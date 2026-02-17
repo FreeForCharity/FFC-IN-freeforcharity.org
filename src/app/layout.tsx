@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Header from "./../components/header";
-import Footer from "./../components/footer";
-import CookieConsent from "./../components/cookie-consent";
+import Header from "@/components/header";
+import Footer from "@/components/footer";
+import CookieConsent from "@/components/cookie-consent";
 
 // Get basePath for GitHub Pages deployment
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
