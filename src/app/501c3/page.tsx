@@ -1,4 +1,4 @@
-import HeroSection from "@/components/UI/HeroSection";
+import HeroSection from "@/components/ui/HeroSection";
 import HelpForCharitiesandNonprofit from "@/components/501c3-components/Help-For-Charities-and-Nonprofit";
 import ReadyToGetStartedAndFaq from "@/components/501c3-components/Ready-to-get-started-and-faqs";
 import CallSection from "@/components/help-for-charities-components/call-section";

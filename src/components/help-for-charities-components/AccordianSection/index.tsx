@@ -1,5 +1,5 @@
 import React from "react";
-import AccordionItem from "@/components/UI/Accordian";
+import AccordionItem from "@/components/ui/Accordian";
 
 const index = () => {
   return (

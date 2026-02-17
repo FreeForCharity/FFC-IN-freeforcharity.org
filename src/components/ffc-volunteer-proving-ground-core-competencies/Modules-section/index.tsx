@@ -1,5 +1,5 @@
 import React from "react";
-import Modulecard from "@/components/UI/Module-card";
+import Modulecard from "@/components/ui/Module-card";
 
 const index = () => {
   return (

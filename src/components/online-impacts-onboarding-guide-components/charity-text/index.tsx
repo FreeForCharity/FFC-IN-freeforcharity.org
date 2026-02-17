@@ -1,6 +1,6 @@
 import React from "react";
-import HelpForCharities from "@/components/UI/help-for-charity";
-import AccordionItem from "@/components/UI/Accordian";
+import HelpForCharities from "@/components/ui/help-for-charity";
+import AccordionItem from "@/components/ui/Accordian";
 import Link from "next/link";
 
 const index = () => {

@@ -1,6 +1,6 @@
 import React from "react";
-import HeroSection from "@/components/UI/HeroSection";
-import ContactSection from "@/components/Contact-Us-components/Contact-Us";
+import HeroSection from "@/components/ui/HeroSection";
+import ContactSection from "@/components/contact-us-components/Contact-Us";
 
 const index = () => {
   return (

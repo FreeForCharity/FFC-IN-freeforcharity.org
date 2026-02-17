@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import EducationalSitesCard from "@/components/UI/EducationalSitesCard";
+import EducationalSitesCard from "@/components/ui/EducationalSitesCard";
 import { motion, Variants } from "framer-motion";
 
 const cardVariants: Variants = {

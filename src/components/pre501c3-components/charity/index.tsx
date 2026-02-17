@@ -1,5 +1,5 @@
 import React from "react";
-import HelpForCharities from "@/components/UI/help-for-charity";
+import HelpForCharities from "@/components/ui/help-for-charity";
 
 const index = () => {
   return (

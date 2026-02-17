@@ -1,5 +1,5 @@
 // import ProvingGroundSection from '@/components/ProvingGroundSection';
-import ProvingGroundSection from "@/components/UI/ProvingGroundSection";
+import ProvingGroundSection from "@/components/ui/ProvingGroundSection";
 
 export default function Home() {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import ProgressBar from "@/components/UI/ProgressBar";
+import ProgressBar from "@/components/ui/ProgressBar";
 
 const Index = () => {
   return (

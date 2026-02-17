@@ -1,5 +1,5 @@
 import React from "react";
-import HeroSection from "@/components/UI/HeroSection";
+import HeroSection from "@/components/ui/HeroSection";
 import FreeForCharity from "@/components/guidestar-guide/Free-for-charity";
 import Faqs from "@/components/guidestar-guide/Faqs";
 import CallSection from "@/components/help-for-charities-components/call-section";

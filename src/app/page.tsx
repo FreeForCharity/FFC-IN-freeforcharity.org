@@ -1,6 +1,6 @@
 import React from "react";
 // import HomePage from './Home/page'
-import FigmaHomePage from "@/app/Figma-Home-page";
+import FigmaHomePage from "@/app/home-page";
 
 const page = () => {
   return (

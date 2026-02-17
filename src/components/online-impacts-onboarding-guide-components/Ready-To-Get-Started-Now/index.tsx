@@ -1,6 +1,6 @@
 import React from "react";
-import TransparentBtn from "@/components/UI/Transparentbtn";
-import AccordionItem from "@/components/UI/Accordian";
+import TransparentBtn from "@/components/ui/Transparentbtn";
+import AccordionItem from "@/components/ui/Accordian";
 // import { Link } from "lucide-react";
 
 const index = () => {

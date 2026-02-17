@@ -1,5 +1,5 @@
 import React from "react";
-import SlidingCard from "@/components/UI/SlidingCard";
+import SlidingCard from "@/components/ui/SlidingCard";
 
 const index = () => {
   return (

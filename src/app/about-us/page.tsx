@@ -1,5 +1,5 @@
 import React from "react";
-import HeroSection from "@/components/UI/HeroSection";
+import HeroSection from "@/components/ui/HeroSection";
 import Content from "@/components/about-us-components/content";
 import CardSection from "@/components/about-us-components/Card-section";
 import ParaText from "@/components/about-us-components/ParaText";

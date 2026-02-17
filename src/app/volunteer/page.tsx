@@ -1,5 +1,5 @@
 import React from "react";
-import HeroSection from "@/components/UI/HeroSection";
+import HeroSection from "@/components/ui/HeroSection";
 import FreeForCharity from "@/components/volunteer/Free-For-Charity";
 
 const index = () => {

@@ -1,4 +1,4 @@
-import SlidingCard from "@/components/UI/SlidingCard";
+import SlidingCard from "@/components/ui/SlidingCard";
 
 export default function Page() {
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import ToolCard from "@/components/UI/ToolCard";
+import ToolCard from "@/components/ui/ToolCard";
 
 export default function ToolsPage() {
   const topRow = [

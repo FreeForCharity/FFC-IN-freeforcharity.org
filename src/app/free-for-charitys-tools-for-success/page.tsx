@@ -1,5 +1,5 @@
 import React from "react";
-import HeroSection from "@/components/UI/HeroSection";
+import HeroSection from "@/components/ui/HeroSection";
 import CardSection from "@/components/free-for-charitys-tools-for-success-components/Card-section";
 import RescueTime from "@/components/free-for-charitys-tools-for-success-components/Rescue-Time";
 import TwoCards from "@/components/free-for-charitys-tools-for-success-components/Two-Cards";

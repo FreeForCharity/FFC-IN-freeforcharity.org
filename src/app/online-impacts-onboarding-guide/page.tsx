@@ -1,5 +1,5 @@
 import React from "react";
-import HeroSection from "@/components/UI/HeroSection";
+import HeroSection from "@/components/ui/HeroSection";
 import CharityText from "@/components/online-impacts-onboarding-guide-components/charity-text";
 import ReadyToGetStartedNow from "@/components/online-impacts-onboarding-guide-components/Ready-To-Get-Started-Now";
 import CallSection from "@/components/help-for-charities-components/call-section";
