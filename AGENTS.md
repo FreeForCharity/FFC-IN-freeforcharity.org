@@ -39,14 +39,14 @@
 
 All changes follow this process:
 
-1. **Issue** -- Work starts from a GitHub Issue (tracked in FFC-IN-ffcadmin.org repo)
+1. **Issue** -- Work starts from a GitHub Issue in this repo
 2. **Branch** -- Create a feature branch from `main`
 3. **Develop** -- Make changes, commit frequently
 4. **Pre-commit checklist** (run in this order):
    1. `npm run lint` -- Catch code quality issues
    2. `npm run build` -- Verify the static export succeeds
    3. `npm run test` -- Run Playwright E2E tests
-5. **PR** -- Open a Pull Request, link to the issue with `Fixes FreeForCharity/FFC-IN-ffcadmin.org#NNN`
+5. **PR** -- Open a Pull Request, link to the issue with `Fixes #NNN`
 6. **Merge** -- Merge via PR review (no direct commits to `main`)
 
 ---

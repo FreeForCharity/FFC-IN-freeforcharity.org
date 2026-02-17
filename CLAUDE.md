@@ -63,14 +63,13 @@ Check your available tools at the start of each session. If an MCP server is ava
 
 ## Custom Agents
 
-Check `.claude/agents/` for custom agent definitions. Common agents include:
+Custom agent definitions are in `.claude/agents/`:
 
-| Agent         | Purpose                               |
-| ------------- | ------------------------------------- |
-| `dns-audit`   | Audit DNS records for correctness     |
-| `site-health` | Check site availability, SSL, headers |
-| `pr-reviewer` | Automated PR review checklist         |
-| `onboarding`  | New repo setup and configuration      |
+| Agent              | Purpose                                          |
+| ------------------ | ------------------------------------------------ |
+| `site-health`      | Build, serve, and verify site works end-to-end   |
+| `pr-reviewer`      | Review a PR against project standards            |
+| `content-verifier` | Validate data files, loaders, and sitemap coverage |
 
 Invoke these when the task matches their purpose. If no matching agent exists, proceed with your general capabilities.
 
@@ -80,7 +79,6 @@ Invoke these when the task matches their purpose. If no matching agent exists, p
 
 - **Always create a branch.** Never commit directly to `main`.
 - **Link PRs to issues** with `Fixes #NNN` or `Refs #NNN` in the PR body.
-- **Issues are tracked in FFC-IN-ffcadmin.org**, not in this repo. Use `Fixes FreeForCharity/FFC-IN-ffcadmin.org#NNN` format.
 - **Commit messages** use Conventional Commits: `feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `test:`, `chore:`
 - **kebab-case** for all route folder names (SEO requirement).
 - **Use `assetPath()`** for all image and asset references (GitHub Pages compatibility) once the helper is added.

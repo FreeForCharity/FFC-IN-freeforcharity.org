@@ -4,7 +4,7 @@ Free For Charity main nonprofit website. Next.js static site on GitHub Pages at 
 
 ## Workflow
 
-Issue (in FFC-IN-ffcadmin.org) -> branch -> PR -> merge. No direct commits to main.
+Issue -> branch -> PR -> merge. No direct commits to main.
 
 ## Pre-Push Checks (in order)
 

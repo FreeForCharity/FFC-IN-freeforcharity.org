@@ -19,7 +19,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/) format: `<type>
 ## PR Workflow
 
 - Always create a branch. Never push directly to `main`.
-- Link PRs to issues: `Fixes FreeForCharity/FFC-IN-ffcadmin.org#NNN` (issues are in ffcadmin.org repo)
+- Link PRs to issues: `Fixes #NNN` or `Refs #NNN`
 - All PRs require CI checks to pass before merge.
 
 ## Naming Conventions
