@@ -24,7 +24,7 @@ Issue -> branch -> PR -> merge. No direct commits to main.
 ## Conventions
 
 - Route folders: **kebab-case only** (`about-us/`, not `aboutUs/`)
-- Asset paths: use `assetPath()` from `src/lib/assetPath.ts` for all images (once added)
+- Asset paths: use `assetPath()` from `src/lib/assetPath.ts` for all images
 - `NEXT_PUBLIC_BASE_PATH` controls basePath for GitHub Pages subpath fallback
 - Conventional Commits: `feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `test:`, `chore:`
 

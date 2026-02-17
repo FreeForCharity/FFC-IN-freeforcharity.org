@@ -69,10 +69,10 @@ src/
       Hero/
       Mission/
       SupportFreeForCharity/
-      EndowmentFeatures/
-      OurPrograms/
-      VolunteerWithUs/
-      Results2023/
+      Endowment-Features/
+      Our-Programs/
+      Volunteer-with-Us/
+      Results-2023/
       VoicesofGratitude/
       TheFreeForCharityTeam/
       FrequentlyAskedQuestions/
