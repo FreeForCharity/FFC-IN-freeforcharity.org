@@ -1,5 +1,5 @@
 import React from "react";
-import InfoCard from "../../UI/BlogCard";
+import InfoCard from "../../ui/BlogCard";
 
 interface Blog {
   heading: string;

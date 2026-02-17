@@ -1,5 +1,5 @@
 import React from "react";
-import BlueBtn from "../../UI/Bluebtn";
+import BlueBtn from "../../ui/Bluebtn";
 
 const Mission: React.FC = () => {
   return (

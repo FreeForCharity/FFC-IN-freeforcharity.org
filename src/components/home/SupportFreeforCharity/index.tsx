@@ -1,6 +1,6 @@
 import React from "react";
-import TrainingCard from "../../UI/trainingcard";
-import BlueBtn from "../../UI/Bluebtn";
+import TrainingCard from "../../ui/trainingcard";
+import BlueBtn from "../../ui/Bluebtn";
 import Transparentbtn from "@/components/ui/Transparentbtn";
 
 const SupportFreeForCharity: React.FC = () => {
