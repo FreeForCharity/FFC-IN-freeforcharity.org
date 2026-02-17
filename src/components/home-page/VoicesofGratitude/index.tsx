@@ -2,26 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import { testimonials } from "@/data/testimonials";
 
 export default function TestimonialSlider() {
-  const testimonials = [
-    {
-      name: "Name",
-      text: "“Thanks to Free For Charity, our organization now has a professional online presence, which has significantly increased our visibility and donor engagement.”",
-      rating: 5,
-    },
-    {
-      name: "Name",
-      text: "“The free domain and email setup provided by Free For Charity have been invaluable in helping us streamline our communications and expand our reach.”",
-      rating: 5,
-    },
-    {
-      name: "Name",
-      text: "“We are grateful for the support from Free For Charity. Their services have allowed us to focus more on our core mission and less on administrative tasks.”",
-      rating: 5,
-    },
-  ];
-
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -76,16 +59,16 @@ export default function TestimonialSlider() {
                           className="text-center font-[400] text-[28px] mb-3"
                           id="fauna-font"
                         >
-                          {testimonial.name}
+                          {testimonial.author}
                         </p>
                         <div className="flex justify-center mb-3">
-                          {[...Array(testimonial.rating)].map((_, i) => (
+                          {[...Array(5)].map((_, i) => (
                             <Image
                               key={i}
                               src="/Svgs/start-icon.svg"
                               width={29}
                               height={29}
-                              alt="start icon"
+                              alt="star icon"
                               className="mx-[5px]"
                             ></Image>
                           ))}
@@ -95,7 +78,7 @@ export default function TestimonialSlider() {
                           className="text-center text-[21px] font-[400]"
                           id="fauna-font"
                         >
-                          {testimonial.text}
+                          &ldquo;{testimonial.quote}&rdquo;
                         </p>
                       </div>
                     </div>
