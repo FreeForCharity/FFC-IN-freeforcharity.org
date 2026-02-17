@@ -82,17 +82,20 @@ const Footer: React.FC = () => {
                 name: "Supported Charity Login",
                 href: "https://freeforcharity.org/hub/",
               },
-            ].map((link) => (
-              <li key={link.name}>
-                <Link
-                  href={link.href}
-                  target="_blank"
-                  className="hover:text-[#F58C23] hover:tracking-widest transition-all text-[16px] font-[500]"
-                >
-                  {link.name}
-                </Link>
-              </li>
-            ))}
+            ].map((link) => {
+              const isExternal = link.href.startsWith("http");
+              return (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    className="hover:text-[#F58C23] hover:tracking-widest transition-all text-[16px] font-[500]"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
 
           <div className="space-y-3">
@@ -131,7 +134,6 @@ const Footer: React.FC = () => {
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    target="_blank"
                     className="hover:text-[#F58C23] hover:tracking-widest transition-all text-[16px] font-[500]"
                   >
                     {link.name}
