@@ -206,7 +206,7 @@ const Index = () => {
               </a>
             </li>
             <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://whmcs.community/knowledgebase" target="_blank">
+              <a href="https://docs.whmcs.com/" target="_blank">
                 WHMCS Knowledgebase
               </a>
             </li>
@@ -233,10 +233,10 @@ const Index = () => {
           <ul className="p-[0_0_23px_1.5rem] list-disc">
             <li className="hover:underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a
-                href="https://www.hostinger.com/tutorials/whmcs"
+                href="https://docs.whmcs.com/"
                 target="_blank"
               >
-                WHMCS Setup Tutorials (Hostinger)
+                WHMCS Official Documentation
               </a>
             </li>
             <li className="pl-[0.5rem] mb-[0.75rem] text-[14px] leading-[26px] ">
@@ -450,7 +450,7 @@ const Index = () => {
           <ul className="p-[0_0_23px_1.5rem] list-disc">
             <li className="hover:underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a
-                href="https://kinsta.com/knowledgebase/cloudflare-dns/"
+                href="https://kinsta.com/knowledgebase/install-cloudflare/"
                 target="_blank"
               >
                 Cloudflare DNS Tutorial for Beginners
@@ -517,7 +517,7 @@ const Index = () => {
               </span>{" "}
               Visit the{" "}
               <a
-                href="https://www.microsoft.com/en-us/nonprofits/offerings"
+                href="https://www.microsoft.com/en-us/nonprofits/offers-for-nonprofits"
                 className="text-[#0078D4]"
               >
                 Microsoft Nonprofits page
@@ -566,7 +566,7 @@ const Index = () => {
 
             <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a
-                href="https://www.microsoft.com/en-us/nonprofits/community-resources"
+                href="https://www.microsoft.com/en-us/nonprofits/resources"
                 target="_blank"
               >
                 Microsoft Nonprofit Resource Center
@@ -599,7 +599,7 @@ const Index = () => {
             </li>
             <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a
-                href="https://www.infusedinnovations.com/blog/secure-modern-workplace/complete-setup-guide-for-microsoft-365-for-nonprofits"
+                href="https://learn.microsoft.com/en-us/industry/nonprofit/microsoft-for-nonprofits/program-overview"
                 target="_blank"
               >
                 Step-by-Step Guide on Setup
@@ -607,10 +607,10 @@ const Index = () => {
             </li>
             <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a
-                href="https://lazyadmin.nl/office-365/add-domain-to-office-365/"
+                href="https://learn.microsoft.com/en-us/microsoft-365/admin/setup/add-domain?view=o365-worldwide"
                 target="_blank"
               >
-                Third-Party Tutorial on Adding Domains to M365
+                Microsoft Official Guide: Adding Domains to M365
               </a>
             </li>
             <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
@@ -686,7 +686,7 @@ const Index = () => {
             </li>
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               <a
-                href="https://www.directadmin.com/docs.php"
+                href="https://docs.directadmin.com/"
                 className="text-[#0078D4]"
               >
                 DirectAdmin Documentation
@@ -700,7 +700,7 @@ const Index = () => {
           <ul className="pl-[1.5rem] p-[0_0_23px_1em] list-disc">
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               <a
-                href="https://docs.litespeedtech.com/cloud/images/directadmin/"
+                href="https://docs.directadmin.com/"
                 className="text-[#0078D4]"
               >
                 Guide on Setting Up DirectAdmin
@@ -810,12 +810,11 @@ const Index = () => {
           <ul className="pl-[1.5rem] pb-[23px] list-disc space-y-[0.75rem]">
             <li className="pl-[0.5rem] text-[14px] text-[#0078D4] leading-[26px] hover:underline">
               <a
-                href="https://www.udemy.com/course/divi-theme-tutorial/"
+                href="https://www.elegantthemes.com/documentation/divi/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Udemy Course – How to Make a WordPress Website with the Divi
-                Theme
+                Divi Theme Official Documentation (Elegant Themes)
               </a>
             </li>
             <li className="pl-[0.5rem] text-[14px] leading-[26px] text-[#333d47]">
@@ -831,7 +830,7 @@ const Index = () => {
             </li>
             <li className="pl-[0.5rem] text-[14px] text-[#0078D4] leading-[26px] hover:underline">
               <a
-                href="https://www.wpbeginner.com/showcase/best-divi-theme-examples/"
+                href="https://www.wpbeginner.com/solutions/divi/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -1060,17 +1059,7 @@ const Index = () => {
                 Case Studies on Clarity
               </a>
             </li>
-            <li className="hover:underline pl-[0.5rem] text-[#0078D4] mb-[0.75rem] text-[14px] leading-[26px]">
-              <a
-                href="https://www.hotjar.com/google-analytics/clarity-vs-hotjar/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[#0078D4]"
-              >
-                Comparison Guides
-              </a>
-            </li>
-            <li className="hover:underline pl-[0.5rem] text-[#0078D4] mb-[0.75rem] text-[14px] leading-[26px]">
+<li className="hover:underline pl-[0.5rem] text-[#0078D4] mb-[0.75rem] text-[14px] leading-[26px]">
               <a
                 href="https://techcommunity.microsoft.com/t5/microsoft-clarity-blog/bg-p/ClarityBlog"
                 target="_blank"
@@ -1130,11 +1119,11 @@ const Index = () => {
             </li>
             <li className="hover:underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px]">
               <a
-                href="https://www.youtube.com/c/tawkto"
+                href="https://www.tawk.to/academy/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Tawk.to YouTube Channel
+                Tawk.to Academy
               </a>
             </li>
           </ul>
@@ -1207,7 +1196,7 @@ const Index = () => {
 
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               <a
-                href="https://microsoftlearning.github.io/mslearn-ai-fundamentals/Instructions/Labs/07-question-answering.html"
+                href="https://learn.microsoft.com/en-us/azure/ai-services/language-service/question-answering/overview"
                 className="text-[#0078D4]"
               >
                 Microsoft Learn: Create a Question Answering Solution

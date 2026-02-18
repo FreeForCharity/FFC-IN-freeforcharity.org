@@ -101,7 +101,7 @@ const index = () => {
               </>
             }
             buttonText="Available Here"
-            buttonLink="https://www.odesk.com/"
+            buttonLink="https://www.upwork.com/"
             imageSrc="/Images/upwork.webp" // 👈 image passed as prop
           />
         </div>
