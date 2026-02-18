@@ -34,7 +34,7 @@ const index = () => {
               className="text-[#000000a3] text-[16px] mb-[10px] leading-[32px] font-[500]"
               id="fauna-font"
             >
-              [Draft]
+              — FFC Supporter
             </p>
           </div>
         </div>
@@ -61,7 +61,7 @@ const index = () => {
               className="text-[#000000a3] text-[16px] mb-[10px] leading-[32px] font-[500]"
               id="fauna-font"
             >
-              [Draft]
+              — FFC Supporter
             </p>
           </div>
         </div>
@@ -88,7 +88,7 @@ const index = () => {
               className="text-[#000000a3] text-[16px] mb-[10px] leading-[32px] font-[500]"
               id="fauna-font"
             >
-              [Draft]
+              — FFC Supporter
             </p>
           </div>
         </div>
