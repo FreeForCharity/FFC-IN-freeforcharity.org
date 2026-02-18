@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import React from "react";
 import HeroSection from "@/components/ui/HeroSection";
 import FreeForCharity from "@/components/volunteer/Free-For-Charity";
+
+export const metadata: Metadata = {
+  title: "Volunteer",
+  description:
+    "Become a Free For Charity volunteer. Gain marketable skills in technology while helping nonprofits with domains, websites, and IT services.",
+  alternates: { canonical: "/volunteer" },
+};
 
 const index = () => {
   return (

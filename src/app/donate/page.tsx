@@ -1,8 +1,16 @@
+import type { Metadata } from "next";
 import React from "react";
 import HeroSection from "@/components/ui/HeroSection";
 import Measurableimpact from "@/components/donate-components/measurable-impact";
 import FreeForCharityDonationOptions from "@/components/donate-components/Free-for-Charity-Donation-Options";
 import GeneralDonation from "@/components/donate-components/General-donation";
+
+export const metadata: Metadata = {
+  title: "Donate",
+  description:
+    "Support Free For Charity's mission by donating. Your tax-deductible contribution helps provide free domains, hosting, and technology services to nonprofits.",
+  alternates: { canonical: "/donate" },
+};
 
 const index = () => {
   return (
