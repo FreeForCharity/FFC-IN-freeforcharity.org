@@ -10,7 +10,7 @@ const index = () => {
       <HeroSection
         heading="Guidestar Guide"
         paragraph="Achieving validation through GuideStar enhances your charity’s credibility and visibility. It reassures donors and stakeholders of its legal compliance and ethical standing, potentially increasing funding opportunities. This guide will help you make the most of your GuideStar profile."
-        heroImg="/Images/volunteer.png"
+        heroImg="/Images/volunteer.webp"
       />
       <FreeForCharity />
       <Faqs />

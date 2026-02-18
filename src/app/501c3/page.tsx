@@ -9,7 +9,7 @@ const page = () => {
       <HeroSection
         heading="501(c)3 Onboarding Guide"
         paragraph="If you are representing a charity or you currently work for a charity and want to improve your own skills start here to get help for your organization. You get instant access to many of our free tools and products right away!"
-        heroImg="/Images/volunteer.png"
+        heroImg="/Images/volunteer.webp"
       />
       <HelpForCharitiesandNonprofit />
       <ReadyToGetStartedAndFaq />

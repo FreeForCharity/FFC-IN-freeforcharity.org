@@ -29,7 +29,7 @@ const Index = () => {
           {/* Image */}
           <div className="relative w-full aspect-[16/9] mb-[30px]">
             <Image
-              src="https://freeforcharity.org/wp-content/uploads/2021/07/credit-karma-logo.png"
+              src="/Images/credit-karma-logo.webp"
               alt="Placeholder Image"
               fill
               className="object-contain"
@@ -102,7 +102,7 @@ const Index = () => {
           {/* Image */}
           <div className="relative w-full aspect-[16/9] mb-[30px]">
             <Image
-              src="https://freeforcharity.org/wp-content/uploads/2021/07/482664-rescuetime.jpg"
+              src="/Images/rescuetime.webp"
               alt="Placeholder Image"
               fill
               className="object-contain"

@@ -11,7 +11,7 @@ interface EducationalSitesCardProps {
 }
 
 const EducationalSitesCard: React.FC<EducationalSitesCardProps> = ({
-  imageSrc = "https://freeforcharity.org/wp-content/uploads/2021/07/logo-1200x630-1.png",
+  imageSrc = "/Images/educational-sites-default.webp",
   title = "ittybiz.com Great site for ultra small business info",
   link = "https://iwillteachyoutoberich.com",
 }) => {
