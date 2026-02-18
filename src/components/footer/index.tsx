@@ -11,7 +11,7 @@ const Footer: React.FC = () => {
   const currentYear = React.useMemo(() => new Date().getFullYear(), []);
   const socialLinks = [
     { icon: FaFacebookF, href: "https://www.facebook.com/freeforcharity", label: "Facebook" },
-{ icon: FaXTwitter, href: "https://x.com/freeforcharity1", label: "X (Twitter)" },
+    { icon: FaXTwitter, href: "https://x.com/freeforcharity1", label: "X (Twitter)" },
     {
       icon: FaLinkedinIn,
       href: "https://www.linkedin.com/company/freeforcharity/",
@@ -19,7 +19,7 @@ const Footer: React.FC = () => {
     },
     {
       icon: FaGithub,
-      href: "https://github.com/FreeForCharity/freeforcharity-web",
+      href: "https://github.com/FreeForCharity/FFC-IN-freeforcharity.org",
       label: "GitHub",
     },
   ];
@@ -32,7 +32,7 @@ const Footer: React.FC = () => {
 
           <div className="space-y-4">
             <a href="https://www.guidestar.org/profile/46-2471893">
-              <img src="/Svgs/footerImage.svg" alt="" />
+              <img src="/Svgs/footerImage.svg" alt="GuideStar Platinum Seal of Transparency" aria-label="GuideStar Platinum Seal of Transparency" />
             </a>
             <Link
               href="https://www.guidestar.org/profile/shared/bbbe173a-87b9-4af9-a8a2-cae255a95742"
@@ -82,23 +82,30 @@ const Footer: React.FC = () => {
                 name: "Supported Charity Login",
                 href: "https://freeforcharity.org/hub/",
               },
-            ].map((link) => (
-              <li key={link.name}>
-                <Link
-                  href={link.href}
-                  target="_black"
-                  className="hover:text-[#F58C23] hover:tracking-widest transition-all text-[16px] font-[500]"
-                >
-                  {link.name}
-                </Link>
-              </li>
-            ))}
+            ].map((link) => {
+              const isExternal = link.href.startsWith("http");
+              return (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    className="hover:text-[#F58C23] hover:tracking-widest transition-all text-[16px] font-[500]"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
 
           <div className="space-y-3">
             <h4 className="text-[28px] text-white">Free For Charity Policy</h4>
             <ul className="space-y-1 text-sm" id="lato-font">
               {[
+                {
+                  name: "Donation Policy",
+                  href: "/donation-policy",
+                },
                 {
                   name: "Free For Charity Donation Policy",
                   href: "/free-for-charity-donation-policy",
@@ -116,7 +123,7 @@ const Footer: React.FC = () => {
                   href: "/terms-of-service",
                 },
                 {
-                  name: "Free For Charirty Vulnerability Disclosure Policy",
+                  name: "Free For Charity Vulnerability Disclosure Policy",
                   href: "/vulnerability-disclosure-policy",
                 },
                 {
@@ -127,7 +134,6 @@ const Footer: React.FC = () => {
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    target="_blank"
                     className="hover:text-[#F58C23] hover:tracking-widest transition-all text-[16px] font-[500]"
                   >
                     {link.name}
