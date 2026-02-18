@@ -23,7 +23,7 @@ const index = () => {
     {
       imageSrc: "/Images/upwork.webp",
       title: "earn1k.com Program for earning your for $1000 on the side by Ramit",
-      link: "http://earn1k.com/",
+      link: "https://www.iwillteachyoutoberich.com/",
     },
     {
       imageSrc: "/Images/upwork.webp",

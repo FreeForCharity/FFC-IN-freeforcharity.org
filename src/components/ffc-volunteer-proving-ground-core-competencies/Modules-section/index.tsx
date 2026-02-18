@@ -141,7 +141,7 @@ const index = () => {
         <ul className="list-disc list-inside space-y-2 text-gray-700 font-[500]">
           <li>
             <a
-              href="https://learn.microsoft.com/en-us/copilot/tutorials/learn-microsoft-copilot"
+              href="https://learn.microsoft.com/en-us/copilot/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 hover:underline"
@@ -469,7 +469,7 @@ const index = () => {
         <ul className="list-disc list-inside space-y-2 text-gray-700 font-[500]">
           <li>
             <a
-              href="https://support.microsoft.com/en-us/topic/4d7a18b3-3482-4226-bf93-3b3648a230d4"
+              href="https://support.microsoft.com/en-us/planner"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 hover:underline"
@@ -481,7 +481,7 @@ const index = () => {
           </li>
           <li>
             <a
-              href="https://support.microsoft.com/en-us/topic/62798a9f-e827-49dd-8a27-dea23d32a470"
+              href="https://learn.microsoft.com/en-us/microsoftteams/manage-planner-app"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 hover:underline"
