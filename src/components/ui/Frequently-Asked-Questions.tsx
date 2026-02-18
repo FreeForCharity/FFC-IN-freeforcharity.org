@@ -52,7 +52,7 @@ const FrequentlyAskedQuestions: React.FC<AccordionItemProps> = ({
           ) : (
             <Image
               src="/Svgs/down-arrow.svg"
-              alt="up arrow"
+              alt="down arrow"
               width={40}
               height={16}
             ></Image>

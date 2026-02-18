@@ -50,7 +50,7 @@ export default function ToolCard({
               src={logo}
               alt={`${title} logo`}
               fill
-              className="object-conver"
+              className="object-cover"
             />
           </div>
         )}

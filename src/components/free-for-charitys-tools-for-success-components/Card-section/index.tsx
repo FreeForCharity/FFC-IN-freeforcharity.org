@@ -31,7 +31,7 @@ export default function Page() {
             </>
           }
           buttonText="Available Here"
-          buttonLink="mint.com"
+          buttonLink="https://mint.com"
           imageSrc="/Images/mint-logo.webp" // 👈 image passed as prop
         />
       </div>
