@@ -69,7 +69,7 @@ export default function TestimonialSlider() {
 
           {/* Testimonial Content */}
           <div className="relative z-20 text-white pt-[35px] pb-[53px] lg:px-[91px]">
-            <div className="relative h-[auto] min-h-[520px] sm:min-h-[350] md:min-h-[300px] lg:min-h-[240px] flex items-center justify-center">
+            <div className="relative h-[auto] min-h-[520px] sm:min-h-[350px] md:min-h-[300px] lg:min-h-[240px] flex items-center justify-center">
               {testimonials.map((testimonial, idx) => (
                 <div
                   key={idx}
