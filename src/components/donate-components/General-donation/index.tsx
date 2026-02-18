@@ -28,7 +28,7 @@ const index = () => {
             title="Large Donations"
             description="For large donations we can work directly with the donor and earmark the funds for a particular project of personal significance. This can be as simple as saying that your donation should be used for the technology programs vs. the business programs or more involved such as that the funds should be used to assist one particular local charity you support"
             img="/Images/payment.gif"
-            href="https://example.com/donate"
+            href="/help-for-charities"
           />
         </div>
       </div>
