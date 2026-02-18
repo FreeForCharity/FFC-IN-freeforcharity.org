@@ -40,8 +40,8 @@ const index = () => {
           >
             Free For Charity is creating an endowment fund to support our
             program that buys and manages domains names and email accounts for
-            charities in need. Consider supporting to the largest fundrinaing
-            campain in Free For Charity history.
+            charities in need. Consider supporting to the largest fundraising
+            campaign in Free For Charity history.
           </p>
           <Transparentbtn text="Make a Lasting Impact Today!" href="/free-for-charity-endowment-fund"  color="#fff" />
         </div>

@@ -164,7 +164,7 @@ const AccordionLayout = () => {
                 graciously provided us with a Platinum account to support other
                 non profits providing the lowest cost domain names for a charity
                 of our size. As we get more and more charities into the domain
-                system we expect the costs to freeforchariy.org to drop even
+                system we expect the costs to freeforcharity.org to drop even
                 further.
               </AccordionItem>
 
