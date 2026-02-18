@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
 import React from "react";
+
+export const metadata: Metadata = {
+  title: "Donation Policy",
+  description:
+    "Free For Charity donation policy outlining guidelines for the acceptance, management, and acknowledgment of charitable donations.",
+  alternates: { canonical: "/free-for-charity-donation-policy" },
+};
 
 const index = () => {
   return (
