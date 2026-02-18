@@ -241,14 +241,14 @@ const index = () => {
 
           <div className="flex flex-col lg:flex-row items-center justify-between gap-o sm:gap-6 w-[100%] gap-[20px]">
             <a
-              href="#"
+              href="/501c3"
               className="rounded-[20px] border-[5px] border-[#2A6682] flex items-center justify-center text-black font-[400] text-[25px] px-[28px] py-[16px]"
               id="lato-font"
             >
               501 (c)3 Charities Click Here To Get Started!
             </a>
             <a
-              href="#"
+              href="/pre501c3"
               className="rounded-[20px] border-[5px] border-[#2A6682] flex items-center justify-center text-black font-[400] text-[25px] px-[28px] py-[16px]"
               id="lato-font"
             >

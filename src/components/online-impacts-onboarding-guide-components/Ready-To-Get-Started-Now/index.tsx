@@ -34,7 +34,7 @@ const index = () => {
 
           <p className="text-[18px] font-[700] text-[#4a4a4a] mb-[1em]">
             Visit{" "}
-            <a href="#" className="text-[#2ea3f2]">
+            <a href="/domains" className="text-[#2ea3f2]">
               https://freeforcharity.org/domains
             </a>{" "}
             and follow all steps
@@ -45,7 +45,7 @@ const index = () => {
           </p>
           <p className="text-[18px] font-[700] text-[#4a4a4a]">
             As always if you run into problems contact us at anytime{" "}
-            <a href="#" className="text-[#2ea3f2]">
+            <a href="mailto:clarkemoyer@freeforcharity.org" className="text-[#2ea3f2]">
               clarkemoyer@freeforcharity.org
             </a>{" "}
             520-222-8104
@@ -75,10 +75,10 @@ const index = () => {
                 <li>
                   Visit{" "}
                   <a
-                    href="mailto:sales@interserver.net"
+                    href="https://my.interserver.net/login.php"
                     className="text-[#2ea3f2] hover:underline"
                   >
-                    sales@interserver.net
+                    https://my.interserver.net
                   </a>{" "}
                   to create a free account with your organizational email
                   address <span className="">accounts@yourcharityname.org</span>
@@ -87,12 +87,12 @@ const index = () => {
                 <li>
                   Send an email to{" "}
                   <a
-                    href="https://my.interserver.net"
+                    href="mailto:sales@interserver.net"
                     className="text-[#2ea3f2] hover:underline"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    https://my.interserver.net
+                    sales@interserver.net
                   </a>{" "}
                   with:
                   <ul className="list-disc list-inside ml-6 mt-2 ">

@@ -37,7 +37,7 @@ const index = () => {
             >
               clarkemoyer@freeforcharity.org
             </a>{" "}
-            <a href="tel:5202228104">
+            <a href="tel:+15202228104">
               520-222-8104
             </a>
           </h1>
@@ -65,7 +65,7 @@ const index = () => {
                     href="https://my.interserver.net/login.php"
                     className="text-[#2ea3f2] hover:underline"
                   >
-                    sales@interserver.net
+                    https://my.interserver.net
                   </a>{" "}
                   to create a free account with your organizational email
                   address <span className="">accounts@yourcharityname.org</span>
@@ -79,7 +79,7 @@ const index = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    https://my.interserver.net
+                    sales@interserver.net
                   </a>{" "}
                   with:
                   <ul className="list-disc list-inside ml-6 mt-2 ">

@@ -1,10 +1,10 @@
 import React from "react";
-import Hero from "../../components/Home/HeroSection";
-import Mission from "../../components/Home/MissionSection";
-import SupportFreeforCharity from "../../components/Home/SupportFreeforCharity";
-import Testimonials from "../../components/Home/Testimonials";
-import Ourblogs from "../../components/Home/Ourblogs";
-import Contactus from "../../components/Home/Contactus";
+import Hero from "../../components/home/HeroSection";
+import Mission from "../../components/home/MissionSection";
+import SupportFreeforCharity from "../../components/home/SupportFreeforCharity";
+import Testimonials from "../../components/home/Testimonials";
+import Ourblogs from "../../components/home/Ourblogs";
+import Contactus from "../../components/home/Contactus";
 
 const Home: React.FC = () => {
   return (

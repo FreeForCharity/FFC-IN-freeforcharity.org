@@ -24,11 +24,11 @@ const ContactSection = () => {
             <MdEmail className="w-[55px] h-[55px] text-[#2680A7] mx-auto mb-4" />
             <p className="font-[600] text-[24px] text-black mb-2">Email</p>
             <a
-              href="mailto:clarkemoyer@staging.freeforcharity.org"
+              href="mailto:clarkemoyer@freeforcharity.org"
               className="font-[600] text-[#2ea3f2] text-[18px] break-all "
               id="lato-font"
             >
-              clarkemoyer@staging.freeforcharity.org
+              clarkemoyer@freeforcharity.org
             </a>
           </div>
 
@@ -66,7 +66,7 @@ const ContactSection = () => {
             <MdPhone className="w-[55px] h-[55px] text-[#2680A7] mx-auto mb-4" />
             <p className="font-[600] text-[24px] text-black mb-2">Call</p>
             <a
-              href="tel:+5202228104"
+              href="tel:+15202228104"
               className="font-[600] text-[#2ea3f2] text-[18px]"
               id="lato-font"
             >
