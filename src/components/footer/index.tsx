@@ -163,7 +163,7 @@ const Footer: React.FC = () => {
               <div>
                 <p className="font-[500] text-[22px]">Call Us Today</p>
                 <a
-                  href="tel:5202228104"
+                  href="tel:+15202228104"
                   className="font-[500] text-[16px] hover:text-cyan-400 transition-colors"
                   id="aria-font"
                 >

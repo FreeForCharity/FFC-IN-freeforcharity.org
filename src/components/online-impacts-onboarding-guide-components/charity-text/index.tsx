@@ -117,7 +117,7 @@ const index = () => {
               <ol className="list-decimal list-inside ml-8">
                 <li>
                   (Please read our{" "}
-                  <Link href="#" className="text-[#2ea3f2]">
+                  <Link href="/guidestar-guide" className="text-[#2ea3f2]">
                     GuideStar Guide
                   </Link>
                   , we require charities to have at least

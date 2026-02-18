@@ -167,7 +167,7 @@ const index = () => {
           <div className="mb-[10px] flex items-center">
             <IoCall className="text-[34px] font-[400] leading-[34px] text-[#0580f8]" />
             <a
-              href="tel:520-222-8104"
+              href="tel:+15202228104"
               className="pl-[15px] text-[28px] font-[500] leading-[42px] text-[#2ea3f2]"
               id="raleway-font"
             >

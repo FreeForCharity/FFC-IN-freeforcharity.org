@@ -93,7 +93,7 @@ const index = () => {
               ways! Free for Charity is not the only ‘charity for charities’
               helping to lower your costs. Another great charity showing all the
               big name things you can get for free or at heavy discounts is 
-              <a href="#">TechSoup.org.</a> Even with these other sites many
+              <a href="https://www.techsoup.org/" className="text-[#2ea3f2]">TechSoup.org.</a> Even with these other sites many
               charities and non profits still pay for profit companies to do
               work every day or buy products at full cost. Some do so without
               knowing that as a charity they qualify for lower rates or even

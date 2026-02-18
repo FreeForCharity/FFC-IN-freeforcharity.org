@@ -37,7 +37,7 @@ const index = () => {
             >
               clarkemoyer@freeforcharity.org
             </a>{" "}
-            <a href="tel:5202228104">
+            <a href="tel:+15202228104">
               520-222-8104
             </a>
           </h1>

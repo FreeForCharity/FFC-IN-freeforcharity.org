@@ -121,7 +121,7 @@ const index = () => {
                   GuideStar
                 </a>
                 )​(
-                <a href="blog.candid.org/post/what-is-a-seal-of-transparency-your-questions-about-candid-seals-answered/" className="text-[#2ea3f2]">
+                <a href="https://blog.candid.org/post/what-is-a-seal-of-transparency-your-questions-about-candid-seals-answered/" className="text-[#2ea3f2]">
                   Candid insights
                 </a>
                 ).
