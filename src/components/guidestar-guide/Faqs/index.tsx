@@ -266,6 +266,7 @@ const index = () => {
           </p>
           <p
             className="text-center text-[#2ea3f2] pb-[1em]"
+            // GuideStar widget intentionally external — dynamic badge must load from their servers
             dangerouslySetInnerHTML={{
               __html:
                 '<a href="https://www.guidestar.org/profile/shared/bbbe173a-87b9-4af9-a8a2-cae255a95742" target="_blank" rel="noopener noreferrer">' +

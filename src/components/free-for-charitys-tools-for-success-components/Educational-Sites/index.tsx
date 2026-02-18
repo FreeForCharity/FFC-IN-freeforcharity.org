@@ -29,7 +29,7 @@ const EducationalSitesSection = () => {
   ];
 
   return (
-    <div className="py-[91px] bg-[linear-gradient(180deg,#0068b7_0%,rgba(44,96,118,0.75)_100%)] bg-[#0f82af] bg-cover bg-center bg-no-repeat">
+    <div className="py-[91px] bg-[linear-gradient(180deg,#0068b7_0%,rgba(44,96,118,0.75)_100%),url('/Images/pexels-cottonbro-4064840.webp')] bg-[#0f82af] bg-cover bg-center bg-no-repeat">
       <div className="w-[80%] mx-auto flex flex-col items-center">
         {/* Heading */}
         <h2

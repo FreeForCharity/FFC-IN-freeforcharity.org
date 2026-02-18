@@ -151,7 +151,7 @@ const Header: React.FC = () => {
             >
               <Link href="/" onClick={handleLinkClick} className="block">
                 <img
-                  src="https://freeforcharity.org/wp-content/uploads/2024/04/Screenshot_145.png"
+                  src="/Images/ffc-logo-banner.webp"
                   alt="Free For Charity"
                   className={`transition-all duration-300 ${
                     isScrolled ? "h-7" : "h-11"

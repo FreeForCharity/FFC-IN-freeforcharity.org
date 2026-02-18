@@ -10,7 +10,7 @@ const index = () => {
       <HeroSection
         heading="Online Impacts Onboarding Guide"
         paragraph="If you are representing a charity or you currently work for a charity that was hosted or designed by Online Impacts (onlineimpacts.org) start here to get help for your organization. You get instant access to many of our free tools and products right away!"
-        heroImg="/Images/volunteer.png"
+        heroImg="/Images/volunteer.webp"
       />
       <CharityText />
       <ReadyToGetStartedNow />
