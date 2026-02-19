@@ -37,6 +37,13 @@ const eslintConfig = [
       'react-hooks/immutability': 'warn',
     },
   },
+  {
+    // Allow require() in CJS config files (Jest, commitlint)
+    files: ['*.config.js', '*.config.cjs'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
 ]
 
 export default eslintConfig

@@ -238,7 +238,7 @@ const index = () => {
               We are a registered reseller of eNom domain names. eNom has graciously provided us
               with a Platinum account to support other non profits providing the lowest cost domain
               names for a charity of our size. As we get more and more charities into the domain
-              system we expect the costs to freeforchariy.org to drop even further.
+              system we expect the costs to freeforcharity.org to drop even further.
             </p>
           </FrequentlyAskedQuestions>
 
