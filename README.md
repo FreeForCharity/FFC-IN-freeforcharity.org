@@ -13,6 +13,7 @@ Free For Charity connects students, professionals, and businesses with nonprofit
 ## Site Structure
 
 The website consists of **29 pages** covering:
+
 - **Main pages**: Home, About Us, Contact Us
 - **Program pages**: 501c3, Pre-501c3, Help for Charities, Domains, Free Charity Web Hosting, Endowment Fund
 - **Resource pages**: Tools for Success, GuideStar Guide, Validation Guide, Onboarding Guide
@@ -36,7 +37,7 @@ For a complete list, see the [Site Map](#site-map) section below.
 - **Framework**: Next.js 15.5.2 (App Router with TypeScript)
 - **React**: 19.1.0
 - **Styling**: Tailwind CSS 4.1.12
-- **UI Components**: 
+- **UI Components**:
   - Framer Motion 12.23.24 (animations)
   - Lucide React 0.469.0 (icons)
   - React Icons 5.5.0 (additional icons)
@@ -48,27 +49,33 @@ For a complete list, see the [Site Map](#site-map) section below.
 ## Local Development
 
 ### Prerequisites
+
 - Node.js 20.x (tested with v20.19.6)
 - npm (comes with Node.js)
 
 ### Setup
 
 1. **Clone the repository**
+
 ```bash
 git clone https://github.com/FreeForCharity/freeforcharity-web.git
 cd freeforcharity-web
 ```
 
 2. **Install dependencies**
+
 ```bash
 npm install
 ```
+
 _Takes approximately 10-15 seconds_
 
 3. **Start development server**
+
 ```bash
 npm run dev
 ```
+
 _Server starts in ~1 second with Turbopack. Visit http://localhost:3000_
 
 ### Available Commands
@@ -105,7 +112,8 @@ npm run test:ui       # Interactive UI mode
 ### Test Coverage
 
 **Test Statistics**: 29 tests across 6 test suites
-- ✅ 28 passing tests  
+
+- ✅ 28 passing tests
 - ⏭️ 1 skipped test (image dimensions - unreliable in CI)
 - 📊 Execution time: ~25-30 seconds
 
@@ -141,6 +149,7 @@ The test suite includes:
    - Link to freeforcharity.org
 
 **Test Configuration** (`playwright.config.ts`)
+
 - Uses system Chromium to avoid network restrictions
 - Runs against production build (`npm run preview`)
 - Retries failed tests 2x in CI, 0x locally
@@ -153,15 +162,19 @@ Tests run automatically on every push to main via GitHub Actions before deployme
 ### Code Quality
 
 **ESLint**
+
 ```bash
 npm run lint
 ```
+
 Currently reports **11 warnings** (expected):
+
 - 6 warnings about using `<img>` instead of Next.js `<Image>` component (acceptable for static export)
 - 3 warnings about unused imports
 - 2 warnings about React hooks dependencies
 
 **TypeScript**
+
 - Strict mode enabled
 - Type checking runs during build
 - No type errors in codebase
@@ -169,7 +182,8 @@ Currently reports **11 warnings** (expected):
 ## Key Features
 
 ### Global Header and Footer
-- **Header** (`src/components/Header/index.tsx`): 
+
+- **Header** (`src/components/Header/index.tsx`):
   - Responsive navigation with mobile menu
   - Logo and primary navigation links
   - Donate and Volunteer buttons
@@ -182,7 +196,9 @@ Currently reports **11 warnings** (expected):
   - Cookie consent integration
 
 ### Content Management
+
 Content is stored as JSON files in `src/data/` for easy editing:
+
 - **FAQs** (`src/data/faqs/`): 2 FAQ entries from JSON files, additional FAQs inline
 - **Team Members** (`src/data/team/`): 5 board member profiles
 - **Testimonials** (`src/data/testimonials/`): 3 testimonial entries
@@ -190,13 +206,16 @@ Content is stored as JSON files in `src/data/` for easy editing:
 To update content, simply edit the JSON files directly.
 
 ### UI Components Library
+
 Reusable components in `src/components/UI/`:
+
 - `HeroSection.tsx` - Page hero sections
 - `CallToActionCard.tsx` - CTA cards with animations
 - `General-Donation-Card.tsx` - Donation cards
 - `trainingcard.tsx` - Training program cards
 
 ### SEO Optimization
+
 - **Global metadata** in `src/app/layout.tsx`: title templates, descriptions, Open Graph, Twitter cards
 - **Sitemap** (`src/app/sitemap.ts`): Currently configured for homepage
 - **Robots.txt** (`src/app/robots.ts`): Search engine indexing rules
@@ -263,10 +282,12 @@ freeforcharity-web/
 ### Content Updates
 
 **Edit Homepage**
+
 - Main homepage: `src/app/Figma-Home-page/index.tsx`
 - Original alternative: `src/app/Home/page.tsx`
 
 **Update Team Members**
+
 ```bash
 # Edit existing team member
 vi src/data/team/clarke-moyer.json
@@ -280,6 +301,7 @@ vi src/data/team/clarke-moyer.json
 ```
 
 **Update FAQs**
+
 ```bash
 # Edit FAQ JSON files
 vi src/data/faqs/what-is-the-organization-aiming-to-accomplish.json
@@ -290,6 +312,7 @@ vi src/data/faqs.ts
 ```
 
 **Update Testimonials**
+
 ```bash
 vi src/data/testimonials/testimonial-1.json
 vi src/data/testimonials/testimonial-2.json
@@ -299,6 +322,7 @@ vi src/data/testimonials/testimonial-3.json
 ### Component Development
 
 **Add a New Page**
+
 ```bash
 # Create new page directory
 mkdir -p src/app/my-new-page
@@ -311,6 +335,7 @@ vi src/app/sitemap.ts
 ```
 
 **Create Reusable Component**
+
 ```bash
 # Add to UI components
 touch src/components/UI/MyComponent.tsx
@@ -319,29 +344,34 @@ touch src/components/UI/MyComponent.tsx
 ### Styling
 
 **Global Styles**
+
 ```bash
 vi src/app/globals.css
 ```
 
 **Component Styles**
+
 - Use Tailwind CSS utility classes directly in components
 - Tailwind config: `postcss.config.mjs`
 
 ### SEO and Metadata
 
 **Update Site Metadata**
+
 ```bash
 vi src/app/layout.tsx
 # Edit the metadata object
 ```
 
 **Add Pages to Sitemap**
+
 ```bash
 vi src/app/sitemap.ts
 # Add new routes to the returned array
 ```
 
 **Configure Robots**
+
 ```bash
 vi src/app/robots.ts
 ```
@@ -370,6 +400,7 @@ The site uses **dual deployment** strategy:
 **Trigger**: Push to `main` branch
 
 **Pipeline Steps**:
+
 1. Checkout repository
 2. Setup Node.js 20
 3. Install dependencies with `npm ci`
@@ -380,12 +411,14 @@ The site uses **dual deployment** strategy:
 8. Deploy to GitHub Pages (only if tests pass)
 
 **Environment Variables**:
+
 - `NEXT_PUBLIC_BASE_PATH`: Set to `/freeforcharity-web` for GitHub Pages deployment
 - Not set (empty) for custom domain deployment
 
 ### Local Production Build
 
 **Build for custom domain** (default):
+
 ```bash
 npm run build
 npm run preview
@@ -393,6 +426,7 @@ npm run preview
 ```
 
 **Build for GitHub Pages** (with basePath):
+
 ```bash
 NEXT_PUBLIC_BASE_PATH=/freeforcharity-web npm run build
 npm run preview
@@ -402,6 +436,7 @@ npm run preview
 ### Build Configuration
 
 **next.config.ts**:
+
 - `output: "export"` - Enables static site generation
 - `images.unoptimized: true` - Allows static image export
 - `basePath: process.env.NEXT_PUBLIC_BASE_PATH || ""` - Dynamic basePath
@@ -409,6 +444,7 @@ npm run preview
 
 **Asset Path Helper**:
 When adding images that need to work on both deployments, use the `assetPath()` helper:
+
 ```typescript
 import { assetPath } from "@/lib/assetPath";
 
@@ -430,16 +466,19 @@ This automatically handles the basePath for both deployment scenarios.
 The website consists of 29 page routes organized as follows:
 
 ### Main Pages
+
 - `/` - Homepage (Free For Charity overview)
 - `/Home` - Alternative homepage layout
 - `/about-us` - About Free For Charity organization
 - `/contact-us` - Contact form and information
 
 ### Action Pages
+
 - `/donate` - Donation page
 - `/volunteer` - Volunteer sign-up
 
 ### Program Pages
+
 - `/501c3` - Services for established 501(c)(3) nonprofits
 - `/pre501c3` - Services for organizations seeking 501(c)(3) status
 - `/help-for-charities` - Overview of charity assistance programs
@@ -448,6 +487,7 @@ The website consists of 29 page routes organized as follows:
 - `/free-for-charity-endowment-fund` - Endowment fund information
 
 ### Resource & Training Pages
+
 - `/free-for-charitys-tools-for-success` - Tools and resources
 - `/guidestar-guide` - GuideStar profile guide
 - `/charity-validation-guide-ensuring-mutual-benefit-through-comprehensive-validation-processes` - Validation guide
@@ -458,10 +498,12 @@ The website consists of 29 page routes organized as follows:
 - `/techstack` - Technology stack information
 
 ### Admin Pages
+
 - `/ffcadmin` - Admin dashboard
 - `/ffcadmin-free-for-charity-cpanel-backup-sop` - cPanel backup procedures
 
 ### Policy Pages
+
 - `/privacy-policy` - Privacy policy
 - `/terms-of-service` - Terms of service
 - `/cookie-policy` - Cookie policy
@@ -477,6 +519,7 @@ The website consists of 29 page routes organized as follows:
 ### Common Issues
 
 **Issue: Port 3000 already in use**
+
 ```bash
 # Kill process on port 3000
 npx kill-port 3000
@@ -485,6 +528,7 @@ npm run dev -- -p 3001
 ```
 
 **Issue: Build cache issues**
+
 ```bash
 # Clear Next.js cache
 rm -rf .next
@@ -492,6 +536,7 @@ npm run build
 ```
 
 **Issue: Dependencies out of sync**
+
 ```bash
 # Clean install
 rm -rf node_modules package-lock.json
@@ -499,12 +544,14 @@ npm install
 ```
 
 **Issue: Playwright browsers not found**
+
 ```bash
 # Install Playwright browsers
 npx playwright install chromium --with-deps
 ```
 
 **Issue: Tests fail in CI but pass locally**
+
 - Check GitHub Actions logs for specific errors
 - Review test artifacts (screenshots, traces)
 - Ensure build was successful before tests run

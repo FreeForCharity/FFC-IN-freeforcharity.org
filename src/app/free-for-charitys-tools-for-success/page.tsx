@@ -1,22 +1,22 @@
-import type { Metadata } from "next";
-import React from "react";
-import HeroSection from "@/components/ui/HeroSection";
-import CardSection from "@/components/free-for-charitys-tools-for-success-components/Card-section";
+import type { Metadata } from 'next'
+import React from 'react'
+import HeroSection from '@/components/ui/HeroSection'
+import CardSection from '@/components/free-for-charitys-tools-for-success-components/Card-section'
 
 export const metadata: Metadata = {
-  title: "Tools for Success",
+  title: 'Tools for Success',
   description:
-    "Free productivity, educational, and business tools curated by Free For Charity to help nonprofits and volunteers succeed.",
-  alternates: { canonical: "/free-for-charitys-tools-for-success" },
-};
-import RescueTime from "@/components/free-for-charitys-tools-for-success-components/Rescue-Time";
-import TwoCards from "@/components/free-for-charitys-tools-for-success-components/Two-Cards";
-import EducationalSites from "@/components/free-for-charitys-tools-for-success-components/Educational-Sites";
-import TwoCardsWithHeading from "@/components/free-for-charitys-tools-for-success-components/Two-Cards-With-Heading";
-import TwoFlexCards from "@/components/free-for-charitys-tools-for-success-components/Two-Flex-Cards";
-import SixGridCards from "@/components/free-for-charitys-tools-for-success-components/Six-Grid-Cards";
-import ToolsForBusinesses from "@/components/free-for-charitys-tools-for-success-components/Tools-For-Businesses";
-import FiveCardsGridSection from "@/components/free-for-charitys-tools-for-success-components/Five-Cards-Grid-Section";
+    'Free productivity, educational, and business tools curated by Free For Charity to help nonprofits and volunteers succeed.',
+  alternates: { canonical: '/free-for-charitys-tools-for-success' },
+}
+import RescueTime from '@/components/free-for-charitys-tools-for-success-components/Rescue-Time'
+import TwoCards from '@/components/free-for-charitys-tools-for-success-components/Two-Cards'
+import EducationalSites from '@/components/free-for-charitys-tools-for-success-components/Educational-Sites'
+import TwoCardsWithHeading from '@/components/free-for-charitys-tools-for-success-components/Two-Cards-With-Heading'
+import TwoFlexCards from '@/components/free-for-charitys-tools-for-success-components/Two-Flex-Cards'
+import SixGridCards from '@/components/free-for-charitys-tools-for-success-components/Six-Grid-Cards'
+import ToolsForBusinesses from '@/components/free-for-charitys-tools-for-success-components/Tools-For-Businesses'
+import FiveCardsGridSection from '@/components/free-for-charitys-tools-for-success-components/Five-Cards-Grid-Section'
 
 const index = () => {
   return (
@@ -39,7 +39,7 @@ const index = () => {
       <ToolsForBusinesses />
       <FiveCardsGridSection />
     </div>
-  );
-};
+  )
+}
 
-export default index;
+export default index

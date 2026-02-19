@@ -1,39 +1,39 @@
-import React from "react";
-import type { Metadata } from "next";
-import HeroSection from "@/components/ui/HeroSection";
+import React from 'react'
+import type { Metadata } from 'next'
+import HeroSection from '@/components/ui/HeroSection'
 
 export const metadata: Metadata = {
-  title: "Charity and Nonprofit Technology Directory",
+  title: 'Charity and Nonprofit Technology Directory',
   description:
-    "Explore free and open source technology tools for nonprofit organizations. Find solutions for web hosting, office automation, CRM, and more.",
+    'Explore free and open source technology tools for nonprofit organizations. Find solutions for web hosting, office automation, CRM, and more.',
   alternates: {
-    canonical: "/charity-and-nonprofit-technology-directory",
+    canonical: '/charity-and-nonprofit-technology-directory',
   },
-};
+}
 
 const categories = [
   {
-    name: "Charity Websites",
+    name: 'Charity Websites',
     items: [
-      "WordPress Web Hosting",
-      "WordPress Themes",
-      "WordPress Plugins",
-      "WordPress Management",
+      'WordPress Web Hosting',
+      'WordPress Themes',
+      'WordPress Plugins',
+      'WordPress Management',
     ],
   },
   {
-    name: "Accounting",
-    items: ["Installed Software", "Cloud Based"],
+    name: 'Accounting',
+    items: ['Installed Software', 'Cloud Based'],
   },
   {
-    name: "Office Automation",
-    items: ["Office Suites", "Customer Relationship Management Systems"],
+    name: 'Office Automation',
+    items: ['Office Suites', 'Customer Relationship Management Systems'],
   },
   {
-    name: "Management Tools",
-    items: ["Time Tracking", "Volunteer Management"],
+    name: 'Management Tools',
+    items: ['Time Tracking', 'Volunteer Management'],
   },
-];
+]
 
 const TechDirectoryPage = () => {
   return (
@@ -53,23 +53,21 @@ const TechDirectoryPage = () => {
 
           <div className="space-y-6 mb-12" id="lato-font">
             <p className="text-[18px] font-[500] leading-[28px] text-[#333]">
-              The Nonprofit technology directory will focus on the startup
-              charity and will have a heavy preference for items that are open
-              source or free. At the end of the day however it is up to each and
-              every nonprofit or charity to decide what is best for them.
+              The Nonprofit technology directory will focus on the startup charity and will have a
+              heavy preference for items that are open source or free. At the end of the day however
+              it is up to each and every nonprofit or charity to decide what is best for them.
             </p>
 
             <p className="text-[18px] font-[500] leading-[28px] text-[#333]">
-              This Nonprofit Technology Directory expands on the great work of
-              techsoup.org and grassroots.org by moving the focus on products
-              outside those that have directly partnered with us to show you all
-              offers both from for-profit and nonprofit companies.
+              This Nonprofit Technology Directory expands on the great work of techsoup.org and
+              grassroots.org by moving the focus on products outside those that have directly
+              partnered with us to show you all offers both from for-profit and nonprofit companies.
             </p>
 
             <p className="text-[18px] font-[500] leading-[28px] text-[#333]">
-              Many of the providers on other directories are tailored to the
-              nonprofit sector but do not offer the best solutions and should be
-              compared to the best solutions industry wide.
+              Many of the providers on other directories are tailored to the nonprofit sector but do
+              not offer the best solutions and should be compared to the best solutions industry
+              wide.
             </p>
           </div>
 
@@ -80,9 +78,7 @@ const TechDirectoryPage = () => {
                 key={cat.name}
                 className="bg-white rounded-[10px] shadow-[0px_2px_12px_0px_rgba(0,0,0,0.08)] p-6"
               >
-                <h3 className="text-[20px] font-[700] text-[#2583ab] mb-3">
-                  {cat.name}
-                </h3>
+                <h3 className="text-[20px] font-[700] text-[#2583ab] mb-3">{cat.name}</h3>
                 <ul className="space-y-2">
                   {cat.items.map((item) => (
                     <li
@@ -106,16 +102,13 @@ const TechDirectoryPage = () => {
           <h2 className="text-[28px] md:text-[36px] font-[700] text-white leading-[40px] mb-4">
             Have Questions?
           </h2>
-          <p
-            className="text-[18px] text-white/90 font-[500] leading-[28px] mb-4"
-            id="lato-font"
-          >
-            Have questions about consultation or hosting? Want to know more
-            about nonprofits? Give a real person a call:
+          <p className="text-[18px] text-white/90 font-[500] leading-[28px] mb-4" id="lato-font">
+            Have questions about consultation or hosting? Want to know more about nonprofits? Give a
+            real person a call:
           </p>
           <div className="space-y-1 mb-6">
             <p className="text-[18px] text-white font-[600]">
-              Clarke Moyer:{" "}
+              Clarke Moyer:{' '}
               <a href="tel:+15202228104" className="text-[#e88d33] hover:underline">
                 (520) 222-8104
               </a>
@@ -131,7 +124,7 @@ const TechDirectoryPage = () => {
         </div>
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default TechDirectoryPage;
+export default TechDirectoryPage

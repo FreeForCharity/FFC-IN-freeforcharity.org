@@ -1,33 +1,33 @@
-import React from "react";
-import type { Metadata } from "next";
-import HeroSection from "@/components/ui/HeroSection";
+import React from 'react'
+import type { Metadata } from 'next'
+import HeroSection from '@/components/ui/HeroSection'
 
 export const metadata: Metadata = {
-  title: "Workforce Development",
+  title: 'Workforce Development',
   description:
-    "Free workforce development and training programs in web development and programming. Build your skills while helping charities.",
+    'Free workforce development and training programs in web development and programming. Build your skills while helping charities.',
   alternates: {
-    canonical: "/workforce-development",
+    canonical: '/workforce-development',
   },
-};
+}
 
 const webDevSkills = [
-  "Website Maintenance",
-  "WordPress Theme and Plugin Setup",
-  "Content Creation",
-  "Form Creation",
-  "CSS Customization",
-  "Basic HTML",
-  "Microsoft Office 365 Skills",
-];
+  'Website Maintenance',
+  'WordPress Theme and Plugin Setup',
+  'Content Creation',
+  'Form Creation',
+  'CSS Customization',
+  'Basic HTML',
+  'Microsoft Office 365 Skills',
+]
 
 const programmingSkills = [
-  "Create Applications Using PHP, JavaScript, Python and More",
-  "Use GitHub to Save Progress and Track Your Contributions Online",
-  "Help Charities by Working on Production Systems",
-  "Work With Common Business Applications and APIs",
-  "Learn How to Manage Projects",
-];
+  'Create Applications Using PHP, JavaScript, Python and More',
+  'Use GitHub to Save Progress and Track Your Contributions Online',
+  'Help Charities by Working on Production Systems',
+  'Work With Common Business Applications and APIs',
+  'Learn How to Manage Projects',
+]
 
 const WorkforceDevelopmentPage = () => {
   return (
@@ -52,14 +52,10 @@ const WorkforceDevelopmentPage = () => {
               <h3 className="text-[24px] font-[700] text-[#2583ab] leading-[32px] mb-4">
                 Web Developer / Web Design
               </h3>
-              <p
-                className="text-[16px] font-[500] leading-[26px] text-[#333] mb-6"
-                id="lato-font"
-              >
-                Learn how to create and manage web pages. Use the tools and
-                applications that are used every day by businesses. Learn new
-                skills and practice them by making websites and applications for
-                charities. You will be able to learn:
+              <p className="text-[16px] font-[500] leading-[26px] text-[#333] mb-6" id="lato-font">
+                Learn how to create and manage web pages. Use the tools and applications that are
+                used every day by businesses. Learn new skills and practice them by making websites
+                and applications for charities. You will be able to learn:
               </p>
               <ul className="space-y-3">
                 {webDevSkills.map((skill) => (
@@ -80,14 +76,10 @@ const WorkforceDevelopmentPage = () => {
               <h3 className="text-[24px] font-[700] text-[#2583ab] leading-[32px] mb-4">
                 Programming
               </h3>
-              <p
-                className="text-[16px] font-[500] leading-[26px] text-[#333] mb-6"
-                id="lato-font"
-              >
-                Build your resume and hone your skills by programming for
-                nonprofits. Build your programming profile on GitHub. Help
-                produce solutions for problems charities face every day. You
-                will be able to:
+              <p className="text-[16px] font-[500] leading-[26px] text-[#333] mb-6" id="lato-font">
+                Build your resume and hone your skills by programming for nonprofits. Build your
+                programming profile on GitHub. Help produce solutions for problems charities face
+                every day. You will be able to:
               </p>
               <ul className="space-y-3">
                 {programmingSkills.map((skill) => (
@@ -105,8 +97,8 @@ const WorkforceDevelopmentPage = () => {
           </div>
 
           <p className="text-[14px] text-[#666] italic mt-8 text-center" id="lato-font">
-            NOTE: Workforce Development Programs are only accessible to US
-            citizens who are not dual citizens of any other nation.
+            NOTE: Workforce Development Programs are only accessible to US citizens who are not dual
+            citizens of any other nation.
           </p>
         </div>
       </section>
@@ -117,18 +109,12 @@ const WorkforceDevelopmentPage = () => {
           <h3 className="text-[24px] md:text-[30px] font-[600] text-white leading-[36px] mb-4">
             Ready to Get Started?
           </h3>
-          <p
-            className="text-[18px] text-white/90 font-[500] leading-[28px] mb-4"
-            id="lato-font"
-          >
+          <p className="text-[18px] text-white/90 font-[500] leading-[28px] mb-4" id="lato-font">
             Give a real person a text:
           </p>
           <p className="text-[20px] text-white font-[600] mb-6">
-            Free For Charity Founder: Clarke Moyer{" "}
-            <a
-              href="tel:+15202228104"
-              className="text-[#e88d33] hover:underline"
-            >
+            Free For Charity Founder: Clarke Moyer{' '}
+            <a href="tel:+15202228104" className="text-[#e88d33] hover:underline">
               (520) 222-8104
             </a>
           </p>
@@ -142,7 +128,7 @@ const WorkforceDevelopmentPage = () => {
         </div>
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default WorkforceDevelopmentPage;
+export default WorkforceDevelopmentPage

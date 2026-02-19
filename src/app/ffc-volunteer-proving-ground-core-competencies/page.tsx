@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
-import React from "react";
-import Header from "@/components/ffc-volunteer-proving-ground-core-competencies/Header";
+import type { Metadata } from 'next'
+import React from 'react'
+import Header from '@/components/ffc-volunteer-proving-ground-core-competencies/Header'
 
 export const metadata: Metadata = {
-  title: "Volunteer Proving Ground: Core Competencies",
+  title: 'Volunteer Proving Ground: Core Competencies',
   description:
-    "Mandatory first step for FFC volunteers. Learn foundational tools for security and effective collaboration in nonprofit technology services.",
-  alternates: { canonical: "/ffc-volunteer-proving-ground-core-competencies" },
-};
-import ContentSection from "@/components/ffc-volunteer-proving-ground-core-competencies/ContentSection";
-import Modulessection from "@/components/ffc-volunteer-proving-ground-core-competencies/Modules-section";
-import Footer from "@/components/ffc-volunteer-proving-ground-core-competencies/Footer";
+    'Mandatory first step for FFC volunteers. Learn foundational tools for security and effective collaboration in nonprofit technology services.',
+  alternates: { canonical: '/ffc-volunteer-proving-ground-core-competencies' },
+}
+import ContentSection from '@/components/ffc-volunteer-proving-ground-core-competencies/ContentSection'
+import Modulessection from '@/components/ffc-volunteer-proving-ground-core-competencies/Modules-section'
+import Footer from '@/components/ffc-volunteer-proving-ground-core-competencies/Footer'
 
 const index = () => {
   return (
@@ -22,7 +22,7 @@ const index = () => {
         <Footer />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default index;
+export default index

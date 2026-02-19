@@ -1,28 +1,28 @@
-"use client";
+'use client'
 
-import React from "react";
-import Link from "next/link";
-import { Mail, Phone, MapPin, ArrowRight } from "lucide-react";
+import React from 'react'
+import Link from 'next/link'
+import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react'
 
-import { FaFacebookF, FaLinkedinIn, FaGithub } from "react-icons/fa";
-import { FaXTwitter } from "react-icons/fa6";
+import { FaFacebookF, FaLinkedinIn, FaGithub } from 'react-icons/fa'
+import { FaXTwitter } from 'react-icons/fa6'
 
 const Footer: React.FC = () => {
-  const currentYear = React.useMemo(() => new Date().getFullYear(), []);
+  const currentYear = React.useMemo(() => new Date().getFullYear(), [])
   const socialLinks = [
-    { icon: FaFacebookF, href: "https://www.facebook.com/freeforcharity", label: "Facebook" },
-    { icon: FaXTwitter, href: "https://x.com/freeforcharity1", label: "X (Twitter)" },
+    { icon: FaFacebookF, href: 'https://www.facebook.com/freeforcharity', label: 'Facebook' },
+    { icon: FaXTwitter, href: 'https://x.com/freeforcharity1', label: 'X (Twitter)' },
     {
       icon: FaLinkedinIn,
-      href: "https://www.linkedin.com/company/freeforcharity/",
-      label: "LinkedIn",
+      href: 'https://www.linkedin.com/company/freeforcharity/',
+      label: 'LinkedIn',
     },
     {
       icon: FaGithub,
-      href: "https://github.com/FreeForCharity/FFC-IN-freeforcharity.org",
-      label: "GitHub",
+      href: 'https://github.com/FreeForCharity/FFC-IN-freeforcharity.org',
+      label: 'GitHub',
     },
-  ];
+  ]
   return (
     <footer className="bg-black text-white">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 py-12 px-4 md:px-6 lg:px-8">
@@ -32,7 +32,11 @@ const Footer: React.FC = () => {
 
           <div className="space-y-4">
             <a href="https://www.guidestar.org/profile/46-2471893">
-              <img src="/Svgs/footerImage.svg" alt="GuideStar Platinum Seal of Transparency" aria-label="GuideStar Platinum Seal of Transparency" />
+              <img
+                src="/Svgs/footerImage.svg"
+                alt="GuideStar Platinum Seal of Transparency"
+                aria-label="GuideStar Platinum Seal of Transparency"
+              />
             </a>
             <Link
               href="https://www.guidestar.org/profile/shared/bbbe173a-87b9-4af9-a8a2-cae255a95742"
@@ -52,9 +56,7 @@ const Footer: React.FC = () => {
             </Link>
 
             <p>
-              <span className="font-[500] text-[22px]">
-                Free For Charity EIN: 46-2471893
-              </span>
+              <span className="font-[500] text-[22px]">Free For Charity EIN: 46-2471893</span>
             </p>
           </div>
         </div>
@@ -65,36 +67,36 @@ const Footer: React.FC = () => {
 
           <ul className="space-y-2 text-sm" id="lato-font">
             {[
-              { name: "Home", href: "/" },
-              { name: "About Us", href: "/about-us" },
-              { name: "Donate", href: "/donate" },
-              { name: "Volunteer", href: "/volunteer" },
-              { name: "Help For Charities", href: "/help-for-charities" },
+              { name: 'Home', href: '/' },
+              { name: 'About Us', href: '/about-us' },
+              { name: 'Donate', href: '/donate' },
+              { name: 'Volunteer', href: '/volunteer' },
+              { name: 'Help For Charities', href: '/help-for-charities' },
               {
-                name: "Pre-501c3 Onboarding",
-                href: "/pre501c3",
+                name: 'Pre-501c3 Onboarding',
+                href: '/pre501c3',
               },
               {
-                name: "501c3 Onboarding",
-                href: "/501c3",
+                name: '501c3 Onboarding',
+                href: '/501c3',
               },
               {
-                name: "Supported Charity Login",
-                href: "https://freeforcharity.org/hub/",
+                name: 'Supported Charity Login',
+                href: 'https://freeforcharity.org/hub/',
               },
             ].map((link) => {
-              const isExternal = link.href.startsWith("http");
+              const isExternal = link.href.startsWith('http')
               return (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                     className="hover:text-[#F58C23] hover:tracking-widest transition-all text-[16px] font-[500]"
                   >
                     {link.name}
                   </Link>
                 </li>
-              );
+              )
             })}
           </ul>
 
@@ -103,32 +105,32 @@ const Footer: React.FC = () => {
             <ul className="space-y-1 text-sm" id="lato-font">
               {[
                 {
-                  name: "Donation Policy",
-                  href: "/donation-policy",
+                  name: 'Donation Policy',
+                  href: '/donation-policy',
                 },
                 {
-                  name: "Free For Charity Donation Policy",
-                  href: "/free-for-charity-donation-policy",
+                  name: 'Free For Charity Donation Policy',
+                  href: '/free-for-charity-donation-policy',
                 },
                 {
-                  name: "Free For Charity Privacy Policy",
-                  href: "/privacy-policy",
+                  name: 'Free For Charity Privacy Policy',
+                  href: '/privacy-policy',
                 },
                 {
-                  name: "Free For Charity Cookie Policy",
-                  href: "/cookie-policy",
+                  name: 'Free For Charity Cookie Policy',
+                  href: '/cookie-policy',
                 },
                 {
-                  name: "Free For Charity Terms of Service",
-                  href: "/terms-of-service",
+                  name: 'Free For Charity Terms of Service',
+                  href: '/terms-of-service',
                 },
                 {
-                  name: "Free For Charity Vulnerability Disclosure Policy",
-                  href: "/vulnerability-disclosure-policy",
+                  name: 'Free For Charity Vulnerability Disclosure Policy',
+                  href: '/vulnerability-disclosure-policy',
                 },
                 {
-                  name: "Free For Charity Security Acknowledgement",
-                  href: "/security-acknowledgements",
+                  name: 'Free For Charity Security Acknowledgement',
+                  href: '/security-acknowledgements',
                 },
               ].map((link) => (
                 <li key={link.name}>
@@ -231,7 +233,6 @@ const Footer: React.FC = () => {
             </div>
           </div>
         </div>
-
       </div>
 
       {/* Bottom Bar */}
@@ -241,7 +242,7 @@ const Footer: React.FC = () => {
       >
         <p>
           © {currentYear} All Rights Are Reserved by Free For Charity a US 501c3 Non Profit | A
-          project of{" "}
+          project of{' '}
           <Link
             href="https://freeforcharity.org"
             className="underline text-[#2EA3F2] hover:text-[#2EA3F2] transition-colors"
@@ -251,7 +252,7 @@ const Footer: React.FC = () => {
         </p>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

@@ -1,19 +1,19 @@
-"use client"; // if using Next 13+ App Router
+'use client' // if using Next 13+ App Router
 
-import React from "react";
-import Image from "next/image";
-import { IoIosArrowForward } from "react-icons/io";
+import React from 'react'
+import Image from 'next/image'
+import { IoIosArrowForward } from 'react-icons/io'
 
 interface EducationalSitesCardProps {
-  imageSrc?: string;
-  title?: string;
-  link?: string;
+  imageSrc?: string
+  title?: string
+  link?: string
 }
 
 const EducationalSitesCard: React.FC<EducationalSitesCardProps> = ({
-  imageSrc = "/Images/educational-sites-default.webp",
-  title = "ittybiz.com Great site for ultra small business info",
-  link = "https://iwillteachyoutoberich.com",
+  imageSrc = '/Images/educational-sites-default.webp',
+  title = 'ittybiz.com Great site for ultra small business info',
+  link = 'https://iwillteachyoutoberich.com',
 }) => {
   return (
     <div className="bg-[rgba(255,255,255,0.82)] rounded-[20px] overflow-hidden pt-[30px] pr-[20px] pb-[30px] pl-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.3)]">
@@ -43,9 +43,7 @@ const EducationalSitesCard: React.FC<EducationalSitesCardProps> = ({
           "
           id="montserrat-font"
         >
-          <span className="transition-all duration-300 group-hover:translate-x-1">
-            Check Here!
-          </span>
+          <span className="transition-all duration-300 group-hover:translate-x-1">Check Here!</span>
           <IoIosArrowForward
             className="
               opacity-0 translate-x-[-8px]
@@ -57,7 +55,7 @@ const EducationalSitesCard: React.FC<EducationalSitesCardProps> = ({
         </a>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default EducationalSitesCard;
+export default EducationalSitesCard

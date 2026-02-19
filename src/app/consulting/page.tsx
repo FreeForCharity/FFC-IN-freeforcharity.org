@@ -1,15 +1,15 @@
-import React from "react";
-import type { Metadata } from "next";
-import HeroSection from "@/components/ui/HeroSection";
+import React from 'react'
+import type { Metadata } from 'next'
+import HeroSection from '@/components/ui/HeroSection'
 
 export const metadata: Metadata = {
-  title: "Consulting",
+  title: 'Consulting',
   description:
-    "Free nonprofit consulting services from Free For Charity. Get expert help with charity operations, technology, and strategy at no cost.",
+    'Free nonprofit consulting services from Free For Charity. Get expert help with charity operations, technology, and strategy at no cost.',
   alternates: {
-    canonical: "/consulting",
+    canonical: '/consulting',
   },
-};
+}
 
 const ConsultingPage = () => {
   return (
@@ -31,14 +31,12 @@ const ConsultingPage = () => {
             className="text-[18px] md:text-[20px] font-[500] leading-[28px] md:leading-[30px] text-[#333] mb-8"
             id="lato-font"
           >
-            Have questions about consultation services? Want to know more about
-            nonprofits? Looking to chat? Give a real person a call for free:
+            Have questions about consultation services? Want to know more about nonprofits? Looking
+            to chat? Give a real person a call for free:
           </p>
 
           <div className="bg-white rounded-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.1)] p-8 inline-block">
-            <p className="text-[22px] font-[600] text-[#2583ab]">
-              Clarke Moyer
-            </p>
+            <p className="text-[22px] font-[600] text-[#2583ab]">Clarke Moyer</p>
             <a
               href="tel:+15202228104"
               className="text-[24px] font-[700] text-[#f27022] hover:underline"
@@ -55,10 +53,7 @@ const ConsultingPage = () => {
           <h2 className="text-[28px] md:text-[36px] font-[700] text-white leading-[40px] mb-4">
             Ready to Get Started?
           </h2>
-          <p
-            className="text-[18px] text-white/90 font-[500] leading-[28px] mb-6"
-            id="lato-font"
-          >
+          <p className="text-[18px] text-white/90 font-[500] leading-[28px] mb-6" id="lato-font">
             Reach out today and let us help your nonprofit succeed.
           </p>
           <a
@@ -71,7 +66,7 @@ const ConsultingPage = () => {
         </div>
       </section>
     </div>
-  );
-};
+  )
+}
 
-export default ConsultingPage;
+export default ConsultingPage

@@ -25,6 +25,7 @@ Review a pull request for this Next.js static site project.
    - GitHub Actions secrets use `${{ secrets.* }}` syntax
 
 5. Verify the build still works:
+
    ```bash
    npm run lint
    npm run build
@@ -40,6 +41,7 @@ Review a pull request for this Next.js static site project.
 ## When to Use
 
 Use this agent when reviewing any PR before merge. Invoke with the PR number:
+
 ```
 /agent pr-reviewer 42
 ```

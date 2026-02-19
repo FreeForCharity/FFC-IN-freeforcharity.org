@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
-import React from "react";
-import HeroSection from "@/components/ui/HeroSection";
-import CharityText from "@/components/online-impacts-onboarding-guide-components/charity-text";
-import ReadyToGetStartedNow from "@/components/online-impacts-onboarding-guide-components/Ready-To-Get-Started-Now";
-import CallSection from "@/components/help-for-charities-components/call-section";
+import type { Metadata } from 'next'
+import React from 'react'
+import HeroSection from '@/components/ui/HeroSection'
+import CharityText from '@/components/online-impacts-onboarding-guide-components/charity-text'
+import ReadyToGetStartedNow from '@/components/online-impacts-onboarding-guide-components/Ready-To-Get-Started-Now'
+import CallSection from '@/components/help-for-charities-components/call-section'
 
 export const metadata: Metadata = {
-  title: "Online Impacts Onboarding Guide",
+  title: 'Online Impacts Onboarding Guide',
   description:
-    "Onboarding guide for charities hosted and designed by Online Impacts, providing instant access to free tools and services.",
-  alternates: { canonical: "/online-impacts-onboarding-guide" },
-};
+    'Onboarding guide for charities hosted and designed by Online Impacts, providing instant access to free tools and services.',
+  alternates: { canonical: '/online-impacts-onboarding-guide' },
+}
 
 const index = () => {
   return (
@@ -24,7 +24,7 @@ const index = () => {
       <ReadyToGetStartedNow />
       <CallSection />
     </div>
-  );
-};
+  )
+}
 
-export default index;
+export default index

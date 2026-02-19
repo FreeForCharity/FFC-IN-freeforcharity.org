@@ -1,18 +1,18 @@
-import type { Metadata } from "next";
-import React from "react";
-import HeroSection from "@/components/ui/HeroSection";
-import ReadyToGetStarted from "@/components/help-for-charities-components/Ready-to-Get-Started-Now";
-import CharityNonprofitDirectorFaq from "@/components/help-for-charities-components/Charity-Nonprofit-Director-Faq";
-import CallSection from "@/components/help-for-charities-components/call-section";
+import type { Metadata } from 'next'
+import React from 'react'
+import HeroSection from '@/components/ui/HeroSection'
+import ReadyToGetStarted from '@/components/help-for-charities-components/Ready-to-Get-Started-Now'
+import CharityNonprofitDirectorFaq from '@/components/help-for-charities-components/Charity-Nonprofit-Director-Faq'
+import CallSection from '@/components/help-for-charities-components/call-section'
 
 export const metadata: Metadata = {
-  title: "Pre-501(c)(3) Onboarding Guide",
+  title: 'Pre-501(c)(3) Onboarding Guide',
   description:
-    "Onboarding guide for charities pending 501(c)(3) status. Access free tools and services from Free For Charity while your application is in progress.",
-  alternates: { canonical: "/pre501c3" },
-};
-import Faqs from "@/components/pre501c3-components/Faqs";
-import Charity from "@/components/pre501c3-components/charity";
+    'Onboarding guide for charities pending 501(c)(3) status. Access free tools and services from Free For Charity while your application is in progress.',
+  alternates: { canonical: '/pre501c3' },
+}
+import Faqs from '@/components/pre501c3-components/Faqs'
+import Charity from '@/components/pre501c3-components/charity'
 
 const index = () => {
   return (
@@ -29,7 +29,7 @@ const index = () => {
       <ReadyToGetStarted />
       <CallSection />
     </div>
-  );
-};
+  )
+}
 
-export default index;
+export default index

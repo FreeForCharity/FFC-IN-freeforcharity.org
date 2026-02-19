@@ -1,12 +1,12 @@
-"use client";
+'use client'
 
-import React from "react";
-import HeroSection from "@/components/ui/HeroSection";
-import HelpForCharities from "@/components/ui/help-for-charity";
-import AccordionSection from "@/components/help-for-charities-components/AccordianSection";
-import ReadyToGetStarted from "@/components/help-for-charities-components/Ready-to-Get-Started-Now";
-import CharityNonprofitDirectorFaq from "@/components/ui/Charity-Nonprofit-Director-Faq";
-import CallSection from "@/components/help-for-charities-components/call-section";
+import React from 'react'
+import HeroSection from '@/components/ui/HeroSection'
+import HelpForCharities from '@/components/ui/help-for-charity'
+import AccordionSection from '@/components/help-for-charities-components/AccordianSection'
+import ReadyToGetStarted from '@/components/help-for-charities-components/Ready-to-Get-Started-Now'
+import CharityNonprofitDirectorFaq from '@/components/ui/Charity-Nonprofit-Director-Faq'
+import CallSection from '@/components/help-for-charities-components/call-section'
 
 const Page: React.FC = () => {
   return (
@@ -33,7 +33,7 @@ const Page: React.FC = () => {
       <ReadyToGetStarted />
       <CallSection />
     </div>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page

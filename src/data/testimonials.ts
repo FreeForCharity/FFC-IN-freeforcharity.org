@@ -3,19 +3,13 @@
 // To edit testimonials, edit the JSON files directly in src/data/testimonials/
 
 export type Testimonial = {
-  author: string;
-  role: string;
-  quote: string;
-};
+  author: string
+  role: string
+  quote: string
+}
 
-import testimonial1 from "./testimonials/testimonial-1.json";
-import testimonial2 from "./testimonials/testimonial-2.json";
-import testimonial3 from "./testimonials/testimonial-3.json";
+import testimonial1 from './testimonials/testimonial-1.json'
+import testimonial2 from './testimonials/testimonial-2.json'
+import testimonial3 from './testimonials/testimonial-3.json'
 
-export const testimonials: Testimonial[] = [
-  testimonial1,
-  testimonial2,
-  testimonial3,
-];
-
-
+export const testimonials: Testimonial[] = [testimonial1, testimonial2, testimonial3]

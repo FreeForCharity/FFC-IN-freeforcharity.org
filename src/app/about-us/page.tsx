@@ -1,17 +1,17 @@
-import type { Metadata } from "next";
-import React from "react";
-import HeroSection from "@/components/ui/HeroSection";
-import Content from "@/components/about-us-components/content";
-import CardSection from "@/components/about-us-components/Card-section";
-import ParaText from "@/components/about-us-components/ParaText";
+import type { Metadata } from 'next'
+import React from 'react'
+import HeroSection from '@/components/ui/HeroSection'
+import Content from '@/components/about-us-components/content'
+import CardSection from '@/components/about-us-components/Card-section'
+import ParaText from '@/components/about-us-components/ParaText'
 
 export const metadata: Metadata = {
-  title: "About Us",
+  title: 'About Us',
   description:
     "Learn about Free For Charity's mission to reduce costs and increase revenues for nonprofits by connecting students, professionals, and businesses with charities in need.",
-  alternates: { canonical: "/about-us" },
-};
-import CallToAction from "@/components/about-us-components/CallToAction";
+  alternates: { canonical: '/about-us' },
+}
+import CallToAction from '@/components/about-us-components/CallToAction'
 
 const index = () => {
   return (
@@ -33,7 +33,7 @@ const index = () => {
         <h1>About Us Page</h1>
       </div> */}
     </div>
-  );
-};
+  )
+}
 
-export default index;
+export default index

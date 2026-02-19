@@ -5,11 +5,13 @@ Run a health check on the built site to verify core functionality.
 ## Steps
 
 1. Build the site:
+
    ```bash
    npm run build
    ```
 
 2. Start the preview server:
+
    ```bash
    npm run preview &
    ```
@@ -23,6 +25,7 @@ Run a health check on the built site to verify core functionality.
    - Cookie consent banner appears
 
 4. Run the existing Playwright tests:
+
    ```bash
    npm run test
    ```
@@ -38,6 +41,7 @@ Run a health check on the built site to verify core functionality.
 ## When to Use
 
 Use this agent after making significant changes to verify the site still works end-to-end. Especially useful after:
+
 - Component refactors
 - Adding/removing pages
 - Updating dependencies

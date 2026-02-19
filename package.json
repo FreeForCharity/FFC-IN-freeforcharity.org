@@ -7,9 +7,13 @@
     "build": "next build",
     "preview": "npx serve -s out -l 3000",
     "lint": "eslint",
-    "test": "playwright test",
-    "test:ui": "playwright test --ui",
-    "test:headed": "playwright test --headed"
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check-links": "linkinator ./out --recurse --config .linkinatorrc.json",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "prepare": "husky"
   },
   "dependencies": {
     "framer-motion": "^12.23.24",
@@ -22,6 +26,8 @@
     "swiper": "^12.0.3"
   },
   "devDependencies": {
+    "@commitlint/cli": "^20.4.1",
+    "@commitlint/config-conventional": "^20.4.1",
     "@playwright/test": "^1.56.0",
     "@tailwindcss/postcss": "^4.1.12",
     "@types/node": "^20",
@@ -29,6 +35,11 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "^16.0.10",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "husky": "^9.1.7",
+    "linkinator": "^7.5.3",
+    "prettier": "^3.8.1",
     "tailwindcss": "^4.1.12",
     "typescript": "^5"
   }
