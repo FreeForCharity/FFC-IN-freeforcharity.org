@@ -38,8 +38,8 @@ const eslintConfig = [
     },
   },
   {
-    // Allow require() in CJS config files (Jest, commitlint)
-    files: ['*.config.js', '*.config.cjs'],
+    // Allow require() in CJS config files and test mocks
+    files: ['*.config.js', '*.config.cjs', '__mocks__/**/*.js'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
     },
