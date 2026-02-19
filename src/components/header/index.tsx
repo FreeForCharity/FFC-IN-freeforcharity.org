@@ -7,6 +7,7 @@ import { FiMenu, FiChevronDown } from 'react-icons/fi'
 import { LiaSearchSolid } from 'react-icons/lia'
 import { RxCross2 } from 'react-icons/rx'
 import { motion, AnimatePresence } from 'framer-motion'
+import { assetPath } from '@/lib/assetPath'
 
 interface DropdownItem {
   label: string
@@ -149,7 +150,7 @@ const Header: React.FC = () => {
             >
               <Link href="/" onClick={handleLinkClick} className="block">
                 <img
-                  src="/Images/ffc-logo-banner.webp"
+                  src={assetPath('/Images/ffc-logo-banner.webp')}
                   alt="Free For Charity"
                   className={`transition-all duration-300 ${isScrolled ? 'h-7' : 'h-11'}`}
                 />

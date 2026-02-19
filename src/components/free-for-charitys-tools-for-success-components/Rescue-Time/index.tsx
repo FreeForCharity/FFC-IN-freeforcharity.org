@@ -4,6 +4,7 @@ import React from 'react'
 import Image from 'next/image'
 import { IoIosArrowForward } from 'react-icons/io'
 import { motion, Variants } from 'framer-motion'
+import { assetPath } from '@/lib/assetPath'
 
 const sectionVariants: Variants = {
   offscreen: { opacity: 0, scale: 0.8 },
@@ -29,7 +30,7 @@ const Index = () => {
           {/* Image */}
           <div className="relative w-full aspect-[16/9] mb-[30px]">
             <Image
-              src="/Images/credit-karma-logo.webp"
+              src={assetPath('/Images/credit-karma-logo.webp')}
               alt="Placeholder Image"
               fill
               className="object-contain"
@@ -97,7 +98,7 @@ const Index = () => {
           {/* Image */}
           <div className="relative w-full aspect-[16/9] mb-[30px]">
             <Image
-              src="/Images/rescuetime.webp"
+              src={assetPath('/Images/rescuetime.webp')}
               alt="Placeholder Image"
               fill
               className="object-contain"

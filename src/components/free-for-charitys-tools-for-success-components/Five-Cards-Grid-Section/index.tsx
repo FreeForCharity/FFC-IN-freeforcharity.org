@@ -3,6 +3,7 @@
 import React from 'react'
 import EducationalSitesCard from '@/components/ui/EducationalSitesCard'
 import { motion, Variants } from 'framer-motion'
+import { assetPath } from '@/lib/assetPath'
 
 const cardVariants: Variants = {
   offscreen: { opacity: 0, scale: 0.8 },
@@ -16,17 +17,17 @@ const cardVariants: Variants = {
 const index = () => {
   const firstGrid = [
     {
-      imageSrc: '/Images/upwork.webp',
+      imageSrc: assetPath('/Images/upwork.webp'),
       title: 'ittybiz.com Great site for ultra small business info',
       link: 'http://ittybiz.com/about/',
     },
     {
-      imageSrc: '/Images/upwork.webp',
+      imageSrc: assetPath('/Images/upwork.webp'),
       title: 'earn1k.com Program for earning your for $1000 on the side by Ramit',
       link: 'https://www.iwillteachyoutoberich.com/',
     },
     {
-      imageSrc: '/Images/upwork.webp',
+      imageSrc: assetPath('/Images/upwork.webp'),
       title: 'appsumo.com Another program for earning your first money online',
       link: 'https://appsumo.com/courses-learning/',
     },
@@ -34,19 +35,24 @@ const index = () => {
 
   const secondGrid = [
     {
-      imageSrc: '/Images/upwork.webp',
+      imageSrc: assetPath('/Images/upwork.webp'),
       title: '100startup.com First book on starting a business',
       link: 'https://100startup.com/',
     },
     {
-      imageSrc: '/Images/upwork.webp',
+      imageSrc: assetPath('/Images/upwork.webp'),
       title: 'theleanstartup.com The next step up book on starting a business',
       link: 'http://theleanstartup.com/',
     },
   ]
 
   return (
-    <div className="bg-[linear-gradient(180deg,rgba(232,141,51,0.5)_0%,rgba(44,96,118,0.89)_100%),url('/Images/pexels-serpstat-572056.webp')] bg-cover bg-center pt-[67px] pb-[67px]">
+    <div
+      className="bg-cover bg-center pt-[67px] pb-[67px]"
+      style={{
+        backgroundImage: `linear-gradient(180deg,rgba(232,141,51,0.5) 0%,rgba(44,96,118,0.89) 100%),url('${assetPath('/Images/pexels-serpstat-572056.webp')}')`,
+      }}
+    >
       <div className="py-[27px] w-[80%] mx-auto">
         <h1 className="text-center pb-[10px] tracking-[1px] mb-[11px] text-[30px] md:text-[40px] text-[#333] font-[700] leading-[44px]">
           Educational Sites for Starting a Business
