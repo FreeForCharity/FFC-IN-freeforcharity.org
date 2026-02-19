@@ -227,6 +227,7 @@ const Header: React.FC = () => {
                   <button
                     onClick={handleSearchToggle}
                     className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+                    aria-label="Search"
                   >
                     <LiaSearchSolid className="h-5 w-5 cursor-pointer" />
                   </button>
@@ -236,6 +237,8 @@ const Header: React.FC = () => {
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                   className="lg:hidden p-2 text-gray-600 hover:text-blue-600"
+                  aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+                  aria-expanded={isMobileMenuOpen ? 'true' : 'false'}
                 >
                   {isMobileMenuOpen ? (
                     <RxCross2 className="h-6 w-6" />
@@ -253,7 +256,11 @@ const Header: React.FC = () => {
                   className="w-full px-4 py-2 focus:outline-none"
                   autoFocus
                 />
-                <button onClick={handleSearchToggle} className="ml-2 p-2 text-gray-600">
+                <button
+                  onClick={handleSearchToggle}
+                  className="ml-2 p-2 text-gray-600"
+                  aria-label="Close search"
+                >
                   <RxCross2 className="cursor-pointer h-5 w-5" />
                 </button>
               </div>

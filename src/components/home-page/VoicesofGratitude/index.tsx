@@ -27,12 +27,12 @@ export default function TestimonialSlider() {
   return (
     <>
       <div className="py-[30px]">
-        <h1
+        <h2
           className="font-[400] text-[40px] lg:text-[48px]  tracking-[0] text-center mx-auto mb-[50px]"
           id="faustina-font"
         >
           Voices of Gratitude
-        </h1>
+        </h2>
         <div className="bg-[#2A6682] ">
           <div className="w-[90%] mx-auto">
             <div className="w-full mx-auto lg:p-8">
