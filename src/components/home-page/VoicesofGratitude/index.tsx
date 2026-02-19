@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { testimonials } from '@/data/testimonials'
+import { assetPath } from '@/lib/assetPath'
 
 export default function TestimonialSlider() {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -60,7 +61,7 @@ export default function TestimonialSlider() {
                           {[...Array(5)].map((_, i) => (
                             <Image
                               key={i}
-                              src="/Svgs/start-icon.svg"
+                              src={assetPath('/Svgs/start-icon.svg')}
                               width={29}
                               height={29}
                               alt="star icon"

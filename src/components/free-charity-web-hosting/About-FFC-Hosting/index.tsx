@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import { assetPath } from '@/lib/assetPath'
 
 const index = () => {
   return (
@@ -8,7 +9,7 @@ const index = () => {
         <div className="w-full md:w-[38.2%] mr-[32px]">
           <div className="rounded-[15px] overflow-hidden shadow-[0px_2px_18px_0px_rgba(0,0,0,0.3)] w-full">
             <img
-              src="/Images/About-FFC-Hosting.webp"
+              src={assetPath('/Images/About-FFC-Hosting.webp')}
               alt="Example"
               className="w-full h-auto object-cover"
             />

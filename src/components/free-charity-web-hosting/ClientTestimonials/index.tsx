@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { testimonials } from '@/data/testimonials'
+import { assetPath } from '@/lib/assetPath'
 
 export default function TestimonialSlider() {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -51,7 +52,7 @@ export default function TestimonialSlider() {
           <div
             className="absolute inset-0 bg-cover bg-bottom"
             style={{
-              backgroundImage: `url('/Images/client-section-bg-image.webp')`,
+              backgroundImage: `url('${assetPath('/Images/client-section-bg-image.webp')}')`,
             }}
           ></div>
 

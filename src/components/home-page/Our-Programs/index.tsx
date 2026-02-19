@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import OrangeFaqItem from '@/components/ui/OrangeFaqItem'
+import { assetPath } from '@/lib/assetPath'
 
 const index = () => {
   return (
@@ -17,7 +18,7 @@ const index = () => {
           <div className="mb-[40px]  flex items-center gap-[20px]">
             <div className="w-[100px] flex items-center justify-center p-2 h-[100px] bg-[#2A6682] rounded-full">
               <div className="relative w-[56px] h-[56px]">
-                <Image src="/Svgs/FFC-Domains.svg" alt="FFC-Domains" fill></Image>
+                <Image src={assetPath('/Svgs/FFC-Domains.svg')} alt="FFC-Domains" fill></Image>
               </div>
             </div>
             <h1 className="text-[36px] font-[400] " id="lato-font">
@@ -73,7 +74,7 @@ const index = () => {
           <div className="lg:pl-[50px] mb-[40px]  flex items-center gap-[20px]">
             <div className="w-[100px] flex items-center justify-center p-2 h-[100px] bg-[#2A6682] rounded-full">
               <div className="relative w-[56px] h-[56px]">
-                <Image src="/Svgs/FFC-Hosting.svg" alt="FFC-Domains" fill></Image>
+                <Image src={assetPath('/Svgs/FFC-Hosting.svg')} alt="FFC-Domains" fill></Image>
               </div>
             </div>
             <h1 className="text-[36px] font-[400]  " id="lato-font">
@@ -139,7 +140,7 @@ const index = () => {
           <div className="lg:pl-[50px] mb-[40px]  flex items-center gap-[20px]">
             <div className="w-[100px] flex items-center justify-center p-2 h-[100px] bg-[#2A6682] rounded-full">
               <div className="relative w-[56px] h-[56px]">
-                <Image src="/Svgs/FFC-Consulting.svg" alt="FFC-Domains" fill></Image>
+                <Image src={assetPath('/Svgs/FFC-Consulting.svg')} alt="FFC-Domains" fill></Image>
               </div>
             </div>
             <h1 className="text-[36px] font-[400]  " id="lato-font">

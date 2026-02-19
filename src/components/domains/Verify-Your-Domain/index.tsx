@@ -3,6 +3,7 @@ import Image from 'next/image'
 import DomainCard from '@/components/ui/Domain-Card'
 import { IoCall } from 'react-icons/io5'
 import { IoMdMail } from 'react-icons/io'
+import { assetPath } from '@/lib/assetPath'
 
 const index = () => {
   return (
@@ -38,7 +39,7 @@ const index = () => {
             <div className="mb-4 md:mb-0 md:mr-4">
               <div className="relative h-[100px] w-[100px]">
                 <Image
-                  src="/Images/1.webp"
+                  src={assetPath('/Images/1.webp')}
                   fill
                   alt="domain verification email"
                   className="object-contain"
@@ -90,7 +91,7 @@ const index = () => {
             <div className="mb-4 md:mb-0 md:mr-4">
               <div className="relative h-[100px] w-[100px]">
                 <Image
-                  src="/Images/2.webp"
+                  src={assetPath('/Images/2.webp')}
                   fill
                   alt="domain verification email"
                   className="object-contain"
