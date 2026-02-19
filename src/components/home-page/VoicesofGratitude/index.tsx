@@ -1,27 +1,27 @@
-"use client";
+'use client'
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import { testimonials } from "@/data/testimonials";
+import React, { useState, useEffect } from 'react'
+import Image from 'next/image'
+import { testimonials } from '@/data/testimonials'
 
 export default function TestimonialSlider() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
 
   // Auto-scroll behavior
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused) return
 
     const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-    }, 4000); // Change slide every 4 seconds
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length)
+    }, 4000) // Change slide every 4 seconds
 
-    return () => clearInterval(interval);
-  }, [isPaused, testimonials.length]);
+    return () => clearInterval(interval)
+  }, [isPaused, testimonials.length])
 
   const goToSlide = (index: number) => {
-    setCurrentIndex(index);
-  };
+    setCurrentIndex(index)
+  }
 
   return (
     <>
@@ -49,16 +49,11 @@ export default function TestimonialSlider() {
                     <div key={index} className="w-full flex-shrink-0 px-4">
                       <div
                         className={`lg:p-8 text-white transition-all duration-500 ${
-                          index === currentIndex
-                            ? "scale-100 opacity-100"
-                            : "scale-95 opacity-0"
+                          index === currentIndex ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
                         }`}
-                        style={{ minHeight: "200px" }}
+                        style={{ minHeight: '200px' }}
                       >
-                        <p
-                          className="text-center font-[400] text-[28px] mb-3"
-                          id="fauna-font"
-                        >
+                        <p className="text-center font-[400] text-[28px] mb-3" id="fauna-font">
                           {testimonial.author}
                         </p>
                         <div className="flex justify-center mb-3">
@@ -74,10 +69,7 @@ export default function TestimonialSlider() {
                           ))}
                         </div>
 
-                        <p
-                          className="text-center text-[21px] font-[400]"
-                          id="fauna-font"
-                        >
+                        <p className="text-center text-[21px] font-[400]" id="fauna-font">
                           &ldquo;{testimonial.quote}&rdquo;
                         </p>
                       </div>
@@ -93,8 +85,8 @@ export default function TestimonialSlider() {
                       onClick={() => goToSlide(index)}
                       className={`transition-all duration-300 rounded-full ${
                         index === currentIndex
-                          ? "w-3 h-3 bg-[#D9D9D9] scale-150"
-                          : "w-3 h-3 bg-white bg-opacity-50 hover:bg-opacity-75"
+                          ? 'w-3 h-3 bg-[#D9D9D9] scale-150'
+                          : 'w-3 h-3 bg-white bg-opacity-50 hover:bg-opacity-75'
                       }`}
                       aria-label={`Go to slide ${index + 1}`}
                     />
@@ -113,5 +105,5 @@ export default function TestimonialSlider() {
         </div>
       </div>
     </>
-  );
+  )
 }

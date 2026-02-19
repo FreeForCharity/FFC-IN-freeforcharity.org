@@ -5,11 +5,13 @@ This guide provides comprehensive documentation for testing the Free For Charity
 ## Quick Start
 
 ### Prerequisites
+
 - Node.js 20.x installed
 - Dependencies installed (`npm install`)
 - Built application (`npm run build`)
 
 ### Run Tests
+
 ```bash
 # Build the application
 npm run build
@@ -26,32 +28,38 @@ npm run test:ui       # Interactive Playwright UI
 ## Quick Test Checklist
 
 ### 1. Verify Dependencies
+
 ```bash
 node --version        # Should be v20.x
 npm --version         # Should be 10.x
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 npm install           # Takes ~10-15 seconds
 ```
 
 ### 3. Run Linter
+
 ```bash
 npm run lint          # Expect 11 warnings (see below)
 ```
 
 ### 4. Build Application
+
 ```bash
 npm run build         # Takes ~15-20 seconds
 ```
 
 ### 5. Preview Build
+
 ```bash
 npm run preview       # Visit http://localhost:3000
 ```
 
 ### 6. Run Automated Tests
+
 ```bash
 npm test              # Requires build first
 ```
@@ -90,11 +98,13 @@ npm run lint
    - Recommendation: Review and fix if causing issues
 
 **Rules Enabled**:
+
 - Next.js core-web-vitals
 - TypeScript recommended rules
 - React hooks rules
 
 **Ignored Paths**:
+
 - `node_modules/`
 - `.next/`
 - `out/`
@@ -112,6 +122,7 @@ npm run lint
 - **Path Aliases**: `@/*` maps to `src/*`
 
 **Check Types**:
+
 ```bash
 npm run build  # Type checking is part of build process
 ```
@@ -126,7 +137,8 @@ The project uses **Playwright** for end-to-end testing. All tests run automatica
 
 **Test Framework**: Playwright v1.56.0  
 **Browser**: Chromium (uses system browser to avoid network restrictions)  
-**Test Statistics**: 
+**Test Statistics**:
+
 - **Total**: 29 tests across 6 test suites
 - **Passing**: 28 tests ✅
 - **Skipped**: 1 test ⏭️
@@ -167,6 +179,7 @@ npx playwright test --debug
 #### CI/CD Environment
 
 Tests run automatically in GitHub Actions:
+
 - **Trigger**: Every push to main branch
 - **Environment**: Ubuntu latest with Node.js 20
 - **Browser Setup**: `npx playwright install --with-deps chromium`
@@ -187,7 +200,6 @@ Tests that verify the Free For Charity logo and images display correctly.
 1. **`should display logo in header`**
    - **Purpose**: Verifies logo appears in site header
    - **Checks**: Logo visibility, src attribute, alt text
-   
 2. **`should display hero section image`**
    - **Purpose**: Validates hero section image displays correctly
    - **Checks**: Hero image element present and visible
@@ -340,6 +352,7 @@ Tests the footer copyright notice.
 **Playwright Config** (`playwright.config.ts`)
 
 Key settings:
+
 - **Test Directory**: `./tests`
 - **Base URL**: `http://localhost:3000`
 - **Parallel Execution**: Enabled locally, disabled in CI for stability
@@ -350,6 +363,7 @@ Key settings:
 - **Reporter**: HTML report (view with `npx playwright show-report`)
 
 **Special Features**:
+
 - Automatically detects and uses system Chromium browser
 - Works in restricted network environments (no external downloads)
 - Prevents accidental `test.only` in CI (`forbidOnly: true`)
@@ -362,6 +376,7 @@ Key settings:
 **File**: `.github/workflows/nextjs.yml`
 
 **Pipeline Steps**:
+
 1. ✅ Checkout repository
 2. ✅ Setup Node.js 20 with caching
 3. ✅ Install dependencies (`npm ci`)
@@ -373,10 +388,12 @@ Key settings:
 9. ✅ Deploy to GitHub Pages (only if tests pass)
 
 **Triggers**:
+
 - Push to `main` branch
 - Manual workflow dispatch
 
 **Failure Handling**:
+
 - Tests must pass before deployment
 - Build artifacts uploaded even on test failure
 - Traces and screenshots available for debugging
@@ -403,6 +420,7 @@ npm audit
 **Current Status**: ✅ 0 vulnerabilities (as of build)
 
 **Best Practices**:
+
 - Run `npm audit` regularly
 - Update dependencies promptly when vulnerabilities are discovered
 - Enable Dependabot for automated security updates
@@ -418,6 +436,7 @@ npm audit
 ## Manual Testing Checklist
 
 ### Visual Elements
+
 - [ ] Logo displays in Header (top navigation)
 - [ ] Logo renders correctly on all pages
 - [ ] Images load on both custom domain and GitHub Pages
@@ -426,6 +445,7 @@ npm audit
 - [ ] All animations work smoothly
 
 ### Content Verification
+
 - [ ] Homepage loads completely
 - [ ] All 29 pages are accessible
 - [ ] Team members display correctly (5 board members)
@@ -435,6 +455,7 @@ npm audit
 - [ ] Header navigation links work
 
 ### Forms and Interactions
+
 - [ ] Contact form submission works
 - [ ] Donate page loads correctly
 - [ ] Volunteer page loads correctly
@@ -442,6 +463,7 @@ npm audit
 - [ ] External links open correctly
 
 ### Cross-Browser Testing
+
 - [ ] Chrome/Chromium
 - [ ] Firefox
 - [ ] Safari
@@ -451,6 +473,7 @@ npm audit
 ## Expected Content
 
 ### Team Members (src/data/team/)
+
 1. **Clarke Moyer** - Founder/President
 2. **Chris Rae** - Vice President
 3. **Tyler Carlotto** - Secretary
@@ -458,11 +481,13 @@ npm audit
 5. **Rebecca Cook** - Member at Large
 
 ### Testimonials (src/data/testimonials/)
+
 1. Professional online presence testimonial
 2. Free domain and email testimonial
 3. Core mission focus testimonial
 
 ### FAQs (src/data/faqs/)
+
 1. **What is the organization aiming to accomplish?** (JSON file)
 2. **Are you really a Charity?** (JSON file)
 3. Additional FAQs defined inline in `src/data/faqs.ts`
@@ -472,11 +497,13 @@ npm audit
 ### Build Issues
 
 **Issue: Build fails with network errors**
+
 - **Status**: ✅ **RESOLVED** - Google Fonts have been removed
 - **Current**: Build works without modifications
 - **Build time**: ~15-20 seconds
 
 **Issue: Build cache not found warning**
+
 - **Cause**: First build or cache was cleared
 - **Solution**: Normal behavior, subsequent builds will be faster
 - **Impact**: None - just informational
@@ -484,6 +511,7 @@ npm audit
 ### Development Server Issues
 
 **Issue: Port 3000 already in use**
+
 ```bash
 # Kill process on port 3000
 npx kill-port 3000
@@ -492,6 +520,7 @@ npm run dev -- -p 3001
 ```
 
 **Issue: Changes not reflecting**
+
 ```bash
 # Clear Next.js cache
 rm -rf .next
@@ -501,24 +530,28 @@ npm run dev
 ### Test Issues
 
 **Issue: Playwright browsers not found**
+
 ```bash
 # Install browsers with system dependencies
 npx playwright install chromium --with-deps
 ```
 
 **Issue: Tests timeout**
+
 - **Cause**: Web server didn't start in time
 - **Solution**: Timeout is set to 120s in `playwright.config.ts`
 - **Check**: Ensure build completed successfully
 - **Verify**: Run `npm run preview` manually to test
 
 **Issue: Tests pass locally but fail in CI**
+
 - **Check**: GitHub Actions logs for specific errors
 - **Review**: Test artifacts (screenshots, traces) in Actions
 - **Compare**: Local vs CI environment differences
 - **Consider**: Timing/race conditions in tests
 
 **Issue: Image dimension test skipped**
+
 - **Status**: Expected behavior
 - **Reason**: `naturalWidth`/`naturalHeight` unreliable in CI
 - **Impact**: None - other tests cover image loading
@@ -526,6 +559,7 @@ npx playwright install chromium --with-deps
 ### Content Issues
 
 **Issue: Content not showing**
+
 ```bash
 # Check JSON file validity
 cat src/data/team/clarke-moyer.json | jq .
@@ -535,6 +569,7 @@ cat src/data/team.ts
 ```
 
 **Issue: Images not loading**
+
 - **Custom domain**: Images should load from root path
 - **GitHub Pages**: Images need basePath prefix
 - **Solution**: Use `assetPath()` helper from `src/lib/assetPath.ts`

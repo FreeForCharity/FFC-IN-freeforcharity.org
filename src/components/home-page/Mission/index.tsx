@@ -1,5 +1,5 @@
-import React from "react";
-import { assetPath } from "@/lib/assetPath";
+import React from 'react'
+import { assetPath } from '@/lib/assetPath'
 
 const index = () => {
   return (
@@ -15,17 +15,16 @@ const index = () => {
           className="font-[700] text-[25px] leading-[150%] tracking-[0] text-center mb-[30px]"
           id="lato-font"
         >
-          Reduce costs and increase revenues for nonprofits; putting that money
-          back into their charitable mission where it belongs.
+          Reduce costs and increase revenues for nonprofits; putting that money back into their
+          charitable mission where it belongs.
         </p>
         <p
           className="font-[500] text-[25px] leading-[150%] tracking-[0] text-center"
           id="lato-font"
         >
-          This charity for charities seeks to replace as many functions as
-          possible that current nonprofits pay for to for-profit companies with
-          free or at cost work from our campus, on site projects, or
-          partnerships with other entities.
+          This charity for charities seeks to replace as many functions as possible that current
+          nonprofits pay for to for-profit companies with free or at cost work from our campus, on
+          site projects, or partnerships with other entities.
         </p>
         <div className="mt-[50px] flex justify-center">
           <video
@@ -45,7 +44,7 @@ const index = () => {
 
       <div className="w-[95%] mt-[50px] mx-auto border border-[#2B627B]"></div>
     </div>
-  );
-};
+  )
+}
 
-export default index;
+export default index

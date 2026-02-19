@@ -12,14 +12,14 @@ See **AGENTS.md** for the complete project reference. This file gives you the pr
 
 ## Quick Context
 
-| What      | Detail                                                    |
-| --------- | --------------------------------------------------------- |
-| Framework | Next.js with App Router (see package.json)                |
-| Language  | TypeScript (strict)                                       |
-| Styling   | Tailwind CSS v4 (CSS-based config, no config file)        |
-| Output    | Static export (`output: 'export'`)                        |
-| Hosting   | GitHub Pages (custom domain freeforcharity.org)           |
-| Tests     | Playwright (E2E)                                          |
+| What      | Detail                                             |
+| --------- | -------------------------------------------------- |
+| Framework | Next.js with App Router (see package.json)         |
+| Language  | TypeScript (strict)                                |
+| Styling   | Tailwind CSS v4 (CSS-based config, no config file) |
+| Output    | Static export (`output: 'export'`)                 |
+| Hosting   | GitHub Pages (custom domain freeforcharity.org)    |
+| Tests     | Playwright (E2E)                                   |
 
 The site is **fully static**. No server-side rendering, no API routes, no middleware. Every page must be renderable at build time.
 

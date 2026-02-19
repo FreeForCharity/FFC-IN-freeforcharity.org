@@ -1,6 +1,6 @@
-import React from "react";
-import TeamMemberCard from "@/components/ui/TeamMemberCard";
-import { team } from "@/data/team";
+import React from 'react'
+import TeamMemberCard from '@/components/ui/TeamMemberCard'
+import { team } from '@/data/team'
 
 const TheFreeForCharityTeam = () => {
   return (
@@ -37,7 +37,7 @@ const TheFreeForCharityTeam = () => {
         </div>
       </div>
     </section>
-  );
-};
+  )
+}
 
-export default TheFreeForCharityTeam;
+export default TheFreeForCharityTeam

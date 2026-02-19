@@ -1,16 +1,16 @@
-import type { Metadata } from "next";
-import React from "react";
-import Hero from "@/components/home/HeroSection";
+import type { Metadata } from 'next'
+import React from 'react'
+import Hero from '@/components/home/HeroSection'
 
 export const metadata: Metadata = {
-  title: "Home (Legacy)",
+  title: 'Home (Legacy)',
   robots: { index: false, follow: false },
-};
-import Mission from "@/components/home/MissionSection";
-import SupportFreeforCharity from "@/components/home/SupportFreeforCharity";
-import Testimonials from "@/components/home/Testimonials";
-import Ourblogs from "@/components/home/Ourblogs";
-import Contactus from "@/components/home/Contactus";
+}
+import Mission from '@/components/home/MissionSection'
+import SupportFreeforCharity from '@/components/home/SupportFreeforCharity'
+import Testimonials from '@/components/home/Testimonials'
+import Ourblogs from '@/components/home/Ourblogs'
+import Contactus from '@/components/home/Contactus'
 
 const Home: React.FC = () => {
   return (
@@ -22,7 +22,7 @@ const Home: React.FC = () => {
       <Ourblogs />
       <Contactus />
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

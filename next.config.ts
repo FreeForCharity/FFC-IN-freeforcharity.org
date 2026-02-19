@@ -1,24 +1,24 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  output: "export",
+  output: 'export',
   // Images configuration
   images: {
     unoptimized: true,
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "freeforcharity.org",
+        protocol: 'https',
+        hostname: 'freeforcharity.org',
       },
       {
-        protocol: "https",
-        hostname: "static.vecteezy.com",
+        protocol: 'https',
+        hostname: 'static.vecteezy.com',
       },
     ],
   },
   // Optional: base path and asset prefix if using a subdirectory deployment
-  basePath: process.env.NEXT_PUBLIC_BASE_PATH || "",
-  assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH || "",
-};
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
+  assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH || '',
+}
 
-export default nextConfig;
+export default nextConfig

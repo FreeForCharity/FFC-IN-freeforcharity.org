@@ -94,6 +94,7 @@ Follow conventional commits format:
 - `chore:` Maintenance tasks
 
 Examples:
+
 ```
 feat: add team member profile page
 fix: correct logo alignment in mobile view
@@ -111,16 +112,17 @@ test: add tests for contact form validation
 - **Use interfaces** for component props
 
 Example:
+
 ```typescript
 interface TeamMemberProps {
-  name: string;
-  title: string;
-  bio?: string;
+  name: string
+  title: string
+  bio?: string
 }
 
 const TeamMember: React.FC<TeamMemberProps> = ({ name, title, bio }) => {
   // Component implementation
-};
+}
 ```
 
 ### React Components
@@ -138,6 +140,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({ name, title, bio }) => {
 - **Accessibility**: Ensure proper ARIA labels and semantic HTML
 
 Example:
+
 ```tsx
 <button
   className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 
@@ -195,19 +198,20 @@ When adding new features, consider adding tests:
 
 ```typescript
 // tests/my-feature.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
 
 test.describe('My Feature', () => {
   test('should do something', async ({ page }) => {
-    await page.goto('/');
-    
-    const element = page.locator('[data-testid="my-element"]');
-    await expect(element).toBeVisible();
-  });
-});
+    await page.goto('/')
+
+    const element = page.locator('[data-testid="my-element"]')
+    await expect(element).toBeVisible()
+  })
+})
 ```
 
 Run your tests:
+
 ```bash
 npm test                 # All tests
 npx playwright test my-feature.spec.ts  # Specific test
@@ -218,6 +222,7 @@ npx playwright test my-feature.spec.ts  # Specific test
 ### Pull Request Process
 
 1. **Update from upstream**:
+
    ```bash
    git checkout main
    git pull upstream main
@@ -226,6 +231,7 @@ npx playwright test my-feature.spec.ts  # Specific test
    ```
 
 2. **Push to your fork**:
+
    ```bash
    git push origin your-feature-branch
    ```
@@ -248,24 +254,29 @@ When creating a PR, include:
 
 ```markdown
 ## Description
+
 Brief description of changes
 
 ## Type of Change
+
 - [ ] Bug fix
 - [ ] New feature
 - [ ] Breaking change
 - [ ] Documentation update
 
 ## Testing
+
 - [ ] Lint passed
 - [ ] Build successful
 - [ ] All tests pass
 - [ ] Manual testing completed
 
 ## Screenshots (if applicable)
+
 [Add screenshots here]
 
 ## Related Issues
+
 Fixes #123
 ```
 

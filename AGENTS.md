@@ -22,14 +22,14 @@
 
 ## Core Commands
 
-| Command          | What It Does               | Typical Duration |
-| ---------------- | -------------------------- | ---------------- |
-| `npm install`    | Install dependencies       | ~17s             |
-| `npm run dev`    | Start dev server (Turbo)   | ~1s startup      |
-| `npm run lint`   | Run ESLint                 | ~2s              |
-| `npm run build`  | Production static build    | ~30s             |
-| `npm run test`   | Run Playwright E2E tests   | ~15s             |
-| `npm run preview`| Serve built output locally | immediate        |
+| Command           | What It Does               | Typical Duration |
+| ----------------- | -------------------------- | ---------------- |
+| `npm install`     | Install dependencies       | ~17s             |
+| `npm run dev`     | Start dev server (Turbo)   | ~1s startup      |
+| `npm run lint`    | Run ESLint                 | ~2s              |
+| `npm run build`   | Production static build    | ~30s             |
+| `npm run test`    | Run Playwright E2E tests   | ~15s             |
+| `npm run preview` | Serve built output locally | immediate        |
 
 **NEVER CANCEL long-running commands.** Builds and E2E tests take time. Set your timeout to 180+ seconds and let them finish.
 
@@ -119,10 +119,12 @@ The `basePath` and `assetPrefix` in `next.config.ts` are controlled by `NEXT_PUB
 The Footer is a **non-negotiable standard** across every FFC-supported charity site. The 3-column layout must include:
 
 ### Column 1: Endorsements
+
 - GuideStar Platinum Seal SVG (linked to profile)
 - Organization EIN number display
 
 ### Column 2: Quick Links + Policies
+
 - Navigation links to all major site sections
 - **All 6 mandatory policy links:**
   1. Donation Policy
@@ -133,12 +135,14 @@ The Footer is a **non-negotiable standard** across every FFC-supported charity s
   6. Security Acknowledgements
 
 ### Column 3: Contact Us
+
 - Email with mailto link
 - Phone with tel: link
 - Address(es) with Google Maps link(s)
 - Social media icon buttons (Facebook, X/Twitter, LinkedIn, GitHub)
 
 ### Bottom Bar
+
 - Copyright with dynamic year
 - Organization name as US 501c3 Non Profit
 - "A project of https://freeforcharity.org" attribution
@@ -148,6 +152,7 @@ The Footer is a **non-negotiable standard** across every FFC-supported charity s
 ## Mandatory Team Section Standard (FFC-Wide)
 
 Every FFC-supported site MUST have a Team section with:
+
 - Circular photo (300x300px, ring-4 white border, shadow)
 - Full name, Title/Role
 - LinkedIn profile link (SVG icon button)

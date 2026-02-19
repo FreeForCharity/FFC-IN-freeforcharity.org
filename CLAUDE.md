@@ -22,11 +22,11 @@ You have full terminal access via the Bash tool. Use it for all CLI operations.
 
 **Set timeout to 180+ seconds** for these commands:
 
-| Command          | Why                                                |
-| ---------------- | -------------------------------------------------- |
-| `npm run build`  | Static export can take 30-60s; do not cancel early |
-| `npm run test`   | Playwright launches browsers; needs time           |
-| `npm install`    | Network-dependent; can be slow on first run        |
+| Command         | Why                                                |
+| --------------- | -------------------------------------------------- |
+| `npm run build` | Static export can take 30-60s; do not cancel early |
+| `npm run test`  | Playwright launches browsers; needs time           |
+| `npm install`   | Network-dependent; can be slow on first run        |
 
 **NEVER CANCEL a running build, test, or install command.** Let it finish. If it fails, read the error output.
 
@@ -65,10 +65,10 @@ Check your available tools at the start of each session. If an MCP server is ava
 
 Custom agent definitions are in `.claude/agents/`:
 
-| Agent              | Purpose                                          |
-| ------------------ | ------------------------------------------------ |
-| `site-health`      | Build, serve, and verify site works end-to-end   |
-| `pr-reviewer`      | Review a PR against project standards            |
+| Agent              | Purpose                                            |
+| ------------------ | -------------------------------------------------- |
+| `site-health`      | Build, serve, and verify site works end-to-end     |
+| `pr-reviewer`      | Review a PR against project standards              |
 | `content-verifier` | Validate data files, loaders, and sitemap coverage |
 
 Invoke these when the task matches their purpose. If no matching agent exists, proceed with your general capabilities.

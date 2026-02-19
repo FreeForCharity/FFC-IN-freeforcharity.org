@@ -1,13 +1,13 @@
-"use client";
+'use client'
 
-import React from "react";
-import Image from "next/image";
+import React from 'react'
+import Image from 'next/image'
 
 interface TeamMemberCardProps {
-  imageUrl: string;
-  name: string;
-  title: string;
-  linkedinUrl: string;
+  imageUrl: string
+  name: string
+  title: string
+  linkedinUrl: string
 }
 
 export default function TeamMemberCard({
@@ -47,13 +47,8 @@ export default function TeamMemberCard({
         className="mt-6"
         aria-label={`${name} on LinkedIn`}
       >
-        <Image
-          src="/Svgs/linkedin-icon.svg"
-          width={63}
-          height={63}
-          alt="LinkedIn"
-        />
+        <Image src="/Svgs/linkedin-icon.svg" width={63} height={63} alt="LinkedIn" />
       </a>
     </div>
-  );
+  )
 }

@@ -1,38 +1,36 @@
-"use client";
+'use client'
 
-import React, { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { testimonials } from "@/data/testimonials";
+import React, { useState, useEffect } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { testimonials } from '@/data/testimonials'
 
 export default function TestimonialSlider() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const [transitioning, setTransitioning] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [isHovered, setIsHovered] = useState(false)
+  const [transitioning, setTransitioning] = useState(false)
 
   useEffect(() => {
     if (!isHovered) {
-      const interval = setInterval(() => handleNext(), 5000);
-      return () => clearInterval(interval);
+      const interval = setInterval(() => handleNext(), 5000)
+      return () => clearInterval(interval)
     }
-  }, [isHovered]);
+  }, [isHovered])
 
   const handlePrev = () => {
-    startTransition(
-      (prev) => (prev - 1 + testimonials.length) % testimonials.length
-    );
-  };
+    startTransition((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+  }
 
   const handleNext = () => {
-    startTransition((prev) => (prev + 1) % testimonials.length);
-  };
+    startTransition((prev) => (prev + 1) % testimonials.length)
+  }
 
   const startTransition = (getNextIndex: (prev: number) => number) => {
-    setTransitioning(true);
+    setTransitioning(true)
     setTimeout(() => {
-      setCurrentIndex(getNextIndex);
-      setTimeout(() => setTransitioning(false), 300);
-    }, 300);
-  };
+      setCurrentIndex(getNextIndex)
+      setTimeout(() => setTransitioning(false), 300)
+    }, 300)
+  }
 
   return (
     <div className="py-16 bg-white">
@@ -63,7 +61,7 @@ export default function TestimonialSlider() {
           {/* Fade-to-white overlay during transition */}
           <div
             className={`absolute inset-0 bg-white transition-opacity duration-500 pointer-events-none ${
-              transitioning ? "opacity-70" : "opacity-0"
+              transitioning ? 'opacity-70' : 'opacity-0'
             }`}
           ></div>
 
@@ -75,8 +73,8 @@ export default function TestimonialSlider() {
                   key={idx}
                   className={`absolute inset-0 transition-all duration-700 ease-in-out flex flex-col items-center justify-center ${
                     idx === currentIndex
-                      ? "opacity-100 translate-y-0 delay-200"
-                      : "opacity-0 translate-y-6"
+                      ? 'opacity-100 translate-y-0 delay-200'
+                      : 'opacity-0 translate-y-6'
                   }`}
                 >
                   <p
@@ -111,7 +109,7 @@ export default function TestimonialSlider() {
                   key={idx}
                   onClick={() => startTransition(() => idx)}
                   className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    idx === currentIndex ? "bg-white" : "bg-white/40"
+                    idx === currentIndex ? 'bg-white' : 'bg-white/40'
                   }`}
                   aria-label={`Go to slide ${idx + 1}`}
                 />
@@ -123,9 +121,7 @@ export default function TestimonialSlider() {
           <button
             onClick={handlePrev}
             className={`cursor-pointer absolute left-4 top-1/2 -translate-y-1/2 z-30 transition-all duration-300 text-white ${
-              isHovered
-                ? "translate-x-0 opacity-100"
-                : "-translate-x-10 opacity-0"
+              isHovered ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'
             }`}
             aria-label="Previous testimonial"
           >
@@ -135,9 +131,7 @@ export default function TestimonialSlider() {
           <button
             onClick={handleNext}
             className={`cursor-pointer absolute right-4 top-1/2 -translate-y-1/2 z-30 transition-all duration-300 text-white ${
-              isHovered
-                ? "translate-x-0 opacity-100"
-                : "translate-x-10 opacity-0"
+              isHovered ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'
             }`}
             aria-label="Next testimonial"
           >
@@ -146,5 +140,5 @@ export default function TestimonialSlider() {
         </div>
       </div>
     </div>
-  );
+  )
 }
