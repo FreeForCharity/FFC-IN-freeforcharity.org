@@ -42,7 +42,7 @@ test.describe('Header Navigation', () => {
     await page.goto('/donate')
 
     await expect(page).toHaveURL(/donate/)
-    await expect(page.locator('body')).toContainText('Donat')
+    await expect(page.locator('body')).toContainText('Be a Part in Donations')
   })
 
   test('should navigate to Volunteer page', async ({ page }) => {
@@ -58,7 +58,7 @@ test.describe('Page Loading', () => {
     { path: '/', name: 'Home', expectedText: 'Free For Charity' },
     { path: '/about-us', name: 'About Us', expectedText: 'About' },
     { path: '/contact-us', name: 'Contact Us', expectedText: 'Get In Touch' },
-    { path: '/donate', name: 'Donate', expectedText: 'Donat' },
+    { path: '/donate', name: 'Donate', expectedText: 'Be a Part in Donations' },
     { path: '/volunteer', name: 'Volunteer', expectedText: 'Volunteer' },
     { path: '/domains', name: 'Domains', expectedText: 'Domain' },
     { path: '/privacy-policy', name: 'Privacy Policy', expectedText: 'Privacy Policy' },

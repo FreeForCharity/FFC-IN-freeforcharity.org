@@ -18,7 +18,7 @@ test.describe('Results 2023 Animated Numbers', () => {
     await page.goto('/')
 
     // Find the Results-2023 section heading
-    const resultsHeading = page.locator('h1:has-text("Results - 2023")')
+    const resultsHeading = page.locator('h2:has-text("Results - 2023")')
     await expect(resultsHeading).toBeVisible()
 
     // Scroll to the Results section to trigger animations
@@ -46,7 +46,7 @@ test.describe('Results 2023 Animated Numbers', () => {
     const firstCardNumber = getResultCard(page, 'Organizational partners').locator('h1')
     await expect(firstCardNumber).toContainText('0')
 
-    const resultsSection = page.locator('h1:has-text("Results - 2023")')
+    const resultsSection = page.locator('h2:has-text("Results - 2023")')
     await expect(resultsSection).toBeAttached()
   })
 
@@ -55,7 +55,7 @@ test.describe('Results 2023 Animated Numbers', () => {
     await page.goto('/')
 
     // Find and scroll to the Results-2023 section
-    const resultsHeading = page.locator('h1:has-text("Results - 2023")')
+    const resultsHeading = page.locator('h2:has-text("Results - 2023")')
     await resultsHeading.scrollIntoViewIfNeeded()
 
     // Wait for animation to complete by checking the final value
@@ -91,7 +91,7 @@ test.describe('Results 2023 Animated Numbers', () => {
     const page = await context.newPage()
 
     await page.goto('/')
-    const resultsHeading = page.locator('h1:has-text("Results - 2023")')
+    const resultsHeading = page.locator('h2:has-text("Results - 2023")')
     // Wait for the element to be visible before scrolling
     await expect(resultsHeading).toBeVisible({ timeout: 5000 })
     await resultsHeading.scrollIntoViewIfNeeded()
