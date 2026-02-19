@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test'
  * The tests check that images in the header and hero section are visible
  * and load properly with successful HTTP responses.
  *
- * Note: The hero image is a local asset (/Images/figma-hero-img.png) that
+ * Note: The hero image is a local asset (/Images/figma-hero-img.webp) that
  * should load correctly in all deployment scenarios including GitHub Pages.
  */
 
@@ -38,7 +38,7 @@ test.describe('Image Loading', () => {
     const imageRequests: Array<{ url: string; status: number }> = []
 
     page.on('response', (response) => {
-      if (response.url().includes('figma-hero-img.png')) {
+      if (response.url().includes('figma-hero-img.webp')) {
         imageRequests.push({
           url: response.url(),
           status: response.status(),

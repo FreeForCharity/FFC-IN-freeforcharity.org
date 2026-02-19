@@ -56,8 +56,8 @@ export default defineConfig({
   reporter: 'html',
 
   use: {
-    // Base URL for tests
-    baseURL: 'http://localhost:3000',
+    // Base URL for tests — uses port 4173 to avoid conflicts with dev servers
+    baseURL: 'http://localhost:4173',
     // Collect trace when retrying the failed test
     trace: 'on-first-retry',
   },
@@ -79,8 +79,8 @@ export default defineConfig({
 
   // Run local dev server before starting the tests
   webServer: {
-    command: 'npm run preview',
-    url: 'http://localhost:3000',
+    command: 'npx serve out -l 4173',
+    url: 'http://localhost:4173',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },

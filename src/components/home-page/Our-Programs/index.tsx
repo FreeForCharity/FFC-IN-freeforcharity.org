@@ -7,12 +7,12 @@ const index = () => {
   return (
     <div id="programs" className="py-[52px]">
       <div className="w-[90%] lg:px-[20px] mx-auto">
-        <h1
+        <h2
           className="font-[400] text-[40px] lg:text-[48px]  tracking-[0] text-center mx-auto mb-[50px]"
           id="faustina-font"
         >
           Help for Charities
-        </h1>
+        </h2>
 
         <div className="lg:pl-[50px]">
           <div className="mb-[40px]  flex items-center gap-[20px]">
@@ -21,9 +21,9 @@ const index = () => {
                 <Image src={assetPath('/Svgs/FFC-Domains.svg')} alt="FFC-Domains" fill></Image>
               </div>
             </div>
-            <h1 className="text-[36px] font-[400] " id="lato-font">
+            <h3 className="text-[36px] font-[400] " id="lato-font">
               FFC Domains
-            </h1>
+            </h3>
           </div>
           <p className="text-[25px] font-[400] " id="lato-font">
             Provides free .org domain names, Microsoft 365 with Outlook email, & Microsoft Teams to
@@ -77,9 +77,9 @@ const index = () => {
                 <Image src={assetPath('/Svgs/FFC-Hosting.svg')} alt="FFC-Domains" fill></Image>
               </div>
             </div>
-            <h1 className="text-[36px] font-[400]  " id="lato-font">
+            <h3 className="text-[36px] font-[400]  " id="lato-font">
               FFC Hosting
-            </h1>
+            </h3>
           </div>
           <p className="text-[25px] font-[400]  " id="lato-font">
             Free static site hosting for nonprofit organizations using Microsoft GitHub Pages, with
@@ -143,9 +143,9 @@ const index = () => {
                 <Image src={assetPath('/Svgs/FFC-Consulting.svg')} alt="FFC-Domains" fill></Image>
               </div>
             </div>
-            <h1 className="text-[36px] font-[400]  " id="lato-font">
+            <h3 className="text-[36px] font-[400]  " id="lato-font">
               FFC Consulting
-            </h1>
+            </h3>
           </div>
           <p className="text-[25px] font-[400]  " id="lato-font">
             FFC Consulting is about helping charities get the most out of their digital
@@ -195,9 +195,9 @@ const index = () => {
         </div>
 
         <div className="lg:w-[90%] mx-auto text-center pb-[54px] pt-[20px]">
-          <h1 className="text-[36px] font-[400] pt-[22px] pb-[30px]" id="lato-font">
+          <h3 className="text-[36px] font-[400] pt-[22px] pb-[30px]" id="lato-font">
             Ready to Get Started Now?
-          </h1>
+          </h3>
 
           <div className="flex flex-col lg:flex-row items-center justify-between gap-o sm:gap-6 w-[100%] gap-[20px]">
             <a
