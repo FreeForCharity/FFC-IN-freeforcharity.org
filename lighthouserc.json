@@ -6,6 +6,9 @@
         "http://localhost/index.html",
         "http://localhost/about-us.html",
         "http://localhost/contact-us.html",
+        "http://localhost/donate.html",
+        "http://localhost/volunteer.html",
+        "http://localhost/free-charity-web-hosting.html",
         "http://localhost/privacy-policy.html"
       ],
       "numberOfRuns": 3
@@ -16,10 +19,10 @@
     },
     "assert": {
       "assertions": {
-        "categories:performance": ["warn", { "minScore": 0.55 }],
-        "categories:accessibility": ["warn", { "minScore": 0.9 }],
-        "categories:best-practices": ["warn", { "minScore": 0.65 }],
-        "categories:seo": ["warn", { "minScore": 0.95 }]
+        "categories:performance": ["warn", { "minScore": 0.9 }],
+        "categories:accessibility": ["error", { "minScore": 0.95 }],
+        "categories:best-practices": ["warn", { "minScore": 0.9 }],
+        "categories:seo": ["error", { "minScore": 0.9 }]
       }
     }
   }
