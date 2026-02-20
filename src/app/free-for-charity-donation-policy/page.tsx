@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import React from 'react'
 
 export const metadata: Metadata = {
-  title: 'Free For Charity Donation Policy',
+  title: { absolute: 'Free For Charity Donation Policy' },
   description:
     'Free For Charity donation policy outlining guidelines for the acceptance, management, and acknowledgment of charitable donations.',
   alternates: { canonical: '/free-for-charity-donation-policy' },
