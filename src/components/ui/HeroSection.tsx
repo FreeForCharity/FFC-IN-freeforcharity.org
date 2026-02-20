@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Image from 'next/image'
+import { assetPath } from '@/lib/assetPath'
 
 interface HeroSectionProps {
   heading: string
@@ -49,7 +50,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           <div className="w-full lg:w-[60%] md:pr-[50px] md:pl-[80px]">
             <div className={`relative ${imageContainerWidth} mx-auto`}>
               <Image
-                src={heroImg}
+                src={assetPath(heroImg)}
                 alt="Hero Image"
                 width={1200}
                 height={600}
