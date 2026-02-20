@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { assetPath } from '@/lib/assetPath'
 
 interface InfoCardProps {
   imageUrl?: string
@@ -29,7 +30,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ imageUrl, heading, date, descriptio
       {imageUrl && (
         <div className="relative w-full aspect-[4/3] overflow-hidden">
           <Image
-            src={imageUrl}
+            src={assetPath(imageUrl)}
             alt={heading}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
