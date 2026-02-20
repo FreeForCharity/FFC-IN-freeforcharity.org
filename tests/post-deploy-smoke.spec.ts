@@ -96,8 +96,13 @@ test.describe('Post-Deploy Smoke Tests', () => {
         })
 
         await page.goto(route, { waitUntil: 'load' })
-        // Wait for images to finish loading
-        await page.waitForTimeout(2000)
+        // Wait for eagerly-loaded images to finish. Lazy images (Next.js default) are
+        // excluded because they only load when scrolled into view.
+        await page.waitForFunction(() =>
+          Array.from(document.images)
+            .filter((img) => img.loading !== 'lazy')
+            .every((img) => img.complete)
+        )
 
         // Check all <img> elements have loaded (naturalWidth > 0)
         const brokenImgs = await page.evaluate(() => {
