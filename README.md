@@ -3,6 +3,7 @@
 [![CI - Build and Test](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/ci.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/ci.yml)
 [![Deploy to GitHub Pages](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/deploy.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/deploy.yml)
 [![CodeQL](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/codeql.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/codeql.yml)
+[![Lighthouse CI](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/lighthouse.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/lighthouse.yml)
 
 Free For Charity website built with Next.js 15.5.2 (App Router).
 
