@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import { assetPath } from '@/lib/assetPath'
 
 type StepCardProps = {
   imageSrc: string
@@ -26,7 +27,7 @@ export default function StepCard({
       {/* Circle Image */}
       <div className="mx-auto flex-shrink-0 w-[50px] h-[50px] bg-white rounded-full overflow-hidden shadow-lg mb-[30px]">
         <Image
-          src={imageSrc}
+          src={assetPath(imageSrc)}
           alt={imageAlt}
           width={56}
           height={56}

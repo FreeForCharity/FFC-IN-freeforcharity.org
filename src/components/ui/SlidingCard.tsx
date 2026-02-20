@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from 'react'
 import Image, { StaticImageData } from 'next/image'
 import { IoIosArrowForward } from 'react-icons/io'
+import { assetPath } from '@/lib/assetPath'
 
 type SlidingCardProps = {
   direction?: 'left' | 'right' // Image on left or right
@@ -60,7 +61,7 @@ export default function SlidingCard({
         <div ref={imageRef} className="flex-1 flex justify-start overflow-hidden">
           <div className="relative w-full">
             <Image
-              src={imageSrc}
+              src={typeof imageSrc === 'string' ? assetPath(imageSrc) : imageSrc}
               alt={subtitle}
               width={400}
               height={120}

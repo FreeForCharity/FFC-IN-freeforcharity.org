@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import { assetPath } from '@/lib/assetPath'
 
 interface GeneralDonationCardProps {
   title: string
@@ -30,7 +31,7 @@ const GeneralDonationCard: React.FC<GeneralDonationCardProps> = ({
 
       {/* Image */}
       <div className="flex justify-center">
-        <img src={img} alt="Donation image" className="h-12 w-auto object-contain" />
+        <img src={assetPath(img)} alt="Donation image" className="h-12 w-auto object-contain" />
       </div>
     </Link>
   )

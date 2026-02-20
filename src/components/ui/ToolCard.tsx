@@ -2,6 +2,7 @@
 import React, { useEffect, useRef } from 'react'
 import Image, { StaticImageData } from 'next/image'
 import { IoIosArrowForward } from 'react-icons/io' // Import arrow
+import { assetPath } from '@/lib/assetPath'
 
 type ToolCardProps = {
   logo?: string | StaticImageData
@@ -41,7 +42,12 @@ export default function ToolCard({ logo, title, description, link }: ToolCardPro
       <div className="flex items-center mb-[15px]">
         {logo && (
           <div className="relative w-full mx-auto h-[200px]">
-            <Image src={logo} alt={`${title} logo`} fill className="object-cover" />
+            <Image
+              src={typeof logo === 'string' ? assetPath(logo) : logo}
+              alt={`${title} logo`}
+              fill
+              className="object-cover"
+            />
           </div>
         )}
       </div>
