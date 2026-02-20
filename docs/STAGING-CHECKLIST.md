@@ -14,16 +14,15 @@ completed successfully before running manual checks.
 These run automatically on every push to `main`. Confirm all are green before
 proceeding to manual checks.
 
-| Check          | Workflow     | What It Verifies                                          |
-| -------------- | ------------ | --------------------------------------------------------- |
-| Format         | `ci.yml`     | Prettier formatting                                       |
-| Lint           | `ci.yml`     | ESLint — no errors                                        |
-| Unit tests     | `ci.yml`     | Jest (metadata, sitemap, data files, assetPath)           |
-| Build          | `ci.yml`     | `next build` — static export succeeds                     |
-| Internal links | `ci.yml`     | Linkinator crawls `./out` — no dead routes                |
-| E2E tests      | `ci.yml`     | Playwright: navigation, images, cookie consent, copyright |
-| Accessibility  | `ci.yml`     | axe-core WCAG 2.1 AA (critical/serious violations)        |
-| Deploy         | `deploy.yml` | GitHub Pages deployment                                   |
+| Check          | Workflow     | What It Verifies                                                   |
+| -------------- | ------------ | ------------------------------------------------------------------ |
+| Format         | `ci.yml`     | Prettier formatting                                                |
+| Lint           | `ci.yml`     | ESLint — no errors                                                 |
+| Unit tests     | `ci.yml`     | Jest (metadata, sitemap, data files, assetPath)                    |
+| Build          | `ci.yml`     | `next build` — static export succeeds                              |
+| Internal links | manual       | Run `npm run check-links` (Linkinator) on `./out` — no dead routes |
+| E2E tests      | `ci.yml`     | Playwright: navigation, images, cookie consent, copyright          |
+| Deploy         | `deploy.yml` | GitHub Pages deployment                                            |
 
 ---
 
@@ -59,7 +58,7 @@ boxes as you go.
 - [ ] Header nav links all route to correct pages (no 404s)
 - [ ] Footer links all route correctly
 - [ ] Footer donation policy link points to `/donation-policy`
-- [ ] Footer GitHub URL points to `https://github.com/FreeForCharity`
+- [ ] Footer GitHub URL points to `https://github.com/FreeForCharity/FFC-IN-freeforcharity.org`
 - [ ] Social icons in footer open correct external URLs
 
 ---
@@ -114,6 +113,9 @@ document.querySelector('link[rel="canonical"]').href
   - Accessibility ≥ 90
   - Best Practices ≥ 65
   - SEO ≥ 95
+    > **Note:** These thresholds match `lighthouserc.json` but are configured as `warn`
+    > level assertions — they will not block CI. Use these as quality indicators, not
+    > hard gates.
 - [ ] No console errors in DevTools on homepage load
 - [ ] No console errors on /donate page (donation widget)
 
