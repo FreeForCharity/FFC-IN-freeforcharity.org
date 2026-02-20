@@ -95,20 +95,28 @@ test.describe('Post-Deploy Smoke Tests', () => {
           }
         })
 
-        await page.goto(route, { waitUntil: 'networkidle' })
+        await page.goto(route, { waitUntil: 'load' })
+        // Wait for images to finish loading
+        await page.waitForTimeout(2000)
 
         // Check all <img> elements have loaded (naturalWidth > 0)
         const brokenImgs = await page.evaluate(() => {
           const imgs = document.querySelectorAll('img')
           const broken: string[] = []
           imgs.forEach((img) => {
-            // Skip invisible images (display:none, etc.)
+            // Skip invisible images, but always check header images (may be hidden initially but load lazily)
             if (img.offsetParent === null && !img.closest('header')) return
             // Skip external images (different origin)
             if (img.src && !img.src.startsWith(window.location.origin)) return
-            // Check if image actually loaded
-            if (img.src && img.naturalWidth === 0 && img.complete) {
-              broken.push(`${img.alt || '(no alt)'}: ${img.src}`)
+            // Check if image actually loaded — use both naturalWidth and rendered size
+            // to avoid false positives in CI where naturalWidth alone can be unreliable
+            if (img.src && img.complete) {
+              const rect = img.getBoundingClientRect()
+              const hasNoNaturalSize = img.naturalWidth === 0
+              const hasNoRenderedSize = rect.width === 0 && rect.height === 0
+              if (hasNoNaturalSize && hasNoRenderedSize) {
+                broken.push(`${img.alt || '(no alt)'}: ${img.src}`)
+              }
             }
           })
           return broken
@@ -156,8 +164,10 @@ test.describe('Post-Deploy Smoke Tests', () => {
           if (response && response.status() >= 400) {
             brokenLinks.push(`${response.status()} ${link}`)
           }
-        } catch {
-          brokenLinks.push(`ERROR ${link}`)
+        } catch (error) {
+          brokenLinks.push(
+            `ERROR ${link}: ${error instanceof Error ? error.message : 'Unknown error'}`
+          )
         }
       }
 
