@@ -9,7 +9,10 @@
         "http://localhost/donate.html",
         "http://localhost/volunteer.html",
         "http://localhost/free-charity-web-hosting.html",
-        "http://localhost/privacy-policy.html"
+        "http://localhost/privacy-policy.html",
+        "http://localhost/blog.html",
+        "http://localhost/domains.html",
+        "http://localhost/help-for-charities.html"
       ],
       "numberOfRuns": 3
     },
