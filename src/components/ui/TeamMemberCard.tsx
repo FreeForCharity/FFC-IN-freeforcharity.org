@@ -22,7 +22,7 @@ export default function TeamMemberCard({
       {/* Circular Image Container */}
       <div className="relative w-[300px] h-[300px] mb-6 rounded-full overflow-hidden ring-4 ring-white shadow-xl">
         <Image
-          src={imageUrl}
+          src={assetPath(imageUrl)}
           alt={`${name} — ${title}`}
           fill
           className="object-cover"

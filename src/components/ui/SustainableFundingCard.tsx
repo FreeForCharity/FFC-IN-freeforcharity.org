@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
+import { assetPath } from '@/lib/assetPath'
 
 interface SustainableFundingCardProps {
   imageUrl: string
@@ -17,7 +18,12 @@ export const SustainableFundingCard: React.FC<SustainableFundingCardProps> = ({
       {/* Image/Icon Section */}
       <div className="flex justify-center">
         <div className="relative w-[60px] h-[60px]">
-          <Image src={imageUrl} alt={title} fill className="object-contain drop-shadow-md" />
+          <Image
+            src={assetPath(imageUrl)}
+            alt={title}
+            fill
+            className="object-contain drop-shadow-md"
+          />
         </div>
       </div>
 
