@@ -12,6 +12,8 @@ on:
       - 'README.md'
       - 'CONTRIBUTING.md'
       - 'AGENTS.md'
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
