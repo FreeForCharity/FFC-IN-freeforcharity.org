@@ -29,6 +29,14 @@ const pagesToAudit = [
   { route: '/contact-us', name: 'Contact Us' },
   { route: '/free-for-charity-endowment-fund', name: 'Endowment Fund' },
   { route: '/501c3', name: '501c3' },
+  { route: '/pre501c3', name: 'Pre-501c3' },
+  { route: '/blog', name: 'Blog' },
+  { route: '/privacy-policy', name: 'Privacy Policy' },
+  { route: '/terms-of-service', name: 'Terms of Service' },
+  { route: '/guidestar-guide', name: 'GuideStar Guide' },
+  { route: '/free-for-charitys-tools-for-success', name: 'Tools for Success' },
+  { route: '/free-training-programs', name: 'Free Training Programs' },
+  { route: '/consulting', name: 'Consulting' },
 ]
 
 test.describe('Accessibility (WCAG 2.1 AA)', () => {

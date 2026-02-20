@@ -4,8 +4,8 @@ This directory contains automated end-to-end tests for the Free For Charity web 
 
 ## Test Statistics
 
-- **Total Tests**: 29 tests across 6 test suites
-- **Status**: ✅ 28 passing, ⏭️ 1 skipped
+- **Total Tests**: 56 tests across 8 test suites
+- **Status**: ✅ 55 passing, ⏭️ 1 skipped
 - **Execution Time**: ~25-30 seconds
 - **Framework**: Playwright v1.56.0
 
@@ -160,6 +160,21 @@ Tests the cookie consent banner functionality and GDPR compliance across 3 test 
 14. **`banner should have proper ARIA attributes`**
     - Ensures banner accessibility
     - Validates proper ARIA attributes on banner
+
+### `accessibility.spec.ts` - Accessibility Audit (18 tests)
+
+Tests WCAG 2.1 AA accessibility compliance using `@axe-core/playwright`.
+
+**Test Suite**: `Accessibility (WCAG 2.1 AA)`
+
+Audits 18 pages for critical and serious axe-core violations. `color-contrast` is
+disabled pending brand color design review (issue #80). Third-party donation iframes
+are excluded as their internal DOM is outside FFC control.
+
+**Pages Audited:**
+Homepage, About Us, Donate, Volunteer, Domains, Free Charity Web Hosting, Help for
+Charities, Contact Us, Endowment Fund, 501c3, Pre-501c3, Blog, Privacy Policy, Terms
+of Service, GuideStar Guide, Tools for Success, Free Training Programs, Consulting.
 
 ### `copyright.spec.ts` - Footer Copyright (2 tests)
 
@@ -445,6 +460,6 @@ When tests fail in CI:
 
 ---
 
-**Test Suite Status**: ✅ 5 passing, 1 skipped  
+**Test Suite Status**: ✅ 55 passing, 1 skipped
 **Last Updated**: October 2025  
 **Framework**: Playwright v1.56.0
