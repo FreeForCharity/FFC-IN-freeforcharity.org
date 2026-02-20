@@ -96,8 +96,8 @@ test.describe('Post-Deploy Smoke Tests', () => {
         })
 
         await page.goto(route, { waitUntil: 'load' })
-        // Wait for images to finish loading
-        await page.waitForTimeout(2000)
+        // Wait for all images on the page to finish loading
+        await page.waitForFunction(() => Array.from(document.images).every((img) => img.complete))
 
         // Check all <img> elements have loaded (naturalWidth > 0)
         const brokenImgs = await page.evaluate(() => {
