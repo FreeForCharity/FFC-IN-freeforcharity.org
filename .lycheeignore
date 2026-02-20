@@ -1,0 +1,31 @@
+# Lychee ignore patterns
+# Lines starting with # are comments. Each line is a regex pattern.
+
+# Localhost and local dev URLs (used in configs and tests)
+http://localhost
+https://localhost
+
+# LinkedIn blocks bots with HTTP 999 — not a real broken link
+https://www.linkedin.com
+https://linkedin.com
+
+# Facebook/Meta rate-limits crawlers
+https://www.facebook.com
+https://facebook.com
+
+# Twitter/X blocks crawlers
+https://twitter.com
+https://x.com
+
+# YouTube embeds are always reachable but embed URLs sometimes return non-200
+https://www.youtube.com/embed
+
+# Placeholder / example domains
+https://example.com
+https://your-domain.com
+
+# Cloudflare dashboard — requires authentication
+https://dash.cloudflare.com
+
+# Internal GitHub Actions badge URLs — always valid when the workflow exists
+https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions

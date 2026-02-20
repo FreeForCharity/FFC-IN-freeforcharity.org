@@ -1,0 +1,93 @@
+name: Lychee Link Checker
+
+on:
+  schedule:
+    # Run every Monday at 08:00 UTC to catch external link rot
+    - cron: '0 8 * * 1'
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'docs/**'
+      - 'README.md'
+      - 'CONTRIBUTING.md'
+      - 'AGENTS.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  lychee:
+    name: Check external links
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Run Lychee link checker
+        id: lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --verbose
+            --no-progress
+            --exclude-path .lycheeignore
+            --timeout 30
+            --max-retries 3
+            --accept 200,206,301,302,307,308
+            './src/**/*.tsx'
+            './src/**/*.ts'
+            './docs/**/*.md'
+            'README.md'
+            'CONTRIBUTING.md'
+            'AGENTS.md'
+            'CLAUDE.md'
+            'GEMINI.md'
+          fail: false
+
+      - name: Create issue on link rot (scheduled runs only)
+        if: steps.lychee.outputs.exit_code != 0 && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+            // Check for an existing open link-rot issue to avoid duplicates
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'link-rot',
+              state: 'open',
+            })
+            if (existing.data.length > 0) {
+              console.log(`Open link-rot issue already exists: #${existing.data[0].number}`)
+              return
+            }
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🔗 Broken external links detected',
+              body: [
+                '## External Link Rot Detected',
+                '',
+                'The weekly Lychee link checker found broken or unreachable external URLs in the source code.',
+                '',
+                `**Workflow run:** ${runUrl}`,
+                '',
+                '## Next Steps',
+                '',
+                '1. Review the workflow run output for the full list of broken URLs',
+                '2. Update or remove broken links in the affected source files',
+                '3. Add persistent false-positives to `.lycheeignore`',
+                '4. Close this issue once all links are resolved',
+                '',
+                '_This issue was automatically created by the Lychee Link Checker workflow._',
+              ].join('\n'),
+              labels: ['link-rot', 'maintenance'],
+            })
+
+      - name: Fail on broken links (PR/push runs)
+        if: steps.lychee.outputs.exit_code != 0 && github.event_name != 'schedule'
+        run: exit 1
