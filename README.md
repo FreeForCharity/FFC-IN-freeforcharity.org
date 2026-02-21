@@ -5,7 +5,7 @@
 [![CodeQL](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/codeql.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/codeql.yml)
 [![Lighthouse CI](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/lighthouse.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/lighthouse.yml)
 
-Free For Charity website built with Next.js 15.5.2 (App Router).
+Free For Charity website built with Next.js 16.0.10 (App Router).
 
 ## Organization
 
@@ -39,7 +39,7 @@ For a complete list, see the [Site Map](#site-map) section below.
 
 ## Tech Stack
 
-- **Framework**: Next.js 15.5.2 (App Router with TypeScript)
+- **Framework**: Next.js 16.0.10 (App Router with TypeScript)
 - **React**: 19.1.0
 - **Styling**: Tailwind CSS 4.1.12
 - **UI Components**:
@@ -588,5 +588,5 @@ This project is maintained by Free For Charity, a 501(c)(3) nonprofit organizati
 ---
 
 **Documentation Status**: ✅ Updated December 2025  
-**Next.js Version**: 15.5.2  
+**Next.js Version**: 16.0.10  
 **Node.js Version**: 20.x required

@@ -76,7 +76,7 @@ If you want to prevent GitHub Pages from attempting to serve the custom domain:
 1. Go to **FreeForCharity/FFC-IN-freeforcharity.org → Settings → Pages**
 2. Under **Custom domain**, clear the field and save
 3. The site will remain accessible at
-   `freeforcharity.github.io/FFC-IN-freeforcharity.org/` for staging use
+   `https://freeforcharity.github.io/FFC-IN-freeforcharity.org/` for staging use
 
 This step is optional — DNS changes alone are sufficient to route traffic back
 to WordPress.
