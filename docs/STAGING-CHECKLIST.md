@@ -11,8 +11,9 @@ completed successfully before running manual checks.
 
 ## 1. Automated Checks (CI Must Pass)
 
-These run automatically on every push to `main`. Confirm all are green before
-proceeding to manual checks.
+CI-based checks in this table run automatically on every push to `main`; rows
+marked `manual` must be run by hand. Confirm all checks are green or completed
+before proceeding to the manual checks below.
 
 | Check          | Workflow     | What It Verifies                                                   |
 | -------------- | ------------ | ------------------------------------------------------------------ |
@@ -102,7 +103,7 @@ document.querySelector('link[rel="canonical"]').href
 - [ ] Homepage title: `Free For Charity | Reduce Costs, Increase Impact`
 - [ ] Each page has a unique `<title>` tag (use `npm run build` output to verify)
 - [ ] Canonical URLs point to `https://www.freeforcharity.org/[path]`
-- [ ] `robots.txt` accessible at `/robots.txt` — allows Googlebot
+- [ ] On staging: `robots.txt` accessible at `https://freeforcharity.github.io/FFC-IN-freeforcharity.org/robots.txt`; on production: `https://www.freeforcharity.org/robots.txt` — both allow Googlebot
 
 ---
 
@@ -126,13 +127,13 @@ document.querySelector('link[rel="canonical"]').href
 All items below must be confirmed before initiating DNS cutover:
 
 - [ ] All automated CI checks are green on the latest `main` commit
-- [ ] No open `incident` or `deployment` GitHub Issues (would indicate recent failure)
+- [ ] No recent failed CI or deploy workflow runs on `main` in GitHub Actions
 - [ ] All critical pages load correctly in incognito (section 2a above)
 - [ ] Images all load (section 3 above)
 - [ ] `NEXT_PUBLIC_BASE_PATH` will be cleared to `''` at cutover time
   - Confirm with team: who will trigger the cutover deploy?
 - [ ] DNS TTL has been lowered to 300s (5 min) in Cloudflare at least 1 hour before cutover
-- [ ] WordPress server is confirmed running at `66.45.234.13` (rollback target)
+- [ ] WordPress server is confirmed running at the origin IP (see InterServer control panel; rollback target)
 - [ ] Rollback procedure reviewed: [`docs/ROLLBACK.md`](ROLLBACK.md)
 
 ---
@@ -145,7 +146,8 @@ After DNS cutover, monitor:
 - [ ] `https://www.freeforcharity.org` redirects/resolves correctly
 - [ ] Homepage loads without any `404` or `5xx` errors
 - [ ] Donation forms on `/donate` and `/free-for-charity-endowment-fund` still work
-- [ ] No incident issues auto-created by the deploy workflow
+- [ ] GitHub Actions deploy workflow and GitHub Pages deployment status for `main` show success (no ongoing failures)
+- [ ] If problems are detected, on-call manually creates an `incident` issue and begins rollback as needed
 
 If anything fails, follow [`docs/ROLLBACK.md`](ROLLBACK.md) immediately.
 

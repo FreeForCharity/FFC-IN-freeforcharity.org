@@ -3,7 +3,7 @@
 Use this procedure to revert production traffic back to the WordPress server if the
 GitHub Pages cutover causes critical issues.
 
-**Rollback target:** WordPress at `66.45.234.13`
+**Rollback target:** WordPress origin (see InterServer control panel for current IP)
 
 ---
 
@@ -13,7 +13,7 @@ Roll back immediately if any of the following occur within 30 minutes of cutover
 
 - Homepage returns non-200 or shows a broken layout
 - Donation forms on `/donate` or `/free-for-charity-endowment-fund` are non-functional
-- More than 3 consecutive failed health checks (auto-created incident GitHub Issues)
+- More than 3 consecutive failed production health checks (e.g., repeated failed GitHub Actions monitoring/deploy workflows on `main`)
 - Critical content is missing or images are completely broken site-wide
 
 ---
@@ -23,9 +23,11 @@ Roll back immediately if any of the following occur within 30 minutes of cutover
 1. Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/) and select the
    `freeforcharity.org` zone.
 2. Go to **DNS → Records**.
-3. Update the `A` record for `@` (root) to point back to `66.45.234.13`.
-4. Update the `CNAME` for `www` to point back to `66.45.234.13` (or revert to the
-   previous WordPress A record, whichever was in use).
+3. Update the `A` record for `@` (root) to point back to the WordPress origin IP
+   (see InterServer control panel or private infra runbook for the current IP).
+4. For `www`, either:
+   - If `www` is an **A** record, point it to the WordPress origin IP.
+   - If `www` is a **CNAME**, point it back to the previous WordPress hostname (often `@`), **not** directly to an IP.
 5. Set TTL to **Auto** (or 300s) so propagation is fast.
 6. Confirm records are saved.
 
