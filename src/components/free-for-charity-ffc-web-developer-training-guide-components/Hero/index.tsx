@@ -220,7 +220,7 @@ const Index = () => {
               WHMCS Basics on YouTube:{' '}
               <a
                 href="https://www.youtube.com/results?search_query=WHMCS+Tutorial"
-                className="text-[#0078D4]  hover:underline  "
+                className="text-[#0078D4] underline"
                 target="_blank"
               >
                 (Search for “WHMCS Tutorial” on YouTube)
@@ -264,7 +264,7 @@ const Index = () => {
           <ul className="pl-[1.5rem] p-[0_0_23px_1em] list-disc">
             <li className="pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               <span className="font-[600] text-[#1c2a38]">Charity & Admin Login URL:</span>{' '}
-              <a href="https://dash.cloudflare.com/" className="text-[#0078D4]">
+              <a href="https://dash.cloudflare.com/" className="text-[#0078D4] underline">
                 https://dash.cloudflare.com/
               </a>
             </li>
@@ -339,7 +339,7 @@ const Index = () => {
                   Open the{' '}
                   <a
                     href="https://login.microsoftonline.com/common/oauth2/authorize?client_id=00000006-0000-0ff1-ce00-000000000000&response_type=code%20id_token&scope=openid%20profile&state=OpenIdConnect.AuthenticationProperties%3DcXdE9ZpBiUOIKrw41LubJrVLKlhcxriGV9xXed-qdbNIbM7XI9QfL_Lx0WxbxW8Un93hvwvLe36C5t_x4NE1DfrujTyRp8ThtIbS4sjKCSpmrAwmbCELkDhhuWoWA2C41BpRCIJaFUtw9DaD8Ztk-SWbNQyqMn3v8U3RTB_JkCtam2St5DQ7FuiPA7nGxIs-o_OMxRL1dIB8W5tg_Xl-KQ&response_mode=form_post&nonce=638975127534783663.MWM0NzJhN2UtMjMwMC00ODk0LWIxMDYtNDA0NTM1ZWIyOGM3N2FiMGRiYjktN2Q5Ni00NjliLThiMDgtYTNjYmJmODkxMzI4&redirect_uri=https%3A%2F%2Fadmin.microsoft.com%2Flanding&ui_locales=en-US&mkt=en-US&client-request-id=90c71719-12a6-4390-b854-f14ff3429635&claims=%7B%22id_token%22%3A%7B%22xms_cc%22%3A%7B%22values%22%3A%5B%22CP1%22%5D%7D%7D%7D&x-client-SKU=ID_NET472&x-client-ver=8.9.0.0"
-                    className="text-[#0078D4] hover:text-[#005AA0] hover:underline transition-colors duration-200"
+                    className="text-[#0078D4] underline hover:text-[#005AA0] transition-colors duration-200"
                   >
                     Microsoft 365 Admin Portal
                   </a>
@@ -419,7 +419,7 @@ const Index = () => {
               YouTube: Cloudflare DNS Explained:
               <a
                 href="https://www.youtube.com/results?search_query=Cloudflare+DNS+Tutorial"
-                className="text-[#0078D4]  hover:underline  "
+                className="text-[#0078D4] underline"
                 target="_blank"
               >
                 (Search for “Cloudflare DNS Tutorial” on YouTube.)
@@ -461,7 +461,7 @@ const Index = () => {
               Visit the{' '}
               <a
                 href="https://www.microsoft.com/en-us/nonprofits/offers-for-nonprofits"
-                className="text-[#0078D4]"
+                className="text-[#0078D4] underline"
               >
                 Microsoft Nonprofits page
               </a>{' '}
@@ -474,7 +474,7 @@ const Index = () => {
               email accounts for your charity. Detailed instructions can be found here:{' '}
               <a
                 href="https://learn.microsoft.com/en-us/microsoft-365/admin/setup/add-domain?view=o365-worldwide"
-                className="text-[#0078D4]"
+                className="text-[#0078D4] underline"
               >
                 Microsoft 365 Admin Documentation.
               </a>
@@ -521,7 +521,7 @@ const Index = () => {
               <a
                 href="https://www.youtube.com/results?search_query=Microsoft+365+for+nonprofits+tutorial"
                 target="_blank"
-                className="text-[#0078D4]"
+                className="text-[#0078D4] underline"
               >
                 (Search for “Microsoft 365 for nonprofits tutorial” on YouTube.)
               </a>
@@ -581,7 +581,7 @@ const Index = () => {
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               <span className="font-[600] text-[#1c2a38]">Apply for a Hosting Account:</span>{' '}
               Directly request hosting services for the charity via InterServer:
-              <a href="https://www.interserver.net/support/" className="text-[#0078D4]">
+              <a href="https://www.interserver.net/support/" className="text-[#0078D4] underline">
                 InterServer Support.
               </a>
             </li>
@@ -589,7 +589,7 @@ const Index = () => {
               <span className="font-[600] text-[#1c2a38]">Configure the Hosting Environment:</span>{' '}
               Use the DirectAdmin panel to set up the website. Detailed guidance and documentation
               can be found on the DirectAdmin Help site:{' '}
-              <a href="https://help.directadmin.com/" className="text-[#0078D4]">
+              <a href="https://help.directadmin.com/" className="text-[#0078D4] underline">
                 DirectAdmin Help Site.
               </a>
             </li>
@@ -604,12 +604,12 @@ const Index = () => {
 
           <ul className="pl-[1.5rem] p-[0_0_23px_1em] list-disc">
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
-              <a href="https://www.interserver.net/tips/" className="text-[#0078D4]">
+              <a href="https://www.interserver.net/tips/" className="text-[#0078D4] underline">
                 InterServer Knowledge Base
               </a>
             </li>
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
-              <a href="https://docs.directadmin.com/" className="text-[#0078D4]">
+              <a href="https://docs.directadmin.com/" className="text-[#0078D4] underline">
                 DirectAdmin Documentation
               </a>
             </li>
@@ -620,7 +620,7 @@ const Index = () => {
 
           <ul className="pl-[1.5rem] p-[0_0_23px_1em] list-disc">
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
-              <a href="https://docs.directadmin.com/" className="text-[#0078D4]">
+              <a href="https://docs.directadmin.com/" className="text-[#0078D4] underline">
                 Guide on Setting Up DirectAdmin
               </a>
             </li>
@@ -628,21 +628,21 @@ const Index = () => {
               YouTube Tutorials on DirectAdmin:
               <a
                 href="https://www.youtube.com/results?search_query=DirectAdmin+Setup+Tutorial"
-                className="text-[#0078D4]"
+                className="text-[#0078D4] underline"
               >
                 {' '}
                 (Search for “DirectAdmin Setup Tutorial” on YouTube.)
               </a>
             </li>
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
-              <a href="https://forum.directadmin.com/" className="text-[#0078D4]">
+              <a href="https://forum.directadmin.com/" className="text-[#0078D4] underline">
                 Blog Posts & Forums
               </a>
             </li>
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               <a
                 href="https://www.webhostingtalk.com/showthread.php?t=1801261"
-                className="text-[#0078D4]"
+                className="text-[#0078D4] underline"
               >
                 Community Resources on Hosting Setup
               </a>
@@ -699,7 +699,7 @@ const Index = () => {
             <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
               <a
                 href="https://www.elegantthemes.com/documentation/divi/"
-                className="text-[#0078D4] hover:text-[#005AA0] hover:underline transition-colors duration-200"
+                className="text-[#0078D4] underline hover:text-[#005AA0] transition-colors duration-200"
               >
                 Divi Documentation by Elegant Themes
               </a>
@@ -707,7 +707,7 @@ const Index = () => {
             <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
               <a
                 href="https://www.elegantthemes.com/blog/category/divi-resources"
-                className="text-[#0078D4] hover:text-[#005AA0] hover:underline transition-colors duration-200"
+                className="text-[#0078D4] underline hover:text-[#005AA0] transition-colors duration-200"
               >
                 Elegant Themes Blog & Tutorials
               </a>
@@ -735,7 +735,7 @@ const Index = () => {
                 href="https://www.youtube.com/results?search_query=Divi+Theme+Tutorial"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#0078D4] hover:underline"
+                className="text-[#0078D4] underline"
               >
                 (Search for “Divi Theme Tutorial” on YouTube)
               </a>
@@ -806,7 +806,7 @@ const Index = () => {
             <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
               <a
                 href="https://wpmudev.com/docs/wpmu-dev-plugins/smush/"
-                className="text-[#0078D4] hover:text-[#005AA0] hover:underline transition-colors duration-200"
+                className="text-[#0078D4] underline hover:text-[#005AA0] transition-colors duration-200"
               >
                 Smush Pro (Image Optimization)
               </a>
@@ -814,7 +814,7 @@ const Index = () => {
             <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
               <a
                 href="https://wpmudev.com/docs/wpmu-dev-plugins/hummingbird/"
-                className="text-[#0078D4] hover:text-[#005AA0] hover:underline transition-colors duration-200"
+                className="text-[#0078D4] underline hover:text-[#005AA0] transition-colors duration-200"
               >
                 Hummingbird Pro (Performance & Caching)
               </a>
@@ -822,7 +822,7 @@ const Index = () => {
             <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
               <a
                 href="https://wpmudev.com/docs/wpmu-dev-plugins/defender/"
-                className="text-[#0078D4] hover:text-[#005AA0] hover:underline transition-colors duration-200"
+                className="text-[#0078D4] underline hover:text-[#005AA0] transition-colors duration-200"
               >
                 Defender Pro (Security)
               </a>
@@ -830,7 +830,7 @@ const Index = () => {
             <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
               <a
                 href="https://wpmudev.com/docs/wpmu-dev-plugins/forminator/"
-                className="text-[#0078D4] hover:text-[#005AA0] hover:underline transition-colors duration-200"
+                className="text-[#0078D4] underline hover:text-[#005AA0] transition-colors duration-200"
               >
                 Forminator Pro (Forms & Surveys)
               </a>
@@ -838,7 +838,7 @@ const Index = () => {
             <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
               <a
                 href="https://wpmudev.com/docs/wpmu-dev-plugins/snapshot/"
-                className="text-[#0078D4] hover:text-[#005AA0] hover:underline transition-colors duration-200"
+                className="text-[#0078D4] underline hover:text-[#005AA0] transition-colors duration-200"
               >
                 Snapshot Pro (Backups)
               </a>
@@ -846,7 +846,7 @@ const Index = () => {
             <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
               <a
                 href="https://wpmudev.com/docs/wpmu-dev-plugins/branda/"
-                className="text-[#0078D4] hover:text-[#005AA0] hover:underline transition-colors duration-200"
+                className="text-[#0078D4] underline hover:text-[#005AA0] transition-colors duration-200"
               >
                 Branda Pro (White Labeling)
               </a>
@@ -856,14 +856,14 @@ const Index = () => {
             For general tutorials and community support, you can also visit the{' '}
             <a
               href="https://wpmudev.com/blog/"
-              className="text-[#0078D4] hover:text-[#005AA0] hover:underline transition-colors duration-200"
+              className="text-[#0078D4] underline hover:text-[#005AA0] transition-colors duration-200"
             >
               WPMUdev Blog
             </a>
             and their
             <a
               href="https://wpmudev.com/forums/forum/support/"
-              className="text-[#0078D4] hover:text-[#005AA0] hover:underline transition-colors duration-200"
+              className="text-[#0078D4] underline hover:text-[#005AA0] transition-colors duration-200"
             >
               Community Forums.
             </a>
@@ -909,12 +909,15 @@ const Index = () => {
 
           <ul className="pl-[1.5rem] p-[0_0_23px_1em] list-disc">
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
-              <a href="https://clarity.microsoft.com/" className="text-[#0078D4]">
+              <a href="https://clarity.microsoft.com/" className="text-[#0078D4] underline">
                 Microsoft Clarity Website
               </a>
             </li>
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
-              <a href="https://learn.microsoft.com/en-us/clarity/" className="text-[#0078D4]">
+              <a
+                href="https://learn.microsoft.com/en-us/clarity/"
+                className="text-[#0078D4] underline"
+              >
                 Microsoft Clarity Documentation
               </a>
             </li>
@@ -930,7 +933,7 @@ const Index = () => {
                 href="https://www.youtube.com/results?search_query=Microsoft+Clarity+Tutorial"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#0078D4]"
+                className="text-[#0078D4] underline"
               >
                 (Search for “Microsoft Clarity Tutorial” on YouTube.)
               </a>
@@ -940,7 +943,7 @@ const Index = () => {
                 href="https://neilpatel.com/blog/microsoft-clarity/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#0078D4]"
+                className="text-[#0078D4] underline"
               >
                 Blog Posts on Website Analytics
               </a>
@@ -950,7 +953,7 @@ const Index = () => {
                 href="https://www.searchenginejournal.com/microsoft-clarity-case-studies/409608/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#0078D4]"
+                className="text-[#0078D4] underline"
               >
                 Case Studies on Clarity
               </a>
@@ -960,7 +963,7 @@ const Index = () => {
                 href="https://techcommunity.microsoft.com/t5/microsoft-clarity-blog/bg-p/ClarityBlog"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#0078D4]"
+                className="text-[#0078D4] underline"
               >
                 Tech Community Discussions
               </a>
@@ -982,7 +985,7 @@ const Index = () => {
           <ul className="pl-[1.5rem] p-[0_0_23px_1em] list-disc">
             <li className="pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               Create an account at{' '}
-              <a href="https://www.tawk.to/" className="text-[#0078D4]">
+              <a href="https://www.tawk.to/" className="text-[#0078D4] underline">
                 Tawk.to.
               </a>
             </li>
@@ -1035,7 +1038,7 @@ const Index = () => {
           <ul className="pl-[1.5rem] p-[0_0_23px_1em] list-disc">
             <li className="pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               Navigate to the{' '}
-              <a href="https://language.cognitive.azure.com/" className="text-[#0078D4]">
+              <a href="https://language.cognitive.azure.com/" className="text-[#0078D4] underline">
                 Azure Language Studio.
               </a>
             </li>
@@ -1061,7 +1064,7 @@ const Index = () => {
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               <a
                 href="https://learn.microsoft.com/en-us/azure/ai-services/language-service/question-answering/overview"
-                className="text-[#0078D4]"
+                className="text-[#0078D4] underline"
               >
                 Custom Question Answering Documentation
               </a>
@@ -1070,7 +1073,7 @@ const Index = () => {
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               <a
                 href="https://learn.microsoft.com/en-us/azure/ai-services/language-service/overview"
-                className="text-[#0078D4]"
+                className="text-[#0078D4] underline"
               >
                 Azure AI Language Documentation
               </a>
@@ -1079,7 +1082,7 @@ const Index = () => {
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               <a
                 href="https://learn.microsoft.com/en-us/azure/ai-services/language-service/question-answering/overview"
-                className="text-[#0078D4]"
+                className="text-[#0078D4] underline"
               >
                 Microsoft Learn: Create a Question Answering Solution
               </a>

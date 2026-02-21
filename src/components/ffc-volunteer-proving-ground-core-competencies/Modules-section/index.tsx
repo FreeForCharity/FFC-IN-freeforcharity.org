@@ -32,7 +32,7 @@ const index = () => {
               href="https://www.youtube.com/watch?v=example-lastpass-101"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline font-medium"
+              className="text-blue-600 underline font-medium"
             >
               LastPass 101: How to Use LastPass (Official Video)
             </a>{' '}
@@ -43,7 +43,7 @@ const index = () => {
               href="https://usertraining.lastpass.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline font-medium"
+              className="text-blue-600 underline font-medium"
             >
               LastPass User Training & Resources (Official)
             </a>{' '}
@@ -66,7 +66,7 @@ const index = () => {
               href="https://support.lastpass.com/s/document-item?language=en_US&bundleId=lastpass&topicId=LastPass%2FLastPass_Authenticator.html&_LANG=enus"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline font-medium"
+              className="text-blue-600 underline font-medium"
             >
               What is the LastPass Authenticator App? (Official Guide)
             </a>
@@ -77,7 +77,7 @@ const index = () => {
               href="https://play.google.com/store/apps/details?id=com.lastpass.authenticator"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               Google Play Store
             </a>{' '}
@@ -86,7 +86,7 @@ const index = () => {
               href="https://apps.apple.com/us/app/lastpass-authenticator/id1079110004"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               Apple App Store
             </a>
@@ -131,7 +131,7 @@ const index = () => {
               href="https://learn.microsoft.com/en-us/copilot/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               Get Started with Microsoft Copilot (Official Tutorial)
             </a>
@@ -141,7 +141,7 @@ const index = () => {
               href="https://gemini.google/about/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               About Gemini (Official Google Page)
             </a>
@@ -152,7 +152,7 @@ const index = () => {
               href="https://play.google.com/store/apps/details?id=com.microsoft.copilot"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               Microsoft Copilot
             </a>{' '}
@@ -161,7 +161,7 @@ const index = () => {
               href="https://play.google.com/store/apps/details?id=com.google.android.apps.bard"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               Google Gemini
             </a>
@@ -206,7 +206,7 @@ const index = () => {
               href="https://learn.microsoft.com/en-us/training/courses/ms-900t01"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               Microsoft Learn Self-Paced Course (Official)
             </a>{' '}
@@ -217,7 +217,7 @@ const index = () => {
               href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/ms-900"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               Official MS-900 Study Guide
             </a>{' '}
@@ -274,7 +274,7 @@ const index = () => {
               href="https://support.microsoft.com/en-us/office/microsoft-teams-video-training-4f108e54-240b-4351-8084-b1089f0d21d7"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               Microsoft Teams Quick Start Video Training (Official)
             </a>{' '}
@@ -285,7 +285,7 @@ const index = () => {
               href="https://learn.microsoft.com/en-us/training/paths/get-started-managing-microsoft-teams/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               MS-700 Get started with managing Microsoft Teams - Training | Microsoft Learn
             </a>{' '}
@@ -296,7 +296,7 @@ const index = () => {
               href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/ms-700"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               Official MS-700 Study Guide
             </a>{' '}
@@ -355,7 +355,7 @@ const index = () => {
               href="https://support.microsoft.com/en-us/office/video-onedrive-basics-fe8aab1e-3d1a-4a65-a9b6-77b79b6dbb30"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               OneDrive Video Basics (Official)
             </a>{' '}
@@ -366,7 +366,7 @@ const index = () => {
               href="https://adoption.microsoft.com/files/onedrive/Microsoft-OneDrive-quick-start-guide.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               OneDrive Quickstart Guide (PDF)
             </a>{' '}
@@ -377,7 +377,7 @@ const index = () => {
               href="https://support.microsoft.com/en-us/onedrive"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               OneDrive Help & Learning Center (Official)
             </a>{' '}
@@ -423,7 +423,7 @@ const index = () => {
               href="https://support.microsoft.com/en-us/planner"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               Microsoft Planner Video Training (Official)
             </a>{' '}
@@ -434,7 +434,7 @@ const index = () => {
               href="https://learn.microsoft.com/en-us/microsoftteams/manage-planner-app"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               Use Planner in Microsoft Teams (Official Guide)
             </a>{' '}
@@ -482,7 +482,7 @@ const index = () => {
               href="https://support.microsoft.com/en-us#id0ebbh=web"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-600 hover:underline"
+              className="text-blue-600 underline"
             >
               Microsoft 365 Quick Starts (Official Hub)
             </a>{' '}
