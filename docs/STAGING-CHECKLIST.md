@@ -15,15 +15,16 @@ CI-based checks in this table run automatically on every push to `main`; rows
 marked `manual` must be run by hand. Confirm all checks are green or completed
 before proceeding to the manual checks below.
 
-| Check          | Workflow     | What It Verifies                                                   |
-| -------------- | ------------ | ------------------------------------------------------------------ |
-| Format         | `ci.yml`     | Prettier formatting                                                |
-| Lint           | `ci.yml`     | ESLint — no errors                                                 |
-| Unit tests     | `ci.yml`     | Jest (metadata, sitemap, data files, assetPath)                    |
-| Build          | `ci.yml`     | `next build` — static export succeeds                              |
-| Internal links | manual       | Run `npm run check-links` (Linkinator) on `./out` — no dead routes |
-| E2E tests      | `ci.yml`     | Playwright: navigation, images, cookie consent, copyright          |
-| Deploy         | `deploy.yml` | GitHub Pages deployment                                            |
+| Check          | Workflow     | What It Verifies                                                       |
+| -------------- | ------------ | ---------------------------------------------------------------------- |
+| Format         | `ci.yml`     | Prettier formatting                                                    |
+| Lint           | `ci.yml`     | ESLint — no errors                                                     |
+| Unit tests     | `ci.yml`     | Jest (metadata, sitemap, data files, assetPath)                        |
+| Build          | `ci.yml`     | `next build` — static export succeeds                                  |
+| Internal links | `ci.yml`     | Playwright: no broken internal links (`post-deploy-smoke.spec.ts`)     |
+| Linkinator     | manual       | Optional: run `npm run check-links` on `./out` for additional coverage |
+| E2E tests      | `ci.yml`     | Playwright: navigation, images, cookie consent, copyright              |
+| Deploy         | `deploy.yml` | GitHub Pages deployment                                                |
 
 ---
 
