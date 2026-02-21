@@ -44,7 +44,7 @@ jobs:
         run: npm run build
 
       - name: Check internal links
-        run: npm run check-links
+        run: npm run check-links -- --skip "^https?://"
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
