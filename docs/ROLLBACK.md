@@ -36,10 +36,8 @@ live and accessible at its origin IP for the duration of the monitoring window.
    185.199.110.153
    185.199.111.153
    ```
-5. Update each `A` record to point back to the WordPress server:
-   ```
-   66.45.234.13
-   ```
+5. Update each `A` record to point back to the WordPress origin IP
+   (see InterServer control panel or private infra runbook for the current IP)
 6. Ensure the record is set to **Proxied** (orange cloud) to maintain
    Cloudflare WAF and CDN protection
 7. If a `CNAME` record for `www` exists pointing to
@@ -58,10 +56,12 @@ Before declaring rollback complete, confirm the WordPress site is live:
 
 ```bash
 curl -I https://freeforcharity.org
-# Expect: HTTP/2 200, Server: Apache or nginx (not GitHub Pages headers)
+# Expect: HTTP/2 200. If Cloudflare is still proxying, you'll typically see
+#   "server: cloudflare" and Cloudflare headers (e.g., "cf-ray"), not GitHub
+#   Pages headers like "x-github-request-id".
 
 curl -I https://www.freeforcharity.org
-# Expect: HTTP/2 200
+# Expect: HTTP/2 200 with the same origin content as the apex domain.
 ```
 
 Also verify visually in a browser using an incognito window or a DNS resolver
@@ -97,13 +97,13 @@ After stabilizing, open a GitHub issue to document:
 
 ## Important Notes
 
-| Item                | Detail                                                                                     |
-| ------------------- | ------------------------------------------------------------------------------------------ |
-| WordPress origin IP | `66.45.234.13`                                                                             |
-| GitHub Pages IPs    | `185.199.108–111.153`                                                                      |
-| WordPress server    | InterServer VPS — do **not** stop or reprovision for at least 2 weeks post-cutover         |
-| Monitoring window   | Keep WordPress running for minimum 14 days after successful cutover before decommissioning |
-| `public/CNAME` file | Leaving it in the repo is harmless — it only takes effect when DNS points to GitHub        |
+| Item                | Detail                                                                                                          |
+| ------------------- | --------------------------------------------------------------------------------------------------------------- |
+| WordPress origin IP | See private infra runbook or InterServer control panel for current origin IP; restrict origin to Cloudflare IPs |
+| GitHub Pages IPs    | `185.199.108–111.153`                                                                                           |
+| WordPress server    | InterServer VPS — do **not** stop or reprovision for at least 2 weeks post-cutover                              |
+| Monitoring window   | Keep WordPress running for minimum 14 days after successful cutover before decommissioning                      |
+| `public/CNAME` file | Leaving it in the repo is harmless — it only takes effect when DNS points to GitHub                             |
 
 ---
 
