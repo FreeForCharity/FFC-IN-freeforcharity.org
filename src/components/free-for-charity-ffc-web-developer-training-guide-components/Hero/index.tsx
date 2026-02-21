@@ -181,27 +181,31 @@ const Index = () => {
           </h4>
           <ul className="p-[0_0_23px_1.5rem] list-disc">
             <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://docs.whmcs.com/" target="_blank">
+              <a href="https://docs.whmcs.com/" target="_blank" rel="noopener noreferrer">
                 WHMCS Documentation
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://docs.whmcs.com/" target="_blank">
+              <a href="https://docs.whmcs.com/" target="_blank" rel="noopener noreferrer">
                 WHMCS Knowledgebase
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://www.youtube.com/user/whmcs" target="_blank">
+              <a
+                href="https://www.youtube.com/user/whmcs"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 WHMCS YouTube Channel
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://blog.whmcs.com/" target="_blank">
+              <a href="https://blog.whmcs.com/" target="_blank" rel="noopener noreferrer">
                 WHMCS Official Blog
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://whmcs.community/" target="_blank">
+              <a href="https://whmcs.community/" target="_blank" rel="noopener noreferrer">
                 WHMCS Community Forum
               </a>
             </li>
@@ -212,7 +216,7 @@ const Index = () => {
           </h4>
           <ul className="p-[0_0_23px_1.5rem] list-disc">
             <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://docs.whmcs.com/" target="_blank">
+              <a href="https://docs.whmcs.com/" target="_blank" rel="noopener noreferrer">
                 WHMCS Official Documentation
               </a>
             </li>
@@ -222,22 +226,35 @@ const Index = () => {
                 href="https://www.youtube.com/results?search_query=WHMCS+Tutorial"
                 className="text-[#0078D4] underline"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 (Search for “WHMCS Tutorial” on YouTube)
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://www.nexcess.net/blog/whmcs-best-practices/" target="_blank">
+              <a
+                href="https://www.nexcess.net/blog/whmcs-best-practices/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Blog Post on WHMCS Best Practices
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://www.inmotionhosting.com/support/edu/whmcs/" target="_blank">
+              <a
+                href="https://www.inmotionhosting.com/support/edu/whmcs/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 WHMCS Setup Guide by InMotion Hosting
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://www.g2.com/products/whmcs/reviews" target="_blank">
+              <a
+                href="https://www.g2.com/products/whmcs/reviews"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Community Comparisons & Reviews
               </a>
             </li>
@@ -372,27 +389,39 @@ const Index = () => {
 
           <ul className="p-[0_0_23px_1.5rem] list-disc">
             <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://www.cloudflare.com/learning/" target="_blank">
+              <a
+                href="https://www.cloudflare.com/learning/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Cloudflare Learning Center
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://developers.cloudflare.com/dns/" target="_blank">
+              <a
+                href="https://developers.cloudflare.com/dns/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Cloudflare Developer Docs (DNS)
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://support.cloudflare.com/" target="_blank">
+              <a href="https://support.cloudflare.com/" target="_blank" rel="noopener noreferrer">
                 Cloudflare Support Portal
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://www.youtube.com/c/cloudflare" target="_blank">
+              <a
+                href="https://www.youtube.com/c/cloudflare"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Cloudflare YouTube Channel
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://blog.cloudflare.com/" target="_blank">
+              <a href="https://blog.cloudflare.com/" target="_blank" rel="noopener noreferrer">
                 Cloudflare Blog
               </a>
             </li>
@@ -403,7 +432,11 @@ const Index = () => {
           </h4>
           <ul className="p-[0_0_23px_1.5rem] list-disc">
             <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://kinsta.com/knowledgebase/install-cloudflare/" target="_blank">
+              <a
+                href="https://kinsta.com/knowledgebase/install-cloudflare/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Cloudflare DNS Tutorial for Beginners
               </a>
             </li>
@@ -411,6 +444,7 @@ const Index = () => {
               <a
                 href="https://www.wpbeginner.com/wp-tutorials/how-to-setup-cloudflare-free-cdn-in-wordpress/"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 Cloudflare Setup for WordPress (WPBeginner)
               </a>
@@ -421,17 +455,26 @@ const Index = () => {
                 href="https://www.youtube.com/results?search_query=Cloudflare+DNS+Tutorial"
                 className="text-[#0078D4] underline"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 (Search for “Cloudflare DNS Tutorial” on YouTube.)
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://www.cloudwards.net/what-is-cloudflare/" target="_blank">
+              <a
+                href="https://www.cloudwards.net/what-is-cloudflare/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Blog Resource at Cloudwards
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://www.siteground.com/kb/cloudflare-cdn-work/" target="_blank">
+              <a
+                href="https://www.siteground.com/kb/cloudflare-cdn-work/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Guide by SiteGround
               </a>
             </li>
@@ -493,19 +536,28 @@ const Index = () => {
               <a
                 href="https://learn.microsoft.com/en-us/microsoft-365/admin/?view=o365-worldwide"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 Microsoft 365 Admin Help
               </a>
             </li>
 
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://support.microsoft.com/en-us" target="_blank">
+              <a
+                href="https://support.microsoft.com/en-us"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Microsoft 365 Training Portal
               </a>
             </li>
 
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
-              <a href="https://www.microsoft.com/en-us/nonprofits/resources" target="_blank">
+              <a
+                href="https://www.microsoft.com/en-us/nonprofits/resources"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Microsoft Nonprofit Resource Center
               </a>
             </li>
@@ -521,6 +573,7 @@ const Index = () => {
               <a
                 href="https://www.youtube.com/results?search_query=Microsoft+365+for+nonprofits+tutorial"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="text-[#0078D4] underline"
               >
                 (Search for “Microsoft 365 for nonprofits tutorial” on YouTube.)
@@ -530,6 +583,7 @@ const Index = () => {
               <a
                 href="https://www.avepoint.com/blog/office-365/microsoft-365-nonprofits/"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 Blog Guide by AvePoint
               </a>
@@ -538,6 +592,7 @@ const Index = () => {
               <a
                 href="https://learn.microsoft.com/en-us/industry/nonprofit/microsoft-for-nonprofits/program-overview"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 Step-by-Step Guide on Setup
               </a>
@@ -546,6 +601,7 @@ const Index = () => {
               <a
                 href="https://learn.microsoft.com/en-us/microsoft-365/admin/setup/add-domain?view=o365-worldwide"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 Microsoft Official Guide: Adding Domains to M365
               </a>
@@ -554,6 +610,7 @@ const Index = () => {
               <a
                 href="https://techcommunity.microsoft.com/t5/nonprofits/ct-p/Nonprofits"
                 target="_blank"
+                rel="noopener noreferrer"
               >
                 Community Forum Discussions
               </a>

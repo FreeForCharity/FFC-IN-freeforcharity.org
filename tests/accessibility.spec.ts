@@ -1,11 +1,14 @@
 import { test, expect } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
+import { siteRoutes } from './routes'
 
 /**
  * Accessibility Tests (WCAG 2.1 AA)
  *
- * Runs axe-core against key pages of the static build.
+ * Runs axe-core against every page in the shared route list.
  * Violations at the 'critical' and 'serious' levels cause test failures.
+ * Violations with no impact level are also treated as blocking (err on
+ * the side of caution when axe cannot determine severity).
  * 'moderate' and 'minor' violations are reported but do not fail.
  *
  * Known limitations:
@@ -18,63 +21,8 @@ import AxeBuilder from '@axe-core/playwright'
  *   excluded — their internal DOM is outside our control.
  */
 
-const pagesToAudit = [
-  { route: '/', name: 'Homepage' },
-  { route: '/about-us', name: 'About Us' },
-  { route: '/donate', name: 'Donate' },
-  { route: '/volunteer', name: 'Volunteer' },
-  { route: '/domains', name: 'Domains' },
-  { route: '/free-charity-web-hosting', name: 'Free Charity Web Hosting' },
-  { route: '/help-for-charities', name: 'Help for Charities' },
-  { route: '/contact-us', name: 'Contact Us' },
-  { route: '/free-for-charity-endowment-fund', name: 'Endowment Fund' },
-  { route: '/501c3', name: '501c3' },
-  { route: '/pre501c3', name: 'Pre-501c3' },
-  { route: '/blog', name: 'Blog' },
-  { route: '/privacy-policy', name: 'Privacy Policy' },
-  { route: '/terms-of-service', name: 'Terms of Service' },
-  { route: '/guidestar-guide', name: 'GuideStar Guide' },
-  { route: '/free-for-charitys-tools-for-success', name: 'Tools for Success' },
-  { route: '/free-training-programs', name: 'Free Training Programs' },
-  { route: '/consulting', name: 'Consulting' },
-  { route: '/workforce-development', name: 'Workforce Development' },
-  {
-    route: '/charity-and-nonprofit-service-and-consultant-directory',
-    name: 'Service & Consultant Directory',
-  },
-  {
-    route: '/charity-and-nonprofit-technology-directory',
-    name: 'Technology Directory',
-  },
-  { route: '/charity-and-nonprofit-case-studies', name: 'Case Studies' },
-  {
-    route: '/free-for-charity-ffc-service-delivery-stages',
-    name: 'Service Delivery Stages',
-  },
-  {
-    route: '/free-for-charity-ffc-web-developer-training-guide',
-    name: 'Web Developer Training Guide',
-  },
-  {
-    route: '/ffc-volunteer-proving-ground-core-competencies',
-    name: 'Volunteer Proving Ground',
-  },
-  {
-    route:
-      '/charity-validation-guide-ensuring-mutual-benefit-through-comprehensive-validation-processes',
-    name: 'Charity Validation Guide',
-  },
-  { route: '/online-impacts-onboarding-guide', name: 'Online Impacts Onboarding Guide' },
-  { route: '/techstack', name: 'Tech Stack' },
-  { route: '/donation-policy', name: 'Donation Policy' },
-  { route: '/free-for-charity-donation-policy', name: 'FFC Donation Policy' },
-  { route: '/cookie-policy', name: 'Cookie Policy' },
-  { route: '/vulnerability-disclosure-policy', name: 'Vulnerability Disclosure Policy' },
-  { route: '/security-acknowledgements', name: 'Security Acknowledgements' },
-]
-
 test.describe('Accessibility (WCAG 2.1 AA)', () => {
-  for (const { route, name } of pagesToAudit) {
+  for (const { route, name } of siteRoutes) {
     test(`${name} (${route}) has no critical or serious violations`, async ({ page }) => {
       await page.goto(route, { waitUntil: 'domcontentloaded' })
 
@@ -87,31 +35,15 @@ test.describe('Accessibility (WCAG 2.1 AA)', () => {
         .exclude('iframe')
         .analyze()
 
-      // Separate critical/serious (must fix) from moderate/minor (should fix)
+      // Treat critical, serious, and unknown-impact violations as blocking.
+      // Unknown impact (null/undefined) is included because axe could not
+      // determine severity — we err on the side of caution.
       const blocking = results.violations.filter(
-        (v) => v.impact === 'critical' || v.impact === 'serious'
+        (v) => v.impact === 'critical' || v.impact === 'serious' || !v.impact
       )
       const advisory = results.violations.filter(
         (v) => v.impact === 'moderate' || v.impact === 'minor'
       )
-
-      const noImpact = results.violations.filter((v) => !v.impact)
-
-      if (noImpact.length > 0) {
-        console.warn(
-          `\n[a11y warning] ${name}: ${noImpact.length} violation(s) with no impact level:\n` +
-            noImpact
-              .map(
-                (v) =>
-                  `  - [no impact] ${v.id}: ${v.description}\n` +
-                  v.nodes
-                    .slice(0, 2)
-                    .map((n) => `      ${n.target}`)
-                    .join('\n')
-              )
-              .join('\n')
-        )
-      }
 
       if (advisory.length > 0) {
         console.warn(
@@ -135,7 +67,7 @@ test.describe('Accessibility (WCAG 2.1 AA)', () => {
           blocking
             .map(
               (v) =>
-                `\n  [${v.impact}] ${v.id}: ${v.description}\n` +
+                `\n  [${v.impact ?? 'unknown'}] ${v.id}: ${v.description}\n` +
                 `  Help: ${v.helpUrl}\n` +
                 v.nodes
                   .slice(0, 3)
