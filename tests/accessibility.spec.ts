@@ -37,6 +37,40 @@ const pagesToAudit = [
   { route: '/free-for-charitys-tools-for-success', name: 'Tools for Success' },
   { route: '/free-training-programs', name: 'Free Training Programs' },
   { route: '/consulting', name: 'Consulting' },
+  { route: '/workforce-development', name: 'Workforce Development' },
+  {
+    route: '/charity-and-nonprofit-service-and-consultant-directory',
+    name: 'Service & Consultant Directory',
+  },
+  {
+    route: '/charity-and-nonprofit-technology-directory',
+    name: 'Technology Directory',
+  },
+  { route: '/charity-and-nonprofit-case-studies', name: 'Case Studies' },
+  {
+    route: '/free-for-charity-ffc-service-delivery-stages',
+    name: 'Service Delivery Stages',
+  },
+  {
+    route: '/free-for-charity-ffc-web-developer-training-guide',
+    name: 'Web Developer Training Guide',
+  },
+  {
+    route: '/ffc-volunteer-proving-ground-core-competencies',
+    name: 'Volunteer Proving Ground',
+  },
+  {
+    route:
+      '/charity-validation-guide-ensuring-mutual-benefit-through-comprehensive-validation-processes',
+    name: 'Charity Validation Guide',
+  },
+  { route: '/online-impacts-onboarding-guide', name: 'Online Impacts Onboarding Guide' },
+  { route: '/techstack', name: 'Tech Stack' },
+  { route: '/donation-policy', name: 'Donation Policy' },
+  { route: '/free-for-charity-donation-policy', name: 'FFC Donation Policy' },
+  { route: '/cookie-policy', name: 'Cookie Policy' },
+  { route: '/vulnerability-disclosure-policy', name: 'Vulnerability Disclosure Policy' },
+  { route: '/security-acknowledgements', name: 'Security Acknowledgements' },
 ]
 
 test.describe('Accessibility (WCAG 2.1 AA)', () => {
