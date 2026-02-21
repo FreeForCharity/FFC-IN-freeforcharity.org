@@ -1,9 +1,13 @@
 # Lychee ignore patterns
 # Lines starting with # are comments. Each line is a glob pattern.
 
-# Localhost and local dev URLs (used in configs and tests)
+# Localhost and local dev URLs (used in configs, tests, and docs)
 http://localhost/*
 https://localhost/*
+http://localhost:3000/*
+https://localhost:3000/*
+http://localhost:4173/*
+https://localhost:4173/*
 
 # LinkedIn blocks bots with HTTP 999 — not a real broken link
 https://www.linkedin.com/**
