@@ -3,6 +3,14 @@
  *
  * Single source of truth for site routes — keeps accessibility,
  * smoke, and any future per-page tests in sync with the sitemap.
+ *
+ * NOTE: These routes intentionally mirror src/app/sitemap.ts but live
+ * in the test directory. A shared src/lib/routes.ts was considered,
+ * but sitemap.ts requires Next.js-specific metadata (priority,
+ * changeFrequency) while tests need human-readable names. Coupling
+ * production code to test utilities adds fragility without benefit.
+ * The Jest sitemap test (__tests__/app/sitemap.test.ts) validates
+ * sitemap correctness independently.
  */
 
 export const siteRoutes = [

@@ -167,19 +167,20 @@ Tests WCAG 2.1 AA accessibility compliance using `@axe-core/playwright`.
 
 **Test Suite**: `Accessibility (WCAG 2.1 AA)`
 
-Audits all 33 sitemap pages for critical and serious axe-core violations. `color-contrast` is
-disabled pending brand color design review (issue #80). Third-party donation iframes
-are excluded as their internal DOM is outside FFC control.
+Audits all 33 sitemap pages for critical, serious, and unknown-impact axe-core violations.
+`color-contrast` is disabled pending brand color design review (issue #80). Third-party
+donation iframes are excluded as their internal DOM is outside FFC control. Routes are
+imported from the shared `routes.ts` module.
 
 **Pages Audited:**
-Homepage, About Us, Donate, Volunteer, Domains, Free Charity Web Hosting, Help for
-Charities, Contact Us, Endowment Fund, 501c3, Pre-501c3, Blog, Privacy Policy, Terms
-of Service, GuideStar Guide, Tools for Success, Free Training Programs, Consulting,
-Workforce Development, Service & Consultant Directory, Technology Directory, Case
-Studies, Service Delivery Stages, Web Developer Training Guide, Volunteer Proving
-Ground, Charity Validation Guide, Online Impacts Onboarding Guide, Tech Stack,
-Donation Policy, FFC Donation Policy, Cookie Policy, Vulnerability Disclosure Policy,
-Security Acknowledgements.
+Homepage, About Us, Contact Us, Donate, Volunteer, Domains, Free Charity Web Hosting,
+Help for Charities, Blog, Consulting, Free Training Programs, Workforce Development,
+Service & Consultant Directory, Technology Directory, Case Studies, 501c3, Pre-501c3,
+Endowment Fund, GuideStar Guide, Tools for Success, Service Delivery Stages, Web
+Developer Training Guide, Volunteer Proving Ground, Charity Validation Guide, Online
+Impacts Onboarding Guide, Tech Stack, Donation Policy, FFC Donation Policy, Privacy
+Policy, Terms of Service, Cookie Policy, Vulnerability Disclosure Policy, Security
+Acknowledgements.
 
 ### `navigation.spec.ts` - Header Navigation & Page Loading (16 tests)
 
@@ -234,27 +235,6 @@ Parameterized tests for 13 image-heavy pages. Each test monitors network respons
 1. **`homepage internal links resolve`**
    - Collects all internal `<a href>` values from the homepage
    - Navigates to each and verifies HTTP 200
-
-### `accessibility.spec.ts` - Accessibility Audit (33 tests)
-
-Tests WCAG 2.1 AA accessibility compliance using `@axe-core/playwright`.
-
-**Test Suite**: `Accessibility (WCAG 2.1 AA)`
-
-Audits all 33 sitemap pages for critical, serious, and unknown-impact axe-core violations.
-`color-contrast` is disabled pending brand color design review (issue #80). Third-party
-donation iframes are excluded as their internal DOM is outside FFC control. Routes are
-imported from the shared `routes.ts` module.
-
-**Pages Audited:**
-Homepage, About Us, Contact Us, Donate, Volunteer, Domains, Free Charity Web Hosting,
-Help for Charities, Blog, Consulting, Free Training Programs, Workforce Development,
-Service & Consultant Directory, Technology Directory, Case Studies, 501c3, Pre-501c3,
-Endowment Fund, GuideStar Guide, Tools for Success, Service Delivery Stages, Web
-Developer Training Guide, Volunteer Proving Ground, Charity Validation Guide, Online
-Impacts Onboarding Guide, Tech Stack, Donation Policy, FFC Donation Policy, Privacy
-Policy, Terms of Service, Cookie Policy, Vulnerability Disclosure Policy, Security
-Acknowledgements.
 
 ### `copyright.spec.ts` - Footer Copyright (2 tests)
 
