@@ -40,7 +40,7 @@ For a complete list, see the [Site Map](#site-map) section below.
 ## Tech Stack
 
 - **Framework**: Next.js 16.0.10 (App Router with TypeScript)
-- **React**: 19.1.0
+- **React**: 19.2.0
 - **Styling**: Tailwind CSS 4.1.12
 - **UI Components**:
   - Framer Motion 12.23.24 (animations)
@@ -587,6 +587,6 @@ This project is maintained by Free For Charity, a 501(c)(3) nonprofit organizati
 
 ---
 
-**Documentation Status**: ✅ Updated December 2025  
+**Documentation Status**: ✅ Updated February 2026  
 **Next.js Version**: 16.0.10  
 **Node.js Version**: 20.x required
