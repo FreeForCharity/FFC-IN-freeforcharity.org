@@ -180,27 +180,27 @@ const Index = () => {
             Official WHMCS Learning Resources:
           </h4>
           <ul className="p-[0_0_23px_1.5rem] list-disc">
-            <li className="hover:underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://docs.whmcs.com/" target="_blank">
                 WHMCS Documentation
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://docs.whmcs.com/" target="_blank">
                 WHMCS Knowledgebase
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://www.youtube.com/user/whmcs" target="_blank">
                 WHMCS YouTube Channel
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://blog.whmcs.com/" target="_blank">
                 WHMCS Official Blog
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://whmcs.community/" target="_blank">
                 WHMCS Community Forum
               </a>
@@ -211,7 +211,7 @@ const Index = () => {
             External WMHCS Learning Resources:
           </h4>
           <ul className="p-[0_0_23px_1.5rem] list-disc">
-            <li className="hover:underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://docs.whmcs.com/" target="_blank">
                 WHMCS Official Documentation
               </a>
@@ -226,17 +226,17 @@ const Index = () => {
                 (Search for “WHMCS Tutorial” on YouTube)
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://www.nexcess.net/blog/whmcs-best-practices/" target="_blank">
                 Blog Post on WHMCS Best Practices
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://www.inmotionhosting.com/support/edu/whmcs/" target="_blank">
                 WHMCS Setup Guide by InMotion Hosting
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://www.g2.com/products/whmcs/reviews" target="_blank">
                 Community Comparisons & Reviews
               </a>
@@ -371,27 +371,27 @@ const Index = () => {
           </h4>
 
           <ul className="p-[0_0_23px_1.5rem] list-disc">
-            <li className="hover:underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://www.cloudflare.com/learning/" target="_blank">
                 Cloudflare Learning Center
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://developers.cloudflare.com/dns/" target="_blank">
                 Cloudflare Developer Docs (DNS)
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://support.cloudflare.com/" target="_blank">
                 Cloudflare Support Portal
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://www.youtube.com/c/cloudflare" target="_blank">
                 Cloudflare YouTube Channel
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://blog.cloudflare.com/" target="_blank">
                 Cloudflare Blog
               </a>
@@ -402,12 +402,12 @@ const Index = () => {
             External Cloudflare Learning Resources:
           </h4>
           <ul className="p-[0_0_23px_1.5rem] list-disc">
-            <li className="hover:underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://kinsta.com/knowledgebase/install-cloudflare/" target="_blank">
                 Cloudflare DNS Tutorial for Beginners
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a
                 href="https://www.wpbeginner.com/wp-tutorials/how-to-setup-cloudflare-free-cdn-in-wordpress/"
                 target="_blank"
@@ -425,12 +425,12 @@ const Index = () => {
                 (Search for “Cloudflare DNS Tutorial” on YouTube.)
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://www.cloudwards.net/what-is-cloudflare/" target="_blank">
                 Blog Resource at Cloudwards
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://www.siteground.com/kb/cloudflare-cdn-work/" target="_blank">
                 Guide by SiteGround
               </a>
@@ -489,7 +489,7 @@ const Index = () => {
             Official Microsoft 365 Learning Resources:
           </h4>
           <ul className="p-[0_0_23px_1.5rem] list-disc">
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a
                 href="https://learn.microsoft.com/en-us/microsoft-365/admin/?view=o365-worldwide"
                 target="_blank"
@@ -498,13 +498,13 @@ const Index = () => {
               </a>
             </li>
 
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://support.microsoft.com/en-us" target="_blank">
                 Microsoft 365 Training Portal
               </a>
             </li>
 
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a href="https://www.microsoft.com/en-us/nonprofits/resources" target="_blank">
                 Microsoft Nonprofit Resource Center
               </a>
@@ -516,7 +516,7 @@ const Index = () => {
           </h4>
 
           <ul className="p-[0_0_23px_1.5rem] list-disc">
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] leading-[26px] ">
               Microsoft 365 Setup Video Tutorials:
               <a
                 href="https://www.youtube.com/results?search_query=Microsoft+365+for+nonprofits+tutorial"
@@ -526,7 +526,7 @@ const Index = () => {
                 (Search for “Microsoft 365 for nonprofits tutorial” on YouTube.)
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a
                 href="https://www.avepoint.com/blog/office-365/microsoft-365-nonprofits/"
                 target="_blank"
@@ -534,7 +534,7 @@ const Index = () => {
                 Blog Guide by AvePoint
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a
                 href="https://learn.microsoft.com/en-us/industry/nonprofit/microsoft-for-nonprofits/program-overview"
                 target="_blank"
@@ -542,7 +542,7 @@ const Index = () => {
                 Step-by-Step Guide on Setup
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a
                 href="https://learn.microsoft.com/en-us/microsoft-365/admin/setup/add-domain?view=o365-worldwide"
                 target="_blank"
@@ -550,7 +550,7 @@ const Index = () => {
                 Microsoft Official Guide: Adding Domains to M365
               </a>
             </li>
-            <li className="hover:underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
+            <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px] ">
               <a
                 href="https://techcommunity.microsoft.com/t5/nonprofits/ct-p/Nonprofits"
                 target="_blank"
@@ -720,7 +720,7 @@ const Index = () => {
           </h4>
 
           <ul className="pl-[1.5rem] pb-[23px] list-disc space-y-[0.75rem]">
-            <li className="pl-[0.5rem] text-[14px] text-[#0078D4] leading-[26px] hover:underline">
+            <li className="pl-[0.5rem] text-[14px] text-[#0078D4] leading-[26px] underline">
               <a
                 href="https://www.elegantthemes.com/documentation/divi/"
                 target="_blank"
@@ -740,7 +740,7 @@ const Index = () => {
                 (Search for “Divi Theme Tutorial” on YouTube)
               </a>
             </li>
-            <li className="pl-[0.5rem] text-[14px] text-[#0078D4] leading-[26px] hover:underline">
+            <li className="pl-[0.5rem] text-[14px] text-[#0078D4] leading-[26px] underline">
               <a
                 href="https://www.wpbeginner.com/solutions/divi/"
                 target="_blank"
@@ -749,7 +749,7 @@ const Index = () => {
                 WPBeginner’s Guide to Divi
               </a>
             </li>
-            <li className="pl-[0.5rem] text-[14px] text-[#0078D4] leading-[26px] hover:underline">
+            <li className="pl-[0.5rem] text-[14px] text-[#0078D4] leading-[26px] underline">
               <a
                 href="https://www.facebook.com/groups/DiviThemeUsers/"
                 target="_blank"
@@ -927,7 +927,7 @@ const Index = () => {
             External Microsoft Clarity Resources:
           </h4>
           <ul className="p-[0_0_23px_1.5rem] list-disc">
-            <li className="hover:underline pl-[0.5rem] mb-[0.75rem] text-[14px] leading-[26px]">
+            <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] leading-[26px]">
               YouTube Clarity Tutorials:
               <a
                 href="https://www.youtube.com/results?search_query=Microsoft+Clarity+Tutorial"
@@ -938,7 +938,7 @@ const Index = () => {
                 (Search for “Microsoft Clarity Tutorial” on YouTube.)
               </a>
             </li>
-            <li className="hover:underline pl-[0.5rem] text-[#0078D4] mb-[0.75rem] text-[14px] leading-[26px]">
+            <li className="underline pl-[0.5rem] text-[#0078D4] mb-[0.75rem] text-[14px] leading-[26px]">
               <a
                 href="https://neilpatel.com/blog/microsoft-clarity/"
                 target="_blank"
@@ -948,7 +948,7 @@ const Index = () => {
                 Blog Posts on Website Analytics
               </a>
             </li>
-            <li className="hover:underline pl-[0.5rem] text-[#0078D4] mb-[0.75rem] text-[14px] leading-[26px]">
+            <li className="underline pl-[0.5rem] text-[#0078D4] mb-[0.75rem] text-[14px] leading-[26px]">
               <a
                 href="https://www.searchenginejournal.com/microsoft-clarity-case-studies/409608/"
                 target="_blank"
@@ -958,7 +958,7 @@ const Index = () => {
                 Case Studies on Clarity
               </a>
             </li>
-            <li className="hover:underline pl-[0.5rem] text-[#0078D4] mb-[0.75rem] text-[14px] leading-[26px]">
+            <li className="underline pl-[0.5rem] text-[#0078D4] mb-[0.75rem] text-[14px] leading-[26px]">
               <a
                 href="https://techcommunity.microsoft.com/t5/microsoft-clarity-blog/bg-p/ClarityBlog"
                 target="_blank"
@@ -1005,12 +1005,12 @@ const Index = () => {
             8.2. Learning Resources
           </h3>
           <ul className="p-[0_0_23px_1.5rem] list-disc">
-            <li className="hover:underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px]">
+            <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px]">
               <a href="https://help.tawk.to/" target="_blank" rel="noopener noreferrer">
                 Tawk.to Help Center
               </a>
             </li>
-            <li className="hover:underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px]">
+            <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0078D4] leading-[26px]">
               <a href="https://www.tawk.to/academy/" target="_blank" rel="noopener noreferrer">
                 Tawk.to Academy
               </a>

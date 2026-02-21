@@ -37,10 +37,7 @@ const ConsultingPage = () => {
 
           <div className="bg-white rounded-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.1)] p-8 inline-block">
             <p className="text-[22px] font-[600] text-[#2583ab]">Clarke Moyer</p>
-            <a
-              href="tel:+15202228104"
-              className="text-[24px] font-[700] text-[#f27022] hover:underline"
-            >
+            <a href="tel:+15202228104" className="text-[24px] font-[700] text-[#f27022] underline">
               (520) 222-8104
             </a>
           </div>
