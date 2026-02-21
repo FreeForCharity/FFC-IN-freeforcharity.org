@@ -95,6 +95,24 @@ test.describe('Accessibility (WCAG 2.1 AA)', () => {
         (v) => v.impact === 'moderate' || v.impact === 'minor'
       )
 
+      const noImpact = results.violations.filter((v) => !v.impact)
+
+      if (noImpact.length > 0) {
+        console.warn(
+          `\n[a11y warning] ${name}: ${noImpact.length} violation(s) with no impact level:\n` +
+            noImpact
+              .map(
+                (v) =>
+                  `  - [no impact] ${v.id}: ${v.description}\n` +
+                  v.nodes
+                    .slice(0, 2)
+                    .map((n) => `      ${n.target}`)
+                    .join('\n')
+              )
+              .join('\n')
+        )
+      }
+
       if (advisory.length > 0) {
         console.warn(
           `\n[a11y advisory] ${name}: ${advisory.length} moderate/minor violation(s):\n` +
