@@ -1,6 +1,11 @@
 # Free For Charity
 
-Free For Charity website built with Next.js 15.5.2 (App Router).
+[![CI - Build and Test](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/ci.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/ci.yml)
+[![Deploy to GitHub Pages](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/deploy.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/deploy.yml)
+[![CodeQL](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/codeql.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/codeql.yml)
+[![Lighthouse CI](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/lighthouse.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/lighthouse.yml)
+
+Free For Charity website built with Next.js 16.0.10 (App Router).
 
 ## Organization
 
@@ -27,15 +32,15 @@ For a complete list, see the [Site Map](#site-map) section below.
 ## Deployment
 
 - **Primary Site**: [https://www.freeforcharity.org](https://www.freeforcharity.org) (custom domain with CNAME)
-- **GitHub Pages**: [https://freeforcharity.github.io/freeforcharity-web/](https://freeforcharity.github.io/freeforcharity-web/)
+- **GitHub Pages**: [https://freeforcharity.github.io/FFC-IN-freeforcharity.org/](https://freeforcharity.github.io/FFC-IN-freeforcharity.org/)
 - **Hosting**: GitHub Pages
 - **Deployment**: Automated via GitHub Actions on push to `main` branch
 - **Build Configuration**: Dual deployment support (custom domain and GitHub Pages basePath)
 
 ## Tech Stack
 
-- **Framework**: Next.js 15.5.2 (App Router with TypeScript)
-- **React**: 19.1.0
+- **Framework**: Next.js 16.0.10 (App Router with TypeScript)
+- **React**: 19.2.0
 - **Styling**: Tailwind CSS 4.1.12
 - **UI Components**:
   - Framer Motion 12.23.24 (animations)
@@ -58,8 +63,8 @@ For a complete list, see the [Site Map](#site-map) section below.
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/FreeForCharity/freeforcharity-web.git
-cd freeforcharity-web
+git clone https://github.com/FreeForCharity/FFC-IN-freeforcharity.org.git
+cd FFC-IN-freeforcharity.org
 ```
 
 2. **Install dependencies**
@@ -224,7 +229,7 @@ Reusable components in `src/components/UI/`:
 ## Project Structure
 
 ```
-freeforcharity-web/
+FFC-IN-freeforcharity.org/
 ├── .github/
 │   ├── workflows/
 │   │   └── nextjs.yml          # CI/CD pipeline for GitHub Pages
@@ -388,9 +393,9 @@ The site uses **dual deployment** strategy:
    - No basePath required
    - Assets served from root path
 
-2. **GitHub Pages**: [https://freeforcharity.github.io/freeforcharity-web/](https://freeforcharity.github.io/freeforcharity-web/)
+2. **GitHub Pages**: [https://freeforcharity.github.io/FFC-IN-freeforcharity.org/](https://freeforcharity.github.io/FFC-IN-freeforcharity.org/)
    - Backup/alternative URL
-   - Requires basePath: `/freeforcharity-web`
+   - Requires basePath: `/FFC-IN-freeforcharity.org`
    - Assets served from subpath
 
 ### CI/CD Pipeline
@@ -405,14 +410,14 @@ The site uses **dual deployment** strategy:
 2. Setup Node.js 20
 3. Install dependencies with `npm ci`
 4. Install Playwright browsers
-5. Build with `NEXT_PUBLIC_BASE_PATH=/freeforcharity-web`
+5. Build with `NEXT_PUBLIC_BASE_PATH=/FFC-IN-freeforcharity.org`
 6. Run Playwright tests
 7. Upload build artifacts (./out directory)
 8. Deploy to GitHub Pages (only if tests pass)
 
 **Environment Variables**:
 
-- `NEXT_PUBLIC_BASE_PATH`: Set to `/freeforcharity-web` for GitHub Pages deployment
+- `NEXT_PUBLIC_BASE_PATH`: Set to `/FFC-IN-freeforcharity.org` for GitHub Pages deployment
 - Not set (empty) for custom domain deployment
 
 ### Local Production Build
@@ -428,7 +433,7 @@ npm run preview
 **Build for GitHub Pages** (with basePath):
 
 ```bash
-NEXT_PUBLIC_BASE_PATH=/freeforcharity-web npm run build
+NEXT_PUBLIC_BASE_PATH=/FFC-IN-freeforcharity.org npm run build
 npm run preview
 # Visit http://localhost:3000
 ```
@@ -582,6 +587,6 @@ This project is maintained by Free For Charity, a 501(c)(3) nonprofit organizati
 
 ---
 
-**Documentation Status**: ✅ Updated December 2025  
-**Next.js Version**: 15.5.2  
+**Documentation Status**: ✅ Updated February 2026  
+**Next.js Version**: 16.0.10  
 **Node.js Version**: 20.x required

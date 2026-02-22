@@ -4,9 +4,9 @@ This directory contains automated end-to-end tests for the Free For Charity web 
 
 ## Test Statistics
 
-- **Total Tests**: 29 tests across 6 test suites
-- **Status**: ✅ 28 passing, ⏭️ 1 skipped
-- **Execution Time**: ~25-30 seconds
+- **Total Tests**: 125 tests across 9 test suites
+- **Status**: ✅ 124 passing, ⏭️ 1 skipped
+- **Execution Time**: ~40-60 seconds
 - **Framework**: Playwright v1.56.0
 
 ## Test Files
@@ -160,6 +160,81 @@ Tests the cookie consent banner functionality and GDPR compliance across 3 test 
 14. **`banner should have proper ARIA attributes`**
     - Ensures banner accessibility
     - Validates proper ARIA attributes on banner
+
+### `accessibility.spec.ts` - Accessibility Audit (33 tests)
+
+Tests WCAG 2.1 AA accessibility compliance using `@axe-core/playwright`.
+
+**Test Suite**: `Accessibility (WCAG 2.1 AA)`
+
+Audits all 33 sitemap pages for critical, serious, and unknown-impact axe-core violations.
+`color-contrast` is disabled pending brand color design review (issue #80). Third-party
+donation iframes are excluded as their internal DOM is outside FFC control. Routes are
+imported from the shared `routes.ts` module.
+
+**Pages Audited:**
+Homepage, About Us, Contact Us, Donate, Volunteer, Domains, Free Charity Web Hosting,
+Help for Charities, Blog, Consulting, Free Training Programs, Workforce Development,
+Service & Consultant Directory, Technology Directory, Case Studies, 501c3, Pre-501c3,
+Endowment Fund, GuideStar Guide, Tools for Success, Service Delivery Stages, Web
+Developer Training Guide, Volunteer Proving Ground, Charity Validation Guide, Online
+Impacts Onboarding Guide, Tech Stack, Donation Policy, FFC Donation Policy, Privacy
+Policy, Terms of Service, Cookie Policy, Vulnerability Disclosure Policy, Security
+Acknowledgements.
+
+### `navigation.spec.ts` - Header Navigation & Page Loading (16 tests)
+
+Tests header navigation links, critical page loading, and footer content.
+
+**Test Suite 1**: `Header Navigation` (5 tests)
+
+1. **`should display main navigation links`**
+   - Verifies main nav items are visible (Home, Help for Charities, Volunteer, Donate, About Us)
+
+2. **`should navigate to About Us page`**
+   - Navigates to /about-us and verifies expected content
+
+3. **`should navigate to Contact Us page`**
+   - Navigates to /contact-us and verifies expected content
+
+4. **`should navigate to Donate page`**
+   - Navigates to /donate and verifies expected content
+
+5. **`should navigate to Volunteer page`**
+   - Navigates to /volunteer and verifies expected content
+
+**Test Suite 2**: `Page Loading` (8 tests)
+
+Parameterized tests for 8 critical pages (Home, About Us, Contact Us, Donate, Volunteer, Domains, Privacy Policy, Terms of Service). Each test verifies HTTP 200 status, expected content text, and header/footer presence.
+
+**Test Suite 3**: `Footer` (3 tests)
+
+6. **`should contain social media links`**
+   - Verifies Facebook, LinkedIn, and GitHub links in footer
+
+7. **`should contain contact information`**
+   - Checks for contact phone link
+
+8. **`should contain policy links`**
+   - Verifies privacy policy and terms of service links
+
+### `post-deploy-smoke.spec.ts` - Post-Deploy Smoke Tests (47 tests)
+
+Crawls every page in the sitemap and verifies pages load, images render, and internal links resolve.
+
+**Test Suite 1**: `All pages load successfully` (33 tests)
+
+Parameterized tests for all 33 sitemap routes. Each test verifies the page returns HTTP 200.
+
+**Test Suite 2**: `No broken images` (13 tests)
+
+Parameterized tests for 13 image-heavy pages. Each test monitors network responses for failed image requests and checks all `<img>` elements have loaded (naturalWidth > 0).
+
+**Test Suite 3**: `No broken internal links` (1 test)
+
+1. **`homepage internal links resolve`**
+   - Collects all internal `<a href>` values from the homepage
+   - Navigates to each and verifies HTTP 200
 
 ### `copyright.spec.ts` - Footer Copyright (2 tests)
 
@@ -445,6 +520,6 @@ When tests fail in CI:
 
 ---
 
-**Test Suite Status**: ✅ 5 passing, 1 skipped  
-**Last Updated**: October 2025  
+**Test Suite Status**: ✅ 124 passing, 1 skipped
+**Last Updated**: February 2026
 **Framework**: Playwright v1.56.0

@@ -67,7 +67,7 @@ const index = () => {
                   Visit{' '}
                   <a
                     href="https://my.interserver.net/login.php"
-                    className="text-[#2ea3f2] hover:underline"
+                    className="text-[#2ea3f2] underline"
                   >
                     https://my.interserver.net
                   </a>{' '}
@@ -79,7 +79,7 @@ const index = () => {
                   Send an email to{' '}
                   <a
                     href="mailto:sales@interserver.net"
-                    className="text-[#2ea3f2] hover:underline"
+                    className="text-[#2ea3f2] underline"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -136,7 +136,7 @@ const index = () => {
                       Email:{' '}
                       <a
                         href="mailto:globaladmin@freeforcharity.org"
-                        className="text-[#2ea3f2] hover:underline"
+                        className="text-[#2ea3f2] underline"
                       >
                         globaladmin@freeforcharity.org
                       </a>
@@ -162,7 +162,7 @@ const index = () => {
                   Make the text “InterServer” a hyperlink to{' '}
                   <a
                     href="https://www.interserver.net"
-                    className="text-[#2ea3f2] hover:underline"
+                    className="text-[#2ea3f2] underline"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -192,10 +192,7 @@ const index = () => {
             {/* Contact */}
             <p className="font-[700]">
               As always, if you run into problems, contact us anytime{' '}
-              <a
-                href="mailto:clarkemoyer@freeforcharity.org"
-                className="text-[#2ea3f2] hover:underline"
-              >
+              <a href="mailto:clarkemoyer@freeforcharity.org" className="text-[#2ea3f2] underline">
                 clarkemoyer@freeforcharity.org
               </a>{' '}
               520-222-8104

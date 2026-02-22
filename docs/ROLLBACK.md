@@ -1,55 +1,120 @@
-# Rollback Procedure
+# Rollback Procedure: GitHub Pages → WordPress
 
-Use this procedure to revert production traffic back to the WordPress server if the
-GitHub Pages cutover causes critical issues.
+This document describes how to roll back the freeforcharity.org website from
+GitHub Pages (Next.js) back to the WordPress server in the event of a
+production issue after DNS cutover.
 
-**Rollback target:** WordPress origin (see InterServer control panel for current IP)
+**Estimated rollback time: 5–30 minutes** (DNS propagation varies by TTL and
+resolver)
 
 ---
 
-## When to Roll Back
+## Prerequisites
 
-Roll back immediately if any of the following occur within 30 minutes of cutover:
+You will need access to:
 
-- Homepage returns non-200 or shows a broken layout
-- Donation forms on `/donate` or `/free-for-charity-endowment-fund` are non-functional
-- More than 3 consecutive failed production health checks (e.g., repeated failed GitHub Actions monitoring/deploy workflows on `main`)
-- Critical content is missing or images are completely broken site-wide
+- **Cloudflare dashboard** — DNS management for freeforcharity.org
+  - Account: FFC Cloudflare org
+  - Zone: freeforcharity.org
+- **GitHub** — to disable or reconfigure GitHub Pages if needed
+  - Repo: FreeForCharity/FFC-IN-freeforcharity.org → Settings → Pages
+
+The WordPress server is **never modified** during or after cutover. It remains
+live and accessible at its origin IP for the duration of the monitoring window.
 
 ---
 
 ## Step 1 — Revert DNS in Cloudflare
 
-1. Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/) and select the
-   `freeforcharity.org` zone.
-2. Go to **DNS → Records**.
-3. Update the `A` record for `@` (root) to point back to the WordPress origin IP
-   (see InterServer control panel or private infra runbook for the current IP).
-4. For `www`, either:
-   - If `www` is an **A** record, point it to the WordPress origin IP.
-   - If `www` is a **CNAME**, point it back to the previous WordPress hostname (often `@`), **not** directly to an IP.
-5. Set TTL to **Auto** (or 300s) so propagation is fast.
-6. Confirm records are saved.
+1. Log in to [dash.cloudflare.com](https://dash.cloudflare.com)
+2. Select the **freeforcharity.org** zone
+3. Go to **DNS → Records**
+4. Find the `A` record(s) for `@` (apex) pointing to GitHub Pages IPs:
+   ```
+   185.199.108.153
+   185.199.109.153
+   185.199.110.153
+   185.199.111.153
+   ```
+5. Update each `A` record to point back to the WordPress origin IP
+   (see InterServer control panel or private infra runbook for the current IP)
+6. Ensure the record is set to **Proxied** (orange cloud) to maintain
+   Cloudflare WAF and CDN protection
+7. If a `CNAME` record for `www` exists pointing to
+   `freeforcharity.github.io`, revert it to point to the origin server or
+   remove it
 
-DNS propagation will be near-instant due to the lowered TTL set before cutover.
-
----
-
-## Step 2 — Verify WordPress is Serving Traffic
-
-1. Check `https://freeforcharity.org` — confirm it shows the WordPress site.
-2. Check `https://www.freeforcharity.org` — confirm redirect/resolution is correct.
-3. Verify the donation forms work on the WordPress site.
-
----
-
-## Step 3 — Post-Rollback Actions
-
-- [ ] Create a GitHub Issue labeled `incident` with details of what failed.
-- [ ] Notify the FFC team via Microsoft Teams/email that rollback occurred.
-- [ ] Document the root cause before attempting cutover again.
-- [ ] Do not re-attempt cutover until the root cause is resolved and verified in staging.
+> **Tip:** Cloudflare's default TTL is 300 seconds (5 min) for proxied records.
+> If you previously lowered the TTL before cutover, propagation is fast.
+> External resolvers may cache for longer depending on their own TTLs.
 
 ---
 
-_Last updated: 2026-02-20_
+## Step 2 — Verify WordPress is Responding
+
+Before declaring rollback complete, confirm the WordPress site is live:
+
+```bash
+curl -I https://freeforcharity.org
+# Expect: HTTP/2 200. If Cloudflare is still proxying, you'll typically see
+#   "server: cloudflare" and Cloudflare headers (e.g., "cf-ray"), not GitHub
+#   Pages headers like "x-github-request-id".
+
+curl -I https://www.freeforcharity.org
+# Expect: HTTP/2 200 with the same origin content as the apex domain.
+```
+
+Also verify visually in a browser using an incognito window or a DNS resolver
+that has picked up the change.
+
+---
+
+## Step 3 — Disable GitHub Pages Custom Domain (Optional)
+
+If you want to prevent GitHub Pages from attempting to serve the custom domain:
+
+1. Go to **FreeForCharity/FFC-IN-freeforcharity.org → Settings → Pages**
+2. Under **Custom domain**, clear the field and save
+3. The site will remain accessible at
+   `https://freeforcharity.github.io/FFC-IN-freeforcharity.org/` for staging use
+
+This step is optional — DNS changes alone are sufficient to route traffic back
+to WordPress.
+
+---
+
+## Step 4 — Create a Post-Mortem Issue
+
+After stabilizing, open a GitHub issue to document:
+
+- What broke (specific pages, features, or infra)
+- When it was detected
+- How long the outage lasted
+- Root cause
+- Fix required before re-attempting cutover
+
+---
+
+## Important Notes
+
+| Item                | Detail                                                                                                          |
+| ------------------- | --------------------------------------------------------------------------------------------------------------- |
+| WordPress origin IP | See private infra runbook or InterServer control panel for current origin IP; restrict origin to Cloudflare IPs |
+| GitHub Pages IPs    | `185.199.108–111.153`                                                                                           |
+| WordPress server    | InterServer VPS — do **not** stop or reprovision for at least 2 weeks post-cutover                              |
+| Monitoring window   | Keep WordPress running for minimum 14 days after successful cutover before decommissioning                      |
+| `public/CNAME` file | Leaving it in the repo is harmless — it only takes effect when DNS points to GitHub                             |
+
+---
+
+## Escalation Contacts
+
+| Role                | Contact                         |
+| ------------------- | ------------------------------- |
+| DNS / Cloudflare    | FFC Cloudflare admin account    |
+| GitHub Pages / repo | FreeForCharity GitHub org owner |
+| WordPress server    | InterServer hosting panel       |
+
+---
+
+_Last updated: 2026-02-21_
