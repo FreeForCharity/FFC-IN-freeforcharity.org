@@ -117,4 +117,4 @@ After stabilizing, open a GitHub issue to document:
 
 ---
 
-_Last updated: 2026-02-20_
+_Last updated: 2026-02-21_
