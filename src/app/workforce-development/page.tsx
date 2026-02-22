@@ -114,7 +114,7 @@ const WorkforceDevelopmentPage = () => {
           </p>
           <p className="text-[20px] text-white font-[600] mb-6">
             Free For Charity Founder: Clarke Moyer{' '}
-            <a href="tel:+15202228104" className="text-[#e88d33] hover:underline">
+            <a href="tel:+15202228104" className="text-[#e88d33] underline">
               (520) 222-8104
             </a>
           </p>

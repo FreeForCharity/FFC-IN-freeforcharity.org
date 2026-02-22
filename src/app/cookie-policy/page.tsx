@@ -153,7 +153,7 @@ export default function CookiePolicy() {
                 href="https://policies.google.com/privacy"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
+                className="text-blue-600 underline"
               >
                 https://policies.google.com/privacy
               </a>
@@ -196,7 +196,7 @@ export default function CookiePolicy() {
                 href="https://privacy.microsoft.com/en-us/privacystatement"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
+                className="text-blue-600 underline"
               >
                 https://privacy.microsoft.com/privacystatement
               </a>
@@ -249,7 +249,7 @@ export default function CookiePolicy() {
                 href="https://www.facebook.com/privacy/policy/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
+                className="text-blue-600 underline"
               >
                 https://www.facebook.com/privacy/policy/
               </a>
@@ -329,7 +329,7 @@ export default function CookiePolicy() {
                 href="https://tools.google.com/dlpage/gaoptout"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
+                className="text-blue-600 underline"
               >
                 Google Analytics Opt-out Browser Add-on
               </a>
@@ -340,7 +340,7 @@ export default function CookiePolicy() {
                 href="https://www.facebook.com/settings/?tab=ads"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:underline"
+                className="text-blue-600 underline"
               >
                 Facebook Ad Settings
               </a>
@@ -390,7 +390,7 @@ export default function CookiePolicy() {
           <ul className="list-inside list-disc space-y-[4px] pb-[1em]">
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
               <strong>Email:</strong>{' '}
-              <a href="mailto:privacy@freeforcharity.org" className="text-blue-600 hover:underline">
+              <a href="mailto:privacy@freeforcharity.org" className="text-blue-600 underline">
                 privacy@freeforcharity.org
               </a>
             </li>
@@ -399,7 +399,7 @@ export default function CookiePolicy() {
             </li>
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
               <strong>Phone:</strong>{' '}
-              <a href="tel:+15202228104" className="text-blue-600 hover:underline">
+              <a href="tel:+15202228104" className="text-blue-600 underline">
                 520-222-8104
               </a>
             </li>
@@ -415,7 +415,7 @@ export default function CookiePolicy() {
           </ol>
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
             For more information about how we handle your personal data, please see our{' '}
-            <a href="/privacy-policy" className="text-blue-600 hover:underline">
+            <a href="/privacy-policy" className="text-blue-600 underline">
               Privacy Policy
             </a>
             .

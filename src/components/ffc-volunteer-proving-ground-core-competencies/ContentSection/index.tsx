@@ -55,45 +55,45 @@ export default function Home() {
         </p>
         <ul className="text-[#444] list-none p-0 m-0">
           <li>
-            <a href="#module1" className="text-blue-600 leading-[28px] hover:underline">
+            <a href="#module1" className="text-blue-600 leading-[28px] underline">
               <span className="font-[700]">Module 1:</span> LastPass - Our Security Standard
             </a>{' '}
             (1 - 2 Hours)
           </li>
           <li>
-            <a href="#module2" className="text-blue-600 leading-[28px] hover:underline">
+            <a href="#module2" className="text-blue-600 leading-[28px] underline">
               <span className="font-[700]">Module 2:</span> Introduction to AI Assistants
             </a>{' '}
             (2 - 4 Hours)
           </li>
           <li>
-            <a href="#module3" className="text-blue-600 leading-[28px] hover:underline">
+            <a href="#module3" className="text-blue-600 leading-[28px] underline">
               <span className="font-[700]">Module 3:</span> MS-900 Microsoft 365 Fundamentals
             </a>{' '}
             (12 - 16 Hours)
           </li>
           <li>
-            <a href="#module4" className="text-blue-600 leading-[28px] hover:underline">
+            <a href="#module4" className="text-blue-600 leading-[28px] underline">
               <span className="font-[700]">Module 4:</span> MS-700 Teams Administration Fundamentals
             </a>{' '}
             (8 - 12 Hours)
           </li>
           <li>
-            <a href="#module5" className="text-blue-600 leading-[28px] hover:underline">
+            <a href="#module5" className="text-blue-600 leading-[28px] underline">
               <span className="font-[700]">Module 5:</span> Microsoft OneDrive - Our Shared File
               System
             </a>{' '}
             (2 Hours)
           </li>
           <li>
-            <a href="#module6" className="text-blue-600 leading-[28px] hover:underline">
+            <a href="#module6" className="text-blue-600 leading-[28px] underline">
               <span className="font-[700]">Module 6:</span> Microsoft Planner - Task Management in
               Teams
             </a>{' '}
             (2 Hours)
           </li>
           <li>
-            <a href="#module7" className="text-blue-600 leading-[28px] hover:underline">
+            <a href="#module7" className="text-blue-600 leading-[28px] underline">
               <span className="font-[700]">Module 7:</span> Microsoft 365 Apps Quick Start
             </a>{' '}
             (6 - 8 Hours)
