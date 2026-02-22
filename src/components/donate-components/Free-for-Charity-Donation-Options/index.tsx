@@ -7,7 +7,7 @@ const index = () => {
       <div className="w-full max-w-[90%] md:max-w-[80%] py-4 mx-auto">
         {/* Header Section */}
         <div className="text-center">
-          <h1 className="text-[30px] md:text-[40px] font-[700] leading-[44px] text-[#f27022] mb-[20px]">
+          <h1 className="text-[30px] md:text-[40px] font-[700] leading-[44px] text-[#b35000] mb-[20px]">
             Free for Charity Donation Options
           </h1>
           <p className="text-[18px] font-[500] text-black pb-[1em]" id="lato-font">
@@ -20,7 +20,7 @@ const index = () => {
         </div>
 
         {/* Callout Box */}
-        <div className="bg-[#7EBEC5] py-[20px] md:py-[40px] md:px-[60px]  px-[30px] flex flex-col items-center justify-center text-center">
+        <div className="bg-[#2D7F87] py-[20px] md:py-[40px] md:px-[60px]  px-[30px] flex flex-col items-center justify-center text-center">
           <h1 className="text-[26px] font-[500] leading-[26px] text-white pb-[10px]" id="aria-font">
             Free For Charity Domains Endowment Fund
           </h1>

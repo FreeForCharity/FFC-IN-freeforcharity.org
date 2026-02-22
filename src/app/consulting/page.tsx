@@ -23,7 +23,7 @@ const ConsultingPage = () => {
       {/* Main Content */}
       <section className="py-[60px] bg-[#fcfcfc]">
         <div className="w-[90%] md:w-[80%] max-w-[900px] mx-auto text-center">
-          <h2 className="text-[30px] md:text-[40px] font-[700] leading-[44px] text-[#f27022] mb-6">
+          <h2 className="text-[30px] md:text-[40px] font-[700] leading-[44px] text-[#b35000] mb-6">
             Need Any Charity Consulting?
           </h2>
 
@@ -36,8 +36,8 @@ const ConsultingPage = () => {
           </p>
 
           <div className="bg-white rounded-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.1)] p-8 inline-block">
-            <p className="text-[22px] font-[600] text-[#2583ab]">Clarke Moyer</p>
-            <a href="tel:+15202228104" className="text-[24px] font-[700] text-[#f27022] underline">
+            <p className="text-[22px] font-[600] text-[#1D6E90]">Clarke Moyer</p>
+            <a href="tel:+15202228104" className="text-[24px] font-[700] text-[#b35000] underline">
               (520) 222-8104
             </a>
           </div>
@@ -45,17 +45,17 @@ const ConsultingPage = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-[50px] bg-[#2583ab]">
+      <section className="py-[50px] bg-[#1D6E90]">
         <div className="w-[90%] md:w-[80%] max-w-[900px] mx-auto text-center">
           <h2 className="text-[28px] md:text-[36px] font-[700] text-white leading-[40px] mb-4">
             Ready to Get Started?
           </h2>
-          <p className="text-[18px] text-white/90 font-[500] leading-[28px] mb-6" id="lato-font">
+          <p className="text-[18px] text-white font-[500] leading-[28px] mb-6" id="lato-font">
             Reach out today and let us help your nonprofit succeed.
           </p>
           <a
             href="/contact-us"
-            className="inline-block px-[30px] py-[10px] text-white border border-[#f27022] rounded-[10px] text-[18px] bg-[#f27022] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#f27022] transition-all duration-300"
+            className="inline-block px-[30px] py-[10px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
             id="montserrat-font"
           >
             Contact Us

@@ -53,7 +53,7 @@ const index = () => {
           descriptionAlign="left"
         />
 
-        <div className="w-full h-[1px] bg-[#7EBEC5] mt-[30px] mb-[50px]"></div>
+        <div className="w-full h-[1px] bg-[#2D7F87] mt-[30px] mb-[50px]"></div>
         <h1 className="text-[26px] font-[500] text-[#333] mt-[20px]" id="lato-font">
           Before You Begin Onboarding
         </h1>
@@ -108,7 +108,7 @@ const index = () => {
               <ol className="list-decimal list-inside ml-8">
                 <li>
                   (Please read our{' '}
-                  <Link href="/guidestar-guide" className="text-[#2ea3f2]">
+                  <Link href="/guidestar-guide" className="text-[#0567B1]">
                     GuideStar Guide
                   </Link>
                   , we require charities to have at least
@@ -185,7 +185,7 @@ const index = () => {
           <p className="text-[18px] text-[#555] leading-relaxed mb-[1em]">
             We require two links from your GuideStar page — the public profile link and the “full
             profile” link. For instructions on how to find them in GuideStar,{' '}
-            <Link href="/guidestar-guide" className="text-[#2ea3f2] underline">
+            <Link href="/guidestar-guide" className="text-[#0567B1] underline">
               click here
             </Link>
             .

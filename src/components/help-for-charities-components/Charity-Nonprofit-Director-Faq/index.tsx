@@ -8,10 +8,10 @@ const CharityFAQ: React.FC = () => {
       <div className="w-full max-w-[90%] mx-auto flex flex-wrap gap-[5.5%]">
         {/* Left Column */}
         <div className="w-full md:w-[47.25%]">
-          <h1 className="font-bold text-[28px] text-[#f27022] mb-4">
+          <h1 className="font-bold text-[28px] text-[#b35000] mb-4">
             We are here to provide help for charities while testing people in real world skills.
           </h1>
-          <h1 className="font-bold text-[28px] text-[#f27022] mb-4">
+          <h1 className="font-bold text-[28px] text-[#b35000] mb-4">
             We can’t test them without helping your charity or non profit.
           </h1>
           <p className="text-[18px] font-medium text-black" id="lato-font">
@@ -38,7 +38,7 @@ const CharityFAQ: React.FC = () => {
 
         {/* Right Column */}
         <div className="w-full md:w-[47.25%] mt-8 md:mt-0">
-          <h1 className="font-bold text-[28px] text-[#f27022] mb-4">
+          <h1 className="font-bold text-[28px] text-[#b35000] mb-4">
             Charity / Nonprofit Director FAQ
           </h1>
 
@@ -53,7 +53,7 @@ const CharityFAQ: React.FC = () => {
             </strong>{' '}
             Another great charity showing all the big name things you can get for free or at heavy
             discounts is{' '}
-            <Link href="https://www.techsoup.org/" className="text-[#2ea3f2]">
+            <Link href="https://www.techsoup.org/" className="text-[#0567B1]">
               TechSoup.org
             </Link>
             .{' '}

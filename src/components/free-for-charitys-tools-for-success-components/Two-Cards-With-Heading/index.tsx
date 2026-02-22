@@ -11,9 +11,9 @@ const index = () => {
               className="mb-[11px] pb-[10px] text-[40px] font-[700] leading-[44px] text-center text-[#333] tracking-[1px]"
               id="faustina-font"
             >
-              Tools for <span className="text-[#e88d33]">Non-Profits</span>
+              Tools for <span className="text-[#b35000]">Non-Profits</span>
             </h1>
-            <div className="w-[18%] mx-auto h-[5px] bg-[#E88D33]"></div>
+            <div className="w-[18%] mx-auto h-[5px] bg-[#b35000]"></div>
           </div>
 
           <SlidingCard

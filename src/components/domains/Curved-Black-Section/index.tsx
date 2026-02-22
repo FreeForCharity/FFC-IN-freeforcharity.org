@@ -41,7 +41,7 @@ const Index = () => {
                   href="https://docs.microsoft.com/en-us/microsoft-365/admin/setup/add-domain?view=o365-worldwide"
                   target="_blank"
                   rel="noopener"
-                  className="text-[#0078D4] underline"
+                  className="text-[#0066B8] underline"
                 >
                   https://docs.microsoft.com/en-us/microsoft-365/admin/setup/add-domain?view=o365-worldwide
                 </a>

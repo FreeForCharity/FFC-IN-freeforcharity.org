@@ -80,7 +80,7 @@ const index = () => {
               Yes there is a need to provide help for charities in many ways! Free for Charity is
               not the only ‘charity for charities’ helping to lower your costs. Another great
               charity showing all the big name things you can get for free or at heavy discounts is 
-              <a href="https://www.techsoup.org/" className="text-[#2ea3f2]">
+              <a href="https://www.techsoup.org/" className="text-[#0567B1]">
                 TechSoup.org.
               </a>
                Even with these other sites many charities and non profits still pay for profit

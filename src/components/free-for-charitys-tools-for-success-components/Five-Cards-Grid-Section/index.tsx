@@ -57,7 +57,7 @@ const index = () => {
         <h1 className="text-center pb-[10px] tracking-[1px] mb-[11px] text-[30px] md:text-[40px] text-[#333] font-[700] leading-[44px]">
           Educational Sites for Starting a Business
         </h1>
-        <div className="w-[18%] mx-auto h-[5px] bg-[#E88D33]"></div>
+        <div className="w-[18%] mx-auto h-[5px] bg-[#b35000]"></div>
       </div>
 
       {/* First Grid */}

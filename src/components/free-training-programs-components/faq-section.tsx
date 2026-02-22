@@ -38,7 +38,7 @@ const FaqSection = () => {
         ))}
 
         <div className="text-center mt-8">
-          <p className="text-[18px] font-[600] text-[#f27022]" id="lato-font">
+          <p className="text-[18px] font-[600] text-[#b35000]" id="lato-font">
             Sign up today and start learning these new skills while helping charities.
           </p>
         </div>

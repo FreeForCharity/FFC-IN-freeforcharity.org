@@ -7,7 +7,7 @@ const FFCOnboardingNotice = () => {
       <div className="py-[20px] w-[90%] md:w-[80%] mx-auto max-w-[1080px] text-center">
         {/* Main Heading */}
         <h2
-          className="font-[700] text-[30px] md:text-[35px] leading-[45px] mb-[16px] pb-[10px] text-[#0d7ff8]"
+          className="font-[700] text-[30px] md:text-[35px] leading-[45px] mb-[16px] pb-[10px] text-[#0567B1]"
           id="cantata-font"
         >
           Dear Prospective FFC Domain Supported Charity

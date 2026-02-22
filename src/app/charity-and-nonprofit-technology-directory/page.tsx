@@ -47,7 +47,7 @@ const TechDirectoryPage = () => {
       {/* Intro */}
       <section className="py-[60px] bg-[#fcfcfc]">
         <div className="w-[90%] md:w-[80%] max-w-[900px] mx-auto">
-          <h2 className="text-[28px] md:text-[36px] font-[700] leading-[40px] text-center text-[#f27022] mb-8">
+          <h2 className="text-[28px] md:text-[36px] font-[700] leading-[40px] text-center text-[#b35000] mb-8">
             Charity Nonprofit Tech Directory
           </h2>
 
@@ -78,12 +78,12 @@ const TechDirectoryPage = () => {
                 key={cat.name}
                 className="bg-white rounded-[10px] shadow-[0px_2px_12px_0px_rgba(0,0,0,0.08)] p-6"
               >
-                <h3 className="text-[20px] font-[700] text-[#2583ab] mb-3">{cat.name}</h3>
+                <h3 className="text-[20px] font-[700] text-[#1D6E90] mb-3">{cat.name}</h3>
                 <ul className="space-y-2">
                   {cat.items.map((item) => (
                     <li
                       key={item}
-                      className="text-[16px] font-[500] text-[#333] pl-4 border-l-2 border-[#e88d33]"
+                      className="text-[16px] font-[500] text-[#333] pl-4 border-l-2 border-[#b35000]"
                       id="lato-font"
                     >
                       {item}
@@ -102,21 +102,21 @@ const TechDirectoryPage = () => {
           <h2 className="text-[28px] md:text-[36px] font-[700] text-white leading-[40px] mb-4">
             Have Questions?
           </h2>
-          <p className="text-[18px] text-white/90 font-[500] leading-[28px] mb-4" id="lato-font">
+          <p className="text-[18px] text-white font-[500] leading-[28px] mb-4" id="lato-font">
             Have questions about consultation or hosting? Want to know more about nonprofits? Give a
             real person a call:
           </p>
           <div className="space-y-1 mb-6">
             <p className="text-[18px] text-white font-[600]">
               Clarke Moyer:{' '}
-              <a href="tel:+15202228104" className="text-[#e88d33] underline">
+              <a href="tel:+15202228104" className="text-white underline">
                 (520) 222-8104
               </a>
             </p>
           </div>
           <a
             href="/contact-us"
-            className="inline-block px-[30px] py-[10px] text-white border border-[#f27022] rounded-[10px] text-[18px] bg-[#f27022] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#f27022] transition-all duration-300"
+            className="inline-block px-[30px] py-[10px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
             id="montserrat-font"
           >
             Contact Us

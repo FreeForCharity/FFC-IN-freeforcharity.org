@@ -9,7 +9,7 @@ const DonateSection: React.FC = () => {
     <div className="py-[40px]">
       <div className="pt-[27px] w-[90%] lg:w-[80%] mx-auto flex flex-col md:flex-row gap-[32px]">
         {/* Donate Now Card */}
-        <div className="w-full bg-[#0d7ff8] rounded-[10px] overflow-hidden pt-[30px] pr-[20px] pb-[30px] pl-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.3)] flex flex-col items-center">
+        <div className="w-full bg-[#0567B1] rounded-[10px] overflow-hidden pt-[30px] pr-[20px] pb-[30px] pl-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.3)] flex flex-col items-center">
           <div className="mb-[30px] w-full relative h-[128px]">
             <Image
               src={assetPath('/Images/donate-now.webp')}
@@ -30,7 +30,7 @@ const DonateSection: React.FC = () => {
         {/* Help Us Card */}
         <div className="w-full rounded-[10px] overflow-hidden pt-[30px] pr-[20px] pb-[30px] pl-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.3)] flex flex-col items-center">
           <h1
-            className="text-[31px] leading-[31px] font-bold text-[#0d7ff8] text-center pb-[10px]"
+            className="text-[31px] leading-[31px] font-bold text-[#0567B1] text-center pb-[10px]"
             id="cantata-font"
           >
             Help us in our cause
@@ -42,7 +42,7 @@ const DonateSection: React.FC = () => {
         </div>
 
         {/* Volunteer Card */}
-        <div className="w-full bg-[#0d7ff8] rounded-[10px] overflow-hidden pt-[30px] pr-[20px] pb-[30px] pl-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.3)] flex flex-col items-center">
+        <div className="w-full bg-[#0567B1] rounded-[10px] overflow-hidden pt-[30px] pr-[20px] pb-[30px] pl-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.3)] flex flex-col items-center">
           <div className="mb-[30px] w-full relative h-[128px]">
             <Image
               src={assetPath('/Images/Be-a-volunteer.webp')}

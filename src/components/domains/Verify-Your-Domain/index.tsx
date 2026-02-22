@@ -11,7 +11,7 @@ const index = () => {
       <div className="w-[90%] mx-auto">
         <div className="pt-[24px] pb-[3px] w-[80%] mx-auto">
           <h1
-            className="mt-[2px] mb-[12px] pb-[10px] text-[30px] md:text-[35px] font-[700] leading-[46px] text-[#0d7ff8] text-center"
+            className="mt-[2px] mb-[12px] pb-[10px] text-[30px] md:text-[35px] font-[700] leading-[46px] text-[#0567B1] text-center"
             id="cantata-font"
           >
             HOW TO VERIFY YOUR DOMAIN WITH ICANN
@@ -150,20 +150,20 @@ const index = () => {
           </h2>
 
           <div className="mb-[10px] flex items-center">
-            <IoCall className="text-[34px] font-[400] leading-[34px] text-[#0580f8]" />
+            <IoCall className="text-[34px] font-[400] leading-[34px] text-[#0460C0]" />
             <a
               href="tel:+15202228104"
-              className="pl-[15px] text-[28px] font-[500] leading-[42px] text-[#2ea3f2]"
+              className="pl-[15px] text-[28px] font-[500] leading-[42px] text-[#0567B1]"
               id="raleway-font"
             >
               520-222-8104
             </a>
           </div>
           <div className="mt-[3px] flex items-center">
-            <IoMdMail className="text-[34px] font-[400] leading-[34px] text-[#0580f8]" />
+            <IoMdMail className="text-[34px] font-[400] leading-[34px] text-[#0460C0]" />
             <a
               href="mailto:clarkemoyer@freeforcharity.org"
-              className="text-center pl-[15px] text-[28px] font-[500] leading-[42px] text-[#2ea3f2] break-all  inline-block"
+              className="text-center pl-[15px] text-[28px] font-[500] leading-[42px] text-[#0567B1] break-all  inline-block"
               id="raleway-font"
             >
               clarkemoyer@freeforcharity.org

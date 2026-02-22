@@ -423,7 +423,7 @@ export default function PrivacyPolicy() {
           <ul className="list-inside list-disc space-y-[4px] pb-[1em]">
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
               <strong>Email:</strong>{' '}
-              <a href="mailto:clarkemoyer@freeforcharity.org" className="text-[#007bff] underline">
+              <a href="mailto:clarkemoyer@freeforcharity.org" className="text-[#0056B3] underline">
                 clarkemoyer@freeforcharity.org
               </a>{' '}
               520-222-8104
@@ -449,7 +449,7 @@ export default function PrivacyPolicy() {
           <ul className="list-inside list-disc space-y-[4px] pb-[1em]">
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
               <strong>Contact DPO:</strong> Clarke Moyer{' '}
-              <a href="mailto:clarkemoyer@freeforcharity.org" className="text-[#007bff] underline">
+              <a href="mailto:clarkemoyer@freeforcharity.org" className="text-[#0056B3] underline">
                 clarkemoyer@freeforcharity.org
               </a>{' '}
               520-222-8104

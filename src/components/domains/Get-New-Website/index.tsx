@@ -28,7 +28,7 @@ const index = () => {
         <div className="py-[41px] ">
           <div className="pt-[24px] pb-[3px] w-[90%] md:w-[80%] mx-auto max-w-[1080px]">
             <h1
-              className="mt-[2px] mb-[12px] pb-[10px] text-[30px] md:text-[35px] font-[700] leading-[46px] text-[#0d7ff8] text-center"
+              className="mt-[2px] mb-[12px] pb-[10px] text-[30px] md:text-[35px] font-[700] leading-[46px] text-[#0567B1] text-center"
               id="cantata-font"
             >
               STEPS TO GET A NEW WEBSITE DESIGNED AND HOSTED

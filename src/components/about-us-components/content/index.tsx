@@ -4,7 +4,7 @@ const Page = () => {
   return (
     <div className="pt-[40px] md:pt-[60px] pb-[20px] md:pb-[28px] bg-[#fcfcfc]">
       <div className="w-[95%] md:w-[85%] mx-auto pt-0 md:pt-[30px] px-0 md:px-[31px] pb-0 md:pb-[19px]">
-        <h1 className="w-[95%] md:w-[80%] mx-auto text-[26px] md:text-[34px] font-[700] leading-[34px] md:leading-[37px] text-center text-[#f27022]">
+        <h1 className="w-[95%] md:w-[80%] mx-auto text-[26px] md:text-[34px] font-[700] leading-[34px] md:leading-[37px] text-center text-[#b35000]">
           Reduce costs and increase revenues for nonprofits; putting that money back into their
           charitable mission where it belongs.
         </h1>

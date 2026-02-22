@@ -19,18 +19,18 @@ const ContactUsSection: React.FC = () => {
   return (
     <div className="pt-15 pb-20 px-4 bg-[#FCFCFC]">
       <div className="w-full max-w-[1200px] mx-auto text-center">
-        <h2 className="font-[700] text-[#F27022] text-[30px] md:text-[40px] leading-[44px] mb-7">
+        <h2 className="font-[700] text-[#b35000] text-[30px] md:text-[40px] leading-[44px] mb-7">
           Contact Us
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6 py-6">
           {/* Email */}
           <div className="w-full max-w-[550px]">
-            <MdEmail className="w-[55px] h-[55px] text-[#2680A7] mx-auto mb-4" />
+            <MdEmail className="w-[55px] h-[55px] text-[#1D6E90] mx-auto mb-4" />
             <p className="font-[600] text-[24px] text-black mb-2">Email</p>
             <a
               href={`mailto:${contact.email}`}
-              className="font-[600] text-[#2ea3f2] text-[18px]"
+              className="font-[600] text-[#0567B1] text-[18px]"
               id="lato-font"
             >
               {contact.email}
@@ -39,7 +39,7 @@ const ContactUsSection: React.FC = () => {
 
           {/* Main Address */}
           <div className="w-full max-w-[550px]">
-            <MdLocationOn className="w-[55px] h-[55px] text-[#2680A7] mx-auto mb-4" />
+            <MdLocationOn className="w-[55px] h-[55px] text-[#1D6E90] mx-auto mb-4" />
             <p className="font-[600] text-[24px] text-black mb-2">Main Address</p>
             <p className="font-[600] text-[18px] text-[#666666]" id="lato-font">
               {contact.mainAddress}
@@ -48,11 +48,11 @@ const ContactUsSection: React.FC = () => {
 
           {/* Phone */}
           <div className="w-full max-w-[550px]">
-            <MdPhone className="w-[55px] h-[55px] text-[#2680A7] mx-auto mb-4" />
+            <MdPhone className="w-[55px] h-[55px] text-[#1D6E90] mx-auto mb-4" />
             <p className="font-[600] text-[24px] text-black mb-2">Call</p>
             <a
               href={`tel:${contact.phone.replace(/[^0-9]/g, '')}`}
-              className="font-[600] text-[#2ea3f2] text-[18px]"
+              className="font-[600] text-[#0567B1] text-[18px]"
               id="lato-font"
             >
               {contact.phone}
@@ -62,7 +62,7 @@ const ContactUsSection: React.FC = () => {
 
         {/* PA Office */}
         <div className="w-full max-w-[550px] mx-auto">
-          <MdLocationOn className="w-[55px] h-[55px] text-[#2680A7] mx-auto mb-4" />
+          <MdLocationOn className="w-[55px] h-[55px] text-[#1D6E90] mx-auto mb-4" />
           <p className="font-[600] text-[24px] text-black mb-2">PA Office Address</p>
           <p className="font-[600] text-[18px] text-[#666666]" id="lato-font">
             {contact.paAddress}

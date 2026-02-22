@@ -8,7 +8,7 @@ const index = () => {
       <div className="w-[80%] mx-auto">
         <div className="pt-[24px] pb-[3px]">
           <h1
-            className="mt-[2px] mb-[12px] pb-[10px] text-[30px] md:text-[35px] font-[700] leading-[46px] text-[#0d7ff8] text-center"
+            className="mt-[2px] mb-[12px] pb-[10px] text-[30px] md:text-[35px] font-[700] leading-[46px] text-[#0567B1] text-center"
             id="cantata-font"
           >
             HOW TO SET UP EMAIL HOSTING FOR THE NEW DOMAIN
@@ -26,8 +26,8 @@ const index = () => {
         <a
           href="mailto:yourname@yourdomain.org"
           className="bg-white rounded-[8px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.3)] 
-    border-l-[8px] border-[#0d7ff8]
-    p-[20px] text-center text-[20px] md:text-[22px] font-[600] leading-[31px] text-[#0d7ff8]
+    border-l-[8px] border-[#0567B1]
+    p-[20px] text-center text-[20px] md:text-[22px] font-[600] leading-[31px] text-[#0567B1]
     break-words inline-block"
           id="raleway-font"
         >
@@ -37,8 +37,8 @@ const index = () => {
         <a
           href="mailto:contactus@yourdomain.org"
           className="bg-white rounded-[8px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.3)] 
-    border-l-[8px] border-[#0d7ff8]
-    p-[20px] text-center text-[20px] md:text-[22px] font-[600] leading-[31px] text-[#0d7ff8]
+    border-l-[8px] border-[#0567B1]
+    p-[20px] text-center text-[20px] md:text-[22px] font-[600] leading-[31px] text-[#0567B1]
     break-words inline-block"
           id="raleway-font"
         >
@@ -48,8 +48,8 @@ const index = () => {
         <a
           href="mailto:board@yourdomain.org"
           className="bg-white rounded-[8px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.3)] 
-    border-l-[8px] border-[#0d7ff8]
-    p-[20px] text-center text-[20px] md:text-[22px] font-[600] leading-[31px] text-[#0d7ff8]
+    border-l-[8px] border-[#0567B1]
+    p-[20px] text-center text-[20px] md:text-[22px] font-[600] leading-[31px] text-[#0567B1]
     break-words inline-block"
           id="raleway-font"
         >
@@ -71,7 +71,7 @@ const index = () => {
           </div>
 
           <h4
-            className="text-[31px] font-[700] leading-[31px] pb-[30px] text-[#0d7ff8]"
+            className="text-[31px] font-[700] leading-[31px] pb-[30px] text-[#0567B1]"
             id="cantata-font"
           >
             Step 1
@@ -103,7 +103,7 @@ const index = () => {
           </div>
 
           <h4
-            className="text-[31px] font-[700] leading-[31px] pb-[30px] text-[#0d7ff8]"
+            className="text-[31px] font-[700] leading-[31px] pb-[30px] text-[#0567B1]"
             id="cantata-font"
           >
             Step 2
@@ -121,7 +121,7 @@ const index = () => {
           </p>
           <a
             href="/domains#setupstep2"
-            className="text-[25px] leading-[32px] font-[600] text-[#0580f8]"
+            className="text-[25px] leading-[32px] font-[600] text-[#0460C0]"
             id="raleway-font"
           >
             Click here

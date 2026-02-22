@@ -9,7 +9,7 @@ const Index = () => {
         {/* Left Column */}
         <div className="w-full md:w-[47%] md:mr-[5.5%] flex flex-col justify-between bg-transparent">
           <div>
-            <h1 className="text-[28px] font-[700] leading-[31px] text-[#f27022]">
+            <h1 className="text-[28px] font-[700] leading-[31px] text-[#b35000]">
               You can create a measurable impact to the success of charities nation wide with your
               donation or volunteer hours.
             </h1>
@@ -21,7 +21,7 @@ const Index = () => {
               received for its causes. Here at Free for Charity it is our mission to provide world
               class services to other nonprofits throughout the United States.
             </p>
-            <h1 className="text-[28px] font-[700] leading-[31px] text-[#f27022]">
+            <h1 className="text-[28px] font-[700] leading-[31px] text-[#b35000]">
               We cannot do the work we do without your support.
             </h1>
             <p className="text-[18px] font-[500] leading-[27px] pb-[1em] mt-[20px]" id="lato-font">
@@ -32,7 +32,7 @@ const Index = () => {
             <p className="text-[18px] font-[500] leading-[27px] mb-[5.82%]" id="lato-font">
               In addition to financial support, Free for Charity also needs community support
               through{' '}
-              <a href="/volunteer" className="text-[#2ea3f2]">
+              <a href="/volunteer" className="text-[#0567B1]">
                 skilled volunteers
               </a>{' '}
               and gifts in kind (such as services or products sold by your business). Take a look at
@@ -43,7 +43,7 @@ const Index = () => {
 
         {/* Right Column - Button */}
         <div className="w-full md:w-[50%] flex items-stretch">
-          <div className="bg-[#7EBEC5] flex flex-col justify-center items-center text-center py-[20px] md:py-[40px] md:px-[60px] px-[30px] w-full h-full">
+          <div className="bg-[#2D7F87] flex flex-col justify-center items-center text-center py-[20px] md:py-[40px] md:px-[60px] px-[30px] w-full h-full">
             <h1
               className="text-[26px] font-[500] leading-[26px] text-white pb-[10px]"
               id="aria-font"

@@ -32,7 +32,7 @@ const ServiceDirectoryPage = () => {
       {/* Intro */}
       <section className="py-[60px] bg-[#fcfcfc]">
         <div className="w-[90%] md:w-[80%] max-w-[900px] mx-auto">
-          <h2 className="text-[28px] md:text-[36px] font-[700] leading-[40px] text-center text-[#f27022] mb-8">
+          <h2 className="text-[28px] md:text-[36px] font-[700] leading-[40px] text-center text-[#b35000] mb-8">
             Topics Covered by Services and Consultants
           </h2>
 
@@ -42,7 +42,7 @@ const ServiceDirectoryPage = () => {
                 key={topic}
                 className="bg-white rounded-[10px] shadow-[0px_2px_12px_0px_rgba(0,0,0,0.08)] p-5 text-center"
               >
-                <p className="text-[18px] font-[600] text-[#2583ab]">{topic}</p>
+                <p className="text-[18px] font-[600] text-[#1D6E90]">{topic}</p>
               </div>
             ))}
           </div>
@@ -93,18 +93,18 @@ const ServiceDirectoryPage = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-[50px] bg-[#2583ab]">
+      <section className="py-[50px] bg-[#1D6E90]">
         <div className="w-[90%] md:w-[80%] max-w-[900px] mx-auto text-center">
           <h2 className="text-[28px] md:text-[36px] font-[700] text-white leading-[40px] mb-4">
             Want to Be Listed in the Directory?
           </h2>
-          <p className="text-[18px] text-white/90 font-[500] leading-[28px] mb-6" id="lato-font">
+          <p className="text-[18px] text-white font-[500] leading-[28px] mb-6" id="lato-font">
             For more information about Free for Charity or to obtain information about being added
             to the directory, please contact us.
           </p>
           <a
             href="/contact-us"
-            className="inline-block px-[30px] py-[10px] text-white border border-[#f27022] rounded-[10px] text-[18px] bg-[#f27022] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#f27022] transition-all duration-300"
+            className="inline-block px-[30px] py-[10px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
             id="montserrat-font"
           >
             Contact Us

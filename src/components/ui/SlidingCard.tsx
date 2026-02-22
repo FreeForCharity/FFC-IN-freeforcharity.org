@@ -74,7 +74,7 @@ export default function SlidingCard({
         {/* Text */}
         <div className="flex-1 text-center md:text-left">
           <div className="flex mb-5">
-            <div className="h-[3px] bg-[#e88d33] w-[18%]"></div>
+            <div className="h-[3px] bg-[#b35000] w-[18%]"></div>
           </div>
 
           <h3 className="text-[28px] font-[600] text-[#333] leading-[36px] pb-[10px]">
@@ -90,7 +90,7 @@ export default function SlidingCard({
             href={buttonLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="relative group inline-flex items-center justify-center gap-2 mt-[25px] px-[30px] py-[6px] text-white border border-[#f27022] rounded-[10px] text-[18px] bg-[#f27022] transition-all duration-300 ease-in-out shadow-md leading-[31px] font-[600] hover:shadow-[0px_12px_18px_-6px_#f27022]"
+            className="relative group inline-flex items-center justify-center gap-2 mt-[25px] px-[30px] py-[6px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] transition-all duration-300 ease-in-out shadow-md leading-[31px] font-[600] hover:shadow-[0px_12px_18px_-6px_#b35000]"
             id="montserrat-font"
           >
             <span className="transition-all duration-300 group-hover:translate-x-1">
