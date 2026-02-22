@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { siteRoutes } from './routes'
 
 /**
  * Post-Deploy Smoke Tests
@@ -12,42 +13,8 @@ import { test, expect } from '@playwright/test'
  * broken assets before they reach production.
  */
 
-// All routes from sitemap.ts — the single source of truth for the site
-const sitemapRoutes = [
-  '/',
-  '/about-us',
-  '/contact-us',
-  '/donate',
-  '/volunteer',
-  '/domains',
-  '/free-charity-web-hosting',
-  '/help-for-charities',
-  '/blog',
-  '/consulting',
-  '/free-training-programs',
-  '/workforce-development',
-  '/charity-and-nonprofit-service-and-consultant-directory',
-  '/charity-and-nonprofit-technology-directory',
-  '/charity-and-nonprofit-case-studies',
-  '/501c3',
-  '/pre501c3',
-  '/free-for-charity-endowment-fund',
-  '/guidestar-guide',
-  '/free-for-charitys-tools-for-success',
-  '/free-for-charity-ffc-service-delivery-stages',
-  '/free-for-charity-ffc-web-developer-training-guide',
-  '/ffc-volunteer-proving-ground-core-competencies',
-  '/charity-validation-guide-ensuring-mutual-benefit-through-comprehensive-validation-processes',
-  '/online-impacts-onboarding-guide',
-  '/techstack',
-  '/donation-policy',
-  '/free-for-charity-donation-policy',
-  '/privacy-policy',
-  '/terms-of-service',
-  '/cookie-policy',
-  '/vulnerability-disclosure-policy',
-  '/security-acknowledgements',
-]
+// Derive flat route list from the shared siteRoutes
+const sitemapRoutes = siteRoutes.map((r) => r.route)
 
 test.describe('Post-Deploy Smoke Tests', () => {
   test.describe('All pages load successfully', () => {

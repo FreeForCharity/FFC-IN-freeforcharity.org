@@ -89,7 +89,7 @@ const index = () => {
                   (Please read our{' '}
                   <a
                     href="/guidestar-guide"
-                    className="text-[#2ea3f2] hover:underline font-medium"
+                    className="text-[#2ea3f2] underline font-medium"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
