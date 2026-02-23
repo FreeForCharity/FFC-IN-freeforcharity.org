@@ -14,7 +14,7 @@ export default function CloudflareSetup() {
             Use your organizational outlook.com account
             <br />
             e.g.{' '}
-            <a href="mailto:yourcharity@outlook.com" className="text-[#2ea3f2]">
+            <a href="mailto:yourcharity@outlook.com" className="text-[#0567B1]">
               yourcharity@outlook.com
             </a>
           </li>
@@ -25,7 +25,7 @@ export default function CloudflareSetup() {
               href="https://dash.cloudflare.com/sign-up"
               target="_blank"
               rel="noopener"
-              className="text-[#2ea3f2] break-all"
+              className="text-[#0567B1] break-all"
             >
               https://dash.cloudflare.com/sign-up
             </a>

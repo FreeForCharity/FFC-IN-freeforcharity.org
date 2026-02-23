@@ -43,10 +43,10 @@ const EducationalSitesSection = () => {
           id="lato-font"
         >
           Educational Sites for
-          <span className="text-[#e88d33]"> Everyone</span>
+          <span className="text-[#b35000]"> Everyone</span>
         </h2>
 
-        <div className="h-[5px] bg-[#e88d33] w-[195px] mx-auto mb-12"></div>
+        <div className="h-[5px] bg-[#b35000] w-[195px] mx-auto mb-12"></div>
 
         {/* Cards Container */}
         <div className="flex flex-col md:flex-row gap-12 w-full justify-center">
@@ -81,11 +81,11 @@ const EducationalSitesSection = () => {
                   className="
                     relative group inline-flex items-center justify-center gap-2
                     mt-[25px] px-[30px] py-[6px]
-                    text-white border border-[#f27022] rounded-[10px]
-                    text-[18px] bg-[#f27022]
+                    text-white border border-[#b35000] rounded-[10px]
+                    text-[18px] bg-[#b35000]
                     transition-all duration-300 ease-in-out
                     shadow-md leading-[31px] font-[600]
-                    hover:shadow-[0px_12px_18px_-6px_#f27022]
+                    hover:shadow-[0px_12px_18px_-6px_#b35000]
                   "
                   id="montserrat-font"
                 >

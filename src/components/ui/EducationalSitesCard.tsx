@@ -35,11 +35,11 @@ const EducationalSitesCard: React.FC<EducationalSitesCardProps> = ({
           className="
             relative group inline-flex items-center justify-center gap-2
             px-[30px] py-[6px]
-            text-white border border-[#2583ab] rounded-[10px]
-            text-[18px] bg-[#2583ab]
+            text-white border border-[#1D6E90] rounded-[10px]
+            text-[18px] bg-[#1D6E90]
             transition-all duration-300 ease-in-out
             shadow-md leading-[31px] font-[600]
-            hover:shadow-[0px_12px_18px_-6px_#f27022] w-fit
+            hover:shadow-[0px_12px_18px_-6px_#b35000] w-fit
           "
           id="montserrat-font"
         >

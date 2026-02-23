@@ -229,7 +229,7 @@ export default function CharityValidationGuide() {
               <strong className="text-[#666] text-[14px] font-[700]">
                 Target Demographic Assessment
               </strong>
-              <a href="https://sdgs.un.org/goals" className="text-[#56A3F4] underline">
+              <a href="https://sdgs.un.org/goals" className="text-[#0567B1] underline">
                 (THE 17 GOALS | Sustainable Development (un.org))
               </a>
               <ol className="list-decimal list-inside ml-8 mt-2 space-y-1">
@@ -242,7 +242,7 @@ export default function CharityValidationGuide() {
                   pages National Taxonomy of Exempt Entities (NTEE) Code IRS 1040 Legal status{' '}
                   <a
                     href="https://nccs.urban.org/publication/irs-activity-codes"
-                    className="text-[#56A3F4] underline"
+                    className="text-[#0567B1] underline"
                   >
                     (IRS Activity Codes | National Center for Charitable Statistics (urban.org))
                   </a>

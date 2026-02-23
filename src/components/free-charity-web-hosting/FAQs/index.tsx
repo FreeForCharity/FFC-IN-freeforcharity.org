@@ -30,7 +30,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   }, [isOpen])
 
   return (
-    <div className="mb-4 border-2 border-[#0d7ff8] rounded-[10px] overflow-hidden transition-all duration-300">
+    <div className="mb-4 border-2 border-[#0567B1] rounded-[10px] overflow-hidden transition-all duration-300">
       {/* Header */}
       <button
         onClick={onToggle}
@@ -42,9 +42,9 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         <span
           className={`flex-1 pr-3 font-[700] leading-[26px] transition-all duration-300 ease-in-out ${
             small
-              ? `text-[18px] text-center ${isOpen ? 'text-[#0d7ff8]' : 'text-black'}`
+              ? `text-[18px] text-center ${isOpen ? 'text-[#0567B1]' : 'text-black'}`
               : isOpen
-                ? 'text-[22px] text-[#0D7FF8]'
+                ? 'text-[22px] text-[#0567B1]'
                 : 'text-[18px] text-black'
           }`}
           id="cantata-font"
@@ -103,7 +103,7 @@ const AccordionLayout = () => {
       <div className="w-[90%] md:w-[80%] mx-auto max-w-[1080px]">
         <div className="py-[24px]">
           <h1
-            className="mt-[2px] mb-[12px] pb-[10px] text-[31px] font-[700] leading-[31px] text-[#0d7ff8] text-center"
+            className="mt-[2px] mb-[12px] pb-[10px] text-[31px] font-[700] leading-[31px] text-[#0567B1] text-center"
             id="cantata-font"
           >
             FAQS
@@ -136,11 +136,11 @@ const AccordionLayout = () => {
                 exist and in fact fill an important need in reducing overhead expenses for other
                 nonprofits. Our IRS designation number (EIN) is 46-2471893. You can see our
                 guidestar profile{' '}
-                <a href="https://www.guidestar.org/profile/46-2471893" className="text-[#0d7ff8]">
+                <a href="https://www.guidestar.org/profile/46-2471893" className="text-[#0567B1]">
                   here.
                 </a>{' '}
                 We are proud to also recommend other charities for charities that inspired us to{' '}
-                <a href="https://www.techsoup.org/" className="text-[#0d7ff8]">
+                <a href="https://www.techsoup.org/" className="text-[#0567B1]">
                   create this nonprofit.
                 </a>
               </AccordionItem>
@@ -171,7 +171,7 @@ const AccordionLayout = () => {
                 <ul className="list-disc list-inside mt-1">
                   <li>
                     If you already have your 501(c)3 get your free domain from us{' '}
-                    <a href="/domains" className="text-[#0d7ff8]">
+                    <a href="/domains" className="text-[#0567B1]">
                       (https://freeforcharity.org/domains)
                     </a>
                   </li>

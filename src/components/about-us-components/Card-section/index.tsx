@@ -9,7 +9,7 @@ const Index = () => {
         <div className="flex flex-col md:flex-row gap-10 items-start">
           {/* Left Content */}
           <div className="w-full md:w-[58.8%] md:mr-[32px] rounded-[15px] overflow-hidden p-[30px] shadow-[0_2px_18px_rgba(0,0,0,0.3)]">
-            <h1 className="text-[30px] md:text-[36px] font-[700] leading-[36px] md:leading-[40px] text-center text-[#f27022]">
+            <h1 className="text-[30px] md:text-[36px] font-[700] leading-[36px] md:leading-[40px] text-center text-[#b35000]">
               Some things we are working to get to free or at cost to non profits and charity groups
               are:
             </h1>

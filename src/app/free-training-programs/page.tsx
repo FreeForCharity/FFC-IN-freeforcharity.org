@@ -59,10 +59,10 @@ const FreeTrainingProgramsPage = () => {
       {/* Win-Win-Win */}
       <section className="py-[60px] bg-[#fcfcfc]">
         <div className="w-[90%] md:w-[80%] max-w-[1000px] mx-auto">
-          <h2 className="text-[28px] md:text-[36px] font-[700] leading-[40px] text-center text-[#f27022] mb-4">
+          <h2 className="text-[28px] md:text-[36px] font-[700] leading-[40px] text-center text-[#b35000] mb-4">
             Free Training Programs in Business and Technology Skills
           </h2>
-          <div className="w-[18%] mx-auto h-[5px] bg-[#e88d33] mb-8" />
+          <div className="w-[18%] mx-auto h-[5px] bg-[#b35000] mb-8" />
 
           <p
             className="text-[18px] font-[500] leading-[28px] text-[#333] text-center mb-8"
@@ -76,14 +76,14 @@ const FreeTrainingProgramsPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="bg-white rounded-[10px] shadow-[0px_2px_12px_0px_rgba(0,0,0,0.08)] p-6 text-center">
               <div className="text-[40px] mb-2">&#127891;</div>
-              <h3 className="text-[18px] font-[700] text-[#2583ab] mb-2">You Win</h3>
+              <h3 className="text-[18px] font-[700] text-[#1D6E90] mb-2">You Win</h3>
               <p className="text-[15px] font-[500] text-[#333]" id="lato-font">
                 Get training and skills in real work needed by for-profit and nonprofits alike.
               </p>
             </div>
             <div className="bg-white rounded-[10px] shadow-[0px_2px_12px_0px_rgba(0,0,0,0.08)] p-6 text-center">
               <div className="text-[40px] mb-2">&#10084;&#65039;</div>
-              <h3 className="text-[18px] font-[700] text-[#2583ab] mb-2">Charities Win</h3>
+              <h3 className="text-[18px] font-[700] text-[#1D6E90] mb-2">Charities Win</h3>
               <p className="text-[15px] font-[500] text-[#333]" id="lato-font">
                 Instead of your work never being seen again after training, your projects are all
                 real-world things needed today.
@@ -91,7 +91,7 @@ const FreeTrainingProgramsPage = () => {
             </div>
             <div className="bg-white rounded-[10px] shadow-[0px_2px_12px_0px_rgba(0,0,0,0.08)] p-6 text-center">
               <div className="text-[40px] mb-2">&#127775;</div>
-              <h3 className="text-[18px] font-[700] text-[#2583ab] mb-2">FFC Wins</h3>
+              <h3 className="text-[18px] font-[700] text-[#1D6E90] mb-2">FFC Wins</h3>
               <p className="text-[15px] font-[500] text-[#333]" id="lato-font">
                 Free for Charity captures your skills and motivation to bring efficiencies to the
                 nonprofit industry as a whole.
@@ -115,8 +115,8 @@ const FreeTrainingProgramsPage = () => {
                 className="bg-[#fcfcfc] rounded-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.08)] p-8"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-2">
-                  <h3 className="text-[26px] font-[700] text-[#2583ab]">{program.title}</h3>
-                  <span className="text-[14px] font-[600] text-white bg-[#e88d33] px-3 py-1 rounded-full w-fit">
+                  <h3 className="text-[26px] font-[700] text-[#1D6E90]">{program.title}</h3>
+                  <span className="text-[14px] font-[600] text-white bg-[#b35000] px-3 py-1 rounded-full w-fit">
                     {program.level}
                   </span>
                 </div>
@@ -130,13 +130,13 @@ const FreeTrainingProgramsPage = () => {
                       {program.skillNote}
                     </p>
                   )}
-                  <p className="text-[16px] font-[600] text-[#2583ab]">
+                  <p className="text-[16px] font-[600] text-[#1D6E90]">
                     Average salary: {program.salary}
                   </p>
                 </div>
                 <a
                   href="/volunteer"
-                  className="inline-block mt-6 px-[24px] py-[8px] text-white border border-[#f27022] rounded-[10px] text-[16px] bg-[#f27022] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#f27022] transition-all duration-300"
+                  className="inline-block mt-6 px-[24px] py-[8px] text-white border border-[#b35000] rounded-[10px] text-[16px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
                   id="montserrat-font"
                 >
                   Sign Up Now

@@ -5,7 +5,7 @@ const Mission: React.FC = () => {
   return (
     <section className="py-16 px-4 sm:px-6 md:px-8 font-sans text-center">
       <div className="mx-auto w-full max-w-[1000px]">
-        <h1 className="mb-6 font-bold text-[30px] sm:text-[32px] md:text-[40px] leading-[1.1] text-[#f27022] w-full sm:w-[85%] md:w-[70%] mx-auto">
+        <h1 className="mb-6 font-bold text-[30px] sm:text-[32px] md:text-[40px] leading-[1.1] text-[#b35000] w-full sm:w-[85%] md:w-[70%] mx-auto">
           Free for Charity has a simple mission with broad implications.
         </h1>
 

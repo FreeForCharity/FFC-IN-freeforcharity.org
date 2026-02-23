@@ -42,7 +42,7 @@ const Footer: React.FC = () => {
             <Link
               href="https://www.guidestar.org/profile/shared/bbbe173a-87b9-4af9-a8a2-cae255a95742"
               className="group relative my-4 flex w-full max-w-[230px] items-center justify-between
-                border-2 border-[#2ea3f2] bg-black px-5 py-2.5 text-[#2ea3f2]
+                border-2 border-[#5BA3D9] bg-black px-5 py-2.5 text-[#5BA3D9]
                 transition-all duration-300 hover:border-transparent"
               id="aria-font"
             >
@@ -51,7 +51,7 @@ const Footer: React.FC = () => {
               </span>
 
               <ArrowRight
-                className="h-8 w-8 translate-x-2 opacity-0 text-[#2ea3f2] transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+                className="h-8 w-8 translate-x-2 opacity-0 text-[#5BA3D9] transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
                 strokeWidth={2}
               />
             </Link>
@@ -92,7 +92,7 @@ const Footer: React.FC = () => {
                   <Link
                     href={link.href}
                     {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                    className="hover:text-[#F58C23] hover:tracking-widest transition-all text-[16px] font-[500]"
+                    className="hover:text-[#b35000] hover:tracking-widest transition-all text-[16px] font-[500]"
                   >
                     {link.name}
                   </Link>
@@ -137,7 +137,7 @@ const Footer: React.FC = () => {
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="hover:text-[#F58C23] hover:tracking-widest transition-all text-[16px] font-[500]"
+                    className="hover:text-[#b35000] hover:tracking-widest transition-all text-[16px] font-[500]"
                   >
                     {link.name}
                   </Link>
@@ -246,7 +246,7 @@ const Footer: React.FC = () => {
           project of{' '}
           <Link
             href="https://freeforcharity.org"
-            className="underline text-[#2EA3F2] hover:text-[#2EA3F2] transition-colors"
+            className="underline text-[#5BA3D9] hover:text-[#5BA3D9] transition-colors"
           >
             https://freeforcharity.org
           </Link>

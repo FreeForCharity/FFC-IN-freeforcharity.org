@@ -9,7 +9,7 @@ const Index = () => {
     <div>
       <div className="py-[54px] bg-white">
         <div className="w-[90%] md:w-[85%] max-w-[1200px] mx-auto pt-[30px] px-[10px] lg:px-[31px] pb-[19px]">
-          <h1 className="py-[27px] text-[30px] lg:text-[40px] font-[700] leading-[44px] text-center text-[#f27022]">
+          <h1 className="py-[27px] text-[30px] lg:text-[40px] font-[700] leading-[44px] text-center text-[#b35000]">
             Get started today with any of the below options:
           </h1>
 

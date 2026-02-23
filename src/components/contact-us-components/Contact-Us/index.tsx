@@ -6,7 +6,7 @@ const ContactSection = () => {
     <div className="pt-[60px] pb-[50px]">
       <div className="w-full max-w-[90%] mx-auto">
         <div className="pt-[20px] w-[100%] md:w-[80%] mx-auto">
-          <h1 className="text-[#f27022] text-[40px] leading-[44px] font-[700] mb-[27px] text-center">
+          <h1 className="text-[#b35000] text-[40px] leading-[44px] font-[700] mb-[27px] text-center">
             Contact Us
           </h1>
           <p
@@ -21,11 +21,11 @@ const ContactSection = () => {
         <div className="mt-[30px] grid grid-cols-1 md:grid-cols-3 gap-8 mb-6 py-6">
           {/* Email */}
           <div className="w-full  text-center">
-            <MdEmail className="w-[55px] h-[55px] text-[#2680A7] mx-auto mb-4" />
+            <MdEmail className="w-[55px] h-[55px] text-[#1D6E90] mx-auto mb-4" />
             <p className="font-[600] text-[24px] text-black mb-2">Email</p>
             <a
               href="mailto:clarkemoyer@freeforcharity.org"
-              className="font-[600] text-[#2ea3f2] text-[18px] break-all "
+              className="font-[600] text-[#0567B1] text-[18px] break-all "
               id="lato-font"
             >
               clarkemoyer@freeforcharity.org
@@ -35,7 +35,7 @@ const ContactSection = () => {
           {/* Main Address */}
           <div className="flex flex-col gap-6">
             <div className="w-full text-center">
-              <MdLocationOn className="w-[55px] h-[55px] text-[#2680A7] mx-auto mb-4" />
+              <MdLocationOn className="w-[55px] h-[55px] text-[#1D6E90] mx-auto mb-4" />
               <p className="font-[600] text-[24px] text-black mb-2">Main Address</p>
               <p className="font-[600] text-[18px] text-[#666666]" id="lato-font">
                 4030 Wake Forrest Road STE 349 Raleigh North Carolina 27609
@@ -43,7 +43,7 @@ const ContactSection = () => {
             </div>
 
             <div className="text-center">
-              <MdLocationOn className="w-[55px] h-[55px] text-[#2680A7] mx-auto mb-4" />
+              <MdLocationOn className="w-[55px] h-[55px] text-[#1D6E90] mx-auto mb-4" />
               <p className="font-[600] text-[24px] text-black mb-2">PA Office Address</p>
               <p className="font-[600] text-[18px] text-[#666666]" id="lato-font">
                 301 Science Park Road Suite 119 State College PA 16803
@@ -53,11 +53,11 @@ const ContactSection = () => {
 
           {/* Phone */}
           <div className="w-full text-center">
-            <MdPhone className="w-[55px] h-[55px] text-[#2680A7] mx-auto mb-4" />
+            <MdPhone className="w-[55px] h-[55px] text-[#1D6E90] mx-auto mb-4" />
             <p className="font-[600] text-[24px] text-black mb-2">Call</p>
             <a
               href="tel:+15202228104"
-              className="font-[600] text-[#2ea3f2] text-[18px]"
+              className="font-[600] text-[#0567B1] text-[18px]"
               id="lato-font"
             >
               (520) 222-8104

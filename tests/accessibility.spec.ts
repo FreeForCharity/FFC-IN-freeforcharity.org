@@ -12,11 +12,6 @@ import { siteRoutes } from './routes'
  * 'moderate' and 'minor' violations are reported but do not fail.
  *
  * Known limitations:
- * - color-contrast is currently disabled pending a brand color design review.
- *   The FFC orange (#f57c20, #f27022) and teal (#7EBEC5) brand colors fail
- *   WCAG 2.1 AA contrast requirements on several pages.
- *   Tracked in: https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/80
- *
  * - Third-party donation iframes (OnlineFundraising, Network for Good) are
  *   excluded — their internal DOM is outside our control.
  */
@@ -28,8 +23,6 @@ test.describe('Accessibility (WCAG 2.1 AA)', () => {
 
       const results = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
-        // color-contrast requires brand design review — tracked in issue #80
-        .disableRules(['color-contrast'])
         // Exclude all iframes — third-party donation widgets (OnlineFundraising,
         // Network for Good) contain components we cannot control
         .exclude('iframe')

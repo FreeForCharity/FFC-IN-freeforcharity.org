@@ -8,7 +8,7 @@ const HowToOrderDomain = () => {
       title: 'Step 1',
       description: 'Set up your Cloudflare account',
       linkText: 'Find more',
-      innerbg: 'bg-[#E09900]',
+      innerbg: 'bg-[#8A6400]',
       outerbg: 'bg-[#fff]',
       linkUrl: '/domains/#orderstep1',
     },
@@ -17,8 +17,8 @@ const HowToOrderDomain = () => {
       title: 'Step 2',
       description: 'Go to our domain management system page',
       linkText: 'Click here',
-      innerbg: 'bg-[#4995D2]',
-      outerbg: 'bg-[#4995D2]',
+      innerbg: 'bg-[#2A6F9E]',
+      outerbg: 'bg-[#2A6F9E]',
       linkUrl:
         'https://freeforcharity.org/hub/store/ffc-consulting/free-org-domain-name-with-microsoft-email-address-setup',
     },
@@ -27,8 +27,8 @@ const HowToOrderDomain = () => {
       title: 'Step 3',
       description: 'Select Register a New Domain',
       linkText: 'Follow Steps',
-      innerbg: 'bg-[#4995D2]',
-      outerbg: 'bg-[#4995D2]',
+      innerbg: 'bg-[#2A6F9E]',
+      outerbg: 'bg-[#2A6F9E]',
       linkUrl: '/domains/#orderstep3',
     },
     {
@@ -36,7 +36,7 @@ const HowToOrderDomain = () => {
       title: 'Step 4',
       description: 'Change your DNS to point to Cloudflare',
       linkText: 'Click here',
-      innerbg: 'bg-[#E09900]',
+      innerbg: 'bg-[#8A6400]',
       outerbg: 'bg-[#fff]',
       linkUrl: '/domains/#orderstep',
     },
@@ -57,7 +57,7 @@ const HowToOrderDomain = () => {
       <div className="relative z-[2]">
         <div className="pb-[3px] w-[80%] max-w-6xl mx-auto mt-[2px] pt-[30px]">
           <h2
-            className="text-center mb-[16px] text-[30px] md:text-[35px] text-[#0d7ff8] font-[700] leading-[46px]"
+            className="text-center mb-[16px] text-[30px] md:text-[35px] text-[#0567B1] font-[700] leading-[46px]"
             id="cantata-font"
           >
             HOW TO ORDER YOUR DOMAIN NAME

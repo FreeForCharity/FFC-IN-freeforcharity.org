@@ -5,7 +5,7 @@ const index = () => {
   return (
     <div className="bg-[#fcfcfc] pt-[60px] pb-[25px] w-full max-w-[100%]">
       <div className="w-[90%] max-w-[90%] mx-auto py-[2%] items-center">
-        <h1 className="text-[#f27022] text-[28px] font-[700] mb-[15px] text-center">
+        <h1 className="text-[#b35000] text-[28px] font-[700] mb-[15px] text-center">
           Free For Charity 501c3 Supported Charity Products and Services
         </h1>
         <div className="mt-[20px] mb-[2.5%]">
@@ -89,7 +89,7 @@ const index = () => {
                   (Please read our{' '}
                   <a
                     href="/guidestar-guide"
-                    className="text-[#2ea3f2] underline font-medium"
+                    className="text-[#0567B1] underline font-medium"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -173,7 +173,7 @@ const index = () => {
           <p className="text-[18px] font-[500] mb-[1em]">
             We require two links from your GuideStar page, the public profile link, and the ‘full
             profile’ link. For instructions on how to find them in GuideStar,{' '}
-            <Link href="/guidestar-guide" className="text-[#2ea3f2]">
+            <Link href="/guidestar-guide" className="text-[#0567B1]">
               click here
             </Link>
             .

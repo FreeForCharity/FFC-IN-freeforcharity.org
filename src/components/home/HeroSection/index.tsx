@@ -8,7 +8,7 @@ const Hero: React.FC = () => {
       <div className="w-full max-w-[1200px] mx-auto flex flex-col md:flex-row items-center justify-between pt-[50px]">
         {/* Left Text Section */}
         <div className="w-full md:w-[40%] text-center md:text-left mt-8 md:mt-0">
-          <h1 className="font-semibold text-[#f27022] text-[40px] leading-[50px] sm:text-[50px] sm:leading-[65px] md:text-[60px] md:leading-[78px]">
+          <h1 className="font-semibold text-[#b35000] text-[40px] leading-[50px] sm:text-[50px] sm:leading-[65px] md:text-[60px] md:leading-[78px]">
             Welcome to Free For Charity
           </h1>
           <p

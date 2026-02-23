@@ -94,14 +94,14 @@ const index = () => {
               <li>Initial LastPass Password Management Account</li>
               <li>
                 Initial Microsoft{' '}
-                <a href="mailto:yourcharityname@outlook.com" className="text-[#2ea3f2]">
+                <a href="mailto:yourcharityname@outlook.com" className="text-[#0567B1]">
                   yourcharityname@outlook.com
                 </a>{' '}
                 organizational email address
               </li>
               <li>
                 Initial Google{' '}
-                <a href="mailto:yourcharityname@gmail.com" className="text-[#2ea3f2]">
+                <a href="mailto:yourcharityname@gmail.com" className="text-[#0567B1]">
                   yourcharityname@gmail.com
                 </a>{' '}
                 organizational email address
@@ -109,7 +109,7 @@ const index = () => {
               <li>Free For Charity Domain Name Registration yourcharityname.org</li>
               <li>
                 Initial Charity Email Routing{' '}
-                <a href="mailto:info@yourcharityname.org" className="text-[#2ea3f2]">
+                <a href="mailto:info@yourcharityname.org" className="text-[#0567B1]">
                   info@yourcharityname.org
                 </a>
               </li>

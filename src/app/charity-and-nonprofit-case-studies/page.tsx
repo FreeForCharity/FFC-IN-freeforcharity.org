@@ -54,7 +54,7 @@ const CaseStudiesPage = () => {
 
           {/* Organization Types */}
           <div className="mb-12">
-            <h2 className="text-[24px] md:text-[30px] font-[700] leading-[36px] text-[#f27022] mb-6">
+            <h2 className="text-[24px] md:text-[30px] font-[700] leading-[36px] text-[#b35000] mb-6">
               Types of Nonprofit Organizations
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -63,7 +63,7 @@ const CaseStudiesPage = () => {
                   key={type}
                   className="bg-white rounded-[10px] shadow-[0px_2px_12px_0px_rgba(0,0,0,0.08)] p-4 text-center"
                 >
-                  <p className="text-[16px] font-[600] text-[#2583ab]">{type}</p>
+                  <p className="text-[16px] font-[600] text-[#1D6E90]">{type}</p>
                 </div>
               ))}
             </div>
@@ -71,7 +71,7 @@ const CaseStudiesPage = () => {
 
           {/* What Case Studies Cover */}
           <div className="mb-12">
-            <h2 className="text-[24px] md:text-[30px] font-[700] leading-[36px] text-[#f27022] mb-4">
+            <h2 className="text-[24px] md:text-[30px] font-[700] leading-[36px] text-[#b35000] mb-4">
               What Case Studies Cover
             </h2>
             <p className="text-[18px] font-[500] leading-[28px] text-[#333] mb-6" id="lato-font">
@@ -86,7 +86,7 @@ const CaseStudiesPage = () => {
                   key={topic}
                   className="flex items-center gap-3 p-3 bg-white rounded-[10px] shadow-[0px_2px_12px_0px_rgba(0,0,0,0.05)]"
                 >
-                  <div className="w-2 h-2 bg-[#e88d33] rounded-full flex-shrink-0" />
+                  <div className="w-2 h-2 bg-[#b35000] rounded-full flex-shrink-0" />
                   <p className="text-[16px] font-[500] text-[#333]" id="lato-font">
                     {topic}
                   </p>
@@ -119,18 +119,18 @@ const CaseStudiesPage = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-[50px] bg-[#2583ab]">
+      <section className="py-[50px] bg-[#1D6E90]">
         <div className="w-[90%] md:w-[80%] max-w-[900px] mx-auto text-center">
           <h2 className="text-[28px] md:text-[36px] font-[700] text-white leading-[40px] mb-4">
             Have a Case Study Request?
           </h2>
-          <p className="text-[18px] text-white/90 font-[500] leading-[28px] mb-6" id="lato-font">
+          <p className="text-[18px] text-white font-[500] leading-[28px] mb-6" id="lato-font">
             Contact us if you have a particular case study request or want to be featured in a case
             study.
           </p>
           <a
             href="/contact-us"
-            className="inline-block px-[30px] py-[10px] text-white border border-[#f27022] rounded-[10px] text-[18px] bg-[#f27022] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#f27022] transition-all duration-300"
+            className="inline-block px-[30px] py-[10px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
             id="montserrat-font"
           >
             Contact Us

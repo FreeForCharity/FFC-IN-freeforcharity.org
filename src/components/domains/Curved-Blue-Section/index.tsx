@@ -4,7 +4,10 @@ import { assetPath } from '@/lib/assetPath'
 
 const Index = () => {
   return (
-    <div className="relative pt-[79px] pb-[67px] bg-[#0580f8] overflow-hidden" id="setupstep2">
+    <div
+      className="relative pt-[79px] pb-[67px] bg-[#0460C0] text-white overflow-hidden"
+      id="setupstep2"
+    >
       {/* Top wave */}
       <div className="absolute top-0 left-0 w-full bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDBweCIgdmlld0JveD0iMCAwIDEyODAgMTQwIiBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnIGZpbGw9IiNmZmZmZmYiPjxwYXRoIGQ9Ik0wIDkwLjcybDE0MC0yOC4yOCAzMTUuNTIgMjQuMTRMNzk2LjQ4IDY1LjggMTE0MCAxMDQuODlsMTQwLTE0LjE3VjBIMHY5MC43MnoiIGZpbGwtb3BhY2l0eT0iLjUiLz48cGF0aCBkPSJNMCAwdjQ3LjQ0TDE3MCAwbDYyNi40OCA5NC44OUwxMTEwIDg3LjExbDE3MC0zOS42N1YwSDB6Ii8+PC9nPjwvc3ZnPg==')] bg-[length:100%_100px] bg-no-repeat h-[100px] z-[1] scale-[1]"></div>
 

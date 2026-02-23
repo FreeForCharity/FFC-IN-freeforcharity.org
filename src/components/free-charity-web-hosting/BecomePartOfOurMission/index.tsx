@@ -6,7 +6,7 @@ const index = () => {
     <div className="py-[40px]">
       <div className="w-[90%] lg:w-[80%] mx-auto pt-[27px]">
         <h1
-          className="mt-[2px] mb-[12px] pb-[10px] text-[31px] font-[700] leading-[31px] text-[#0d7ff8] text-center"
+          className="mt-[2px] mb-[12px] pb-[10px] text-[31px] font-[700] leading-[31px] text-[#0567B1] text-center"
           id="cantata-font"
         >
           Become a part of our Mission

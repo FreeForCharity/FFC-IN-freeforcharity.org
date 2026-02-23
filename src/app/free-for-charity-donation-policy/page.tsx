@@ -268,7 +268,7 @@ const index = () => {
             For any questions or further information about our donation policy, please contact us at{' '}
             <a
               href="mailto:clarkemoyer@freeforcharity.org"
-              className="text-[#2ea3f2] underline break-words"
+              className="text-[#0567B1] underline break-words"
             >
               clarkemoyer@freeforcharity.org
             </a>{' '}

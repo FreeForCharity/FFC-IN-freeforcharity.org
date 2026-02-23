@@ -114,13 +114,13 @@ const index = () => {
                   </ul>
                   <div className="bg-[#fffbeb] border-l-4 border-[#facc15] p-4 my-4 rounded text-[14px] leading-[24px] font-[500] w-[100%] text-[#374151]">
                     <p>
-                      <strong className="text-[#ca8a04]">NOTE:</strong> FFC is restricted to serving
+                      <strong className="text-[#8A6400]">NOTE:</strong> FFC is restricted to serving
                       only US-based charities with a US citizen as the Point of Contact.
                     </p>
                   </div>
                   <div className="bg-[#fffbeb] border-l-4 border-[#facc15] p-4 my-4 rounded text-[14px] leading-[24px] font-[500] w-[100%] text-[#374151]">
                     <p>
-                      <strong className="text-[#ca8a04]">NOTE:</strong> FFC does not provide design
+                      <strong className="text-[#8A6400]">NOTE:</strong> FFC does not provide design
                       services but does provide the Divi Builder and training resources for
                       organizations to self-build their website or hire a designer.
                     </p>
@@ -154,7 +154,7 @@ const index = () => {
                   </ul>
                   <div className="bg-[#fffbeb] border-l-4 border-[#facc15] p-4 my-4 rounded text-[14px] leading-[24px] font-[500] w-[100%] text-[#374151]">
                     <p>
-                      <strong className="text-[#ca8a04]">NOTE:</strong> FFC is Pre-501c3
+                      <strong className="text-[#8A6400]">NOTE:</strong> FFC is Pre-501c3
                       organizations must purchase these services until Microsoft validation is
                       complete. Organizations must add FFC as a guest to their tenant for
                       collaboration.
@@ -228,7 +228,7 @@ if (strpos($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false)
 
                   <div className="bg-[#fffbeb] border-l-4 border-[#facc15] p-4 my-4 rounded text-[14px] leading-[24px] font-[500] w-[100%] text-[#374151]">
                     <p>
-                      <strong className="text-[#ca8a04]">NOTE:</strong> The
+                      <strong className="text-[#8A6400]">NOTE:</strong> The
                       `GlobalAdmin@freeforcharity.org` account is a root tenant account used by
                       highly trusted individuals for continuity, with credentials managed via a
                       shared password manager.
@@ -289,13 +289,13 @@ if (strpos($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false)
                   </ul>
                   <div className="bg-[#fffbeb] border-l-4 border-[#facc15] p-4 my-4 rounded text-[14px] leading-[24px] font-[500] w-[100%] text-[#374151]">
                     <p>
-                      <strong className="text-[#ca8a04]">NOTE:</strong> This default page acts as a
+                      <strong className="text-[#8A6400]">NOTE:</strong> This default page acts as a
                       coming soon page while the full design is completed on a staging site.
                     </p>
                   </div>
                   <div className="bg-[#fffbeb] border-l-4 border-[#facc15] p-4 my-4 rounded text-[14px] leading-[24px] font-[500] w-[100%] text-[#374151]">
                     <p>
-                      <strong className="text-[#ca8a04]">NOTE:</strong> All organizations must agree
+                      <strong className="text-[#8A6400]">NOTE:</strong> All organizations must agree
                       to use the default Divi footer with a link back to FFC for validation and
                       network effects.
                     </p>

@@ -7,7 +7,7 @@ const Index = () => {
     <div className="w-full pt-[27px] pb-[54px] bg-[#FCFCFC]">
       <div className="w-full max-w-[90%] mx-auto">
         {/* Red Divider Line */}
-        <div className="h-px bg-[#7EBEC5] w-full mb-10"></div>
+        <div className="h-px bg-[#2D7F87] w-full mb-10"></div>
 
         {/* GuideStar Instruction Text */}
         <p

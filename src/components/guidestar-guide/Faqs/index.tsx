@@ -16,7 +16,7 @@ const index = () => {
             <ul className="list-disc list-inside space-y-1 pb-[1em]">
               <li>
                 <strong className="text-[#666]">Create an account:</strong> Go to the{' '}
-                <a href="https://www.guidestar.org/" className="text-[#2ea3f2]">
+                <a href="https://www.guidestar.org/" className="text-[#0567B1]">
                   Candid website
                 </a>{' '}
                 and create a free account if you don’t have one.
@@ -31,14 +31,14 @@ const index = () => {
                 the profile, but you can invite others later to manage it​ (
                 <a
                   href="https://www.guidestar.org/UpdateNonprofitProfile/get-platinum"
-                  className="text-[#2ea3f2]"
+                  className="text-[#0567B1]"
                 >
                   GuideStar
                 </a>
                 )​(
                 <a
                   href="https://help.candid.org/s/article/How-to-Earn-a-Platinum-Seal-of-Transparency"
-                  className="text-[#2ea3f2]"
+                  className="text-[#0567B1]"
                 >
                   Candid
                 </a>
@@ -67,7 +67,7 @@ const index = () => {
                 and titles of key staff members and board members​ ({' '}
                 <a
                   href="https://blog.candid.org/post/what-is-a-seal-of-transparency-your-questions-about-candid-seals-answered/"
-                  className="text-[#2ea3f2]"
+                  className="text-[#0567B1]"
                 >
                   Candid insights
                 </a>{' '}
@@ -78,14 +78,14 @@ const index = () => {
                 completed, publish your updates to earn the Bronze Seal​ ​ (
                 <a
                   href="https://www.guidestar.org/UpdateNonprofitProfile/get-platinum"
-                  className="text-[#2ea3f2]"
+                  className="text-[#0567B1]"
                 >
                   GuideStar
                 </a>
                 )​(
                 <a
                   href="https://help.candid.org/s/article/How-to-Earn-a-Platinum-Seal-of-Transparency"
-                  className="text-[#2ea3f2]"
+                  className="text-[#0567B1]"
                 >
                   Candid
                 </a>
@@ -110,7 +110,7 @@ const index = () => {
                 objectives and the target population that benefits from your services​ ({' '}
                 <a
                   href="https://www.guidestar.org/UpdateNonprofitProfile/profile-best-practices/"
-                  className="text-[#2ea3f2]"
+                  className="text-[#0567B1]"
                 >
                   GuideStart
                 </a>{' '}
@@ -121,14 +121,14 @@ const index = () => {
                 publish to earn the Silver Seal​​ ​ (
                 <a
                   href="https://www.guidestar.org/UpdateNonprofitProfile/get-platinum"
-                  className="text-[#2ea3f2]"
+                  className="text-[#0567B1]"
                 >
                   GuideStar
                 </a>
                 )​(
                 <a
                   href="https://blog.candid.org/post/what-is-a-seal-of-transparency-your-questions-about-candid-seals-answered/"
-                  className="text-[#2ea3f2]"
+                  className="text-[#0567B1]"
                 >
                   Candid insights
                 </a>
@@ -157,14 +157,14 @@ const index = () => {
                 data are in place, publish your profile to obtain the Gold Seal​​ ​ (
                 <a
                   href="https://www.guidestar.org/UpdateNonprofitProfile/profile-best-practices/"
-                  className="text-[#2ea3f2]"
+                  className="text-[#0567B1]"
                 >
                   GuideStar
                 </a>
                 )​(
                 <a
                   href="https://www.guidestar.org/UpdateNonprofitProfile/get-platinum"
-                  className="text-[#2ea3f2]"
+                  className="text-[#0567B1]"
                 >
                   GuideStar
                 </a>
@@ -193,7 +193,7 @@ const index = () => {
                 nonprofit’s goals and strategies​ ({' '}
                 <a
                   href="https://www.guidestar.org/UpdateNonprofitProfile/get-platinum"
-                  className="text-[#2ea3f2]"
+                  className="text-[#0567B1]"
                 >
                   GuideStart
                 </a>{' '}
@@ -205,14 +205,14 @@ const index = () => {
                 (
                 <a
                   href="https://www.guidestar.org/UpdateNonprofitProfile/get-platinum"
-                  className="text-[#2ea3f2]"
+                  className="text-[#0567B1]"
                 >
                   GuideStar
                 </a>
                 )​(
                 <a
                   href="https://candid.org/blogs/what-is-a-seal-of-transparency-your-questions-about-candid-seals-answered/"
-                  className="text-[#2ea3f2]"
+                  className="text-[#0567B1]"
                 >
                   Candid insights
                 </a>
@@ -249,7 +249,7 @@ const index = () => {
           <p className="font-[500] text-[#666] pb-[1em]">FFC ‘Full Profile’ GuideStar Link:</p>
           <a
             href="https://www.guidestar.org/profile/shared/bbbe173a-87b9-4af9-a8a2-cae255a95742"
-            className="break-all font-[500] text-[#2ea3f2]"
+            className="break-all font-[500] text-[#0567B1]"
           >
             https://www.guidestar.org/profile/shared/bbbe173a-87b9-4af9-a8a2-cae255a95742
           </a>
@@ -258,7 +258,7 @@ const index = () => {
           </p>
           <a
             href="https://www.guidestar.org/profile/46-2471893"
-            className="text-[#2ea3f2] break-all"
+            className="text-[#0567B1] break-all"
           >
             https://www.guidestar.org/profile/46-2471893
           </a>
@@ -267,7 +267,7 @@ const index = () => {
             later):
           </p>
           <p
-            className="text-center text-[#2ea3f2] pb-[1em]"
+            className="text-center text-[#0567B1] pb-[1em]"
             // GuideStar widget intentionally external — dynamic badge must load from their servers
             dangerouslySetInnerHTML={{
               __html:

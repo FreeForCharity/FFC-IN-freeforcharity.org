@@ -193,7 +193,7 @@ const Header: React.FC = () => {
                             <div
                               className={`absolute left-0 ${
                                 isScrolled ? 'top-[82%]' : 'top-[97%]'
-                              } border-t-3 border-[#2EA3F2] px-3 shadow-[0_2px_5px_rgba(0,0,0,0.1)] bg-white min-w-[240px] z-50`}
+                              } border-t-3 border-[#0567B1] px-3 shadow-[0_2px_5px_rgba(0,0,0,0.1)] bg-white min-w-[240px] z-50`}
                             >
                               <div className="px-1 py-[20px]">
                                 {item.dropdownItems?.map((dropItem, dropIndex) => {
@@ -282,7 +282,7 @@ const Header: React.FC = () => {
             }`}
           >
             <div
-              className={`max-w-[700px] mx-auto px-6 p-[5%] bg-white border-t-[3px] border-[#2EA3F2] shadow-[0_2px_5px_rgba(0,0,0,0.1)] h-[80vh] overflow-auto`}
+              className={`max-w-[700px] mx-auto px-6 p-[5%] bg-white border-t-[3px] border-[#0567B1] shadow-[0_2px_5px_rgba(0,0,0,0.1)] h-[80vh] overflow-auto`}
             >
               <ul className="space-y-2">
                 {menuItems.map((item, index) => {

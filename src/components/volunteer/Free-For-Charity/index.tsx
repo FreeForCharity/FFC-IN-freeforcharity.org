@@ -8,7 +8,7 @@ const Index = () => {
       <div className="w-full max-w-[90%] md:max-w-[80%] py-4 mx-auto">
         {/* Header Section */}
         <div className="text-center">
-          <h1 className="text-[30px] md:text-[40px] font-[700] leading-[44px] text-[#f27022] mb-[20px]">
+          <h1 className="text-[30px] md:text-[40px] font-[700] leading-[44px] text-[#b35000] mb-[20px]">
             Free for Charity Volunteer Options
           </h1>
           <p className="text-[18px] font-[500] text-black pb-[1em]" id="lato-font">
@@ -21,7 +21,7 @@ const Index = () => {
         </div>
 
         {/* Callout Box */}
-        <div className="bg-[#7EBEC5] py-[20px] md:py-[40px] md:px-[60px]  px-[30px] flex flex-col items-center justify-center text-center">
+        <div className="bg-[#2D7F87] py-[20px] md:py-[40px] md:px-[60px]  px-[30px] flex flex-col items-center justify-center text-center">
           <h1 className="text-[26px] font-[500] leading-[26px] text-white pb-[10px]" id="aria-font">
             IMPORTANT: A Prerequisite for All Applicants
           </h1>
@@ -48,7 +48,7 @@ const Index = () => {
       <div className="w-full max-w-[90%] mx-auto py-[3%] flex flex-col md:flex-row gap-8 md:gap-0">
         {/* Left Column */}
         <div className="w-full md:w-[47%] md:mr-[5.5%]">
-          <h1 className="text-[28px] font-[700] leading-[31px] text-[#f27022]">
+          <h1 className="text-[28px] font-[700] leading-[31px] text-[#b35000]">
             You can create a measurable impact to the success of charities nation wide with your
             donation or volunteer hours.
           </h1>
@@ -58,7 +58,7 @@ const Index = () => {
             class training programs that at the same time help charities throughout the United
             States.
           </p>
-          <h1 className="text-[28px] font-[700] leading-[31px] text-[#f27022]">
+          <h1 className="text-[28px] font-[700] leading-[31px] text-[#b35000]">
             We cannot do the work we do without your support.
           </h1>
           <p className="text-[18px] font-[500] leading-[27px] pb-[1em] mt-[20px]" id="lato-font">
@@ -68,7 +68,7 @@ const Index = () => {
           </p>
           <p className="text-[18px] font-[500] leading-[27px] mb-[5.82%]" id="lato-font">
             In addition to financial support, Free for Charity also needs community support through{' '}
-            <a href="/volunteer" className="text-[#2EA3F4]">
+            <a href="/volunteer" className="text-[#0567B1]">
               skilled volunteers
             </a>{' '}
             and gifts in kind (such as services or products sold by your business). Take a look at
@@ -80,7 +80,7 @@ const Index = () => {
         <div>
           <a
             href="https://www.idealist.org/en/nonprofit/356bfc8e2ae64f83beea4a4e677e99d7-free-for-charity-state-college#opportunities"
-            className="inline-block px-6 py-3 text-[16px] font-bold text-white bg-[#007bff] rounded-md text-center no-underline transition-colors duration-300 ease-in-out hover:bg-[#0056B3]"
+            className="inline-block px-6 py-3 text-[16px] font-bold text-white bg-[#0056B3] rounded-md text-center no-underline transition-colors duration-300 ease-in-out hover:bg-[#004494]"
             id="aria-font"
             target="_blank"
             rel="noopener noreferrer"
