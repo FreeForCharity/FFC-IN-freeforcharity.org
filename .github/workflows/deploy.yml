@@ -75,29 +75,21 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
-  notify-failure:
-    name: Notify on deployment failure
-    runs-on: ubuntu-latest
-    needs: [build, deploy]
-    if: failure()
-
-    steps:
-
       - name: Post-deploy smoke check
         env:
           DEPLOY_URL: ${{ steps.deployment.outputs.page_url }}
         run: |
           python3 - <<'PY'
           import os, sys, time, urllib.request
-      
+
           url = os.environ.get("DEPLOY_URL")
           if not url:
               print("DEPLOY_URL not set", file=sys.stderr)
               sys.exit(1)
-      
+
           attempts = 12
           delay_seconds = 5
-      
+
           for i in range(1, attempts + 1):
               try:
                   req = urllib.request.Request(url, method="GET", headers={"User-Agent": "gh-actions-smoke"})
@@ -111,10 +103,18 @@ jobs:
                   print(f"Attempt {i}/{attempts} error: {e}")
               if i < attempts:
                   time.sleep(delay_seconds)
-      
+
           print(f"Smoke check failed: {url}", file=sys.stderr)
           sys.exit(1)
           PY
+
+  notify-failure:
+    name: Notify on deployment failure
+    runs-on: ubuntu-latest
+    needs: [build, deploy]
+    if: failure()
+
+    steps:
       - name: Create incident issue
         uses: actions/github-script@v7
         with:
@@ -157,4 +157,5 @@ jobs:
               ].join('\n'),
               labels: ['incident', 'deployment'],
             })
+
 
