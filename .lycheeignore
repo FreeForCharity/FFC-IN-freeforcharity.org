@@ -39,3 +39,21 @@ https://dash.cloudflare.com/**
 
 # Internal GitHub Actions badge URLs — always valid when the workflow exists
 https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/**
+# Sites that block CI crawlers or are intentionally placeholder / flaky
+https://freeforcharity.org/**
+https://www.freeforcharity.org/**
+https://my.interserver.net/**
+https://www.interserver.net/**
+https://support.cloudflare.com/**
+https://www.webhostingtalk.com/**
+https://www.g2.com/**
+https://usertraining.lastpass.com/**
+https://www.techsoup.org/**
+http://www.techsoup.org/**
+https://www.upwork.com/**
+https://www.clarity.ms/tag/**
+https://www.youtube.com/watch?v=example-*
+https://neilpatel.com/blog/microsoft-clarity/**
+https://www.nuance.com/dragon.html
+https://www.avepoint.com/blog/office-365/microsoft-365-nonprofits/**
+https://www.nexcess.net/blog/whmcs-best-practices/**
