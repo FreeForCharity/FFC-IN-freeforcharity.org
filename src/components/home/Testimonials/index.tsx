@@ -116,7 +116,11 @@ const TestimonialSlider: React.FC = () => {
                   )}
 
                   {t.location && (
-                    <a href="https://americanlegionpost64.org/">
+                    <a
+                      href="https://americanlegionpost64.org/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <p className="text-[14px] font-medium text-[#0567B1]" id="aria-font">
                         {t.location}
                       </p>
