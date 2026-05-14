@@ -38,8 +38,10 @@ action:
 
 ### PayPal callback URLs (302, preserve query string)
 
-PayPal hosted button `9ZKQ23YC3G2J2` (see `src/components/donate-components/measurable-impact/index.tsx`)
-returns donors to these paths after payment. They must not 404 on cutover day.
+PayPal hosted buttons `9ZKQ23YC3G2J2` (Monthly / One Time donations and
+the "Donate Today" CTA) and `243G37NHXSRY8` (Large Donations card on
+`/donate`) return donors to these paths after payment. They must not
+404 on cutover day.
 
 | WordPress                 | Next.js    | Reason                                  |
 | ------------------------- | ---------- | --------------------------------------- |
