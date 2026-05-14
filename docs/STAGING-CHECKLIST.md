@@ -15,16 +15,21 @@ CI-based checks in this table run automatically on every push to `main`; rows
 marked `manual` must be run by hand. Confirm all checks are green or completed
 before proceeding to the manual checks below.
 
-| Check          | Workflow     | What It Verifies                                                       |
-| -------------- | ------------ | ---------------------------------------------------------------------- |
-| Format         | `ci.yml`     | Prettier formatting                                                    |
-| Lint           | `ci.yml`     | ESLint — no errors                                                     |
-| Unit tests     | `ci.yml`     | Jest (metadata, sitemap, data files, assetPath)                        |
-| Build          | `ci.yml`     | `next build` — static export succeeds                                  |
-| Internal links | `ci.yml`     | Playwright: no broken internal links (`post-deploy-smoke.spec.ts`)     |
-| Linkinator     | manual       | Optional: run `npm run check-links` on `./out` for additional coverage |
-| E2E tests      | `ci.yml`     | Playwright: navigation, images, cookie consent, copyright              |
-| Deploy         | `deploy.yml` | GitHub Pages deployment                                                |
+| Check             | Workflow         | What It Verifies                                                                                                                             |
+| ----------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Format            | `ci.yml`         | Prettier formatting                                                                                                                          |
+| Lint              | `ci.yml`         | ESLint — no errors                                                                                                                           |
+| Unit tests        | `ci.yml`         | Jest (metadata, sitemap, data files, assetPath)                                                                                              |
+| Build             | `ci.yml`         | `next build` — static export succeeds                                                                                                        |
+| Internal links    | `ci.yml`         | Playwright: no broken internal links (`post-deploy-smoke.spec.ts`)                                                                           |
+| External links    | `lychee.yml`     | Scheduled Lychee link checker against deployed site                                                                                          |
+| Accessibility     | `ci.yml`         | axe-core via Playwright (`tests/accessibility.spec.ts`) — WCAG 2.1 AA                                                                        |
+| E2E tests         | `ci.yml`         | Playwright: navigation, images, cookie consent, copyright, contact page, footer, team, mobile nav, dropdowns, external links                 |
+| Lighthouse        | `lighthouse.yml` | Performance / a11y / SEO / best practices thresholds on multiple URLs                                                                        |
+| CodeQL            | `codeql.yml`     | Static analysis for JS/TS and Actions                                                                                                        |
+| Linkinator        | manual           | Optional: run `npm run check-links` on `./out` for additional coverage                                                                       |
+| Visual regression | manual           | Run `npm run visual-regression` to compare each non-homepage page against the live WordPress origin (see `docs/visual-regression/README.md`) |
+| Deploy            | `deploy.yml`     | GitHub Pages deployment                                                                                                                      |
 
 ---
 
@@ -37,14 +42,19 @@ boxes as you go.
 
 ### 2a. Critical Pages
 
-- [ ] **Homepage** `/` — hero loads, mission video plays, team section visible
+- [ ] **Homepage** `/` — hero loads, Zeffy endowment-fund iframe renders in
+      the `#donate` section, team section visible
 - [ ] **About Us** `/about-us` — team member cards and photos appear
-- [ ] **Donate** `/donate` — donation form widget loads (iframe renders)
+- [ ] **Donate** `/donate` — PayPal "Donate Today" button (hosted button
+      `9ZKQ23YC3G2J2`) appears in the Measurable Impact section
+- [ ] **Endowment Fund** `/free-for-charity-endowment-fund` — see #123
+      (donate path on this page is under review)
 - [ ] **Volunteer** `/volunteer` — page loads fully
 - [ ] **Domains** `/domains` — domain ordering card renders correctly
 - [ ] **Free Hosting** `/free-charity-web-hosting` — testimonials carousel works
 - [ ] **Help for Charities** `/help-for-charities` — accordion sections expand
-- [ ] **Contact Us** `/contact-us` — contact form renders
+- [ ] **Contact Us** `/contact-us` — email, phone, and addresses display
+      (no form — matches FFC "no forms outside /hub" policy, see #44)
 - [ ] **501(c)(3) Guide** `/501c3` — content loads
 
 ### 2b. Legal / Policy Pages
@@ -81,12 +91,22 @@ boxes as you go.
 
 ## 4. Functionality Checks
 
+The following items are covered by CI E2E tests
+(`tests/cookie-consent.spec.ts`, `tests/mobile-navigation.spec.ts`,
+`tests/dropdown-navigation.spec.ts`, `tests/animated-numbers.spec.ts`,
+`tests/footer-complete.spec.ts`, `tests/contact-page.spec.ts`,
+`tests/external-links.spec.ts`, `tests/team-section.spec.ts`). Re-run as
+a spot-check in a real browser; if CI is green these should all pass.
+
 - [ ] Cookie consent banner appears on first visit (incognito)
 - [ ] Accepting cookies hides banner and persists preference on reload
 - [ ] Mobile menu opens and closes correctly (resize browser to < 768px)
+- [ ] Mobile menu dropdowns reveal sub-items
+- [ ] Desktop header dropdowns open on hover
 - [ ] Testimonial carousel on homepage auto-advances
 - [ ] Animated number counters trigger on scroll (Results section)
 - [ ] Accordion items on Help for Charities expand/collapse smoothly
+- [ ] All external links open in a new tab with `rel="noopener noreferrer"`
 
 ---
 
@@ -131,6 +151,13 @@ All items below must be confirmed before initiating DNS cutover:
 - [ ] No recent failed CI or deploy workflow runs on `main` in GitHub Actions
 - [ ] All critical pages load correctly in incognito (section 2a above)
 - [ ] Images all load (section 3 above)
+- [ ] Visual regression run (`npm run visual-regression`) reviewed — no
+      missing content on non-homepage pages (see
+      [`docs/visual-regression/`](visual-regression/))
+- [ ] Cloudflare Bulk Redirects rule **staged but not enabled** for
+      [`docs/cutover-redirects.csv`](cutover-redirects.csv) (see
+      [`docs/CUTOVER-REDIRECTS.md`](CUTOVER-REDIRECTS.md))
+- [ ] Pre-cutover review issues triaged: #121 (Donate cards), #122 (`/home-old`), #123 (endowment fund donate path)
 - [ ] `NEXT_PUBLIC_BASE_PATH` will be cleared to `''` at cutover time
   - Confirm with team: who will trigger the cutover deploy?
 - [ ] DNS TTL has been lowered to 300s (5 min) in Cloudflare at least 1 hour before cutover
