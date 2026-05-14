@@ -49,15 +49,18 @@ remain before DNS can flip from WordPress to GitHub Pages (issue #29).
 
 ## Open items requiring human decision before cutover
 
-**None.** All three review issues (#121, #122, #123) were resolved in
-PR #127:
+**None.** All three review issues (#121, #122, #123) are resolved:
 
-- **#121** — The 3 General Donations cards on `/donate` now link to the
-  PayPal hosted button (same `9ZKQ23YC3G2J2` used by the "Donate Today"
-  CTA on the same page).
-- **#122** — `/home-old` route removed.
-- **#123** — Zeffy donation iframe embedded into the endowment fund
-  page's Support-Our-Mission section.
+- **#121** — The 3 General Donations cards on `/donate` link to PayPal.
+  Monthly and One Time use `9ZKQ23YC3G2J2` (the "Donate Today" CTA on
+  the same page); **Large Donations uses `243G37NHXSRY8`** for WordPress
+  parity (PR #129). Both buttons confirmed on the WP origin in
+  `wordpress-static-export-2026-02-16:donate/index.html`.
+- **#122** — `/home-old` route removed (PR #127).
+- **#123** — The endowment fund page already has the Zeffy donation
+  iframe via the `Empower-Charities` section (`src/components/free-for-charity-endowment-fund-components/Empower-Charities/index.tsx`),
+  plus the matching Zeffy thermometer. PR #127 accidentally added a
+  second copy in `Support-Our-Mission`, which was reverted by PR #130.
 
 Smoke-test these on staging before flipping DNS.
 
@@ -124,4 +127,4 @@ These do not block the DNS flip. Pick them up after the cutover stabilizes.
 
 ---
 
-_Last updated: 2026-05-14. Source-of-truth for any time-sensitive details is the issue tracker, not this doc._
+_Last updated: 2026-05-14 (after PR #131). Source-of-truth for any time-sensitive details is the issue tracker, not this doc._
