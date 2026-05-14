@@ -1,0 +1,31 @@
+Source URL,Target URL,Status Code,Preserve Query String,Subpath Matching,Notes
+https://freeforcharity.org/free-for-charity-terms-of-service/,https://freeforcharity.org/terms-of-service/,301,disabled,disabled,Slug shortened in Next.js redesign
+https://freeforcharity.org/charity-and-nonprofit-case-studies-to-help-your-organization-succeed/,https://freeforcharity.org/charity-and-nonprofit-case-studies/,301,disabled,disabled,Slug shortened in Next.js redesign
+https://freeforcharity.org/donation-confirmation/,https://freeforcharity.org/donate/,302,enabled,disabled,PayPal return URL for completed donation; preserve query for PayPal txn params
+https://freeforcharity.org/donation-failed/,https://freeforcharity.org/donate/,302,enabled,disabled,PayPal cancel/return URL for failed donation
+https://freeforcharity.org/free-for-charity-just-earned-the-platinum-seal-of-transparency/,https://freeforcharity.org/blog/,301,disabled,disabled,Legacy blog post; consolidates to /blog index
+https://freeforcharity.org/our-organization-earned-a-2021-platinum-seal-of-transparency/,https://freeforcharity.org/blog/,301,disabled,disabled,Legacy blog post
+https://freeforcharity.org/we-just-updated-for-the-2022-guidestar-platinum-seal/,https://freeforcharity.org/blog/,301,disabled,disabled,Legacy blog post
+https://freeforcharity.org/using-a-registered-agent-service-northwest-registered-agent/,https://freeforcharity.org/blog/,301,disabled,disabled,Legacy blog post
+https://freeforcharity.org/podio-sponsorship-program/,https://freeforcharity.org/help-for-charities/,301,disabled,disabled,Legacy program page; closest content match
+https://freeforcharity.org/what-is-the-cost/,https://freeforcharity.org/help-for-charities/,301,disabled,disabled,Pricing FAQ rolled into help page
+https://freeforcharity.org/testimonial/american-legion-ahwatukee-post-64/,https://freeforcharity.org/#testimonials,301,disabled,disabled,Testimonials now inlined on homepage carousel
+https://freeforcharity.org/testimonial/keith-ray/,https://freeforcharity.org/#testimonials,301,disabled,disabled,Testimonials now inlined on homepage carousel
+https://freeforcharity.org/testimonial/pardhasaradhi-namburi/,https://freeforcharity.org/#testimonials,301,disabled,disabled,Testimonials now inlined on homepage carousel
+https://freeforcharity.org/testimonial/tashonda-payne/,https://freeforcharity.org/#testimonials,301,disabled,disabled,Testimonials now inlined on homepage carousel
+https://freeforcharity.org/author/clarkemoyer/,https://freeforcharity.org/about-us/,301,disabled,disabled,Author archive dropped; closest content
+https://freeforcharity.org/author/joel/,https://freeforcharity.org/about-us/,301,disabled,disabled,Author archive dropped
+https://freeforcharity.org/author/adagraves/,https://freeforcharity.org/about-us/,301,disabled,disabled,Author archive dropped
+https://freeforcharity.org/author/admin/,https://freeforcharity.org/about-us/,301,disabled,disabled,Author archive dropped
+https://freeforcharity.org/author/globaladmin/,https://freeforcharity.org/about-us/,301,disabled,disabled,Author archive dropped
+https://freeforcharity.org/author/tempmigrationadmin/,https://freeforcharity.org/about-us/,301,disabled,disabled,Author archive dropped
+https://freeforcharity.org/category/uncategorized/,https://freeforcharity.org/blog/,301,disabled,disabled,Category archive dropped
+https://freeforcharity.org/sample-page/,https://freeforcharity.org/,301,disabled,disabled,WordPress default sample page; redirect to home
+https://freeforcharity.org/codetest/,https://freeforcharity.org/,301,disabled,disabled,Test page; redirect to home
+https://freeforcharity.org/submit-information/,https://freeforcharity.org/contact-us/,301,disabled,disabled,Was Coming Soon Forminator page; contact-us is the closest replacement
+https://freeforcharity.org/donor-dashboard/,https://freeforcharity.org/donate/,301,disabled,disabled,WP-only logged-in dashboard removed; redirect to donate
+https://freeforcharity.org/__qs/,https://freeforcharity.org/,301,disabled,disabled,WP Query Strings utility page
+https://freeforcharity.org/layout_type/row/,https://freeforcharity.org/,301,disabled,disabled,Divi taxonomy archive
+https://freeforcharity.org/layout_type/section/,https://freeforcharity.org/,301,disabled,disabled,Divi taxonomy archive
+https://freeforcharity.org/module_width/regular/,https://freeforcharity.org/,301,disabled,disabled,Divi taxonomy archive
+https://freeforcharity.org/scope/not_global/,https://freeforcharity.org/,301,disabled,disabled,Divi taxonomy archive
