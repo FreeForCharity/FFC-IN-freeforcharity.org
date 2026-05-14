@@ -88,6 +88,12 @@ jobs:
               labels: ['link-rot', 'maintenance'],
             })
 
+      - name: Warn on broken links for Dependabot PRs
+        if: steps.lychee.outputs.exit_code != 0 && github.event_name != 'schedule' && github.actor == 'dependabot[bot]'
+        run: |
+          echo "Broken external links were detected, but this run was triggered by Dependabot."
+          echo "Link rot remains tracked by the scheduled workflow and should not block dependency maintenance."
+
       - name: Fail on broken links (PR/push runs)
-        if: steps.lychee.outputs.exit_code != 0 && github.event_name != 'schedule'
+        if: steps.lychee.outputs.exit_code != 0 && github.event_name != 'schedule' && github.actor != 'dependabot[bot]'
         run: exit 1
