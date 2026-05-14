@@ -92,10 +92,14 @@ const slugFor = (wp, next) => {
 
 async function capturePage(page, url, outPath) {
   try {
-    const response = await page.goto(url, { waitUntil: 'networkidle', timeout: 60_000 })
+    // Use 'load' (not 'networkidle') because pages with live third-party
+    // iframes (Zeffy donation forms) keep polling and never reach
+    // networkidle within a reasonable timeout.
+    const response = await page.goto(url, { waitUntil: 'load', timeout: 45_000 })
     const status = response?.status() ?? 0
-    // Let lazy assets settle a beat
-    await page.waitForTimeout(1500)
+    // Let lazy assets and animations settle. Longer than strictly
+    // necessary for static pages but safe across the board.
+    await page.waitForTimeout(3000)
     await page.screenshot({ path: outPath, fullPage: true })
     return { ok: status >= 200 && status < 400, status }
   } catch (err) {
