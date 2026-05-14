@@ -13,10 +13,10 @@ remain before DNS can flip from WordPress to GitHub Pages (issue #29).
 | Phase 1 — Content audit (REST API, URL mapping, media inventory) | ✅ Closed                         | #32 #33 #34 #35 #36                             |
 | Phase 2 — Builds for missing pages                               | ✅ Closed                         | (already in `src/app/`)                         |
 | Phase 3 — Testing                                                | ✅ Closed                         | #18 #19 #20 #22 #23 #25 #26 #28 #30 #52 #70 #71 |
-| Phase 4 — Visual regression harness                              | ✅ Done (PR #125)                 | #24, `docs/visual-regression/`                  |
-| Phase 5 — Cloudflare redirects                                   | ✅ Plan + CSV ready (PR #124)     | #27, `docs/cutover-redirects.csv`               |
+| Phase 4 — Visual regression harness                              | ✅ Merged (PR #125)               | #24, `docs/visual-regression/`                  |
+| Phase 5 — Cloudflare redirects                                   | ✅ Merged (PR #124)               | #27, `docs/cutover-redirects.csv`               |
 | Phase 6 — Contact form policy                                    | ✅ Closed (no forms outside /hub) | #44                                             |
-| Phase 7 — Pre-cutover review items                               | 🟡 3 open issues                  | #121 #122 #123                                  |
+| Phase 7 — Donate flows + /home-old cleanup                       | ✅ Merged (PR #127)               | #121 #122 #123                                  |
 | Phase 8 — DNS cutover                                            | ⛔ Operator action                | #29                                             |
 
 ---
@@ -49,14 +49,17 @@ remain before DNS can flip from WordPress to GitHub Pages (issue #29).
 
 ## Open items requiring human decision before cutover
 
-| #                                                                              | Title                                                                          | Severity                    | Decision needed                                                                                                                                |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| [#121](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/121) | General Donations cards link to `/help-for-charities` instead of a donate flow | Functional regression vs WP | Confirm whether the 3 cards on `/donate` (Monthly / One Time / Large) should link to the PayPal hosted button, the Zeffy iframe, or be removed |
-| [#122](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/122) | `/home-old` route purpose                                                      | Low                         | Remove if template leftover, keep if intentional                                                                                               |
-| [#123](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/123) | Endowment fund page has no donate path embedded                                | Conversion regression       | Embed Zeffy iframe / PayPal button on `/free-for-charity-endowment-fund` Support-Our-Mission section, or link to `/#donate`                    |
+**None.** All three review issues (#121, #122, #123) were resolved in
+PR #127:
 
-These were filed instead of stubbed per the explicit "no placeholders or
-stubs" guidance — fix in code requires intent decisions.
+- **#121** — The 3 General Donations cards on `/donate` now link to the
+  PayPal hosted button (same `9ZKQ23YC3G2J2` used by the "Donate Today"
+  CTA on the same page).
+- **#122** — `/home-old` route removed.
+- **#123** — Zeffy donation iframe embedded into the endowment fund
+  page's Support-Our-Mission section.
+
+Smoke-test these on staging before flipping DNS.
 
 ---
 
@@ -66,8 +69,8 @@ stubs" guidance — fix in code requires intent decisions.
 
 1. **Lower DNS TTL** in Cloudflare for `freeforcharity.org` apex and `www` records to **300s**.
 2. **Drain staging cache** if any — GitHub Pages serves fresh on each request.
-3. **Resolve open review issues** (#121 #122 #123) or accept the regression risk.
-4. **Confirm staging fully passes the checklist** in [`docs/STAGING-CHECKLIST.md`](STAGING-CHECKLIST.md) sections 2–6.
+3. **Confirm staging fully passes the checklist** in [`docs/STAGING-CHECKLIST.md`](STAGING-CHECKLIST.md) sections 2–6.
+4. **Run a final visual regression pass** (`npm run visual-regression`) and skim `docs/visual-regression/REPORT.md` for missing-content surprises.
 5. **Stage Cloudflare Bulk Redirects** per [`docs/CUTOVER-REDIRECTS.md`](CUTOVER-REDIRECTS.md) — import the CSV, create the rule, **leave the rule disabled**.
 
 ### Flip window
