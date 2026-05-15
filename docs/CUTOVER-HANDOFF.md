@@ -81,37 +81,43 @@ because it lives in a sibling directory.
 
 ### Pre-flight (do once, ahead of time)
 
-1. **Full cPanel backup** — cPanel → Backup → "Generate Full Backup". Download the `.tar.gz` locally and keep it. Don't skip this.
-2. **Targeted snapshots** (defense-in-depth on top of the full backup):
+1. **Full cPanel backup** ([#143](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/143)) — cPanel → Backup → "Generate Full Backup". Download the `.tar.gz` locally and keep it. Don't skip this.
+2. **Snapshot `/hub/`** ([#148](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/148)) — defense-in-depth on top of the full backup:
    ```bash
    # In cPanel → Terminal (or external SSH)
    tar -czf ~/hub-backup-$(date +%Y%m%d).tar.gz -C ~/public_html hub
    ```
-3. **WHMCS database export** — cPanel → phpMyAdmin → select the WHMCS database → Export → SQL → download.
-4. **Add GitHub repo secrets** for the cPanel deploy workflow:
+3. **WHMCS database export** ([#149](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/149)) — cPanel → phpMyAdmin → select the WHMCS database → Export → SQL → download.
+4. **Add GitHub repo secrets** ([#150](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/150)) for the cPanel deploy workflow:
    - `FTP_SERVER` — your cPanel FTP hostname (often `freeforcharity.org` or `ftp.freeforcharity.org`)
    - `FTP_USERNAME` — cPanel username
    - `FTP_PASSWORD` — cPanel FTP password (cPanel → FTP Accounts)
-5. **(Optional) lower DNS TTL** to 300s. Not strictly required because DNS isn't changing, but useful if you want to keep the rollback window short.
+5. **(Optional) lower DNS TTL** to 300s ([#136](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/136)). Not strictly required because DNS isn't changing, but useful if you want to keep the rollback window short.
 
 ### First deploy (creates `public_html_next/`)
 
-1. In GitHub → Actions → "Deploy to InterServer cPanel (production)" → **Run workflow** on `main`. The job builds with empty basePath, FTPS-uploads `out/` to `~/public_html_next/`, and smoke-tests the apex.
-2. SSH/Terminal into cPanel and verify:
+1. **Run the workflow** ([#151](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/151)). In GitHub → Actions → "Deploy to InterServer cPanel (production)" → **Run workflow** on `main`. The job builds with empty basePath, FTPS-uploads `out/` to `~/public_html_next/`, and smoke-tests the apex.
+2. **SSH/Terminal verify** ([#152](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/152)) into cPanel:
    ```bash
    ls ~/public_html_next/ | head
    ls ~/public_html_next/_next/  # hashed asset directory should exist
    test -f ~/public_html_next/.htaccess && echo "htaccess deployed"
    ```
-3. **Link `/hub` from the new directory** (so document-root swap doesn't take WHMCS offline):
+3. **Link `/hub` from the new directory** ([#153](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/153)) so document-root swap doesn't take WHMCS offline:
    ```bash
    ln -s ~/public_html/hub ~/public_html_next/hub
    ```
 
+### Staging review on cPanel preview (recommended)
+
+1. **Point a staging subdomain** ([#155](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/155)) at `~/public_html_next/` (cPanel → Domains → Create A New Domain → docroot `public_html_next`), OR use a local hosts-file override.
+2. **Walk the staging checklist** ([#156](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/156)) sections 2–6 of [`docs/STAGING-CHECKLIST.md`](STAGING-CHECKLIST.md) against the staging URL.
+3. **Verify `/hub/` via the staging URL** ([#157](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/157)) — WHMCS storefront + admin login + a sample product page (§2d).
+
 ### Flip window
 
-1. **In cPanel → Domains → manage `freeforcharity.org` → change document root** from `public_html` to `public_html_next`. Apply.
-2. **Smoke-test in incognito**, in this order:
+1. **In cPanel → Domains → manage `freeforcharity.org` → change document root** ([#139](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/139)) from `public_html` to `public_html_next`. Apply.
+2. **Smoke-test in incognito** ([#140](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/140)), in this order:
    - `https://freeforcharity.org/` — homepage renders the Figma redesign.
    - `https://freeforcharity.org/about-us` — content loads, no 404.
    - `https://freeforcharity.org/donate` — PayPal button visible (`hosted_button_id=9ZKQ23YC3G2J2`).
@@ -119,15 +125,15 @@ because it lives in a sibling directory.
    - `https://freeforcharity.org/free-for-charity-terms-of-service/` — should 301-redirect to `/terms-of-service`.
 3. (Optional) Stage Cloudflare Bulk Redirects from [`docs/cutover-redirects.csv`](cutover-redirects.csv) per [`docs/CUTOVER-REDIRECTS.md`](CUTOVER-REDIRECTS.md). The `.htaccess` already covers these at the origin; Cloudflare-level rules are redundant but preempt origin traffic.
 
+### Post-flip
+
+1. **First 30 min** ([#141](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/141)) — keep an eye on Apache error logs, Cloudflare 5xx rate, WHMCS at `/hub/`. Per [`docs/STAGING-CHECKLIST.md`](STAGING-CHECKLIST.md) §8.
+2. **48-hour soak** ([#142](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/142)) — let organic traffic + an off-hours billing cycle hit the new stack before declaring it stable.
+3. **14-day decommission** ([#144](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/144)) — archive WordPress files, drop WP database, restore DNS TTL.
+
 ### If anything breaks
 
 Follow [`docs/ROLLBACK.md`](ROLLBACK.md). One cPanel click reverts document root to `public_html` (WordPress).
-
-### After verification (≥48 hours)
-
-The WordPress files in `~/public_html/` (excluding `/hub`) are no
-longer serving anything. Leave them in place for a minimum of 14 days
-as a hot rollback target. After that, archive and remove.
 
 ---
 
