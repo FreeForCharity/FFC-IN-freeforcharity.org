@@ -79,39 +79,36 @@ domain's document root from `public_html` to `public_html_next`.
 Rollback is the same action in reverse. WHMCS at `/hub/` is unaffected
 because it lives in a sibling directory.
 
+Every step below has a dedicated tracking issue under the parent #29
+for full traceability — tick the issue closed once its acceptance
+criteria are met.
+
 ### Pre-flight (do once, ahead of time)
 
-1. **Full cPanel backup** — cPanel → Backup → "Generate Full Backup". Download the `.tar.gz` locally and keep it. Don't skip this.
-2. **Targeted snapshots** (defense-in-depth on top of the full backup):
-   ```bash
-   # In cPanel → Terminal (or external SSH)
-   tar -czf ~/hub-backup-$(date +%Y%m%d).tar.gz -C ~/public_html hub
-   ```
-3. **WHMCS database export** — cPanel → phpMyAdmin → select the WHMCS database → Export → SQL → download.
-4. **Add GitHub repo secrets** for the cPanel deploy workflow:
-   - `FTP_SERVER` — your cPanel FTP hostname (often `freeforcharity.org` or `ftp.freeforcharity.org`)
-   - `FTP_USERNAME` — cPanel username
+1. **#134 — Full cPanel backup + `/hub/` snapshot + WHMCS DB export.** cPanel → Backup → "Generate Full Backup", then `tar -czf ~/hub-backup-$(date +%Y%m%d).tar.gz -C ~/public_html hub`, then export the WHMCS DB via phpMyAdmin.
+2. **#135 — Add GitHub repo secrets** for the cPanel deploy workflow:
+   - `FTP_SERVER` — cPanel FTP hostname
+   - `FTP_USERNAME` — cPanel FTP username
    - `FTP_PASSWORD` — cPanel FTP password (cPanel → FTP Accounts)
-5. **(Optional) lower DNS TTL** to 300s. Not strictly required because DNS isn't changing, but useful if you want to keep the rollback window short.
+3. **#136 — (Optional) lower DNS TTL** to 300s. Not strictly required because DNS isn't changing.
 
 ### First deploy (creates `public_html_next/`)
 
-1. In GitHub → Actions → "Deploy to InterServer cPanel (production)" → **Run workflow** on `main`. The job builds with empty basePath, FTPS-uploads `out/` to `~/public_html_next/`, and smoke-tests the apex.
-2. SSH/Terminal into cPanel and verify:
+1. **#137 — Run `deploy-cpanel.yml` and verify upload.** GitHub → Actions → "Deploy to InterServer cPanel (production)" → Run workflow on `main`. Then verify via SSH:
    ```bash
    ls ~/public_html_next/ | head
-   ls ~/public_html_next/_next/  # hashed asset directory should exist
+   ls ~/public_html_next/_next/   # hashed asset directory
    test -f ~/public_html_next/.htaccess && echo "htaccess deployed"
    ```
-3. **Link `/hub` from the new directory** (so document-root swap doesn't take WHMCS offline):
+2. **#138 — Link `/hub` from the new directory** so the document-root swap doesn't take WHMCS offline:
    ```bash
    ln -s ~/public_html/hub ~/public_html_next/hub
    ```
 
 ### Flip window
 
-1. **In cPanel → Domains → manage `freeforcharity.org` → change document root** from `public_html` to `public_html_next`. Apply.
-2. **Smoke-test in incognito**, in this order:
+1. **#139 — Change document root.** In cPanel → Domains → manage `freeforcharity.org` → change document root from `public_html` to `public_html_next`. Apply.
+2. **#140 — Smoke-test in incognito**, in this order:
    - `https://freeforcharity.org/` — homepage renders the Figma redesign.
    - `https://freeforcharity.org/about-us` — content loads, no 404.
    - `https://freeforcharity.org/donate` — PayPal button visible (`hosted_button_id=9ZKQ23YC3G2J2`).
@@ -119,15 +116,15 @@ because it lives in a sibling directory.
    - `https://freeforcharity.org/free-for-charity-terms-of-service/` — should 301-redirect to `/terms-of-service`.
 3. (Optional) Stage Cloudflare Bulk Redirects from [`docs/cutover-redirects.csv`](cutover-redirects.csv) per [`docs/CUTOVER-REDIRECTS.md`](CUTOVER-REDIRECTS.md). The `.htaccess` already covers these at the origin; Cloudflare-level rules are redundant but preempt origin traffic.
 
+### Post-flip
+
+1. **#141 — First 30-minute monitoring** per [`docs/STAGING-CHECKLIST.md`](STAGING-CHECKLIST.md) §8. Watch for 4xx/5xx spikes, broken donate flow, WHMCS regressions.
+2. **#142 — 48-hour soak.** If nothing broke for 48 hours, declare cutover stable.
+3. **#144 — After 14 days, archive WordPress files** in `~/public_html/` (excluding `/hub`). Until then, leave them in place as a hot rollback target.
+
 ### If anything breaks
 
 Follow [`docs/ROLLBACK.md`](ROLLBACK.md). One cPanel click reverts document root to `public_html` (WordPress).
-
-### After verification (≥48 hours)
-
-The WordPress files in `~/public_html/` (excluding `/hub`) are no
-longer serving anything. Leave them in place for a minimum of 14 days
-as a hot rollback target. After that, archive and remove.
 
 ---
 
