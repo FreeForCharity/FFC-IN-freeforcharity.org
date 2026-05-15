@@ -50,3 +50,6 @@ next-env.d.ts
 # Visual regression artifacts (large PNG screenshots; regenerate locally)
 /docs/visual-regression/screenshots/
 /docs/visual-regression/REPORT.md
+
+# cPanel backup tarballs from scripts/cpanel-backup.sh — huge, sensitive
+/cpanel-backups/
