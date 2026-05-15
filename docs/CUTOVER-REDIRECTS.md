@@ -1,11 +1,19 @@
 # Cutover Redirect Plan
 
-URL changes between the WordPress site (`wordpress-static-export-2026-02-16` tag,
-60 pages) and the Next.js redesign (~36 routes). Source for Cloudflare
-[Bulk Redirects](https://developers.cloudflare.com/rules/url-forwarding/bulk-redirects/).
+URL changes between the WordPress site (`wordpress-static-export-2026-02-16`
+tag, 60 pages) and the Next.js redesign (~36 routes).
 
-**Status:** Source data prepared (`docs/cutover-redirects.csv`). Cloudflare
-upload requires a human with zone access — see Operator Steps below.
+**Primary implementation:** [`public/.htaccess`](../public/.htaccess)
+ships with the static export and handles every redirect listed below at
+the InterServer Apache origin. No Cloudflare changes are required for
+the redirects to fire.
+
+**Optional secondary implementation:** the same redirects are also
+available as a Cloudflare [Bulk Redirects](https://developers.cloudflare.com/rules/url-forwarding/bulk-redirects/)
+import file at [`docs/cutover-redirects.csv`](cutover-redirects.csv) —
+useful if you want redirects to fire at Cloudflare's edge instead of
+the origin (saves a hop). Either source-of-truth works; don't enable
+both unless you accept the redundancy.
 
 ---
 
@@ -81,37 +89,53 @@ inbound links.
 
 ---
 
-## Operator Steps (Cloudflare Bulk Redirects)
+## Primary Operator Steps (Apache `.htaccess`)
 
-1. Sign in to [dash.cloudflare.com](https://dash.cloudflare.com) → account
-   level (not zone) → **Bulk Redirects**.
-2. Create a new **Bulk Redirect List** named `ffc-wp-to-next-cutover`.
-3. **Import URLs** → upload `docs/cutover-redirects.csv`.
-   - Verify "Status code" maps to the third column (301 for slug/content,
-     302 for the two PayPal return URLs).
-   - For the two PayPal rows, ensure **Preserve query string = enabled** so
-     `?tx=...&st=...` reach `/donate/`.
-4. Create a **Bulk Redirect Rule** that references the list. Scope: HTTP
-   requests to `freeforcharity.org` and `www.freeforcharity.org`.
-5. **Do NOT enable** the rule yet — keep it staged until DNS is flipped.
-   When the cutover deploy goes live, enable the rule in the same maintenance
-   window.
-6. After enabling, smoke-test 5 sample URLs from each category in an
-   incognito browser:
-   - `/free-for-charity-terms-of-service/` → `/terms-of-service/`
-   - `/charity-and-nonprofit-case-studies-…-succeed/` → `/charity-and-nonprofit-case-studies/`
-   - `/testimonial/keith-ray/` → `/#testimonials`
-   - `/donation-confirmation/?tx=ABC123` → `/donate/?tx=ABC123`
-   - `/sample-page/` → `/`
+No action required at cutover. The rules are part of
+[`public/.htaccess`](../public/.htaccess), which is included in
+`out/.htaccess` after `next build` and uploaded as part of the cPanel
+deploy. They activate the moment the document root is swapped to
+`public_html_next` (see `docs/CUTOVER-HANDOFF.md`).
+
+After cutover, smoke-test 5 sample URLs in an incognito browser:
+
+- `/free-for-charity-terms-of-service/` → `/terms-of-service`
+- `/charity-and-nonprofit-case-studies-to-help-your-organization-succeed/` → `/charity-and-nonprofit-case-studies`
+- `/testimonial/keith-ray/` → `/#testimonials`
+- `/donation-confirmation/?tx=ABC123` → `/donate?tx=ABC123` (query preserved)
+- `/sample-page/` → `/`
+
+---
+
+## Optional Cloudflare Bulk Redirects (skip unless needed)
+
+Only do this if you want redirects to fire at Cloudflare's edge instead
+of reaching the InterServer origin. It's redundant with `.htaccess` and
+adds a second place to keep in sync — most teams skip it.
+
+1. Sign in to [dash.cloudflare.com](https://dash.cloudflare.com) →
+   account level (not zone) → **Bulk Redirects**.
+2. Create a **Bulk Redirect List** named `ffc-wp-to-next-cutover`.
+3. **Import URLs** → upload `docs/cutover-redirects.csv`. Verify status
+   codes (301 for slug/content, 302 for the two PayPal callbacks) and
+   query-string preservation for the PayPal rows.
+4. Create a **Bulk Redirect Rule** that references the list. Scope:
+   `freeforcharity.org` and `www.freeforcharity.org`.
+5. Enable the rule whenever you like — the `.htaccess` already covers
+   the same URLs at the origin.
 
 ---
 
 ## Rollback
 
-If a redirect misroutes high-traffic content, disable the Bulk Redirect rule
-in Cloudflare (single toggle). The list can stay imported — only the rule
-attachment determines whether redirects fire.
+The cutover rollback (cPanel document-root swap from `public_html_next`
+back to `public_html`) automatically deactivates all `.htaccess`
+redirects, because the old `public_html/.htaccess` (WordPress) takes
+over. No separate redirect-rollback step needed.
+
+If Cloudflare Bulk Redirects are enabled, disable that rule in
+Cloudflare with a single toggle.
 
 ---
 
-_Last updated: 2026-05-12_
+_Last updated: 2026-05-15 (pivoted from Cloudflare-primary to Apache-primary after the cPanel target was confirmed)._
