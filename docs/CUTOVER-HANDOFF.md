@@ -1,23 +1,42 @@
-# Cutover Handoff — Free For Charity WordPress → Next.js
+# Cutover Handoff — Free For Charity WordPress → Next.js (InterServer cPanel)
 
-The pre-cutover engineering work is complete. This document inventories
-what is done, what is open for human review, and the operator steps that
-remain before DNS can flip from WordPress to GitHub Pages (issue #29).
+The pre-cutover engineering work is complete. This document describes
+what is done and the operator steps that remain.
+
+> **Target host:** InterServer cPanel (the same VPS that already runs
+> WHMCS at `/hub/`). DNS does **not** change for cutover. We swap the
+> document root for the apex from the WordPress install to the Next.js
+> static export, leaving `/hub/` untouched.
 
 ---
 
 ## Status at a glance
 
-| Track                                                            | Status                            | Reference                                       |
-| ---------------------------------------------------------------- | --------------------------------- | ----------------------------------------------- |
-| Phase 1 — Content audit (REST API, URL mapping, media inventory) | ✅ Closed                         | #32 #33 #34 #35 #36                             |
-| Phase 2 — Builds for missing pages                               | ✅ Closed                         | (already in `src/app/`)                         |
-| Phase 3 — Testing                                                | ✅ Closed                         | #18 #19 #20 #22 #23 #25 #26 #28 #30 #52 #70 #71 |
-| Phase 4 — Visual regression harness                              | ✅ Merged (PR #125)               | #24, `docs/visual-regression/`                  |
-| Phase 5 — Cloudflare redirects                                   | ✅ Merged (PR #124)               | #27, `docs/cutover-redirects.csv`               |
-| Phase 6 — Contact form policy                                    | ✅ Closed (no forms outside /hub) | #44                                             |
-| Phase 7 — Donate flows + /home-old cleanup                       | ✅ Merged (PR #127)               | #121 #122 #123                                  |
-| Phase 8 — DNS cutover                                            | ⛔ Operator action                | #29                                             |
+| Track                                                            | Status                            | Reference                                                      |
+| ---------------------------------------------------------------- | --------------------------------- | -------------------------------------------------------------- |
+| Phase 1 — Content audit (REST API, URL mapping, media inventory) | ✅ Closed                         | #32 #33 #34 #35 #36                                            |
+| Phase 2 — Builds for missing pages                               | ✅ Closed                         | (already in `src/app/`)                                        |
+| Phase 3 — Testing                                                | ✅ Closed                         | #18 #19 #20 #22 #23 #25 #26 #28 #30 #52 #70 #71                |
+| Phase 4 — Visual regression harness                              | ✅ Merged (PR #125)               | #24, `docs/visual-regression/`                                 |
+| Phase 5 — Apache `.htaccess` redirects + cPanel deploy workflow  | ✅ Pivoted from GH Pages          | #27, `public/.htaccess`, `.github/workflows/deploy-cpanel.yml` |
+| Phase 6 — Contact form policy                                    | ✅ Closed (no forms outside /hub) | #44                                                            |
+| Phase 7 — Donate flows + /home-old cleanup                       | ✅ Merged                         | #121 #122 #123                                                 |
+| Phase 8 — Document-root swap on InterServer                      | ⛔ Operator action                | #29                                                            |
+
+---
+
+## Why cPanel, not GitHub Pages
+
+The original plan flipped DNS to GitHub Pages, but `/hub/` (WHMCS
+billing, store, client portal) lives at the same apex domain as the
+public site, in the same `public_html/` document root. Splitting `/hub/`
+to a subdomain would require touching every WHMCS URL across the
+codebase (search: `freeforcharity.org/hub`). Keeping WHMCS at the apex
+means the Next.js site has to share the same origin, so it deploys to
+cPanel alongside WHMCS rather than to GitHub Pages.
+
+Side benefits: DNS doesn't change, rollback is a single cPanel
+document-root swap, the nonprofit-tier cPanel hosting is already paid for.
 
 ---
 
@@ -25,106 +44,117 @@ remain before DNS can flip from WordPress to GitHub Pages (issue #29).
 
 ### CI gates green on `main`
 
-- **`ci.yml`** — format check, lint, Jest unit tests (115), Next build, internal link check, Playwright E2E (100+ specs incl. accessibility/axe-core, contact, footer, team, mobile + desktop nav, external links, cookie consent, copyright, animated numbers, image loading, logo, mission video).
+- **`ci.yml`** — format check, lint, Jest unit tests (115), Next build, internal link check, Playwright E2E (~100 specs incl. accessibility/axe-core, contact, footer, team, mobile + desktop nav, external links, cookie consent, copyright, animated numbers, image loading, logo, mission video).
 - **`lighthouse.yml`** — multi-URL Lighthouse CI (warn thresholds).
 - **`lychee.yml`** — scheduled external link check.
 - **`codeql.yml`** — JS/TS + Actions static analysis.
-- **`deploy.yml`** — staged deploy to GitHub Pages on push to main.
+
+### Deploy workflows
+
+- **`deploy-cpanel.yml`** — production. Builds with empty basePath and FTPS-uploads `out/` to `~/public_html_next/` on the InterServer cPanel host. Manual-trigger only until operator validates. Requires three GitHub repo secrets (`FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`). Preserves `~/public_html/hub/` (WHMCS) via the action's exclude rules.
+- **`deploy-gh-pages-staging.yml`** — optional. Manual-trigger only. Useful for hosting a no-DNS preview at the GH Pages URL if needed (e.g., to re-run `npm run visual-regression`).
 
 ### Pre-cutover artifacts in this repo
 
-- [`docs/cutover-redirects.csv`](cutover-redirects.csv) — 30-row Cloudflare Bulk Redirects import file.
-- [`docs/CUTOVER-REDIRECTS.md`](CUTOVER-REDIRECTS.md) — operator runbook for the redirect import.
+- [`public/.htaccess`](../public/.htaccess) — Apache config that ships with the static export. Handles trailing-slash stripping, `.html` resolution, WP→Next 301/302 redirects (incl. PayPal callbacks), `/hub/` pass-through, WP-legacy path blocking, cache + compression, security headers.
+- [`docs/cutover-redirects.csv`](cutover-redirects.csv) — same 30-row redirect set as a Cloudflare Bulk Redirects import (optional; `.htaccess` already covers it, but Cloudflare can preempt before hitting origin).
+- [`docs/CUTOVER-REDIRECTS.md`](CUTOVER-REDIRECTS.md) — operator runbook.
 - [`docs/visual-regression/README.md`](visual-regression/README.md) + `scripts/visual-regression/capture.mjs` — `npm run visual-regression` to compare every non-homepage page against the live WordPress origin (homepage excluded because it's a Figma redesign).
 - [`docs/STAGING-CHECKLIST.md`](STAGING-CHECKLIST.md) — manual verification checklist.
-- [`docs/ROLLBACK.md`](ROLLBACK.md) — emergency rollback procedure.
+- [`docs/ROLLBACK.md`](ROLLBACK.md) — emergency rollback procedure (document-root swap).
 
 ### Source fixes shipped in the pre-cutover branch series
 
 - E2E coverage for nav, footer, team, contact, external links (PR #120).
 - `target="_blank" rel="noopener noreferrer"` on the 3 external links that were missing it: americanlegionpost64.org (Testimonials), GuideStar seal + profile (footer), techsoup.org (FAQ).
 - WCAG 2.1 AA color contrast (#92).
-
----
-
-## Open items requiring human decision before cutover
-
-**None.** All three review issues (#121, #122, #123) are resolved:
-
-- **#121** — The 3 General Donations cards on `/donate` link to PayPal.
-  Monthly and One Time use `9ZKQ23YC3G2J2` (the "Donate Today" CTA on
-  the same page); **Large Donations uses `243G37NHXSRY8`** for WordPress
-  parity (PR #129). Both buttons confirmed on the WP origin in
-  `wordpress-static-export-2026-02-16:donate/index.html`.
-- **#122** — `/home-old` route removed (PR #127).
-- **#123** — The endowment fund page already has the Zeffy donation
-  iframe via the `Empower-Charities` section (`src/components/free-for-charity-endowment-fund-components/Empower-Charities/index.tsx`),
-  plus the matching Zeffy thermometer. PR #127 accidentally added a
-  second copy in `Support-Our-Mission`, which was reverted by PR #130.
-
-Smoke-test these on staging before flipping DNS.
+- All three review issues (#121, #122, #123) resolved (see prior commits).
 
 ---
 
 ## Operator steps for cutover day (#29)
 
-### Pre-flight (≥ 1 hour before flip)
+The flip itself is now a **single cPanel action**: change the apex
+domain's document root from `public_html` to `public_html_next`.
+Rollback is the same action in reverse. WHMCS at `/hub/` is unaffected
+because it lives in a sibling directory.
 
-1. **Lower DNS TTL** in Cloudflare for `freeforcharity.org` apex and `www` records to **300s**.
-2. **Drain staging cache** if any — GitHub Pages serves fresh on each request.
-3. **Confirm staging fully passes the checklist** in [`docs/STAGING-CHECKLIST.md`](STAGING-CHECKLIST.md) sections 2–6.
-4. **Run a final visual regression pass** (`npm run visual-regression`) and skim `docs/visual-regression/REPORT.md` for missing-content surprises.
-5. **Stage Cloudflare Bulk Redirects** per [`docs/CUTOVER-REDIRECTS.md`](CUTOVER-REDIRECTS.md) — import the CSV, create the rule, **leave the rule disabled**.
+### Pre-flight (do once, ahead of time)
+
+1. **Full cPanel backup** — cPanel → Backup → "Generate Full Backup". Download the `.tar.gz` locally and keep it. Don't skip this.
+2. **Targeted snapshots** (defense-in-depth on top of the full backup):
+   ```bash
+   # In cPanel → Terminal (or external SSH)
+   tar -czf ~/hub-backup-$(date +%Y%m%d).tar.gz -C ~/public_html hub
+   ```
+3. **WHMCS database export** — cPanel → phpMyAdmin → select the WHMCS database → Export → SQL → download.
+4. **Add GitHub repo secrets** for the cPanel deploy workflow:
+   - `FTP_SERVER` — your cPanel FTP hostname (often `freeforcharity.org` or `ftp.freeforcharity.org`)
+   - `FTP_USERNAME` — cPanel username
+   - `FTP_PASSWORD` — cPanel FTP password (cPanel → FTP Accounts)
+5. **(Optional) lower DNS TTL** to 300s. Not strictly required because DNS isn't changing, but useful if you want to keep the rollback window short.
+
+### First deploy (creates `public_html_next/`)
+
+1. In GitHub → Actions → "Deploy to InterServer cPanel (production)" → **Run workflow** on `main`. The job builds with empty basePath, FTPS-uploads `out/` to `~/public_html_next/`, and smoke-tests the apex.
+2. SSH/Terminal into cPanel and verify:
+   ```bash
+   ls ~/public_html_next/ | head
+   ls ~/public_html_next/_next/  # hashed asset directory should exist
+   test -f ~/public_html_next/.htaccess && echo "htaccess deployed"
+   ```
+3. **Link `/hub` from the new directory** (so document-root swap doesn't take WHMCS offline):
+   ```bash
+   ln -s ~/public_html/hub ~/public_html_next/hub
+   ```
 
 ### Flip window
 
-1. **In GitHub repo Settings → Pages** — set custom domain to `freeforcharity.org` (`public/CNAME` is already in place).
-2. **In Cloudflare DNS** — change apex `A` records from the WordPress origin IP to GitHub Pages IPs:
-   ```
-   185.199.108.153
-   185.199.109.153
-   185.199.110.153
-   185.199.111.153
-   ```
-   …or replace with `CNAME` to `freeforcharity.github.io` (proxied).
-3. **Wait for GitHub to provision HTTPS certificate** (a few minutes).
-4. **Enable** the Cloudflare Bulk Redirects rule from step 5 of pre-flight.
-5. **Smoke test** the 5 sample URLs from `docs/CUTOVER-REDIRECTS.md` section "Operator Steps" #6.
-
-### Post-flip (first 30 minutes)
-
-Follow [`docs/STAGING-CHECKLIST.md`](STAGING-CHECKLIST.md) section 8 "Post-Cutover Monitoring".
+1. **In cPanel → Domains → manage `freeforcharity.org` → change document root** from `public_html` to `public_html_next`. Apply.
+2. **Smoke-test in incognito**, in this order:
+   - `https://freeforcharity.org/` — homepage renders the Figma redesign.
+   - `https://freeforcharity.org/about-us` — content loads, no 404.
+   - `https://freeforcharity.org/donate` — PayPal button visible (`hosted_button_id=9ZKQ23YC3G2J2`).
+   - `https://freeforcharity.org/hub/` — **WHMCS billing renders**. Critical check.
+   - `https://freeforcharity.org/free-for-charity-terms-of-service/` — should 301-redirect to `/terms-of-service`.
+3. (Optional) Stage Cloudflare Bulk Redirects from [`docs/cutover-redirects.csv`](cutover-redirects.csv) per [`docs/CUTOVER-REDIRECTS.md`](CUTOVER-REDIRECTS.md). The `.htaccess` already covers these at the origin; Cloudflare-level rules are redundant but preempt origin traffic.
 
 ### If anything breaks
 
-Follow [`docs/ROLLBACK.md`](ROLLBACK.md). The WordPress server stays running untouched for at least 14 days post-cutover.
+Follow [`docs/ROLLBACK.md`](ROLLBACK.md). One cPanel click reverts document root to `public_html` (WordPress).
+
+### After verification (≥48 hours)
+
+The WordPress files in `~/public_html/` (excluding `/hub`) are no
+longer serving anything. Leave them in place for a minimum of 14 days
+as a hot rollback target. After that, archive and remove.
 
 ---
 
 ## Out-of-scope / post-cutover
 
-These were intentionally not done because they need operator credentials, accounts, or further design discussion:
+These do not block the document-root swap; pick them up after cutover stabilizes.
 
-- **#39–#42** — Tawk.to / Microsoft Clarity / PostHog / MS Bot Framework integrations (each needs a property ID or workspace credential).
+- **#39–#42** — Tawk.to / Microsoft Clarity / PostHog / MS Bot Framework integrations (each needs a workspace credential).
 - **#45** — Decommission WPMUDEV Beehive Analytics (post-cutover cleanup).
-- **#46–#48** — GA4 / GTM / Google Search Console setup (need property IDs from Google).
-- **#107** — Stop blocking Dependabot on link rot (dependabot CI workflow fix).
-
-These do not block the DNS flip. Pick them up after the cutover stabilizes.
+- **#46–#48** — GA4 / GTM / Google Search Console setup (need property IDs).
+- **#107** — Stop blocking Dependabot on link rot (workflow fix).
+- Subsequent deploys: once you're comfortable, edit `.github/workflows/deploy-cpanel.yml` to fire on `push: branches: [main]` instead of `workflow_dispatch` only.
 
 ---
 
 ## Quick links
 
-| Resource                        | Path                                                              |
-| ------------------------------- | ----------------------------------------------------------------- |
-| WordPress URL → Next.js URL map | [`docs/CUTOVER-REDIRECTS.md`](CUTOVER-REDIRECTS.md)               |
-| Cloudflare Bulk Redirects CSV   | [`docs/cutover-redirects.csv`](cutover-redirects.csv)             |
-| Visual regression runbook       | [`docs/visual-regression/README.md`](visual-regression/README.md) |
-| Staging verification checklist  | [`docs/STAGING-CHECKLIST.md`](STAGING-CHECKLIST.md)               |
-| Rollback procedure              | [`docs/ROLLBACK.md`](ROLLBACK.md)                                 |
-| Migration master plan           | [`docs/MIGRATION-PLAN.md`](MIGRATION-PLAN.md) (in PR #38)         |
+| Resource                         | Path                                                                            |
+| -------------------------------- | ------------------------------------------------------------------------------- |
+| Apache config (rewrites + cache) | [`public/.htaccess`](../public/.htaccess)                                       |
+| cPanel deploy workflow           | [`.github/workflows/deploy-cpanel.yml`](../.github/workflows/deploy-cpanel.yml) |
+| WordPress URL → Next.js URL map  | [`docs/CUTOVER-REDIRECTS.md`](CUTOVER-REDIRECTS.md)                             |
+| Cloudflare Bulk Redirects CSV    | [`docs/cutover-redirects.csv`](cutover-redirects.csv)                           |
+| Visual regression runbook        | [`docs/visual-regression/README.md`](visual-regression/README.md)               |
+| Staging verification checklist   | [`docs/STAGING-CHECKLIST.md`](STAGING-CHECKLIST.md)                             |
+| Rollback procedure               | [`docs/ROLLBACK.md`](ROLLBACK.md)                                               |
 
 ---
 
-_Last updated: 2026-05-14 (after PR #131). Source-of-truth for any time-sensitive details is the issue tracker, not this doc._
+_Last updated: 2026-05-15. Source-of-truth for any time-sensitive details is the issue tracker, not this doc._

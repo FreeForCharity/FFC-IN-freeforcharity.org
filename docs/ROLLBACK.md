@@ -1,11 +1,12 @@
-# Rollback Procedure: GitHub Pages → WordPress
+# Rollback Procedure: cPanel Document-Root Swap
 
-This document describes how to roll back the freeforcharity.org website from
-GitHub Pages (Next.js) back to the WordPress server in the event of a
-production issue after DNS cutover.
+Roll back the freeforcharity.org website from the Next.js static export
+(`public_html_next`) back to the WordPress install (`public_html`).
+Used when something breaks in the first 14 days after cutover.
 
-**Estimated rollback time: 5–30 minutes** (DNS propagation varies by TTL and
-resolver)
+**Estimated rollback time: 2–5 minutes.** No DNS propagation involved
+— the document-root swap takes effect immediately on the InterServer
+cPanel host.
 
 ---
 
@@ -13,108 +14,103 @@ resolver)
 
 You will need access to:
 
-- **Cloudflare dashboard** — DNS management for freeforcharity.org
-  - Account: FFC Cloudflare org
-  - Zone: freeforcharity.org
-- **GitHub** — to disable or reconfigure GitHub Pages if needed
-  - Repo: FreeForCharity/FFC-IN-freeforcharity.org → Settings → Pages
+- **InterServer cPanel** for the freeforcharity.org account.
+- (Optional) SSH/Terminal access in cPanel for verifying file state.
+- The full cPanel backup downloaded during pre-flight (see
+  `docs/CUTOVER-HANDOFF.md` → "Pre-flight" step 1) — only needed if the
+  swap doesn't recover the WP files for some reason.
 
-The WordPress server is **never modified** during or after cutover. It remains
-live and accessible at its origin IP for the duration of the monitoring window.
-
----
-
-## Step 1 — Revert DNS in Cloudflare
-
-1. Log in to [dash.cloudflare.com](https://dash.cloudflare.com)
-2. Select the **freeforcharity.org** zone
-3. Go to **DNS → Records**
-4. Find the `A` record(s) for `@` (apex) pointing to GitHub Pages IPs:
-   ```
-   185.199.108.153
-   185.199.109.153
-   185.199.110.153
-   185.199.111.153
-   ```
-5. Update each `A` record to point back to the WordPress origin IP
-   (see InterServer control panel or private infra runbook for the current IP)
-6. Ensure the record is set to **Proxied** (orange cloud) to maintain
-   Cloudflare WAF and CDN protection
-7. If a `CNAME` record for `www` exists pointing to
-   `freeforcharity.github.io`, revert it to point to the origin server or
-   remove it
-
-> **Tip:** Cloudflare's default TTL is 300 seconds (5 min) for proxied records.
-> If you previously lowered the TTL before cutover, propagation is fast.
-> External resolvers may cache for longer depending on their own TTLs.
+The WordPress install at `~/public_html/` is **never modified** during or
+after cutover. It remains in place as the rollback target for at least
+14 days.
 
 ---
 
-## Step 2 — Verify WordPress is Responding
+## Step 1 — Swap the document root back in cPanel
 
-Before declaring rollback complete, confirm the WordPress site is live:
+1. Log in to InterServer cPanel.
+2. Go to **Domains → manage `freeforcharity.org`**.
+3. Change the document root from `public_html_next` back to `public_html`.
+4. Save / apply. The swap takes effect on the next HTTP request.
+
+---
+
+## Step 2 — Bust the Cloudflare cache
+
+Cloudflare caches HTML aggressively. After the swap, force a refresh
+so visitors see the WordPress site immediately:
+
+1. Cloudflare dashboard → `freeforcharity.org` zone → **Caching → Configuration**.
+2. **Purge Everything**. Confirm.
+
+---
+
+## Step 3 — Verify WordPress is responding
 
 ```bash
 curl -I https://freeforcharity.org
-# Expect: HTTP/2 200. If Cloudflare is still proxying, you'll typically see
-#   "server: cloudflare" and Cloudflare headers (e.g., "cf-ray"), not GitHub
-#   Pages headers like "x-github-request-id".
+# Expect: HTTP/2 200 with WordPress-style headers (link rel="https://api.w.org/", etc.)
 
-curl -I https://www.freeforcharity.org
-# Expect: HTTP/2 200 with the same origin content as the apex domain.
+curl -I https://freeforcharity.org/hub/
+# Expect: HTTP/2 200 — WHMCS still works (it never moved)
+
+curl -I https://freeforcharity.org/wp-login.php
+# Expect: HTTP/2 200 — WP admin reachable again
 ```
 
-Also verify visually in a browser using an incognito window or a DNS resolver
-that has picked up the change.
+Also verify visually in an incognito browser. If you see the Figma
+redesign, Cloudflare cache hasn't purged yet — wait 1–2 minutes and
+retry.
 
 ---
 
-## Step 3 — Disable GitHub Pages Custom Domain (Optional)
+## Step 4 — Disable the Next.js deploy workflow (optional)
 
-If you want to prevent GitHub Pages from attempting to serve the custom domain:
+If you want to prevent accidental redeploys to `public_html_next/`
+while you investigate:
 
-1. Go to **FreeForCharity/FFC-IN-freeforcharity.org → Settings → Pages**
-2. Under **Custom domain**, clear the field and save
-3. The site will remain accessible at
-   `https://freeforcharity.github.io/FFC-IN-freeforcharity.org/` for staging use
+1. GitHub repo → **Settings → Actions → General → Workflow permissions**, or
+2. Open `.github/workflows/deploy-cpanel.yml` and add `if: false` to the job, or
+3. Disable the workflow from the Actions tab in GitHub UI.
 
-This step is optional — DNS changes alone are sufficient to route traffic back
-to WordPress.
+This step is optional — the workflow is already manual-trigger only.
 
 ---
 
-## Step 4 — Create a Post-Mortem Issue
+## Step 5 — Open a post-mortem issue
 
-After stabilizing, open a GitHub issue to document:
+After stabilizing, open a GitHub issue documenting:
 
-- What broke (specific pages, features, or infra)
-- When it was detected
-- How long the outage lasted
-- Root cause
-- Fix required before re-attempting cutover
+- What broke (specific pages, features, or infra).
+- When it was detected.
+- How long the outage lasted.
+- Root cause.
+- Fix required before re-attempting cutover.
 
 ---
 
 ## Important Notes
 
-| Item                | Detail                                                                                                          |
-| ------------------- | --------------------------------------------------------------------------------------------------------------- |
-| WordPress origin IP | See private infra runbook or InterServer control panel for current origin IP; restrict origin to Cloudflare IPs |
-| GitHub Pages IPs    | `185.199.108–111.153`                                                                                           |
-| WordPress server    | InterServer VPS — do **not** stop or reprovision for at least 2 weeks post-cutover                              |
-| Monitoring window   | Keep WordPress running for minimum 14 days after successful cutover before decommissioning                      |
-| `public/CNAME` file | Leaving it in the repo is harmless — it only takes effect when DNS points to GitHub                             |
+| Item                         | Detail                                                                                                                                           |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `~/public_html/`             | Original WordPress install. Do not touch for at least 14 days post-cutover.                                                                      |
+| `~/public_html/hub/`         | WHMCS. Never modified by the cutover; same files serve both before and after.                                                                    |
+| `~/public_html_next/`        | Next.js static export. Created by the first `deploy-cpanel.yml` run.                                                                             |
+| `~/public_html_next/hub`     | Symlink to `~/public_html/hub`. Keeps `/hub/` working under the new document root.                                                               |
+| Cloudflare role              | Continues to proxy as before — no DNS change in either direction.                                                                                |
+| `docs/cutover-redirects.csv` | If Cloudflare Bulk Redirects were enabled, disable that rule too — `.htaccess` redirects vanish automatically when the document root swaps back. |
 
 ---
 
 ## Escalation Contacts
 
-| Role                | Contact                         |
-| ------------------- | ------------------------------- |
-| DNS / Cloudflare    | FFC Cloudflare admin account    |
-| GitHub Pages / repo | FreeForCharity GitHub org owner |
-| WordPress server    | InterServer hosting panel       |
+| Role                          | Contact                                             |
+| ----------------------------- | --------------------------------------------------- |
+| InterServer cPanel            | InterServer hosting panel + account                 |
+| DNS / Cloudflare              | FFC Cloudflare admin account                        |
+| GitHub deploy workflow / repo | FreeForCharity GitHub org owner                     |
+| WHMCS billing                 | WHMCS admin at `freeforcharity.org/hub/globaladmin` |
 
 ---
 
-_Last updated: 2026-02-21_
+_Last updated: 2026-05-15 (rewrote for cPanel document-root swap; previous version was for a DNS-flip rollback that no longer applies)._
