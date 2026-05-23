@@ -10,6 +10,15 @@ RewriteEngine On
 Options -Indexes
 ServerSignature Off
 
+# Defensive: keep mod_dir from auto-redirecting bare-dir requests to
+# trailing-slash URLs. Without this, a request to /about-us could be
+# rewritten to /about-us/ by mod_dir, which our slash-strip rule below
+# would then bounce back -- and a future change in fixup-phase ordering
+# could turn that into an infinite redirect. Explicit > implicit.
+<IfModule mod_dir.c>
+  DirectorySlash Off
+</IfModule>
+
 # ---------------------------------------------------------------------
 # Hand-off /hub/ to WHMCS untouched
 # ---------------------------------------------------------------------
@@ -82,9 +91,11 @@ RewriteRule ^wp-login\.php$ - [F,L]
 # Apache: strip trailing slashes, then resolve clean URLs to their
 # .html files.
 
-# Strip trailing slash when a matching .html file exists
-# (also handles the Next.js RSC sidecar dirs like /about-us/, which would
-# otherwise be served as directories and 403 under Options -Indexes)
+# Strip trailing slash when a matching .html file exists (root is
+# excluded naturally: the (.+) capture requires at least one char before
+# the slash). Also handles the Next.js RSC sidecar dirs like /about-us/,
+# which would otherwise be served as directories and 403 under
+# Options -Indexes.
 RewriteCond %{REQUEST_URI} ^/(.+)/$
 RewriteCond %{DOCUMENT_ROOT}/$1.html -f
 RewriteRule ^(.+)/$ /$1 [R=301,L]
