@@ -1,0 +1,11 @@
+--- src/components/free-for-charitys-tools-for-success-components/Five-Cards-Grid-Section/index.tsx
++++ src/components/free-for-charitys-tools-for-success-components/Five-Cards-Grid-Section/index.tsx
+@@ -48,7 +48,7 @@
+               </>
+             }
+             buttonText="Available Here"
+-            buttonLink="http://theleanstartup.com/"
++            buttonLink="https://theleanstartup.com/"
+             imageSrc="/Images/lean.webp" // 👈 Image passed as prop
+           />
+           <SlidingCard

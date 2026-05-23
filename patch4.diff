@@ -1,0 +1,11 @@
+--- src/components/free-for-charity-ffc-web-developer-training-guide-components/Hero/index.tsx
++++ src/components/free-for-charity-ffc-web-developer-training-guide-components/Hero/index.tsx
+@@ -524,7 +524,7 @@
+           <ul className="p-[0_0_23px_1.5rem] list-disc">
+             <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px]">
+               <a
+-                href="https://www.siteground.com/kb/cloudflare-cdn/"
++                href="https://www.siteground.com/kb/cloudflare-cdn-work/"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 className="text-[#0066B8]"

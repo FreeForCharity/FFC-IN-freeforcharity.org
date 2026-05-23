@@ -1,0 +1,10 @@
+--- src/components/free-for-charitys-tools-for-success-components/Five-Cards-Grid-Section/index.tsx
++++ src/components/free-for-charitys-tools-for-success-components/Five-Cards-Grid-Section/index.tsx
+@@ -41,7 +41,7 @@
+     {
+       imageSrc: assetPath('/Images/upwork.webp'),
+       title: 'theleanstartup.com The next step up book on starting a business',
+-      link: 'http://theleanstartup.com/',
++      link: 'https://theleanstartup.com/',
+     },
+   ]

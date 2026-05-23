@@ -42,7 +42,7 @@ const index = () => {
     {
       imageSrc: assetPath('/Images/upwork.webp'),
       title: 'theleanstartup.com The next step up book on starting a business',
-      link: 'https://theleanstartup.com/',
+      link: 'http://theleanstartup.com/',
     },
   ]
 

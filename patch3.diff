@@ -1,0 +1,11 @@
+--- src/components/home/Testimonials/index.tsx
++++ src/components/home/Testimonials/index.tsx
+@@ -107,7 +107,7 @@
+
+                   {t.location && (
+                     <a
+-                      href="https://americanlegionpost64.org/"
++                      href="https://www.americanlegionpost64.org/"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                     >
