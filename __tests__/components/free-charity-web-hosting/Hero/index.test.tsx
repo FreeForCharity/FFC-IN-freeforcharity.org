@@ -6,7 +6,9 @@ import Hero from '@/components/free-charity-web-hosting/Hero'
 // Mock the next/image component since it's not supported in JSDOM out of the box
 jest.mock('next/image', () => {
   return function MockImage({ src, alt, fill, className, priority }: any) {
-    return <img src={src} alt={alt} className={className} data-fill={fill} data-priority={priority} />
+    return (
+      <img src={src} alt={alt} className={className} data-fill={fill} data-priority={priority} />
+    )
   }
 })
 
