@@ -11,7 +11,9 @@ describe('Hero Section', () => {
 
   it('renders the descriptive paragraph', () => {
     render(<Hero />)
-    const paragraph = screen.getByText(/connecting students, professionals, & businesses with charities in need/i)
+    const paragraph = screen.getByText(
+      /connecting students, professionals, & businesses with charities in need/i
+    )
     expect(paragraph).toBeInTheDocument()
   })
 
