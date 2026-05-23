@@ -82,14 +82,17 @@ RewriteRule ^wp-login\.php$ - [F,L]
 # Apache: strip trailing slashes, then resolve clean URLs to their
 # .html files.
 
-# Strip trailing slash on non-directory URLs (except root)
-RewriteCond %{REQUEST_FILENAME} !-d
+# Strip trailing slash when a matching .html file exists
+# (also handles the Next.js RSC sidecar dirs like /about-us/, which would
+# otherwise be served as directories and 403 under Options -Indexes)
 RewriteCond %{REQUEST_URI} ^/(.+)/$
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
 RewriteRule ^(.+)/$ /$1 [R=301,L]
 
 # Append .html when a matching file exists
+# (no !-d check: Next.js export emits both /foo.html AND a /foo/ RSC sidecar
+# dir for every route; we always prefer the .html sibling when it exists)
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{DOCUMENT_ROOT}/$1.html -f
 RewriteRule ^(.+?)/?$ /$1.html [L]
 
