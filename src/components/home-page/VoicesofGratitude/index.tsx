@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { testimonials } from '@/data/testimonials'
 import { assetPath } from '@/lib/assetPath'
 
-const STARS = [0, 1, 2, 3, 4]
+const STAR_INDICES = [0, 1, 2, 3, 4] as const
 
 export default function TestimonialSlider() {
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -60,7 +60,7 @@ export default function TestimonialSlider() {
                           {testimonial.author}
                         </p>
                         <div className="flex justify-center mb-3">
-                          {STARS.map((i) => (
+                          {STAR_INDICES.map((i) => (
                             <Image
                               key={i}
                               src={assetPath('/Svgs/start-icon.svg')}
