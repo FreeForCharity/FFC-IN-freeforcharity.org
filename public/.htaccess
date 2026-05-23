@@ -15,6 +15,8 @@ ServerSignature Off
 # rewritten to /about-us/ by mod_dir, which our slash-strip rule below
 # would then bounce back -- and a future change in fixup-phase ordering
 # could turn that into an infinite redirect. Explicit > implicit.
+# (WHMCS still needs /hub -> /hub/ for relative-URL resolution; that's
+# handled by an explicit rule in the hand-off block below.)
 <IfModule mod_dir.c>
   DirectorySlash Off
 </IfModule>
@@ -22,6 +24,12 @@ ServerSignature Off
 # ---------------------------------------------------------------------
 # Hand-off /hub/ to WHMCS untouched
 # ---------------------------------------------------------------------
+# Restore the slash on bare /hub before handing off. WHMCS HTML uses
+# relative URLs that resolve against the request URI, so visitors must
+# land on /hub/ -- DirectorySlash Off above means we have to do this
+# ourselves rather than rely on mod_dir.
+RewriteRule ^hub$ /hub/ [R=301,L]
+
 # Anything under /hub/ is WHMCS billing/store/admin. Stop processing
 # immediately so the rules below cannot accidentally rewrite it.
 RewriteRule ^hub($|/) - [L]
