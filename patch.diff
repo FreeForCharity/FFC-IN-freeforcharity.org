@@ -1,11 +1,10 @@
---- src/components/home-page/Mission/index.tsx
-+++ src/components/home-page/Mission/index.tsx
-@@ -35,7 +35,7 @@
-             aria-label="Free For Charity mission video"
-             title="Learn about Free For Charity's mission to help nonprofits reduce costs"
-           >
--            <source src="https://ffcsites.org/videos/mission-video.mp4" type="video/mp4" />
-+            <source src={assetPath('/videos/mission-video.mp4')} type="video/mp4" />
-             Your browser does not support the video tag.
-           </video>
-         </div>
+--- src/components/free-for-charitys-tools-for-success-components/Tools-For-Businesses/index.tsx
++++ src/components/free-for-charitys-tools-for-success-components/Tools-For-Businesses/index.tsx
+@@ -62,7 +62,7 @@
+               </>
+             }
+             buttonText="Available Here"
+-            buttonLink="http://fiverr.com/"
++            buttonLink="https://www.fiverr.com/"
+             imageSrc="/Images/fiverr.webp" // 👈 image passed as prop
+           />
