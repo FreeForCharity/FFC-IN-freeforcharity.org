@@ -5,7 +5,13 @@ import BecomePartOfOurMission from '@/components/free-charity-web-hosting/Become
 // Mock the BecomePartOfOurMissionCard component to make testing simpler
 // and isolate the test to just the BecomePartOfOurMission component's rendering
 jest.mock('@/components/ui/BecomePartOfOurMissionCard', () => {
-  return function DummyBecomePartOfOurMissionCard(props: any) {
+  return function DummyBecomePartOfOurMissionCard(props: {
+    heading: string
+    description1: string
+    description2: string
+    buttonLink: string
+    buttonText: string
+  }) {
     return (
       <div data-testid="mission-card">
         <span data-testid="card-heading">{props.heading}</span>
