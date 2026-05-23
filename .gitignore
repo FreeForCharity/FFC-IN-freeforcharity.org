@@ -53,3 +53,6 @@ next-env.d.ts
 
 # cPanel backup tarballs from scripts/cpanel-backup.sh — huge, sensitive
 /cpanel-backups/
+
+# Claude Code on the web — subagent worktree checkouts
+/.claude/worktrees/
