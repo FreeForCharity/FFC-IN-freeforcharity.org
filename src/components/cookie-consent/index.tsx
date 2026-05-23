@@ -3,10 +3,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 
-// Environment variables for tracking IDs (replace with actual values)
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX'
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || 'XXXXXXXXXXXXXXX'
-const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || 'XXXXXXXXXX'
+// Tracking IDs come from build-time env vars. No placeholder fallbacks:
+// a missing var must mean "don't load the script" — never "load with a
+// fake/dev ID" — so we don't risk shipping bogus or accidentally-real
+// hardcoded keys to production.
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''
+const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || ''
+const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || ''
 
 // Define type for GTM dataLayer events
 interface DataLayerEvent {
@@ -44,6 +47,7 @@ export default function CookieConsent() {
   const previousFocusRef = useRef<HTMLElement | null>(null)
 
   const loadGoogleAnalytics = useCallback(() => {
+    if (!GA_MEASUREMENT_ID) return
     if (
       typeof window !== 'undefined' &&
       !document.querySelector('script[src*="googletagmanager.com/gtag"]')
@@ -70,6 +74,7 @@ export default function CookieConsent() {
   }, [])
 
   const loadMetaPixel = useCallback(() => {
+    if (!META_PIXEL_ID) return
     if (typeof window !== 'undefined' && !document.querySelector('script[src*="fbevents.js"]')) {
       const fbScript = document.createElement('script')
       fbScript.textContent = `
@@ -98,6 +103,7 @@ export default function CookieConsent() {
   }, [])
 
   const loadMicrosoftClarity = useCallback(() => {
+    if (!CLARITY_PROJECT_ID) return
     if (typeof window !== 'undefined' && !document.querySelector('script[src*="clarity.ms"]')) {
       const clarityScript = document.createElement('script')
       clarityScript.textContent = `
