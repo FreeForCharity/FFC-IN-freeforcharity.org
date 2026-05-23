@@ -296,9 +296,10 @@ export default function CookieConsent() {
     setPreferences(allAccepted)
     try {
       localStorage.setItem('cookie-consent', JSON.stringify(allAccepted))
-    } catch (e) {
-      // If localStorage is unavailable, continue anyway
-      console.warn('Unable to save preferences to localStorage:', e)
+    } catch {
+      // If localStorage is unavailable (Safari private mode, quota
+      // exceeded, disabled storage), continue anyway — the consent
+      // cookie set by applyConsent() is the source of truth.
     }
     applyConsent(allAccepted, savedPreferencesBackup)
     setSavedPreferencesBackup(allAccepted)
@@ -315,9 +316,10 @@ export default function CookieConsent() {
     setPreferences(onlyNecessary)
     try {
       localStorage.setItem('cookie-consent', JSON.stringify(onlyNecessary))
-    } catch (e) {
-      // If localStorage is unavailable, continue anyway
-      console.warn('Unable to save preferences to localStorage:', e)
+    } catch {
+      // If localStorage is unavailable (Safari private mode, quota
+      // exceeded, disabled storage), continue anyway — the consent
+      // cookie set by applyConsent() is the source of truth.
     }
 
     // Delete third-party cookies when consent is withdrawn
@@ -331,9 +333,10 @@ export default function CookieConsent() {
   const handleSavePreferences = () => {
     try {
       localStorage.setItem('cookie-consent', JSON.stringify(preferences))
-    } catch (e) {
-      // If localStorage is unavailable, continue anyway
-      console.warn('Unable to save preferences to localStorage:', e)
+    } catch {
+      // If localStorage is unavailable (Safari private mode, quota
+      // exceeded, disabled storage), continue anyway — the consent
+      // cookie set by applyConsent() is the source of truth.
     }
     applyConsent(preferences, savedPreferencesBackup)
     setSavedPreferencesBackup(preferences)
