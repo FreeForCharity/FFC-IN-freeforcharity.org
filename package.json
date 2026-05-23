@@ -34,6 +34,7 @@
     "@axe-core/react": "^4.11.1",
     "@commitlint/cli": "^20.4.2",
     "@commitlint/config-conventional": "^20.4.2",
+    "@eslint/eslintrc": "^3.3.5",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.58.2",
     "@tailwindcss/postcss": "^4.2.0",
