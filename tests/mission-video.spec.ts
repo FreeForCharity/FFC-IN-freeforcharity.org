@@ -53,9 +53,9 @@ test.describe('Mission Video', () => {
       .getAttribute('src')
 
     expect(src, 'video <source> must have a src attribute').toBeTruthy()
-    expect(src, 'video <source> must be served from this origin').not.toMatch(
-      /^https?:\/\/(www\.)?ffcsites\.org/
-    )
+    // Same-origin only: no absolute http(s) URL. Catches any future
+    // regression to ffcsites.org, ffcadmin.org, a CDN host, etc.
+    expect(src, 'video <source> must be served from this origin').not.toMatch(/^https?:\/\//)
 
     const resolved = new URL(src!, page.url()).toString()
     const response = await page.request.get(resolved, {
