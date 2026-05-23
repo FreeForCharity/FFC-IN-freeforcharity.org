@@ -1,4 +1,3 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
 import AboutFFCHosting from '@/components/free-charity-web-hosting/About-FFC-Hosting/index'
 
