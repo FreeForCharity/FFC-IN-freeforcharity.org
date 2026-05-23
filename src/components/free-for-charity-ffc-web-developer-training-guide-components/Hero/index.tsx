@@ -471,7 +471,7 @@ const Index = () => {
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px] ">
               <a
-                href="https://www.siteground.com/kb/cloudflare-cdn-work/"
+                href="https://eu.siteground.com/kb/cloudflare-cdn-work/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
