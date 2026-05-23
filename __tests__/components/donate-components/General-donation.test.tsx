@@ -40,7 +40,9 @@ describe('GeneralDonation Component', () => {
       1,
       expect.objectContaining({
         title: 'Monthly Donations',
-        description: expect.stringContaining('Monthly donations help by providing a predictable cash flow'),
+        description: expect.stringContaining(
+          'Monthly donations help by providing a predictable cash flow'
+        ),
         img: '/Images/payment.gif',
         href: 'https://www.paypal.com/donate/?hosted_button_id=9ZKQ23YC3G2J2',
       }),
@@ -52,7 +54,9 @@ describe('GeneralDonation Component', () => {
       2,
       expect.objectContaining({
         title: 'One Time Donations',
-        description: expect.stringContaining('On time donations of any amount are placed in the general fund'),
+        description: expect.stringContaining(
+          'On time donations of any amount are placed in the general fund'
+        ),
         img: '/Images/payment.gif',
         href: 'https://www.paypal.com/donate/?hosted_button_id=9ZKQ23YC3G2J2',
       }),
@@ -64,7 +68,9 @@ describe('GeneralDonation Component', () => {
       3,
       expect.objectContaining({
         title: 'Large Donations',
-        description: expect.stringContaining('For large donations we can work directly with the donor'),
+        description: expect.stringContaining(
+          'For large donations we can work directly with the donor'
+        ),
         img: '/Images/payment.gif',
         href: 'https://www.paypal.com/donate/?hosted_button_id=243G37NHXSRY8',
       }),
