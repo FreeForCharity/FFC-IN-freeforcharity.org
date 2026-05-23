@@ -2,6 +2,11 @@ import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   output: 'export',
+  // Canonicalize every page to its trailing-slash form. Apache's
+  // DirectorySlash + DirectoryIndex serve out/about-us/index.html
+  // directly and redirect bare /about-us -> /about-us/ for free, which
+  // also sidesteps the RSC-sidecar/.html collision that broke staging.
+  trailingSlash: true,
   // Images configuration
   images: {
     unoptimized: true,
