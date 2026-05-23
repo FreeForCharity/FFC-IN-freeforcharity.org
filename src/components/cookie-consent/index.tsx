@@ -289,9 +289,8 @@ export default function CookieConsent() {
     setPreferences(allAccepted)
     try {
       localStorage.setItem('cookie-consent', JSON.stringify(allAccepted))
-    } catch (e) {
+    } catch {
       // If localStorage is unavailable, continue anyway
-      console.warn('Unable to save preferences to localStorage:', e)
     }
     applyConsent(allAccepted, savedPreferencesBackup)
     setSavedPreferencesBackup(allAccepted)
@@ -308,9 +307,8 @@ export default function CookieConsent() {
     setPreferences(onlyNecessary)
     try {
       localStorage.setItem('cookie-consent', JSON.stringify(onlyNecessary))
-    } catch (e) {
+    } catch {
       // If localStorage is unavailable, continue anyway
-      console.warn('Unable to save preferences to localStorage:', e)
     }
 
     // Delete third-party cookies when consent is withdrawn
@@ -324,9 +322,8 @@ export default function CookieConsent() {
   const handleSavePreferences = () => {
     try {
       localStorage.setItem('cookie-consent', JSON.stringify(preferences))
-    } catch (e) {
+    } catch {
       // If localStorage is unavailable, continue anyway
-      console.warn('Unable to save preferences to localStorage:', e)
     }
     applyConsent(preferences, savedPreferencesBackup)
     setSavedPreferencesBackup(preferences)
