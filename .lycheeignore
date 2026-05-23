@@ -60,3 +60,9 @@ https://www.nexcess.net/blog/whmcs-best-practices/**
 https://www.youtube.com/watch?v=example-lastpass-101
 https://www.youtube.com/watch\?v=example-lastpass-101
 https://www.cloudflare.com/learning/**
+
+# Flaky or protected external URLs that shouldn't fail CI
+https://americanlegionpost64.org/*
+https://www.americanlegionpost64.org/*
+http://theleanstartup.com/*
+https://theleanstartup.com/*
