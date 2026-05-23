@@ -11,7 +11,9 @@ describe('FreeForCharityDonationOptions Component', () => {
 
   it('renders the introductory text correctly', () => {
     render(<FreeForCharityDonationOptions />)
-    const introText1 = screen.getByText(/Here at free for charity we make it easy to donate and help the cause/i)
+    const introText1 = screen.getByText(
+      /Here at free for charity we make it easy to donate and help the cause/i
+    )
     const introText2 = screen.getByText(/We have the following options:/i)
 
     expect(introText1).toBeInTheDocument()
@@ -20,13 +22,17 @@ describe('FreeForCharityDonationOptions Component', () => {
 
   it('renders the callout box heading correctly', () => {
     render(<FreeForCharityDonationOptions />)
-    const calloutHeading = screen.getByRole('heading', { name: /Free For Charity Domains Endowment Fund/i })
+    const calloutHeading = screen.getByRole('heading', {
+      name: /Free For Charity Domains Endowment Fund/i,
+    })
     expect(calloutHeading).toBeInTheDocument()
   })
 
   it('renders the callout box description correctly', () => {
     render(<FreeForCharityDonationOptions />)
-    const descriptionText = screen.getByText(/Free For Charity is creating an endowment fund to support our program/i)
+    const descriptionText = screen.getByText(
+      /Free For Charity is creating an endowment fund to support our program/i
+    )
     expect(descriptionText).toBeInTheDocument()
   })
 
