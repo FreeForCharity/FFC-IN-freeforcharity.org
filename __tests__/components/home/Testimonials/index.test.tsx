@@ -6,7 +6,7 @@ import TestimonialSlider from '@/components/home/Testimonials'
 jest.mock('next/image', () => ({
   __esModule: true,
   default: (props: any) => {
-    return <img {...props} priority={props.priority ? "true" : undefined} />
+    return <img {...props} priority={props.priority ? 'true' : undefined} />
   },
 }))
 
@@ -33,7 +33,9 @@ describe('TestimonialSlider', () => {
     expect(screen.getByText('Keith Ray')).toBeInTheDocument()
 
     // Check some content to ensure it renders text as well
-    expect(screen.getByText(/Knowing that I can reach out to the owner of another veteran/i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/Knowing that I can reach out to the owner of another veteran/i)
+    ).toBeInTheDocument()
   })
 
   it('renders navigation arrows', () => {
