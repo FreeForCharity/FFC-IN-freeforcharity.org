@@ -20,6 +20,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@eslint/eslintrc": "^3.3.5",
     "framer-motion": "^12.34.3",
     "lucide-react": "^0.575.0",
     "next": "^16.0.10",
