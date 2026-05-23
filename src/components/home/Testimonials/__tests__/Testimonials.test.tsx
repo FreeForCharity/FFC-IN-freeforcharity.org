@@ -6,8 +6,9 @@ import TestimonialSlider from '../index'
 // The swiper/react mock is already handled by jest.config.js which points to __mocks__/swiper/react.js
 // but we need to mock the next/image to avoid issues during testing.
 jest.mock('next/image', () => {
-  return function MockImage({ src, alt }: { src: any; alt: string }) {
-    return <img src={src?.src || src} alt={alt} data-testid="mock-image" />
+  return function MockImage({ src, alt }: { src: { src?: string } | string; alt: string }) {
+    const srcString = typeof src === 'string' ? src : src?.src
+    return <img src={srcString} alt={alt} data-testid="mock-image" />
   }
 })
 
