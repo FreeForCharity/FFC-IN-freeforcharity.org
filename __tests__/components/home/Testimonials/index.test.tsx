@@ -5,8 +5,15 @@ import TestimonialSlider from '@/components/home/Testimonials'
 // We need to mock Next.js Image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => {
-    return <img {...props} priority={props.priority ? 'true' : undefined} />
+  // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+  default: (props: Record<string, unknown>) => {
+    return (
+      <img
+        {...props}
+        priority={props.priority ? 'true' : undefined}
+        alt={(props.alt as string) || ''}
+      />
+    )
   },
 }))
 

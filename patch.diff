@@ -1,11 +1,14 @@
---- src/components/free-for-charitys-tools-for-success-components/Five-Cards-Grid-Section/index.tsx
-+++ src/components/free-for-charitys-tools-for-success-components/Five-Cards-Grid-Section/index.tsx
-@@ -48,7 +48,7 @@
-               </>
-             }
-             buttonText="Available Here"
--            buttonLink="http://theleanstartup.com/"
-+            buttonLink="https://theleanstartup.com/"
-             imageSrc="/Images/lean.webp" // 👈 Image passed as prop
-           />
-           <SlidingCard
+--- __tests__/components/home/Testimonials/index.test.tsx
++++ __tests__/components/home/Testimonials/index.test.tsx
+@@ -4,9 +4,11 @@
+
+ // We need to mock Next.js Image component
+ jest.mock('next/image', () => ({
+   __esModule: true,
+-  default: (props: any) => {
+-    return <img {...props} priority={props.priority ? 'true' : undefined} />
++  // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
++  default: (props: Record<string, unknown>) => {
++    return <img {...props} priority={props.priority ? 'true' : undefined} alt={(props.alt as string) || ''} />
+   },
+ }))
