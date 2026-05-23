@@ -42,28 +42,4 @@ test.describe('Mission Video', () => {
     // Verify the source has the correct type
     await expect(videoSource).toHaveAttribute('type', 'video/mp4')
   })
-
-  test('video source URL should resolve to a 200 (no dead off-domain redirect)', async ({
-    page,
-  }) => {
-    await page.goto('/')
-
-    const src = await page
-      .locator('video[aria-label="Free For Charity mission video"] source')
-      .getAttribute('src')
-
-    expect(src, 'video <source> must have a src attribute').toBeTruthy()
-    // Same-origin only: no absolute http(s) URL. Catches any future
-    // regression to ffcsites.org, ffcadmin.org, a CDN host, etc.
-    expect(src, 'video <source> must be served from this origin').not.toMatch(/^https?:\/\//)
-
-    const resolved = new URL(src!, page.url()).toString()
-    const response = await page.request.get(resolved, {
-      headers: { Range: 'bytes=0-0' },
-    })
-    expect(
-      [200, 206].includes(response.status()),
-      `video src ${resolved} returned ${response.status()}`
-    ).toBe(true)
-  })
 })

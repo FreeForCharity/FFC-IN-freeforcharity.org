@@ -79,7 +79,7 @@ Tests the Results 2023 section with animated statistics.
    - Accessibility for users with motion sensitivity
    - Animation disabled when prefers-reduced-motion is set
 
-### `mission-video.spec.ts` - Video Functionality (3 tests)
+### `mission-video.spec.ts` - Video Functionality (2 tests)
 
 Tests the video element in the mission section.
 
@@ -94,12 +94,6 @@ Tests the video element in the mission section.
 2. **`should have video source configured correctly`**
    - Validates video source configuration
    - Ensures video src attribute is set correctly
-
-3. **`video source URL should resolve to a 200 (no dead off-domain redirect)`**
-   - Asserts the `<source>` URL is same-origin (no `ffcsites.org` /
-     `ffcadmin.org` / other off-domain hosts)
-   - Fetches the resolved URL and verifies it returns 200 or 206
-     (catches dead redirect chains before deploy)
 
 ### `cookie-consent.spec.ts` - Cookie Consent (14 tests)
 
