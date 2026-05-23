@@ -4,7 +4,7 @@ import FreeForCharityDonationOptions from '@/components/donate-components/Free-f
 
 // Mock the Transparentbtn component
 jest.mock('@/components/ui/Transparentbtn', () => {
-  return function MockTransparentbtn(props: any) {
+  return function MockTransparentbtn(props: { href: string; color?: string; text: string }) {
     return (
       <a href={props.href} style={{ color: props.color }}>
         {props.text}
