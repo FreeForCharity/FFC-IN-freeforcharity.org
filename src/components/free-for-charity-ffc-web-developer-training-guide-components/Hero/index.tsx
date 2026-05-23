@@ -433,7 +433,7 @@ const Index = () => {
           <ul className="p-[0_0_23px_1.5rem] list-disc">
             <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px] ">
               <a
-                href="https://kinsta.com/knowledgebase/install-cloudflare/"
+                href="https://kinsta.com/blog/install-cloudflare/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -471,7 +471,7 @@ const Index = () => {
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px] ">
               <a
-                href="https://www.siteground.com/kb/cloudflare-cdn-work/"
+                href="https://www.cloudflare.com/learning/cdn/what-is-a-cdn/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
