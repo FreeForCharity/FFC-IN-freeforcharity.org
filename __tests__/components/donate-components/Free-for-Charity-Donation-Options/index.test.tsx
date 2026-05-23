@@ -5,7 +5,11 @@ import FreeForCharityDonationOptions from '@/components/donate-components/Free-f
 // Mock the Transparentbtn component
 jest.mock('@/components/ui/Transparentbtn', () => {
   return function MockTransparentbtn(props: any) {
-    return <a href={props.href} style={{ color: props.color }}>{props.text}</a>
+    return (
+      <a href={props.href} style={{ color: props.color }}>
+        {props.text}
+      </a>
+    )
   }
 })
 
@@ -18,7 +22,9 @@ describe('Free-for-Charity-Donation-Options Component', () => {
 
   it('renders the descriptions correctly', () => {
     render(<FreeForCharityDonationOptions />)
-    const description1 = screen.getByText('Here at free for charity we make it easy to donate and help the cause of great free training programs and free services for charities.')
+    const description1 = screen.getByText(
+      'Here at free for charity we make it easy to donate and help the cause of great free training programs and free services for charities.'
+    )
     const description2 = screen.getByText('We have the following options:')
 
     expect(description1).toBeInTheDocument()
@@ -29,7 +35,9 @@ describe('Free-for-Charity-Donation-Options Component', () => {
     render(<FreeForCharityDonationOptions />)
 
     const calloutHeader = screen.getByText('Free For Charity Domains Endowment Fund')
-    const calloutDescription = screen.getByText(/Free For Charity is creating an endowment fund to support our program/i)
+    const calloutDescription = screen.getByText(
+      /Free For Charity is creating an endowment fund to support our program/i
+    )
     const button = screen.getByText('Make a Lasting Impact Today!')
 
     expect(calloutHeader).toBeInTheDocument()
