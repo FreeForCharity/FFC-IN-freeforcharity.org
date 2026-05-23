@@ -16,9 +16,9 @@ export default function TypesOfCookiesWeUse() {
         <strong>3.1 Necessary Cookies (Always Active)</strong>
       </p>
       <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-        These cookies are essential for the website to function properly. They enable basic
-        features like storing your cookie consent preferences. These cookies do not store any
-        personally identifiable information and cannot be disabled.
+        These cookies are essential for the website to function properly. They enable basic features
+        like storing your cookie consent preferences. These cookies do not store any personally
+        identifiable information and cannot be disabled.
       </p>
       <div className="bg-gray-50 p-4 rounded-lg mb-4 overflow-x-auto">
         <table className="w-full text-sm">
@@ -44,9 +44,9 @@ export default function TypesOfCookiesWeUse() {
         <strong>3.2 Analytics Cookies (Requires Consent)</strong>
       </p>
       <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-        These cookies help us understand how visitors interact with our website by collecting
-        and reporting information anonymously. We use this information to improve our website
-        and user experience.
+        These cookies help us understand how visitors interact with our website by collecting and
+        reporting information anonymously. We use this information to improve our website and user
+        experience.
       </p>
 
       {/* Google Analytics */}
@@ -146,17 +146,17 @@ export default function TypesOfCookiesWeUse() {
         <strong>3.3 Marketing Cookies (Requires Consent)</strong>
       </p>
       <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-        These cookies are used to track visitors across websites. The intention is to display
-        ads that are relevant and engaging for users and thereby more valuable for publishers
-        and advertisers.
+        These cookies are used to track visitors across websites. The intention is to display ads
+        that are relevant and engaging for users and thereby more valuable for publishers and
+        advertisers.
       </p>
 
       {/* Meta Pixel */}
       <div className="bg-gray-50 p-4 rounded-lg mb-4">
         <h4 className="font-semibold mb-2 text-[#333]">Meta Pixel (Facebook Pixel)</h4>
         <p className="text-sm mb-2 text-[#666]">
-          The Meta Pixel is an analytics tool that helps us measure the effectiveness of
-          advertising by understanding the actions people take on our website.
+          The Meta Pixel is an analytics tool that helps us measure the effectiveness of advertising
+          by understanding the actions people take on our website.
         </p>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">

@@ -12,10 +12,10 @@ export default function AdditionalInfo() {
         </li>
       </ol>
       <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-        Some browsers have a &quot;Do Not Track&quot; feature that lets you tell websites that
-        you do not want to have your online activities tracked. At this time, we do not respond
-        to browser &quot;Do Not Track&quot; signals. However, you can control cookies through
-        our cookie consent banner.
+        Some browsers have a &quot;Do Not Track&quot; feature that lets you tell websites that you
+        do not want to have your online activities tracked. At this time, we do not respond to
+        browser &quot;Do Not Track&quot; signals. However, you can control cookies through our
+        cookie consent banner.
       </p>
 
       {/* Section 6 */}
@@ -27,9 +27,9 @@ export default function AdditionalInfo() {
         </li>
       </ol>
       <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-        We may update this Cookie Policy from time to time to reflect changes in our practices
-        or for other operational, legal, or regulatory reasons. Please review this policy
-        periodically for changes.
+        We may update this Cookie Policy from time to time to reflect changes in our practices or
+        for other operational, legal, or regulatory reasons. Please review this policy periodically
+        for changes.
       </p>
 
       {/* Section 7 */}

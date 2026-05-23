@@ -37,8 +37,7 @@ export default function HowToManageCookies() {
         <strong>4.2 Browser Settings</strong>
       </p>
       <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-        Most web browsers allow you to control cookies through their settings. You can
-        typically:
+        Most web browsers allow you to control cookies through their settings. You can typically:
       </p>
       <ul className="list-disc list-inside space-y-[4px] pb-[1em]">
         <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
@@ -58,8 +57,8 @@ export default function HowToManageCookies() {
         </li>
       </ul>
       <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-        Please note that if you block all cookies, you may not be able to use all features of
-        our website.
+        Please note that if you block all cookies, you may not be able to use all features of our
+        website.
       </p>
 
       <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500] mt-[1em]">
