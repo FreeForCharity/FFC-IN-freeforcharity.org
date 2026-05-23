@@ -71,7 +71,12 @@ jobs:
             exit 1
           fi
           if [ ! -f ./out/.htaccess ]; then
-            echo "::warning::./out/.htaccess missing -- deploy-cpanel.yml requires it for prod; staging may not, but worth noting."
+            # Hard-fail to match prod's deploy-cpanel.yml ("Verify build
+            # output" step asserts `test -f out/.htaccess`). Without it
+            # Apache cannot route clean URLs to *.html and staging would
+            # appear "deployed" but be functionally broken.
+            echo "::error::./out/.htaccess missing -- routing requires it; aborting."
+            exit 1
           fi
           echo "out/ produced. Top-level entries:"
           ls -la ./out | head -20
@@ -141,16 +146,22 @@ jobs:
           # NOTE: .htaccess is NOT excluded -- the Next.js out/.htaccess must
           # deploy or routing breaks (see prod deploy-cpanel.yml step
           # "Verify build output" which hard-asserts test -f out/.htaccess).
-          # Credentials are passed via env var CPANEL_FTP_PASSWORD interpolated
-          # into a quoted `set ftp:password` command -- the password never
-          # appears on argv. lftp is run without -d so debug output (which
-          # can leak transformed credentials) is not produced.
-          lftp -c "
+          # Script is piped to lftp via stdin (heredoc) instead of passed as
+          # an argv string via `lftp -c "..."`. That matters because the -c
+          # form puts the entire command string -- including the embedded
+          # password in `open -u user,pw` -- into the lftp process's argv,
+          # which is readable by anyone with /proc visibility on the runner
+          # (e.g. another step in the same job, or a side-car action).
+          # Heredoc-to-stdin keeps the password out of argv entirely. lftp
+          # is also run without -d so debug output (which can leak
+          # transformed credentials past GH's exact-string masking) is not
+          # produced.
+          lftp <<LFTP_SCRIPT 2>&1 | tail -200
             set ftp:ssl-allow no
             set net:max-retries 3
             set net:reconnect-interval-base 5
             set net:timeout 60
-            open -p \"$CPANEL_FTP_PORT\" -u \"$CPANEL_FTP_USER\",\"$CPANEL_FTP_PASSWORD\" \"ftp://$CPANEL_FTP_HOST\"
+            open -p "$CPANEL_FTP_PORT" -u "$CPANEL_FTP_USER","$CPANEL_FTP_PASSWORD" "ftp://$CPANEL_FTP_HOST"
             mirror --reverse $DELETE_FLAG --parallel=4 --verbose=1 \
               --exclude-glob '.ftpquota' \
               --exclude-glob '.well-known' \
@@ -159,7 +170,7 @@ jobs:
               --exclude-glob 'error_log' \
               ./out/ ./
             bye
-          " 2>&1 | tail -200
+          LFTP_SCRIPT
           echo "Upload complete."
 
       - name: Smoke-check the deployed site
