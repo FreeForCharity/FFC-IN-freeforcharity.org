@@ -126,7 +126,7 @@ export default function CookieConsent() {
     // Dynamically delete all cookies matching _ga_* (e.g., _ga_G-XXXXXXXXXX)
     if (typeof document !== 'undefined') {
       const regex = /(?:^|;\s*)(_ga_[^=;\s]*)/g
-      let match
+      let match: RegExpExecArray | null
       const cookieStr = document.cookie
       while ((match = regex.exec(cookieStr)) !== null) {
         const cookieName = match[1]
