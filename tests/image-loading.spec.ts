@@ -62,10 +62,7 @@ test.describe('Image Loading', () => {
     }
   })
 
-  // Temporarily disabled: This test checks natural dimensions which don't work reliably in CI
-  // The test passes locally but fails on GitHub Actions
-  // TODO: Investigate why naturalWidth/naturalHeight return 0 in CI despite image being visible
-  test.skip('images have natural dimensions indicating successful load', async ({ page }) => {
+  test('images have natural dimensions indicating successful load', async ({ page }) => {
     // Navigate to the homepage
     await page.goto('/')
 
@@ -74,6 +71,16 @@ test.describe('Image Loading', () => {
 
     // Wait for the image to be visible
     await expect(heroImage).toBeVisible()
+
+    // Wait for the image to finish loading to ensure natural dimensions are correctly populated
+    await heroImage.evaluate((img: HTMLImageElement) => {
+      if (img.complete) return
+
+      return new Promise((resolve) => {
+        img.onload = resolve
+        img.onerror = resolve
+      })
+    })
 
     // Verify the image has loaded by checking it has natural dimensions
     const naturalWidth = await heroImage.evaluate((img: HTMLImageElement) => img.naturalWidth)
