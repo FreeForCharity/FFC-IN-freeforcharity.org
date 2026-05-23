@@ -1,4 +1,3 @@
-import React from 'react'
 import Link from 'next/link'
 
 export default function CpanelBackupSop() {
@@ -29,7 +28,7 @@ export default function CpanelBackupSop() {
             Free For Charity homepage
           </Link>{' '}
           or the{' '}
-          <Link href="/about-us/" className="text-[#0567B1] underline">
+          <Link href="/about-us" className="text-[#0567B1] underline">
             About Us page
           </Link>
           .
