@@ -5,7 +5,7 @@ import SupportFreeForCharity from '@/components/home/SupportFreeforCharity'
 
 // Mock the child components to simplify testing
 jest.mock('@/components/ui/trainingcard', () => {
-  return function MockTrainingCard({ heading, text }: { heading: string, text: string }) {
+  return function MockTrainingCard({ heading, text }: { heading: string; text: string }) {
     return (
       <div data-testid="mock-training-card">
         <h2>{heading}</h2>
@@ -17,13 +17,21 @@ jest.mock('@/components/ui/trainingcard', () => {
 
 jest.mock('@/components/ui/Bluebtn', () => {
   return function MockBlueBtn({ href }: { href: string }) {
-    return <a data-testid="mock-blue-btn" href={href}>Blue Button</a>
+    return (
+      <a data-testid="mock-blue-btn" href={href}>
+        Blue Button
+      </a>
+    )
   }
 })
 
 jest.mock('@/components/ui/Transparentbtn', () => {
-  return function MockTransparentbtn({ text, href }: { text: string, href: string }) {
-    return <a data-testid="mock-transparent-btn" href={href}>{text}</a>
+  return function MockTransparentbtn({ text, href }: { text: string; href: string }) {
+    return (
+      <a data-testid="mock-transparent-btn" href={href}>
+        {text}
+      </a>
+    )
   }
 })
 
@@ -61,7 +69,9 @@ describe('SupportFreeForCharity', () => {
 
     // Check card 3 content
     expect(screen.getByText('VOLUNTEER AND/OR DONATE')).toBeInTheDocument()
-    expect(screen.getByText(/We are always looking for individuals and business/i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/We are always looking for individuals and business/i)
+    ).toBeInTheDocument()
 
     // Check buttons
     const blueBtns = screen.getAllByTestId('mock-blue-btn')
