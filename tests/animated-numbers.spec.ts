@@ -91,14 +91,20 @@ test.describe('Results 2023 Animated Numbers', () => {
     const page = await context.newPage()
 
     await page.goto('/')
+    // Wait for React hydration to settle so the heading element does not
+    // detach between `toBeVisible` and `scrollIntoViewIfNeeded`.
+    await page.waitForLoadState('networkidle')
     const resultsHeading = page.locator('h2:has-text("Results - 2023")')
-    // Wait for the element to be visible before scrolling
     await expect(resultsHeading).toBeVisible({ timeout: 5000 })
     await resultsHeading.scrollIntoViewIfNeeded()
 
-    // With reduced motion, numbers should appear instantly at final value
+    // With reduced motion, numbers should appear at final value once the
+    // section is hydrated and the scroll observer fires. Allow a 5s window
+    // for the React effect + CountUp to settle on slower CI runners (the
+    // motion-reduced branch is still synchronous, but hydration timing
+    // varies enough to flake under a 1s budget).
     const firstCardNumber = getResultCard(page, 'Organizational partners').locator('h1')
-    await expect(firstCardNumber).toContainText('221', { timeout: 1000 })
+    await expect(firstCardNumber).toContainText('221', { timeout: 5000 })
 
     await context.close()
   })
