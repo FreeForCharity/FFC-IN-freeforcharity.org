@@ -18,11 +18,6 @@ name: 'Deploy to cPanel staging'
 on:
   workflow_dispatch:
     inputs:
-      keyvault_name:
-        description: 'Key Vault name'
-        required: true
-        default: 'kv-ffc-admin-prod-cbm'
-        type: string
       public_url_base:
         description: 'Public base URL for smoke-check. Default https://staging.freeforcharity.org.'
         required: false
@@ -92,13 +87,15 @@ jobs:
       - name: Fetch deploy-staging FTP creds from Key Vault
         shell: pwsh
         env:
-          KV_NAME: ${{ inputs.keyvault_name }}
+          # Hardcoded: this workflow targets exactly one vault. Removing the
+          # workflow_dispatch input narrows attack surface -- nobody can
+          # re-point a dispatch at an unrelated KV name.
+          KV_NAME: kv-ffc-admin-prod-cbm
         run: |
           $ErrorActionPreference = 'Stop'
           . ./.github/scripts/Get-KvSecret.ps1
 
           $vault = $env:KV_NAME.Trim()
-          if ([string]::IsNullOrWhiteSpace($vault)) { throw 'Missing input: keyvault_name' }
 
           $ftpHost = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-host'
           $ftpPort = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-port'
@@ -134,19 +131,32 @@ jobs:
           #   --delete            remove remote files not in local (gated by input)
           #   --parallel=4        4 concurrent transfers (plain FTP is fine with this)
           #   --verbose=1         per-file log; muted to "summary only" with =0 if too noisy
-          #   --exclude-glob .ftpquota  cPanel writes this; do not delete it
-          #   --exclude-glob '.*'       skip any other dotfile cPanel may create
+          # Exclusions mirror prod's deploy-cpanel.yml (minus hub/** which is
+          # WHMCS-only and lives outside this subdomain jail):
+          #   .ftpquota        cPanel writes this; do not delete it
+          #   .well-known      ACME/HTTP-01 challenges -- never clobber
+          #   cgi-bin          cPanel-managed
+          #   .htpasswd        any auth file the server might add later
+          #   error_log        cPanel writes this
+          # NOTE: .htaccess is NOT excluded -- the Next.js out/.htaccess must
+          # deploy or routing breaks (see prod deploy-cpanel.yml step
+          # "Verify build output" which hard-asserts test -f out/.htaccess).
           # Credentials are passed via env var CPANEL_FTP_PASSWORD interpolated
           # into a quoted `set ftp:password` command -- the password never
-          # appears on argv.
-          lftp -d -c "
+          # appears on argv. lftp is run without -d so debug output (which
+          # can leak transformed credentials) is not produced.
+          lftp -c "
             set ftp:ssl-allow no
             set net:max-retries 3
             set net:reconnect-interval-base 5
             set net:timeout 60
             open -p \"$CPANEL_FTP_PORT\" -u \"$CPANEL_FTP_USER\",\"$CPANEL_FTP_PASSWORD\" \"ftp://$CPANEL_FTP_HOST\"
             mirror --reverse $DELETE_FLAG --parallel=4 --verbose=1 \
-              --exclude-glob '.ftpquota' --exclude-glob '.htaccess' \
+              --exclude-glob '.ftpquota' \
+              --exclude-glob '.well-known' \
+              --exclude-glob 'cgi-bin' \
+              --exclude-glob '.htpasswd' \
+              --exclude-glob 'error_log' \
               ./out/ ./
             bye
           " 2>&1 | tail -200
@@ -161,13 +171,21 @@ jobs:
           $url = $env:URL_BASE.TrimEnd('/') + '/'
           Write-Host "GET $url"
 
+          # Bypass Cloudflare's edge cache: staging is orange-clouded, so a
+          # cached old response could mask a failed deploy. Mirrors prod's
+          # `curl -H "Cache-Control: no-cache"` smoke check.
+          $headers = @{
+            'Cache-Control' = 'no-cache'
+            'Pragma'        = 'no-cache'
+          }
+
           $maxAttempts = 4
           $attempt = 0
           $resp = $null
           while ($attempt -lt $maxAttempts) {
             $attempt++
             try {
-              $resp = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 30
+              $resp = Invoke-WebRequest -Uri $url -Headers $headers -UseBasicParsing -TimeoutSec 30
               break
             }
             catch {
