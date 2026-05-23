@@ -60,6 +60,25 @@ https://www.nexcess.net/blog/whmcs-best-practices/**
 https://www.youtube.com/watch?v=example-lastpass-101
 https://www.youtube.com/watch\?v=example-lastpass-101
 https://www.cloudflare.com/learning/**
+
+# Fiverr blocks CI crawlers (returns 403)
+https://www.fiverr.com/**
 https://fiverr.com/**
 http://fiverr.com/**
-https://ffcsites.org/**
+http://www.fiverr.com/**
+
+# GuideStar/Candid returns 403 to bots — visible profile URL still reachable in browser
+https://www.guidestar.org/**
+
+# Microsoft privacy statement 403s on bots; the canonical /en-us/ variant is what users get redirected to
+https://privacy.microsoft.com/privacystatement
+https://privacy.microsoft.com/**
+
+# Third-party knowledge bases / search pages that return non-2xx to crawlers
+https://www.cloudwards.net/**
+https://www.inmotionhosting.com/**
+https://www.siteground.com/**
+https://www.youtube.com/results**
+https://www.microsoft.com/en-us/nonprofits/**
+https://mailchimp.com/**
+https://www.mailchimp.com/**
