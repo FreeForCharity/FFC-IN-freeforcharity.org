@@ -125,15 +125,16 @@ export default function CookieConsent() {
 
     // Dynamically delete all cookies matching _ga_* (e.g., _ga_G-XXXXXXXXXX)
     if (typeof document !== 'undefined') {
-      document.cookie.split(';').forEach((cookie) => {
-        const cookieName = cookie.split('=')[0].trim()
-        if (cookieName.startsWith('_ga_')) {
-          // Delete for current domain
-          document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
-          // Also try to delete with domain specification
-          document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`
-        }
-      })
+      const regex = /(?:^|;\s*)(_ga_[^=;\s]*)/g
+      let match: RegExpExecArray | null
+      const cookieStr = document.cookie
+      while ((match = regex.exec(cookieStr)) !== null) {
+        const cookieName = match[1]
+        // Delete for current domain
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+        // Also try to delete with domain specification
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`
+      }
     }
   }, [])
 
