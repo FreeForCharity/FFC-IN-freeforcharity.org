@@ -79,7 +79,7 @@ const index = () => {
               </>
             }
             buttonText="Available Here"
-            buttonLink="http://fiverr.com/"
+            buttonLink="https://www.fiverr.com/"
             imageSrc="/Images/fiverr.webp" // 👈 image passed as prop
           />
 
