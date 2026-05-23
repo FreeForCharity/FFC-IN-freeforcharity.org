@@ -82,3 +82,6 @@ https://www.youtube.com/results**
 https://www.microsoft.com/en-us/nonprofits/**
 https://mailchimp.com/**
 https://www.mailchimp.com/**
+
+# FFC-owned video CDN serving mission-video.mp4 (origin returns 403 to bots)
+https://ffcsites.org/videos/mission-video.mp4
