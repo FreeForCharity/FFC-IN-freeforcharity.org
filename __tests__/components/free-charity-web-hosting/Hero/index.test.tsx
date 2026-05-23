@@ -3,10 +3,19 @@ import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Hero from '@/components/free-charity-web-hosting/Hero'
 
+interface MockImageProps {
+  src: string
+  alt: string
+  fill?: boolean
+  className?: string
+  priority?: boolean
+}
+
 // Mock the next/image component since it's not supported in JSDOM out of the box
 jest.mock('next/image', () => {
-  return function MockImage({ src, alt, fill, className, priority }: any) {
+  return function MockImage({ src, alt, fill, className, priority }: MockImageProps) {
     return (
+      // eslint-disable-next-line @next/next/no-img-element
       <img src={src} alt={alt} className={className} data-fill={fill} data-priority={priority} />
     )
   }
