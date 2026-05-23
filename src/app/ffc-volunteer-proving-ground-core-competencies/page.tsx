@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Volunteer Proving Ground: Core Competencies',
   description:
     'Mandatory first step for FFC volunteers. Learn foundational tools for security and effective collaboration in nonprofit technology services.',
-  alternates: { canonical: '/ffc-volunteer-proving-ground-core-competencies' },
+  alternates: { canonical: '/ffc-volunteer-proving-ground-core-competencies/' },
 }
 import ContentSection from '@/components/ffc-volunteer-proving-ground-core-competencies/ContentSection'
 import Modulessection from '@/components/ffc-volunteer-proving-ground-core-competencies/Modules-section'

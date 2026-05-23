@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Contact Us',
   description:
     'Get in touch with Free For Charity. We connect students, professionals, and businesses with charities in need of support.',
-  alternates: { canonical: '/contact-us' },
+  alternates: { canonical: '/contact-us/' },
 }
 
 const index = () => {

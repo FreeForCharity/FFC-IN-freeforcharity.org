@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     'Build real-world skills in business and technology through hands-on projects that help nonprofit organizations. Free for Charity offers training in research, business analysis, and web development.',
   alternates: {
-    canonical: '/free-training-programs',
+    canonical: '/free-training-programs/',
   },
 }
 
@@ -135,7 +135,7 @@ const FreeTrainingProgramsPage = () => {
                   </p>
                 </div>
                 <a
-                  href="/volunteer"
+                  href="/volunteer/"
                   className="inline-block mt-6 px-[24px] py-[8px] text-white border border-[#b35000] rounded-[10px] text-[16px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
                   id="montserrat-font"
                 >

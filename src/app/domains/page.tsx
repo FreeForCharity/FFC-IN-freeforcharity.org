@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'Free Domains for Nonprofits',
   description:
     'Free For Charity provides free domain registration, DNS management, and email setup for verified 501(c)(3) nonprofit organizations.',
-  alternates: { canonical: '/domains' },
+  alternates: { canonical: '/domains/' },
 }
 import VerifyYourDomain from '@/components/domains/Verify-Your-Domain'
 import Seperater from '@/components/domains/Seperater'

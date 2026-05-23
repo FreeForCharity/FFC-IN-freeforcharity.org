@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description:
     'Explore free and open source technology tools for nonprofit organizations. Find solutions for web hosting, office automation, CRM, and more.',
   alternates: {
-    canonical: '/charity-and-nonprofit-technology-directory',
+    canonical: '/charity-and-nonprofit-technology-directory/',
   },
 }
 
@@ -115,7 +115,7 @@ const TechDirectoryPage = () => {
             </p>
           </div>
           <a
-            href="/contact-us"
+            href="/contact-us/"
             className="inline-block px-[30px] py-[10px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
             id="montserrat-font"
           >

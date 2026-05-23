@@ -28,7 +28,7 @@ describe('sitemap', () => {
     expect(urls).toContain('https://www.freeforcharity.org/privacy-policy/')
   })
 
-  it('every non-root URL ends with a trailing slash', () => {
+  it('every URL ends with a trailing slash (matches trailingSlash: true export)', () => {
     for (const entry of entries) {
       expect(entry.url).toMatch(/\/$/)
     }

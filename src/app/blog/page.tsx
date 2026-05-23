@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description:
     'News and updates from Free For Charity. Read about our GuideStar transparency seals, nonprofit tools, endorsements, and more.',
   alternates: {
-    canonical: '/blog',
+    canonical: '/blog/',
   },
 }
 

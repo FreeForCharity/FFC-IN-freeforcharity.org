@@ -24,7 +24,7 @@ const SupportFreeForCharity: React.FC = () => {
             </p>
           </div>
           {/* Right – PayPal Donate button */}
-          <Transparentbtn text="Donate With Paypal" href="/donate" />
+          <Transparentbtn text="Donate With Paypal" href="/donate/" />
         </div>
       </section>
 
@@ -45,7 +45,7 @@ const SupportFreeForCharity: React.FC = () => {
               heading="FREE TRAINING PROGRAMS"
               text="Are you looking to gain marketable skills in technology and business services? Are you looking to start building a portfolio showing real world support to small, medium, and large organizations? If so, this is the place for you."
             />
-            <BlueBtn href="/free-training-programs" />
+            <BlueBtn href="/free-training-programs/" />
           </div>
 
           {/* Card 2 */}
@@ -62,7 +62,7 @@ const SupportFreeForCharity: React.FC = () => {
               heading="HELP FOR CHARITIES"
               text="If you are representing a charity or you currently work for a charity and want to improve your own skills start here to get help for your organization. You get instant access to many of our free tools and products right away!"
             />
-            <BlueBtn href="/help-for-charities" />
+            <BlueBtn href="/help-for-charities/" />
           </div>
 
           {/* Card 3 */}
@@ -78,7 +78,7 @@ const SupportFreeForCharity: React.FC = () => {
               heading="VOLUNTEER AND/OR DONATE"
               text="We are always looking for individuals and business to support our training programs. Both donations as well as performing volunteer work for our training programs are critical to the success of Free For Charity and it’s mission."
             />
-            <BlueBtn href="/volunteer" />
+            <BlueBtn href="/volunteer/" />
           </div>
         </div>
       </section>

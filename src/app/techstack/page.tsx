@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Tech Stack',
   description:
     'Understanding the Free For Charity WordPress hosting architecture, including Cloudflare, DirectAdmin, and Microsoft 365 integration layers.',
-  alternates: { canonical: '/techstack' },
+  alternates: { canonical: '/techstack/' },
 }
 
 const index = () => {

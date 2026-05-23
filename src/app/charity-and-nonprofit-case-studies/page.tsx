@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description:
     'Real-world nonprofit case studies to help your organization make informed decisions without wasting time and money on experimentation.',
   alternates: {
-    canonical: '/charity-and-nonprofit-case-studies',
+    canonical: '/charity-and-nonprofit-case-studies/',
   },
 }
 
@@ -129,7 +129,7 @@ const CaseStudiesPage = () => {
             study.
           </p>
           <a
-            href="/contact-us"
+            href="/contact-us/"
             className="inline-block px-[30px] py-[10px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
             id="montserrat-font"
           >

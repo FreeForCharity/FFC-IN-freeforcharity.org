@@ -32,7 +32,10 @@ test.describe('Trailing-slash canonicalization', () => {
     test(`${route} (no slash) canonicalizes to ${route}/`, async ({ page }) => {
       await page.goto(route)
       // Canonical URL has the trailing slash after the static host resolves it.
-      expect(page.url()).toMatch(new RegExp(`${route}/(\\?.*)?$`))
+      // Anchor with the absolute baseURL so a hypothetical /wrong${route}/
+      // can't match an unanchored sub-path.
+      const baseURL = test.info().project.use.baseURL ?? 'http://localhost:4173'
+      expect(page.url()).toMatch(new RegExp(`^${baseURL}${route}/(\\?.*)?$`))
     })
   }
 })
