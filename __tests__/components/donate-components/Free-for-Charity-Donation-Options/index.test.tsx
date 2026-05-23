@@ -16,7 +16,9 @@ jest.mock('@/components/ui/Transparentbtn', () => {
 describe('Free-for-Charity-Donation-Options Component', () => {
   it('renders the main heading', () => {
     render(<FreeForCharityDonationOptions />)
-    expect(screen.getByRole('heading', { name: /Free for Charity Donation Options/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: /Free for Charity Donation Options/i })
+    ).toBeInTheDocument()
   })
 
   it('renders the introductory text paragraphs', () => {
