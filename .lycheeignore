@@ -34,6 +34,11 @@ https://www.youtube.com/embed/**
 https://example.com/**
 https://your-domain.com/**
 
+# Fiverr blocks bots with HTTP 403
+http://fiverr.com/**
+https://fiverr.com/**
+https://www.fiverr.com/**
+
 # Cloudflare dashboard — requires authentication
 https://dash.cloudflare.com/**
 
