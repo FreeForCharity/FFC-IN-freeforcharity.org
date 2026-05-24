@@ -1,13 +1,17 @@
 // Canonical origin for the site. Defaults to production. Override at
 // build time with NEXT_PUBLIC_SITE_ORIGIN so a staging deploy points
 // absolute /hub/ URLs at the staging origin instead of production.
+// Any trailing slash on the env var is stripped so concatenation below
+// produces clean URLs (`origin + '/hub'`, not `origin/ + /hub`).
 //
 // Most internal hrefs should be relative (`/about-us`, not
 // `https://freeforcharity.org/about-us`) — Next.js routes the relative
 // form to whichever origin the page was served from. SITE_ORIGIN is
 // only needed when emitting URLs that must be absolute (Open Graph
 // metadata, canonical tags, JSON-LD, cross-origin links to /hub/).
-export const SITE_ORIGIN = process.env.NEXT_PUBLIC_SITE_ORIGIN || 'https://freeforcharity.org'
+export const SITE_ORIGIN = (
+  process.env.NEXT_PUBLIC_SITE_ORIGIN || 'https://freeforcharity.org'
+).replace(/\/+$/, '')
 
 // WHMCS lives at /hub/ on the same origin (deployed as a sibling
 // directory of the Next.js export inside cPanel). Cross-origin links
@@ -33,9 +37,14 @@ export function hubUrl(path: string = '/'): string {
 /**
  * WHMCS product-configurator URL for a hosted product ID.
  *   hubCart(3) → https://freeforcharity.org/hub/cart.php?a=confproduct&i=3
+ *
+ * Accepts string for forward-compat with WHMCS product slugs that
+ * might be non-numeric; string values are URL-encoded so any stray
+ * special characters can't break the URL.
  */
 export function hubCart(productId: number | string): string {
-  return `${HUB_BASE}/cart.php?a=confproduct&i=${productId}`
+  const encoded = typeof productId === 'number' ? productId : encodeURIComponent(productId)
+  return `${HUB_BASE}/cart.php?a=confproduct&i=${encoded}`
 }
 
 /**
