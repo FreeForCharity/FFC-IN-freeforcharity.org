@@ -1,0 +1,63 @@
+{
+  "finalDisplayedUrl": "https://freeforcharity.org/help-for-charities/",
+  "fetchTime": "2026-05-24T17:04:29.531Z",
+  "lighthouseVersion": "13.3.0",
+  "configSettings": {
+    "formFactor": "mobile"
+  },
+  "categories": {
+    "performance": {
+      "score": 0.71,
+      "title": "Performance"
+    },
+    "accessibility": {
+      "score": 0.63,
+      "title": "Accessibility"
+    },
+    "best-practices": {
+      "score": 0.73,
+      "title": "Best Practices"
+    },
+    "seo": {
+      "score": 0.85,
+      "title": "SEO"
+    }
+  },
+  "audits": {
+    "largest-contentful-paint": {
+      "numericValue": 2723.4539999999997,
+      "displayValue": "2.7\u00a0s",
+      "score": 0.85
+    },
+    "cumulative-layout-shift": {
+      "numericValue": 0.06671635378428262,
+      "displayValue": "0.067",
+      "score": 0.97
+    },
+    "total-blocking-time": {
+      "numericValue": 708.9070000000015,
+      "displayValue": "710\u00a0ms",
+      "score": 0.42
+    },
+    "first-contentful-paint": {
+      "numericValue": 1952.7240000000002,
+      "displayValue": "2.0\u00a0s",
+      "score": 0.85
+    },
+    "speed-index": {
+      "numericValue": 6194.260479418703,
+      "displayValue": "6.2\u00a0s",
+      "score": 0.43
+    },
+    "interactive": {
+      "numericValue": 8831.148899999998,
+      "displayValue": "8.8\u00a0s",
+      "score": 0.35
+    },
+    "server-response-time": {
+      "numericValue": 2643,
+      "displayValue": "Root document took 2,640\u00a0ms",
+      "score": 0
+    }
+  }
+}
