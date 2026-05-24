@@ -23,6 +23,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: deploy-cpanel
@@ -36,6 +37,53 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+
+      # Safety gate: refuse to deploy if the CI workflow (lint, jest,
+      # build, Playwright) on this exact commit isn't green. The deploy
+      # workflow itself doesn't re-run the test suite, so without this
+      # check an operator could ship a known-broken build.
+      - name: Verify CI is green for this ref
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          REF: ${{ github.sha }}
+        run: |
+          set -e
+          rows=$(gh run list \
+            --workflow="CI - Build and Test" \
+            --commit="$REF" \
+            --limit 5 \
+            --json status,conclusion,databaseId,createdAt)
+          row_count=$(echo "$rows" | jq 'length')
+          if [ "$row_count" = "0" ]; then
+            echo "::error::No CI workflow run found for commit $REF."
+            echo "::error::This usually means:"
+            echo "::error::  - the commit was force-pushed after CI started (history rewritten)"
+            echo "::error::  - the CI workflow file was disabled or renamed since this commit"
+            echo "::error::  - the run was manually deleted"
+            echo "::error::Re-trigger CI on this ref before deploying:"
+            echo "::error::    gh workflow run 'CI - Build and Test' --ref $REF"
+            exit 1
+          fi
+          # Pick the most recent run that actually decided an outcome —
+          # skip cancelled/skipped runs (operator cancel, concurrency
+          # group cancel, never-started skip) and fall through to an
+          # earlier run that ran the full suite. Without this, a manual
+          # cancel on the latest run would hide a previous green run and
+          # block the deploy.
+          status=$(echo "$rows" | jq '[.[] | select(.conclusion != "cancelled" and .conclusion != "skipped")][0] // .[0]')
+          conclusion=$(echo "$status" | jq -r '.conclusion // "missing"')
+          state=$(echo "$status" | jq -r '.status // "missing"')
+          run_id=$(echo "$status" | jq -r '.databaseId // "?"')
+          echo "CI workflow on $REF: state=$state conclusion=$conclusion run_id=$run_id"
+          if [ "$state" != "completed" ]; then
+            echo "::error::CI workflow on $REF is still $state (run $run_id). Wait for CI to complete before deploying."
+            exit 1
+          fi
+          if [ "$conclusion" != "success" ]; then
+            echo "::error::CI workflow on $REF concluded with '$conclusion' (run $run_id) — refuse to deploy."
+            exit 1
+          fi
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -91,14 +139,25 @@ jobs:
             error_log
             .well-known/**
 
-      - name: Post-deploy smoke check
+      - name: Post-deploy smoke check (home reachable)
         env:
           DEPLOY_URL: https://freeforcharity.org/
         run: |
-          # Cloudflare proxy caches aggressively; bust with a header
+          # Quick reachability before the full smoke suite — bust Cloudflare
+          # cache so we observe the freshly-deployed origin.
           curl --fail --show-error --silent --location \
             --max-time 20 \
             -H "Cache-Control: no-cache" \
             -o /dev/null \
-            -w "Smoke: %{http_code} on %{url_effective} in %{time_total}s\n" \
+            -w "Home: %{http_code} on %{url_effective} in %{time_total}s\n" \
             "$DEPLOY_URL"
+
+      # Full smoke suite: every sitemap URL returns 200, every WP→Next
+      # 301 from docs/cutover-redirects.csv fires to the right target,
+      # /hub/ serves a WHMCS-marker body (not a stale index.html), an
+      # unknown URL returns 404, and key assets (sitemap.xml, robots.txt,
+      # favicon) are reachable. Fails the deploy job on any non-OK.
+      - name: Full smoke suite
+        env:
+          BASE_URL: https://freeforcharity.org
+        run: npm run smoke-test

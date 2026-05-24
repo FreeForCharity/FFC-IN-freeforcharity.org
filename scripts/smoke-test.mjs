@@ -36,7 +36,7 @@ function record(name, ok, detail) {
   process.stdout.write(`${ok ? PASS : FAIL} ${name}${detail ? ` — ${detail}` : ''}\n`)
 }
 
-async function request(path, { followRedirects = true } = {}) {
+async function request(path, { followRedirects = true, readBody = false } = {}) {
   const url = path.startsWith('http') ? path : `${BASE_URL}${path}`
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
@@ -45,9 +45,26 @@ async function request(path, { followRedirects = true } = {}) {
       method: 'GET',
       redirect: followRedirects ? 'follow' : 'manual',
       signal: controller.signal,
-      headers: { 'User-Agent': 'ffc-smoke-test/1.0' },
+      headers: {
+        'User-Agent': 'ffc-smoke-test/1.0',
+        // Bust the Cloudflare edge cache so a freshly-deployed origin
+        // is observed instead of a stale cached version. Without this,
+        // a smoke run immediately after deploy can pass against the
+        // pre-deploy HTML and report green on a regression.
+        'Cache-Control': 'no-cache',
+        Pragma: 'no-cache',
+      },
     })
-    return { status: res.status, location: res.headers.get('location'), url: res.url }
+    let body
+    if (readBody) {
+      body = await res.text()
+    } else {
+      // Eagerly discard the response stream — without this Node's fetch
+      // keeps the body buffer around until GC, which adds up across
+      // ~50 sitemap+redirect checks per run.
+      await res.body?.cancel?.()
+    }
+    return { status: res.status, location: res.headers.get('location'), url: res.url, body }
   } catch (err) {
     return { status: 0, error: err.message }
   } finally {
@@ -66,6 +83,20 @@ async function checkRedirect(name, path, expectedStatus, expectedLocationSuffix)
   const locOk = r.location && r.location.endsWith(expectedLocationSuffix)
   const ok = r.status === expectedStatus && locOk
   record(name, ok, `${path} → ${r.status} ${r.location || '(no Location)'}`)
+}
+
+async function checkBodyContains(name, path, expectedSubstrings) {
+  const r = await request(path, { readBody: true })
+  const subs = Array.isArray(expectedSubstrings) ? expectedSubstrings : [expectedSubstrings]
+  const matched = r.body ? subs.find((s) => r.body.toLowerCase().includes(s.toLowerCase())) : null
+  const ok = r.status >= 200 && r.status < 300 && Boolean(matched)
+  // Surface the underlying fetch failure (timeout / DNS / TLS) when the
+  // request didn't reach a response, instead of the misleading
+  // "no marker found" message.
+  const detail = r.error
+    ? `${path} → ${r.status} (${r.error})`
+    : `${path} → ${r.status}${matched ? ` (body matches "${matched}")` : ' (no marker found)'}`
+  record(name, ok, detail)
 }
 
 function loadSitemapPaths() {
@@ -138,7 +169,14 @@ async function main() {
   }
 
   console.log(`\n-- defense-in-depth`)
-  await checkStatus(`/hub/ reachable (WHMCS hand-off)`, '/hub/', 200)
+  // WHMCS at /hub/ — assert response includes a WHMCS-specific marker so
+  // a stale index.html or directory listing doesn't pass as a healthy hub.
+  await checkBodyContains(`/hub/ serves WHMCS (not a placeholder)`, '/hub/', [
+    'whmcs',
+    'WHMCompleteSolution',
+    'cart.php',
+    'clientarea',
+  ])
   await checkStatus(`unknown URL returns 404`, '/this-page-does-not-exist-xyz/', 404)
   await checkStatus(`favicon`, '/favicon.ico', 200)
   await checkStatus(`sitemap.xml`, '/sitemap.xml', 200)
