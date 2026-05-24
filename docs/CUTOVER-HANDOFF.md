@@ -3,6 +3,11 @@
 The pre-cutover engineering work is complete. This document describes
 what is done and the operator steps that remain.
 
+> **Cutover day?** Follow [CUTOVER-RUNBOOK.md](CUTOVER-RUNBOOK.md) — a
+> single chronological checklist that links back here for the details.
+> This doc is the "why / what's done" reference; the runbook is the
+> "do this, then this" sequence.
+
 > **Target host:** InterServer cPanel (the same VPS that already runs
 > WHMCS at `/hub/`). DNS does **not** change for cutover. We swap the
 > document root for the apex from the WordPress install to the Next.js
