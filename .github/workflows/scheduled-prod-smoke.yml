@@ -1,0 +1,100 @@
+name: Scheduled production smoke
+
+# Run the post-deploy smoke suite against live production once a day.
+# Catches regressions introduced by changes we don't control:
+#   - Cloudflare config drift (caching, redirect rules, security shield)
+#   - cPanel/Apache state (DocRoot moved, .htaccess deleted, /hub/ broken)
+#   - Third-party widgets (Zeffy iframe down, PayPal hosted button retired,
+#     GTM container deleted, Tawk endpoint flaky)
+# Anything the deploy-cpanel post-deploy smoke step would catch immediately
+# after a deploy, this catches if it regresses days or weeks later without
+# a new deploy to surface it.
+#
+# Cost: ~30 seconds per run, no build step (smoke script fetches the live
+# sitemap when no local one is present). Daily cadence keeps GHA usage
+# negligible.
+
+on:
+  schedule:
+    # 13:00 UTC daily = ~6am Pacific, ~9am Eastern — early enough that an
+    # operator can react during business hours if it fails.
+    - cron: '0 13 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  smoke:
+    name: Smoke-test production
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Run smoke suite against production
+        id: smoke
+        env:
+          BASE_URL: https://freeforcharity.org
+        run: node scripts/smoke-test.mjs
+
+      - name: Open issue on failure (scheduled runs only)
+        if: failure() && github.event_name == 'schedule'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+            // Reuse an existing open production-health issue if one is still open —
+            // avoids spamming the tracker on a multi-day outage.
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'production-health',
+              state: 'open',
+            })
+            const date = new Date().toISOString().slice(0, 10)
+            if (existing.data.length > 0) {
+              const issue = existing.data[0]
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `Smoke also failed on ${date}: ${runUrl}`,
+              })
+              console.log(`Appended to open issue #${issue.number}`)
+              return
+            }
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 Production smoke failed — ${date}`,
+              body: [
+                '## Production smoke-test failed',
+                '',
+                `**Workflow run:** ${runUrl}`,
+                '',
+                'The scheduled production smoke run failed. This usually means one of:',
+                '',
+                '- Cloudflare config drift (caching, redirect rules, security shield)',
+                '- cPanel/Apache state changed unexpectedly (`.htaccess`, `/hub/`, docroot)',
+                '- A third-party widget regressed (Zeffy/PayPal/GTM/Tawk endpoint)',
+                '- A real broken URL in the sitemap',
+                '',
+                '## Next steps',
+                '',
+                '1. Open the workflow run above and read the smoke-test output',
+                '2. Reproduce locally if needed: `BASE_URL=https://freeforcharity.org npm run smoke-test`',
+                '3. Fix the underlying issue (most likely operator-side: Cloudflare / cPanel dashboard)',
+                '4. Re-run the workflow to confirm green; the issue auto-closes if you keep this label and resolve it',
+                '',
+                '_This issue was created automatically by `.github/workflows/scheduled-prod-smoke.yml`._',
+              ].join('\n'),
+              labels: ['production-health', 'incident'],
+            })
+            console.log('Created production-health issue')
