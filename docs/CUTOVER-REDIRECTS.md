@@ -117,11 +117,15 @@ After cutover, smoke-test 5 sample URLs in an incognito browser:
 
 ---
 
-## Optional Cloudflare Bulk Redirects (skip unless needed)
+## Cloudflare Bulk Redirects (do NOT enable by default — see top of file)
 
-Only do this if you want redirects to fire at Cloudflare's edge instead
-of reaching the InterServer origin. It's redundant with `.htaccess` and
-adds a second place to keep in sync — most teams skip it.
+The intro section at the top of this document is the authoritative
+guidance: **skip this by default**. The CSV is shipped as a backup,
+not as something to flip on alongside `.htaccess`. The steps below
+exist so that, if the day comes when `.htaccess` is removed (e.g.
+migrating off cPanel) or you need edge-side preemption for a 301
+storm, you have a documented path to enable the rule without
+guessing. Until then, don't.
 
 1. Sign in to [dash.cloudflare.com](https://dash.cloudflare.com) →
    account level (not zone) → **Bulk Redirects**.
