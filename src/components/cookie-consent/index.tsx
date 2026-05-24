@@ -2,20 +2,13 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-
-// Tracking IDs come from build-time env vars. No placeholder fallbacks:
-// a missing var must mean "don't load the script" — never "load with a
-// fake/dev ID" — so we don't risk shipping bogus or accidentally-real
-// hardcoded keys to production.
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || ''
-const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || ''
-const GTM_CONTAINER_ID = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID || ''
-// Tawk.to live-chat widget. Property + widget IDs in the form
-// "65bf15eb0ff6374032c915d9/1hlp6r8hc" — same format the dashboard
-// shows. Loads as a functional cookie (visitor-support tooling),
-// not an analytics one, so it's not behind the analytics consent gate.
-const TAWK_TO_PROPERTY = process.env.NEXT_PUBLIC_TAWK_TO_PROPERTY || ''
+import {
+  GA_MEASUREMENT_ID,
+  META_PIXEL_ID,
+  CLARITY_PROJECT_ID,
+  GTM_CONTAINER_ID,
+  TAWK_TO_PROPERTY,
+} from '@/lib/analytics-config'
 
 // Define type for GTM dataLayer events
 interface DataLayerEvent {
