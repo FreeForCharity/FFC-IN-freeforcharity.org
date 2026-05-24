@@ -378,7 +378,11 @@ export default function CookieConsent() {
             </h2>
             <p className="text-gray-600 mb-6">
               We use cookies to enhance your browsing experience and analyze our traffic. You can
-              choose which types of cookies you allow.
+              choose which types of cookies you allow. For full details, see our{' '}
+              <Link href="/cookie-policy" className="text-blue-600 hover:underline">
+                Cookie Policy
+              </Link>
+              .
             </p>
 
             {/* Necessary Cookies */}
