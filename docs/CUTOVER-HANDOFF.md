@@ -89,10 +89,20 @@ because it lives in a sibling directory.
    ```
 3. **WHMCS database export** ([#149](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/149)) — cPanel → phpMyAdmin → select the WHMCS database → Export → SQL → download.
 4. **Add GitHub repo secrets** ([#150](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/150)) for the cPanel deploy workflow:
+
+   **Required (deploy fails without these):**
    - `FTP_SERVER` — your cPanel FTP hostname (often `freeforcharity.org` or `ftp.freeforcharity.org`)
    - `FTP_USERNAME` — cPanel username
    - `FTP_PASSWORD` — cPanel FTP password (cPanel → FTP Accounts)
-5. **(Optional) lower DNS TTL** to 300s ([#136](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/136)). Not strictly required because DNS isn't changing, but useful if you want to keep the rollback window short.
+
+   **Optional (analytics is silently disabled without these — see [`.env.example`](../.env.example) for full inventory):**
+   - `NEXT_PUBLIC_GA_MEASUREMENT_ID` — GA4 Measurement ID (`G-XXXXXXXXXX`)
+   - `NEXT_PUBLIC_CLARITY_PROJECT_ID` — Microsoft Clarity Project ID
+   - `NEXT_PUBLIC_META_PIXEL_ID` — Meta Pixel ID (if running Meta ads)
+
+   The deploy workflow needs to inject the optional `NEXT_PUBLIC_*` vars into the build step (`env:` block on the `npm run build` step) — they're read at build time, not runtime, because the export is static.
+
+5. **(Optional) lower DNS TTL** to 300s ([#136](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/136)). Not strictly required because DNS isn't changing, but useful if you want to keep the rollback window short. **Restore after T+48h** — see Post-flip step 3 below.
 
 ### First deploy (creates `public_html_next/`)
 
@@ -129,7 +139,8 @@ because it lives in a sibling directory.
 
 1. **First 30 min** ([#141](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/141)) — keep an eye on Apache error logs, Cloudflare 5xx rate, WHMCS at `/hub/`. Per [`docs/STAGING-CHECKLIST.md`](STAGING-CHECKLIST.md) §8.
 2. **48-hour soak** ([#142](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/142)) — let organic traffic + an off-hours billing cycle hit the new stack before declaring it stable.
-3. **14-day decommission** ([#144](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/144)) — archive WordPress files, drop WP database, restore DNS TTL.
+3. **At T+48h: restore DNS TTL** (if you lowered it pre-flight in step 5). Cloudflare → DNS → set the apex record TTL back to **Auto** (or **3600s** if explicit). Owner: same operator who lowered the TTL. Skipping this leaves subsequent deploys eating an extra propagation cycle.
+4. **14-day decommission** ([#144](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/144)) — archive WordPress files, drop WP database. Confirms there have been no rollback-triggering incidents during the soak window.
 
 ### If anything breaks
 
