@@ -266,16 +266,19 @@ const index = () => {
             FFC GuideStar Seal Code (This isn’t needed for the onboarding form, but will be needed
             later):
           </p>
-          <p
-            className="text-center text-[#0567B1] pb-[1em]"
-            // GuideStar widget intentionally external — dynamic badge must load from their servers
-            dangerouslySetInnerHTML={{
-              __html:
-                '<a href="https://www.guidestar.org/profile/shared/bbbe173a-87b9-4af9-a8a2-cae255a95742" target="_blank" rel="noopener noreferrer">' +
-                '<img src="https://widgets.guidestar.org/TransparencySeal/9326392" alt="GuideStar Transparency Seal" />' +
-                '</a>',
-            }}
-          />
+          <p className="text-center text-[#0567B1] pb-[1em]">
+            {/* GuideStar widget intentionally external — dynamic badge must load from their servers */}
+            <a
+              href="https://www.guidestar.org/profile/shared/bbbe173a-87b9-4af9-a8a2-cae255a95742"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="https://widgets.guidestar.org/TransparencySeal/9326392"
+                alt="GuideStar Transparency Seal"
+              />
+            </a>
+          </p>
           <p className="font-[500] text-[#666] pb-[1em]">
             Please keep your GuideStar profile handy while filling out the FFC onboarding form. A
             significant portion of the information we require can be copied over from what you

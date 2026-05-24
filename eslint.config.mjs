@@ -28,7 +28,7 @@ const eslintConfig = [
       'next-env.d.ts',
       'test-results/**',
       'playwright-report/**',
-      '.claude/**',
+      '.claude/worktrees/**',
     ],
   },
   {

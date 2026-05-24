@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FiMenu, FiChevronDown } from 'react-icons/fi'
@@ -21,6 +21,99 @@ interface MenuItem {
   dropdownItems?: DropdownItem[]
 }
 
+const menuItems: MenuItem[] = [
+  { label: 'Home', path: '/', hasDropdown: false },
+  {
+    label: 'Help for Charities',
+    path: '/help-for-charities',
+    hasDropdown: true,
+    dropdownItems: [
+      { label: 'Help for Charities', path: '/help-for-charities' },
+      { label: '501c3 Onboarding Guide', path: '/501c3' },
+      { label: 'Pre501c3 Onboarding Guide', path: '/pre501c3' },
+      {
+        label: 'Online Impacts Onboarding Guide',
+        path: '/online-impacts-onboarding-guide',
+      },
+      { label: 'GuideStar Profile Setup Guide', path: '/guidestar-guide' },
+      {
+        label: 'Understanding Your Free For Charity WordPress Website Hosting: A Layered Approach',
+        path: '/techstack',
+      },
+      {
+        label:
+          'Charity Validation Guide – Ensuring Mutual Benefit Through Comprehensive Validation Processes',
+        path: '/charity-validation-guide-ensuring-mutual-benefit-through-comprehensive-validation-processes',
+      },
+    ],
+  },
+  {
+    label: 'Volunteer',
+    path: '/volunteer',
+    hasDropdown: true,
+    dropdownItems: [
+      { label: 'Volunteer', path: '/volunteer' },
+      {
+        label: 'FFC Volunteer Proving Ground: Core Competencies',
+        path: '/ffc-volunteer-proving-ground-core-competencies',
+      },
+      {
+        label: 'Free For Charity (FFC) Web Developer Training Guide',
+        path: '/free-for-charity-ffc-web-developer-training-guide',
+      },
+    ],
+  },
+  {
+    label: 'Donate',
+    path: '/donate',
+    hasDropdown: true,
+    dropdownItems: [
+      { label: 'Donate', path: '/donate' },
+      {
+        label: 'Free For Charity Endowment Fund',
+        path: '/free-for-charity-endowment-fund',
+      },
+    ],
+  },
+  {
+    label: 'About Us',
+    path: '/about-us',
+    hasDropdown: true,
+    dropdownItems: [{ label: 'Contact Us', path: '/contact-us' }],
+  },
+  {
+    label: 'Other',
+    path: '#',
+    hasDropdown: true,
+    dropdownItems: [
+      { label: 'Free For Charity Domains', path: '/domains' },
+      {
+        label: 'Free for Charity’s Tools for Success',
+        path: '/free-for-charitys-tools-for-success',
+      },
+      {
+        label: 'Free Charity Web Hosting',
+        path: '/free-charity-web-hosting',
+      },
+    ],
+  },
+  {
+    label: 'FFCAdmin',
+    path: '/ffcadmin',
+    hasDropdown: true,
+    dropdownItems: [
+      {
+        label: 'Free For Charity (FFC) Service Delivery Stages',
+        path: '/free-for-charity-ffc-service-delivery-stages',
+      },
+      {
+        label: 'FFC Admin cPanel Backup',
+        path: '/ffcadmin-free-for-charity-cpanel-backup-sop',
+      },
+    ],
+  },
+]
+
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -34,99 +127,12 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const menuItems: MenuItem[] = [
-    { label: 'Home', path: '/', hasDropdown: false },
-    {
-      label: 'Help for Charities',
-      path: '/help-for-charities',
-      hasDropdown: true,
-      dropdownItems: [
-        { label: 'Help for Charities', path: '/help-for-charities' },
-        { label: '501c3 Onboarding Guide', path: '/501c3' },
-        { label: 'Pre501c3 Onboarding Guide', path: '/pre501c3' },
-        {
-          label: 'Online Impacts Onboarding Guide',
-          path: '/online-impacts-onboarding-guide',
-        },
-        { label: 'GuideStar Profile Setup Guide', path: '/guidestar-guide' },
-        {
-          label:
-            'Understanding Your Free For Charity WordPress Website Hosting: A Layered Approach',
-          path: '/techstack',
-        },
-        {
-          label:
-            'Charity Validation Guide – Ensuring Mutual Benefit Through Comprehensive Validation Processes',
-          path: '/charity-validation-guide-ensuring-mutual-benefit-through-comprehensive-validation-processes',
-        },
-      ],
-    },
-    {
-      label: 'Volunteer',
-      path: '/volunteer',
-      hasDropdown: true,
-      dropdownItems: [
-        { label: 'Volunteer', path: '/volunteer' },
-        {
-          label: 'FFC Volunteer Proving Ground: Core Competencies',
-          path: '/ffc-volunteer-proving-ground-core-competencies',
-        },
-        {
-          label: 'Free For Charity (FFC) Web Developer Training Guide',
-          path: '/free-for-charity-ffc-web-developer-training-guide',
-        },
-      ],
-    },
-    {
-      label: 'Donate',
-      path: '/donate',
-      hasDropdown: true,
-      dropdownItems: [
-        { label: 'Donate', path: '/donate' },
-        {
-          label: 'Free For Charity Endowment Fund',
-          path: '/free-for-charity-endowment-fund',
-        },
-      ],
-    },
-    {
-      label: 'About Us',
-      path: '/about-us',
-      hasDropdown: true,
-      dropdownItems: [{ label: 'Contact Us', path: '/contact-us' }],
-    },
-    {
-      label: 'Other',
-      path: '#',
-      hasDropdown: true,
-      dropdownItems: [
-        { label: 'Free For Charity Domains', path: '/domains' },
-        {
-          label: 'Free for Charity’s Tools for Success',
-          path: '/free-for-charitys-tools-for-success',
-        },
-        {
-          label: 'Free Charity Web Hosting',
-          path: '/free-charity-web-hosting',
-        },
-      ],
-    },
-    {
-      label: 'FFCAdmin',
-      path: '/ffcadmin',
-      hasDropdown: true,
-      dropdownItems: [
-        {
-          label: 'Free For Charity (FFC) Service Delivery Stages',
-          path: '/free-for-charity-ffc-service-delivery-stages',
-        },
-        {
-          label: 'FFC Admin cPanel Backup',
-          path: '/ffcadmin-free-for-charity-cpanel-backup-sop',
-        },
-      ],
-    },
-  ]
+  const memoizedMenuItems = useMemo(() => {
+    return menuItems.map((item) => ({
+      ...item,
+      isActive: pathname === item.path || item.dropdownItems?.some((d) => d.path === pathname),
+    }))
+  }, [pathname])
 
   const handleSearchToggle = () => setIsSearchOpen(!isSearchOpen)
   const handleLinkClick = () => {
@@ -163,10 +169,7 @@ const Header: React.FC = () => {
                 {/* Desktop Menu */}
                 <nav className="hidden lg:block transition-all duration-300">
                   <ul className="flex items-center space-x-[1px] font-navbar font-[600]">
-                    {menuItems.map((item, index) => {
-                      const isActive =
-                        pathname === item.path ||
-                        item.dropdownItems?.some((d) => d.path === pathname)
+                    {memoizedMenuItems.map((item, index) => {
                       const isOpen = activeDropdown === index
 
                       return (
@@ -180,7 +183,7 @@ const Header: React.FC = () => {
                             href={item.path}
                             onClick={handleLinkClick}
                             className={`flex items-center px-3 py-2 text-[14px] transition-colors duration-200 ${
-                              isActive ? 'text-blue-600' : 'text-gray-600 hover:text-gray-500'
+                              item.isActive ? 'text-blue-600' : 'text-gray-600 hover:text-gray-500'
                             }`}
                           >
                             {item.label}
@@ -285,16 +288,16 @@ const Header: React.FC = () => {
               className={`max-w-[700px] mx-auto px-6 p-[5%] bg-white border-t-[3px] border-[#0567B1] shadow-[0_2px_5px_rgba(0,0,0,0.1)] h-[80vh] overflow-auto`}
             >
               <ul className="space-y-2">
-                {menuItems.map((item, index) => {
-                  const isActive =
-                    pathname === item.path || item.dropdownItems?.some((d) => d.path === pathname)
+                {memoizedMenuItems.map((item, index) => {
                   return (
                     <li key={index}>
                       <Link
                         href={item.path}
                         onClick={handleLinkClick}
                         className={`block px-4 py-2 rounded-lg text-sm font-[600] ${
-                          isActive ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-100'
+                          item.isActive
+                            ? 'bg-blue-50 text-blue-600'
+                            : 'text-gray-700 hover:bg-gray-100'
                         }`}
                       >
                         {item.label}
