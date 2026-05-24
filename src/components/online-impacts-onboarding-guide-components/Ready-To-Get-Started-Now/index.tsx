@@ -1,6 +1,7 @@
 import React from 'react'
 import TransparentBtn from '@/components/ui/Transparentbtn'
 import AccordionItem from '@/components/ui/Accordian'
+import { hubCart } from '@/lib/config'
 // import { Link } from "lucide-react";
 
 const index = () => {
@@ -13,7 +14,7 @@ const index = () => {
           </h1>
           <TransparentBtn
             text="Online Impacts to Free For Charity Onboarding Form"
-            href="https://freeforcharity.org/hub/cart.php?a=confproduct&i=3"
+            href={hubCart(3)}
           />
         </div>
 

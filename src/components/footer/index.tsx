@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react'
+import { hubUrl } from '@/lib/config'
 
 import { FaFacebookF, FaLinkedinIn, FaGithub } from 'react-icons/fa'
 import { FaXTwitter } from 'react-icons/fa6'
@@ -89,7 +90,7 @@ const Footer: React.FC = () => {
               },
               {
                 name: 'Supported Charity Login',
-                href: 'https://freeforcharity.org/hub/',
+                href: hubUrl(),
               },
             ].map((link) => {
               const isExternal = link.href.startsWith('http')
@@ -251,7 +252,7 @@ const Footer: React.FC = () => {
           © {currentYear} All Rights Are Reserved by Free For Charity a US 501c3 Non Profit | A
           project of{' '}
           <Link
-            href="https://freeforcharity.org"
+            href="/"
             className="underline text-[#5BA3D9] hover:text-[#5BA3D9] transition-colors"
           >
             https://freeforcharity.org

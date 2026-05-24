@@ -3,6 +3,7 @@ import Image from 'next/image'
 import DomainCard from '@/components/ui/Domain-Card'
 import { IoCall } from 'react-icons/io5'
 import { IoMdMail } from 'react-icons/io'
+import { hubUrl } from '@/lib/config'
 import { assetPath } from '@/lib/assetPath'
 
 const index = () => {
@@ -109,7 +110,7 @@ const index = () => {
                 created at checkout.
               </p>
               <a
-                href="https://freeforcharity.org/hub/"
+                href={hubUrl()}
                 id="raleway-font"
                 className="italic text-[23px] font-[500] leading-[46px] break-all"
               >

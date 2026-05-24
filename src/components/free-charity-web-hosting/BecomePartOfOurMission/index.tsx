@@ -1,5 +1,6 @@
 import React from 'react'
 import BecomePartOfOurMissionCard from '@/components/ui/BecomePartOfOurMissionCard'
+import { hubStore } from '@/lib/config'
 
 const index = () => {
   return (
@@ -19,7 +20,7 @@ const index = () => {
           description1="INDIVIDUALS OR BUSINESSES LOOKING"
           description2="FOR A DOMAIN NAME PACKAGE"
           buttonText="Get Started"
-          buttonLink="https://freeforcharity.org/hub/store/free-for-charity-individual-supporter-package"
+          buttonLink={hubStore('free-for-charity-individual-supporter-package')}
         />
 
         <BecomePartOfOurMissionCard

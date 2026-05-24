@@ -159,6 +159,10 @@ test.describe('Footer - Copyright', () => {
     const currentYear = new Date().getFullYear().toString()
 
     await expect(footer.getByText(new RegExp(`© ${currentYear}`))).toBeVisible()
-    await expect(footer.locator('a[href="https://freeforcharity.org"]')).toBeVisible()
+    // Copyright link uses a relative href ("/") and renders the canonical
+    // origin as visible text. Match on the display text rather than the
+    // href attribute so the test survives staging deploys that ship from
+    // a non-production origin.
+    await expect(footer.getByRole('link', { name: 'https://freeforcharity.org' })).toBeVisible()
   })
 })

@@ -68,12 +68,12 @@ describe('OutBlogs Component', () => {
     expect(links).toHaveLength(3)
     expect(links[0]).toHaveAttribute(
       'href',
-      'https://freeforcharity.org/we-just-updated-for-the-2022-guidestar-platinum-seal/'
+      '/we-just-updated-for-the-2022-guidestar-platinum-seal/'
     )
     expect(links[1]).toHaveAttribute(
       'href',
-      'https://freeforcharity.org/our-organization-earned-a-2021-platinum-seal-of-transparency/'
+      '/our-organization-earned-a-2021-platinum-seal-of-transparency/'
     )
-    expect(links[2]).toHaveAttribute('href', 'https://freeforcharity.org/what-is-the-cost/')
+    expect(links[2]).toHaveAttribute('href', '/what-is-the-cost/')
   })
 })
