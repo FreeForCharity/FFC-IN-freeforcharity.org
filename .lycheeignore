@@ -37,6 +37,16 @@ https://your-domain.com/**
 # Cloudflare dashboard — requires authentication
 https://dash.cloudflare.com/**
 
+# Chronic external-host timeouts. Even with the bumped lychee retries
+# in .github/workflows/lychee.yml (--max-retries 5 --timeout 60), these
+# hosts respond too slowly from GitHub Actions runners and fail CI on
+# clean PRs that didn't touch them. Both are real, healthy URLs — they
+# just don't tolerate CI's network path. Pinned here to stop the flake.
+http://theleanstartup.com/
+http://theleanstartup.com/**
+https://sdgs.un.org/goals
+https://sdgs.un.org/goals/**
+
 # Internal GitHub Actions badge URLs — always valid when the workflow exists
 https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/**
 
