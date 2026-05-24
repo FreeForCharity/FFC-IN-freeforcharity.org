@@ -99,6 +99,14 @@ jobs:
         env:
           # Apex domain, no subpath
           NEXT_PUBLIC_BASE_PATH: ''
+          # Analytics IDs are read at build time by cookie-consent.tsx —
+          # baking them into the static export. If a secret is unset the
+          # corresponding script never fires (no placeholder fallbacks),
+          # which is the desired behaviour. See .env.example for full
+          # documentation of these vars.
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
+          NEXT_PUBLIC_CLARITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_CLARITY_PROJECT_ID }}
+          NEXT_PUBLIC_META_PIXEL_ID: ${{ secrets.NEXT_PUBLIC_META_PIXEL_ID }}
 
       - name: Verify build output
         run: |

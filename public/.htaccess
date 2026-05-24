@@ -170,4 +170,34 @@ ErrorDocument 404 /404.html
   # rather than "same-origin" so /hub/ (WHMCS on the same registrable
   # domain) can still embed assets if needed.
   Header always set Cross-Origin-Resource-Policy "same-site"
+
+  # Tell browsers to upgrade to HTTPS for the next year, including
+  # subdomains, and that we accept inclusion in the HSTS preload list.
+  # Cloudflare sets this at the edge, but if a request ever reaches
+  # the origin directly (proxy disabled, ops debug, internal probe)
+  # the origin needs to set it too so browsers remember the policy.
+  # Note: STS doesn't enforce HTTPS on the first visit — it only
+  # instructs the browser to upgrade subsequent navigations. The
+  # `Force HTTPS` RewriteRule earlier in this file handles first-visit.
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+  # Content-Security-Policy in Report-Only mode. Lets us discover the
+  # exact set of inline-style / inline-script / third-party origins
+  # Tailwind + Lucide + Swiper + cookie-consent + Zeffy + PayPal + GA4
+  # actually need, without blocking the site if the policy is too tight.
+  #
+  # No report-uri/report-to directive is set today: violations surface
+  # in browser DevTools (Console + Network) for manual collection while
+  # we tune the allowlist. Wiring a report endpoint (e.g. report-uri.com
+  # free tier, or a Cloudflare Worker) is a follow-up before we promote
+  # to enforcing — see #29's post-cutover backlog.
+  #
+  # Once the report stream is clean for a week, swap to enforcing
+  # `Content-Security-Policy` and drop the -Report-Only suffix.
+  #
+  # 'unsafe-inline' on style-src is required by Tailwind v4 (inline
+  # styles for arbitrary class values). 'unsafe-inline' on script-src
+  # is required by Next.js hydration markers. These can be tightened
+  # with hash- or nonce-based policies in a follow-up.
+  Header always set Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://*.zeffy.com https://www.paypal.com https://www.paypalobjects.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: blob:; font-src 'self' data:; connect-src 'self' https://www.google-analytics.com https://*.clarity.ms https://*.zeffy.com; frame-src https://*.zeffy.com https://www.paypal.com https://widgets.guidestar.org; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.paypal.com"
 </IfModule>
