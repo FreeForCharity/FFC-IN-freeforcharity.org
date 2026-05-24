@@ -36,7 +36,7 @@ function record(name, ok, detail) {
   process.stdout.write(`${ok ? PASS : FAIL} ${name}${detail ? ` — ${detail}` : ''}\n`)
 }
 
-async function head(path, { followRedirects = true, readBody = false } = {}) {
+async function request(path, { followRedirects = true, readBody = false } = {}) {
   const url = path.startsWith('http') ? path : `${BASE_URL}${path}`
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
@@ -45,9 +45,25 @@ async function head(path, { followRedirects = true, readBody = false } = {}) {
       method: 'GET',
       redirect: followRedirects ? 'follow' : 'manual',
       signal: controller.signal,
-      headers: { 'User-Agent': 'ffc-smoke-test/1.0' },
+      headers: {
+        'User-Agent': 'ffc-smoke-test/1.0',
+        // Bust the Cloudflare edge cache so a freshly-deployed origin
+        // is observed instead of a stale cached version. Without this,
+        // a smoke run immediately after deploy can pass against the
+        // pre-deploy HTML and report green on a regression.
+        'Cache-Control': 'no-cache',
+        Pragma: 'no-cache',
+      },
     })
-    const body = readBody ? await res.text() : undefined
+    let body
+    if (readBody) {
+      body = await res.text()
+    } else {
+      // Eagerly discard the response stream — without this Node's fetch
+      // keeps the body buffer around until GC, which adds up across
+      // ~50 sitemap+redirect checks per run.
+      await res.body?.cancel?.()
+    }
     return { status: res.status, location: res.headers.get('location'), url: res.url, body }
   } catch (err) {
     return { status: 0, error: err.message }
@@ -57,20 +73,20 @@ async function head(path, { followRedirects = true, readBody = false } = {}) {
 }
 
 async function checkStatus(name, path, expected) {
-  const r = await head(path)
+  const r = await request(path)
   const ok = r.status === expected
   record(name, ok, `${path} → ${r.status}${r.error ? ` (${r.error})` : ''}`)
 }
 
 async function checkRedirect(name, path, expectedStatus, expectedLocationSuffix) {
-  const r = await head(path, { followRedirects: false })
+  const r = await request(path, { followRedirects: false })
   const locOk = r.location && r.location.endsWith(expectedLocationSuffix)
   const ok = r.status === expectedStatus && locOk
   record(name, ok, `${path} → ${r.status} ${r.location || '(no Location)'}`)
 }
 
 async function checkBodyContains(name, path, expectedSubstrings) {
-  const r = await head(path, { readBody: true })
+  const r = await request(path, { readBody: true })
   const subs = Array.isArray(expectedSubstrings) ? expectedSubstrings : [expectedSubstrings]
   const matched = r.body ? subs.find((s) => r.body.toLowerCase().includes(s.toLowerCase())) : null
   const ok = r.status >= 200 && r.status < 300 && Boolean(matched)
@@ -120,12 +136,23 @@ async function main() {
     await checkStatus(`sitemap ${path}`, path, 200)
   }
 
-  console.log(`\n-- canonical-form 301s (Apache-only; will fail on \`serve\`)`)
-  const slugSamples = sitemapPaths.filter((p) => p !== '/').slice(0, 5)
-  for (const path of slugSamples) {
-    const noSlash = path.replace(/\/$/, '')
-    await checkRedirect(`canonical /slug → /slug/`, noSlash, 301, path)
-    await checkRedirect(`legacy *.html → /slug/`, `${noSlash}.html`, 301, path)
+  // Canonical-form 301s only make sense in the trailingSlash: true
+  // world (PR #186): bare /foo → /foo/, /foo.html → /foo/. Detect by
+  // looking at the sitemap form — if it ships trailing slashes, the
+  // Apache config is the post-#186 variant and these assertions apply.
+  // Skip on a pre-#186 deploy where the export emits /foo.html and the
+  // .htaccess strips trailing slashes (the opposite invariant).
+  const sitemapHasTrailingSlash = sitemapPaths.some((p) => p !== '/' && p.endsWith('/'))
+  if (sitemapHasTrailingSlash) {
+    console.log(`\n-- canonical-form 301s (Apache-only; will fail on \`serve\`)`)
+    const slugSamples = sitemapPaths.filter((p) => p !== '/').slice(0, 5)
+    for (const path of slugSamples) {
+      const noSlash = path.replace(/\/$/, '')
+      await checkRedirect(`canonical /slug → /slug/`, noSlash, 301, path)
+      await checkRedirect(`legacy *.html → /slug/`, `${noSlash}.html`, 301, path)
+    }
+  } else {
+    console.log(`\n-- canonical-form 301s skipped (sitemap is no-slash → pre-trailingSlash export)`)
   }
 
   console.log(`\n-- WP→Next legacy redirects from docs/cutover-redirects.csv`)
