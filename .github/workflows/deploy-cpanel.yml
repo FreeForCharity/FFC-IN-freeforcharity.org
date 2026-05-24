@@ -49,21 +49,33 @@ jobs:
           REF: ${{ github.sha }}
         run: |
           set -e
-          status=$(gh run list \
+          rows=$(gh run list \
             --workflow="CI - Build and Test" \
             --commit="$REF" \
-            --limit 1 \
-            --json status,conclusion \
-            --jq '.[0] // {}')
+            --limit 5 \
+            --json status,conclusion,databaseId,createdAt)
+          row_count=$(echo "$rows" | jq 'length')
+          if [ "$row_count" = "0" ]; then
+            echo "::error::No CI workflow run found for commit $REF."
+            echo "::error::This usually means:"
+            echo "::error::  - the commit was force-pushed after CI started (history rewritten)"
+            echo "::error::  - the CI workflow file was disabled or renamed since this commit"
+            echo "::error::  - the run was manually deleted"
+            echo "::error::Re-trigger CI on this ref before deploying:"
+            echo "::error::    gh workflow run 'CI - Build and Test' --ref $REF"
+            exit 1
+          fi
+          status=$(echo "$rows" | jq '.[0]')
           conclusion=$(echo "$status" | jq -r '.conclusion // "missing"')
           state=$(echo "$status" | jq -r '.status // "missing"')
-          echo "CI workflow on $REF: status=$state conclusion=$conclusion"
+          run_id=$(echo "$status" | jq -r '.databaseId // "?"')
+          echo "CI workflow on $REF: state=$state conclusion=$conclusion run_id=$run_id"
           if [ "$state" != "completed" ]; then
-            echo "::error::CI workflow has not finished on $REF (state=$state). Wait for CI to complete before deploying."
+            echo "::error::CI workflow on $REF is still $state (run $run_id). Wait for CI to complete before deploying."
             exit 1
           fi
           if [ "$conclusion" != "success" ]; then
-            echo "::error::CI workflow on $REF concluded with '$conclusion' — refuse to deploy."
+            echo "::error::CI workflow on $REF concluded with '$conclusion' (run $run_id) — refuse to deploy."
             exit 1
           fi
 
