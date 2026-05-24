@@ -11,6 +11,11 @@ const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || ''
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || ''
 const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || ''
 const GTM_CONTAINER_ID = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID || ''
+// Tawk.to live-chat widget. Property + widget IDs in the form
+// "65bf15eb0ff6374032c915d9/1hlp6r8hc" — same format the dashboard
+// shows. Loads as a functional cookie (visitor-support tooling),
+// not an analytics one, so it's not behind the analytics consent gate.
+const TAWK_TO_PROPERTY = process.env.NEXT_PUBLIC_TAWK_TO_PROPERTY || ''
 
 // Define type for GTM dataLayer events
 interface DataLayerEvent {
@@ -140,6 +145,28 @@ export default function CookieConsent() {
     }
   }, [])
 
+  const loadTawkTo = useCallback(() => {
+    if (!TAWK_TO_PROPERTY) return
+    if (typeof window !== 'undefined' && !document.querySelector('script[src*="embed.tawk.to"]')) {
+      // Tawk.to's standard async-embed snippet, escaped for textContent.
+      // Property/widget format is "<32-char hex>/<10-char alnum>" as
+      // shown in the Tawk.to dashboard.
+      const tawkScript = document.createElement('script')
+      tawkScript.textContent = `
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+          var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+          s1.async=true;
+          s1.src='https://embed.tawk.to/${TAWK_TO_PROPERTY}';
+          s1.charset='UTF-8';
+          s1.setAttribute('crossorigin','*');
+          s0.parentNode.insertBefore(s1,s0);
+        })();
+      `
+      document.head.appendChild(tawkScript)
+    }
+  }, [])
+
   const deleteAnalyticsCookies = useCallback(() => {
     // List of static cookie names to delete
     const cookiesToDelete = ['_ga', '_gid', '_fbp', 'fr', '_clck', '_clsk']
@@ -209,6 +236,12 @@ export default function CookieConsent() {
       if (prefs.marketing) {
         loadMetaPixel()
       }
+      // Tawk.to live-chat sits under functional consent (visitor-support
+      // tool, not analytics). Functional is always-on per cookie banner,
+      // so this loads unconditionally when a property is configured.
+      if (prefs.functional) {
+        loadTawkTo()
+      }
     },
     [
       deleteAnalyticsCookies,
@@ -216,6 +249,7 @@ export default function CookieConsent() {
       loadGoogleTagManager,
       loadMetaPixel,
       loadMicrosoftClarity,
+      loadTawkTo,
     ]
   )
 
