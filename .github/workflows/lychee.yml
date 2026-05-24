@@ -34,7 +34,7 @@ jobs:
         with:
           # Bumped timeout (30 → 60s), retries (3 → 5), and added a
           # retry-wait so transient external-host flakes (sdgs.un.org,
-          # leanstartup.com, etc.) stop failing CI on otherwise-healthy
+          # theleanstartup.com, etc.) stop failing CI on otherwise-healthy
           # PRs. Real 4xx/5xx still surface as non-zero exit.
           args: >-
             --verbose
