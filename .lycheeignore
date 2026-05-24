@@ -39,9 +39,23 @@ https://dash.cloudflare.com/**
 
 # Internal GitHub Actions badge URLs — always valid when the workflow exists
 https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/**
-# Sites that block CI crawlers or are intentionally placeholder / flaky
+
+# Pre-cutover: the apex domain still points at WordPress, so any link in
+# the Next.js source pointing at https://freeforcharity.org/* would hit
+# WP and report misleading 200s/404s. Skip until cutover lands.
+#
+# POST-CUTOVER ACTION: once the document-root swap is complete and the
+# 48-hour soak has passed, narrow these to only the /hub/ subpath
+# (WHMCS — third-party app, we don't own the URL surface):
+#     https://freeforcharity.org/hub/**
+#     https://www.freeforcharity.org/hub/**
+# That lets lychee validate every /about-us, /donate, /volunteer, etc.
+# against the live new site, catching broken internal links the next
+# time someone touches a navigation component.
 https://freeforcharity.org/**
 https://www.freeforcharity.org/**
+
+# Sites that block CI crawlers or are intentionally placeholder / flaky
 https://my.interserver.net/**
 https://www.interserver.net/**
 https://support.cloudflare.com/**

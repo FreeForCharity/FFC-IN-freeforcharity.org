@@ -8,12 +8,22 @@ ships with the static export and handles every redirect listed below at
 the InterServer Apache origin. No Cloudflare changes are required for
 the redirects to fire.
 
-**Optional secondary implementation:** the same redirects are also
-available as a Cloudflare [Bulk Redirects](https://developers.cloudflare.com/rules/url-forwarding/bulk-redirects/)
-import file at [`docs/cutover-redirects.csv`](cutover-redirects.csv) —
-useful if you want redirects to fire at Cloudflare's edge instead of
-the origin (saves a hop). Either source-of-truth works; don't enable
-both unless you accept the redundancy.
+**Cloudflare Bulk Redirects: DO NOT enable by default.** The same
+redirects are available as a Cloudflare [Bulk Redirects](https://developers.cloudflare.com/rules/url-forwarding/bulk-redirects/)
+import file at [`docs/cutover-redirects.csv`](cutover-redirects.csv).
+`.htaccess` is the single source of truth. Enabling the Cloudflare
+rule on top would double-source the redirect map and force every
+edit to happen in two places.
+
+**Enable the Cloudflare rule only if:**
+
+- `.htaccess` is ever removed (e.g. migrating off cPanel to a static
+  host without `.htaccess` semantics), or
+- you specifically want to preempt the origin hop for crawler traffic
+  during heavy 301 storms.
+
+The CSV is otherwise dead-weight kept in sync as a backup. Don't
+touch the toggle without updating this doc.
 
 ---
 
