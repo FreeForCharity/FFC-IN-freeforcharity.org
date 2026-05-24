@@ -159,4 +159,15 @@ ErrorDocument 404 /404.html
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+
+  # Block Flash/Silverlight from loading cross-domain policy files.
+  # The technologies are dead, but the header is a one-line hardening
+  # win against any forgotten legacy plugin probing the origin.
+  Header always set X-Permitted-Cross-Domain-Policies "none"
+
+  # Tell the browser this origin's resources should not be embedded
+  # cross-origin (Spectre/cross-site leak mitigation). "same-site"
+  # rather than "same-origin" so /hub/ (WHMCS on the same registrable
+  # domain) can still embed assets if needed.
+  Header always set Cross-Origin-Resource-Policy "same-site"
 </IfModule>
