@@ -19,7 +19,6 @@
 
 import { chromium } from 'playwright'
 import { mkdir, writeFile } from 'node:fs/promises'
-import { existsSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -85,7 +84,7 @@ const ROUTE_PAIRS = [
   ['/workforce-development/', '/workforce-development/'],
 ]
 
-const slugFor = (wp, next) => {
+const slugFor = (wp) => {
   const base = wp.replace(/^\/+|\/+$/g, '').replaceAll('/', '__')
   return base || 'root'
 }
@@ -120,7 +119,7 @@ async function main() {
 
   const rows = []
   for (const [wpPath, nextPath] of ROUTE_PAIRS) {
-    const slug = slugFor(wpPath, nextPath)
+    const slug = slugFor(wpPath)
     const wpFile = resolve(wpDir, `${slug}.png`)
     const stagingFile = resolve(stagingDir, `${slug}.png`)
 
