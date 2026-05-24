@@ -1,5 +1,4 @@
 import type { NextConfig } from 'next'
-import bundleAnalyzer from '@next/bundle-analyzer'
 
 const nextConfig: NextConfig = {
   output: 'export',
@@ -22,11 +21,15 @@ const nextConfig: NextConfig = {
   assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH || '',
 }
 
-// Bundle analyzer is opt-in via `ANALYZE=true npm run build`. The wrapper
-// is a no-op when ANALYZE is unset, so the default build is unaffected.
-// See package.json's "build:analyze" script for the standard invocation.
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === 'true',
-})
-
-export default withBundleAnalyzer(nextConfig)
+// Bundle analyzer is opt-in via `npm run build:analyze` (which sets
+// ANALYZE=true). The dynamic import means @next/bundle-analyzer is
+// only resolved when actually requested — a production install that
+// omits devDependencies (`npm ci --omit=dev` etc.) still loads this
+// config file without ERR_MODULE_NOT_FOUND because the import only
+// runs when ANALYZE is set, and ANALYZE is never set during a
+// production build.
+export default (async () => {
+  if (process.env.ANALYZE !== 'true') return nextConfig
+  const { default: bundleAnalyzer } = await import('@next/bundle-analyzer')
+  return bundleAnalyzer({ enabled: true })(nextConfig)
+})()
