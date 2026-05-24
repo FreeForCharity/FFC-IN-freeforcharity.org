@@ -100,7 +100,7 @@ because it lives in a sibling directory.
    - `NEXT_PUBLIC_CLARITY_PROJECT_ID` — Microsoft Clarity Project ID
    - `NEXT_PUBLIC_META_PIXEL_ID` — Meta Pixel ID (if running Meta ads)
 
-   The deploy workflow needs to inject the optional `NEXT_PUBLIC_*` vars into the build step (`env:` block on the `npm run build` step) — they're read at build time, not runtime, because the export is static.
+   The deploy workflow (`.github/workflows/deploy-cpanel.yml`) already maps these secrets into the `npm run build` step's `env:` block. Once the secret is populated in repo settings, the next deploy bakes the value into the static export (no further workflow edit needed). Without the secret, the corresponding analytics script never loads (no placeholder fallbacks).
 
 5. **(Optional) lower DNS TTL** to 300s ([#136](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/136)). Not strictly required because DNS isn't changing, but useful if you want to keep the rollback window short. **Restore after T+48h** — see Post-flip step 3 below.
 
