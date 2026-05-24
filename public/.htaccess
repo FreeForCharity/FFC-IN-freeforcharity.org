@@ -77,6 +77,20 @@ RewriteRule ^xmlrpc\.php$ - [F,L]
 RewriteRule ^wp-login\.php$ - [F,L]
 
 # ---------------------------------------------------------------------
+# Legacy .html → canonical / redirect
+# ---------------------------------------------------------------------
+# Pre-PR the export emitted /about-us.html (200 OK direct hit) alongside
+# the slug rewrite. With trailingSlash: true the export now emits
+# /about-us/index.html only, so bare .html requests would 404.
+# Preserve backwards compat for any external backlinks or search engine
+# results still pointing at the .html form.
+#
+# Skip /404.html — that path is the Apache ErrorDocument target and
+# must keep serving the 404 page itself, not redirect.
+RewriteCond %{REQUEST_URI} !^/404\.html$
+RewriteRule ^(.+)\.html$ /$1/ [R=301,L]
+
+# ---------------------------------------------------------------------
 # Next.js static export URL handling
 # ---------------------------------------------------------------------
 # next.config.ts sets trailingSlash: true, so the export emits
