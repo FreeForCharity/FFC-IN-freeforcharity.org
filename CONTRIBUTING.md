@@ -26,7 +26,7 @@ Free For Charity is committed to providing a welcoming and inclusive environment
 
 ### Prerequisites
 
-- **Node.js**: Version 20.x (tested with v20.19.6)
+- **Node.js**: Version 24.x LTS (tested with v24.15.0)
 - **npm**: Comes with Node.js
 - **Git**: For version control
 - **Code Editor**: VS Code recommended with TypeScript support
