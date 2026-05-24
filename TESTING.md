@@ -6,7 +6,7 @@ This guide provides comprehensive documentation for testing the Free For Charity
 
 ### Prerequisites
 
-- Node.js 20.x installed
+- Node.js 24.x installed
 - Dependencies installed (`npm install`)
 - Built application (`npm run build`)
 
@@ -30,7 +30,7 @@ npm run test:ui       # Interactive Playwright UI
 ### 1. Verify Dependencies
 
 ```bash
-node --version        # Should be v20.x
+node --version        # Should be v24.x
 npm --version         # Should be 10.x
 ```
 
@@ -181,7 +181,7 @@ npx playwright test --debug
 Tests run automatically in GitHub Actions:
 
 - **Trigger**: Every push to main branch
-- **Environment**: Ubuntu latest with Node.js 20
+- **Environment**: Ubuntu latest with Node.js 24
 - **Browser Setup**: `npx playwright install --with-deps chromium`
 - **Build**: Built with `NEXT_PUBLIC_BASE_PATH=/freeforcharity-web`
 - **Retry Logic**: Failed tests retry 2 times
@@ -378,7 +378,7 @@ Key settings:
 **Pipeline Steps**:
 
 1. ✅ Checkout repository
-2. ✅ Setup Node.js 20 with caching
+2. ✅ Setup Node.js 24 with caching
 3. ✅ Install dependencies (`npm ci`)
 4. ✅ Restore Next.js build cache
 5. ✅ Install Playwright browsers with system dependencies
