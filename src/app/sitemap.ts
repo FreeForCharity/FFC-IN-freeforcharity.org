@@ -6,6 +6,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://www.freeforcharity.org'
   const now = new Date()
 
+  // Internal admin pages (/ffcadmin/, /ffcadmin-free-for-charity-cpanel-backup-sop/)
+  // are intentionally omitted. Both carry robots: { index: false } in
+  // their page-level metadata, so listing them here would be incoherent.
   const routes = [
     { path: '/', priority: 1, changeFrequency: 'weekly' as const },
     { path: '/about-us', priority: 0.9, changeFrequency: 'monthly' as const },
@@ -87,7 +90,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ]
 
   return routes.map((route) => ({
-    url: `${baseUrl}${route.path}`,
+    // next.config.ts sets trailingSlash: true, so canonical URLs end
+    // with '/'. The MetadataRoute.Sitemap helper does not auto-apply
+    // it — add the slash here so the published sitemap matches what
+    // the export serves.
+    url: `${baseUrl}${route.path}${route.path.endsWith('/') ? '' : '/'}`,
     lastModified: now,
     changeFrequency: route.changeFrequency,
     priority: route.priority,

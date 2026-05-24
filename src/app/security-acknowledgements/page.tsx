@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Security Acknowledgements',
   description:
     'Acknowledging security researchers who have responsibly disclosed vulnerabilities to Free For Charity.',
-  alternates: { canonical: '/security-acknowledgements' },
+  alternates: { canonical: '/security-acknowledgements/' },
 }
 
 const index = () => {
@@ -36,7 +36,7 @@ const index = () => {
           <p className="mb-[10px] text-[14px] font-[500] leading-[25px] text-[#666]">
             If you believe you have found a security vulnerability, please refer to our{' '}
             <Link
-              href="/vulnerability-disclosure-policy"
+              href="/vulnerability-disclosure-policy/"
               className="text-[#005BB7] font-[700] underline decoration-dotted hover:decoration-solid transition-all"
             >
               Vulnerability Disclosure Policy

@@ -267,7 +267,7 @@ const index = () => {
               <strong>Ways to get in faster:</strong>
               <br />
               1. If you already have your 501(c)3 get your free domain from us{' '}
-              <a href="/domains" className="text-[#1c6e92] underline">
+              <a href="/domains/" className="text-[#1c6e92] underline">
                 freeforcharity.org/domains
               </a>
               <br />

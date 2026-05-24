@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Free Nonprofit Web Hosting',
   description:
     'Free WordPress hosting, domain registration, and email setup for nonprofit organizations. Powered by Free For Charity volunteers.',
-  alternates: { canonical: '/free-charity-web-hosting' },
+  alternates: { canonical: '/free-charity-web-hosting/' },
 }
 import Hosting from '@/components/free-charity-web-hosting/hosting'
 import AboutFFCHosting from '@/components/free-charity-web-hosting/About-FFC-Hosting'

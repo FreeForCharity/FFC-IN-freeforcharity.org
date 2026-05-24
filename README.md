@@ -583,7 +583,7 @@ This project is maintained by Free For Charity, a 501(c)(3) nonprofit organizati
 - **Website**: [https://www.freeforcharity.org](https://www.freeforcharity.org)
 - **Organization**: Free For Charity
 - **EIN**: 46-2471893
-- **Contact**: Use the contact form at [/contact-us](https://www.freeforcharity.org/contact-us)
+- **Contact**: Use the contact form at [/contact-us/](https://www.freeforcharity.org/contact-us/)
 
 ---
 

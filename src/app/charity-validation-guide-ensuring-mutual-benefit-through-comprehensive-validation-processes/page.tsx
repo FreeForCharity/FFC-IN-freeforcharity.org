@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     'Comprehensive guide for validating charitable entities, ensuring credibility and mutual benefit through GuideStar verification and due diligence processes.',
   alternates: {
     canonical:
-      '/charity-validation-guide-ensuring-mutual-benefit-through-comprehensive-validation-processes',
+      '/charity-validation-guide-ensuring-mutual-benefit-through-comprehensive-validation-processes/',
   },
 }
 

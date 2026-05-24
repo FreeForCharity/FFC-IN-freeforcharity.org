@@ -19,7 +19,7 @@ const index = () => {
           </p>
           <h1 className="pb-[1em] font-[700]">
             Visit{' '}
-            <a href="/domains" className="text-[#0567B1]">
+            <a href="/domains/" className="text-[#0567B1]">
               https://freeforcharity.org/domains
             </a>{' '}
             and follow all steps

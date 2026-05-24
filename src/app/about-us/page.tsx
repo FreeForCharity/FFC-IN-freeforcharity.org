@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'About Us',
   description:
     "Learn about Free For Charity's mission to reduce costs and increase revenues for nonprofits by connecting students, professionals, and businesses with charities in need.",
-  alternates: { canonical: '/about-us' },
+  alternates: { canonical: '/about-us/' },
 }
 import CallToAction from '@/components/about-us-components/CallToAction'
 

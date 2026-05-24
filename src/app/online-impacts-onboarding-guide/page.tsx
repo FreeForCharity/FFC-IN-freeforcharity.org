@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'Online Impacts Onboarding Guide',
   description:
     'Onboarding guide for charities hosted and designed by Online Impacts, providing instant access to free tools and services.',
-  alternates: { canonical: '/online-impacts-onboarding-guide' },
+  alternates: { canonical: '/online-impacts-onboarding-guide/' },
 }
 
 const index = () => {

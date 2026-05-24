@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description:
     'Find nonprofit consultants and service providers for marketing, legal, IT, HR, fundraising, and more. A free resource from Free For Charity.',
   alternates: {
-    canonical: '/charity-and-nonprofit-service-and-consultant-directory',
+    canonical: '/charity-and-nonprofit-service-and-consultant-directory/',
   },
 }
 
@@ -103,7 +103,7 @@ const ServiceDirectoryPage = () => {
             to the directory, please contact us.
           </p>
           <a
-            href="/contact-us"
+            href="/contact-us/"
             className="inline-block px-[30px] py-[10px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
             id="montserrat-font"
           >

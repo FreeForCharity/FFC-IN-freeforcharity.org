@@ -171,7 +171,7 @@ const AccordionLayout = () => {
                 <ul className="list-disc list-inside mt-1">
                   <li>
                     If you already have your 501(c)3 get your free domain from us{' '}
-                    <a href="/domains" className="text-[#0567B1]">
+                    <a href="/domains/" className="text-[#0567B1]">
                       (https://freeforcharity.org/domains)
                     </a>
                   </li>

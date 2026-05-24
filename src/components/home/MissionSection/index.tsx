@@ -27,7 +27,7 @@ const Mission: React.FC = () => {
         </p>
 
         <div className="mt-6">
-          <BlueBtn href="/about-us">Visit Site</BlueBtn>
+          <BlueBtn href="/about-us/">Visit Site</BlueBtn>
         </div>
       </div>
     </section>

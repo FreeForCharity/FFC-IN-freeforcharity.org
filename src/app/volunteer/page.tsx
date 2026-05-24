@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Volunteer',
   description:
     'Become a Free For Charity volunteer. Gain marketable skills in technology while helping nonprofits with domains, websites, and IT services.',
-  alternates: { canonical: '/volunteer' },
+  alternates: { canonical: '/volunteer/' },
 }
 
 const index = () => {

@@ -3,16 +3,16 @@
     "collect": {
       "staticDistDir": "./out",
       "url": [
-        "http://localhost/index.html",
-        "http://localhost/about-us.html",
-        "http://localhost/contact-us.html",
-        "http://localhost/donate.html",
-        "http://localhost/volunteer.html",
-        "http://localhost/free-charity-web-hosting.html",
-        "http://localhost/privacy-policy.html",
-        "http://localhost/blog.html",
-        "http://localhost/domains.html",
-        "http://localhost/help-for-charities.html"
+        "http://localhost/",
+        "http://localhost/about-us/",
+        "http://localhost/contact-us/",
+        "http://localhost/donate/",
+        "http://localhost/volunteer/",
+        "http://localhost/free-charity-web-hosting/",
+        "http://localhost/privacy-policy/",
+        "http://localhost/blog/",
+        "http://localhost/domains/",
+        "http://localhost/help-for-charities/"
       ],
       "numberOfRuns": 3
     },

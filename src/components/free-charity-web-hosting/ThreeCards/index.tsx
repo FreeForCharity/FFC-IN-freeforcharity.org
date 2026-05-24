@@ -23,7 +23,7 @@ const DonateSection: React.FC = () => {
             className="text-[31px] leading-[31px] font-bold text-white text-center"
             id="cantata-font"
           >
-            <a href="/donate">Donate Now</a>
+            <a href="/donate/">Donate Now</a>
           </h1>
         </div>
 
@@ -56,7 +56,7 @@ const DonateSection: React.FC = () => {
             className="text-[31px] leading-[31px] font-bold text-white text-center"
             id="cantata-font"
           >
-            <a href="/volunteer">Be a Volunteer</a>
+            <a href="/volunteer/">Be a Volunteer</a>
           </h1>
         </div>
       </div>
