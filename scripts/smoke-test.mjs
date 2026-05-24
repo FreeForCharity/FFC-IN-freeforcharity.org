@@ -36,7 +36,7 @@ function record(name, ok, detail) {
   process.stdout.write(`${ok ? PASS : FAIL} ${name}${detail ? ` — ${detail}` : ''}\n`)
 }
 
-async function head(path, { followRedirects = true } = {}) {
+async function head(path, { followRedirects = true, readBody = false } = {}) {
   const url = path.startsWith('http') ? path : `${BASE_URL}${path}`
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
@@ -47,7 +47,8 @@ async function head(path, { followRedirects = true } = {}) {
       signal: controller.signal,
       headers: { 'User-Agent': 'ffc-smoke-test/1.0' },
     })
-    return { status: res.status, location: res.headers.get('location'), url: res.url }
+    const body = readBody ? await res.text() : undefined
+    return { status: res.status, location: res.headers.get('location'), url: res.url, body }
   } catch (err) {
     return { status: 0, error: err.message }
   } finally {
@@ -66,6 +67,18 @@ async function checkRedirect(name, path, expectedStatus, expectedLocationSuffix)
   const locOk = r.location && r.location.endsWith(expectedLocationSuffix)
   const ok = r.status === expectedStatus && locOk
   record(name, ok, `${path} → ${r.status} ${r.location || '(no Location)'}`)
+}
+
+async function checkBodyContains(name, path, expectedSubstrings) {
+  const r = await head(path, { readBody: true })
+  const subs = Array.isArray(expectedSubstrings) ? expectedSubstrings : [expectedSubstrings]
+  const matched = r.body ? subs.find((s) => r.body.toLowerCase().includes(s.toLowerCase())) : null
+  const ok = r.status >= 200 && r.status < 300 && Boolean(matched)
+  record(
+    name,
+    ok,
+    `${path} → ${r.status}${matched ? ` (body matches "${matched}")` : ' (no marker found)'}`
+  )
 }
 
 function loadSitemapPaths() {
@@ -127,7 +140,14 @@ async function main() {
   }
 
   console.log(`\n-- defense-in-depth`)
-  await checkStatus(`/hub/ reachable (WHMCS hand-off)`, '/hub/', 200)
+  // WHMCS at /hub/ — assert response includes a WHMCS-specific marker so
+  // a stale index.html or directory listing doesn't pass as a healthy hub.
+  await checkBodyContains(`/hub/ serves WHMCS (not a placeholder)`, '/hub/', [
+    'whmcs',
+    'WHMCompleteSolution',
+    'cart.php',
+    'clientarea',
+  ])
   await checkStatus(`unknown URL returns 404`, '/this-page-does-not-exist-xyz/', 404)
   await checkStatus(`favicon`, '/favicon.ico', 200)
   await checkStatus(`sitemap.xml`, '/sitemap.xml', 200)
