@@ -31,7 +31,7 @@ const index = () => {
           </p>
           <Transparentbtn
             text="Make a Lasting Impact Today!"
-            href="/free-for-charity-endowment-fund"
+            href="/free-for-charity-endowment-fund/"
             color="#fff"
           />
         </div>

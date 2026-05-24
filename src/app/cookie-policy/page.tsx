@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: 'Cookie Policy',
   description:
     'Free For Charity cookie policy explaining how we use cookies and similar tracking technologies on our website.',
-  alternates: { canonical: '/cookie-policy' },
+  alternates: { canonical: '/cookie-policy/' },
 }
 
 // Update this date when the policy changes
@@ -415,7 +415,7 @@ export default function CookiePolicy() {
           </ol>
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
             For more information about how we handle your personal data, please see our{' '}
-            <a href="/privacy-policy" className="text-blue-600 underline">
+            <a href="/privacy-policy/" className="text-blue-600 underline">
               Privacy Policy
             </a>
             .

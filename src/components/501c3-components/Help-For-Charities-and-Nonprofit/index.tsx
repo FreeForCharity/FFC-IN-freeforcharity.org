@@ -88,7 +88,7 @@ const index = () => {
                 <li>
                   (Please read our{' '}
                   <a
-                    href="/guidestar-guide"
+                    href="/guidestar-guide/"
                     className="text-[#0567B1] underline font-medium"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -173,7 +173,7 @@ const index = () => {
           <p className="text-[18px] font-[500] mb-[1em]">
             We require two links from your GuideStar page, the public profile link, and the ‘full
             profile’ link. For instructions on how to find them in GuideStar,{' '}
-            <Link href="/guidestar-guide" className="text-[#0567B1]">
+            <Link href="/guidestar-guide/" className="text-[#0567B1]">
               click here
             </Link>
             .

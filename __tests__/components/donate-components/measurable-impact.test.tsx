@@ -20,7 +20,7 @@ describe('MeasurableImpact Component', () => {
     render(<MeasurableImpact />)
     const volunteerLink = screen.getByRole('link', { name: /skilled volunteers/i })
     expect(volunteerLink).toBeInTheDocument()
-    expect(volunteerLink).toHaveAttribute('href', '/volunteer')
+    expect(volunteerLink).toHaveAttribute('href', '/volunteer/')
   })
 
   it('renders the PayPal donation button', () => {

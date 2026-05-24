@@ -87,7 +87,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ]
 
   return routes.map((route) => ({
-    url: `${baseUrl}${route.path}`,
+    // next.config.ts sets trailingSlash: true, so canonical URLs end
+    // with '/'. The MetadataRoute.Sitemap helper does not auto-apply
+    // it — add the slash here so the published sitemap matches what
+    // the export serves.
+    url: `${baseUrl}${route.path}${route.path.endsWith('/') ? '' : '/'}`,
     lastModified: now,
     changeFrequency: route.changeFrequency,
     priority: route.priority,

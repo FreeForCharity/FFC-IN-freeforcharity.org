@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'Donate',
   description:
     "Support Free For Charity's mission by donating. Your tax-deductible contribution helps provide free domains, hosting, and technology services to nonprofits.",
-  alternates: { canonical: '/donate' },
+  alternates: { canonical: '/donate/' },
 }
 
 const index = () => {

@@ -18,19 +18,19 @@ const Index = () => {
               icon={<IoIosHome className="w-[80px] h-[80px]" />}
               iconLabel="Home"
               text="Help for Charity"
-              href="/help-for-charities"
+              href="/help-for-charities/"
             />
             <CallToActionCard
               icon={<IoHeart className="w-[80px] h-[80px]" />}
               iconLabel="Heart"
               text="Donate"
-              href="/donate"
+              href="/donate/"
             />
             <CallToActionCard
               icon={<FaUser className="w-[80px] h-[80px]" />}
               iconLabel="User"
               text="Volunteer"
-              href="/volunteer"
+              href="/volunteer/"
             />
           </div>
         </div>

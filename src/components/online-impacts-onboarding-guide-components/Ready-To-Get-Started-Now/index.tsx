@@ -30,7 +30,7 @@ const index = () => {
 
           <p className="text-[18px] font-[700] text-[#4a4a4a] mb-[1em]">
             Visit{' '}
-            <a href="/domains" className="text-[#0567B1]">
+            <a href="/domains/" className="text-[#0567B1]">
               https://freeforcharity.org/domains
             </a>{' '}
             and follow all steps

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description:
     'Free workforce development and training programs in web development and programming. Build your skills while helping charities.',
   alternates: {
-    canonical: '/workforce-development',
+    canonical: '/workforce-development/',
   },
 }
 
@@ -119,7 +119,7 @@ const WorkforceDevelopmentPage = () => {
             </a>
           </p>
           <a
-            href="/volunteer"
+            href="/volunteer/"
             className="inline-block px-[30px] py-[10px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
             id="montserrat-font"
           >

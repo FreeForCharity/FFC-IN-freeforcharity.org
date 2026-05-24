@@ -22,10 +22,16 @@ describe('sitemap', () => {
 
   it('includes key pages', () => {
     const urls = entries.map((e) => e.url)
-    expect(urls).toContain('https://www.freeforcharity.org/about-us')
-    expect(urls).toContain('https://www.freeforcharity.org/contact-us')
-    expect(urls).toContain('https://www.freeforcharity.org/donate')
-    expect(urls).toContain('https://www.freeforcharity.org/privacy-policy')
+    expect(urls).toContain('https://www.freeforcharity.org/about-us/')
+    expect(urls).toContain('https://www.freeforcharity.org/contact-us/')
+    expect(urls).toContain('https://www.freeforcharity.org/donate/')
+    expect(urls).toContain('https://www.freeforcharity.org/privacy-policy/')
+  })
+
+  it('every URL ends with a trailing slash (matches trailingSlash: true export)', () => {
+    for (const entry of entries) {
+      expect(entry.url).toMatch(/\/$/)
+    }
   })
 
   it('all entries have required fields', () => {
