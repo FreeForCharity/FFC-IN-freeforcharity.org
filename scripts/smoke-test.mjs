@@ -90,11 +90,13 @@ async function checkBodyContains(name, path, expectedSubstrings) {
   const subs = Array.isArray(expectedSubstrings) ? expectedSubstrings : [expectedSubstrings]
   const matched = r.body ? subs.find((s) => r.body.toLowerCase().includes(s.toLowerCase())) : null
   const ok = r.status >= 200 && r.status < 300 && Boolean(matched)
-  record(
-    name,
-    ok,
-    `${path} → ${r.status}${matched ? ` (body matches "${matched}")` : ' (no marker found)'}`
-  )
+  // Surface the underlying fetch failure (timeout / DNS / TLS) when the
+  // request didn't reach a response, instead of the misleading
+  // "no marker found" message.
+  const detail = r.error
+    ? `${path} → ${r.status} (${r.error})`
+    : `${path} → ${r.status}${matched ? ` (body matches "${matched}")` : ' (no marker found)'}`
+  record(name, ok, detail)
 }
 
 function loadSitemapPaths() {

@@ -65,7 +65,13 @@ jobs:
             echo "::error::    gh workflow run 'CI - Build and Test' --ref $REF"
             exit 1
           fi
-          status=$(echo "$rows" | jq '.[0]')
+          # Pick the most recent run that actually decided an outcome —
+          # skip cancelled/skipped runs (operator cancel, concurrency
+          # group cancel, never-started skip) and fall through to an
+          # earlier run that ran the full suite. Without this, a manual
+          # cancel on the latest run would hide a previous green run and
+          # block the deploy.
+          status=$(echo "$rows" | jq '[.[] | select(.conclusion != "cancelled" and .conclusion != "skipped")][0] // .[0]')
           conclusion=$(echo "$status" | jq -r '.conclusion // "missing"')
           state=$(echo "$status" | jq -r '.status // "missing"')
           run_id=$(echo "$status" | jq -r '.databaseId // "?"')
