@@ -87,7 +87,9 @@ RewriteRule ^wp-login\.php$ - [F,L]
 #
 # Skip /404.html — that path is the Apache ErrorDocument target and
 # must keep serving the 404 page itself, not redirect.
-RewriteCond %{REQUEST_URI} !^/404\.html$
+# Skip /index.html — without this guard, /index.html → /index/ would
+# 404 (no /index/ route in the export; the homepage is just /).
+RewriteCond %{REQUEST_URI} !^/(404|index)\.html$
 RewriteRule ^(.+)\.html$ /$1/ [R=301,L]
 
 # ---------------------------------------------------------------------
