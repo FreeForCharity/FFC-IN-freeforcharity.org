@@ -3,6 +3,7 @@ import './globals.css'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import CookieConsent from '@/components/cookie-consent'
+import SentryInit from '@/components/sentry-init'
 
 // Get basePath for GitHub Pages deployment
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
@@ -80,6 +81,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`antialiased`} suppressHydrationWarning={true}>
         {/* <PopupProvider> */}
+        <SentryInit />
         <Header />
         {children}
         <Footer />
