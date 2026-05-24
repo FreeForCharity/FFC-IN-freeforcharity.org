@@ -27,29 +27,30 @@ RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 # ---------------------------------------------------------------------
 # WP → Next.js URL redirects (source: docs/cutover-redirects.csv)
-# Apply BEFORE the trailing-slash / .html rewriting below so Apache
-# does not try to find static files for old WordPress paths.
+# Apply BEFORE the Next.js URL handling below so Apache does not try
+# to find static files for old WordPress paths.
 # ---------------------------------------------------------------------
 
-# Slug changes
-RewriteRule ^free-for-charity-terms-of-service/?$ /terms-of-service [R=301,L]
-RewriteRule ^charity-and-nonprofit-case-studies-to-help-your-organization-succeed/?$ /charity-and-nonprofit-case-studies [R=301,L]
+# Slug changes (targets carry a trailing slash to match the canonical
+# trailingSlash: true export — saves the user a second 301 hop)
+RewriteRule ^free-for-charity-terms-of-service/?$ /terms-of-service/ [R=301,L]
+RewriteRule ^charity-and-nonprofit-case-studies-to-help-your-organization-succeed/?$ /charity-and-nonprofit-case-studies/ [R=301,L]
 
 # PayPal callbacks (302 + preserve query string with QSA)
-RewriteRule ^donation-confirmation/?$ /donate [R=302,L,QSA]
-RewriteRule ^donation-failed/?$ /donate [R=302,L,QSA]
+RewriteRule ^donation-confirmation/?$ /donate/ [R=302,L,QSA]
+RewriteRule ^donation-failed/?$ /donate/ [R=302,L,QSA]
 
-# Legacy WP blog posts → /blog
-RewriteRule ^free-for-charity-just-earned-the-platinum-seal-of-transparency/?$ /blog [R=301,L]
-RewriteRule ^our-organization-earned-a-2021-platinum-seal-of-transparency/?$ /blog [R=301,L]
-RewriteRule ^we-just-updated-for-the-2022-guidestar-platinum-seal/?$ /blog [R=301,L]
-RewriteRule ^using-a-registered-agent-service-northwest-registered-agent/?$ /blog [R=301,L]
+# Legacy WP blog posts → /blog/
+RewriteRule ^free-for-charity-just-earned-the-platinum-seal-of-transparency/?$ /blog/ [R=301,L]
+RewriteRule ^our-organization-earned-a-2021-platinum-seal-of-transparency/?$ /blog/ [R=301,L]
+RewriteRule ^we-just-updated-for-the-2022-guidestar-platinum-seal/?$ /blog/ [R=301,L]
+RewriteRule ^using-a-registered-agent-service-northwest-registered-agent/?$ /blog/ [R=301,L]
 
 # Content consolidation
-RewriteRule ^podio-sponsorship-program/?$ /help-for-charities [R=301,L]
-RewriteRule ^what-is-the-cost/?$ /help-for-charities [R=301,L]
-RewriteRule ^donor-dashboard/?$ /donate [R=301,L]
-RewriteRule ^submit-information/?$ /contact-us [R=301,L]
+RewriteRule ^podio-sponsorship-program/?$ /help-for-charities/ [R=301,L]
+RewriteRule ^what-is-the-cost/?$ /help-for-charities/ [R=301,L]
+RewriteRule ^donor-dashboard/?$ /donate/ [R=301,L]
+RewriteRule ^submit-information/?$ /contact-us/ [R=301,L]
 
 # Testimonials inlined on homepage
 RewriteRule ^testimonial/american-legion-ahwatukee-post-64/?$ /#testimonials [R=301,L]
@@ -59,7 +60,7 @@ RewriteRule ^testimonial/tashonda-payne/?$ /#testimonials [R=301,L]
 
 # Dropped WP archives + plumbing → home
 RewriteRule ^author/(adagraves|admin|clarkemoyer|globaladmin|joel|tempmigrationadmin)/?$ / [R=301,L]
-RewriteRule ^category/uncategorized/?$ /blog [R=301,L]
+RewriteRule ^category/uncategorized/?$ /blog/ [R=301,L]
 RewriteRule ^layout_type/(row|section)/?$ / [R=301,L]
 RewriteRule ^module_width/regular/?$ / [R=301,L]
 RewriteRule ^scope/not_global/?$ / [R=301,L]
@@ -76,23 +77,42 @@ RewriteRule ^xmlrpc\.php$ - [F,L]
 RewriteRule ^wp-login\.php$ - [F,L]
 
 # ---------------------------------------------------------------------
+# Legacy .html → canonical / redirect
+# ---------------------------------------------------------------------
+# Pre-PR the export emitted /about-us.html (200 OK direct hit) alongside
+# the slug rewrite. With trailingSlash: true the export now emits
+# /about-us/index.html only, so bare .html requests would 404.
+# Preserve backwards compat for any external backlinks or search engine
+# results still pointing at the .html form.
+#
+# Skip /404.html — that path is the Apache ErrorDocument target and
+# must keep serving the 404 page itself, not redirect.
+# Skip /index.html — without this guard, /index.html → /index/ would
+# 404 (no /index/ route in the export; the homepage is just /).
+RewriteCond %{REQUEST_URI} !^/(404|index)\.html$
+RewriteRule ^(.+)\.html$ /$1/ [R=301,L]
+
+# ---------------------------------------------------------------------
 # Next.js static export URL handling
 # ---------------------------------------------------------------------
-# The export emits /about-us.html (no trailing slash) AND a sibling
-# /about-us/ directory containing __next.* RSC sidecar payloads. We must
-# prefer the .html even when the sibling dir exists, so neither rule
-# below uses !-d. Both still guard on the target .html actually existing,
-# which keeps real asset dirs (_next/, Images/, Svgs/) from being
-# accidentally rewritten.
-
-# Strip trailing slash when a matching .html exists for the stripped path
-RewriteCond %{DOCUMENT_ROOT}/$1.html -f
-RewriteRule ^(.+)/$ /$1 [R=301,L]
-
-# Append .html when a matching file exists
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{DOCUMENT_ROOT}/$1.html -f
-RewriteRule ^(.+?)/?$ /$1.html [L]
+# next.config.ts sets trailingSlash: true, so the export emits
+#   out/about-us/index.html  (one file per route, in a directory)
+# Apache's defaults handle this natively — no rewrite rules needed:
+#   - DirectorySlash On  → bare /about-us 301s to /about-us/
+#   - DirectoryIndex     → /about-us/ serves /about-us/index.html
+# We pin DirectorySlash + DirectoryIndex here as defense-in-depth in
+# case the cPanel vhost overrides either default. Without DirectorySlash
+# On, bare /about-us would be served from /about-us/index.html without
+# redirecting, leaving canonical URLs ambiguous; without DirectoryIndex
+# the request would 403 under Options -Indexes.
+#
+# index.php is listed AFTER index.html so the Next.js export wins for
+# its own directories, while WHMCS at /hub/ (PHP, no index.html there)
+# still resolves via its index.php. The RewriteRule above short-circuits
+# rewrites for /hub/, but mod_dir's DirectoryIndex lookup is separate
+# from mod_rewrite — without index.php in the list, /hub/ would 403.
+DirectorySlash On
+DirectoryIndex index.html index.php
 
 # Custom 404 page generated by next build
 ErrorDocument 404 /404.html
@@ -139,6 +159,17 @@ ErrorDocument 404 /404.html
   Header always set X-Frame-Options "SAMEORIGIN"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+
+  # Block Flash/Silverlight from loading cross-domain policy files.
+  # The technologies are dead, but the header is a one-line hardening
+  # win against any forgotten legacy plugin probing the origin.
+  Header always set X-Permitted-Cross-Domain-Policies "none"
+
+  # Tell the browser this origin's resources should not be embedded
+  # cross-origin (Spectre/cross-site leak mitigation). "same-site"
+  # rather than "same-origin" so /hub/ (WHMCS on the same registrable
+  # domain) can still embed assets if needed.
+  Header always set Cross-Origin-Resource-Policy "same-site"
 
   # Tell browsers to upgrade to HTTPS for the next year, including
   # subdomains, and that we accept inclusion in the HSTS preload list.

@@ -84,7 +84,7 @@ We also provide many physical services like nonprofit websites and hosting that 
     answer: `We have a large backlog for new sites and support. We try to process at least 1 new charity into the full hosting system per week.
 
 Ways to get in faster
-If you already have your 501(c)3 get your free domain from us (https://freeforcharity.org/domains)
+If you already have your 501(c)3 get your free domain from us (https://freeforcharity.org/domains/)
 If you can provide your own qualified WordPress webmaster you may be moved up in the list.`,
   },
   {

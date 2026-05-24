@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'Pre-501(c)(3) Onboarding Guide',
   description:
     'Onboarding guide for charities pending 501(c)(3) status. Access free tools and services from Free For Charity while your application is in progress.',
-  alternates: { canonical: '/pre501c3' },
+  alternates: { canonical: '/pre501c3/' },
 }
 import Faqs from '@/components/pre501c3-components/Faqs'
 import Charity from '@/components/pre501c3-components/charity'

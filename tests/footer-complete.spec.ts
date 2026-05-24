@@ -51,12 +51,12 @@ test.describe('Footer - Column 2: Quick Links', () => {
     const footer = page.locator('footer')
     const expectedLinks = [
       { text: 'Home', href: '/' },
-      { text: 'About Us', href: '/about-us' },
-      { text: 'Donate', href: '/donate' },
-      { text: 'Volunteer', href: '/volunteer' },
-      { text: 'Help For Charities', href: '/help-for-charities' },
-      { text: 'Pre-501c3 Onboarding', href: '/pre501c3' },
-      { text: '501c3 Onboarding', href: '/501c3' },
+      { text: 'About Us', href: '/about-us/' },
+      { text: 'Donate', href: '/donate/' },
+      { text: 'Volunteer', href: '/volunteer/' },
+      { text: 'Help For Charities', href: '/help-for-charities/' },
+      { text: 'Pre-501c3 Onboarding', href: '/pre501c3/' },
+      { text: '501c3 Onboarding', href: '/501c3/' },
       { text: 'Supported Charity Login', href: /hub/ },
     ]
 
@@ -79,18 +79,18 @@ test.describe('Footer - Column 2: Quick Links', () => {
   test('should have 7 policy links', async ({ page }) => {
     const footer = page.locator('footer')
     const policyLinks = [
-      { text: 'Donation Policy', href: '/donation-policy' },
-      { text: 'Free For Charity Donation Policy', href: '/free-for-charity-donation-policy' },
-      { text: 'Free For Charity Privacy Policy', href: '/privacy-policy' },
-      { text: 'Free For Charity Cookie Policy', href: '/cookie-policy' },
-      { text: 'Free For Charity Terms of Service', href: '/terms-of-service' },
+      { text: 'Donation Policy', href: '/donation-policy/' },
+      { text: 'Free For Charity Donation Policy', href: '/free-for-charity-donation-policy/' },
+      { text: 'Free For Charity Privacy Policy', href: '/privacy-policy/' },
+      { text: 'Free For Charity Cookie Policy', href: '/cookie-policy/' },
+      { text: 'Free For Charity Terms of Service', href: '/terms-of-service/' },
       {
         text: 'Free For Charity Vulnerability Disclosure Policy',
-        href: '/vulnerability-disclosure-policy',
+        href: '/vulnerability-disclosure-policy/',
       },
       {
         text: 'Free For Charity Security Acknowledgement',
-        href: '/security-acknowledgements',
+        href: '/security-acknowledgements/',
       },
     ]
 

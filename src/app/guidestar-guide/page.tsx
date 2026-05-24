@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'GuideStar Guide',
   description:
     "Guide for achieving GuideStar/Candid Platinum Seal of Transparency. Enhance your charity's credibility and visibility for donors.",
-  alternates: { canonical: '/guidestar-guide' },
+  alternates: { canonical: '/guidestar-guide/' },
 }
 
 const index = () => {

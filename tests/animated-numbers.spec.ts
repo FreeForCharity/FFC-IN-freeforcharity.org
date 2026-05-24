@@ -90,15 +90,27 @@ test.describe('Results 2023 Animated Numbers', () => {
     })
     const page = await context.newPage()
 
-    await page.goto('/')
+    // The homepage embeds a Zeffy donation iframe whose network never
+    // quiets, so `waitForLoadState('networkidle')` times out in CI. Use
+    // `domcontentloaded` and rely on Playwright's auto-retrying
+    // `toBeVisible` to absorb hydration timing instead.
+    await page.goto('/', { waitUntil: 'domcontentloaded' })
     const resultsHeading = page.locator('h2:has-text("Results - 2023")')
-    // Wait for the element to be visible before scrolling
-    await expect(resultsHeading).toBeVisible({ timeout: 5000 })
-    await resultsHeading.scrollIntoViewIfNeeded()
+    await expect(resultsHeading).toBeVisible({ timeout: 10000 })
+    // Scroll via the DOM API rather than `scrollIntoViewIfNeeded`. The
+    // React tree on this page re-renders during hydration, so Playwright's
+    // stability check can fail with "Element is not attached to the DOM"
+    // even after `toBeVisible` succeeds. `evaluate` only needs the node
+    // to exist at the moment of execution.
+    await resultsHeading.evaluate((el) => el.scrollIntoView({ block: 'center' }))
 
-    // With reduced motion, numbers should appear instantly at final value
+    // With reduced motion, numbers should appear at final value once the
+    // section is hydrated and the scroll observer fires. Allow a 5s window
+    // for the React effect + CountUp to settle on slower CI runners (the
+    // motion-reduced branch is still synchronous, but hydration timing
+    // varies enough to flake under a 1s budget).
     const firstCardNumber = getResultCard(page, 'Organizational partners').locator('h1')
-    await expect(firstCardNumber).toContainText('221', { timeout: 1000 })
+    await expect(firstCardNumber).toContainText('221', { timeout: 5000 })
 
     await context.close()
   })

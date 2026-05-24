@@ -1,4 +1,11 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: 'cPanel Backup SOP',
+  description: 'Internal Free For Charity admin runbook for cPanel backups.',
+  robots: { index: false, follow: false },
+}
 
 export default function CpanelBackupSop() {
   return (

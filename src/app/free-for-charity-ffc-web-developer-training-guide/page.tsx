@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Web Developer Training Guide',
   description:
     'Comprehensive FFC training guide for setting up and managing WHMCS, Cloudflare, Microsoft 365, WordPress, and other nonprofit technology tools.',
-  alternates: { canonical: '/free-for-charity-ffc-web-developer-training-guide' },
+  alternates: { canonical: '/free-for-charity-ffc-web-developer-training-guide/' },
 }
 
 const index = () => {

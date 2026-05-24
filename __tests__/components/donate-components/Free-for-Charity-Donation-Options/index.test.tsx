@@ -43,6 +43,6 @@ describe('Free-for-Charity-Donation-Options Component', () => {
     expect(calloutHeader).toBeInTheDocument()
     expect(calloutDescription).toBeInTheDocument()
     expect(button).toBeInTheDocument()
-    expect(button).toHaveAttribute('href', '/free-for-charity-endowment-fund')
+    expect(button).toHaveAttribute('href', '/free-for-charity-endowment-fund/')
   })
 })

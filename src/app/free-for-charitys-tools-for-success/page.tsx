@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Tools for Success',
   description:
     'Free productivity, educational, and business tools curated by Free For Charity to help nonprofits and volunteers succeed.',
-  alternates: { canonical: '/free-for-charitys-tools-for-success' },
+  alternates: { canonical: '/free-for-charitys-tools-for-success/' },
 }
 import RescueTime from '@/components/free-for-charitys-tools-for-success-components/Rescue-Time'
 import TwoCards from '@/components/free-for-charitys-tools-for-success-components/Two-Cards'

@@ -287,7 +287,7 @@ const index = () => {
         </div>
 
         <div className="pt-[26px] max-w-[90%] sm:max-w-[90%] mx-auto text-[14px] flex items-center justify-center">
-          <Transparentbtn text="Continue Onboarding with Free For Charity" href="/501c3" />
+          <Transparentbtn text="Continue Onboarding with Free For Charity" href="/501c3/" />
         </div>
       </div>
     </div>
