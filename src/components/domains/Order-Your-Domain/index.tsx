@@ -1,5 +1,6 @@
 import React from 'react'
 import StepCard from '@/components/ui/StepCard'
+import { hubStore } from '@/lib/config'
 
 const HowToOrderDomain = () => {
   const steps = [
@@ -19,8 +20,7 @@ const HowToOrderDomain = () => {
       linkText: 'Click here',
       innerbg: 'bg-[#2A6F9E]',
       outerbg: 'bg-[#2A6F9E]',
-      linkUrl:
-        'https://freeforcharity.org/hub/store/ffc-consulting/free-org-domain-name-with-microsoft-email-address-setup',
+      linkUrl: hubStore('ffc-consulting/free-org-domain-name-with-microsoft-email-address-setup'),
     },
     {
       number: 3,

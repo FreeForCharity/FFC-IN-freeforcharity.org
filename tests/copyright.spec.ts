@@ -36,10 +36,13 @@ test.describe('Footer Copyright Notice', () => {
     // Navigate to the homepage
     await page.goto('/')
 
-    // Find the link within the copyright notice
-    const copyrightLink = page.locator(
-      'footer p:has-text("All Rights Are Reserved") a[href="https://freeforcharity.org"]'
-    )
+    // Find the link within the copyright notice. The href is relative
+    // ("/") and the canonical origin renders as visible text — match
+    // on display text so the test survives staging deploys that ship
+    // from a non-production origin.
+    const copyrightLink = page
+      .locator('footer p:has-text("All Rights Are Reserved")')
+      .getByRole('link', { name: 'https://freeforcharity.org' })
 
     // Verify the link is visible
     await expect(copyrightLink).toBeVisible()

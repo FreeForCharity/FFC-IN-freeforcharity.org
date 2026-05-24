@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useRef } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { IoIosArrowForward } from 'react-icons/io'
 import { assetPath } from '@/lib/assetPath'
 
@@ -102,10 +103,8 @@ const Index = () => {
               organization.
             </div>
 
-            <a
-              href="https://freeforcharity.org/"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/"
               className="relative group inline-flex items-center justify-center gap-2 mt-[25px] px-[30px] py-[6px] border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] transition-all duration-300 ease-in-out text-white shadow-md leading-[31px] font-[600] hover:shadow-[0px_12px_18px_-6px_#b35000]"
               id="montserrat-font"
             >
@@ -113,7 +112,7 @@ const Index = () => {
                 Get Started
               </span>
               <IoIosArrowForward className="opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-in-out w-[20px] h-[20px]" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

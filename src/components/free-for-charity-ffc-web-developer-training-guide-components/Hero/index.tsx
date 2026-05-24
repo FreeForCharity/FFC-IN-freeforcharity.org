@@ -1,4 +1,5 @@
 import React from 'react'
+import { hubUrl } from '@/lib/config'
 
 const Index = () => {
   const sections = [
@@ -70,7 +71,7 @@ const Index = () => {
             <li className="pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               <span className="font-[600] text-[#1c2a38]">Charity Login URL:</span>{' '}
               <a
-                href="https://freeforcharity.org/hub/"
+                href={hubUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#005a9c]"
@@ -81,7 +82,7 @@ const Index = () => {
             <li className="pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               <span className="font-[600] text-[#1c2a38]">Admin Login URL:</span>{' '}
               <a
-                href="https://freeforcharity.org/hub/globaladmin"
+                href={hubUrl('/globaladmin')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#005a9c]"
