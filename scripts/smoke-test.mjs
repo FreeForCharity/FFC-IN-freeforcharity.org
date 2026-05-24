@@ -45,7 +45,15 @@ async function request(path, { followRedirects = true } = {}) {
       method: 'GET',
       redirect: followRedirects ? 'follow' : 'manual',
       signal: controller.signal,
-      headers: { 'User-Agent': 'ffc-smoke-test/1.0' },
+      headers: {
+        'User-Agent': 'ffc-smoke-test/1.0',
+        // Bust the Cloudflare edge cache so a freshly-deployed origin
+        // is observed instead of a stale cached version. Without this,
+        // a smoke run immediately after deploy can pass against the
+        // pre-deploy HTML and report green on a regression.
+        'Cache-Control': 'no-cache',
+        Pragma: 'no-cache',
+      },
     })
     return { status: res.status, location: res.headers.get('location'), url: res.url }
   } catch (err) {
