@@ -36,7 +36,7 @@ function record(name, ok, detail) {
   process.stdout.write(`${ok ? PASS : FAIL} ${name}${detail ? ` — ${detail}` : ''}\n`)
 }
 
-async function head(path, { followRedirects = true } = {}) {
+async function request(path, { followRedirects = true } = {}) {
   const url = path.startsWith('http') ? path : `${BASE_URL}${path}`
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
@@ -56,13 +56,13 @@ async function head(path, { followRedirects = true } = {}) {
 }
 
 async function checkStatus(name, path, expected) {
-  const r = await head(path)
+  const r = await request(path)
   const ok = r.status === expected
   record(name, ok, `${path} → ${r.status}${r.error ? ` (${r.error})` : ''}`)
 }
 
 async function checkRedirect(name, path, expectedStatus, expectedLocationSuffix) {
-  const r = await head(path, { followRedirects: false })
+  const r = await request(path, { followRedirects: false })
   const locOk = r.location && r.location.endsWith(expectedLocationSuffix)
   const ok = r.status === expectedStatus && locOk
   record(name, ok, `${path} → ${r.status} ${r.location || '(no Location)'}`)
@@ -107,12 +107,23 @@ async function main() {
     await checkStatus(`sitemap ${path}`, path, 200)
   }
 
-  console.log(`\n-- canonical-form 301s (Apache-only; will fail on \`serve\`)`)
-  const slugSamples = sitemapPaths.filter((p) => p !== '/').slice(0, 5)
-  for (const path of slugSamples) {
-    const noSlash = path.replace(/\/$/, '')
-    await checkRedirect(`canonical /slug → /slug/`, noSlash, 301, path)
-    await checkRedirect(`legacy *.html → /slug/`, `${noSlash}.html`, 301, path)
+  // Canonical-form 301s only make sense in the trailingSlash: true
+  // world (PR #186): bare /foo → /foo/, /foo.html → /foo/. Detect by
+  // looking at the sitemap form — if it ships trailing slashes, the
+  // Apache config is the post-#186 variant and these assertions apply.
+  // Skip on a pre-#186 deploy where the export emits /foo.html and the
+  // .htaccess strips trailing slashes (the opposite invariant).
+  const sitemapHasTrailingSlash = sitemapPaths.some((p) => p !== '/' && p.endsWith('/'))
+  if (sitemapHasTrailingSlash) {
+    console.log(`\n-- canonical-form 301s (Apache-only; will fail on \`serve\`)`)
+    const slugSamples = sitemapPaths.filter((p) => p !== '/').slice(0, 5)
+    for (const path of slugSamples) {
+      const noSlash = path.replace(/\/$/, '')
+      await checkRedirect(`canonical /slug → /slug/`, noSlash, 301, path)
+      await checkRedirect(`legacy *.html → /slug/`, `${noSlash}.html`, 301, path)
+    }
+  } else {
+    console.log(`\n-- canonical-form 301s skipped (sitemap is no-slash → pre-trailingSlash export)`)
   }
 
   console.log(`\n-- WP→Next legacy redirects from docs/cutover-redirects.csv`)
