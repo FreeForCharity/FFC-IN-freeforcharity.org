@@ -11,10 +11,11 @@ describe('src/lib/config', () => {
   const originalEnv = process.env.NEXT_PUBLIC_SITE_ORIGIN
   let mod: typeof import('@/lib/config')
 
-  // Use isolateModules + dynamic import alternative so each test gets a
-  // fresh module evaluation (config.ts reads process.env at import time).
-  // require() is forbidden by @typescript-eslint/no-require-imports;
-  // jest.requireActual is the typed-friendly equivalent.
+  // Force a fresh module evaluation in each test (config.ts reads
+  // process.env at import time). jest.resetModules() clears the module
+  // cache; jest.requireActual re-evaluates against the current env.
+  // require() is forbidden by @typescript-eslint/no-require-imports,
+  // so jest.requireActual is the typed-friendly equivalent.
   function reloadModule() {
     jest.resetModules()
     mod = jest.requireActual('@/lib/config')
