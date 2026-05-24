@@ -99,15 +99,30 @@ async function checkBodyContains(name, path, expectedSubstrings) {
   record(name, ok, detail)
 }
 
-function loadSitemapPaths() {
+function parseSitemap(xml) {
+  const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])
+  return locs.map((u) => new URL(u).pathname)
+}
+
+async function loadSitemapPaths() {
+  // Prefer the freshly-built local sitemap when present (deploy workflow
+  // builds before running the smoke check, so this is the post-deploy path).
   const localSitemap = resolve(repoRoot, 'out/sitemap.xml')
   try {
-    const xml = readFileSync(localSitemap, 'utf8')
-    const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])
-    return locs.map((u) => new URL(u).pathname)
+    return parseSitemap(readFileSync(localSitemap, 'utf8'))
   } catch {
-    return null
+    /* fall through to fetch from origin */
   }
+  // Scheduled / standalone runs without a local build: fetch the sitemap
+  // from the target origin instead. Lets daily monitoring jobs run without
+  // `npm ci && npm run build` in front of every invocation.
+  try {
+    const r = await request('/sitemap.xml', { readBody: true })
+    if (r.status === 200 && r.body) return parseSitemap(r.body)
+  } catch {
+    /* swallow; null tells main() to bail */
+  }
+  return null
 }
 
 function loadCsvRedirects() {
@@ -127,9 +142,11 @@ function loadCsvRedirects() {
 async function main() {
   console.log(`\nSmoke-testing ${BASE_URL}\n`)
 
-  const sitemapPaths = loadSitemapPaths()
+  const sitemapPaths = await loadSitemapPaths()
   if (!sitemapPaths) {
-    console.error('No out/sitemap.xml found — run `npm run build` first.')
+    console.error(
+      'No sitemap available — neither out/sitemap.xml (build) nor /sitemap.xml on the target origin worked.'
+    )
     process.exit(1)
   }
 
