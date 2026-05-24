@@ -8,12 +8,22 @@ ships with the static export and handles every redirect listed below at
 the InterServer Apache origin. No Cloudflare changes are required for
 the redirects to fire.
 
-**Optional secondary implementation:** the same redirects are also
-available as a Cloudflare [Bulk Redirects](https://developers.cloudflare.com/rules/url-forwarding/bulk-redirects/)
-import file at [`docs/cutover-redirects.csv`](cutover-redirects.csv) —
-useful if you want redirects to fire at Cloudflare's edge instead of
-the origin (saves a hop). Either source-of-truth works; don't enable
-both unless you accept the redundancy.
+**Cloudflare Bulk Redirects: DO NOT enable by default.** The same
+redirects are available as a Cloudflare [Bulk Redirects](https://developers.cloudflare.com/rules/url-forwarding/bulk-redirects/)
+import file at [`docs/cutover-redirects.csv`](cutover-redirects.csv).
+`.htaccess` is the single source of truth. Enabling the Cloudflare
+rule on top would double-source the redirect map and force every
+edit to happen in two places.
+
+**Enable the Cloudflare rule only if:**
+
+- `.htaccess` is ever removed (e.g. migrating off cPanel to a static
+  host without `.htaccess` semantics), or
+- you specifically want to preempt the origin hop for crawler traffic
+  during heavy 301 storms.
+
+The CSV is otherwise dead-weight kept in sync as a backup. Don't
+touch the toggle without updating this doc.
 
 ---
 
@@ -107,11 +117,15 @@ After cutover, smoke-test 5 sample URLs in an incognito browser:
 
 ---
 
-## Optional Cloudflare Bulk Redirects (skip unless needed)
+## Cloudflare Bulk Redirects (do NOT enable by default — see top of file)
 
-Only do this if you want redirects to fire at Cloudflare's edge instead
-of reaching the InterServer origin. It's redundant with `.htaccess` and
-adds a second place to keep in sync — most teams skip it.
+The intro section at the top of this document is the authoritative
+guidance: **skip this by default**. The CSV is shipped as a backup,
+not as something to flip on alongside `.htaccess`. The steps below
+exist so that, if the day comes when `.htaccess` is removed (e.g.
+migrating off cPanel) or you need edge-side preemption for a 301
+storm, you have a documented path to enable the rule without
+guessing. Until then, don't.
 
 1. Sign in to [dash.cloudflare.com](https://dash.cloudflare.com) →
    account level (not zone) → **Bulk Redirects**.
