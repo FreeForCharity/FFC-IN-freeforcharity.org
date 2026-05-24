@@ -115,7 +115,7 @@ test.describe('Mobile Navigation', () => {
 
     const mobileMenu = page.locator('header .lg\\:hidden.absolute')
     // About Us dropdown has Contact Us as sub-item
-    const contactLinks = mobileMenu.locator('a[href="/contact-us"]')
+    const contactLinks = mobileMenu.locator('a[href="/contact-us/"]')
     await expect(contactLinks.first()).toBeVisible()
   })
 
