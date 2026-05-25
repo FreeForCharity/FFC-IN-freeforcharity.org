@@ -73,7 +73,9 @@ Deep-dive docs:
 - [ ] `/donate/` — PayPal button + Zeffy iframe load
 - [ ] `/hub/` — WHMCS billing renders, can log in
 - [ ] Do a **real $5 PayPal donation** end-to-end, confirm the return URL
-- [ ] Cookie banner → Accept → GTM + Clarity + Tawk load (DevTools Network)
+- [ ] Cookie banner → Accept → GA4 + GTM + Clarity + Tawk load (DevTools Network)
+- [ ] Confirm the GA4 Realtime report shows your visit (validates `G-541Y8JRDLX`)
+- [ ] Keep production analytics clean: set up the GA4 hostname filter per [ANALYTICS-STAGING-FILTER.md](ANALYTICS-STAGING-FILTER.md) (excludes staging + localhost hits)
 - [ ] Watch Cloudflare 5xx rate + cPanel `error_log`
 
 ## Step 5 — 48-hour soak ([#142])
