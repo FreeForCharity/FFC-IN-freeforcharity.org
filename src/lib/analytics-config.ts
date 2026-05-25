@@ -17,21 +17,28 @@
 //
 // Anything genuinely secret (FTP creds, API tokens) stays in GitHub
 // Actions secrets and never appears here.
+//
+// `??` (not `||`) so a build can DISABLE an integration by setting its
+// env var to an empty string — e.g. a staging build with
+// `NEXT_PUBLIC_GA_MEASUREMENT_ID=""` gets an empty ID (loader no-ops),
+// whereas `||` would treat "" as falsy and fall back to the default,
+// making it impossible to turn off. An unset var is `undefined`, which
+// `??` correctly resolves to the default.
 
-export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-541Y8JRDLX'
+export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? 'G-541Y8JRDLX'
 
-export const GTM_CONTAINER_ID = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID || 'GTM-NJ4DXH9'
+export const GTM_CONTAINER_ID = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID ?? 'GTM-NJ4DXH9'
 
-export const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || 'nzldyj4h3k'
+export const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID ?? 'nzldyj4h3k'
 
 export const TAWK_TO_PROPERTY =
-  process.env.NEXT_PUBLIC_TAWK_TO_PROPERTY || '65bf15eb0ff6374032c915d9/1hlp6r8hc'
+  process.env.NEXT_PUBLIC_TAWK_TO_PROPERTY ?? '65bf15eb0ff6374032c915d9/1hlp6r8hc'
 
 // No Meta Pixel or Sentry project configured yet — these stay empty
 // until an operator sets the env var (or adds a default here once a
 // real ID exists). Empty = the corresponding loader is a no-op.
-export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || ''
+export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID ?? ''
 
-export const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN || ''
+export const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN ?? ''
 
-export const SENTRY_ENVIRONMENT = process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT || 'production'
+export const SENTRY_ENVIRONMENT = process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT ?? 'production'

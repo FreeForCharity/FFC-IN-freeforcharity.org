@@ -1,4 +1,10 @@
 import { test, expect, type Page } from '@playwright/test'
+import {
+  GA_MEASUREMENT_ID,
+  GTM_CONTAINER_ID,
+  CLARITY_PROJECT_ID,
+  TAWK_TO_PROPERTY,
+} from '../src/lib/analytics-config'
 
 /**
  * Analytics + widget loading tests.
@@ -9,17 +15,17 @@ import { test, expect, type Page } from '@playwright/test'
  * build under test — local, CI, or production — always has them, which
  * is exactly why this is testable in CI at all.
  *
+ * IDs are imported from the same config module the app uses, so a
+ * future ID change (or a staging build that overrides them) keeps the
+ * test aligned with the build under test rather than asserting a
+ * hard-coded value the app no longer uses.
+ *
  * Consent model (from cookie-consent/index.tsx):
  *   - necessary + functional: always on  → Tawk.to (functional) loads
  *     once the banner is dismissed by any choice
  *   - analytics (opt-in)                 → GA4 + GTM + Clarity
  *   - marketing (opt-in)                 → Meta Pixel (no ID yet, no-op)
  */
-
-const GA_MEASUREMENT_ID = 'G-541Y8JRDLX'
-const GTM_CONTAINER_ID = 'GTM-NJ4DXH9'
-const CLARITY_PROJECT_ID = 'nzldyj4h3k'
-const TAWK_TO_PROPERTY = '65bf15eb0ff6374032c915d9'
 
 // Count <script> elements whose src OR inline text references a marker.
 async function scriptCount(page: Page, marker: string): Promise<number> {
@@ -74,8 +80,13 @@ test.describe('Analytics + widget loading', () => {
   test('Decline All keeps analytics scripts out', async ({ page }) => {
     await clearConsent(page)
     await page.getByRole('button', { name: 'Decline All' }).click()
-    // Give the page a moment; nothing analytics should appear.
-    await page.waitForTimeout(1500)
+    // Bound the wait on a real event instead of an arbitrary sleep:
+    // Decline All still grants functional consent, so Tawk.to loads.
+    // Once Tawk is present we know the post-consent loaders have run —
+    // at which point analytics must still be absent.
+    await expect
+      .poll(() => scriptCount(page, `embed.tawk.to/${TAWK_TO_PROPERTY}`), { timeout: 8000 })
+      .toBeGreaterThan(0)
     expect(await scriptCount(page, `gtag/js?id=${GA_MEASUREMENT_ID}`)).toBe(0)
     expect(await scriptCount(page, 'googletagmanager.com/gtm.js')).toBe(0)
     expect(await scriptCount(page, 'clarity.ms')).toBe(0)
