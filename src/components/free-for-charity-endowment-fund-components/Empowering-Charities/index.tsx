@@ -7,12 +7,12 @@ const Index = () => {
   return (
     <div>
       <section className="py-[54px] w-[90%] md:w-[80%] mx-auto">
-        <h1
+        <h2
           className="pt-[27px] mb-[10px] text-[32px] sm:text-[42px] md:text-[50px] text-[#111111] text-center font-[500] leading-[42px] sm:leading-[52px] md:leading-[60px] pb-[37px]"
           id="cinzel"
         >
-          Empowering Charities Through Endowment
-        </h1>
+          The Impact So Far &mdash; and What&rsquo;s Next
+        </h2>
 
         <div className="flex flex-col-reverse md:flex-row items-center md:items-stretch mt-[40px] gap-[30px] md:gap-0">
           {/* Image Column */}

@@ -14,18 +14,25 @@ const Index = () => {
               className="text-[42px] sm:text-[54px] md:text-[72px] font-[500] leading-[50px] sm:leading-[65px] md:leading-[83px] text-white"
               id="cinzel"
             >
-              Empower Charities with Free Domains
+              An Endowment That Keeps Charities Online Forever
             </h1>
+            <p
+              className="mt-[20px] text-[16px] sm:text-[18px] md:text-[20px] leading-[28px] sm:leading-[30px] text-white/90 max-w-[640px]"
+              id="fauna-font"
+            >
+              Your gift today funds free domains, hosting, and email for U.S. 501(c)(3) nonprofits
+              for generations to come — paid for from investment returns, never the principal.
+            </p>
           </div>
 
           {/* Right Column: Button */}
           <div className="flex justify-center md:justify-start items-center mt-[25px] md:mt-0">
             <Link
-              href="/free-for-charity-endowment-fund/"
+              href="#donate"
               className="whitespace-nowrap px-[20px] sm:px-[24px] py-[10px] sm:py-[12px] hover:bg-gray-100 transition shadow-lg text-[#003566] !border-0 rounded-full text-[14px] font-[700] leading-[24px] bg-white"
               id="fauna-font"
             >
-              Support the Endowment
+              Give to the Endowment
             </Link>
           </div>
         </div>

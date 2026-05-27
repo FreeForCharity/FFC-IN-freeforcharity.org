@@ -1,16 +1,21 @@
 import React from 'react'
+import Link from 'next/link'
 import { assetPath } from '@/lib/assetPath'
 
 interface SupportMissionSectionProps {
   title?: string
   description1?: string
   description2?: string
+  ctaLabel?: string
+  ctaHref?: string
 }
 
 const SupportMissionSection: React.FC<SupportMissionSectionProps> = ({
-  title = 'Support Our Mission',
-  description1 = 'Join us in reaching our $1,000,000 Endowment goal to ensure sustainable support for our US based 501c3 charities.',
-  description2 = 'Your contribution will help provide free domain names and essential email services to nonprofits, enabling them to focus on their missions without the burden of digital costs. Every donation brings us closer to empowering more charities with the tools they need to succeed.',
+  title = 'Help Us Reach $1,000,000',
+  description1 = 'A fully-funded $1M endowment lets Free For Charity cover free domains, hosting, and email for our 501(c)(3) partners from investment returns alone &mdash; with no annual fundraising scramble.',
+  description2 = 'Every gift, of any size, moves us closer. Recurring monthly gifts are especially powerful: they compound into permanent capacity for the charities we serve.',
+  ctaLabel = 'Give to the Endowment',
+  ctaHref = '#donate',
 }) => {
   return (
     <section
@@ -30,27 +35,31 @@ const SupportMissionSection: React.FC<SupportMissionSectionProps> = ({
         className="bg-white rounded-[6px] shadow-[0px_24px_72px_-12px_rgba(0,0,0,0.12)] p-[40px] max-w-[540px] text-center
       sm:p-[24px] sm:max-w-[540px] w-[100%]"
       >
-        <h1
+        <h2
           className="text-[32px] font-[500] text-gray-900 mb-[10px] pb-[10px] sm:leading-[60px]
           sm:text-[50px] leading-[40px]"
           id="cinzel"
-        >
-          {title}
-        </h1>
+          dangerouslySetInnerHTML={{ __html: title }}
+        />
         <p
           className="sm:text-[16px] font-[500] text-[#000000a3] mb-6 sm:leading-[28px]
           text-[14px] leading-[24px]"
           id="fauna-font"
-        >
-          {description1}
-        </p>
+          dangerouslySetInnerHTML={{ __html: description1 }}
+        />
         <p
           className="sm:text-[16px] font-[500] text-[#000000a3] mb-6 sm:leading-[28px]
           text-[14px] leading-[24px]"
           id="fauna-font"
+          dangerouslySetInnerHTML={{ __html: description2 }}
+        />
+        <Link
+          href={ctaHref}
+          className="inline-block whitespace-nowrap px-[28px] py-[12px] bg-[#003566] text-white rounded-full text-[14px] font-[700] leading-[24px] shadow-lg hover:bg-[#002448] transition"
+          id="fauna-font"
         >
-          {description2}
-        </p>
+          {ctaLabel}
+        </Link>
       </div>
     </section>
   )
