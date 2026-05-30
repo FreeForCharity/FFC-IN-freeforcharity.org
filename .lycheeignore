@@ -110,3 +110,20 @@ https://www.mailchimp.com/**
 
 # FFC-owned video CDN serving mission-video.mp4 (origin returns 403 to bots)
 https://ffcsites.org/videos/mission-video.mp4
+
+# Template / placeholder URLs that appear literally in source code and fail
+# scanner probes — not real broken links, just unresolved interpolation
+# values being scanned as if they were URLs.
+#
+# - GTM loader with an empty container id (the real id is injected at
+#   runtime from NEXT_PUBLIC_GTM_ID; empty `?id=` returns 400 Bad Request).
+# - Tawk widget URL containing the literal `${TAWK_TO_PROPERTY}` placeholder
+#   string (the real property id is injected at runtime, so the placeholder
+#   itself can never resolve).
+https://www.googletagmanager.com/gtm.js?id=
+https://embed.tawk.to/$%7BTAWK_TO_PROPERTY%7D
+
+# Returns HTTP 415 to scanners (server rejects the bot's Accept header).
+# Site is healthy in a browser — verified during 2026-05-27 audit.
+https://americanlegionpost64.org/
+https://americanlegionpost64.org/**
