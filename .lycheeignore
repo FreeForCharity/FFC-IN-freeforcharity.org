@@ -115,15 +115,19 @@ https://ffcsites.org/videos/mission-video.mp4
 # scanner probes — not real broken links, just unresolved interpolation
 # values being scanned as if they were URLs.
 #
-# - GTM loader with an empty container id (the real id is injected at
-#   runtime from NEXT_PUBLIC_GTM_ID; empty `?id=` returns 400 Bad Request).
+# Patterns in .lycheeignore are treated as regex by lychee, so `?` `.` and
+# `$` are escaped here. (Existing glob-ish patterns above like `**` happen
+# to work because regex `*` matches "previous char zero or more times" and
+# `.` matches any char — close enough for URL globs.)
+#
+# - GTM loader with an empty container id. Empty `?id=` returns 400; the
+#   real id is injected at runtime from NEXT_PUBLIC_GTM_ID.
 # - Tawk widget URL containing the literal `${TAWK_TO_PROPERTY}` placeholder
-#   string (the real property id is injected at runtime, so the placeholder
-#   itself can never resolve).
-https://www.googletagmanager.com/gtm.js?id=
-https://embed.tawk.to/$%7BTAWK_TO_PROPERTY%7D
+#   (URL-encoded in the response as `$%7BTAWK_TO_PROPERTY%7D`). The real
+#   property id is injected at runtime.
+https://www\.googletagmanager\.com/gtm\.js\?id=
+https://embed\.tawk\.to/\$%7BTAWK_TO_PROPERTY%7D
 
 # Returns HTTP 415 to scanners (server rejects the bot's Accept header).
 # Site is healthy in a browser — verified during 2026-05-27 audit.
-https://americanlegionpost64.org/
-https://americanlegionpost64.org/**
+https://americanlegionpost64\.org/?
