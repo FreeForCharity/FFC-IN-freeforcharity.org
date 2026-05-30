@@ -73,6 +73,9 @@ https://support.cloudflare.com/**
 https://www.webhostingtalk.com/**
 https://www.g2.com/**
 https://usertraining.lastpass.com/**
+# support.lastpass.com presents an SSL cert lychee can't verify from the
+# GHA runner (UnknownIssuer). Browser-trusted; CI-only flake.
+https://support\.lastpass\.com/.*
 https://www.techsoup.org/**
 http://www.techsoup.org/**
 https://www.upwork.com/**
