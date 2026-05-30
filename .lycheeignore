@@ -133,4 +133,5 @@ https://embed\.tawk\.to/\$%7BTAWK_TO_PROPERTY%7D
 
 # Returns HTTP 415 to scanners (server rejects the bot's Accept header).
 # Site is healthy in a browser — verified during 2026-05-27 audit.
-https://americanlegionpost64\.org/?
+# Regex: literal domain + optional trailing slash + end-of-URL.
+^https://americanlegionpost64\.org/?$

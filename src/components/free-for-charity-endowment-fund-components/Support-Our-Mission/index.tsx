@@ -12,7 +12,7 @@ interface SupportMissionSectionProps {
 
 const SupportMissionSection: React.FC<SupportMissionSectionProps> = ({
   title = 'Help Us Reach $1,000,000',
-  description1 = 'A fully-funded $1M endowment lets Free For Charity cover free domains, hosting, and email for our 501(c)(3) partners from investment returns alone &mdash; with no annual fundraising scramble.',
+  description1 = 'A fully-funded $1M endowment lets Free For Charity cover free domains, hosting, and email for our 501(c)(3) partners from investment returns alone — with no annual fundraising scramble.',
   description2 = 'Every gift, of any size, moves us closer. Recurring monthly gifts are especially powerful: they compound into permanent capacity for the charities we serve.',
   ctaLabel = 'Give to the Endowment',
   ctaHref = '#donate',
@@ -39,20 +39,23 @@ const SupportMissionSection: React.FC<SupportMissionSectionProps> = ({
           className="text-[32px] font-[500] text-gray-900 mb-[10px] pb-[10px] sm:leading-[60px]
           sm:text-[50px] leading-[40px]"
           id="cinzel"
-          dangerouslySetInnerHTML={{ __html: title }}
-        />
+        >
+          {title}
+        </h2>
         <p
           className="sm:text-[16px] font-[500] text-[#000000a3] mb-6 sm:leading-[28px]
           text-[14px] leading-[24px]"
           id="fauna-font"
-          dangerouslySetInnerHTML={{ __html: description1 }}
-        />
+        >
+          {description1}
+        </p>
         <p
           className="sm:text-[16px] font-[500] text-[#000000a3] mb-6 sm:leading-[28px]
           text-[14px] leading-[24px]"
           id="fauna-font"
-          dangerouslySetInnerHTML={{ __html: description2 }}
-        />
+        >
+          {description2}
+        </p>
         <Link
           href={ctaHref}
           className="inline-block whitespace-nowrap px-[28px] py-[12px] bg-[#003566] text-white rounded-full text-[14px] font-[700] leading-[24px] shadow-lg hover:bg-[#002448] transition"
