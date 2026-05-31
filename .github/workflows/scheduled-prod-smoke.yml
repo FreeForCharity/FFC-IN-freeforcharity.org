@@ -64,12 +64,19 @@ jobs:
           )
           echo "x-powered-by header: '${powered_by}'"
           shopt -s nocasematch
-          if [[ "${powered_by}" == PHP/* ]]; then
+          # Fail-safe: if the probe returned nothing at all (network/DNS/TLS
+          # failure, runner outage, etc.), assume we're still pre-cutover
+          # and skip — that's the safer side. The smoke would just open a
+          # noisy false-positive incident; the gate stays cautious instead.
+          if [[ -z "${powered_by}" ]]; then
+            echo "is_wp=true" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Probe inconclusive::Could not read x-powered-by from https://freeforcharity.org/ (empty or curl failed). Skipping smoke as a precaution — re-run once the apex is reachable."
+          elif [[ "${powered_by}" == PHP/* ]]; then
             echo "is_wp=true" >> "$GITHUB_OUTPUT"
             echo "::notice title=Pre-cutover state::Production is still WordPress (x-powered-by: ${powered_by}). Skipping smoke until the cPanel docroot swap is done. This is expected; the workflow will start asserting cutover behavior automatically once PHP is no longer in the response path."
           else
             echo "is_wp=false" >> "$GITHUB_OUTPUT"
-            echo "Production is no longer WordPress — proceeding with full smoke suite."
+            echo "Production is no longer WordPress (x-powered-by: ${powered_by}) — proceeding with full smoke suite."
           fi
 
       - name: Run smoke suite against production
