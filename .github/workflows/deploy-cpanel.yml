@@ -1,0 +1,175 @@
+name: Deploy to InterServer cPanel (production)
+
+# Builds the static export and SFTP-uploads it to ~/public_html_next/
+# on the InterServer cPanel host, alongside (not over) the WHMCS
+# instance at ~/public_html/hub/.
+#
+# Manual-trigger only until the operator is comfortable with the
+# deploy + swap workflow. Once stable, change the `on:` block to also
+# fire on push to main.
+#
+# Required GitHub repository secrets (Settings → Secrets and variables
+# → Actions):
+#   FTP_SERVER     e.g. freeforcharity.org or ftp.freeforcharity.org
+#   FTP_USERNAME   cPanel username (NOT root)
+#   FTP_PASSWORD   cPanel FTP password
+#   FTP_PORT       optional, defaults to 21 for FTPS
+#
+# The action used (SamKirkland/FTP-Deploy-Action) defaults to FTPS
+# (encrypted FTP over TLS) which is what InterServer cPanel provides.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: deploy-cpanel
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    name: Build and SFTP upload
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      # Safety gate: refuse to deploy if the CI workflow (lint, jest,
+      # build, Playwright) on this exact commit isn't green. The deploy
+      # workflow itself doesn't re-run the test suite, so without this
+      # check an operator could ship a known-broken build.
+      - name: Verify CI is green for this ref
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          REF: ${{ github.sha }}
+        run: |
+          set -e
+          rows=$(gh run list \
+            --workflow="CI - Build and Test" \
+            --commit="$REF" \
+            --limit 5 \
+            --json status,conclusion,databaseId,createdAt)
+          row_count=$(echo "$rows" | jq 'length')
+          if [ "$row_count" = "0" ]; then
+            echo "::error::No CI workflow run found for commit $REF."
+            echo "::error::This usually means:"
+            echo "::error::  - the commit was force-pushed after CI started (history rewritten)"
+            echo "::error::  - the CI workflow file was disabled or renamed since this commit"
+            echo "::error::  - the run was manually deleted"
+            echo "::error::Re-trigger CI on this ref before deploying:"
+            echo "::error::    gh workflow run 'CI - Build and Test' --ref $REF"
+            exit 1
+          fi
+          # Pick the most recent run that actually decided an outcome —
+          # skip cancelled/skipped runs (operator cancel, concurrency
+          # group cancel, never-started skip) and fall through to an
+          # earlier run that ran the full suite. Without this, a manual
+          # cancel on the latest run would hide a previous green run and
+          # block the deploy.
+          status=$(echo "$rows" | jq '[.[] | select(.conclusion != "cancelled" and .conclusion != "skipped")][0] // .[0]')
+          conclusion=$(echo "$status" | jq -r '.conclusion // "missing"')
+          state=$(echo "$status" | jq -r '.status // "missing"')
+          run_id=$(echo "$status" | jq -r '.databaseId // "?"')
+          echo "CI workflow on $REF: state=$state conclusion=$conclusion run_id=$run_id"
+          if [ "$state" != "completed" ]; then
+            echo "::error::CI workflow on $REF is still $state (run $run_id). Wait for CI to complete before deploying."
+            exit 1
+          fi
+          if [ "$conclusion" != "success" ]; then
+            echo "::error::CI workflow on $REF concluded with '$conclusion' (run $run_id) — refuse to deploy."
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build with Next.js (production basePath — root)
+        run: npm run build
+        env:
+          # Apex domain, no subpath
+          NEXT_PUBLIC_BASE_PATH: ''
+          # Analytics IDs are read at build time by cookie-consent.tsx —
+          # baking them into the static export. If a secret is unset the
+          # corresponding script never fires (no placeholder fallbacks),
+          # which is the desired behaviour. See .env.example for full
+          # documentation of these vars.
+          NEXT_PUBLIC_GA_MEASUREMENT_ID: ${{ secrets.NEXT_PUBLIC_GA_MEASUREMENT_ID }}
+          NEXT_PUBLIC_CLARITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_CLARITY_PROJECT_ID }}
+          NEXT_PUBLIC_META_PIXEL_ID: ${{ secrets.NEXT_PUBLIC_META_PIXEL_ID }}
+          NEXT_PUBLIC_GTM_CONTAINER_ID: ${{ secrets.NEXT_PUBLIC_GTM_CONTAINER_ID }}
+          NEXT_PUBLIC_TAWK_TO_PROPERTY: ${{ secrets.NEXT_PUBLIC_TAWK_TO_PROPERTY }}
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          NEXT_PUBLIC_SENTRY_ENVIRONMENT: ${{ secrets.NEXT_PUBLIC_SENTRY_ENVIRONMENT }}
+
+      - name: Verify build output
+        run: |
+          test -f out/index.html
+          test -f out/.htaccess
+          echo "out/ ready, $(find out -type f | wc -l) files"
+
+      - name: Validate required secrets are configured
+        run: |
+          missing=0
+          if [ -z "${{ secrets.FTP_SERVER }}" ];   then echo "::error::FTP_SERVER not set";   missing=1; fi
+          if [ -z "${{ secrets.FTP_USERNAME }}" ]; then echo "::error::FTP_USERNAME not set"; missing=1; fi
+          if [ -z "${{ secrets.FTP_PASSWORD }}" ]; then echo "::error::FTP_PASSWORD not set"; missing=1; fi
+          if [ "$missing" = "1" ]; then exit 1; fi
+
+      - name: SFTP upload to ~/public_html_next/
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT || '21' }}
+          protocol: ftps
+          local-dir: ./out/
+          server-dir: ./public_html_next/
+          # Preserve the WHMCS billing instance — never touch /hub.
+          # The exclude patterns apply BOTH to uploads and to remote
+          # deletions, so anything matched here stays untouched on the
+          # cPanel host even if it doesn't exist locally.
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/.DS_Store
+            **/node_modules/**
+            hub/**
+            cgi-bin/**
+            .htpasswd
+            error_log
+            .well-known/**
+
+      - name: Post-deploy smoke check (home reachable)
+        env:
+          DEPLOY_URL: https://freeforcharity.org/
+        run: |
+          # Quick reachability before the full smoke suite — bust Cloudflare
+          # cache so we observe the freshly-deployed origin.
+          curl --fail --show-error --silent --location \
+            --max-time 20 \
+            -H "Cache-Control: no-cache" \
+            -o /dev/null \
+            -w "Home: %{http_code} on %{url_effective} in %{time_total}s\n" \
+            "$DEPLOY_URL"
+
+      # Full smoke suite: every sitemap URL returns 200, every WP→Next
+      # 301 from docs/cutover-redirects.csv fires to the right target,
+      # /hub/ serves a WHMCS-marker body (not a stale index.html), an
+      # unknown URL returns 404, and key assets (sitemap.xml, robots.txt,
+      # favicon) are reachable. Fails the deploy job on any non-OK.
+      - name: Full smoke suite
+        env:
+          BASE_URL: https://freeforcharity.org
+        run: npm run smoke-test

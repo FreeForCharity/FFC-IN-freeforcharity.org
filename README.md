@@ -55,7 +55,7 @@ For a complete list, see the [Site Map](#site-map) section below.
 
 ### Prerequisites
 
-- Node.js 20.x (tested with v20.19.6)
+- Node.js 24.x (tested with v24.15.0)
 - npm (comes with Node.js)
 
 ### Setup
@@ -407,7 +407,7 @@ The site uses **dual deployment** strategy:
 **Pipeline Steps**:
 
 1. Checkout repository
-2. Setup Node.js 20
+2. Setup Node.js 24
 3. Install dependencies with `npm ci`
 4. Install Playwright browsers
 5. Build with `NEXT_PUBLIC_BASE_PATH=/FFC-IN-freeforcharity.org`
@@ -583,10 +583,10 @@ This project is maintained by Free For Charity, a 501(c)(3) nonprofit organizati
 - **Website**: [https://www.freeforcharity.org](https://www.freeforcharity.org)
 - **Organization**: Free For Charity
 - **EIN**: 46-2471893
-- **Contact**: Use the contact form at [/contact-us](https://www.freeforcharity.org/contact-us)
+- **Contact**: Use the contact form at [/contact-us/](https://www.freeforcharity.org/contact-us/)
 
 ---
 
 **Documentation Status**: ✅ Updated February 2026  
 **Next.js Version**: 16.0.10  
-**Node.js Version**: 20.x required
+**Node.js Version**: 24.x required

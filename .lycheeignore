@@ -1,5 +1,8 @@
 # Lychee ignore patterns
-# Lines starting with # are comments. Each line is a glob pattern.
+# Lines starting with # are comments. Each line is passed to lychee's
+# --exclude, which treats it as a regular expression matched anywhere
+# in the URL — escape regex metacharacters like '?' and '$' when you
+# need them literally.
 
 # Localhost and local dev URLs (used in configs, tests, and docs)
 http://localhost
@@ -37,11 +40,36 @@ https://your-domain.com/**
 # Cloudflare dashboard — requires authentication
 https://dash.cloudflare.com/**
 
+# Chronic external-host timeouts. Even with the bumped lychee retries
+# in .github/workflows/lychee.yml (--max-retries 5 --timeout 60), these
+# hosts respond too slowly from GitHub Actions runners and fail CI on
+# clean PRs that didn't touch them. Both are real, healthy URLs — they
+# just don't tolerate CI's network path. Pinned here to stop the flake.
+http://theleanstartup.com/
+http://theleanstartup.com/**
+https://sdgs.un.org/goals
+https://sdgs.un.org/goals/**
+
 # Internal GitHub Actions badge URLs — always valid when the workflow exists
 https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/**
-# Sites that block CI crawlers or are intentionally placeholder / flaky
+
+# Pre-cutover: the apex domain still points at WordPress, so any link in
+# the Next.js source pointing at https://freeforcharity.org/* would hit
+# WP and report misleading 200s/404s. Skip until cutover lands.
+#
+# POST-CUTOVER ACTION: once the document-root swap is complete and the
+# 48-hour soak has passed, narrow these to only the paths we don't own:
+#     https://freeforcharity.org/hub/**          (WHMCS, third-party)
+#     https://www.freeforcharity.org/hub/**      (WHMCS, third-party)
+#     https://freeforcharity.org/cdn-cgi/**      (Cloudflare-managed)
+#     https://www.freeforcharity.org/cdn-cgi/**  (Cloudflare-managed)
+# That lets lychee validate every /about-us, /donate, /volunteer, etc.
+# against the live new site, catching broken internal links the next
+# time someone touches a navigation component.
 https://freeforcharity.org/**
 https://www.freeforcharity.org/**
+
+# Sites that block CI crawlers or are intentionally placeholder / flaky
 https://my.interserver.net/**
 https://www.interserver.net/**
 https://support.cloudflare.com/**
@@ -60,3 +88,48 @@ https://www.nexcess.net/blog/whmcs-best-practices/**
 https://www.youtube.com/watch?v=example-lastpass-101
 https://www.youtube.com/watch\?v=example-lastpass-101
 https://www.cloudflare.com/learning/**
+
+# FFC-affiliated charity site whose origin intermittently times out
+# behind Cloudflare (522). The testimonial link is correct; site uptime
+# is monitored elsewhere, not by this repo's link checker.
+https://americanlegionpost64.org/**
+https://americanlegionpost64.org/
+
+# Fiverr blocks CI crawlers (returns 403)
+https://www.fiverr.com/**
+https://fiverr.com/**
+http://fiverr.com/**
+http://www.fiverr.com/**
+
+# GuideStar/Candid returns 403 to bots — visible profile URL still reachable in browser
+https://www.guidestar.org/**
+
+# Microsoft privacy statement 403s on bots; the canonical /en-us/ variant is what users get redirected to
+https://privacy.microsoft.com/privacystatement
+https://privacy.microsoft.com/**
+
+# Third-party knowledge bases / search pages that return non-2xx to crawlers
+https://www.cloudwards.net/**
+https://www.inmotionhosting.com/**
+https://www.siteground.com/**
+https://www.youtube.com/results**
+https://www.microsoft.com/en-us/nonprofits/**
+https://mailchimp.com/**
+https://www.mailchimp.com/**
+
+# FFC-owned video CDN serving mission-video.mp4 (origin returns 403 to bots)
+https://ffcsites.org/videos/mission-video.mp4
+
+# Script-loader URL fragments in src/components/cookie-consent/index.tsx.
+# Lychee extracts the string literals before JS interpolation appends the
+# real container/property ID, so the "URLs" it checks are intentionally
+# incomplete. The full URLs only exist at runtime. The tawk pattern is
+# anchored to the literal '$' of the template placeholder so any real
+# embed.tawk.to/<property-id> link added later still gets validated.
+https://www\.googletagmanager\.com/gtm\.js\?id=
+https://embed\.tawk\.to/\$
+
+# LastPass support KB presents a cert chain GitHub runners can't verify
+# (UnknownIssuer). Fine in browsers; sibling usertraining.lastpass.com is
+# already pinned above for the same reason.
+https://support.lastpass.com/**

@@ -1,7 +1,6 @@
 import React from 'react'
 import ReadyToGetStarted from '@/components/help-for-charities-components/Ready-to-Get-Started-Now'
 import AccordionItem from '@/components/ui/Accordian'
-import Link from 'next/link'
 const index = () => {
   return (
     <div className="w-full max-w-[100%]">
@@ -19,7 +18,7 @@ const index = () => {
           </p>
           <h1 className="pb-[1em] font-[700]">
             Visit{' '}
-            <a href="/domains" className="text-[#0567B1]">
+            <a href="/domains/" className="text-[#0567B1]">
               https://freeforcharity.org/domains
             </a>{' '}
             and follow all steps

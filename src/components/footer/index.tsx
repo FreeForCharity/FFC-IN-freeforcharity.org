@@ -3,6 +3,7 @@
 import React from 'react'
 import Link from 'next/link'
 import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react'
+import { hubUrl } from '@/lib/config'
 
 import { FaFacebookF, FaLinkedinIn, FaGithub } from 'react-icons/fa'
 import { FaXTwitter } from 'react-icons/fa6'
@@ -32,7 +33,11 @@ const Footer: React.FC = () => {
           <h3 className="text-[28px] text-white">Endorsements</h3>
 
           <div className="space-y-4">
-            <a href="https://www.guidestar.org/profile/46-2471893">
+            <a
+              href="https://www.guidestar.org/profile/46-2471893"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <img
                 src={assetPath('/Svgs/footerImage.svg')}
                 alt="GuideStar Platinum Seal of Transparency"
@@ -41,6 +46,8 @@ const Footer: React.FC = () => {
             </a>
             <Link
               href="https://www.guidestar.org/profile/shared/bbbe173a-87b9-4af9-a8a2-cae255a95742"
+              target="_blank"
+              rel="noopener noreferrer"
               className="group relative my-4 flex w-full max-w-[230px] items-center justify-between
                 border-2 border-[#5BA3D9] bg-black px-5 py-2.5 text-[#5BA3D9]
                 transition-all duration-300 hover:border-transparent"
@@ -83,7 +90,7 @@ const Footer: React.FC = () => {
               },
               {
                 name: 'Supported Charity Login',
-                href: 'https://freeforcharity.org/hub/',
+                href: hubUrl(),
               },
             ].map((link) => {
               const isExternal = link.href.startsWith('http')
@@ -245,7 +252,7 @@ const Footer: React.FC = () => {
           © {currentYear} All Rights Are Reserved by Free For Charity a US 501c3 Non Profit | A
           project of{' '}
           <Link
-            href="https://freeforcharity.org"
+            href="/"
             className="underline text-[#5BA3D9] hover:text-[#5BA3D9] transition-colors"
           >
             https://freeforcharity.org

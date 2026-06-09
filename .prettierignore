@@ -29,3 +29,7 @@ playwright-report
 # Other
 .DS_Store
 *.pem
+# Skip Lighthouse-generated JSON — it's machine output, not prose, and
+# prettier-formatting it would create a giant noise diff on every refresh.
+# The hand-written README stays prettier-managed.
+docs/performance-baseline/*.json

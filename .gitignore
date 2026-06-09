@@ -36,6 +36,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...except the example, which documents the var inventory.
+!.env.example
 
 # vercel
 .vercel
@@ -46,3 +48,13 @@ next-env.d.ts
 
 # Decap CMS uploads
 /public/uploads
+
+# Visual regression artifacts (large PNG screenshots; regenerate locally)
+/docs/visual-regression/screenshots/
+/docs/visual-regression/REPORT.md
+
+# cPanel backup tarballs from scripts/cpanel-backup.sh — huge, sensitive
+/cpanel-backups/
+
+# Claude Code on the web — subagent worktree checkouts
+/.claude/worktrees/

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: 'Service Delivery Stages',
   description:
     'Free For Charity service delivery process: charity validation stages, onboarding philosophy, and how we deliver free technology services to nonprofits.',
-  alternates: { canonical: '/free-for-charity-ffc-service-delivery-stages' },
+  alternates: { canonical: '/free-for-charity-ffc-service-delivery-stages/' },
 }
 
 const index = () => {

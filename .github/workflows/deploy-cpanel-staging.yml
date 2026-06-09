@@ -1,0 +1,233 @@
+name: 'Deploy to cPanel staging'
+
+# Builds the Next.js static export and uploads it to the deploy-staging
+# FTP jail on the FFC InterServer cPanel server. Manual dispatch only for
+# the first iteration -- once we trust it, add `pull_request` trigger for
+# per-PR previews.
+#
+# End-to-end path:
+#   GH OIDC -> Azure -> Key Vault (kv-ffc-admin-prod-cbm) ->
+#   deploy-staging FTP creds -> lftp mirror -> /home/freeforc/staging.freeforcharity.org/
+#   -> https://staging.freeforcharity.org/ (Cloudflare orange-cloud edge)
+#
+# The credential pathway is the one proven in FFC-IN-ClarkeMoyerAdmin
+# workflows 8 + 9 (see issues #109, #112, #113, #114, #117, #118 in that
+# repo). The deploy-staging account is jailed to the subdomain docroot,
+# so an lftp mirror of ./out is exactly what serves at the URL above.
+
+on:
+  workflow_dispatch:
+    inputs:
+      public_url_base:
+        description: 'Public base URL for smoke-check. Default https://staging.freeforcharity.org.'
+        required: false
+        default: 'https://staging.freeforcharity.org'
+        type: string
+      delete_remote:
+        description: 'Remove remote files not in the local build (lftp --delete). True = clean mirror; False = additive upload.'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  id-token: write # required for OIDC to Azure
+  contents: read
+
+concurrency:
+  group: cpanel-staging-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: 'Build + deploy to staging.freeforcharity.org'
+    runs-on: ubuntu-latest
+    environment: cpanel-staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js static export
+        env:
+          # No basepath -- staging is at staging.freeforcharity.org root,
+          # same as the sibling deploy-cpanel.yml that targets ~/public_html_next/.
+          NEXT_PUBLIC_BASE_PATH: ''
+        run: |
+          npm run build
+          if [ ! -d ./out ]; then
+            echo "::error::Expected ./out directory after 'next build' but it was not created."
+            exit 1
+          fi
+          if [ ! -f ./out/index.html ]; then
+            echo "::error::./out/index.html missing -- build produced no homepage."
+            exit 1
+          fi
+          if [ ! -f ./out/.htaccess ]; then
+            # Hard-fail to match prod's deploy-cpanel.yml ("Verify build
+            # output" step asserts `test -f out/.htaccess`). Without it
+            # Apache cannot route clean URLs to *.html and staging would
+            # appear "deployed" but be functionally broken.
+            echo "::error::./out/.htaccess missing -- routing requires it; aborting."
+            exit 1
+          fi
+          echo "out/ produced. Top-level entries:"
+          ls -la ./out | head -20
+          echo "out/ size: $(du -sh ./out | cut -f1)  files: $(find out -type f | wc -l)"
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.WR_ALL_FFC_AZURE_KV_CLIENT_ID }}
+          tenant-id: ${{ secrets.WR_ALL_FFC_AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+
+      - name: Fetch deploy-staging FTP creds from Key Vault
+        shell: pwsh
+        env:
+          # Hardcoded: this workflow targets exactly one vault. Removing the
+          # workflow_dispatch input narrows attack surface -- nobody can
+          # re-point a dispatch at an unrelated KV name.
+          KV_NAME: kv-ffc-admin-prod-cbm
+        run: |
+          $ErrorActionPreference = 'Stop'
+          . ./.github/scripts/Get-KvSecret.ps1
+
+          $vault = $env:KV_NAME.Trim()
+
+          $ftpHost = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-host'
+          $ftpPort = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-port'
+          $ftpUser = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-deploy-staging-ftp-user'
+          $ftpPw   = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-deploy-staging-ftp-password'
+
+          # Mask everything that could fingerprint or authenticate. ftp-port
+          # is left unmasked because it is a low-entropy small integer.
+          Write-Host "::add-mask::$ftpHost"
+          Write-Host "::add-mask::$ftpUser"
+          Write-Host "::add-mask::$ftpPw"
+
+          "CPANEL_FTP_HOST=$ftpHost"     | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_PORT=$ftpPort"     | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_USER=$ftpUser"     | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_PASSWORD=$ftpPw"   | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Upload out/ to deploy-staging FTP jail
+        env:
+          DELETE_REMOTE: ${{ inputs.delete_remote }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq lftp
+
+          DELETE_FLAG=""
+          if [ "$DELETE_REMOTE" = "true" ]; then
+            DELETE_FLAG="--delete"
+          fi
+
+          # lftp mirror notes:
+          #   --reverse           upload (local -> remote) instead of download
+          #   --delete            remove remote files not in local (gated by input)
+          #   --parallel=4        4 concurrent transfers (plain FTP is fine with this)
+          #   --verbose=1         per-file log; muted to "summary only" with =0 if too noisy
+          # Exclusions mirror prod's deploy-cpanel.yml (minus hub/** which is
+          # WHMCS-only and lives outside this subdomain jail):
+          #   .ftpquota        cPanel writes this; do not delete it
+          #   .well-known      ACME/HTTP-01 challenges -- never clobber
+          #   cgi-bin          cPanel-managed
+          #   .htpasswd        any auth file the server might add later
+          #   error_log        cPanel writes this
+          # NOTE: .htaccess is NOT excluded -- the Next.js out/.htaccess must
+          # deploy or routing breaks (see prod deploy-cpanel.yml step
+          # "Verify build output" which hard-asserts test -f out/.htaccess).
+          # Script is piped to lftp via stdin (heredoc) instead of passed as
+          # an argv string via `lftp -c "..."`. That matters because the -c
+          # form puts the entire command string -- including the embedded
+          # password in `open -u user,pw` -- into the lftp process's argv,
+          # which is readable by anyone with /proc visibility on the runner
+          # (e.g. another step in the same job, or a side-car action).
+          # Heredoc-to-stdin keeps the password out of argv entirely. lftp
+          # is also run without -d so debug output (which can leak
+          # transformed credentials past GH's exact-string masking) is not
+          # produced.
+          lftp <<LFTP_SCRIPT 2>&1 | tail -200
+            set ftp:ssl-allow no
+            set net:max-retries 3
+            set net:reconnect-interval-base 5
+            set net:timeout 60
+            open -p "$CPANEL_FTP_PORT" -u "$CPANEL_FTP_USER","$CPANEL_FTP_PASSWORD" "ftp://$CPANEL_FTP_HOST"
+            mirror --reverse $DELETE_FLAG --parallel=4 --verbose=1 \
+              --exclude-glob '.ftpquota' \
+              --exclude-glob '.well-known' \
+              --exclude-glob 'cgi-bin' \
+              --exclude-glob '.htpasswd' \
+              --exclude-glob 'error_log' \
+              ./out/ ./
+            bye
+          LFTP_SCRIPT
+          echo "Upload complete."
+
+      - name: Smoke-check the deployed site
+        shell: pwsh
+        env:
+          URL_BASE: ${{ inputs.public_url_base }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $url = $env:URL_BASE.TrimEnd('/') + '/'
+          Write-Host "GET $url"
+
+          # Bypass Cloudflare's edge cache: staging is orange-clouded, so a
+          # cached old response could mask a failed deploy. Mirrors prod's
+          # `curl -H "Cache-Control: no-cache"` smoke check.
+          $headers = @{
+            'Cache-Control' = 'no-cache'
+            'Pragma'        = 'no-cache'
+          }
+
+          $maxAttempts = 4
+          $attempt = 0
+          $resp = $null
+          while ($attempt -lt $maxAttempts) {
+            $attempt++
+            try {
+              $resp = Invoke-WebRequest -Uri $url -Headers $headers -UseBasicParsing -TimeoutSec 30
+              break
+            }
+            catch {
+              Write-Warning "Attempt $attempt/$maxAttempts failed: $($_.Exception.Message)"
+              if ($attempt -lt $maxAttempts) { Start-Sleep -Seconds 5 }
+            }
+          }
+          if (-not $resp) { throw "Could not fetch $url after $maxAttempts attempts." }
+
+          $status = [int]$resp.StatusCode
+          $bodyLen = $resp.Content.Length
+          Write-Host "HTTP $status from $url (body length: $bodyLen)"
+          if ($status -ne 200) { throw "Expected HTTP 200, got $status." }
+
+          # Sanity: a Next.js export of this site should have a <title> in
+          # the homepage HTML. Look for it -- absence means the build is
+          # broken or we uploaded the wrong thing.
+          if ($resp.Content -notmatch '<title>') {
+            throw "Response body does not contain a <title> tag. Body head: $($resp.Content.Substring(0, [Math]::Min(400, $bodyLen)))"
+          }
+
+          $titleMatch = [regex]::Match($resp.Content, '<title>(.*?)</title>')
+          $title = if ($titleMatch.Success) { $titleMatch.Groups[1].Value } else { '(no title parsed)' }
+          Write-Host "Page title: $title"
+
+          @(
+            "## Staging deploy: $url",
+            '',
+            "- **Status:** HTTP $status",
+            "- **Body length:** $bodyLen bytes",
+            "- **Title:** $title",
+            '',
+            "Verify the site visually in a browser. Cleanup: re-dispatch with delete_remote=true to wipe and re-upload, or use cPanel File Manager."
+          ) | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8

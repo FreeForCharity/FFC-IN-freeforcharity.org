@@ -32,7 +32,7 @@ const Index = () => {
             <p className="text-[18px] font-[500] leading-[27px] mb-[5.82%]" id="lato-font">
               In addition to financial support, Free for Charity also needs community support
               through{' '}
-              <a href="/volunteer" className="text-[#0567B1]">
+              <a href="/volunteer/" className="text-[#0567B1]">
                 skilled volunteers
               </a>{' '}
               and gifts in kind (such as services or products sold by your business). Take a look at

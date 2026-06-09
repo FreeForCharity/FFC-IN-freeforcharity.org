@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: 'Terms of Service',
   description:
     'Free For Charity terms of service governing access to our website and nonprofit technology services.',
-  alternates: { canonical: '/terms-of-service' },
+  alternates: { canonical: '/terms-of-service/' },
 }
 
 export default function TermsOfService() {

@@ -3,6 +3,7 @@ import './globals.css'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import CookieConsent from '@/components/cookie-consent'
+import SentryInit from '@/components/sentry-init'
 
 // Get basePath for GitHub Pages deployment
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
@@ -47,7 +48,7 @@ export const metadata: Metadata = {
       'Connecting students, professionals, and businesses with nonprofits to reduce costs and increase revenues.',
     images: [
       {
-        url: '/web-app-manifest-512x512.png',
+        url: `${basePath}/web-app-manifest-512x512.png`,
         width: 512,
         height: 512,
         alt: 'Free For Charity',
@@ -60,14 +61,14 @@ export const metadata: Metadata = {
     title: 'Free For Charity | Reduce Costs, Increase Impact',
     description:
       'Connecting students, professionals, and businesses with nonprofits to reduce costs and increase revenues.',
-    images: ['/web-app-manifest-512x512.png'],
+    images: [`${basePath}/web-app-manifest-512x512.png`],
   },
   icons: {
     icon: [
-      { url: `${basePath}/favicon.ico`, sizes: '32x32' },
+      { url: `${basePath}/favicon.ico`, sizes: 'any' },
       { url: `${basePath}/icon.png`, type: 'image/png', sizes: '32x32' },
     ],
-    apple: [{ url: `${basePath}/apple-icon.png`, sizes: '180x180', type: 'image/png' }],
+    apple: [{ url: `${basePath}/apple-touch-icon.png`, sizes: '180x180', type: 'image/png' }],
   },
   manifest: `${basePath}/site.webmanifest`,
 }
@@ -80,6 +81,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`antialiased`} suppressHydrationWarning={true}>
         {/* <PopupProvider> */}
+        <SentryInit />
         <Header />
         {children}
         <Footer />

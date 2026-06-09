@@ -1,0 +1,63 @@
+{
+  "finalDisplayedUrl": "https://freeforcharity.org/about-us/",
+  "fetchTime": "2026-05-24T17:03:30.075Z",
+  "lighthouseVersion": "13.3.0",
+  "configSettings": {
+    "formFactor": "mobile"
+  },
+  "categories": {
+    "performance": {
+      "score": 0.77,
+      "title": "Performance"
+    },
+    "accessibility": {
+      "score": 0.63,
+      "title": "Accessibility"
+    },
+    "best-practices": {
+      "score": 0.73,
+      "title": "Best Practices"
+    },
+    "seo": {
+      "score": 0.85,
+      "title": "SEO"
+    }
+  },
+  "audits": {
+    "largest-contentful-paint": {
+      "numericValue": 2481.8405,
+      "displayValue": "2.5\u00a0s",
+      "score": 0.9
+    },
+    "cumulative-layout-shift": {
+      "numericValue": 0.010807793051216437,
+      "displayValue": "0.011",
+      "score": 1
+    },
+    "total-blocking-time": {
+      "numericValue": 611.5,
+      "displayValue": "610\u00a0ms",
+      "score": 0.49
+    },
+    "first-contentful-paint": {
+      "numericValue": 1957.1385000000002,
+      "displayValue": "2.0\u00a0s",
+      "score": 0.85
+    },
+    "speed-index": {
+      "numericValue": 5183.295406885443,
+      "displayValue": "5.2\u00a0s",
+      "score": 0.6
+    },
+    "interactive": {
+      "numericValue": 8711.74885,
+      "displayValue": "8.7\u00a0s",
+      "score": 0.36
+    },
+    "server-response-time": {
+      "numericValue": 2072,
+      "displayValue": "Root document took 2,070\u00a0ms",
+      "score": 0
+    }
+  }
+}

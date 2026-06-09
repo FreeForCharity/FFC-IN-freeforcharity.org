@@ -1,0 +1,203 @@
+# freeforcharity.org — Apache config for the Next.js static export
+# served from InterServer cPanel alongside WHMCS at /hub/.
+#
+# This file is part of the static export (lives in public/ so it ships
+# inside out/ during `next build`). When deployed to cPanel's document
+# root it controls URL rewriting, redirects, and cache behavior for the
+# entire apex domain except /hub/, which is delegated to WHMCS.
+
+RewriteEngine On
+Options -Indexes
+ServerSignature Off
+
+# ---------------------------------------------------------------------
+# Hand-off /hub/ to WHMCS untouched
+# ---------------------------------------------------------------------
+# Anything under /hub/ is WHMCS billing/store/admin. Stop processing
+# immediately so the rules below cannot accidentally rewrite it.
+RewriteRule ^hub($|/) - [L]
+
+# ---------------------------------------------------------------------
+# Force HTTPS (Cloudflare proxy already does this, but defense-in-depth
+# in case the proxy is disabled or someone hits the origin directly)
+# ---------------------------------------------------------------------
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+# ---------------------------------------------------------------------
+# WP → Next.js URL redirects (source: docs/cutover-redirects.csv)
+# Apply BEFORE the Next.js URL handling below so Apache does not try
+# to find static files for old WordPress paths.
+# ---------------------------------------------------------------------
+
+# Slug changes (targets carry a trailing slash to match the canonical
+# trailingSlash: true export — saves the user a second 301 hop)
+RewriteRule ^free-for-charity-terms-of-service/?$ /terms-of-service/ [R=301,L]
+RewriteRule ^charity-and-nonprofit-case-studies-to-help-your-organization-succeed/?$ /charity-and-nonprofit-case-studies/ [R=301,L]
+
+# PayPal callbacks (302 + preserve query string with QSA)
+RewriteRule ^donation-confirmation/?$ /donate/ [R=302,L,QSA]
+RewriteRule ^donation-failed/?$ /donate/ [R=302,L,QSA]
+
+# Legacy WP blog posts → /blog/
+RewriteRule ^free-for-charity-just-earned-the-platinum-seal-of-transparency/?$ /blog/ [R=301,L]
+RewriteRule ^our-organization-earned-a-2021-platinum-seal-of-transparency/?$ /blog/ [R=301,L]
+RewriteRule ^we-just-updated-for-the-2022-guidestar-platinum-seal/?$ /blog/ [R=301,L]
+RewriteRule ^using-a-registered-agent-service-northwest-registered-agent/?$ /blog/ [R=301,L]
+
+# Content consolidation
+RewriteRule ^podio-sponsorship-program/?$ /help-for-charities/ [R=301,L]
+RewriteRule ^what-is-the-cost/?$ /help-for-charities/ [R=301,L]
+RewriteRule ^donor-dashboard/?$ /donate/ [R=301,L]
+RewriteRule ^submit-information/?$ /contact-us/ [R=301,L]
+
+# Testimonials inlined on homepage
+RewriteRule ^testimonial/american-legion-ahwatukee-post-64/?$ /#testimonials [R=301,L]
+RewriteRule ^testimonial/keith-ray/?$ /#testimonials [R=301,L]
+RewriteRule ^testimonial/pardhasaradhi-namburi/?$ /#testimonials [R=301,L]
+RewriteRule ^testimonial/tashonda-payne/?$ /#testimonials [R=301,L]
+
+# Dropped WP archives + plumbing → home
+RewriteRule ^author/(adagraves|admin|clarkemoyer|globaladmin|joel|tempmigrationadmin)/?$ / [R=301,L]
+RewriteRule ^category/uncategorized/?$ /blog/ [R=301,L]
+RewriteRule ^layout_type/(row|section)/?$ / [R=301,L]
+RewriteRule ^module_width/regular/?$ / [R=301,L]
+RewriteRule ^scope/not_global/?$ / [R=301,L]
+RewriteRule ^sample-page/?$ / [R=301,L]
+RewriteRule ^codetest/?$ / [R=301,L]
+RewriteRule ^__qs/?$ / [R=301,L]
+
+# Block legacy WordPress admin/include paths (defense-in-depth in case
+# any old WP files linger in public_html after the deploy swap)
+RewriteRule ^wp-admin(/|$) / [R=301,L]
+RewriteRule ^wp-includes/ - [F,L]
+RewriteRule ^wp-content/(plugins|themes|mu-plugins)/ - [F,L]
+RewriteRule ^xmlrpc\.php$ - [F,L]
+RewriteRule ^wp-login\.php$ - [F,L]
+
+# ---------------------------------------------------------------------
+# Legacy .html → canonical / redirect
+# ---------------------------------------------------------------------
+# Pre-PR the export emitted /about-us.html (200 OK direct hit) alongside
+# the slug rewrite. With trailingSlash: true the export now emits
+# /about-us/index.html only, so bare .html requests would 404.
+# Preserve backwards compat for any external backlinks or search engine
+# results still pointing at the .html form.
+#
+# Skip /404.html — that path is the Apache ErrorDocument target and
+# must keep serving the 404 page itself, not redirect.
+# Skip /index.html — without this guard, /index.html → /index/ would
+# 404 (no /index/ route in the export; the homepage is just /).
+RewriteCond %{REQUEST_URI} !^/(404|index)\.html$
+RewriteRule ^(.+)\.html$ /$1/ [R=301,L]
+
+# ---------------------------------------------------------------------
+# Next.js static export URL handling
+# ---------------------------------------------------------------------
+# next.config.ts sets trailingSlash: true, so the export emits
+#   out/about-us/index.html  (one file per route, in a directory)
+# Apache's defaults handle this natively — no rewrite rules needed:
+#   - DirectorySlash On  → bare /about-us 301s to /about-us/
+#   - DirectoryIndex     → /about-us/ serves /about-us/index.html
+# We pin DirectorySlash + DirectoryIndex here as defense-in-depth in
+# case the cPanel vhost overrides either default. Without DirectorySlash
+# On, bare /about-us would be served from /about-us/index.html without
+# redirecting, leaving canonical URLs ambiguous; without DirectoryIndex
+# the request would 403 under Options -Indexes.
+#
+# index.php is listed AFTER index.html so the Next.js export wins for
+# its own directories, while WHMCS at /hub/ (PHP, no index.html there)
+# still resolves via its index.php. The RewriteRule above short-circuits
+# rewrites for /hub/, but mod_dir's DirectoryIndex lookup is separate
+# from mod_rewrite — without index.php in the list, /hub/ would 403.
+DirectorySlash On
+DirectoryIndex index.html index.php
+
+# Custom 404 page generated by next build
+ErrorDocument 404 /404.html
+
+# ---------------------------------------------------------------------
+# Cache + compression
+# ---------------------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType application/manifest+json .webmanifest
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json application/manifest+json image/svg+xml application/xml font/ttf font/otf
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 5 minutes"
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType font/ttf "access plus 1 year"
+</IfModule>
+
+# Hashed Next.js asset files are safe to cache forever
+<FilesMatch "\.(js|css|woff2|ttf|webp|svg|png|jpg|jpeg|gif|ico)$">
+  Header set Cache-Control "public, max-age=31536000, immutable"
+</FilesMatch>
+
+# Never cache HTML
+<FilesMatch "\.html$">
+  Header set Cache-Control "public, max-age=300, must-revalidate"
+</FilesMatch>
+
+# ---------------------------------------------------------------------
+# Security headers (Cloudflare adds some; these are origin-side defaults)
+# ---------------------------------------------------------------------
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+
+  # Block Flash/Silverlight from loading cross-domain policy files.
+  # The technologies are dead, but the header is a one-line hardening
+  # win against any forgotten legacy plugin probing the origin.
+  Header always set X-Permitted-Cross-Domain-Policies "none"
+
+  # Tell the browser this origin's resources should not be embedded
+  # cross-origin (Spectre/cross-site leak mitigation). "same-site"
+  # rather than "same-origin" so /hub/ (WHMCS on the same registrable
+  # domain) can still embed assets if needed.
+  Header always set Cross-Origin-Resource-Policy "same-site"
+
+  # Tell browsers to upgrade to HTTPS for the next year, including
+  # subdomains, and that we accept inclusion in the HSTS preload list.
+  # Cloudflare sets this at the edge, but if a request ever reaches
+  # the origin directly (proxy disabled, ops debug, internal probe)
+  # the origin needs to set it too so browsers remember the policy.
+  # Note: STS doesn't enforce HTTPS on the first visit — it only
+  # instructs the browser to upgrade subsequent navigations. The
+  # `Force HTTPS` RewriteRule earlier in this file handles first-visit.
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+
+  # Content-Security-Policy in Report-Only mode. Lets us discover the
+  # exact set of inline-style / inline-script / third-party origins
+  # Tailwind + Lucide + Swiper + cookie-consent + Zeffy + PayPal + GA4
+  # actually need, without blocking the site if the policy is too tight.
+  #
+  # No report-uri/report-to directive is set today: violations surface
+  # in browser DevTools (Console + Network) for manual collection while
+  # we tune the allowlist. Wiring a report endpoint (e.g. report-uri.com
+  # free tier, or a Cloudflare Worker) is a follow-up before we promote
+  # to enforcing — see #29's post-cutover backlog.
+  #
+  # Once the report stream is clean for a week, swap to enforcing
+  # `Content-Security-Policy` and drop the -Report-Only suffix.
+  #
+  # 'unsafe-inline' on style-src is required by Tailwind v4 (inline
+  # styles for arbitrary class values). 'unsafe-inline' on script-src
+  # is required by Next.js hydration markers. These can be tightened
+  # with hash- or nonce-based policies in a follow-up.
+  Header always set Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://www.clarity.ms https://embed.tawk.to https://*.tawk.to https://*.zeffy.com https://www.paypal.com https://www.paypalobjects.com; style-src 'self' 'unsafe-inline' https://embed.tawk.to https://*.tawk.to; img-src 'self' data: https: blob:; font-src 'self' data: https://embed.tawk.to https://*.tawk.to; connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://*.analytics.google.com https://*.clarity.ms https://*.tawk.to wss://*.tawk.to https://*.zeffy.com https://*.ingest.sentry.io https://*.ingest.us.sentry.io https://*.ingest.de.sentry.io; frame-src https://www.googletagmanager.com https://*.tawk.to https://*.zeffy.com https://www.paypal.com https://widgets.guidestar.org; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://www.paypal.com"
+</IfModule>

@@ -80,7 +80,12 @@ const index = () => {
               Yes there is a need to provide help for charities in many ways! Free for Charity is
               not the only ‘charity for charities’ helping to lower your costs. Another great
               charity showing all the big name things you can get for free or at heavy discounts is 
-              <a href="https://www.techsoup.org/" className="text-[#0567B1]">
+              <a
+                href="https://www.techsoup.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#0567B1]"
+              >
                 TechSoup.org.
               </a>
                Even with these other sites many charities and non profits still pay for profit
@@ -262,11 +267,7 @@ const index = () => {
               <strong>Ways to get in faster:</strong>
               <br />
               1. If you already have your 501(c)3 get your free domain from us{' '}
-              <a
-                href="https://freeforcharity.org/domains"
-                className="text-[#1c6e92] underline"
-                target="_blank"
-              >
+              <a href="/domains/" className="text-[#1c6e92] underline">
                 freeforcharity.org/domains
               </a>
               <br />

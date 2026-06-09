@@ -2,11 +2,13 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
-
-// Environment variables for tracking IDs (replace with actual values)
-const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX'
-const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || 'XXXXXXXXXXXXXXX'
-const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || 'XXXXXXXXXX'
+import {
+  GA_MEASUREMENT_ID,
+  META_PIXEL_ID,
+  CLARITY_PROJECT_ID,
+  GTM_CONTAINER_ID,
+  TAWK_TO_PROPERTY,
+} from '@/lib/analytics-config'
 
 // Define type for GTM dataLayer events
 interface DataLayerEvent {
@@ -44,6 +46,7 @@ export default function CookieConsent() {
   const previousFocusRef = useRef<HTMLElement | null>(null)
 
   const loadGoogleAnalytics = useCallback(() => {
+    if (!GA_MEASUREMENT_ID) return
     if (
       typeof window !== 'undefined' &&
       !document.querySelector('script[src*="googletagmanager.com/gtag"]')
@@ -70,6 +73,7 @@ export default function CookieConsent() {
   }, [])
 
   const loadMetaPixel = useCallback(() => {
+    if (!META_PIXEL_ID) return
     if (typeof window !== 'undefined' && !document.querySelector('script[src*="fbevents.js"]')) {
       const fbScript = document.createElement('script')
       fbScript.textContent = `
@@ -97,7 +101,30 @@ export default function CookieConsent() {
     }
   }, [])
 
+  const loadGoogleTagManager = useCallback(() => {
+    if (!GTM_CONTAINER_ID) return
+    if (
+      typeof window !== 'undefined' &&
+      !document.querySelector(`script[src*="googletagmanager.com/gtm.js"]`)
+    ) {
+      // Standard GTM snippet, escaped for textContent. Loads the GTM
+      // container which can itself fire GA4, Meta Pixel, Clarity, etc.
+      // via tag configuration in the GTM dashboard — avoids hard-coding
+      // those IDs in this file once an operator wires them up in GTM.
+      const gtmScript = document.createElement('script')
+      gtmScript.textContent = `
+        (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','${GTM_CONTAINER_ID}');
+      `
+      document.head.appendChild(gtmScript)
+    }
+  }, [])
+
   const loadMicrosoftClarity = useCallback(() => {
+    if (!CLARITY_PROJECT_ID) return
     if (typeof window !== 'undefined' && !document.querySelector('script[src*="clarity.ms"]')) {
       const clarityScript = document.createElement('script')
       clarityScript.textContent = `
@@ -108,6 +135,28 @@ export default function CookieConsent() {
         })(window, document, "clarity", "script", "${CLARITY_PROJECT_ID}");
       `
       document.head.appendChild(clarityScript)
+    }
+  }, [])
+
+  const loadTawkTo = useCallback(() => {
+    if (!TAWK_TO_PROPERTY) return
+    if (typeof window !== 'undefined' && !document.querySelector('script[src*="embed.tawk.to"]')) {
+      // Tawk.to's standard async-embed snippet, escaped for textContent.
+      // Property/widget format is "<32-char hex>/<10-char alnum>" as
+      // shown in the Tawk.to dashboard.
+      const tawkScript = document.createElement('script')
+      tawkScript.textContent = `
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+          var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+          s1.async=true;
+          s1.src='https://embed.tawk.to/${TAWK_TO_PROPERTY}';
+          s1.charset='UTF-8';
+          s1.setAttribute('crossorigin','*');
+          s0.parentNode.insertBefore(s1,s0);
+        })();
+      `
+      document.head.appendChild(tawkScript)
     }
   }, [])
 
@@ -125,15 +174,16 @@ export default function CookieConsent() {
 
     // Dynamically delete all cookies matching _ga_* (e.g., _ga_G-XXXXXXXXXX)
     if (typeof document !== 'undefined') {
-      document.cookie.split(';').forEach((cookie) => {
-        const cookieName = cookie.split('=')[0].trim()
-        if (cookieName.startsWith('_ga_')) {
-          // Delete for current domain
-          document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
-          // Also try to delete with domain specification
-          document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`
-        }
-      })
+      const regex = /(?:^|;\s*)(_ga_[^=;\s]*)/g
+      let match: RegExpExecArray | null
+      const cookieStr = document.cookie
+      while ((match = regex.exec(cookieStr)) !== null) {
+        const cookieName = match[1]
+        // Delete for current domain
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+        // Also try to delete with domain specification
+        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`
+      }
     }
   }, [])
 
@@ -166,16 +216,34 @@ export default function CookieConsent() {
         })
       }
 
-      // Load scripts based on consent independently
+      // Load scripts based on consent independently. GTM rides alongside
+      // GA4 — if the operator has wired GA4 inside GTM via a tag, they
+      // should unset NEXT_PUBLIC_GA_MEASUREMENT_ID to avoid double-firing.
+      // The dataLayer consent_update event above fires regardless so any
+      // GTM-managed tags can read the current consent state.
       if (prefs.analytics) {
+        loadGoogleTagManager()
         loadGoogleAnalytics()
         loadMicrosoftClarity()
       }
       if (prefs.marketing) {
         loadMetaPixel()
       }
+      // Tawk.to live-chat sits under functional consent (visitor-support
+      // tool, not analytics). Functional is always-on per cookie banner,
+      // so this loads unconditionally when a property is configured.
+      if (prefs.functional) {
+        loadTawkTo()
+      }
     },
-    [deleteAnalyticsCookies, loadGoogleAnalytics, loadMetaPixel, loadMicrosoftClarity]
+    [
+      deleteAnalyticsCookies,
+      loadGoogleAnalytics,
+      loadGoogleTagManager,
+      loadMetaPixel,
+      loadMicrosoftClarity,
+      loadTawkTo,
+    ]
   )
 
   // Helper to load preferences from localStorage and update state
@@ -289,9 +357,10 @@ export default function CookieConsent() {
     setPreferences(allAccepted)
     try {
       localStorage.setItem('cookie-consent', JSON.stringify(allAccepted))
-    } catch (e) {
-      // If localStorage is unavailable, continue anyway
-      console.warn('Unable to save preferences to localStorage:', e)
+    } catch {
+      // If localStorage is unavailable (Safari private mode, quota
+      // exceeded, disabled storage), continue anyway — the consent
+      // cookie set by applyConsent() is the source of truth.
     }
     applyConsent(allAccepted, savedPreferencesBackup)
     setSavedPreferencesBackup(allAccepted)
@@ -308,9 +377,10 @@ export default function CookieConsent() {
     setPreferences(onlyNecessary)
     try {
       localStorage.setItem('cookie-consent', JSON.stringify(onlyNecessary))
-    } catch (e) {
-      // If localStorage is unavailable, continue anyway
-      console.warn('Unable to save preferences to localStorage:', e)
+    } catch {
+      // If localStorage is unavailable (Safari private mode, quota
+      // exceeded, disabled storage), continue anyway — the consent
+      // cookie set by applyConsent() is the source of truth.
     }
 
     // Delete third-party cookies when consent is withdrawn
@@ -324,9 +394,10 @@ export default function CookieConsent() {
   const handleSavePreferences = () => {
     try {
       localStorage.setItem('cookie-consent', JSON.stringify(preferences))
-    } catch (e) {
-      // If localStorage is unavailable, continue anyway
-      console.warn('Unable to save preferences to localStorage:', e)
+    } catch {
+      // If localStorage is unavailable (Safari private mode, quota
+      // exceeded, disabled storage), continue anyway — the consent
+      // cookie set by applyConsent() is the source of truth.
     }
     applyConsent(preferences, savedPreferencesBackup)
     setSavedPreferencesBackup(preferences)
@@ -368,7 +439,11 @@ export default function CookieConsent() {
             </h2>
             <p className="text-gray-600 mb-6">
               We use cookies to enhance your browsing experience and analyze our traffic. You can
-              choose which types of cookies you allow.
+              choose which types of cookies you allow. For full details, see our{' '}
+              <Link href="/cookie-policy" className="text-blue-600 hover:underline">
+                Cookie Policy
+              </Link>
+              .
             </p>
 
             {/* Necessary Cookies */}
@@ -500,10 +575,10 @@ export default function CookieConsent() {
               decline non-essential cookies.
             </p>
             <div className="flex items-center gap-4 text-xs text-gray-500">
-              <Link href="/privacy-policy" className="text-blue-600 underline">
+              <Link href="/privacy-policy/" className="text-blue-600 underline">
                 Privacy Policy
               </Link>
-              <Link href="/cookie-policy" className="text-blue-600 underline">
+              <Link href="/cookie-policy/" className="text-blue-600 underline">
                 Cookie Policy
               </Link>
             </div>
