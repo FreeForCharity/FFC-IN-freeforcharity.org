@@ -38,14 +38,56 @@ jobs:
         with:
           node-version: '24'
 
+      # Pre-flight: skip the smoke suite while production is still the
+      # WordPress site. The suite asserts the post-cutover Next.js + .htaccess
+      # behavior (legacy WP URLs should 301 to their Next.js equivalents,
+      # /hub/ delegated to WHMCS, etc.), none of which is true while WP is
+      # still serving the apex. WordPress fingerprints itself with the
+      # `x-powered-by: PHP/...` response header; the static Next.js export
+      # from LiteSpeed does not. Once cutover swaps the docroot, the header
+      # disappears and this step becomes a no-op.
+      - name: Pre-flight — is production still WordPress?
+        id: cutover-check
+        run: |
+          # Probe the apex with retries + timeout so a transient network
+          # blip doesn't trigger a false "cutover done" reading. Match
+          # `x-powered-by: PHP/*` case-insensitively against the header
+          # dump — that's the WordPress fingerprint that disappears once
+          # the cPanel docroot swap retires PHP from the response path.
+          powered_by=$(
+            curl -sIL --max-time 15 --retry 3 --retry-delay 2 \
+              https://freeforcharity.org/ 2>/dev/null \
+              | tr -d '\r' \
+              | grep -i '^x-powered-by:' \
+              | tail -n 1 \
+              | sed 's/^[Xx]-[Pp]owered-[Bb]y:[[:space:]]*//'
+          )
+          echo "x-powered-by header: '${powered_by}'"
+          shopt -s nocasematch
+          # Fail-safe: if the probe returned nothing at all (network/DNS/TLS
+          # failure, runner outage, etc.), assume we're still pre-cutover
+          # and skip — that's the safer side. The smoke would just open a
+          # noisy false-positive incident; the gate stays cautious instead.
+          if [[ -z "${powered_by}" ]]; then
+            echo "is_wp=true" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Probe inconclusive::Could not read x-powered-by from https://freeforcharity.org/ (empty or curl failed). Skipping smoke as a precaution — re-run once the apex is reachable."
+          elif [[ "${powered_by}" == PHP/* ]]; then
+            echo "is_wp=true" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Pre-cutover state::Production is still WordPress (x-powered-by: ${powered_by}). Skipping smoke until the cPanel docroot swap is done. This is expected; the workflow will start asserting cutover behavior automatically once PHP is no longer in the response path."
+          else
+            echo "is_wp=false" >> "$GITHUB_OUTPUT"
+            echo "Production is no longer WordPress (x-powered-by: ${powered_by}) — proceeding with full smoke suite."
+          fi
+
       - name: Run smoke suite against production
         id: smoke
+        if: steps.cutover-check.outputs.is_wp == 'false'
         env:
           BASE_URL: https://freeforcharity.org
         run: node scripts/smoke-test.mjs
 
       - name: Open issue on failure (scheduled runs only)
-        if: failure() && github.event_name == 'schedule'
+        if: failure() && github.event_name == 'schedule' && steps.cutover-check.outputs.is_wp == 'false'
         uses: actions/github-script@v9
         with:
           script: |

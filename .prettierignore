@@ -33,3 +33,4 @@ playwright-report
 # prettier-formatting it would create a giant noise diff on every refresh.
 # The hand-written README stays prettier-managed.
 docs/performance-baseline/*.json
+.playwright-mcp/
