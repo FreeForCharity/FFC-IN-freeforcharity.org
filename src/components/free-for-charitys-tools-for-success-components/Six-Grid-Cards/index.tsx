@@ -33,7 +33,7 @@ export default function ToolsPage() {
       title: 'Salesforce (free to nonprofits up to 10 seats per year)',
       description:
         'Worlds best CRM available. NOTE: Microsoft offer now includes CRM for an all in one solution.',
-      link: 'http://www.salesforcefoundation.org/nonprofit/',
+      link: 'https://www.salesforce.com/nonprofit/',
     },
     {
       logo: '/Images/grantstationLogo.webp',

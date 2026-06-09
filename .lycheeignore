@@ -110,3 +110,15 @@ https://www.mailchimp.com/**
 
 # FFC-owned video CDN serving mission-video.mp4 (origin returns 403 to bots)
 https://ffcsites.org/videos/mission-video.mp4
+
+# Script-loader URL fragments in src/components/cookie-consent/index.tsx.
+# Lychee extracts the string literals before JS interpolation appends the
+# real container/property ID, so the "URLs" it checks are intentionally
+# incomplete. The full URLs only exist at runtime.
+https://www.googletagmanager.com/gtm.js?id=
+https://embed.tawk.to/**
+
+# LastPass support KB presents a cert chain GitHub runners can't verify
+# (UnknownIssuer). Fine in browsers; sibling usertraining.lastpass.com is
+# already pinned above for the same reason.
+https://support.lastpass.com/**
