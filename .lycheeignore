@@ -86,6 +86,12 @@ https://www.youtube.com/watch?v=example-lastpass-101
 https://www.youtube.com/watch\?v=example-lastpass-101
 https://www.cloudflare.com/learning/**
 
+# FFC-affiliated charity site whose origin intermittently times out
+# behind Cloudflare (522). The testimonial link is correct; site uptime
+# is monitored elsewhere, not by this repo's link checker.
+https://americanlegionpost64.org/**
+https://americanlegionpost64.org/
+
 # Fiverr blocks CI crawlers (returns 403)
 https://www.fiverr.com/**
 https://fiverr.com/**
