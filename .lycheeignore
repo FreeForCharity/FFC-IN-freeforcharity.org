@@ -114,8 +114,9 @@ https://ffcsites.org/videos/mission-video.mp4
 # Script-loader URL fragments in src/components/cookie-consent/index.tsx.
 # Lychee extracts the string literals before JS interpolation appends the
 # real container/property ID, so the "URLs" it checks are intentionally
-# incomplete. The full URLs only exist at runtime.
-https://www.googletagmanager.com/gtm.js?id=
+# incomplete. The full URLs only exist at runtime. NOTE: these lines are
+# regexes — '?' must be escaped or it quantifies the preceding char.
+https://www\.googletagmanager\.com/gtm\.js\?id=
 https://embed.tawk.to/**
 
 # LastPass support KB presents a cert chain GitHub runners can't verify
