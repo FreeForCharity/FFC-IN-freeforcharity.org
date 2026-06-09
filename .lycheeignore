@@ -1,5 +1,8 @@
 # Lychee ignore patterns
-# Lines starting with # are comments. Each line is a glob pattern.
+# Lines starting with # are comments. Each line is passed to lychee's
+# --exclude, which treats it as a regular expression matched anywhere
+# in the URL — escape regex metacharacters like '?' and '$' when you
+# need them literally.
 
 # Localhost and local dev URLs (used in configs, tests, and docs)
 http://localhost
@@ -73,9 +76,6 @@ https://support.cloudflare.com/**
 https://www.webhostingtalk.com/**
 https://www.g2.com/**
 https://usertraining.lastpass.com/**
-# support.lastpass.com presents an SSL cert lychee can't verify from the
-# GHA runner (UnknownIssuer). Browser-trusted; CI-only flake.
-https://support\.lastpass\.com/.*
 https://www.techsoup.org/**
 http://www.techsoup.org/**
 https://www.upwork.com/**
@@ -88,6 +88,12 @@ https://www.nexcess.net/blog/whmcs-best-practices/**
 https://www.youtube.com/watch?v=example-lastpass-101
 https://www.youtube.com/watch\?v=example-lastpass-101
 https://www.cloudflare.com/learning/**
+
+# FFC-affiliated charity site whose origin intermittently times out
+# behind Cloudflare (522). The testimonial link is correct; site uptime
+# is monitored elsewhere, not by this repo's link checker.
+https://americanlegionpost64.org/**
+https://americanlegionpost64.org/
 
 # Fiverr blocks CI crawlers (returns 403)
 https://www.fiverr.com/**
@@ -114,24 +120,16 @@ https://www.mailchimp.com/**
 # FFC-owned video CDN serving mission-video.mp4 (origin returns 403 to bots)
 https://ffcsites.org/videos/mission-video.mp4
 
-# Template / placeholder URLs that appear literally in source code and fail
-# scanner probes — not real broken links, just unresolved interpolation
-# values being scanned as if they were URLs.
-#
-# Patterns in .lycheeignore are treated as regex by lychee, so `?` `.` and
-# `$` are escaped here. (Existing glob-ish patterns above like `**` happen
-# to work because regex `*` matches "previous char zero or more times" and
-# `.` matches any char — close enough for URL globs.)
-#
-# - GTM loader with an empty container id. Empty `?id=` returns 400; the
-#   real id is injected at runtime from NEXT_PUBLIC_GTM_ID.
-# - Tawk widget URL containing the literal `${TAWK_TO_PROPERTY}` placeholder
-#   (URL-encoded in the response as `$%7BTAWK_TO_PROPERTY%7D`). The real
-#   property id is injected at runtime.
+# Script-loader URL fragments in src/components/cookie-consent/index.tsx.
+# Lychee extracts the string literals before JS interpolation appends the
+# real container/property ID, so the "URLs" it checks are intentionally
+# incomplete. The full URLs only exist at runtime. The tawk pattern is
+# anchored to the literal '$' of the template placeholder so any real
+# embed.tawk.to/<property-id> link added later still gets validated.
 https://www\.googletagmanager\.com/gtm\.js\?id=
-https://embed\.tawk\.to/\$%7BTAWK_TO_PROPERTY%7D
+https://embed\.tawk\.to/\$
 
-# Returns HTTP 415 to scanners (server rejects the bot's Accept header).
-# Site is healthy in a browser — verified during 2026-05-27 audit.
-# Regex: literal domain + optional trailing slash + end-of-URL.
-^https://americanlegionpost64\.org/?$
+# LastPass support KB presents a cert chain GitHub runners can't verify
+# (UnknownIssuer). Fine in browsers; sibling usertraining.lastpass.com is
+# already pinned above for the same reason.
+https://support.lastpass.com/**
