@@ -24,7 +24,7 @@
   "dependencies": {
     "@sentry/browser": "^10.57.0",
     "framer-motion": "^12.40.0",
-    "lucide-react": "^0.575.0",
+    "lucide-react": "^1.18.0",
     "next": "^16.2.9",
     "postcss": "^8.5.15",
     "react": "19.2.7",
