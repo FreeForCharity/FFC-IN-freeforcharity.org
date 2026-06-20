@@ -91,24 +91,45 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq && sudo apt-get install -y -qq lftp
 
-          # Build the lftp script with BASH expanding the CPANEL_* values
-          # (lftp itself does NOT expand shell $VARs). The password lands in
-          # the script text but is ::add-mask::ed, so it shows as *** in the
-          # log (and there is no `set -x` to echo these lines). `cls <dir>`
-          # lists a path WITHOUT changing cwd, so probes don't carry state.
-          {
+          # Two lftp sessions over explicit FTPS. BASH expands the CPANEL_*
+          # values (lftp does NOT expand shell $VARs); the password is
+          # ::add-mask::ed so it shows as *** in the debug dialog, and there is
+          # no `set -x`, so these lines are not echoed verbatim.
+          ftps_setup() {
             echo "set ftp:ssl-allow yes"
             echo "set ftp:ssl-force yes"
             echo "set ftp:ssl-protect-data yes"
             echo "set ssl:verify-certificate no"
             echo "set net:timeout 25"
             echo "set net:max-retries 1"
-            echo "set cmd:fail-exit no"
             echo "debug 3"
+          }
+
+          # 1) AUTH GATE -- cmd:fail-exit yes, so a refused/bad login or a
+          # failed TLS handshake makes `pwd` error and lftp exit non-zero;
+          # with `set -e` that fails the job. No false-green on bad creds.
+          echo "=== AUTH GATE: login must succeed over FTPS ==="
+          {
+            ftps_setup
+            echo "set cmd:fail-exit yes"
             echo "open -p \"${CPANEL_FTP_PORT}\" \"ftp://${CPANEL_FTP_HOST}\""
             echo "user \"${CPANEL_FTP_USER}\" \"${CPANEL_FTP_PASSWORD}\""
-            echo "echo === LOGIN HOME (pwd) ==="
+            echo "echo === LOGIN OK -- home (pwd): ==="
             echo "pwd"
+            echo "bye"
+          } | lftp 2>&1
+
+          # 2) REACH PROBE -- cmd:fail-exit no + trailing `|| true`, because
+          # some probe dirs are EXPECTED to be unreachable (jailed account, or
+          # a parking dir not yet created). These results are diagnostic, not
+          # failures. `cls <dir>` lists a path WITHOUT changing cwd.
+          echo ""
+          echo "=== REACH PROBE: which dirs the login can see (diagnostic) ==="
+          {
+            ftps_setup
+            echo "set cmd:fail-exit no"
+            echo "open -p \"${CPANEL_FTP_PORT}\" \"ftp://${CPANEL_FTP_HOST}\""
+            echo "user \"${CPANEL_FTP_USER}\" \"${CPANEL_FTP_PASSWORD}\""
             echo "echo === HOME listing ==="
             echo "cls -1"
             for d in $PROBE_DIRS; do
@@ -116,6 +137,6 @@ jobs:
               echo "cls -1 \"${d}/\" && echo \"RESULT: ${d} -> REACHABLE\" || echo \"RESULT: ${d} -> NOT reachable (jailed/absent)\""
             done
             echo "bye"
-          } | lftp 2>&1
+          } | lftp 2>&1 || true
           echo ""
           echo "Read-only verification complete (no files were written)."

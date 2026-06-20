@@ -5,7 +5,8 @@ name: Deploy to InterServer cPanel (production)
 # ~/public_html/ and the WHMCS instance at ~/public_html/hub/.
 #
 # Credential model: GH OIDC -> Azure -> Key Vault (kv-ffc-admin-prod-cbm) ->
-# MAIN cPanel FTP creds -> lftp mirror -> ~/public_html_next/. It reuses the
+# MAIN cPanel FTP creds -> lftp mirror over FTPS (AUTH TLS) ->
+# ~/public_html_next/. It reuses the
 # existing `cpanel-staging` GitHub Environment (same Azure federated
 # credential + WR_ALL_* env secrets proven by deploy-cpanel-staging.yml), so
 # NO new environment, federated credential, or secret is required. There are

@@ -21,7 +21,7 @@ Deep-dive docs:
 - [ ] **Full cPanel backup** taken and downloaded off-server ([#143])
 - [ ] **`/hub/` snapshot** — `tar -czf ~/hub-backup-$(date +%Y%m%d).tar.gz -C ~/public_html hub` ([#148])
 - [ ] **WHMCS DB export** via phpMyAdmin, downloaded ([#149])
-- [x] **Deploy credentials in place** ([#150]) — reuses the existing `cpanel-staging` environment (Azure OIDC → Key Vault) + the **main cPanel FTP account** (`…-ftp-user/password` already in `kv-ffc-admin-prod-cbm`). Nothing to provision. (`deploy-prod` is jailed to the live `public_html/`, so the main account is used to reach `public_html_next/` — verified with `verify-cpanel-ftp.yml`.)
+- [x] **Deploy credentials in place** ([#150]) — reuses the existing `cpanel-staging` environment (Azure OIDC → Key Vault) + the **main cPanel FTP account** (`…-ftp-user/password` already in `kv-ffc-admin-prod-cbm`), uploaded over **encrypted FTPS (explicit AUTH TLS)**. Nothing to provision. (`deploy-prod` is jailed to the live `public_html/`, so the main account is used to reach `public_html_next/` — both the FTPS handshake and the account-root reach were verified 2026-06-20 with `verify-cpanel-ftp.yml`.)
   - Analytics repo secrets (already set this session): `NEXT_PUBLIC_CLARITY_PROJECT_ID`, `NEXT_PUBLIC_GTM_CONTAINER_ID`, `NEXT_PUBLIC_TAWK_TO_PROPERTY`
   - Optional: `NEXT_PUBLIC_SENTRY_DSN` (after you make a Sentry project)
 - [ ] **GA4 tag wired inside GTM** container `GTM-NJ4DXH9` (so analytics flows; see CUTOVER-HANDOFF "analytics")
@@ -30,7 +30,7 @@ Deep-dive docs:
 ## Step 1 — First deploy (populates `public_html_next/`)
 
 - [ ] GitHub → Actions → **Deploy to InterServer cPanel (production)** → Run workflow on `main` with defaults (`run_smoke=false`) ([#151])
-  - The workflow refuses to run unless CI is green on that commit, builds with all analytics secrets baked in, and `lftp`-uploads to `~/public_html_next/` via Azure OIDC → Key Vault creds. With `run_smoke=false` it stops after upload (no live-apex dependency); you run the full smoke suite against the live apex by re-dispatching with `run_smoke=true` _after_ the docroot swap in Step 3.
+  - The workflow refuses to run unless CI is green on that commit, builds with all analytics secrets baked in, and `lftp`-uploads to `~/public_html_next/` over **encrypted FTPS (explicit AUTH TLS)** using Azure OIDC → Key Vault creds. With `run_smoke=false` it stops after upload (no live-apex dependency); you run the full smoke suite against the live apex by re-dispatching with `run_smoke=true` _after_ the docroot swap in Step 3.
 - [ ] SSH/Terminal verify the upload ([#152]):
   ```bash
   ls ~/public_html_next/ | head

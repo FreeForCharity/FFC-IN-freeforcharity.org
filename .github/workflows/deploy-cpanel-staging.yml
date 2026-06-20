@@ -7,7 +7,8 @@ name: 'Deploy to cPanel staging'
 #
 # End-to-end path:
 #   GH OIDC -> Azure -> Key Vault (kv-ffc-admin-prod-cbm) ->
-#   deploy-staging FTP creds -> lftp mirror -> /home/freeforc/staging.freeforcharity.org/
+#   deploy-staging FTP creds -> lftp mirror over FTPS (AUTH TLS) ->
+#   /home/freeforc/staging.freeforcharity.org/
 #   -> https://staging.freeforcharity.org/ (Cloudflare orange-cloud edge)
 #
 # The credential pathway is the one proven in FFC-IN-ClarkeMoyerAdmin
