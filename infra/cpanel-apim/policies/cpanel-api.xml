@@ -1,0 +1,38 @@
+<!--
+  cPanel UAPI proxy policy for Azure API Management.
+
+  Inbound:
+    - Route to the "cpanel" backend entity (base URL https://<cpanel-host>:2083,
+      with backend TLS validation disabled for cPanel's shared/self-signed cert).
+    - Inject the cPanel token auth header from Key Vault-backed named values:
+        Authorization: cpanel {{cpanel-user}}:{{cpanel-api-token}}
+      (named values are secret + sourced from kv-ffc-admin-prod-cbm via the
+      APIM managed identity, so no credential is stored in this repo).
+    - Force Accept: application/json so the cPanel OpenResty front returns JSON
+      instead of 415.
+
+  The caller (e.g. GitHub Actions) authenticates to APIM with a subscription
+  key (Ocp-Apim-Subscription-Key) and never sees the cPanel token. APIM's
+  static public IP is the source the cPanel host / Imunify360 sees.
+-->
+<policies>
+  <inbound>
+    <base />
+    <set-backend-service backend-id="cpanel" />
+    <set-header name="Authorization" exists-action="override">
+      <value>cpanel {{cpanel-user}}:{{cpanel-api-token}}</value>
+    </set-header>
+    <set-header name="Accept" exists-action="override">
+      <value>application/json</value>
+    </set-header>
+  </inbound>
+  <backend>
+    <base />
+  </backend>
+  <outbound>
+    <base />
+  </outbound>
+  <on-error>
+    <base />
+  </on-error>
+</policies>
