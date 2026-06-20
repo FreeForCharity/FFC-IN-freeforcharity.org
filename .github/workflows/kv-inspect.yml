@@ -1,0 +1,76 @@
+name: 'Inspect Key Vault (secret names only)'
+
+# READ-ONLY diagnostic. Lists the secret NAMES in kv-ffc-admin-prod-cbm via
+# the same Azure OIDC identity the deploys use (cpanel-staging environment),
+# so we can discover whether a cPanel API token (or cPanel user/host) secret
+# already exists -- the repo only ever reads the `…-ftp-*` names, so anything
+# else in the vault is invisible to a code search.
+#
+# It NEVER prints secret VALUES. `az keyvault secret list` returns names
+# only; the candidate-probe fallback uses `--query id` (the secret's URL,
+# which contains the name, not the value). Safe to run.
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  inspect:
+    name: 'List KV secret names'
+    runs-on: ubuntu-latest
+    environment: cpanel-staging
+    steps:
+      - name: Azure login (OIDC)
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.WR_ALL_FFC_AZURE_KV_CLIENT_ID }}
+          tenant-id: ${{ secrets.WR_ALL_FFC_AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+
+      - name: List secret names (values never printed)
+        env:
+          KV_NAME: kv-ffc-admin-prod-cbm
+        run: |
+          set -uo pipefail
+          vault="${KV_NAME}"
+          echo "=== Attempting: az keyvault secret list (names only) ==="
+          if names=$(az keyvault secret list --vault-name "$vault" --query "[].name" -o tsv 2>list_err.txt); then
+            echo "--- all secret names in $vault ---"
+            echo "$names" | sort
+            echo ""
+            echo "--- candidates relevant to cPanel API / user / host ---"
+            echo "$names" | grep -iE 'api|token|uapi|user|host|server|cpanel|whm' | sort || echo "(no obvious matches by keyword)"
+          else
+            echo "::warning::secret list not permitted for this identity:"
+            cat list_err.txt || true
+            echo ""
+            echo "=== Fallback: probe candidate names via 'secret show --query id' (no values) ==="
+            base='wr-all-cbm-cpanel-ffc-interserver'
+            candidates="
+              ${base}-api-token
+              ${base}-cpanel-api-token
+              ${base}-cpanel-token
+              ${base}-uapi-token
+              ${base}-token
+              ${base}-api-user
+              ${base}-cpanel-user
+              ${base}-username
+              ${base}-cpanel-server
+              ${base}-cpanel-host
+              ${base}-api-key
+              cpanel-api-token
+              cpanel-token
+            "
+            for n in $candidates; do
+              if id=$(az keyvault secret show --vault-name "$vault" --name "$n" --query id -o tsv 2>/dev/null); then
+                echo "EXISTS:  $n"
+              else
+                echo "missing: $n"
+              fi
+            done
+          fi
+          echo ""
+          echo "Done. (No secret values were printed.)"
