@@ -36,8 +36,7 @@ on:
         default: false
 
 permissions:
-  id-token: write
-  contents: read
+  id-token: write # OIDC to Azure; no checkout, so contents stays unset (none)
 
 jobs:
   diag:
@@ -82,9 +81,9 @@ jobs:
           v="${KV_NAME}"
           # Read the cPanel API credential values (this action intentionally
           # reads VALUES, unlike the names-only action above).
-          tok=$(az keyvault secret show --vault-name "$v" --name wr-all-cbm-cpanel-ffc-interserver-api-token --query value -o tsv 2>/dev/null || true)
-          usr=$(az keyvault secret show --vault-name "$v" --name wr-all-cbm-cpanel-ffc-interserver-user   --query value -o tsv 2>/dev/null || true)
-          srv=$(az keyvault secret show --vault-name "$v" --name wr-all-cbm-cpanel-ffc-interserver-server --query value -o tsv 2>/dev/null || true)
+          tok=$(az keyvault secret show --vault-name "$v" --name wr-all-cbm-cpanel-ffc-interserver-api-token --query value -o tsv --only-show-errors || true)
+          usr=$(az keyvault secret show --vault-name "$v" --name wr-all-cbm-cpanel-ffc-interserver-user   --query value -o tsv --only-show-errors || true)
+          srv=$(az keyvault secret show --vault-name "$v" --name wr-all-cbm-cpanel-ffc-interserver-server --query value -o tsv --only-show-errors || true)
           if [ -z "$tok" ] || [ -z "$usr" ] || [ -z "$srv" ]; then
             echo "::warning::cPanel api-token/user/server secret(s) missing or unreadable in ${v} -- nothing to test."
             exit 0
@@ -100,7 +99,7 @@ jobs:
           # gets past its content-type check. -k tolerates a shared-cert
           # hostname mismatch. Token auth is in the Authorization header.
           api() { curl -k -sS --max-time 30 -H "Authorization: cpanel ${usr}:${tok}" -H "Accept: application/json" "$@"; }
-          resp=$(api -w $'\n%{http_code}' "https://${host}:2083/execute/DomainInfo/list_domains" 2>/dev/null || true)
+          resp=$(api -w $'\n%{http_code}' "https://${host}:2083/execute/DomainInfo/list_domains" || true)
           code=$(printf '%s' "$resp" | tail -1)
           body=$(printf '%s' "$resp" | sed '$d')
           status=$(printf '%s' "$body" | jq -r '.status // empty' 2>/dev/null || true)
@@ -108,7 +107,7 @@ jobs:
           if [ "$status" = "1" ]; then
             echo "✅ cPanel API token AUTHENTICATED (UAPI status=1)"
             echo "main_domain      : $(printf '%s' "$body" | jq -r '.data.main_domain // "n/a"')"
-            dd=$(api "https://${host}:2083/execute/DomainInfo/single_domain_data?domain=freeforcharity.org" 2>/dev/null || true)
+            dd=$(api "https://${host}:2083/execute/DomainInfo/single_domain_data?domain=freeforcharity.org" || true)
             echo "apex documentroot: $(printf '%s' "$dd" | jq -r '.data.documentroot // "n/a"')"
           elif printf '%s' "$body" | grep -qi 'imunify'; then
             echo "⛔ Blocked by Imunify360 bot-protection (source IP not whitelisted) -- EXPECTED from"
