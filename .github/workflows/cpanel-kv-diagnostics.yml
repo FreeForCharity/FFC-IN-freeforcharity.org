@@ -1,0 +1,122 @@
+name: 'cPanel / Key Vault diagnostics (read-only)'
+
+# Read-only operational diagnostics. Manual-dispatch ONLY. Pick an action:
+#
+#   list-kv-secret-names  -- list the secret NAMES in kv-ffc-admin-prod-cbm
+#                            (never values) to inventory what's available.
+#
+#   test-cpanel-api-token -- READS the cPanel api-token / user / server secret
+#                            VALUES from Key Vault (masked via ::add-mask::,
+#                            never printed) and makes a read-only cPanel UAPI
+#                            call (DomainInfo) to verify the token works and
+#                            show the apex document root.
+#
+# IMPORTANT -- Imunify360: the cPanel API (port 2083) on this InterServer host
+# sits behind Imunify360 bot-protection, which DENIES source IPs that are not
+# whitelisted. From GitHub-hosted runners the test-cpanel-api-token action gets
+# "Access denied by Imunify360 bot-protection" before the token is evaluated.
+# It will only succeed from a whitelisted IP -- e.g. a static-egress self-hosted
+# runner or the planned Azure static-IP API proxy. (The FTPS deploys work
+# because they use port 21, which Imunify360 does not gate.) This workflow
+# reports that condition explicitly rather than failing cryptically.
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Which read-only diagnostic to run'
+        type: choice
+        options:
+          - list-kv-secret-names
+          - test-cpanel-api-token
+        default: list-kv-secret-names
+      list_all:
+        description: '(list-kv-secret-names) print ALL names, not just cPanel/API candidates. Names only, never values.'
+        type: boolean
+        default: false
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  diag:
+    name: 'cPanel / KV diagnostic'
+    runs-on: ubuntu-latest
+    environment: cpanel-staging
+    steps:
+      - name: Azure login (OIDC)
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.WR_ALL_FFC_AZURE_KV_CLIENT_ID }}
+          tenant-id: ${{ secrets.WR_ALL_FFC_AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+
+      - name: List KV secret names (values never read)
+        if: ${{ inputs.action == 'list-kv-secret-names' }}
+        env:
+          KV_NAME: kv-ffc-admin-prod-cbm
+          LIST_ALL: ${{ inputs.list_all || 'false' }}
+        run: |
+          set -euo pipefail
+          vault="${KV_NAME}"
+          echo "=== az keyvault secret list (names only) ==="
+          names=$(az keyvault secret list --vault-name "$vault" --query "[].name" -o tsv)
+          echo "--- candidates (cPanel / API / user / host / ssh / whmcs) ---"
+          printf '%s\n' "$names" | grep -iE 'api|token|uapi|user|host|server|cpanel|whm|ssh' | sort || echo "(no keyword matches)"
+          if [ "$LIST_ALL" = "true" ]; then
+            echo ""
+            echo "--- ALL secret names in $vault ---"
+            printf '%s\n' "$names" | sort
+          else
+            echo "(full name list suppressed; dispatch with list_all=true to print every name)"
+          fi
+          echo "Done. (No secret values were read or printed.)"
+
+      - name: Test cPanel API token (reads + masks token/user/server VALUES)
+        if: ${{ inputs.action == 'test-cpanel-api-token' }}
+        env:
+          KV_NAME: kv-ffc-admin-prod-cbm
+        run: |
+          set -uo pipefail
+          v="${KV_NAME}"
+          # Read the cPanel API credential values (this action intentionally
+          # reads VALUES, unlike the names-only action above).
+          tok=$(az keyvault secret show --vault-name "$v" --name wr-all-cbm-cpanel-ffc-interserver-api-token --query value -o tsv 2>/dev/null || true)
+          usr=$(az keyvault secret show --vault-name "$v" --name wr-all-cbm-cpanel-ffc-interserver-user   --query value -o tsv 2>/dev/null || true)
+          srv=$(az keyvault secret show --vault-name "$v" --name wr-all-cbm-cpanel-ffc-interserver-server --query value -o tsv 2>/dev/null || true)
+          if [ -z "$tok" ] || [ -z "$usr" ] || [ -z "$srv" ]; then
+            echo "::warning::cPanel api-token/user/server secret(s) missing or unreadable in ${v} -- nothing to test."
+            exit 0
+          fi
+          echo "::add-mask::$tok"; echo "::add-mask::$usr"; echo "::add-mask::$srv"
+          # The -server secret may carry a scheme/port/path -- reduce to a bare
+          # host so the UAPI URL isn't doubled (https://https://...).
+          host="$srv"; host="${host#https://}"; host="${host#http://}"; host="${host%%/*}"; host="${host%%:*}"
+          echo "::add-mask::$host"
+          echo "Pulled cPanel token + user + server from KV (all masked)."
+
+          # OpenResty fronts cPanel here; an Accept: application/json header
+          # gets past its content-type check. -k tolerates a shared-cert
+          # hostname mismatch. Token auth is in the Authorization header.
+          api() { curl -k -sS --max-time 30 -H "Authorization: cpanel ${usr}:${tok}" -H "Accept: application/json" "$@"; }
+          resp=$(api -w $'\n%{http_code}' "https://${host}:2083/execute/DomainInfo/list_domains" 2>/dev/null || true)
+          code=$(printf '%s' "$resp" | tail -1)
+          body=$(printf '%s' "$resp" | sed '$d')
+          status=$(printf '%s' "$body" | jq -r '.status // empty' 2>/dev/null || true)
+          echo "HTTP ${code:-?}"
+          if [ "$status" = "1" ]; then
+            echo "✅ cPanel API token AUTHENTICATED (UAPI status=1)"
+            echo "main_domain      : $(printf '%s' "$body" | jq -r '.data.main_domain // "n/a"')"
+            dd=$(api "https://${host}:2083/execute/DomainInfo/single_domain_data?domain=freeforcharity.org" 2>/dev/null || true)
+            echo "apex documentroot: $(printf '%s' "$dd" | jq -r '.data.documentroot // "n/a"')"
+          elif printf '%s' "$body" | grep -qi 'imunify'; then
+            echo "⛔ Blocked by Imunify360 bot-protection (source IP not whitelisted) -- EXPECTED from"
+            echo "   GitHub-hosted runners. The token is not at fault. Re-run from a whitelisted IP"
+            echo "   (static-egress self-hosted runner or the planned Azure static-IP API proxy)."
+          else
+            echo "⚠️ Unexpected response (HTTP ${code:-?}); first 300 bytes:"
+            printf '%s' "$body" | head -c 300
+          fi
+          # Read-only diagnostic -- never fail the job; read the result above.
+          true
