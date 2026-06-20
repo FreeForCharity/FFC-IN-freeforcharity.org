@@ -230,8 +230,16 @@ jobs:
           # "..."` so the embedded password never lands in the process argv
           # (readable via /proc by any side-car). lftp is run without -d so
           # debug output can't leak transformed credentials past GH masking.
+          # Explicit FTPS (AUTH TLS): ssl-force aborts rather than fall back
+          # to plaintext, so the MAIN-account password is never sent in the
+          # clear; ssl-protect-data encrypts the data channel too;
+          # verify-certificate no accepts cPanel's self-signed/host-mismatched
+          # cert (the connection is still encrypted).
           lftp <<LFTP_SCRIPT 2>&1 | tail -200
-            set ftp:ssl-allow no
+            set ftp:ssl-allow yes
+            set ftp:ssl-force yes
+            set ftp:ssl-protect-data yes
+            set ssl:verify-certificate no
             set net:max-retries 3
             set net:reconnect-interval-base 5
             set net:timeout 60

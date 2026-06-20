@@ -85,7 +85,10 @@ jobs:
         env:
           PROBE_DIRS: ${{ inputs.probe_dirs || 'public_html_next public_html staging.freeforcharity.org' }}
         run: |
-          set -uo pipefail
+          # -e so a real failure (e.g. apt-get install, or a refused login)
+          # fails the job instead of silently passing -- this is a credential
+          # check, false greens are worse than useless.
+          set -euo pipefail
           sudo apt-get update -qq && sudo apt-get install -y -qq lftp
 
           # Build the lftp script with BASH expanding the CPANEL_* values
@@ -94,7 +97,10 @@ jobs:
           # log (and there is no `set -x` to echo these lines). `cls <dir>`
           # lists a path WITHOUT changing cwd, so probes don't carry state.
           {
-            echo "set ftp:ssl-allow no"
+            echo "set ftp:ssl-allow yes"
+            echo "set ftp:ssl-force yes"
+            echo "set ftp:ssl-protect-data yes"
+            echo "set ssl:verify-certificate no"
             echo "set net:timeout 25"
             echo "set net:max-retries 1"
             echo "set cmd:fail-exit no"

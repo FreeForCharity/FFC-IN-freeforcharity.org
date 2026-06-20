@@ -156,8 +156,14 @@ jobs:
           # is also run without -d so debug output (which can leak
           # transformed credentials past GH's exact-string masking) is not
           # produced.
+          # Explicit FTPS (AUTH TLS): encrypt control + data channel rather
+          # than send creds in plaintext; verify-certificate no accepts
+          # cPanel's self-signed cert. Matches deploy-cpanel.yml.
           lftp <<LFTP_SCRIPT 2>&1 | tail -200
-            set ftp:ssl-allow no
+            set ftp:ssl-allow yes
+            set ftp:ssl-force yes
+            set ftp:ssl-protect-data yes
+            set ssl:verify-certificate no
             set net:max-retries 3
             set net:reconnect-interval-base 5
             set net:timeout 60
