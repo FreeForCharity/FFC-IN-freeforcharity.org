@@ -12,6 +12,11 @@ name: 'Inspect Key Vault (secret names only)'
 
 on:
   workflow_dispatch: {}
+  # TEMPORARY: run on push to this diagnostic branch so it executes without
+  # depending on workflow_dispatch being registered on the default branch.
+  # Remove before merge.
+  push:
+    branches: ['claude/cpanel-api-token-check']
 
 permissions:
   id-token: write
