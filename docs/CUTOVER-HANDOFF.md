@@ -77,6 +77,32 @@ document-root swap, the nonprofit-tier cPanel hosting is already paid for.
 
 ---
 
+## DNS / origin facts (verified 2026-06-20 via Cloudflare API)
+
+Pulled directly from the Cloudflare zone with the read-only
+`11. DNS - Export All Records (Full, per-record)` workflow in
+`FreeForCharity/FFC-Cloudflare-Automation`. Re-run that workflow to refresh.
+
+- `freeforcharity.org` (apex), `www`, and **`staging`** are all **proxied A
+  records → `66.45.234.13`** — the InterServer cPanel host. They are the
+  **same physical origin**, differing only by cPanel docroot/vhost:
+  - apex / `www` → `~/public_html/` (WordPress today)
+  - `staging.freeforcharity.org` → the staging subdomain docroot (serves the
+    Next static export — this is a real cPanel deploy, **not** GitHub Pages)
+  - cutover target → `~/public_html_next/`
+- **No GitHub Pages records are live** in the zone (no `185.199.x` A records;
+  `www` is an A record to cPanel, not the `freeforcharity.github.io` CNAME).
+  A leftover `_github-challenge-freeforcharity` TXT exists from a past Pages
+  domain-verification, but nothing points at Pages.
+- ⚠️ **Do not run the Cloudflare enforce-standard workflows in write mode**
+  (`03. Domain - Enforce Standard`, `06. DNS - Enforce Standard`) against this
+  zone. Their "standard" wants the apex/`www` on GitHub Pages, so a non-dry
+  run would **CREATE Pages A/AAAA records and a `www → github.io` CNAME**,
+  repointing the apex away from cPanel and breaking the cutover. Decide
+  whether Pages or cPanel is authoritative for this domain before enforcing.
+
+---
+
 ## Operator steps for cutover day (#29)
 
 The flip itself is now a **single cPanel action**: change the apex
