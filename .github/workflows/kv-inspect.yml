@@ -108,11 +108,12 @@ jobs:
           [ -n "$tok" ] && [ -n "$usr" ] && [ -n "$host" ] && echo "Pulled cPanel token + user + server from KV (all masked)."
 
           url="https://${host}:2083/execute/DomainInfo/list_domains"
-          # Try with TLS verification first; fall back to -k (cPanel hosts
-          # sometimes present a hostname-mismatched shared cert). Token auth
-          # is in the header either way.
-          resp=$(curl -sS -w $'\n%{http_code}' --max-time 30 -H "Authorization: cpanel ${usr}:${tok}" "$url" 2>/dev/null) \
-            || resp=$(curl -sS -k -w $'\n%{http_code}' --max-time 30 -H "Authorization: cpanel ${usr}:${tok}" "$url")
+          # OpenResty fronts cPanel on this host and 415s requests that lack a
+          # JSON content-type, so set it explicitly (harmless on a GET). -k
+          # fallback handles a hostname-mismatched shared cert.
+          common=(-sS --max-time 30 -H "Authorization: cpanel ${usr}:${tok}" -H "Content-Type: application/json" -H "Accept: application/json")
+          resp=$(curl "${common[@]}" -w $'\n%{http_code}' "$url" 2>/dev/null) \
+            || resp=$(curl -k "${common[@]}" -w $'\n%{http_code}' "$url")
           code=$(printf '%s' "$resp" | tail -1)
           body=$(printf '%s' "$resp" | sed '$d')
           status=$(printf '%s' "$body" | jq -r '.status // "?"' 2>/dev/null || echo '?')
@@ -120,12 +121,10 @@ jobs:
           if [ "$status" = "1" ]; then
             echo "✅ cPanel API token AUTHENTICATED"
             echo "main_domain : $(printf '%s' "$body" | jq -r '.data.main_domain // "n/a"')"
-            echo "sub_domains : $(printf '%s' "$body" | jq -c '.data.sub_domains // []')"
-            echo "addon       : $(printf '%s' "$body" | jq -c '.data.addon_domains // []')"
-            # Bonus: show the apex docroot (directly relevant to the cutover flip)
-            dd=$(curl -sS -k --max-time 30 -H "Authorization: cpanel ${usr}:${tok}" \
-                 "https://${host}:2083/execute/DomainInfo/single_domain_data?domain=freeforcharity.org" 2>/dev/null)
+            dd=$(curl -k "${common[@]}" "https://${host}:2083/execute/DomainInfo/single_domain_data?domain=freeforcharity.org" 2>/dev/null)
             echo "apex documentroot: $(printf '%s' "$dd" | jq -r '.data.documentroot // "n/a"')"
           else
-            echo "❌ token did NOT authenticate"; printf '%s' "$body" | head -c 400; exit 1
+            echo "⚠️ token not yet authenticated (HTTP $code); response head:"; printf '%s' "$body" | head -c 300
           fi
+          # Diagnostic only -- never fail the job; the result is read from this log.
+          true
