@@ -108,23 +108,25 @@ jobs:
           [ -n "$tok" ] && [ -n "$usr" ] && [ -n "$host" ] && echo "Pulled cPanel token + user + server from KV (all masked)."
 
           url="https://${host}:2083/execute/DomainInfo/list_domains"
-          # OpenResty fronts cPanel on this host and 415s requests that lack a
-          # JSON content-type, so set it explicitly (harmless on a GET). -k
-          # fallback handles a hostname-mismatched shared cert.
-          common=(-sS --max-time 30 -H "Authorization: cpanel ${usr}:${tok}" -H "Content-Type: application/json" -H "Accept: application/json")
-          resp=$(curl "${common[@]}" -w $'\n%{http_code}' "$url" 2>/dev/null) \
-            || resp=$(curl -k "${common[@]}" -w $'\n%{http_code}' "$url")
-          code=$(printf '%s' "$resp" | tail -1)
-          body=$(printf '%s' "$resp" | sed '$d')
-          status=$(printf '%s' "$body" | jq -r '.status // "?"' 2>/dev/null || echo '?')
-          echo "HTTP $code | UAPI status=$status (1=success)"
-          if [ "$status" = "1" ]; then
-            echo "✅ cPanel API token AUTHENTICATED"
-            echo "main_domain : $(printf '%s' "$body" | jq -r '.data.main_domain // "n/a"')"
-            dd=$(curl -k "${common[@]}" "https://${host}:2083/execute/DomainInfo/single_domain_data?domain=freeforcharity.org" 2>/dev/null)
-            echo "apex documentroot: $(printf '%s' "$dd" | jq -r '.data.documentroot // "n/a"')"
-          else
-            echo "⚠️ token not yet authenticated (HTTP $code); response head:"; printf '%s' "$body" | head -c 300
-          fi
-          # Diagnostic only -- never fail the job; the result is read from this log.
+          auth="Authorization: cpanel ${usr}:${tok}"
+          # Probe several header combinations to find the one the OpenResty
+          # front + cpsrvd accept. Prints code / body size / response
+          # content-type / body head for each. Read-only; never fails the job.
+          probe() {
+            local desc="$1"; shift
+            curl -k -sS --max-time 30 -D /tmp/h.txt -o /tmp/b.txt -H "$auth" "$@" "$url" 2>/dev/null
+            local code ctype bytes
+            code=$(awk 'NR==1{print $2}' /tmp/h.txt 2>/dev/null)
+            ctype=$(grep -i '^content-type:' /tmp/h.txt | head -1 | tr -d '\r')
+            bytes=$(wc -c </tmp/b.txt)
+            local st; st=$(jq -r '.status // "n/a"' </tmp/b.txt 2>/dev/null || echo 'non-json')
+            echo "--- ${desc}: HTTP ${code:-?} | bytes=${bytes} | ${ctype:-no-ctype} | uapi.status=${st}"
+            [ "${bytes:-0}" -gt 0 ] && printf '    body: %s\n' "$(head -c 160 /tmp/b.txt | tr '\n' ' ')"
+          }
+          probe "no content-type"
+          probe "accept json"            -H "Accept: application/json"
+          probe "form-urlencoded ctype"  -H "Content-Type: application/x-www-form-urlencoded"
+          probe "json ctype"             -H "Content-Type: application/json"
+          probe "with user-agent"        -A "ffc-cutover-check/1.0" -H "Accept: application/json"
+          echo "(diagnostic probes complete)"
           true
