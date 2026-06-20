@@ -95,6 +95,11 @@ jobs:
           # values (lftp does NOT expand shell $VARs); the password is
           # ::add-mask::ed so it shows as *** in the debug dialog, and there is
           # no `set -x`, so these lines are not echoed verbatim.
+          # No `debug`: like the deploy workflows, lftp runs without debug so
+          # it can't print transformed credential material past GH masking.
+          # The AUTH GATE below proves FTPS regardless -- with ssl-force yes a
+          # failed TLS handshake makes the job fail, so a green run already
+          # means the encrypted login succeeded.
           ftps_setup() {
             echo "set ftp:ssl-allow yes"
             echo "set ftp:ssl-force yes"
@@ -102,7 +107,6 @@ jobs:
             echo "set ssl:verify-certificate no"
             echo "set net:timeout 25"
             echo "set net:max-retries 1"
-            echo "debug 3"
           }
 
           # 1) AUTH GATE -- cmd:fail-exit yes, so a refused/bad login or a
