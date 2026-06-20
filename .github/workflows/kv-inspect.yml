@@ -101,9 +101,13 @@ jobs:
           srv=$(az keyvault secret show --vault-name "$v" --name wr-all-cbm-cpanel-ffc-interserver-server --query value -o tsv)
           # Mask everything that could identify/auth before any further output.
           echo "::add-mask::$tok"; echo "::add-mask::$usr"; echo "::add-mask::$srv"
-          [ -n "$tok" ] && [ -n "$usr" ] && [ -n "$srv" ] && echo "Pulled cPanel token + user + server from KV (all masked)."
+          # The -server secret may be stored with a scheme/port/path -- normalize
+          # to a bare host so the URL we build isn't doubled (https://https://...).
+          host="$srv"; host="${host#https://}"; host="${host#http://}"; host="${host%%/*}"; host="${host%%:*}"
+          echo "::add-mask::$host"
+          [ -n "$tok" ] && [ -n "$usr" ] && [ -n "$host" ] && echo "Pulled cPanel token + user + server from KV (all masked)."
 
-          url="https://${srv}:2083/execute/DomainInfo/list_domains"
+          url="https://${host}:2083/execute/DomainInfo/list_domains"
           # Try with TLS verification first; fall back to -k (cPanel hosts
           # sometimes present a hostname-mismatched shared cert). Token auth
           # is in the header either way.
@@ -120,7 +124,7 @@ jobs:
             echo "addon       : $(printf '%s' "$body" | jq -c '.data.addon_domains // []')"
             # Bonus: show the apex docroot (directly relevant to the cutover flip)
             dd=$(curl -sS -k --max-time 30 -H "Authorization: cpanel ${usr}:${tok}" \
-                 "https://${srv}:2083/execute/DomainInfo/single_domain_data?domain=freeforcharity.org" 2>/dev/null)
+                 "https://${host}:2083/execute/DomainInfo/single_domain_data?domain=freeforcharity.org" 2>/dev/null)
             echo "apex documentroot: $(printf '%s' "$dd" | jq -r '.data.documentroot // "n/a"')"
           else
             echo "❌ token did NOT authenticate"; printf '%s' "$body" | head -c 400; exit 1
