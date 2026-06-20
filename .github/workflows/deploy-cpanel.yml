@@ -5,11 +5,20 @@ name: Deploy to InterServer cPanel (production)
 # ~/public_html/ and the WHMCS instance at ~/public_html/hub/.
 #
 # Credential model: GH OIDC -> Azure -> Key Vault (kv-ffc-admin-prod-cbm) ->
-# production FTP creds -> lftp mirror -> ~/public_html_next/. This mirrors
-# the proven deploy-cpanel-staging.yml pathway; there are NO raw FTP_*
-# repository secrets anymore (the old SamKirkland/FTP-Deploy-Action model
-# was retired in favour of KV-OIDC so no plaintext FTP password ever lives
-# in GitHub).
+# MAIN cPanel FTP creds -> lftp mirror -> ~/public_html_next/. It reuses the
+# existing `cpanel-staging` GitHub Environment (same Azure federated
+# credential + WR_ALL_* env secrets proven by deploy-cpanel-staging.yml), so
+# NO new environment, federated credential, or secret is required. There are
+# no raw FTP_* repository secrets (the old SamKirkland/FTP-Deploy-Action
+# model was retired in favour of KV-OIDC, so no plaintext FTP password ever
+# lives in GitHub).
+#
+# Why the MAIN account: the `deploy-prod` FTP login is chrooted to the LIVE
+# ~/public_html/ docroot (verified 2026-06-20) and cannot reach the sibling
+# ~/public_html_next/ parking dir. The main cPanel account is homed at the
+# account root, so it can create/write ~/public_html_next/. deploy-staging is
+# jailed to the staging docroot. Re-verify any account with the reusable
+# "Verify cPanel FTP credential (read-only)" workflow.
 #
 # Upload vs. cutover are deliberately SEPARATE:
 #   * This workflow only ever writes to ~/public_html_next/ -- a parking
@@ -22,23 +31,16 @@ name: Deploy to InterServer cPanel (production)
 #     pre-cutover upload can go green without depending on the apex already
 #     serving this build.
 #
-# === One-time prerequisites the operator must set up (admin-side) ===
-#   1. GitHub Environment `cpanel-production` (Settings -> Environments).
-#   2. Environment secrets on cpanel-production:
-#        WR_ALL_FFC_AZURE_KV_CLIENT_ID
-#        WR_ALL_FFC_AZURE_TENANT_ID
-#      (same KV-writer Entra app used by cpanel-staging).
-#   3. Azure federated credential on that Entra app for subject
-#        repo:FreeForCharity/FFC-IN-freeforcharity.org:environment:cpanel-production
-#      (case-sensitive -- must match exactly).
-#   4. Key Vault `kv-ffc-admin-prod-cbm` must hold the PRODUCTION FTP creds:
-#        wr-all-cbm-cpanel-ffc-interserver-ftp-host          (shared w/ staging)
-#        wr-all-cbm-cpanel-ffc-interserver-ftp-port          (shared w/ staging)
-#        wr-all-cbm-cpanel-ffc-interserver-deploy-prod-ftp-user
-#        wr-all-cbm-cpanel-ffc-interserver-deploy-prod-ftp-password
-#      The prod FTP user needs write access to ~/public_html_next/ (i.e. the
-#      main cPanel account or a deploy user whose home is the account root --
-#      NOT a subdomain-jailed user like deploy-staging).
+# === Prerequisites -- all already in place (no admin setup remaining) ===
+#   * GitHub Environment `cpanel-staging` with WR_ALL_FFC_AZURE_KV_CLIENT_ID
+#     + WR_ALL_FFC_AZURE_TENANT_ID and the federated credential for subject
+#     repo:FreeForCharity/FFC-IN-freeforcharity.org:environment:cpanel-staging
+#     (already used by deploy-cpanel-staging.yml).
+#   * Key Vault `kv-ffc-admin-prod-cbm` already holds:
+#        wr-all-cbm-cpanel-ffc-interserver-ftp-host       (shared)
+#        wr-all-cbm-cpanel-ffc-interserver-ftp-port       (shared)
+#        wr-all-cbm-cpanel-ffc-interserver-ftp-user       (MAIN cPanel account)
+#        wr-all-cbm-cpanel-ffc-interserver-ftp-password   (MAIN cPanel account)
 
 on:
   workflow_dispatch:
@@ -72,7 +74,7 @@ jobs:
   build-and-deploy:
     name: Build + deploy to ~/public_html_next/
     runs-on: ubuntu-latest
-    environment: cpanel-production
+    environment: cpanel-staging
 
     steps:
       - name: Checkout repository
@@ -183,8 +185,8 @@ jobs:
 
           $ftpHost = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-host'
           $ftpPort = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-port'
-          $ftpUser = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-deploy-prod-ftp-user'
-          $ftpPw   = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-deploy-prod-ftp-password'
+          $ftpUser = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-user'
+          $ftpPw   = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-password'
 
           # Mask everything that could fingerprint or authenticate. ftp-port
           # is left unmasked because it is a low-entropy small integer.

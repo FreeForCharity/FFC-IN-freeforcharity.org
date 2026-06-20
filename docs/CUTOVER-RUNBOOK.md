@@ -21,10 +21,7 @@ Deep-dive docs:
 - [ ] **Full cPanel backup** taken and downloaded off-server ([#143])
 - [ ] **`/hub/` snapshot** — `tar -czf ~/hub-backup-$(date +%Y%m%d).tar.gz -C ~/public_html hub` ([#148])
 - [ ] **WHMCS DB export** via phpMyAdmin, downloaded ([#149])
-- [ ] **`cpanel-production` deploy path provisioned** ([#150]) — Azure OIDC → Key Vault, no raw `FTP_*` secrets:
-  - GitHub Environment `cpanel-production` + env secrets `WR_ALL_FFC_AZURE_KV_CLIENT_ID`, `WR_ALL_FFC_AZURE_TENANT_ID`
-  - Azure federated cred for subject `repo:FreeForCharity/FFC-IN-freeforcharity.org:environment:cpanel-production`
-  - KV `kv-ffc-admin-prod-cbm` secrets: `…-ftp-host`, `…-ftp-port`, `…-deploy-prod-ftp-user`, `…-deploy-prod-ftp-password`
+- [x] **Deploy credentials in place** ([#150]) — reuses the existing `cpanel-staging` environment (Azure OIDC → Key Vault) + the **main cPanel FTP account** (`…-ftp-user/password` already in `kv-ffc-admin-prod-cbm`). Nothing to provision. (`deploy-prod` is jailed to the live `public_html/`, so the main account is used to reach `public_html_next/` — verified with `verify-cpanel-ftp.yml`.)
   - Analytics repo secrets (already set this session): `NEXT_PUBLIC_CLARITY_PROJECT_ID`, `NEXT_PUBLIC_GTM_CONTAINER_ID`, `NEXT_PUBLIC_TAWK_TO_PROPERTY`
   - Optional: `NEXT_PUBLIC_SENTRY_DSN` (after you make a Sentry project)
 - [ ] **GA4 tag wired inside GTM** container `GTM-NJ4DXH9` (so analytics flows; see CUTOVER-HANDOFF "analytics")

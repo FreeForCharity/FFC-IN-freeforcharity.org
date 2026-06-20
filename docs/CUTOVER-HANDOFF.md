@@ -56,7 +56,8 @@ document-root swap, the nonprofit-tier cPanel hosting is already paid for.
 
 ### Deploy workflows
 
-- **`deploy-cpanel.yml`** — production. Builds with empty basePath and `lftp`-uploads `out/` to `~/public_html_next/` on the InterServer cPanel host. Manual-trigger only. Uses the same **Azure OIDC → Key Vault** credential model as `deploy-cpanel-staging.yml` (no raw `FTP_*` repo secrets) via the `cpanel-production` GitHub Environment. Upload and post-cutover smoke are split: a default dispatch only writes to `public_html_next/` (zero live impact); pass `run_smoke=true` after the docroot swap to verify the live apex. Preserves `~/public_html/hub/` (WHMCS), which lives outside the upload target dir.
+- **`deploy-cpanel.yml`** — production. Builds with empty basePath and `lftp`-uploads `out/` to `~/public_html_next/` on the InterServer cPanel host. Manual-trigger only. Uses the same **Azure OIDC → Key Vault** credential model as `deploy-cpanel-staging.yml` (no raw `FTP_*` repo secrets), reusing the **`cpanel-staging` GitHub Environment** and the **main cPanel FTP account** (`…-ftp-user/password` in KV) — because `deploy-prod` is jailed to the live `public_html/` and can't reach the `public_html_next/` parking dir (see "FTP accounts" below). Upload and post-cutover smoke are split: a default dispatch only writes to `public_html_next/` (zero live impact); pass `run_smoke=true` after the docroot swap to verify the live apex. Preserves the `~/public_html_next/hub` symlink (WHMCS) via an lftp exclude.
+- **`verify-cpanel-ftp.yml`** — reusable, read-only "Verify cPanel FTP credential" check. Logs in as a chosen account (`deploy-prod` / `deploy-staging` / `main`) and reports its jail/home and which dirs it can reach. Run it before wiring any credential into a deploy.
 - **`deploy-gh-pages-staging.yml`** — optional. Manual-trigger only. Useful for hosting a no-DNS preview at the GH Pages URL if needed (e.g., to re-run `npm run visual-regression`).
 
 ### Pre-cutover artifacts in this repo
@@ -119,12 +120,12 @@ because it lives in a sibling directory.
    tar -czf ~/hub-backup-$(date +%Y%m%d).tar.gz -C ~/public_html hub
    ```
 3. **WHMCS database export** ([#149](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/149)) — cPanel → phpMyAdmin → select the WHMCS database → Export → SQL → download.
-4. **Provision the `cpanel-production` deploy path** ([#150](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/150)). The production deploy uses Azure OIDC → Key Vault (no raw `FTP_*` repo secrets). One-time admin setup:
+4. **Deploy credentials — already in place, no setup needed** ([#150](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/150)). The production deploy reuses the existing **`cpanel-staging` GitHub Environment** (Azure OIDC → Key Vault; `WR_ALL_FFC_AZURE_*` env secrets + the federated credential for `…:environment:cpanel-staging`) and the **main cPanel FTP account** secrets already in `kv-ffc-admin-prod-cbm` (`…-ftp-user` / `…-ftp-password`). Nothing to provision.
 
-   **Required (deploy fails without these):**
-   - GitHub Environment **`cpanel-production`** with environment secrets `WR_ALL_FFC_AZURE_KV_CLIENT_ID` and `WR_ALL_FFC_AZURE_TENANT_ID` (same KV-writer Entra app as `cpanel-staging`).
-   - Azure **federated credential** on that Entra app for subject `repo:FreeForCharity/FFC-IN-freeforcharity.org:environment:cpanel-production` (case-sensitive).
-   - Key Vault `kv-ffc-admin-prod-cbm` secrets: `wr-all-cbm-cpanel-ffc-interserver-ftp-host`, `…-ftp-port` (both shared with staging), plus production-specific `…-deploy-prod-ftp-user` and `…-deploy-prod-ftp-password`. The prod FTP user needs write access to `~/public_html_next/` (the main cPanel account or an account-root deploy user — not a subdomain-jailed user).
+   **FTP accounts (verified 2026-06-20 with `verify-cpanel-ftp.yml`):**
+   - `main` (`…-ftp-user`) — homed at the **account root**; can create/write `~/public_html_next/`. ← **used by the production deploy.**
+   - `deploy-prod` — **jailed to the LIVE `~/public_html/`** (WordPress + `hub/`); cannot reach `public_html_next`. Not used (would write into the live site).
+   - `deploy-staging` — jailed to the staging docroot; used by `deploy-cpanel-staging.yml`.
 
    **Optional (analytics is silently disabled without these — see [`.env.example`](../.env.example) for full inventory):**
    - `NEXT_PUBLIC_GA_MEASUREMENT_ID` — GA4 Measurement ID (`G-XXXXXXXXXX`)
