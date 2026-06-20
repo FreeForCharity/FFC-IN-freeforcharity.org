@@ -21,17 +21,19 @@ Deep-dive docs:
 - [ ] **Full cPanel backup** taken and downloaded off-server ([#143])
 - [ ] **`/hub/` snapshot** — `tar -czf ~/hub-backup-$(date +%Y%m%d).tar.gz -C ~/public_html hub` ([#148])
 - [ ] **WHMCS DB export** via phpMyAdmin, downloaded ([#149])
-- [ ] **GitHub repo secrets set** ([#150]):
-  - Required: `FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`
-  - Analytics (already set this session): `NEXT_PUBLIC_CLARITY_PROJECT_ID`, `NEXT_PUBLIC_GTM_CONTAINER_ID`, `NEXT_PUBLIC_TAWK_TO_PROPERTY`
+- [ ] **`cpanel-production` deploy path provisioned** ([#150]) — Azure OIDC → Key Vault, no raw `FTP_*` secrets:
+  - GitHub Environment `cpanel-production` + env secrets `WR_ALL_FFC_AZURE_KV_CLIENT_ID`, `WR_ALL_FFC_AZURE_TENANT_ID`
+  - Azure federated cred for subject `repo:FreeForCharity/FFC-IN-freeforcharity.org:environment:cpanel-production`
+  - KV `kv-ffc-admin-prod-cbm` secrets: `…-ftp-host`, `…-ftp-port`, `…-deploy-prod-ftp-user`, `…-deploy-prod-ftp-password`
+  - Analytics repo secrets (already set this session): `NEXT_PUBLIC_CLARITY_PROJECT_ID`, `NEXT_PUBLIC_GTM_CONTAINER_ID`, `NEXT_PUBLIC_TAWK_TO_PROPERTY`
   - Optional: `NEXT_PUBLIC_SENTRY_DSN` (after you make a Sentry project)
 - [ ] **GA4 tag wired inside GTM** container `GTM-NJ4DXH9` (so analytics flows; see CUTOVER-HANDOFF "analytics")
 - [ ] DNS TTL: **leave on Auto** — nothing to change (DNS isn't moving)
 
 ## Step 1 — First deploy (populates `public_html_next/`)
 
-- [ ] GitHub → Actions → **Deploy to InterServer cPanel (production)** → Run workflow on `main` ([#151])
-  - The workflow refuses to run unless CI is green on that commit, builds with all analytics secrets baked in, FTPS-uploads to `~/public_html_next/`, and runs the full smoke suite against production.
+- [ ] GitHub → Actions → **Deploy to InterServer cPanel (production)** → Run workflow on `main` with defaults (`run_smoke=false`) ([#151])
+  - The workflow refuses to run unless CI is green on that commit, builds with all analytics secrets baked in, and `lftp`-uploads to `~/public_html_next/` via Azure OIDC → Key Vault creds. With `run_smoke=false` it stops after upload (no live-apex dependency); you run the full smoke suite against the live apex by re-dispatching with `run_smoke=true` _after_ the docroot swap in Step 3.
 - [ ] SSH/Terminal verify the upload ([#152]):
   ```bash
   ls ~/public_html_next/ | head

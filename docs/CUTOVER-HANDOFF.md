@@ -56,7 +56,7 @@ document-root swap, the nonprofit-tier cPanel hosting is already paid for.
 
 ### Deploy workflows
 
-- **`deploy-cpanel.yml`** — production. Builds with empty basePath and FTPS-uploads `out/` to `~/public_html_next/` on the InterServer cPanel host. Manual-trigger only until operator validates. Requires three GitHub repo secrets (`FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`). Preserves `~/public_html/hub/` (WHMCS) via the action's exclude rules.
+- **`deploy-cpanel.yml`** — production. Builds with empty basePath and `lftp`-uploads `out/` to `~/public_html_next/` on the InterServer cPanel host. Manual-trigger only. Uses the same **Azure OIDC → Key Vault** credential model as `deploy-cpanel-staging.yml` (no raw `FTP_*` repo secrets) via the `cpanel-production` GitHub Environment. Upload and post-cutover smoke are split: a default dispatch only writes to `public_html_next/` (zero live impact); pass `run_smoke=true` after the docroot swap to verify the live apex. Preserves `~/public_html/hub/` (WHMCS), which lives outside the upload target dir.
 - **`deploy-gh-pages-staging.yml`** — optional. Manual-trigger only. Useful for hosting a no-DNS preview at the GH Pages URL if needed (e.g., to re-run `npm run visual-regression`).
 
 ### Pre-cutover artifacts in this repo
@@ -93,12 +93,12 @@ because it lives in a sibling directory.
    tar -czf ~/hub-backup-$(date +%Y%m%d).tar.gz -C ~/public_html hub
    ```
 3. **WHMCS database export** ([#149](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/149)) — cPanel → phpMyAdmin → select the WHMCS database → Export → SQL → download.
-4. **Add GitHub repo secrets** ([#150](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/150)) for the cPanel deploy workflow:
+4. **Provision the `cpanel-production` deploy path** ([#150](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/150)). The production deploy uses Azure OIDC → Key Vault (no raw `FTP_*` repo secrets). One-time admin setup:
 
    **Required (deploy fails without these):**
-   - `FTP_SERVER` — your cPanel FTP hostname (often `freeforcharity.org` or `ftp.freeforcharity.org`)
-   - `FTP_USERNAME` — cPanel username
-   - `FTP_PASSWORD` — cPanel FTP password (cPanel → FTP Accounts)
+   - GitHub Environment **`cpanel-production`** with environment secrets `WR_ALL_FFC_AZURE_KV_CLIENT_ID` and `WR_ALL_FFC_AZURE_TENANT_ID` (same KV-writer Entra app as `cpanel-staging`).
+   - Azure **federated credential** on that Entra app for subject `repo:FreeForCharity/FFC-IN-freeforcharity.org:environment:cpanel-production` (case-sensitive).
+   - Key Vault `kv-ffc-admin-prod-cbm` secrets: `wr-all-cbm-cpanel-ffc-interserver-ftp-host`, `…-ftp-port` (both shared with staging), plus production-specific `…-deploy-prod-ftp-user` and `…-deploy-prod-ftp-password`. The prod FTP user needs write access to `~/public_html_next/` (the main cPanel account or an account-root deploy user — not a subdomain-jailed user).
 
    **Optional (analytics is silently disabled without these — see [`.env.example`](../.env.example) for full inventory):**
    - `NEXT_PUBLIC_GA_MEASUREMENT_ID` — GA4 Measurement ID (`G-XXXXXXXXXX`)

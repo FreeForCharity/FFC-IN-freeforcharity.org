@@ -1,29 +1,68 @@
 name: Deploy to InterServer cPanel (production)
 
-# Builds the static export and SFTP-uploads it to ~/public_html_next/
-# on the InterServer cPanel host, alongside (not over) the WHMCS
-# instance at ~/public_html/hub/.
+# Builds the Next.js static export and uploads it to ~/public_html_next/
+# on the InterServer cPanel host, alongside (not over) the live docroot at
+# ~/public_html/ and the WHMCS instance at ~/public_html/hub/.
 #
-# Manual-trigger only until the operator is comfortable with the
-# deploy + swap workflow. Once stable, change the `on:` block to also
-# fire on push to main.
+# Credential model: GH OIDC -> Azure -> Key Vault (kv-ffc-admin-prod-cbm) ->
+# production FTP creds -> lftp mirror -> ~/public_html_next/. This mirrors
+# the proven deploy-cpanel-staging.yml pathway; there are NO raw FTP_*
+# repository secrets anymore (the old SamKirkland/FTP-Deploy-Action model
+# was retired in favour of KV-OIDC so no plaintext FTP password ever lives
+# in GitHub).
 #
-# Required GitHub repository secrets (Settings → Secrets and variables
-# → Actions):
-#   FTP_SERVER     e.g. freeforcharity.org or ftp.freeforcharity.org
-#   FTP_USERNAME   cPanel username (NOT root)
-#   FTP_PASSWORD   cPanel FTP password
-#   FTP_PORT       optional, defaults to 21 for FTPS
+# Upload vs. cutover are deliberately SEPARATE:
+#   * This workflow only ever writes to ~/public_html_next/ -- a parking
+#     directory that is NOT served at any URL until an operator swaps the
+#     apex docroot to it in cPanel. So a dispatch with run_smoke=false has
+#     zero live impact and is safe to run repeatedly.
+#   * The full live-apex smoke suite (npm run smoke-test against
+#     https://freeforcharity.org/) only makes sense AFTER the docroot swap.
+#     It is therefore gated behind the run_smoke input (default false) so a
+#     pre-cutover upload can go green without depending on the apex already
+#     serving this build.
 #
-# The action used (SamKirkland/FTP-Deploy-Action) defaults to FTPS
-# (encrypted FTP over TLS) which is what InterServer cPanel provides.
+# === One-time prerequisites the operator must set up (admin-side) ===
+#   1. GitHub Environment `cpanel-production` (Settings -> Environments).
+#   2. Environment secrets on cpanel-production:
+#        WR_ALL_FFC_AZURE_KV_CLIENT_ID
+#        WR_ALL_FFC_AZURE_TENANT_ID
+#      (same KV-writer Entra app used by cpanel-staging).
+#   3. Azure federated credential on that Entra app for subject
+#        repo:FreeForCharity/FFC-IN-freeforcharity.org:environment:cpanel-production
+#      (case-sensitive -- must match exactly).
+#   4. Key Vault `kv-ffc-admin-prod-cbm` must hold the PRODUCTION FTP creds:
+#        wr-all-cbm-cpanel-ffc-interserver-ftp-host          (shared w/ staging)
+#        wr-all-cbm-cpanel-ffc-interserver-ftp-port          (shared w/ staging)
+#        wr-all-cbm-cpanel-ffc-interserver-deploy-prod-ftp-user
+#        wr-all-cbm-cpanel-ffc-interserver-deploy-prod-ftp-password
+#      The prod FTP user needs write access to ~/public_html_next/ (i.e. the
+#      main cPanel account or a deploy user whose home is the account root --
+#      NOT a subdomain-jailed user like deploy-staging).
 
 on:
   workflow_dispatch:
+    inputs:
+      delete_remote:
+        description: 'Remove remote files in public_html_next not in the local build (lftp --delete). True = clean mirror; False = additive upload.'
+        required: false
+        default: true
+        type: boolean
+      run_smoke:
+        description: 'Run the full live-apex smoke suite after upload. Only set true AFTER the apex docroot has been cut over to public_html_next.'
+        required: false
+        default: false
+        type: boolean
+      public_url_base:
+        description: 'Base URL for the post-cutover smoke suite (only used when run_smoke=true).'
+        required: false
+        default: 'https://freeforcharity.org'
+        type: string
 
 permissions:
+  id-token: write # required for OIDC to Azure
   contents: read
-  actions: read
+  actions: read # required for the CI-green gate (gh run list)
 
 concurrency:
   group: deploy-cpanel
@@ -31,8 +70,9 @@ concurrency:
 
 jobs:
   build-and-deploy:
-    name: Build and SFTP upload
+    name: Build + deploy to ~/public_html_next/
     runs-on: ubuntu-latest
+    environment: cpanel-production
 
     steps:
       - name: Checkout repository
@@ -65,7 +105,7 @@ jobs:
             echo "::error::    gh workflow run 'CI - Build and Test' --ref $REF"
             exit 1
           fi
-          # Pick the most recent run that actually decided an outcome —
+          # Pick the most recent run that actually decided an outcome --
           # skip cancelled/skipped runs (operator cancel, concurrency
           # group cancel, never-started skip) and fall through to an
           # earlier run that ran the full suite. Without this, a manual
@@ -81,7 +121,7 @@ jobs:
             exit 1
           fi
           if [ "$conclusion" != "success" ]; then
-            echo "::error::CI workflow on $REF concluded with '$conclusion' (run $run_id) — refuse to deploy."
+            echo "::error::CI workflow on $REF concluded with '$conclusion' (run $run_id) -- refuse to deploy."
             exit 1
           fi
 
@@ -94,12 +134,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build with Next.js (production basePath — root)
+      - name: Build with Next.js (production basePath -- root)
         run: npm run build
         env:
-          # Apex domain, no subpath
+          # Apex domain, no subpath -- same as deploy-cpanel-staging.yml.
           NEXT_PUBLIC_BASE_PATH: ''
-          # Analytics IDs are read at build time by cookie-consent.tsx —
+          # Analytics IDs are read at build time by cookie-consent.tsx --
           # baking them into the static export. If a secret is unset the
           # corresponding script never fires (no placeholder fallbacks),
           # which is the desired behaviour. See .env.example for full
@@ -115,61 +155,123 @@ jobs:
       - name: Verify build output
         run: |
           test -f out/index.html
+          # Hard-fail without .htaccess: Apache needs it to route clean URLs
+          # to *.html, and deploy-cpanel-staging.yml asserts the same. Without
+          # it the upload would "succeed" but the site would be broken.
           test -f out/.htaccess
           echo "out/ ready, $(find out -type f | wc -l) files"
 
-      - name: Validate required secrets are configured
-        run: |
-          missing=0
-          if [ -z "${{ secrets.FTP_SERVER }}" ];   then echo "::error::FTP_SERVER not set";   missing=1; fi
-          if [ -z "${{ secrets.FTP_USERNAME }}" ]; then echo "::error::FTP_USERNAME not set"; missing=1; fi
-          if [ -z "${{ secrets.FTP_PASSWORD }}" ]; then echo "::error::FTP_PASSWORD not set"; missing=1; fi
-          if [ "$missing" = "1" ]; then exit 1; fi
-
-      - name: SFTP upload to ~/public_html_next/
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Azure login (OIDC)
+        uses: azure/login@v3
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          port: ${{ secrets.FTP_PORT || '21' }}
-          protocol: ftps
-          local-dir: ./out/
-          server-dir: ./public_html_next/
-          # Preserve the WHMCS billing instance — never touch /hub.
-          # The exclude patterns apply BOTH to uploads and to remote
-          # deletions, so anything matched here stays untouched on the
-          # cPanel host even if it doesn't exist locally.
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/.DS_Store
-            **/node_modules/**
-            hub/**
-            cgi-bin/**
-            .htpasswd
-            error_log
-            .well-known/**
+          client-id: ${{ secrets.WR_ALL_FFC_AZURE_KV_CLIENT_ID }}
+          tenant-id: ${{ secrets.WR_ALL_FFC_AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
 
-      - name: Post-deploy smoke check (home reachable)
+      - name: Fetch production FTP creds from Key Vault
+        shell: pwsh
         env:
-          DEPLOY_URL: https://freeforcharity.org/
+          # Hardcoded: this workflow targets exactly one vault. Not taking a
+          # workflow_dispatch input for it narrows attack surface -- nobody
+          # can re-point a dispatch at an unrelated KV name.
+          KV_NAME: kv-ffc-admin-prod-cbm
         run: |
-          # Quick reachability before the full smoke suite — bust Cloudflare
-          # cache so we observe the freshly-deployed origin.
+          $ErrorActionPreference = 'Stop'
+          . ./.github/scripts/Get-KvSecret.ps1
+
+          $vault = $env:KV_NAME.Trim()
+
+          $ftpHost = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-host'
+          $ftpPort = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-port'
+          $ftpUser = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-deploy-prod-ftp-user'
+          $ftpPw   = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-deploy-prod-ftp-password'
+
+          # Mask everything that could fingerprint or authenticate. ftp-port
+          # is left unmasked because it is a low-entropy small integer.
+          Write-Host "::add-mask::$ftpHost"
+          Write-Host "::add-mask::$ftpUser"
+          Write-Host "::add-mask::$ftpPw"
+
+          "CPANEL_FTP_HOST=$ftpHost"     | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_PORT=$ftpPort"     | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_USER=$ftpUser"     | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_PASSWORD=$ftpPw"   | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Upload out/ to ~/public_html_next/
+        env:
+          DELETE_REMOTE: ${{ inputs.delete_remote }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq lftp
+
+          DELETE_FLAG=""
+          if [ "$DELETE_REMOTE" = "true" ]; then
+            DELETE_FLAG="--delete"
+          fi
+
+          # lftp mirror notes (identical pattern to deploy-cpanel-staging.yml):
+          #   --reverse           upload (local -> remote) instead of download
+          #   --delete            remove remote files not in local (gated by input)
+          #   --parallel=4        4 concurrent transfers
+          # We mirror ./out/ into ./public_html_next/ (relative to the FTP
+          # user's home). hub/** (WHMCS) lives under ./public_html/, OUTSIDE
+          # this target dir, so --delete can never reach it -- but cgi-bin,
+          # .well-known, .htpasswd, error_log and .ftpquota are excluded as
+          # defence-in-depth in case the server ever places them here.
+          # NOTE: .htaccess is NOT excluded -- the Next.js out/.htaccess must
+          # deploy or routing breaks (see "Verify build output" above).
+          # Script is piped to lftp via stdin (heredoc) rather than `lftp -c
+          # "..."` so the embedded password never lands in the process argv
+          # (readable via /proc by any side-car). lftp is run without -d so
+          # debug output can't leak transformed credentials past GH masking.
+          lftp <<LFTP_SCRIPT 2>&1 | tail -200
+            set ftp:ssl-allow no
+            set net:max-retries 3
+            set net:reconnect-interval-base 5
+            set net:timeout 60
+            open -p "$CPANEL_FTP_PORT" -u "$CPANEL_FTP_USER","$CPANEL_FTP_PASSWORD" "ftp://$CPANEL_FTP_HOST"
+            mirror --reverse $DELETE_FLAG --parallel=4 --verbose=1 \
+              --exclude-glob '.ftpquota' \
+              --exclude-glob '.well-known' \
+              --exclude-glob 'cgi-bin' \
+              --exclude-glob '.htpasswd' \
+              --exclude-glob 'error_log' \
+              ./out/ ./public_html_next/
+            bye
+          LFTP_SCRIPT
+          echo "Upload to ~/public_html_next/ complete."
+
+      - name: Deploy summary
+        env:
+          DELETE_REMOTE: ${{ inputs.delete_remote }}
+        run: |
+          {
+            echo "## Production upload to ~/public_html_next/"
+            echo ""
+            echo "- **Files uploaded:** $(find out -type f | wc -l)"
+            echo "- **Clean mirror (--delete):** ${DELETE_REMOTE}"
+            echo ""
+            echo "This directory is NOT live yet. To cut over, swap the apex"
+            echo "docroot to public_html_next in cPanel, then re-dispatch this"
+            echo "workflow with run_smoke=true to verify the live apex."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # Post-cutover only. Full smoke suite: every sitemap URL returns 200,
+      # every WP->Next 301 from docs/cutover-redirects.csv fires to the right
+      # target, /hub/ serves a WHMCS-marker body, an unknown URL returns 404,
+      # and key assets (sitemap.xml, robots.txt, favicon) are reachable.
+      - name: Full smoke suite (post-cutover)
+        if: ${{ inputs.run_smoke }}
+        env:
+          BASE_URL: ${{ inputs.public_url_base }}
+        run: |
+          # Quick reachability first -- bust Cloudflare cache so we observe
+          # the freshly-deployed origin, not an edge-cached old response.
           curl --fail --show-error --silent --location \
             --max-time 20 \
             -H "Cache-Control: no-cache" \
             -o /dev/null \
             -w "Home: %{http_code} on %{url_effective} in %{time_total}s\n" \
-            "$DEPLOY_URL"
-
-      # Full smoke suite: every sitemap URL returns 200, every WP→Next
-      # 301 from docs/cutover-redirects.csv fires to the right target,
-      # /hub/ serves a WHMCS-marker body (not a stale index.html), an
-      # unknown URL returns 404, and key assets (sitemap.xml, robots.txt,
-      # favicon) are reachable. Fails the deploy job on any non-OK.
-      - name: Full smoke suite
-        env:
-          BASE_URL: https://freeforcharity.org
-        run: npm run smoke-test
+            "${BASE_URL%/}/"
+          npm run smoke-test
