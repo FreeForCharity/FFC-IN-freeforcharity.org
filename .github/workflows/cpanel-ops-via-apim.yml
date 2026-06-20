@@ -55,7 +55,7 @@ jobs:
           QUERY: ${{ inputs.query }}
           METHOD: ${{ inputs.method }}
         run: |
-          set -uo pipefail
+          set -euo pipefail
           if [ -z "${BASE}" ] || [ -z "${KEY}" ]; then
             echo "::error::Set APIM_GATEWAY_URL and APIM_SUBSCRIPTION_KEY secrets first (see infra/cpanel-apim/README.md)."
             exit 1

@@ -53,8 +53,8 @@ resource apim 'Microsoft.ApiManagement/service@2022-08-01' = {
 @description('System-assigned identity principal ID. Grant this Get+List secrets on the Key Vault before deploying apis.bicep.')
 output apimPrincipalId string = apim.identity.principalId
 
-@description('Static public IP the cPanel host / Imunify360 sees on outbound calls. Whitelist this single address.')
-output apimStaticIp string = apim.properties.publicIPAddresses[0]
+@description('All static public IPs the cPanel host / Imunify360 may see on outbound calls. Whitelist EVERY address (a classic instance can expose more than one).')
+output apimStaticIps array = apim.properties.publicIPAddresses
 
 @description('Gateway base URL; callers hit https://<gatewayUrl>/cpanel/execute/<Module>/<func>.')
 output gatewayUrl string = apim.properties.gatewayUrl

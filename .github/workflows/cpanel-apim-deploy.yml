@@ -82,9 +82,9 @@ jobs:
               apimName="${{ inputs.apim_name }}" \
               publisherEmail="${{ inputs.publisher_email }}" \
             --query properties.outputs -o json)
-          echo "principalId=$(echo "$out" | jq -r '.apimPrincipalId.value')" >> "$GITHUB_OUTPUT"
-          echo "staticIp=$(echo "$out" | jq -r '.apimStaticIp.value')"      >> "$GITHUB_OUTPUT"
-          echo "gatewayUrl=$(echo "$out" | jq -r '.gatewayUrl.value')"      >> "$GITHUB_OUTPUT"
+          echo "principalId=$(echo "$out" | jq -r '.apimPrincipalId.value')"            >> "$GITHUB_OUTPUT"
+          echo "staticIps=$(echo "$out" | jq -r '.apimStaticIps.value | join(\", \")')" >> "$GITHUB_OUTPUT"
+          echo "gatewayUrl=$(echo "$out" | jq -r '.gatewayUrl.value')"                  >> "$GITHUB_OUTPUT"
 
       - name: 'Grant APIM identity Get+List secrets on Key Vault'
         env:
@@ -94,10 +94,15 @@ jobs:
           kvid=$(az keyvault show --name "${{ inputs.key_vault_name }}" --resource-group "${{ inputs.key_vault_resource_group }}" --query id -o tsv)
           rbac=$(az keyvault show --name "${{ inputs.key_vault_name }}" --query properties.enableRbacAuthorization -o tsv)
           if [ "$rbac" = "true" ]; then
-            echo "Key Vault uses RBAC -> assigning 'Key Vault Secrets User'"
-            az role assignment create \
-              --assignee-object-id "$PID" --assignee-principal-type ServicePrincipal \
-              --role "Key Vault Secrets User" --scope "$kvid"
+            existing=$(az role assignment list --assignee "$PID" --role "Key Vault Secrets User" --scope "$kvid" --query "[0].id" -o tsv)
+            if [ -n "$existing" ]; then
+              echo "Key Vault Secrets User already assigned -> skipping (idempotent re-run)"
+            else
+              echo "Key Vault uses RBAC -> assigning 'Key Vault Secrets User'"
+              az role assignment create \
+                --assignee-object-id "$PID" --assignee-principal-type ServicePrincipal \
+                --role "Key Vault Secrets User" --scope "$kvid"
+            fi
           else
             echo "Key Vault uses access policies -> set-policy get/list"
             az keyvault set-policy --name "${{ inputs.key_vault_name }}" --object-id "$PID" --secret-permissions get list
@@ -120,8 +125,8 @@ jobs:
           {
             echo "## cPanel APIM gateway deployed ✅"
             echo ""
-            echo "1. **Whitelist this static IP in Imunify360** (cPanel → Imunify360 → Firewall → Whitelist):"
-            echo "   \`${{ steps.apim.outputs.staticIp }}\`"
+            echo "1. **Whitelist these static IP(s) in Imunify360** (cPanel → Imunify360 → Firewall → Whitelist) — add every address listed:"
+            echo "   \`${{ steps.apim.outputs.staticIps }}\`"
             echo "2. Gateway base: \`${{ steps.apim.outputs.gatewayUrl }}/cpanel/execute/<Module>/<func>\`"
             echo "3. Get the subscription key and save it as repo secret \`APIM_SUBSCRIPTION_KEY\` (and \`${{ steps.apim.outputs.gatewayUrl }}\` as \`APIM_GATEWAY_URL\`). Key retrieval command is in infra/cpanel-apim/README.md."
             echo "4. Verify with the **cPanel ops via APIM** workflow."
