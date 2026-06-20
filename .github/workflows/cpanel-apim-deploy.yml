@@ -92,7 +92,7 @@ jobs:
         run: |
           set -euo pipefail
           kvid=$(az keyvault show --name "${{ inputs.key_vault_name }}" --resource-group "${{ inputs.key_vault_resource_group }}" --query id -o tsv)
-          rbac=$(az keyvault show --name "${{ inputs.key_vault_name }}" --query properties.enableRbacAuthorization -o tsv)
+          rbac=$(az keyvault show --name "${{ inputs.key_vault_name }}" --resource-group "${{ inputs.key_vault_resource_group }}" --query properties.enableRbacAuthorization -o tsv)
           if [ "$rbac" = "true" ]; then
             existing=$(az role assignment list --assignee "$PID" --role "Key Vault Secrets User" --scope "$kvid" --query "[0].id" -o tsv)
             if [ -n "$existing" ]; then
