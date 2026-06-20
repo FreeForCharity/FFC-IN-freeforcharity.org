@@ -215,10 +215,13 @@ jobs:
           #   --delete            remove remote files not in local (gated by input)
           #   --parallel=4        4 concurrent transfers
           # We mirror ./out/ into ./public_html_next/ (relative to the FTP
-          # user's home). hub/** (WHMCS) lives under ./public_html/, OUTSIDE
-          # this target dir, so --delete can never reach it -- but cgi-bin,
-          # .well-known, .htpasswd, error_log and .ftpquota are excluded as
-          # defence-in-depth in case the server ever places them here.
+          # user's home). 'hub' is excluded because the cutover runbook
+          # creates a ~/public_html_next/hub SYMLINK to ~/public_html/hub so
+          # WHMCS keeps serving after the docroot swap -- without excluding
+          # it, a --delete re-deploy would remove that symlink and 404 the
+          # billing portal. cgi-bin, .well-known, .htpasswd, error_log and
+          # .ftpquota are excluded as defence-in-depth in case the server
+          # ever places them in this dir.
           # NOTE: .htaccess is NOT excluded -- the Next.js out/.htaccess must
           # deploy or routing breaks (see "Verify build output" above).
           # Script is piped to lftp via stdin (heredoc) rather than `lftp -c
@@ -232,6 +235,7 @@ jobs:
             set net:timeout 60
             open -p "$CPANEL_FTP_PORT" -u "$CPANEL_FTP_USER","$CPANEL_FTP_PASSWORD" "ftp://$CPANEL_FTP_HOST"
             mirror --reverse $DELETE_FLAG --parallel=4 --verbose=1 \
+              --exclude-glob 'hub' \
               --exclude-glob '.ftpquota' \
               --exclude-glob '.well-known' \
               --exclude-glob 'cgi-bin' \
