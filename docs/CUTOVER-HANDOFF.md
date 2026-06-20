@@ -56,7 +56,8 @@ document-root swap, the nonprofit-tier cPanel hosting is already paid for.
 
 ### Deploy workflows
 
-- **`deploy-cpanel.yml`** — production. Builds with empty basePath and FTPS-uploads `out/` to `~/public_html_next/` on the InterServer cPanel host. Manual-trigger only until operator validates. Requires three GitHub repo secrets (`FTP_SERVER`, `FTP_USERNAME`, `FTP_PASSWORD`). Preserves `~/public_html/hub/` (WHMCS) via the action's exclude rules.
+- **`deploy-cpanel.yml`** — production. Builds with empty basePath and `lftp`-uploads `out/` to `~/public_html_next/` on the InterServer cPanel host **over explicit FTPS (AUTH TLS)** — `ftp:ssl-force yes` aborts rather than fall back to plaintext, and `ftp:ssl-protect-data yes` encrypts the data channel, so the credential never crosses the wire in the clear. Manual-trigger only. Uses the same **Azure OIDC → Key Vault** credential model as `deploy-cpanel-staging.yml` (no raw `FTP_*` repo secrets), reusing the **`cpanel-staging` GitHub Environment** and the **main cPanel FTP account** (`wr-all-cbm-cpanel-ffc-interserver-ftp-user` / `-ftp-password` in KV) — because `deploy-prod` is jailed to the live `public_html/` and can't reach the `public_html_next/` parking dir (see "FTP accounts" below). Upload and post-cutover smoke are split: a default dispatch only writes to `public_html_next/` (zero live impact); pass `run_smoke=true` after the docroot swap to verify the live apex. Preserves the `~/public_html_next/hub` symlink (WHMCS) via an lftp exclude.
+- **`verify-cpanel-ftp.yml`** — reusable, read-only "Verify cPanel FTP credential" check. Logs in **over the same explicit FTPS** as a chosen account (`deploy-prod` / `deploy-staging` / `main`) and reports its jail/home and which dirs it can reach. Run it before wiring any credential into a deploy. (Used 2026-06-20 to confirm the host negotiates FTPS — `Pure-FTPd [TLS]` → `230 OK` — and that `main` is homed at the account root.)
 - **`deploy-gh-pages-staging.yml`** — optional. Manual-trigger only. Useful for hosting a no-DNS preview at the GH Pages URL if needed (e.g., to re-run `npm run visual-regression`).
 
 ### Pre-cutover artifacts in this repo
@@ -77,6 +78,32 @@ document-root swap, the nonprofit-tier cPanel hosting is already paid for.
 
 ---
 
+## DNS / origin facts (verified 2026-06-20 via Cloudflare API)
+
+Pulled directly from the Cloudflare zone with the read-only
+`11. DNS - Export All Records (Full, per-record)` workflow in
+`FreeForCharity/FFC-Cloudflare-Automation`. Re-run that workflow to refresh.
+
+- `freeforcharity.org` (apex), `www`, and **`staging`** are all **proxied A
+  records → `66.45.234.13`** — the InterServer cPanel host. They are the
+  **same physical origin**, differing only by cPanel docroot/vhost:
+  - apex / `www` → `~/public_html/` (WordPress today)
+  - `staging.freeforcharity.org` → the staging subdomain docroot (serves the
+    Next static export — this is a real cPanel deploy, **not** GitHub Pages)
+  - cutover target → `~/public_html_next/`
+- **No GitHub Pages records are live** in the zone (no `185.199.x` A records;
+  `www` is an A record to cPanel, not the `freeforcharity.github.io` CNAME).
+  A leftover `_github-challenge-freeforcharity` TXT exists from a past Pages
+  domain-verification, but nothing points at Pages.
+- ⚠️ **Do not run the Cloudflare enforce-standard workflows in write mode**
+  (`03. Domain - Enforce Standard`, `06. DNS - Enforce Standard`) against this
+  zone. Their "standard" wants the apex/`www` on GitHub Pages, so a non-dry
+  run would **CREATE Pages A/AAAA records and a `www → github.io` CNAME**,
+  repointing the apex away from cPanel and breaking the cutover. Decide
+  whether Pages or cPanel is authoritative for this domain before enforcing.
+
+---
+
 ## Operator steps for cutover day (#29)
 
 The flip itself is now a **single cPanel action**: change the apex
@@ -93,12 +120,12 @@ because it lives in a sibling directory.
    tar -czf ~/hub-backup-$(date +%Y%m%d).tar.gz -C ~/public_html hub
    ```
 3. **WHMCS database export** ([#149](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/149)) — cPanel → phpMyAdmin → select the WHMCS database → Export → SQL → download.
-4. **Add GitHub repo secrets** ([#150](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/150)) for the cPanel deploy workflow:
+4. **Deploy credentials — already in place, no setup needed** ([#150](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/150)). The production deploy reuses the existing **`cpanel-staging` GitHub Environment** (Azure OIDC → Key Vault; `WR_ALL_FFC_AZURE_KV_CLIENT_ID` + `WR_ALL_FFC_AZURE_TENANT_ID` env secrets + the federated credential for subject `repo:FreeForCharity/FFC-IN-freeforcharity.org:environment:cpanel-staging`) and the **main cPanel FTP account** secrets already in `kv-ffc-admin-prod-cbm` — `wr-all-cbm-cpanel-ffc-interserver-ftp-host`, `wr-all-cbm-cpanel-ffc-interserver-ftp-port`, `wr-all-cbm-cpanel-ffc-interserver-ftp-user`, `wr-all-cbm-cpanel-ffc-interserver-ftp-password`. Nothing to provision.
 
-   **Required (deploy fails without these):**
-   - `FTP_SERVER` — your cPanel FTP hostname (often `freeforcharity.org` or `ftp.freeforcharity.org`)
-   - `FTP_USERNAME` — cPanel username
-   - `FTP_PASSWORD` — cPanel FTP password (cPanel → FTP Accounts)
+   **FTP accounts (verified 2026-06-20 with `verify-cpanel-ftp.yml`):**
+   - `main` (`wr-all-cbm-cpanel-ffc-interserver-ftp-user`) — homed at the **account root**; can create/write `~/public_html_next/`. ← **used by the production deploy.**
+   - `deploy-prod` — **jailed to the LIVE `~/public_html/`** (WordPress + `hub/`); cannot reach `public_html_next`. Not used (would write into the live site).
+   - `deploy-staging` — jailed to the staging docroot; used by `deploy-cpanel-staging.yml`.
 
    **Optional (analytics is silently disabled without these — see [`.env.example`](../.env.example) for full inventory):**
    - `NEXT_PUBLIC_GA_MEASUREMENT_ID` — GA4 Measurement ID (`G-XXXXXXXXXX`)

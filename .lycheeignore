@@ -101,8 +101,9 @@ https://fiverr.com/**
 http://fiverr.com/**
 http://www.fiverr.com/**
 
-# GuideStar/Candid returns 403 to bots — visible profile URL still reachable in browser
+# GuideStar/Candid returns 403 to bots — pages still reachable in a browser
 https://www.guidestar.org/**
+https://help.candid.org/**
 
 # Microsoft privacy statement 403s on bots; the canonical /en-us/ variant is what users get redirected to
 https://privacy.microsoft.com/privacystatement

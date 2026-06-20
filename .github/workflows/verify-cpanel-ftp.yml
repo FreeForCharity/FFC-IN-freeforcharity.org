@@ -1,0 +1,146 @@
+name: 'Verify cPanel FTP credential (read-only)'
+
+# Reusable, READ-ONLY credential check. Logs in to the InterServer cPanel
+# FTP host as a chosen account (creds from Key Vault via the same OIDC path
+# as deploy-cpanel-staging.yml) and reports:
+#   - the FTP login result (220/331/230 = OK, 530 = bad login),
+#   - the account's home directory (pwd) and its listing,
+#   - whether it can reach a set of probe directories (default:
+#     public_html_next + public_html + the staging docroot) -- i.e. whether
+#     the account is jailed and to where.
+# It NEVER uploads or deletes. Use it to validate any cPanel FTP credential
+# before wiring it into a deploy. The FTP password is masked via
+# ::add-mask:: so even lftp's debug dialog shows it as ***.
+
+on:
+  workflow_dispatch:
+    inputs:
+      account:
+        description: 'Which cPanel FTP credential to verify'
+        type: choice
+        options:
+          - deploy-prod
+          - deploy-staging
+          - main
+        default: deploy-prod
+      probe_dirs:
+        description: 'Space-separated directories to test reach from the login home'
+        type: string
+        default: 'public_html_next public_html staging.freeforcharity.org'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  verify:
+    name: 'Verify cPanel FTP login'
+    runs-on: ubuntu-latest
+    environment: cpanel-staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.WR_ALL_FFC_AZURE_KV_CLIENT_ID }}
+          tenant-id: ${{ secrets.WR_ALL_FFC_AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+
+      - name: Fetch FTP creds for the selected account from Key Vault
+        shell: pwsh
+        env:
+          KV_NAME: kv-ffc-admin-prod-cbm
+          ACCOUNT: ${{ inputs.account || 'deploy-prod' }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          . ./.github/scripts/Get-KvSecret.ps1
+          $vault = $env:KV_NAME.Trim()
+
+          # Map the friendly account name to its KV user/password secret names.
+          switch ($env:ACCOUNT) {
+            'deploy-prod'    { $uName = 'wr-all-cbm-cpanel-ffc-interserver-deploy-prod-ftp-user';    $pName = 'wr-all-cbm-cpanel-ffc-interserver-deploy-prod-ftp-password' }
+            'deploy-staging' { $uName = 'wr-all-cbm-cpanel-ffc-interserver-deploy-staging-ftp-user'; $pName = 'wr-all-cbm-cpanel-ffc-interserver-deploy-staging-ftp-password' }
+            'main'           { $uName = 'wr-all-cbm-cpanel-ffc-interserver-ftp-user';                $pName = 'wr-all-cbm-cpanel-ffc-interserver-ftp-password' }
+            default          { throw "Unknown account '$($env:ACCOUNT)'" }
+          }
+          Write-Host "Verifying account '$($env:ACCOUNT)' (KV user secret: $uName)"
+
+          $ftpHost = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-host'
+          $ftpPort = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-port'
+          $ftpUser = Get-KvSecret -VaultName $vault -Name $uName
+          $ftpPw   = Get-KvSecret -VaultName $vault -Name $pName
+
+          Write-Host "::add-mask::$ftpHost"
+          Write-Host "::add-mask::$ftpUser"
+          Write-Host "::add-mask::$ftpPw"
+
+          "CPANEL_FTP_HOST=$ftpHost"   | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_PORT=$ftpPort"   | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_USER=$ftpUser"   | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_PASSWORD=$ftpPw" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Probe FTP login + directory reach (read-only)
+        env:
+          PROBE_DIRS: ${{ inputs.probe_dirs || 'public_html_next public_html staging.freeforcharity.org' }}
+        run: |
+          # -e so a real failure (e.g. apt-get install, or a refused login)
+          # fails the job instead of silently passing -- this is a credential
+          # check, false greens are worse than useless.
+          set -euo pipefail
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+          # Two lftp sessions over explicit FTPS. BASH expands the CPANEL_*
+          # values (lftp does NOT expand shell $VARs); the password is
+          # ::add-mask::ed so it shows as *** in the debug dialog, and there is
+          # no `set -x`, so these lines are not echoed verbatim.
+          # No `debug`: like the deploy workflows, lftp runs without debug so
+          # it can't print transformed credential material past GH masking.
+          # The AUTH GATE below proves FTPS regardless -- with ssl-force yes a
+          # failed TLS handshake makes the job fail, so a green run already
+          # means the encrypted login succeeded.
+          ftps_setup() {
+            echo "set ftp:ssl-allow yes"
+            echo "set ftp:ssl-force yes"
+            echo "set ftp:ssl-protect-data yes"
+            echo "set ssl:verify-certificate no"
+            echo "set net:timeout 25"
+            echo "set net:max-retries 1"
+          }
+
+          # 1) AUTH GATE -- cmd:fail-exit yes, so a refused/bad login or a
+          # failed TLS handshake makes `pwd` error and lftp exit non-zero;
+          # with `set -e` that fails the job. No false-green on bad creds.
+          echo "=== AUTH GATE: login must succeed over FTPS ==="
+          {
+            ftps_setup
+            echo "set cmd:fail-exit yes"
+            echo "open -p \"${CPANEL_FTP_PORT}\" \"ftp://${CPANEL_FTP_HOST}\""
+            echo "user \"${CPANEL_FTP_USER}\" \"${CPANEL_FTP_PASSWORD}\""
+            echo "echo === LOGIN OK -- home (pwd): ==="
+            echo "pwd"
+            echo "bye"
+          } | lftp 2>&1
+
+          # 2) REACH PROBE -- cmd:fail-exit no + trailing `|| true`, because
+          # some probe dirs are EXPECTED to be unreachable (jailed account, or
+          # a parking dir not yet created). These results are diagnostic, not
+          # failures. `cls <dir>` lists a path WITHOUT changing cwd.
+          echo ""
+          echo "=== REACH PROBE: which dirs the login can see (diagnostic) ==="
+          {
+            ftps_setup
+            echo "set cmd:fail-exit no"
+            echo "open -p \"${CPANEL_FTP_PORT}\" \"ftp://${CPANEL_FTP_HOST}\""
+            echo "user \"${CPANEL_FTP_USER}\" \"${CPANEL_FTP_PASSWORD}\""
+            echo "echo === HOME listing ==="
+            echo "cls -1"
+            for d in $PROBE_DIRS; do
+              echo "echo === probe dir: ${d} ==="
+              echo "cls -1 \"${d}/\" && echo \"RESULT: ${d} -> REACHABLE\" || echo \"RESULT: ${d} -> NOT reachable (jailed/absent)\""
+            done
+            echo "bye"
+          } | lftp 2>&1 || true
+          echo ""
+          echo "Read-only verification complete (no files were written)."

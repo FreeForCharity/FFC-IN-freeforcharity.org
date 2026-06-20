@@ -7,7 +7,8 @@ name: 'Deploy to cPanel staging'
 #
 # End-to-end path:
 #   GH OIDC -> Azure -> Key Vault (kv-ffc-admin-prod-cbm) ->
-#   deploy-staging FTP creds -> lftp mirror -> /home/freeforc/staging.freeforcharity.org/
+#   deploy-staging FTP creds -> lftp mirror over FTPS (AUTH TLS) ->
+#   /home/freeforc/staging.freeforcharity.org/
 #   -> https://staging.freeforcharity.org/ (Cloudflare orange-cloud edge)
 #
 # The credential pathway is the one proven in FFC-IN-ClarkeMoyerAdmin
@@ -156,18 +157,24 @@ jobs:
           # is also run without -d so debug output (which can leak
           # transformed credentials past GH's exact-string masking) is not
           # produced.
+          # Explicit FTPS (AUTH TLS): encrypt control + data channel rather
+          # than send creds in plaintext; verify-certificate no accepts
+          # cPanel's self-signed cert. Matches deploy-cpanel.yml.
           lftp <<LFTP_SCRIPT 2>&1 | tail -200
-            set ftp:ssl-allow no
+            set ftp:ssl-allow yes
+            set ftp:ssl-force yes
+            set ftp:ssl-protect-data yes
+            set ssl:verify-certificate no
             set net:max-retries 3
             set net:reconnect-interval-base 5
             set net:timeout 60
             open -p "$CPANEL_FTP_PORT" -u "$CPANEL_FTP_USER","$CPANEL_FTP_PASSWORD" "ftp://$CPANEL_FTP_HOST"
             mirror --reverse $DELETE_FLAG --parallel=4 --verbose=1 \
               --exclude-glob '.ftpquota' \
-              --exclude-glob '.well-known' \
-              --exclude-glob 'cgi-bin' \
               --exclude-glob '.htpasswd' \
               --exclude-glob 'error_log' \
+              --exclude-glob '.well-known/' \
+              --exclude-glob 'cgi-bin/' \
               ./out/ ./
             bye
           LFTP_SCRIPT
