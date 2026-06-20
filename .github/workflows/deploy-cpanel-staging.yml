@@ -171,10 +171,10 @@ jobs:
             open -p "$CPANEL_FTP_PORT" -u "$CPANEL_FTP_USER","$CPANEL_FTP_PASSWORD" "ftp://$CPANEL_FTP_HOST"
             mirror --reverse $DELETE_FLAG --parallel=4 --verbose=1 \
               --exclude-glob '.ftpquota' \
-              --exclude-glob '.well-known' \
-              --exclude-glob 'cgi-bin' \
               --exclude-glob '.htpasswd' \
               --exclude-glob 'error_log' \
+              --exclude-glob '.well-known/' \
+              --exclude-glob 'cgi-bin/' \
               ./out/ ./
             bye
           LFTP_SCRIPT

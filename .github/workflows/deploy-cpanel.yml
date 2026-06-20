@@ -224,7 +224,10 @@ jobs:
           # it, a --delete re-deploy would remove that symlink and 404 the
           # billing portal. cgi-bin, .well-known, .htpasswd, error_log and
           # .ftpquota are excluded as defence-in-depth in case the server
-          # ever places them in this dir.
+          # ever places them in this dir. The two directory excludes use a
+          # trailing slash ('.well-known/', 'cgi-bin/') so lftp skips the
+          # whole subtree -- a bare name could let --delete recurse into and
+          # remove their children.
           # NOTE: .htaccess is NOT excluded -- the Next.js out/.htaccess must
           # deploy or routing breaks (see "Verify build output" above).
           # Script is piped to lftp via stdin (heredoc) rather than `lftp -c
@@ -248,10 +251,10 @@ jobs:
             mirror --reverse $DELETE_FLAG --parallel=4 --verbose=1 \
               --exclude-glob 'hub' \
               --exclude-glob '.ftpquota' \
-              --exclude-glob '.well-known' \
-              --exclude-glob 'cgi-bin' \
               --exclude-glob '.htpasswd' \
               --exclude-glob 'error_log' \
+              --exclude-glob '.well-known/' \
+              --exclude-glob 'cgi-bin/' \
               ./out/ ./public_html_next/
             bye
           LFTP_SCRIPT
