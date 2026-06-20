@@ -29,13 +29,13 @@ GitHub Actions ──(subscription key)──▶ APIM (static IP) ──(cpanel 
 
 ## Cost (US list, approximate)
 
-| Tier | Monthly | Static IP | SLA | Use here |
-|---|---|---|---|---|
-| Consumption | ~$3.50 / million calls | ❌ | ✔️ | ❌ no static IP |
-| **Developer** (default) | **~$40–50** | ✔️ | ❌ none | ✅ cheapest that works |
-| Basic | ~$150 | ✔️ | ✔️ | if you need an SLA |
-| Basic v2 | ~$145 | ❌ | ✔️ | ❌ no static IP |
-| Standard v2 | ~$700/unit | ❌ | ✔️ | ❌ no static IP |
+| Tier                    | Monthly                | Static IP | SLA     | Use here               |
+| ----------------------- | ---------------------- | --------- | ------- | ---------------------- |
+| Consumption             | ~$3.50 / million calls | ❌        | ✔️      | ❌ no static IP        |
+| **Developer** (default) | **~$40–50**            | ✔️        | ❌ none | ✅ cheapest that works |
+| Basic                   | ~$150                  | ✔️        | ✔️      | if you need an SLA     |
+| Basic v2                | ~$145                  | ❌        | ✔️      | ❌ no static IP        |
+| Standard v2             | ~$700/unit             | ❌        | ✔️      | ❌ no static IP        |
 
 `apim.bicep` defaults to **Developer** (no SLA — fine for internal ops
 automation). A self-managed Azure VM with a static IP (~$10/mo) is cheaper
@@ -43,13 +43,13 @@ overall but is not a managed gateway.
 
 ## Files
 
-| File | Purpose |
-|---|---|
-| `apim.bicep` | Phase 1 — the APIM service (Developer tier, system-assigned identity). Outputs the static IP + identity principal ID. |
-| `apis.bicep` | Phase 2 — KV-linked secret named values, the cPanel backend (TLS validation off), the `/cpanel` API + GET/POST operations, the auth-injection policy, and a subscription. |
-| `policies/cpanel-api.xml` | API policy: routes to the `cpanel` backend and injects `Authorization: cpanel {{user}}:{{token}}`. |
-| `../../.github/workflows/cpanel-apim-deploy.yml` | Orchestrates phase 1 → grant KV access → phase 2. |
-| `../../.github/workflows/cpanel-ops-via-apim.yml` | Calls cPanel UAPI through the gateway (also a connectivity check). |
+| File                                              | Purpose                                                                                                                                                                   |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apim.bicep`                                      | Phase 1 — the APIM service (Developer tier, system-assigned identity). Outputs the static IP + identity principal ID.                                                     |
+| `apis.bicep`                                      | Phase 2 — KV-linked secret named values, the cPanel backend (TLS validation off), the `/cpanel` API + GET/POST operations, the auth-injection policy, and a subscription. |
+| `policies/cpanel-api.xml`                         | API policy: routes to the `cpanel` backend and injects `Authorization: cpanel {{user}}:{{token}}`.                                                                        |
+| `../../.github/workflows/cpanel-apim-deploy.yml`  | Orchestrates phase 1 → grant KV access → phase 2.                                                                                                                         |
+| `../../.github/workflows/cpanel-ops-via-apim.yml` | Calls cPanel UAPI through the gateway (also a connectivity check).                                                                                                        |
 
 ## Prerequisites (one-time, admin)
 
@@ -68,17 +68,18 @@ overall but is not a managed gateway.
 
 Run the **Deploy cPanel APIM gateway** workflow (Actions → manual dispatch) with:
 
-| Input | Example |
-|---|---|
-| `resource_group` | `rg-ffc-cpanel-gateway` |
-| `location` | `eastus` |
-| `apim_name` | `apim-ffc-cpanel` (globally unique) |
-| `publisher_email` | an address that should receive APIM notices |
-| `cpanel_api_base_url` | `https://<hostname>:2083` (hostname is in the `...-server` KV secret) |
-| `key_vault_name` | `kv-ffc-admin-prod-cbm` |
-| `key_vault_resource_group` | the KV's resource group |
+| Input                      | Example                                                               |
+| -------------------------- | --------------------------------------------------------------------- |
+| `resource_group`           | `rg-ffc-cpanel-gateway`                                               |
+| `location`                 | `eastus`                                                              |
+| `apim_name`                | `apim-ffc-cpanel` (globally unique)                                   |
+| `publisher_email`          | an address that should receive APIM notices                           |
+| `cpanel_api_base_url`      | `https://<hostname>:2083` (hostname is in the `...-server` KV secret) |
+| `key_vault_name`           | `kv-ffc-admin-prod-cbm`                                               |
+| `key_vault_resource_group` | the KV's resource group                                               |
 
 The workflow:
+
 1. Deploys `apim.bicep` (**~30–45 min** — APIM provisioning is slow).
 2. Grants APIM's managed identity **Get + List secrets** on the Key Vault
    (auto-detects RBAC vs access-policy model).
