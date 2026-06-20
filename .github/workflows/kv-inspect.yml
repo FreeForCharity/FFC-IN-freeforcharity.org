@@ -11,7 +11,12 @@ name: 'Inspect Key Vault (secret names only)'
 # which contains the name, not the value). Safe to run.
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      list_all:
+        description: 'Print ALL secret names (default only prints cPanel/API candidates). Names only, never values.'
+        type: boolean
+        default: false
   # TEMPORARY: run on push to this diagnostic branch so it executes without
   # depending on workflow_dispatch being registered on the default branch.
   # Remove before merge.
@@ -39,15 +44,20 @@ jobs:
         env:
           KV_NAME: kv-ffc-admin-prod-cbm
         run: |
-          set -uo pipefail
+          set -euo pipefail
           vault="${KV_NAME}"
-          echo "=== Attempting: az keyvault secret list (names only) ==="
+          LIST_ALL="${{ inputs.list_all }}"   # empty on push -> treated as false
+          echo "=== az keyvault secret list (names only) ==="
           if names=$(az keyvault secret list --vault-name "$vault" --query "[].name" -o tsv 2>list_err.txt); then
-            echo "--- all secret names in $vault ---"
-            echo "$names" | sort
-            echo ""
-            echo "--- candidates relevant to cPanel API / user / host ---"
-            echo "$names" | grep -iE 'api|token|uapi|user|host|server|cpanel|whm' | sort || echo "(no obvious matches by keyword)"
+            echo "--- candidates (cPanel / API / user / host / ssh) ---"
+            printf '%s\n' "$names" | grep -iE 'api|token|uapi|user|host|server|cpanel|whm|ssh' | sort || echo "(no keyword matches)"
+            if [ "$LIST_ALL" = "true" ]; then
+              echo ""
+              echo "--- ALL secret names in $vault ---"
+              printf '%s\n' "$names" | sort
+            else
+              echo "(full name list suppressed; re-dispatch with list_all=true to print every name)"
+            fi
           else
             echo "::warning::secret list not permitted for this identity:"
             cat list_err.txt || true
@@ -79,3 +89,39 @@ jobs:
           fi
           echo ""
           echo "Done. (No secret values were printed.)"
+
+      - name: Test cPanel API token (read-only UAPI call)
+        env:
+          KV_NAME: kv-ffc-admin-prod-cbm
+        run: |
+          set -uo pipefail
+          v="${KV_NAME}"
+          tok=$(az keyvault secret show --vault-name "$v" --name wr-all-cbm-cpanel-ffc-interserver-api-token --query value -o tsv)
+          usr=$(az keyvault secret show --vault-name "$v" --name wr-all-cbm-cpanel-ffc-interserver-user   --query value -o tsv)
+          srv=$(az keyvault secret show --vault-name "$v" --name wr-all-cbm-cpanel-ffc-interserver-server --query value -o tsv)
+          # Mask everything that could identify/auth before any further output.
+          echo "::add-mask::$tok"; echo "::add-mask::$usr"; echo "::add-mask::$srv"
+          [ -n "$tok" ] && [ -n "$usr" ] && [ -n "$srv" ] && echo "Pulled cPanel token + user + server from KV (all masked)."
+
+          url="https://${srv}:2083/execute/DomainInfo/list_domains"
+          # Try with TLS verification first; fall back to -k (cPanel hosts
+          # sometimes present a hostname-mismatched shared cert). Token auth
+          # is in the header either way.
+          resp=$(curl -sS -w $'\n%{http_code}' --max-time 30 -H "Authorization: cpanel ${usr}:${tok}" "$url" 2>/dev/null) \
+            || resp=$(curl -sS -k -w $'\n%{http_code}' --max-time 30 -H "Authorization: cpanel ${usr}:${tok}" "$url")
+          code=$(printf '%s' "$resp" | tail -1)
+          body=$(printf '%s' "$resp" | sed '$d')
+          status=$(printf '%s' "$body" | jq -r '.status // "?"' 2>/dev/null || echo '?')
+          echo "HTTP $code | UAPI status=$status (1=success)"
+          if [ "$status" = "1" ]; then
+            echo "✅ cPanel API token AUTHENTICATED"
+            echo "main_domain : $(printf '%s' "$body" | jq -r '.data.main_domain // "n/a"')"
+            echo "sub_domains : $(printf '%s' "$body" | jq -c '.data.sub_domains // []')"
+            echo "addon       : $(printf '%s' "$body" | jq -c '.data.addon_domains // []')"
+            # Bonus: show the apex docroot (directly relevant to the cutover flip)
+            dd=$(curl -sS -k --max-time 30 -H "Authorization: cpanel ${usr}:${tok}" \
+                 "https://${srv}:2083/execute/DomainInfo/single_domain_data?domain=freeforcharity.org" 2>/dev/null)
+            echo "apex documentroot: $(printf '%s' "$dd" | jq -r '.data.documentroot // "n/a"')"
+          else
+            echo "❌ token did NOT authenticate"; printf '%s' "$body" | head -c 400; exit 1
+          fi
