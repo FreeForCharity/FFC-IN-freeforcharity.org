@@ -18,15 +18,15 @@ on the same instance and share the one static egress IP.
 
 ## Deployed instance (prod)
 
-| Thing                  | Value                                                       |
-| ---------------------- | ----------------------------------------------------------- |
-| APIM instance          | `apim-ffc-gateway-prod` (Developer tier, eastus)            |
-| Resource group         | `rg-ffc-admin-apim`                                         |
-| Gateway URL            | `https://apim-ffc-gateway-prod.azure-api.net`               |
-| cPanel API base        | `…/cpanel/execute/<Module>/<function>`                      |
-| **Static egress IP**   | **`20.231.116.111`** (whitelist this in Imunify360)         |
-| Subscription           | `cpanel-ops`                                                |
-| Subscription key (KV)  | `read-all-ffc-apim-gateway-subscription-key`                |
+| Thing                 | Value                                               |
+| --------------------- | --------------------------------------------------- |
+| APIM instance         | `apim-ffc-gateway-prod` (Developer tier, eastus)    |
+| Resource group        | `rg-ffc-admin-apim`                                 |
+| Gateway URL           | `https://apim-ffc-gateway-prod.azure-api.net`       |
+| cPanel API base       | `…/cpanel/execute/<Module>/<function>`              |
+| **Static egress IP**  | **`20.231.116.111`** (whitelist this in Imunify360) |
+| Subscription          | `cpanel-ops`                                        |
+| Subscription key (KV) | `read-all-ffc-apim-gateway-subscription-key`        |
 
 The IP is stable for the life of the instance but changes if APIM is deleted and
 recreated. Confirm it from the deployment outputs after any rebuild.
@@ -130,14 +130,14 @@ az deployment group create -g rg-ffc-cpanel-gateway \
 
 1. **Whitelist the static IP in Imunify360.** On a **shared host** (our case,
    InterServer `webhosting1900.is.cc`) the end-user cPanel Imunify360 panel only
-   exposes *Malware Scanner* and *Proactive Defense* — there is **no Firewall /
+   exposes _Malware Scanner_ and _Proactive Defense_ — there is **no Firewall /
    Whitelist tab**; that lives in WHM at the root/server level. So you must **open
    a support ticket asking the host to whitelist the IP** server-side in
    Imunify360's firewall/bot-protection allowlist. On a VPS/reseller plan where you
    control WHM, do it yourself: WHM → Imunify360 → Firewall → Whitelist.
    Until the IP is whitelisted, calls return HTTP 200 with body
    `{"message":"Access denied by Imunify360 bot-protection..."}` — that response
-   coming back *through the gateway* confirms auth + routing already work.
+   coming back _through the gateway_ confirms auth + routing already work.
 2. **Subscription key is stored in Key Vault** as
    `read-all-ffc-apim-gateway-subscription-key`, so CI pulls it the same KV-aligned
    way as the cPanel token (no repo secret needed). To re-read or rotate:
