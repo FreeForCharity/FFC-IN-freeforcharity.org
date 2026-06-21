@@ -180,9 +180,20 @@ az deployment group create -g rg-ffc-cpanel-gateway \
   identity is not verified. **Residual risk:** an attacker able to MITM the
   APIM→cPanel hop could read the injected token. If the cPanel hostname presents
   a valid CA-signed cert, re-enable `validateCertificateName` in `apis.bicep`.
-- The proxy exposes **any** UAPI `{module}/{function}` (reads and writes) and the
-  KV token is write-scoped. If your automation only reads, use a read-scoped
-  cPanel token and/or restrict modules in the policy to shrink blast radius.
+- **Blast-radius control — operation allowlist.** On shared cPanel the API
+  token is unavoidably **full-access**: the user-level _Manage API Tokens_ UI
+  only supports rename/revoke — it cannot scope a token's privileges or
+  restrict it by IP (those are WHM/root features we don't have). So the gateway
+  policy enforces an **allowlist** of the exact UAPI `{module}/{function}` calls
+  our automation uses (backup/list/restore + the read-only `list_*` views) and
+  returns **403** for anything else. Extend the list in
+  `policies/cpanel-api.xml` as new operations are needed.
+- **De-facto IP restriction.** Because Imunify360 blocks port 2083 from any
+  non-whitelisted IP, a leaked cPanel token cannot be used over the API from an
+  arbitrary IP anyway — only from the gateway's static IP (and operator IPs the
+  host already trusts). This compensates for the missing per-token IP allowlist.
+- **Rotation** is the primary token hygiene: revoke + recreate the cPanel token,
+  update the KV secret, and APIM auto-refreshes the named value (no redeploy).
 
 ## Scope / limits
 
