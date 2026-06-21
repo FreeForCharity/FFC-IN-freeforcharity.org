@@ -69,18 +69,27 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      # All workflow_dispatch inputs and step outputs are passed through `env`
+      # and referenced as quoted shell variables, never interpolated directly
+      # into the run script. This avoids GitHub Actions script injection
+      # (a malicious input value cannot break out of the command).
       - name: 'Phase 1 - deploy APIM service (~30-45 min)'
         id: apim
+        env:
+          RESOURCE_GROUP: ${{ inputs.resource_group }}
+          LOCATION: ${{ inputs.location }}
+          APIM_NAME: ${{ inputs.apim_name }}
+          PUBLISHER_EMAIL: ${{ inputs.publisher_email }}
         run: |
           set -euo pipefail
           out=$(az deployment group create \
-            --resource-group "${{ inputs.resource_group }}" \
+            --resource-group "$RESOURCE_GROUP" \
             --name "cpanel-apim-$(date +%s)" \
             --template-file infra/cpanel-apim/apim.bicep \
             --parameters \
-              location="${{ inputs.location }}" \
-              apimName="${{ inputs.apim_name }}" \
-              publisherEmail="${{ inputs.publisher_email }}" \
+              location="$LOCATION" \
+              apimName="$APIM_NAME" \
+              publisherEmail="$PUBLISHER_EMAIL" \
             --query properties.outputs -o json)
           echo "principalId=$(echo "$out" | jq -r '.apimPrincipalId.value')"            >> "$GITHUB_OUTPUT"
           echo "staticIps=$(echo "$out" | jq -r '.apimStaticIps.value | join(\", \")')" >> "$GITHUB_OUTPUT"
@@ -89,10 +98,12 @@ jobs:
       - name: 'Grant APIM identity Get+List secrets on Key Vault'
         env:
           PID: ${{ steps.apim.outputs.principalId }}
+          KV_NAME: ${{ inputs.key_vault_name }}
+          KV_RG: ${{ inputs.key_vault_resource_group }}
         run: |
           set -euo pipefail
-          kvid=$(az keyvault show --name "${{ inputs.key_vault_name }}" --resource-group "${{ inputs.key_vault_resource_group }}" --query id -o tsv)
-          rbac=$(az keyvault show --name "${{ inputs.key_vault_name }}" --resource-group "${{ inputs.key_vault_resource_group }}" --query properties.enableRbacAuthorization -o tsv)
+          kvid=$(az keyvault show --name "$KV_NAME" --resource-group "$KV_RG" --query id -o tsv)
+          rbac=$(az keyvault show --name "$KV_NAME" --resource-group "$KV_RG" --query properties.enableRbacAuthorization -o tsv)
           if [ "$rbac" = "true" ]; then
             existing=$(az role assignment list --assignee "$PID" --role "Key Vault Secrets User" --scope "$kvid" --query "[0].id" -o tsv)
             if [ -n "$existing" ]; then
@@ -105,30 +116,38 @@ jobs:
             fi
           else
             echo "Key Vault uses access policies -> set-policy get/list"
-            az keyvault set-policy --name "${{ inputs.key_vault_name }}" --object-id "$PID" --secret-permissions get list
+            az keyvault set-policy --name "$KV_NAME" --object-id "$PID" --secret-permissions get list
           fi
 
       - name: 'Phase 2 - deploy cPanel API + KV named values + policy'
+        env:
+          RESOURCE_GROUP: ${{ inputs.resource_group }}
+          APIM_NAME: ${{ inputs.apim_name }}
+          KV_NAME: ${{ inputs.key_vault_name }}
+          CPANEL_API_BASE_URL: ${{ inputs.cpanel_api_base_url }}
         run: |
           set -euo pipefail
           az deployment group create \
-            --resource-group "${{ inputs.resource_group }}" \
+            --resource-group "$RESOURCE_GROUP" \
             --name "cpanel-api-$(date +%s)" \
             --template-file infra/cpanel-apim/apis.bicep \
             --parameters \
-              apimName="${{ inputs.apim_name }}" \
-              keyVaultName="${{ inputs.key_vault_name }}" \
-              cpanelApiBaseUrl="${{ inputs.cpanel_api_base_url }}"
+              apimName="$APIM_NAME" \
+              keyVaultName="$KV_NAME" \
+              cpanelApiBaseUrl="$CPANEL_API_BASE_URL"
 
       - name: 'Next steps'
+        env:
+          STATIC_IPS: ${{ steps.apim.outputs.staticIps }}
+          GATEWAY_URL: ${{ steps.apim.outputs.gatewayUrl }}
         run: |
           {
             echo "## cPanel APIM gateway deployed ✅"
             echo ""
             echo "1. **Whitelist these static IP(s) in Imunify360** — add every address listed:"
-            echo "   \`${{ steps.apim.outputs.staticIps }}\`"
+            echo "   \`$STATIC_IPS\`"
             echo "   On a **shared host** the end-user cPanel UI has no Firewall/Whitelist tab — open a support ticket asking the host to whitelist these server-side. With WHM access, do it yourself: WHM → Imunify360 → Firewall → Whitelist."
-            echo "2. Gateway base: \`${{ steps.apim.outputs.gatewayUrl }}/cpanel/execute/<Module>/<func>\`"
-            echo "3. Get the subscription key and save it as repo secret \`APIM_SUBSCRIPTION_KEY\` (and \`${{ steps.apim.outputs.gatewayUrl }}\` as \`APIM_GATEWAY_URL\`). Key retrieval command is in infra/cpanel-apim/README.md."
+            echo "2. Gateway base: \`$GATEWAY_URL/cpanel/execute/<Module>/<func>\`"
+            echo "3. Get the subscription key and save it as repo secret \`APIM_SUBSCRIPTION_KEY\` (and \`$GATEWAY_URL\` as \`APIM_GATEWAY_URL\`). Key retrieval command is in infra/cpanel-apim/README.md."
             echo "4. Verify with the **cPanel ops via APIM** workflow."
           } >> "$GITHUB_STEP_SUMMARY"

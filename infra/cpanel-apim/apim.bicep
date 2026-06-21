@@ -47,6 +47,18 @@ resource apim 'Microsoft.ApiManagement/service@2022-08-01' = {
   properties: {
     publisherEmail: publisherEmail
     publisherName: publisherName
+    // Harden TLS: refuse legacy protocols/ciphers on both the client-facing
+    // gateway and the backend (cPanel) connection. cPanel on :2083 supports
+    // TLS 1.2, so disabling older protocols does not break the proxy.
+    customProperties: {
+      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls10': 'False'
+      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls11': 'False'
+      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Ssl30': 'False'
+      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TripleDes168': 'False'
+      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls10': 'False'
+      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls11': 'False'
+      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Ssl30': 'False'
+    }
   }
 }
 

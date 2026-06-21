@@ -18,6 +18,10 @@
 <policies>
   <inbound>
     <base />
+    <!-- Safety net: cap throughput per subscription so a leaked key cannot be
+         used to hammer the cPanel UAPI (abuse / DoS) from the whitelisted IP.
+         Generous enough for ops automation; tune as needed. -->
+    <rate-limit-by-key calls="300" renewal-period="60" counter-key="@(context.Subscription?.Id ?? context.Request.IpAddress)" />
     <set-backend-service backend-id="cpanel" />
     <set-header name="Authorization" exists-action="override">
       <value>cpanel {{cpanel-user}}:{{cpanel-api-token}}</value>

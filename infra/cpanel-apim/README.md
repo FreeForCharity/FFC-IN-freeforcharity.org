@@ -165,9 +165,24 @@ az deployment group create -g rg-ffc-cpanel-gateway \
   managed identity as **secret named values** (versionless URIs ⇒ auto-rotate).
   They are never committed, logged, or passed through the pipeline.
 - Callers authenticate to APIM with a **subscription key** and never see the
-  cPanel token. Rotate the key with `az apim subscription regenerate-key`.
+  cPanel token. The policy **strips `Ocp-Apim-Subscription-Key`** before
+  forwarding, so the gateway key never reaches cPanel or the host's logs.
+  Rotate the key with `az apim subscription regenerate-key`.
+- The policy applies a **rate limit** (300 calls / 60 s per subscription) as a
+  safety net, so a leaked key cannot be used to hammer the UAPI from the
+  whitelisted IP.
+- The gateway **refuses legacy TLS** (1.0/1.1, SSL3) and 3DES on both the
+  client and backend sides (`customProperties` in `apim.bicep`).
+- Deploy-workflow inputs are passed through `env` (never interpolated directly
+  into `run:`) to avoid GitHub Actions script injection.
 - Backend TLS validation is disabled because cPanel presents a shared/self-signed
-  cert on :2083; the connection is still HTTPS-encrypted.
+  cert on :2083; the connection is still HTTPS-encrypted but the backend's
+  identity is not verified. **Residual risk:** an attacker able to MITM the
+  APIM→cPanel hop could read the injected token. If the cPanel hostname presents
+  a valid CA-signed cert, re-enable `validateCertificateName` in `apis.bicep`.
+- The proxy exposes **any** UAPI `{module}/{function}` (reads and writes) and the
+  KV token is write-scoped. If your automation only reads, use a read-scoped
+  cPanel token and/or restrict modules in the policy to shrink blast radius.
 
 ## Scope / limits
 
