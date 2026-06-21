@@ -22,7 +22,7 @@ Config has sensible defaults for this account; override via env if needed:
   SOFTA_DIR     remote dir (default /softaculous_backups, relative to FTP home)
   DRY_RUN       "1" to log actions without uploading/deleting
 """
-import os, re, ssl, sys, json, ftplib, tempfile, datetime
+import os, re, ssl, json, ftplib, tempfile, datetime
 import urllib.request, urllib.error, urllib.parse
 
 GRAPH = "https://graph.microsoft.com/v1.0"
@@ -38,6 +38,14 @@ DEST = {
 KEEP_ALL_DAYS = 90
 KEEP_MONTHLY_DAYS = 365
 DATE_RE = re.compile(r"(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})")
+# Strict allowlist for backup filenames. The names come from the REMOTE server's
+# directory listing and are used to build local + OneDrive paths, so reject
+# anything that isn't a bare, well-formed basename (no "/", "\", "..").
+NAME_RE = re.compile(r"^(whmcs|wp)\.[A-Za-z0-9._-]+\.tar\.gz$")
+
+
+def safe_name(n):
+    return bool(NAME_RE.match(n)) and n == os.path.basename(n)
 
 
 def log(*a):
@@ -96,6 +104,7 @@ def upload_large(local_path, folder, name):
     upload_url = sess["uploadUrl"]
     size = os.path.getsize(local_path)
     chunk = 10 * 1024 * 1024  # 10 MiB (must be a multiple of 320 KiB)
+    final = None
     with open(local_path, "rb") as f:
         start = 0
         while start < size:
@@ -108,11 +117,23 @@ def upload_large(local_path, folder, name):
             req = urllib.request.Request(upload_url, data=buf, headers=h, method="PUT")
             try:
                 with urllib.request.urlopen(req, timeout=300) as r:
-                    pass
+                    status, body = r.status, r.read()
             except urllib.error.HTTPError as e:
-                if e.code not in (200, 201, 202):
-                    raise RuntimeError(f"upload chunk {name} @{start}: {e.code} {e.read()[:300]}")
+                raise RuntimeError(f"upload chunk {name} @{start}: {e.code} {e.read()[:300]}")
+            # Only 2xx means the chunk was accepted; never advance otherwise
+            # (e.g. a 3xx from a hijacked upload URL must not look like success).
+            if status not in (200, 201, 202):
+                raise RuntimeError(f"upload chunk {name} @{start}: unexpected status {status}")
+            final = body
             start = end + 1
+    # The final chunk returns the created DriveItem; verify the byte count so a
+    # silently-truncated upload can't masquerade as a complete backup.
+    try:
+        item = json.loads(final) if final else {}
+    except ValueError:
+        item = {}
+    if item.get("size") not in (None, size):
+        raise RuntimeError(f"upload {name}: size mismatch (local {size}, remote {item.get('size')})")
     log(f"    uploaded {name} ({size/1e6:.1f} MB)")
 
 
@@ -134,14 +155,17 @@ def file_date(name):
     m = DATE_RE.search(name)
     if not m:
         return None
-    y, mo, d, H, M, S = map(int, m.groups())
-    return datetime.datetime(y, mo, d, H, M, S, tzinfo=datetime.timezone.utc)
+    try:
+        y, mo, d, H, M, S = map(int, m.groups())
+        return datetime.datetime(y, mo, d, H, M, S, tzinfo=datetime.timezone.utc)
+    except ValueError:
+        return None  # malformed date (e.g. month 13) -> treat as undated, never delete
 
 
 def apply_retention(folder, items):
     now = datetime.datetime.now(datetime.timezone.utc)
     dated = sorted(
-        ((file_date(n), n, it) for n, it in items.items() if file_date(n)),
+        ((dt, n, it) for n, it in items.items() if (dt := file_date(n))),
         key=lambda x: x[0],
         reverse=True,
     )
@@ -164,9 +188,22 @@ def apply_retention(folder, items):
 # FTPS
 # ----------------------------------------------------------------------------
 def ftps_connect():
-    ctx = ssl.create_default_context()
-    ctx.check_hostname = False
-    ctx.verify_mode = ssl.CERT_NONE  # cPanel shared/self-signed cert
+    # TLS verification is ON by default (system trust store) so the FTP password
+    # and backup data can't be MITM'd. If the cPanel host presents a self-signed
+    # / shared cert, pin it via FTPS_CACERT (a PEM file path or inline PEM).
+    # FTPS_INSECURE=1 is an explicit, loudly-logged escape hatch — not recommended.
+    cacert = os.environ.get("FTPS_CACERT")
+    if cacert and os.path.exists(cacert):
+        ctx = ssl.create_default_context(cafile=cacert)
+    elif cacert:
+        ctx = ssl.create_default_context(cadata=cacert)
+    elif os.environ.get("FTPS_INSECURE") == "1":
+        log("WARNING: FTPS_INSECURE=1 -> FTPS certificate verification DISABLED (MITM risk).")
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+    else:
+        ctx = ssl.create_default_context()  # verify against the system CA store
     ftp = ftplib.FTP_TLS(context=ctx)
     ftp.connect(os.environ["FTP_HOST"], int(os.environ.get("FTP_PORT", "21")), timeout=60)
     ftp.login(os.environ["FTP_USER"], os.environ["FTP_PASS"])
@@ -180,7 +217,10 @@ def main():
     ftp = ftps_connect()
     ftp.cwd(SOFTA_DIR)
     names = ftp.nlst()
-    backups = [n for n in names if n.endswith(".tar.gz") and any(n.startswith(p) for p in DEST)]
+    backups = [n for n in names if safe_name(n)]
+    rejected = [n for n in names if n.endswith(".tar.gz") and not safe_name(n)]
+    if rejected:
+        log(f"WARNING: ignoring {len(rejected)} archive name(s) failing the safe-name allowlist")
     log(f"Found {len(backups)} Softaculous archive(s) in {SOFTA_DIR}")
 
     uploaded = 0
@@ -193,10 +233,13 @@ def main():
             log(f"  {folder}: new -> {name}")
             if DRY_RUN:
                 continue
-            tmp = os.path.join(tempfile.gettempdir(), name)
-            with open(tmp, "wb") as fh:
-                ftp.retrbinary("RETR " + name, fh.write, blocksize=1024 * 1024)
+            # Unique local temp path (avoids collisions / interrupted-job
+            # leftovers). `name` is allowlisted, but we still never build the
+            # local path from it. OneDrive still uses the original `name`.
+            fd, tmp = tempfile.mkstemp(prefix="ftpbk_", suffix=".tar.gz")
             try:
+                with os.fdopen(fd, "wb") as fh:
+                    ftp.retrbinary("RETR " + name, fh.write, blocksize=1024 * 1024)
                 upload_large(tmp, folder, name)
                 uploaded += 1
             finally:

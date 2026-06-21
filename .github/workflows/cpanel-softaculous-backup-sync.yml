@@ -67,12 +67,17 @@ jobs:
           od_tenant=$(kv read-all-ffc-onedrive-backup-tenant-id)
           od_client=$(kv read-all-ffc-onedrive-backup-client-id)
           od_rt=$(kv wr-all-ffc-onedrive-backup-refresh-token)
-          resp=$(curl -s -X POST "https://login.microsoftonline.com/${od_tenant}/oauth2/v2.0/token" \
+          echo "::add-mask::$od_rt"
+          # -S surfaces transport errors; not -f, because we must read the JSON
+          # error body (.error_description) when the grant is rejected (e.g. an
+          # expired refresh token) to print an actionable message.
+          resp=$(curl -sS -X POST "https://login.microsoftonline.com/${od_tenant}/oauth2/v2.0/token" \
             -d "client_id=${od_client}" -d "grant_type=refresh_token" \
             --data-urlencode "scope=https://graph.microsoft.com/Files.ReadWrite.All offline_access" \
             --data-urlencode "refresh_token=${od_rt}")
           graph_token=$(printf '%s' "$resp" | jq -r '.access_token // empty')
           new_rt=$(printf '%s' "$resp" | jq -r '.refresh_token // empty')
+          [ -n "$new_rt" ] && echo "::add-mask::$new_rt"
           if [ -z "$graph_token" ]; then
             echo "::error::OneDrive refresh-token grant failed. Re-auth the ffc-onedrive-backup app (device code) and update the KV secret."
             printf '%s' "$resp" | jq -r '.error_description // .error' | head -1
@@ -91,8 +96,15 @@ jobs:
           fi
 
           # --- cPanel FTPS creds ---
+          # Connect by HOSTNAME (derived from the ...-server URL), not the raw
+          # IP, so the FTPS certificate's hostname can be verified (the script
+          # verifies against the system CA store by default). cPanel AutoSSL
+          # normally provisions a valid cert for the server hostname. If the
+          # host presents a self-signed cert, pin it with FTPS_CACERT or, as a
+          # logged last resort, set FTPS_INSECURE=1 in the run step below.
+          ftp_host=$(kv wr-all-cbm-cpanel-ffc-interserver-server | sed -E 's#^https?://##; s#[:/].*$##')
           {
-            echo "FTP_HOST=$(kv wr-all-cbm-cpanel-ffc-interserver-ftp-host)"
+            echo "FTP_HOST=$ftp_host"
             echo "FTP_USER=$(kv wr-all-cbm-cpanel-ffc-interserver-ftp-user)"
             echo "FTP_PORT=$(kv wr-all-cbm-cpanel-ffc-interserver-ftp-port)"
           } >> "$GITHUB_ENV"
