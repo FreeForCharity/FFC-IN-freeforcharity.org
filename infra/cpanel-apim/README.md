@@ -14,7 +14,10 @@ GitHub Actions ──(subscription key)──▶ APIM (static IP) ──(cpanel 
 
 This APIM instance is a **shared FFC gateway**, not cPanel-specific. cPanel is the
 first API onboarded (path `/cpanel`); future backends are added as additional APIs
-on the same instance and share the one static egress IP.
+on the same instance and share its static egress IP(s). Classic APIM exposes a
+single IP on the Developer tier (currently `20.231.116.111`) but can present more
+than one — `apim.bicep` outputs the full array, so **whitelist every address it
+lists**, not just the first.
 
 ## Deployed instance (prod)
 
@@ -138,9 +141,15 @@ az deployment group create -g rg-ffc-cpanel-gateway \
    Until the IP is whitelisted, calls return HTTP 200 with body
    `{"message":"Access denied by Imunify360 bot-protection..."}` — that response
    coming back _through the gateway_ confirms auth + routing already work.
-2. **Subscription key is stored in Key Vault** as
-   `read-all-ffc-apim-gateway-subscription-key`, so CI pulls it the same KV-aligned
-   way as the cPanel token (no repo secret needed). To re-read or rotate:
+2. **Subscription key.** The primary key is kept in Key Vault as
+   `read-all-ffc-apim-gateway-subscription-key` (the rotation source of truth).
+   The **cPanel ops via APIM** verify workflow consumes it as the GitHub Actions
+   secret `APIM_SUBSCRIPTION_KEY` (and the gateway URL as `APIM_GATEWAY_URL`), so
+   populate those two secrets from the KV value once. Unlike the cPanel token —
+   which never leaves Key Vault — this lower-sensitivity gateway key is surfaced to
+   CI as an Actions secret; rotating it means regenerating the APIM key and
+   refreshing both the KV secret and `APIM_SUBSCRIPTION_KEY`. To re-read it at the
+   source:
    ```bash
    az rest --method post --uri \
      "https://management.azure.com/subscriptions/<sub>/resourceGroups/rg-ffc-admin-apim/providers/Microsoft.ApiManagement/service/apim-ffc-gateway-prod/subscriptions/cpanel-ops/listSecrets?api-version=2022-08-01" \

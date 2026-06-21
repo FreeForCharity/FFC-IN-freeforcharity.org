@@ -125,8 +125,9 @@ jobs:
           {
             echo "## cPanel APIM gateway deployed ✅"
             echo ""
-            echo "1. **Whitelist these static IP(s) in Imunify360** (cPanel → Imunify360 → Firewall → Whitelist) — add every address listed:"
+            echo "1. **Whitelist these static IP(s) in Imunify360** — add every address listed:"
             echo "   \`${{ steps.apim.outputs.staticIps }}\`"
+            echo "   On a **shared host** the end-user cPanel UI has no Firewall/Whitelist tab — open a support ticket asking the host to whitelist these server-side. With WHM access, do it yourself: WHM → Imunify360 → Firewall → Whitelist."
             echo "2. Gateway base: \`${{ steps.apim.outputs.gatewayUrl }}/cpanel/execute/<Module>/<func>\`"
             echo "3. Get the subscription key and save it as repo secret \`APIM_SUBSCRIPTION_KEY\` (and \`${{ steps.apim.outputs.gatewayUrl }}\` as \`APIM_GATEWAY_URL\`). Key retrieval command is in infra/cpanel-apim/README.md."
             echo "4. Verify with the **cPanel ops via APIM** workflow."
