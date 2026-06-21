@@ -609,7 +609,7 @@ const Index = () => {
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px] ">
               <a
-                href="https://techcommunity.microsoft.com/t5/nonprofits/ct-p/Nonprofits"
+                href="https://techcommunity.microsoft.com/category/microsoftfornonprofits"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -1018,12 +1018,12 @@ const Index = () => {
             </li>
             <li className="underline pl-[0.5rem] text-[#0066B8] mb-[0.75rem] text-[14px] leading-[26px]">
               <a
-                href="https://techcommunity.microsoft.com/t5/microsoft-clarity-blog/bg-p/ClarityBlog"
+                href="https://clarity.microsoft.com/blog/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#0066B8] underline"
               >
-                Tech Community Discussions
+                Microsoft Clarity Blog
               </a>
             </li>
           </ul>
