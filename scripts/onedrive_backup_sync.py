@@ -37,6 +37,13 @@ DEST = {
 }
 KEEP_ALL_DAYS = 90
 KEEP_MONTHLY_DAYS = 365
+# Freshness thresholds (hours). The newest archive in each folder should be no
+# older than this; otherwise Softaculous likely stopped producing backups even
+# though the sync itself is green. WHMCS is daily, WordPress weekly.
+FRESH_MAX_HOURS = {
+    "whmcs.": int(os.environ.get("FRESH_WHMCS_MAX_H", "26")),
+    "wp.": int(os.environ.get("FRESH_WP_MAX_H", "192")),  # 8 days
+}
 DATE_RE = re.compile(r"(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})")
 # Strict allowlist for backup filenames. The names come from the REMOTE server's
 # directory listing and are used to build local + OneDrive paths, so reject
@@ -212,6 +219,32 @@ def ftps_connect():
     return ftp
 
 
+def check_freshness():
+    """Warn (don't fail) if the newest archive in a folder is older than its
+    threshold -- a sign Softaculous stopped producing backups. Reuses the
+    already-minted Graph token so it adds no second token consumer."""
+    now = datetime.datetime.now(datetime.timezone.utc)
+    stale = []
+    for prefix, folder in DEST.items():
+        dated = [dt for n, _ in list_children(folder).items() if (dt := file_date(n)) and n.startswith(prefix)]
+        if not dated:
+            log(f"Freshness: {folder}: NO dated archives found")
+            stale.append((prefix, folder, None))
+            continue
+        newest = max(dated)
+        age_h = (now - newest).total_seconds() / 3600.0
+        limit = FRESH_MAX_HOURS.get(prefix, 26)
+        flag = "STALE" if age_h > limit else "ok"
+        log(f"Freshness: {folder}: newest {newest:%Y-%m-%d %H:%M}Z ({age_h:.1f}h old, limit {limit}h) -> {flag}")
+        if age_h > limit:
+            stale.append((prefix, folder, age_h))
+    for prefix, folder, age_h in stale:
+        msg = f"{folder}: no archive younger than {FRESH_MAX_HOURS.get(prefix, 26)}h" if age_h is None \
+            else f"{folder}: newest archive is {age_h:.0f}h old (limit {FRESH_MAX_HOURS.get(prefix, 26)}h)"
+        log(f"::warning::Backup freshness: {msg}")
+    return stale
+
+
 def main():
     log(f"== Softaculous -> OneDrive sync ({'DRY-RUN' if DRY_RUN else 'live'}) ==")
     ftp = ftps_connect()
@@ -256,6 +289,10 @@ def main():
     for folder in DEST.values():
         log(f"Retention: {folder}")
         apply_retention(folder, list_children(folder))
+
+    # Freshness check (warning-only; the scheduled monitor workflow is the
+    # hard alarm). Run after retention so it reflects the final folder state.
+    check_freshness()
 
     log(f"Done. Uploaded {uploaded} new archive(s).")
 

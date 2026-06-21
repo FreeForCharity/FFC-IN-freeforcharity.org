@@ -1,0 +1,133 @@
+name: 'cPanel deploy verify (public_html_next)'
+
+# Read-only verification that a static-export deploy actually landed on disk in
+# ~/public_html_next/ -- the cloud-native replacement for the manual SSH / cPanel
+# Terminal checks in issue #152 (cutover step DEP2). It calls UAPI
+# Fileman/list_files THROUGH the Azure API Management gateway (static, whitelisted
+# IP), so no SSH and no runner-IP Imunify360 block.
+#
+# Fileman/list_files is on the gateway operation allowlist (PR #291); this
+# workflow adds NO new privilege -- it only reads a directory listing.
+#
+# Secrets (repo or environment):
+#   APIM_GATEWAY_URL       e.g. https://apim-ffc-gateway-prod.azure-api.net
+#   APIM_SUBSCRIPTION_KEY  the "cpanel-ops" subscription primary key
+#   CPANEL_USER            cPanel account username (for the /home/<user> path)
+#
+# What it asserts (mirrors #152 acceptance, minus the .htaccess *content* check
+# which needs file-read access this gateway intentionally does not expose):
+#   * index.html, 404.html, .htaccess and each route in `expect_files` exist
+#   * _next/static/chunks/ contains JS bundles (count > 0)
+
+on:
+  workflow_dispatch:
+    inputs:
+      subdir:
+        description: 'Directory under the account home to verify'
+        required: false
+        default: 'public_html_next'
+        type: string
+      expect_files:
+        description: 'Comma-separated route files that must exist'
+        required: false
+        default: 'index.html,404.html,about-us.html,donate.html'
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cpanel-deploy-verify
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: 'Verify ~/public_html_next/ via gateway'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Check deploy landed (Fileman/list_files via APIM)'
+        env:
+          BASE: ${{ secrets.APIM_GATEWAY_URL }}
+          KEY: ${{ secrets.APIM_SUBSCRIPTION_KEY }}
+          CPANEL_USER: ${{ secrets.CPANEL_USER }}
+          SUBDIR: ${{ inputs.subdir }}
+          EXPECT_FILES: ${{ inputs.expect_files }}
+        run: |
+          set -euo pipefail
+          if [ -z "${BASE:-}" ] || [ -z "${KEY:-}" ] || [ -z "${CPANEL_USER:-}" ]; then
+            echo "::error::Set APIM_GATEWAY_URL, APIM_SUBSCRIPTION_KEY and CPANEL_USER secrets first."
+            exit 1
+          fi
+          base="${BASE%/}"
+          # Normalize the subdir to a single leading-slash-free path segment set;
+          # reject anything with traversal so a dispatch input can't walk the FS.
+          case "$SUBDIR" in
+            *..*|/*) echo "::error::subdir must be a relative path with no '..'"; exit 1 ;;
+          esac
+          root="/home/${CPANEL_USER}/${SUBDIR}"
+
+          api() { curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${KEY}" -H 'Accept: application/json' "$@"; }
+
+          # --- 1) Top-level files (index.html, 404.html, .htaccess + routes) ---
+          # only_these_files filters the listing to just the names we care about,
+          # show_hidden=1 so the dotfile .htaccess is included.
+          want=".htaccess,index.html,${EXPECT_FILES}"
+          listing=$(api --get \
+            --data-urlencode "dir=${root}" \
+            --data-urlencode "types=file" \
+            --data-urlencode "show_hidden=1" \
+            --data-urlencode "only_these_files=${want}" \
+            "${base}/cpanel/execute/Fileman/list_files")
+          status=$(printf '%s' "$listing" | jq -r '.status // 0' 2>/dev/null || echo 0)
+          if [ "$status" != "1" ]; then
+            echo "::error::Fileman/list_files failed for ${root} (status != 1). Diagnostics only:"
+            printf '%s' "$listing" | jq -r '(.errors // [])[], (.messages // [])[]' 2>/dev/null | head -n 5 || true
+            exit 1
+          fi
+          present=$(printf '%s' "$listing" | jq -r '[.data[]?.file] | @json')
+
+          missing=0
+          # NOTE: filenames of a public static site aren't secret, but we still
+          # print only present/MISSING booleans -- never the full server listing.
+          IFS=',' read -ra names <<< "$want"
+          for n in "${names[@]}"; do
+            n="$(printf '%s' "$n" | tr -d '[:space:]')"
+            [ -z "$n" ] && continue
+            if printf '%s' "$present" | jq -e --arg n "$n" 'index($n) != null' >/dev/null; then
+              echo "  ✓ ${n}"
+            else
+              echo "  ✗ ${n}: MISSING"
+              missing=$((missing + 1))
+            fi
+          done
+
+          # --- 2) JS bundles under _next/static/chunks/ ---
+          chunks=$(api --get \
+            --data-urlencode "dir=${root}/_next/static/chunks" \
+            --data-urlencode "types=file" \
+            "${base}/cpanel/execute/Fileman/list_files")
+          cstatus=$(printf '%s' "$chunks" | jq -r '.status // 0' 2>/dev/null || echo 0)
+          js_count=0
+          if [ "$cstatus" = "1" ]; then
+            js_count=$(printf '%s' "$chunks" | jq '[.data[]?.file | select(endswith(".js"))] | length' 2>/dev/null || echo 0)
+          fi
+          if [ "$js_count" -gt 0 ]; then
+            echo "  ✓ _next/static/chunks/: ${js_count} JS bundle(s)"
+          else
+            echo "  ✗ _next/static/chunks/: no JS bundles found"
+            missing=$((missing + 1))
+          fi
+
+          {
+            echo "## cPanel deploy verification — \`${SUBDIR}\`"
+            echo ""
+            echo "- Route/asset files checked: \`${want}\`"
+            echo "- JS bundles in \`_next/static/chunks/\`: **${js_count}**"
+            echo "- Missing/failed checks: **${missing}**"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$missing" -ne 0 ]; then
+            echo "::error::${missing} verification check(s) failed for ${root}. Re-run the deploy (it is idempotent)."
+            exit 1
+          fi
+          echo "✅ Deploy verified: all required files present in ${root}."
