@@ -1,0 +1,111 @@
+name: 'cPanel backup freshness monitor'
+
+# Hard alarm for the off-server backup pipeline. The daily sync
+# (cpanel-softaculous-backup-sync.yml) already emits a per-folder freshness
+# WARNING from inside its run (it has the Graph token), which catches
+# "Softaculous stopped producing backups while the sync is still green."
+#
+# This complementary monitor catches the case that one can't: the sync
+# workflow itself stopped running or started failing (disabled, broken creds,
+# expired OneDrive refresh token, etc.). It only reads GitHub Actions run
+# history via GITHUB_TOKEN -- it does NOT mint a Graph token, so it cannot
+# collide with the sync's single-use (rotating) OneDrive refresh token.
+#
+# Alarms (fails the run) if either:
+#   * there is no SUCCESSFUL sync run within MAX_AGE_HOURS, or
+#   * the most recent sync run concluded in failure.
+
+on:
+  schedule:
+    - cron: '0 8 * * *' # daily 08:00 UTC, ~2h after the 06:00 sync
+  workflow_dispatch:
+    inputs:
+      max_age_hours:
+        description: 'Fail if no successful sync within this many hours'
+        required: false
+        default: '30'
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  monitor:
+    name: 'Check the backup sync is running and succeeding'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Inspect cpanel-softaculous-backup-sync run history'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          SYNC_WF: cpanel-softaculous-backup-sync.yml
+          MAX_AGE_HOURS: ${{ inputs.max_age_hours || '30' }}
+        run: |
+          set -euo pipefail
+          # Validate the dispatch input up front so a bad value fails with a
+          # clear message instead of a cryptic bash arithmetic syntax error.
+          if ! printf '%s' "$MAX_AGE_HOURS" | grep -Eq '^[1-9][0-9]*$'; then
+            echo "::error::max_age_hours must be a positive integer (got '${MAX_AGE_HOURS}')."
+            exit 1
+          fi
+          now=$(date -u +%s)
+          max_age=$(( MAX_AGE_HOURS * 3600 ))
+
+          runs=$(gh run list --workflow "$SYNC_WF" --limit 20 \
+            --json databaseId,status,conclusion,createdAt,updatedAt)
+
+          if [ "$(printf '%s' "$runs" | jq 'length')" -eq 0 ]; then
+            echo "::error::No runs found for ${SYNC_WF}. Is the workflow present/enabled?"
+            exit 1
+          fi
+
+          # Most recent run overall (by createdAt).
+          latest=$(printf '%s' "$runs" | jq -c 'sort_by(.createdAt) | last')
+          latest_concl=$(printf '%s' "$latest" | jq -r '.conclusion // ""')
+          latest_status=$(printf '%s' "$latest" | jq -r '.status // ""')
+          latest_when=$(printf '%s' "$latest" | jq -r '.updatedAt // .createdAt')
+
+          # Most recent SUCCESSFUL run.
+          last_ok=$(printf '%s' "$runs" | jq -c '[.[] | select(.conclusion=="success")] | sort_by(.updatedAt) | last // empty')
+
+          fail=0
+          if [ -z "$last_ok" ]; then
+            echo "::error::No successful ${SYNC_WF} run in the last 20 runs."
+            fail=1
+          else
+            ok_when=$(printf '%s' "$last_ok" | jq -r '.updatedAt // .createdAt')
+            ok_epoch=$(date -u -d "$ok_when" +%s)
+            age=$(( now - ok_epoch ))
+            age_h=$(( age / 3600 ))
+            echo "Last successful sync: ${ok_when} (${age_h}h ago, limit ${MAX_AGE_HOURS}h)"
+            if [ "$age" -gt "$max_age" ]; then
+              echo "::error::Last successful backup sync was ${age_h}h ago (> ${MAX_AGE_HOURS}h). Backups may be stale."
+              fail=1
+            fi
+          fi
+
+          # A currently in-progress run isn't a failure; only alarm on a
+          # decided failure of the most recent run.
+          if [ "$latest_status" = "completed" ] && [ "$latest_concl" != "success" ]; then
+            echo "::error::Most recent ${SYNC_WF} run concluded '${latest_concl}' at ${latest_when}."
+            fail=1
+          fi
+
+          {
+            echo "## Backup freshness monitor"
+            echo ""
+            echo "- Latest sync run: \`${latest_status}/${latest_concl:-?}\` at ${latest_when}"
+            if [ -n "$last_ok" ]; then
+              echo "- Last successful sync: ${ok_when} (${age_h}h ago)"
+            else
+              echo "- Last successful sync: **none in recent history**"
+            fi
+            echo "- Threshold: ${MAX_AGE_HOURS}h"
+            echo "- Result: $( [ "$fail" -eq 0 ] && echo '✅ healthy' || echo '⛔ ALARM' )"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$fail" -ne 0 ]; then
+            exit 1
+          fi
+          echo "✅ Backup pipeline healthy."

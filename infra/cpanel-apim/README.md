@@ -65,13 +65,14 @@ overall but is not a managed gateway.
 
 ## Files
 
-| File                                              | Purpose                                                                                                                                                                   |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `apim.bicep`                                      | Phase 1 — the APIM service (Developer tier, system-assigned identity). Outputs the static IP + identity principal ID.                                                     |
-| `apis.bicep`                                      | Phase 2 — KV-linked secret named values, the cPanel backend (TLS validation off), the `/cpanel` API + GET/POST operations, the auth-injection policy, and a subscription. |
-| `policies/cpanel-api.xml`                         | API policy: routes to the `cpanel` backend and injects `Authorization: cpanel {{user}}:{{token}}`.                                                                        |
-| `../../.github/workflows/cpanel-apim-deploy.yml`  | Orchestrates phase 1 → grant KV access → phase 2.                                                                                                                         |
-| `../../.github/workflows/cpanel-ops-via-apim.yml` | Calls cPanel UAPI through the gateway (also a connectivity check).                                                                                                        |
+| File                                               | Purpose                                                                                                                                                                          |
+| -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `apim.bicep`                                       | Phase 1 — the APIM service (Developer tier, system-assigned identity). Outputs the static IP + identity principal ID.                                                            |
+| `apis.bicep`                                       | Phase 2 — KV-linked secret named values, the cPanel backend (TLS validation off), the `/cpanel` API + GET/POST operations, the auth-injection policy, and a subscription.        |
+| `policies/cpanel-api.xml`                          | API policy: routes to the `cpanel` backend and injects `Authorization: cpanel {{user}}:{{token}}`.                                                                               |
+| `../../.github/workflows/cpanel-apim-deploy.yml`   | Orchestrates phase 1 → grant KV access → phase 2.                                                                                                                                |
+| `../../.github/workflows/cpanel-ops-via-apim.yml`  | Calls cPanel UAPI through the gateway (also a connectivity check).                                                                                                               |
+| `../../.github/workflows/cpanel-deploy-verify.yml` | Read-only deploy check (#152): confirms `~/public_html_next/` has `index.html`, `.htaccess`, the route pages and `_next/static/chunks/` JS via allowlisted `Fileman/list_files`. |
 
 ## Prerequisites (one-time, admin)
 
