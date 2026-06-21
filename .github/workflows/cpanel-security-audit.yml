@@ -98,7 +98,7 @@ jobs:
           echo "Wrote current-fingerprint.json"
 
       - name: 'Diff against baseline'
-        if: ${{ !inputs.update_baseline }}
+        if: ${{ github.event.inputs.update_baseline != 'true' }}
         run: |
           set -euo pipefail
           baseline=security/cpanel-audit-baseline.json
@@ -131,7 +131,7 @@ jobs:
           exit 1
 
       - name: 'Produce new baseline (manual, after an intended change)'
-        if: ${{ inputs.update_baseline }}
+        if: ${{ github.event.inputs.update_baseline == 'true' }}
         run: |
           set -euo pipefail
           mkdir -p security
@@ -141,7 +141,7 @@ jobs:
           echo "this review-gated). It contains only counts + SHA-256 hashes, no raw data."
 
       - name: 'Upload new baseline artifact'
-        if: ${{ inputs.update_baseline }}
+        if: ${{ github.event.inputs.update_baseline == 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: cpanel-audit-baseline

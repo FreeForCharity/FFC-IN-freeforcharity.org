@@ -111,14 +111,14 @@ jobs:
           done
 
       - name: 'Off-site copy (FTPS pull → rclone push)'
-        if: ${{ inputs.offsite_upload }}
+        if: ${{ github.event.inputs.offsite_upload == 'true' }}
         env:
           CPANEL_SERVER: ${{ secrets.CPANEL_SERVER }}
           CPANEL_USER: ${{ secrets.CPANEL_USER }}
           FTP_PASSWORD: ${{ secrets.CPANEL_FTP_PASSWORD }}
           RCLONE_CONFIG_BASE64: ${{ secrets.RCLONE_CONFIG_BASE64 }}
           REMOTE_FILE: ${{ steps.trigger.outputs.remote_file }}
-          RCLONE_DEST: ${{ inputs.rclone_dest }}
+          RCLONE_DEST: ${{ github.event.inputs.rclone_dest }}
         run: |
           set -euo pipefail
           for v in CPANEL_SERVER CPANEL_USER FTP_PASSWORD RCLONE_CONFIG_BASE64 REMOTE_FILE; do
@@ -156,5 +156,5 @@ jobs:
             echo "## cPanel backup run"
             echo ""
             echo "- On-server backup: \`${{ steps.trigger.outputs.remote_file || 'not created' }}\`"
-            echo "- Off-site upload: ${{ inputs.offsite_upload && 'requested' || 'skipped' }}"
+            echo "- Off-site upload: ${{ github.event.inputs.offsite_upload == 'true' && 'requested' || 'skipped' }}"
           } >> "$GITHUB_STEP_SUMMARY"
