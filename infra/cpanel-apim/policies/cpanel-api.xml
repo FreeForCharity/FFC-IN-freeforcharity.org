@@ -25,6 +25,10 @@
     <set-header name="Accept" exists-action="override">
       <value>application/json</value>
     </set-header>
+    <!-- Strip the APIM subscription key so it is never forwarded to cPanel /
+         the host's access logs. The caller authenticates to APIM with it; the
+         backend must never see it. -->
+    <set-header name="Ocp-Apim-Subscription-Key" exists-action="delete" />
   </inbound>
   <backend>
     <base />

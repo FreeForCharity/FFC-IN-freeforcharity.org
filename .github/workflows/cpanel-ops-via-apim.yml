@@ -72,13 +72,16 @@ jobs:
           code=$(printf '%s' "${resp}" | tail -n1)
           body=$(printf '%s' "${resp}" | sed '$d')
           echo "HTTP ${code}"
+          # NOTE: Actions logs on a public repo are world-readable, and UAPI
+          # payloads can carry operationally sensitive data (domains, accounts,
+          # paths). Never echo the response body — log only status + the UAPI
+          # diagnostic fields (errors/messages), plus a harmless item count.
           status=$(printf '%s' "${body}" | jq -r '.status // empty' 2>/dev/null || true)
           if [ "${status}" = "1" ]; then
-            echo "✅ cPanel UAPI reachable through APIM (auth + whitelist OK)."
-            printf '%s' "${body}" | jq '.data' 2>/dev/null | head -n 40 || true
+            items=$(printf '%s' "${body}" | jq -r 'if (.data | type) == "array" then (.data | length | tostring) else "n/a" end' 2>/dev/null || echo "n/a")
+            echo "✅ cPanel UAPI reachable through APIM (auth + whitelist OK). data items: ${items}"
           else
-            echo "::warning::cPanel did not return status=1. First 600 bytes of response:"
-            printf '%s' "${body}" | head -c 600
-            echo ""
+            echo "::error::cPanel did not return status=1 (HTTP ${code}). Diagnostic fields only:"
+            printf '%s' "${body}" | jq -r '(.errors // [])[], (.messages // [])[]' 2>/dev/null | head -n 10 || true
             exit 1
           fi
