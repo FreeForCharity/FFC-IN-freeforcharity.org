@@ -188,7 +188,7 @@ az deployment group create -g rg-ffc-cpanel-gateway \
   our automation uses (backup/list/restore + the read-only `list_*` views) and
   returns **403** for anything else. Extend the list in
   `policies/cpanel-api.xml` as new operations are needed.
-- **De-facto IP restriction.** Because Imunify360 blocks port 2083 from any
+- **De facto IP restriction.** Because Imunify360 blocks port 2083 from any
   non-whitelisted IP, a leaked cPanel token cannot be used over the API from an
   arbitrary IP anyway — only from the gateway's static IP (and operator IPs the
   host already trusts). This compensates for the missing per-token IP allowlist.
