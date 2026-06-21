@@ -85,10 +85,13 @@ Softaculous (cPanel server, scheduled)
 - **Runner identity:** the workflow runs in the **`cpanel-apim-deploy`**
   environment and authenticates to Azure via **OIDC as `ffc-admin-kv-writer`**
   (Key Vault **Secrets Officer** — reads the secrets below _and_ writes the
-  rotated OneDrive token). Repo env secrets: `AZURE_DEPLOY_CLIENT_ID`,
-  `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`.
+  rotated OneDrive token). The OIDC inputs `AZURE_DEPLOY_CLIENT_ID`,
+  `AZURE_TENANT_ID`, and `AZURE_SUBSCRIPTION_ID` are configured as secrets on
+  the **`cpanel-apim-deploy` GitHub Environment** (consumed via the `secrets`
+  context in the workflow).
 - **cPanel FTPS:** `wr-all-cbm-cpanel-ffc-interserver-ftp-{user,password,port}`;
-  the host is the **hostname** parsed from `…-server` (so the FTPS certificate is
+  the host is the **hostname** parsed from the
+  `wr-all-cbm-cpanel-ffc-interserver-server` secret (so the FTPS certificate is
   **verified** by default — the host presents a valid AutoSSL cert).
 - **OneDrive:** a dedicated app **`ffc-onedrive-backup`** with **delegated**
   `Files.ReadWrite.All` (scoped to clarkemoyer's OneDrive — _not_ tenant-wide).
