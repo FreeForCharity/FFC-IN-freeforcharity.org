@@ -86,8 +86,11 @@ jobs:
               out=$(printf '%s' "$out" | jq --arg l "$label" '.[$l]={ok:false,count:0,sha256:""}')
               continue
             fi
-            # Normalize .data to a stable, sorted, compact form, then hash it.
-            norm=$(printf '%s' "$resp" | jq -cS '.data // []')
+            # Normalize .data to a stable, order-independent form, then hash it.
+            # -S sorts object keys; walk(sort) sorts every array (incl. nested)
+            # so a UAPI endpoint returning the same items in a different order
+            # doesn't show up as false drift.
+            norm=$(printf '%s' "$resp" | jq -cS '(.data // []) | walk(if type == "array" then sort else . end)')
             count=$(printf '%s' "$norm" | jq 'length' 2>/dev/null || echo 0)
             sha=$(printf '%s' "$norm" | sha256sum | cut -d' ' -f1)
             echo "  ✓ ${label}: count=${count} sha=${sha:0:12}…"
@@ -142,7 +145,7 @@ jobs:
 
       - name: 'Upload new baseline artifact'
         if: ${{ github.event.inputs.update_baseline == 'true' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: cpanel-audit-baseline
           path: security/cpanel-audit-baseline.json
