@@ -9,7 +9,7 @@ export default function ToolsPage() {
       title: 'QuickBooks Online ($75 per year with 5 users)',
       description:
         'If your accounting is not right a lot will suffer. Techsoup offers the discounts for QuickBooks the industry leader in accounting. Both online and offline versions are offered at the same price.',
-      link: 'https://www.techsoup.org/products/quickbooks-online-plus--1-year-initial-subscription--5-users--G-49616--',
+      link: 'https://www.techsoup.org/products/quickbooks-online-plus-1-year-subscription-5-users-g-49616-',
     },
     {
       logo: '/Images/googleLogo.webp',
@@ -40,7 +40,7 @@ export default function ToolsPage() {
       title: 'GrantStation (199$ per year)',
       description:
         'Best tool if you have a dedicated grant writer or a grant worthy type of charity.',
-      link: 'http://www.techsoup.org/products/grantstation-%28discounted%29--G-2575-',
+      link: 'https://www.techsoup.org/products/grantstation-1-year-membership-g-2575-',
     },
     {
       logo: '/Images/mailchimpLogo.webp',

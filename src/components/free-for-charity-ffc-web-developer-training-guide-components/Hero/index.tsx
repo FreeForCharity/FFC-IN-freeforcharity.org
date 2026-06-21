@@ -233,17 +233,13 @@ const Index = () => {
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px] ">
-              <a
-                href="https://www.nexcess.net/blog/whmcs-best-practices/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Blog Post on WHMCS Best Practices
+              <a href="https://docs.whmcs.com/" target="_blank" rel="noopener noreferrer">
+                WHMCS Official Documentation
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px] ">
               <a
-                href="https://www.inmotionhosting.com/support/edu/whmcs/"
+                href="https://www.inmotionhosting.com/support/whmcs/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -408,7 +404,11 @@ const Index = () => {
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px] ">
-              <a href="https://support.cloudflare.com/" target="_blank" rel="noopener noreferrer">
+              <a
+                href="https://developers.cloudflare.com/support/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Cloudflare Support Portal
               </a>
             </li>
@@ -581,11 +581,7 @@ const Index = () => {
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px] ">
-              <a
-                href="https://www.avepoint.com/blog/office-365/microsoft-365-nonprofits/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href="https://www.avepoint.com/blog" target="_blank" rel="noopener noreferrer">
                 Blog Guide by AvePoint
               </a>
             </li>

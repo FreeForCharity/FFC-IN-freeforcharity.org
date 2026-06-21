@@ -41,7 +41,7 @@ const index = () => {
               </>
             }
             buttonText="Available Here"
-            buttonLink="https://www.nuance.com/dragon.html"
+            buttonLink="https://dragon.nuance.com/en-us/dragon"
             imageSrc="/Images/dragon-logo.webp" // 👈 image passed as prop
           />
         </div>
