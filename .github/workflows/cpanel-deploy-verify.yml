@@ -16,7 +16,9 @@ name: 'cPanel deploy verify (public_html_next)'
 #
 # What it asserts (mirrors #152 acceptance, minus the .htaccess *content* check
 # which needs file-read access this gateway intentionally does not expose):
-#   * index.html, 404.html, .htaccess and each route in `expect_files` exist
+#   * top-level index.html, 404.html and .htaccess exist
+#   * each route in `expect_routes` exports as <route>/index.html (this repo
+#     uses trailingSlash:true, so routes are directories, not flat *.html)
 #   * _next/static/chunks/ contains JS bundles (count > 0)
 
 on:
@@ -27,10 +29,10 @@ on:
         required: false
         default: 'public_html_next'
         type: string
-      expect_files:
-        description: 'Extra route files that must exist (index.html, 404.html and .htaccess are ALWAYS checked)'
+      expect_routes:
+        description: 'Route dirs that must export <route>/index.html (top-level index.html/404.html/.htaccess are ALWAYS checked)'
         required: false
-        default: 'about-us.html,donate.html'
+        default: 'about-us,donate'
         type: string
 
 permissions:
@@ -51,7 +53,7 @@ jobs:
           KEY: ${{ secrets.APIM_SUBSCRIPTION_KEY }}
           CPANEL_USER: ${{ secrets.CPANEL_USER }}
           SUBDIR: ${{ inputs.subdir }}
-          EXPECT_FILES: ${{ inputs.expect_files }}
+          EXPECT_ROUTES: ${{ inputs.expect_routes }}
         run: |
           set -euo pipefail
           if [ -z "${BASE:-}" ] || [ -z "${KEY:-}" ] || [ -z "${CPANEL_USER:-}" ]; then
@@ -67,45 +69,40 @@ jobs:
           root="/home/${CPANEL_USER}/${SUBDIR}"
 
           api() { curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${KEY}" -H 'Accept: application/json' "$@"; }
-
-          # --- 1) Top-level files (index.html, 404.html, .htaccess + routes) ---
-          # only_these_files filters the listing to just the names we care about,
-          # show_hidden=1 so the dotfile .htaccess is included.
-          # Strip ALL whitespace so an input like "about-us.html, donate.html"
-          # can't send a leading-space filename to the API (false negative).
-          # index.html/404.html/.htaccess are always checked, regardless of input.
-          clean_expect=$(printf '%s' "$EXPECT_FILES" | tr -d '[:space:]')
-          want=".htaccess,index.html,404.html${clean_expect:+,$clean_expect}"
-          listing=$(api --get \
-            --data-urlencode "dir=${root}" \
-            --data-urlencode "types=file" \
-            --data-urlencode "show_hidden=1" \
-            --data-urlencode "only_these_files=${want}" \
-            "${base}/cpanel/execute/Fileman/list_files")
-          status=$(printf '%s' "$listing" | jq -r '.status // 0' 2>/dev/null || echo 0)
-          if [ "$status" != "1" ]; then
-            echo "::error::Fileman/list_files failed for ${root} (status != 1). Diagnostics only:"
-            printf '%s' "$listing" | jq -r '(.errors // [])[], (.messages // [])[]' 2>/dev/null | head -n 5 || true
-            exit 1
-          fi
-          present=$(printf '%s' "$listing" | jq -r '[.data[]?.file] | @json')
+          # List a dir and return the file names present as a compact JSON array.
+          # On UAPI status!=1 (dir missing etc.) returns [] so callers see "missing".
+          list_names() { # $1=dir  $2=only_these_files (optional)
+            local args=(--get --data-urlencode "dir=$1" --data-urlencode "types=file" --data-urlencode "show_hidden=1")
+            [ -n "${2:-}" ] && args+=(--data-urlencode "only_these_files=$2")
+            api "${args[@]}" "${base}/cpanel/execute/Fileman/list_files" \
+              | jq -c 'if (.status==1) then [.data[]?.file] else [] end' 2>/dev/null || echo '[]'
+          }
+          has() { printf '%s' "$1" | jq -e --arg n "$2" 'any(.[]; . == $n)' >/dev/null; }
 
           missing=0
-          # NOTE: filenames of a public static site aren't secret, but we still
-          # print only present/MISSING booleans -- never the full server listing.
-          IFS=',' read -ra names <<< "$want"
-          for n in "${names[@]}"; do
-            n="$(printf '%s' "$n" | tr -d '[:space:]')"
-            [ -z "$n" ] && continue
-            if printf '%s' "$present" | jq -e --arg n "$n" 'index($n) != null' >/dev/null; then
-              echo "  ✓ ${n}"
-            else
-              echo "  ✗ ${n}: MISSING"
-              missing=$((missing + 1))
-            fi
+
+          # --- 1) Top-level files: index.html, 404.html, .htaccess (always) ---
+          top=$(list_names "$root" ".htaccess,index.html,404.html")
+          for n in .htaccess index.html 404.html; do
+            if has "$top" "$n"; then echo "  ✓ ${n}"; else echo "  ✗ ${n}: MISSING"; missing=$((missing + 1)); fi
           done
 
-          # --- 2) JS bundles under _next/static/chunks/ ---
+          # --- 2) Routes: trailingSlash:true exports <route>/index.html, so each
+          # route is a DIRECTORY; list it and require index.html inside. ---
+          routes=$(printf '%s' "$EXPECT_ROUTES" | tr -d '[:space:]')
+          checked_routes=""
+          if [ -n "$routes" ]; then
+            IFS=',' read -ra rlist <<< "$routes"
+            for r in "${rlist[@]}"; do
+              [ -z "$r" ] && continue
+              case "$r" in *..*|/*) echo "  ✗ ${r}: invalid route"; missing=$((missing + 1)); continue ;; esac
+              checked_routes="${checked_routes} ${r}"
+              names=$(list_names "${root}/${r}" "index.html")
+              if has "$names" "index.html"; then echo "  ✓ ${r}/index.html"; else echo "  ✗ ${r}/index.html: MISSING"; missing=$((missing + 1)); fi
+            done
+          fi
+
+          # --- 3) JS bundles under _next/static/chunks/ ---
           chunks=$(api --get \
             --data-urlencode "dir=${root}/_next/static/chunks" \
             --data-urlencode "types=file" \
@@ -125,7 +122,8 @@ jobs:
           {
             echo "## cPanel deploy verification — \`${SUBDIR}\`"
             echo ""
-            echo "- Route/asset files checked: \`${want}\`"
+            echo "- Top-level files checked: \`.htaccess, index.html, 404.html\`"
+            echo "- Route dirs checked (\`<route>/index.html\`): \`${checked_routes:-none}\`"
             echo "- JS bundles in \`_next/static/chunks/\`: **${js_count}**"
             echo "- Missing/failed checks: **${missing}**"
           } >> "$GITHUB_STEP_SUMMARY"
