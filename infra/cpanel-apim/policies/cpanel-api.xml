@@ -22,6 +22,46 @@
          used to hammer the cPanel UAPI (abuse / DoS) from the whitelisted IP.
          Generous enough for ops automation; tune as needed. -->
     <rate-limit-by-key calls="300" renewal-period="60" counter-key="@(context.Subscription?.Id ?? context.Request.IpAddress)" />
+    <!-- Operation allowlist. The cPanel API token is full-access at the user
+         level (shared hosting cannot scope a token or restrict it by IP), so
+         the gateway caps the blast radius: it forwards ONLY the specific UAPI
+         module/function calls our automation uses and rejects anything else
+         with 403. A leaked subscription key therefore cannot invoke arbitrary
+         destructive UAPI operations. Extend the list as new ops are needed. -->
+    <set-variable name="op" value="@{
+        var p = context.Request.MatchedParameters;
+        var m = p.ContainsKey(&quot;module&quot;) ? p[&quot;module&quot;] : &quot;&quot;;
+        var f = p.ContainsKey(&quot;function&quot;) ? p[&quot;function&quot;] : &quot;&quot;;
+        return (m + &quot;/&quot; + f).ToLowerInvariant();
+    }" />
+    <choose>
+      <when condition="@(!new[] {
+          &quot;backup/fullbackup_to_homedir&quot;,
+          &quot;backup/fullbackup_to_ftp&quot;,
+          &quot;backup/fullbackup_to_scp&quot;,
+          &quot;backup/list_backups&quot;,
+          &quot;backup/restore&quot;,
+          &quot;fileman/list_files&quot;,
+          &quot;domaininfo/list_domains&quot;,
+          &quot;ftp/list_ftp&quot;,
+          &quot;cron/list_lines&quot;,
+          &quot;email/list_forwarders&quot;,
+          &quot;email/list_filters&quot;,
+          &quot;mysql/list_databases&quot;,
+          &quot;mysql/list_users&quot;,
+          &quot;tokens/list_tokens&quot;,
+          &quot;quota/get_quota_info&quot;,
+          &quot;statsbar/get_stats&quot;
+        }.Contains((string)context.Variables[&quot;op&quot;]))">
+        <return-response>
+          <set-status code="403" reason="Operation not allowed" />
+          <set-header name="Content-Type" exists-action="override">
+            <value>application/json</value>
+          </set-header>
+          <set-body>{"error":"This UAPI operation is not on the gateway allowlist (infra/cpanel-apim/policies/cpanel-api.xml)."}</set-body>
+        </return-response>
+      </when>
+    </choose>
     <set-backend-service backend-id="cpanel" />
     <set-header name="Authorization" exists-action="override">
       <value>cpanel {{cpanel-user}}:{{cpanel-api-token}}</value>
