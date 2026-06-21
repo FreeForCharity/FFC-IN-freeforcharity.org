@@ -40,9 +40,26 @@ KEEP_MONTHLY_DAYS = 365
 # Freshness thresholds (hours). The newest archive in each folder should be no
 # older than this; otherwise Softaculous likely stopped producing backups even
 # though the sync itself is green. WHMCS is daily, WordPress weekly.
+def _int_env(name, default):
+    """Parse a positive-int env override; fall back (with a warning) on junk so
+    freshness — which is warning-only — can never crash the whole sync job."""
+    raw = os.environ.get(name)
+    if raw is None or raw == "":
+        return default
+    try:
+        v = int(raw.strip())
+        if v <= 0:
+            raise ValueError
+        return v
+    except ValueError:
+        # print directly: this runs at import, before log() is defined.
+        print(f"::warning::{name}={raw!r} is not a positive integer; using default {default}", flush=True)
+        return default
+
+
 FRESH_MAX_HOURS = {
-    "whmcs.": int(os.environ.get("FRESH_WHMCS_MAX_H", "26")),
-    "wp.": int(os.environ.get("FRESH_WP_MAX_H", "192")),  # 8 days
+    "whmcs.": _int_env("FRESH_WHMCS_MAX_H", 26),
+    "wp.": _int_env("FRESH_WP_MAX_H", 192),  # 8 days
 }
 DATE_RE = re.compile(r"(\d{4})-(\d{2})-(\d{2})_(\d{2})-(\d{2})-(\d{2})")
 # Strict allowlist for backup filenames. The names come from the REMOTE server's

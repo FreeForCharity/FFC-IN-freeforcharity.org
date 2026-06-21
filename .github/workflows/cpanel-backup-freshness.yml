@@ -43,6 +43,12 @@ jobs:
           MAX_AGE_HOURS: ${{ inputs.max_age_hours || '30' }}
         run: |
           set -euo pipefail
+          # Validate the dispatch input up front so a bad value fails with a
+          # clear message instead of a cryptic bash arithmetic syntax error.
+          if ! printf '%s' "$MAX_AGE_HOURS" | grep -Eq '^[1-9][0-9]*$'; then
+            echo "::error::max_age_hours must be a positive integer (got '${MAX_AGE_HOURS}')."
+            exit 1
+          fi
           now=$(date -u +%s)
           max_age=$(( MAX_AGE_HOURS * 3600 ))
 

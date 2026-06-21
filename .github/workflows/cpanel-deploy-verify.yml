@@ -28,9 +28,9 @@ on:
         default: 'public_html_next'
         type: string
       expect_files:
-        description: 'Comma-separated route files that must exist'
+        description: 'Extra route files that must exist (index.html, 404.html and .htaccess are ALWAYS checked)'
         required: false
-        default: 'index.html,404.html,about-us.html,donate.html'
+        default: 'about-us.html,donate.html'
         type: string
 
 permissions:
@@ -71,7 +71,11 @@ jobs:
           # --- 1) Top-level files (index.html, 404.html, .htaccess + routes) ---
           # only_these_files filters the listing to just the names we care about,
           # show_hidden=1 so the dotfile .htaccess is included.
-          want=".htaccess,index.html,${EXPECT_FILES}"
+          # Strip ALL whitespace so an input like "about-us.html, donate.html"
+          # can't send a leading-space filename to the API (false negative).
+          # index.html/404.html/.htaccess are always checked, regardless of input.
+          clean_expect=$(printf '%s' "$EXPECT_FILES" | tr -d '[:space:]')
+          want=".htaccess,index.html,404.html${clean_expect:+,$clean_expect}"
           listing=$(api --get \
             --data-urlencode "dir=${root}" \
             --data-urlencode "types=file" \
