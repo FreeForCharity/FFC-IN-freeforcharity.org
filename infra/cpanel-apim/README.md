@@ -12,6 +12,25 @@ GitHub Actions ──(subscription key)──▶ APIM (static IP) ──(cpanel 
                                          └─ token+user pulled from Key Vault   └─ Imunify360 whitelists the APIM static IP
 ```
 
+This APIM instance is a **shared FFC gateway**, not cPanel-specific. cPanel is the
+first API onboarded (path `/cpanel`); future backends are added as additional APIs
+on the same instance and share the one static egress IP.
+
+## Deployed instance (prod)
+
+| Thing                  | Value                                                       |
+| ---------------------- | ----------------------------------------------------------- |
+| APIM instance          | `apim-ffc-gateway-prod` (Developer tier, eastus)            |
+| Resource group         | `rg-ffc-admin-apim`                                         |
+| Gateway URL            | `https://apim-ffc-gateway-prod.azure-api.net`               |
+| cPanel API base        | `…/cpanel/execute/<Module>/<function>`                      |
+| **Static egress IP**   | **`20.231.116.111`** (whitelist this in Imunify360)         |
+| Subscription           | `cpanel-ops`                                                |
+| Subscription key (KV)  | `read-all-ffc-apim-gateway-subscription-key`                |
+
+The IP is stable for the life of the instance but changes if APIM is deleted and
+recreated. Confirm it from the deployment outputs after any rebuild.
+
 ## Why this design
 
 - **Imunify360 blocks datacenter traffic, including Azure.** GitHub-hosted
@@ -109,19 +128,27 @@ az deployment group create -g rg-ffc-cpanel-gateway \
 
 ## Post-deploy
 
-1. **Whitelist the static IP in Imunify360**: cPanel → Imunify360 → Firewall →
-   Whitelist → add the IP from the run summary.
-2. **Retrieve the subscription key** and store it as repo secret
-   `APIM_SUBSCRIPTION_KEY` (and the gateway URL as `APIM_GATEWAY_URL`):
+1. **Whitelist the static IP in Imunify360.** On a **shared host** (our case,
+   InterServer `webhosting1900.is.cc`) the end-user cPanel Imunify360 panel only
+   exposes *Malware Scanner* and *Proactive Defense* — there is **no Firewall /
+   Whitelist tab**; that lives in WHM at the root/server level. So you must **open
+   a support ticket asking the host to whitelist the IP** server-side in
+   Imunify360's firewall/bot-protection allowlist. On a VPS/reseller plan where you
+   control WHM, do it yourself: WHM → Imunify360 → Firewall → Whitelist.
+   Until the IP is whitelisted, calls return HTTP 200 with body
+   `{"message":"Access denied by Imunify360 bot-protection..."}` — that response
+   coming back *through the gateway* confirms auth + routing already work.
+2. **Subscription key is stored in Key Vault** as
+   `read-all-ffc-apim-gateway-subscription-key`, so CI pulls it the same KV-aligned
+   way as the cPanel token (no repo secret needed). To re-read or rotate:
    ```bash
-   az apim subscription show -g rg-ffc-cpanel-gateway --service-name apim-ffc-cpanel \
-     --sid cpanel-ops --query primaryKey -o tsv
-   # (if the CLI lacks --query for the key, use: az rest --method post \
-   #   --url "https://management.azure.com/subscriptions/<sub>/resourceGroups/rg-ffc-cpanel-gateway/providers/Microsoft.ApiManagement/service/apim-ffc-cpanel/subscriptions/cpanel-ops/listSecrets?api-version=2022-08-01" \
-   #   --query primaryKey -o tsv)
+   az rest --method post --uri \
+     "https://management.azure.com/subscriptions/<sub>/resourceGroups/rg-ffc-admin-apim/providers/Microsoft.ApiManagement/service/apim-ffc-gateway-prod/subscriptions/cpanel-ops/listSecrets?api-version=2022-08-01" \
+     --query primaryKey -o tsv
    ```
 3. **Verify** with the **cPanel ops via APIM** workflow (defaults to a read-only
-   `DomainInfo/list_domains` call). `status: 1` ⇒ whitelist + auth injection work.
+   `DomainInfo/list_domains` call). Real JSON (not the Imunify block message) ⇒
+   whitelist + auth injection work end-to-end.
 
 ## Security notes
 
