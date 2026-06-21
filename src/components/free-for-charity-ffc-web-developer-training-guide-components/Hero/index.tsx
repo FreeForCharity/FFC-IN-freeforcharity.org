@@ -234,16 +234,16 @@ const Index = () => {
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px] ">
               <a
-                href="https://www.nexcess.net/blog/whmcs-best-practices/"
+                href="https://docs.whmcs.com/9-0/installation-guide/initial-configuration/enhancing-security/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Blog Post on WHMCS Best Practices
+                WHMCS Security Best Practices (Official Guide)
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px] ">
               <a
-                href="https://www.inmotionhosting.com/support/edu/whmcs/"
+                href="https://www.inmotionhosting.com/support/whmcs/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -408,7 +408,11 @@ const Index = () => {
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px] ">
-              <a href="https://support.cloudflare.com/" target="_blank" rel="noopener noreferrer">
+              <a
+                href="https://developers.cloudflare.com/support/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Cloudflare Support Portal
               </a>
             </li>
@@ -581,11 +585,7 @@ const Index = () => {
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px] ">
-              <a
-                href="https://www.avepoint.com/blog/office-365/microsoft-365-nonprofits/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href="https://www.avepoint.com/blog" target="_blank" rel="noopener noreferrer">
                 Blog Guide by AvePoint
               </a>
             </li>
@@ -609,7 +609,7 @@ const Index = () => {
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px] ">
               <a
-                href="https://techcommunity.microsoft.com/t5/nonprofits/ct-p/Nonprofits"
+                href="https://techcommunity.microsoft.com/category/microsoftfornonprofits"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -1018,12 +1018,12 @@ const Index = () => {
             </li>
             <li className="underline pl-[0.5rem] text-[#0066B8] mb-[0.75rem] text-[14px] leading-[26px]">
               <a
-                href="https://techcommunity.microsoft.com/t5/microsoft-clarity-blog/bg-p/ClarityBlog"
+                href="https://clarity.microsoft.com/blog/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[#0066B8] underline"
               >
-                Tech Community Discussions
+                Microsoft Clarity Blog
               </a>
             </li>
           </ul>
