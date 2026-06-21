@@ -1,0 +1,87 @@
+name: 'cPanel ops via APIM'
+
+# Calls the cPanel UAPI THROUGH the Azure API Management gateway, so the request
+# reaches cPanel from APIM's static (whitelisted) IP instead of a GitHub-hosted
+# Azure runner IP that Imunify360 blocks.
+#
+# Requires repo (or environment) secrets, set after deploying the gateway:
+#   APIM_GATEWAY_URL       e.g. https://apim-ffc-cpanel.azure-api.net
+#   APIM_SUBSCRIPTION_KEY  the "cpanel-ops" subscription primary key
+#
+# Defaults to a harmless read-only UAPI call so it doubles as a connectivity
+# check that the whitelist + auth injection work end to end.
+
+on:
+  workflow_dispatch:
+    inputs:
+      module:
+        description: 'cPanel UAPI module'
+        required: true
+        default: 'DomainInfo'
+        type: string
+      function:
+        description: 'cPanel UAPI function'
+        required: true
+        default: 'list_domains'
+        type: string
+      query:
+        description: 'Optional query string, e.g. domain=freeforcharity.org'
+        required: false
+        default: ''
+        type: string
+      method:
+        description: 'HTTP method'
+        required: false
+        default: 'GET'
+        type: choice
+        options:
+          - GET
+          - POST
+
+permissions:
+  contents: read
+
+jobs:
+  call:
+    name: 'Call cPanel UAPI through APIM'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Invoke
+        env:
+          BASE: ${{ secrets.APIM_GATEWAY_URL }}
+          KEY: ${{ secrets.APIM_SUBSCRIPTION_KEY }}
+          MODULE: ${{ inputs.module }}
+          FUNCTION: ${{ inputs.function }}
+          QUERY: ${{ inputs.query }}
+          METHOD: ${{ inputs.method }}
+        run: |
+          set -euo pipefail
+          if [ -z "${BASE}" ] || [ -z "${KEY}" ]; then
+            echo "::error::Set APIM_GATEWAY_URL and APIM_SUBSCRIPTION_KEY secrets first (see infra/cpanel-apim/README.md)."
+            exit 1
+          fi
+          url="${BASE%/}/cpanel/execute/${MODULE}/${FUNCTION}"
+          if [ -n "${QUERY}" ]; then
+            url="${url}?${QUERY}"
+          fi
+          echo "→ ${METHOD} ${BASE%/}/cpanel/execute/${MODULE}/${FUNCTION}"
+          resp=$(curl -sS -X "${METHOD}" -w $'\n%{http_code}' \
+            -H "Ocp-Apim-Subscription-Key: ${KEY}" \
+            -H "Accept: application/json" \
+            "${url}")
+          code=$(printf '%s' "${resp}" | tail -n1)
+          body=$(printf '%s' "${resp}" | sed '$d')
+          echo "HTTP ${code}"
+          # NOTE: Actions logs on a public repo are world-readable, and UAPI
+          # payloads can carry operationally sensitive data (domains, accounts,
+          # paths). Never echo the response body — log only status + the UAPI
+          # diagnostic fields (errors/messages), plus a harmless item count.
+          status=$(printf '%s' "${body}" | jq -r '.status // empty' 2>/dev/null || true)
+          if [ "${status}" = "1" ]; then
+            items=$(printf '%s' "${body}" | jq -r 'if (.data | type) == "array" then (.data | length | tostring) else "n/a" end' 2>/dev/null || echo "n/a")
+            echo "✅ cPanel UAPI reachable through APIM (auth + whitelist OK). data items: ${items}"
+          else
+            echo "::error::cPanel did not return status=1 (HTTP ${code}). Diagnostic fields only:"
+            printf '%s' "${body}" | jq -r '(.errors // [])[], (.messages // [])[]' 2>/dev/null | head -n 10 || true
+            exit 1
+          fi

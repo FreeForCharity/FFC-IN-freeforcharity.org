@@ -1,0 +1,153 @@
+name: 'Deploy cPanel APIM gateway'
+
+# Provisions the Azure API Management gateway that fronts the cPanel UAPI with
+# a STATIC public IP (so it can be whitelisted in Imunify360). Manual-dispatch
+# only. APIM provisioning takes ~30-45 minutes.
+#
+# Prerequisites (admin-side, one time):
+#   * An Azure deploy identity (service principal) with a federated credential
+#     for this repo's `cpanel-apim-deploy` environment, holding:
+#       - Contributor on the target resource group (to create APIM), and
+#       - permission to grant Key Vault access (e.g. User Access Administrator
+#         on the Key Vault if it uses RBAC, or Key Vault access-policy admin).
+#   * Environment `cpanel-apim-deploy` secrets:
+#       AZURE_DEPLOY_CLIENT_ID, AZURE_TENANT_ID, AZURE_SUBSCRIPTION_ID
+#   * The target resource group already exists.
+# See infra/cpanel-apim/README.md for the full procedure and cost.
+
+on:
+  workflow_dispatch:
+    inputs:
+      resource_group:
+        description: 'Target resource group (must already exist)'
+        required: true
+        type: string
+      location:
+        description: 'Azure region (e.g. eastus)'
+        required: true
+        default: 'eastus'
+        type: string
+      apim_name:
+        description: 'APIM instance name (globally unique; forms <name>.azure-api.net)'
+        required: true
+        type: string
+      publisher_email:
+        description: 'Publisher email (receives APIM service notices)'
+        required: true
+        type: string
+      cpanel_api_base_url:
+        description: 'cPanel UAPI base URL incl. port, e.g. https://hostname:2083'
+        required: true
+        type: string
+      key_vault_name:
+        description: 'Key Vault holding the cPanel secrets'
+        required: false
+        default: 'kv-ffc-admin-prod-cbm'
+        type: string
+      key_vault_resource_group:
+        description: 'Resource group of the Key Vault (for the access grant)'
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    name: 'Provision APIM + cPanel API'
+    runs-on: ubuntu-latest
+    environment: cpanel-apim-deploy
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Azure login (deploy identity)
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_DEPLOY_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      # All workflow_dispatch inputs and step outputs are passed through `env`
+      # and referenced as quoted shell variables, never interpolated directly
+      # into the run script. This avoids GitHub Actions script injection
+      # (a malicious input value cannot break out of the command).
+      - name: 'Phase 1 - deploy APIM service (~30-45 min)'
+        id: apim
+        env:
+          RESOURCE_GROUP: ${{ inputs.resource_group }}
+          LOCATION: ${{ inputs.location }}
+          APIM_NAME: ${{ inputs.apim_name }}
+          PUBLISHER_EMAIL: ${{ inputs.publisher_email }}
+        run: |
+          set -euo pipefail
+          out=$(az deployment group create \
+            --resource-group "$RESOURCE_GROUP" \
+            --name "cpanel-apim-$(date +%s)" \
+            --template-file infra/cpanel-apim/apim.bicep \
+            --parameters \
+              location="$LOCATION" \
+              apimName="$APIM_NAME" \
+              publisherEmail="$PUBLISHER_EMAIL" \
+            --query properties.outputs -o json)
+          echo "principalId=$(echo "$out" | jq -r '.apimPrincipalId.value')"            >> "$GITHUB_OUTPUT"
+          echo "staticIps=$(echo "$out" | jq -r '.apimStaticIps.value | join(\", \")')" >> "$GITHUB_OUTPUT"
+          echo "gatewayUrl=$(echo "$out" | jq -r '.gatewayUrl.value')"                  >> "$GITHUB_OUTPUT"
+
+      - name: 'Grant APIM identity Get+List secrets on Key Vault'
+        env:
+          PID: ${{ steps.apim.outputs.principalId }}
+          KV_NAME: ${{ inputs.key_vault_name }}
+          KV_RG: ${{ inputs.key_vault_resource_group }}
+        run: |
+          set -euo pipefail
+          kvid=$(az keyvault show --name "$KV_NAME" --resource-group "$KV_RG" --query id -o tsv)
+          rbac=$(az keyvault show --name "$KV_NAME" --resource-group "$KV_RG" --query properties.enableRbacAuthorization -o tsv)
+          if [ "$rbac" = "true" ]; then
+            existing=$(az role assignment list --assignee "$PID" --role "Key Vault Secrets User" --scope "$kvid" --query "[0].id" -o tsv)
+            if [ -n "$existing" ]; then
+              echo "Key Vault Secrets User already assigned -> skipping (idempotent re-run)"
+            else
+              echo "Key Vault uses RBAC -> assigning 'Key Vault Secrets User'"
+              az role assignment create \
+                --assignee-object-id "$PID" --assignee-principal-type ServicePrincipal \
+                --role "Key Vault Secrets User" --scope "$kvid"
+            fi
+          else
+            echo "Key Vault uses access policies -> set-policy get/list"
+            az keyvault set-policy --name "$KV_NAME" --object-id "$PID" --secret-permissions get list
+          fi
+
+      - name: 'Phase 2 - deploy cPanel API + KV named values + policy'
+        env:
+          RESOURCE_GROUP: ${{ inputs.resource_group }}
+          APIM_NAME: ${{ inputs.apim_name }}
+          KV_NAME: ${{ inputs.key_vault_name }}
+          CPANEL_API_BASE_URL: ${{ inputs.cpanel_api_base_url }}
+        run: |
+          set -euo pipefail
+          az deployment group create \
+            --resource-group "$RESOURCE_GROUP" \
+            --name "cpanel-api-$(date +%s)" \
+            --template-file infra/cpanel-apim/apis.bicep \
+            --parameters \
+              apimName="$APIM_NAME" \
+              keyVaultName="$KV_NAME" \
+              cpanelApiBaseUrl="$CPANEL_API_BASE_URL"
+
+      - name: 'Next steps'
+        env:
+          STATIC_IPS: ${{ steps.apim.outputs.staticIps }}
+          GATEWAY_URL: ${{ steps.apim.outputs.gatewayUrl }}
+        run: |
+          {
+            echo "## cPanel APIM gateway deployed ✅"
+            echo ""
+            echo "1. **Whitelist these static IP(s) in Imunify360** — add every address listed:"
+            echo "   \`$STATIC_IPS\`"
+            echo "   On a **shared host** the end-user cPanel UI has no Firewall/Whitelist tab — open a support ticket asking the host to whitelist these server-side. With WHM access, do it yourself: WHM → Imunify360 → Firewall → Whitelist."
+            echo "2. Gateway base: \`$GATEWAY_URL/cpanel/execute/<Module>/<func>\`"
+            echo "3. Get the subscription key and save it as repo secret \`APIM_SUBSCRIPTION_KEY\` (and \`$GATEWAY_URL\` as \`APIM_GATEWAY_URL\`). Key retrieval command is in infra/cpanel-apim/README.md."
+            echo "4. Verify with the **cPanel ops via APIM** workflow."
+          } >> "$GITHUB_STEP_SUMMARY"
