@@ -1,0 +1,221 @@
+name: 'cPanel cutover rehearsal (static overwrite, /hub-safe)'
+
+# Rehearses the REAL cutover mechanic on a THROWAWAY domain so we can prove,
+# before ever touching freeforcharity.org, that:
+#
+#   1. mirroring the Next.js static export into a live docroot with --delete
+#      cleanly replaces whatever was there ("the WordPress files that won't
+#      survive the migration"), AND
+#   2. a sibling /hub/ subdirectory (which on the apex is the real WHMCS
+#      install) is EXCLUDED from the mirror and KEEPS SERVING — the static
+#      export's own .htaccess hands /hub/ off untouched
+#      (`RewriteRule ^hub($|/) - [L]` + a DirectoryIndex that includes
+#      index.php), so WHMCS is unaffected.
+#
+# It plants a dummy hub/index.php (a stand-in for WHMCS), runs the exact same
+# lftp mirror + exclusions the apex cutover will use, then curls the test
+# domain to assert the static site serves AND /hub/ still returns the planted
+# PHP. NOTHING here can touch the apex: the apex domain and the public_html
+# docroot are hard-blocked below.
+#
+# Path: GH OIDC -> Azure -> Key Vault -> MAIN cPanel FTP creds (homed at the
+# account root, so it can write any docroot) -> lftp over FTPS.
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_domain:
+        description: 'Throwaway addon/sub domain to rehearse on (NOT freeforcharity.org)'
+        required: true
+        default: 'ffcdomains.org'
+        type: string
+      docroot:
+        description: 'Remote docroot for that domain, relative to the FTP home'
+        required: true
+        default: 'ffcdomains.org'
+        type: string
+      dry_run:
+        description: 'List the plan without writing anything (recommended first)'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: cpanel-cutover-rehearse
+  cancel-in-progress: false
+
+jobs:
+  rehearse:
+    name: 'Rehearse static overwrite + /hub passthrough'
+    runs-on: ubuntu-latest
+    environment: cpanel-staging
+    steps:
+      - name: 'Guard: never the apex / public_html'
+        env:
+          TARGET: ${{ inputs.target_domain }}
+          DOCROOT: ${{ inputs.docroot }}
+        run: |
+          set -euo pipefail
+          # Defence in depth: this workflow is REHEARSAL-ONLY. The real apex
+          # cutover is a separate, deliberately more-gated action.
+          case "$TARGET" in
+            freeforcharity.org|www.freeforcharity.org)
+              echo "::error::Refusing to rehearse on the apex domain."; exit 1 ;;
+          esac
+          case "$DOCROOT" in
+            public_html|public_html/|/*|*..*)
+              echo "::error::Refusing: docroot must be a relative throwaway docroot, never public_html."; exit 1 ;;
+          esac
+          echo "Rehearsing on '${TARGET}' (docroot './${DOCROOT}/'), dry_run=${{ inputs.dry_run }}"
+
+      - uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js static export
+        env:
+          NEXT_PUBLIC_BASE_PATH: ''
+        run: |
+          set -euo pipefail
+          npm run build
+          test -f ./out/index.html || { echo "::error::out/index.html missing"; exit 1; }
+          test -f ./out/.htaccess || { echo "::error::out/.htaccess missing (routing + /hub handoff live here)"; exit 1; }
+          echo "out/ ready: $(find out -type f | wc -l) files"
+
+      - name: 'Make the dummy WHMCS stand-in (hub/index.php)'
+        id: hub
+        run: |
+          set -euo pipefail
+          token="HUB_OK_$(date -u +%Y%m%d%H%M%S)_${RANDOM}"
+          echo "token=$token" >> "$GITHUB_OUTPUT"
+          mkdir -p hubstage/hub
+          # Minimal PHP so we can prove /hub/ is executed (not rewritten to a
+          # static .html) AFTER the static export overwrites the rest.
+          printf '<?php echo "%s"; %s\n' "$token" '// rehearsal WHMCS stand-in' > hubstage/hub/index.php
+          echo "Planted hub/index.php with token ${token}"
+
+      - name: Azure login (OIDC)
+        if: ${{ inputs.dry_run == false }}
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.WR_ALL_FFC_AZURE_KV_CLIENT_ID }}
+          tenant-id: ${{ secrets.WR_ALL_FFC_AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+
+      - name: Fetch MAIN cPanel FTP creds from Key Vault
+        if: ${{ inputs.dry_run == false }}
+        shell: pwsh
+        env:
+          KV_NAME: kv-ffc-admin-prod-cbm
+        run: |
+          $ErrorActionPreference = 'Stop'
+          . ./.github/scripts/Get-KvSecret.ps1
+          $vault = $env:KV_NAME.Trim()
+          $ftpHost = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-host'
+          $ftpPort = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-port'
+          $ftpUser = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-user'
+          $ftpPw   = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-password'
+          Write-Host "::add-mask::$ftpHost"
+          Write-Host "::add-mask::$ftpUser"
+          Write-Host "::add-mask::$ftpPw"
+          "CPANEL_FTP_HOST=$ftpHost" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_PORT=$ftpPort" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_USER=$ftpUser" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_PASSWORD=$ftpPw" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: 'Pre-stage the WHMCS stand-in, then overwrite with static export'
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+          DOCROOT: ${{ inputs.docroot }}
+        run: |
+          set -euo pipefail
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "DRY RUN — would, against ./${DOCROOT}/ :"
+            echo "  1) upload hubstage/hub/index.php  -> ./${DOCROOT}/hub/index.php"
+            echo "  2) lftp mirror --reverse --delete ./out/ -> ./${DOCROOT}/"
+            echo "     excluding: hub/ cgi-bin/ .well-known/ .ftpquota .htpasswd error_log"
+            echo "  (hub/ is EXCLUDED from --delete, so the stand-in survives)"
+            exit 0
+          fi
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          # Step 1: place the stand-in WHMCS (simulates the real ~/public_html/hub).
+          # Step 2: mirror the static export with --delete but EXCLUDE hub/ so it
+          # is preserved exactly like real WHMCS will be on the apex.
+          lftp <<LFTP 2>&1 | tail -200
+            set ftp:ssl-allow yes
+            set ftp:ssl-force yes
+            set ftp:ssl-protect-data yes
+            set ssl:verify-certificate no
+            set net:max-retries 3
+            set net:timeout 60
+            open -p "$CPANEL_FTP_PORT" -u "$CPANEL_FTP_USER","$CPANEL_FTP_PASSWORD" "ftp://$CPANEL_FTP_HOST"
+            mirror --reverse --parallel=2 --verbose=1 ./hubstage/ ./${DOCROOT}/
+            mirror --reverse --delete --parallel=4 --verbose=1 \
+              --exclude-glob 'hub' \
+              --exclude-glob 'hub/' \
+              --exclude-glob '.ftpquota' \
+              --exclude-glob '.htpasswd' \
+              --exclude-glob 'error_log' \
+              --exclude-glob '.well-known/' \
+              --exclude-glob 'cgi-bin/' \
+              ./out/ ./${DOCROOT}/
+            bye
+          LFTP
+          echo "Overwrite complete."
+
+      - name: 'Verify: static serves AND /hub/ passthrough survived'
+        if: ${{ inputs.dry_run == false }}
+        env:
+          TARGET: ${{ inputs.target_domain }}
+          HUB_TOKEN: ${{ steps.hub.outputs.token }}
+        run: |
+          set -euo pipefail
+          # Try https first, fall back to http (addon AutoSSL may lag).
+          base="https://${TARGET}"
+          if ! curl -sS -o /dev/null --max-time 20 "$base/" 2>/dev/null; then base="http://${TARGET}"; fi
+          echo "Testing against ${base}"
+          get() { curl -sS -m 25 -H 'Cache-Control: no-cache' -w '\n%{http_code}' "$1"; }
+
+          fail=0
+          # 1) Homepage = static export (has <title>)
+          r=$(get "$base/"); code=$(printf '%s' "$r" | tail -n1); body=$(printf '%s' "$r" | sed '$d')
+          if [ "$code" = "200" ] && printf '%s' "$body" | grep -q '<title>'; then
+            echo "  ✓ / -> 200 static homepage"
+          else echo "  ✗ / -> ${code} (no static homepage)"; fail=1; fi
+
+          # 2) Clean URL routing
+          code=$(curl -sS -m 25 -o /dev/null -w '%{http_code}' -H 'Cache-Control: no-cache' "$base/about-us")
+          [ "$code" = "200" ] && echo "  ✓ /about-us -> 200" || { echo "  ✗ /about-us -> ${code}"; fail=1; }
+
+          # 3) THE key assertion: /hub/ still executes PHP (WHMCS stand-in survived)
+          r=$(get "$base/hub/"); code=$(printf '%s' "$r" | tail -n1); body=$(printf '%s' "$r" | sed '$d')
+          if [ "$code" = "200" ] && printf '%s' "$body" | grep -q "$HUB_TOKEN"; then
+            echo "  ✓ /hub/ -> 200 and served the planted PHP token (passthrough OK)"
+          else echo "  ✗ /hub/ -> ${code}, token present: no — WHMCS would be at risk!"; fail=1; fi
+
+          # 4) Legacy WP path blocked by the static .htaccess
+          code=$(curl -sS -m 25 -o /dev/null -w '%{http_code}' "$base/wp-admin")
+          case "$code" in 301|302|403) echo "  ✓ /wp-admin -> ${code} (blocked/redirected)";; *) echo "  ✗ /wp-admin -> ${code}"; fail=1;; esac
+
+          {
+            echo "## Cutover rehearsal on ${TARGET}"
+            echo ""
+            echo "- Static overwrite with --delete (hub/ excluded): done"
+            echo "- /hub/ passthrough (WHMCS stand-in) survived: $( [ "$fail" -eq 0 ] && echo '✅ yes' || echo '⛔ CHECK FAILED' )"
+            echo ""
+            echo "Cleanup: this is a throwaway docroot; wipe via cPanel File Manager or re-dispatch a normal deploy."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          [ "$fail" -eq 0 ] || { echo "::error::Rehearsal assertions failed — do NOT proceed to the apex cutover."; exit 1; }
+          echo "✅ Rehearsal passed: static overwrite is /hub-safe."
