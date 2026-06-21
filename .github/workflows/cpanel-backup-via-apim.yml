@@ -1,0 +1,155 @@
+name: 'cPanel backup via APIM'
+
+# Cloud-native cPanel full-account backup. Triggers and monitors the backup
+# entirely through the Azure API Management gateway (so the control-plane
+# UAPI calls reach cPanel from the whitelisted static IP instead of a
+# GitHub-hosted runner IP that Imunify360 blocks on :2083), then optionally
+# pulls the tarball off-server via FTPS and pushes it to durable cloud
+# storage with rclone.
+#
+# This is the cloud-native successor to scripts/cpanel-backup.sh — it removes
+# the personal-computer dependency called out in FFC-IN-ClarkeMoyerAdmin #104
+# and automates the routine full backup (#143).
+#
+# Secrets (repo or environment):
+#   APIM_GATEWAY_URL       e.g. https://apim-ffc-gateway-prod.azure-api.net
+#   APIM_SUBSCRIPTION_KEY  the "cpanel-ops" subscription primary key
+#   CPANEL_USER            cPanel account username (used for the home path + file glob)
+# Only required when offsite_upload is enabled:
+#   CPANEL_FTP_PASSWORD    FTPS password for CPANEL_USER (port 21 is reachable from runners)
+#   RCLONE_CONFIG_BASE64   base64 of an rclone.conf containing a remote named "offsite"
+#
+# NOTE: the bulk transfer deliberately does NOT go through APIM — APIM is a
+# request gateway, not a bulk file mover. The ~20 GB tarball is pulled over
+# FTPS (port 21, already reachable from runners per #115) and streamed to the
+# rclone remote.
+
+on:
+  schedule:
+    # Weekly, Sunday 07:00 UTC. Adjust as the backup cadence requires.
+    - cron: '0 7 * * 0'
+  workflow_dispatch:
+    inputs:
+      offsite_upload:
+        description: 'Also download via FTPS and push to the rclone "offsite" remote'
+        required: false
+        default: false
+        type: boolean
+      rclone_dest:
+        description: 'rclone destination path on the "offsite" remote (e.g. offsite:ffc-cpanel-backups)'
+        required: false
+        default: 'offsite:ffc-cpanel-backups'
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  # Never let two backups overlap.
+  group: cpanel-backup
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    name: 'Trigger + verify cPanel full backup'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: 'Trigger full backup and wait for it on-server (via gateway)'
+        id: trigger
+        env:
+          BASE: ${{ secrets.APIM_GATEWAY_URL }}
+          KEY: ${{ secrets.APIM_SUBSCRIPTION_KEY }}
+          CPANEL_USER: ${{ secrets.CPANEL_USER }}
+          POLL_INTERVAL: '60'
+          MAX_WAIT: '5400' # 90 min
+        run: |
+          set -euo pipefail
+          if [ -z "${BASE:-}" ] || [ -z "${KEY:-}" ] || [ -z "${CPANEL_USER:-}" ]; then
+            echo "::error::Set APIM_GATEWAY_URL, APIM_SUBSCRIPTION_KEY and CPANEL_USER secrets first."
+            exit 1
+          fi
+          base="${BASE%/}"
+          api() { curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${KEY}" -H 'Accept: application/json' "$@"; }
+
+          echo "→ Backup/fullbackup_to_homedir"
+          # The gateway injects the cPanel Authorization header; we only send the email arg.
+          resp=$(api --get --data-urlencode "email=noreply@freeforcharity.org" \
+            "${base}/cpanel/execute/Backup/fullbackup_to_homedir")
+          status=$(printf '%s' "$resp" | jq -r '.status // 0' 2>/dev/null || echo 0)
+          if [ "$status" != "1" ]; then
+            echo "::error::cPanel did not accept the backup request (status != 1)."
+            printf '%s' "$resp" | jq -r '(.errors // [])[], (.messages // [])[]' 2>/dev/null | head -n 5 || true
+            exit 1
+          fi
+          echo "Backup queued. Polling Fileman/list_files for the tarball…"
+
+          start=$(date +%s); remote=""
+          while [ -z "$remote" ]; do
+            listing=$(api --get \
+              --data-urlencode "dir=/home/${CPANEL_USER}" \
+              --data-urlencode "types=file" \
+              "${base}/cpanel/execute/Fileman/list_files")
+            remote=$(printf '%s' "$listing" \
+              | jq -r --arg u "$CPANEL_USER" \
+                  '[.data[]?.file | select(test("^backup-[0-9_-]+_" + $u + "\\.tar\\.gz$"))] | sort | last // empty' \
+                  2>/dev/null || true)
+            if [ -n "$remote" ] && [ "$remote" != "null" ]; then
+              size=$(printf '%s' "$listing" | jq -r --arg f "$remote" '.data[]? | select(.file==$f) | .size // "?"' 2>/dev/null || echo "?")
+              echo "✅ Backup present on server: ${remote} (${size} bytes)"
+              echo "remote_file=${remote}" >> "$GITHUB_OUTPUT"
+              break
+            fi
+            elapsed=$(( $(date +%s) - start ))
+            if [ "$elapsed" -ge "$MAX_WAIT" ]; then
+              echo "::error::Timed out after ${MAX_WAIT}s waiting for the backup file."
+              exit 1
+            fi
+            echo "  not ready (${elapsed}s/${MAX_WAIT}s); sleeping ${POLL_INTERVAL}s"
+            sleep "$POLL_INTERVAL"
+          done
+
+      - name: 'Off-site copy (FTPS pull → rclone push)'
+        if: ${{ inputs.offsite_upload }}
+        env:
+          CPANEL_SERVER: webhosting1900.is.cc
+          CPANEL_USER: ${{ secrets.CPANEL_USER }}
+          FTP_PASSWORD: ${{ secrets.CPANEL_FTP_PASSWORD }}
+          RCLONE_CONFIG_BASE64: ${{ secrets.RCLONE_CONFIG_BASE64 }}
+          REMOTE_FILE: ${{ steps.trigger.outputs.remote_file }}
+          RCLONE_DEST: ${{ inputs.rclone_dest }}
+        run: |
+          set -euo pipefail
+          for v in FTP_PASSWORD RCLONE_CONFIG_BASE64 REMOTE_FILE; do
+            if [ -z "${!v:-}" ]; then echo "::error::$v is required for offsite_upload"; exit 1; fi
+          done
+          echo "Free disk before download:"; df -h --output=avail / | tail -1
+
+          # Pull over FTPS (port 21 — reachable from runners; only :2083 was blocked).
+          curl -sS --ftp-ssl --ftp-pasv --max-time 5400 \
+            -u "${CPANEL_USER}:${FTP_PASSWORD}" \
+            -o "${REMOTE_FILE}" \
+            "ftp://${CPANEL_SERVER}/${REMOTE_FILE}"
+
+          # Integrity check before we trust it off-site.
+          if ! tar -tzf "${REMOTE_FILE}" >/dev/null 2>&1; then
+            echo "::error::Downloaded tarball failed integrity check"; exit 1
+          fi
+          echo "Tarball OK: ${REMOTE_FILE} ($(wc -c <"${REMOTE_FILE}") bytes)"
+
+          # Push to durable storage via rclone (remote 'offsite' from the supplied config).
+          curl -fsSL https://rclone.org/install.sh | sudo bash >/dev/null
+          mkdir -p ~/.config/rclone
+          printf '%s' "${RCLONE_CONFIG_BASE64}" | base64 -d > ~/.config/rclone/rclone.conf
+          rclone copyto "${REMOTE_FILE}" "${RCLONE_DEST}/${REMOTE_FILE}" --stats-one-line --retries 3
+          echo "✅ Off-site copy complete: ${RCLONE_DEST}/${REMOTE_FILE}"
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "## cPanel backup run"
+            echo ""
+            echo "- On-server backup: \`${{ steps.trigger.outputs.remote_file || 'not created' }}\`"
+            echo "- Off-site upload: ${{ inputs.offsite_upload && 'requested' || 'skipped' }}"
+          } >> "$GITHUB_STEP_SUMMARY"

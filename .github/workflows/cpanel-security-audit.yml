@@ -1,0 +1,149 @@
+name: 'cPanel security drift audit'
+
+# Scheduled tamper-detection for the cPanel account. Pulls a set of read-only
+# UAPI views through the Azure API Management gateway, reduces each to a
+# privacy-preserving fingerprint (item count + SHA-256 of the normalized
+# list — NEVER the raw values), and compares against a committed baseline.
+# Any drift (a new FTP account, email forwarder, cron job, addon domain, DB,
+# etc.) fails the run so an operator investigates.
+#
+# Why fingerprints: this repo is PUBLIC. Email addresses, FTP usernames, cron
+# commands and DB names are operationally sensitive, so only their hash and
+# count are stored/printed — enough to detect change, nothing to leak.
+#
+# Secrets (repo or environment):
+#   APIM_GATEWAY_URL       e.g. https://apim-ffc-gateway-prod.azure-api.net
+#   APIM_SUBSCRIPTION_KEY  the "cpanel-ops" subscription primary key
+#   CPANEL_USER            cPanel account username (for the home directory path)
+#
+# Baseline: security/cpanel-audit-baseline.json (counts + hashes only).
+# To (re)establish it after an intended change, run this workflow manually
+# with update_baseline = true and commit the produced file.
+
+on:
+  schedule:
+    # Daily 06:00 UTC.
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      update_baseline:
+        description: 'Recompute and commit the baseline instead of diffing (use after an intended change)'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: 'Fingerprint cPanel config and diff'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: 'Collect fingerprints via gateway'
+        env:
+          BASE: ${{ secrets.APIM_GATEWAY_URL }}
+          KEY: ${{ secrets.APIM_SUBSCRIPTION_KEY }}
+          CPANEL_USER: ${{ secrets.CPANEL_USER }}
+        run: |
+          set -euo pipefail
+          if [ -z "${BASE:-}" ] || [ -z "${KEY:-}" ] || [ -z "${CPANEL_USER:-}" ]; then
+            echo "::error::Set APIM_GATEWAY_URL, APIM_SUBSCRIPTION_KEY and CPANEL_USER secrets first."
+            exit 1
+          fi
+          base="${BASE%/}"
+          api() { curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${KEY}" -H 'Accept: application/json' "$@"; }
+
+          # endpoint label  ->  UAPI Module/function  ->  optional query (url-encoded k=v;k=v)
+          # Read-only views whose membership changing is a security signal.
+          declare -A EP=(
+            [domains]="DomainInfo/list_domains|"
+            [ftp_accounts]="Ftp/list_ftp|"
+            [cron_jobs]="Cron/list_lines|"
+            [email_forwarders]="Email/list_forwarders|"
+            [email_filters]="Email/list_filters|account=${CPANEL_USER}"
+            [databases]="Mysql/list_databases|"
+            [db_users]="Mysql/list_users|"
+            [api_tokens]="Tokens/list_tokens|"
+          )
+
+          out='{}'
+          for label in "${!EP[@]}"; do
+            spec="${EP[$label]}"; path="${spec%%|*}"; query="${spec#*|}"
+            url="${base}/cpanel/execute/${path}"
+            args=(--get)
+            if [ -n "$query" ]; then
+              IFS=';' read -ra kvs <<< "$query"
+              for kv in "${kvs[@]}"; do args+=(--data-urlencode "$kv"); done
+            fi
+            resp=$(api "${args[@]}" "$url" || echo '{}')
+            status=$(printf '%s' "$resp" | jq -r '.status // 0' 2>/dev/null || echo 0)
+            if [ "$status" != "1" ]; then
+              # Endpoint unavailable on this tier/account — record as such (not a hard failure).
+              echo "  ~ ${label}: UAPI status!=1 (skipped)"
+              out=$(printf '%s' "$out" | jq --arg l "$label" '.[$l]={ok:false,count:0,sha256:""}')
+              continue
+            fi
+            # Normalize .data to a stable, sorted, compact form, then hash it.
+            norm=$(printf '%s' "$resp" | jq -cS '.data // []')
+            count=$(printf '%s' "$norm" | jq 'length' 2>/dev/null || echo 0)
+            sha=$(printf '%s' "$norm" | sha256sum | cut -d' ' -f1)
+            echo "  ✓ ${label}: count=${count} sha=${sha:0:12}…"
+            out=$(printf '%s' "$out" | jq --arg l "$label" --argjson c "$count" --arg s "$sha" \
+              '.[$l]={ok:true,count:$c,sha256:$s}')
+          done
+          printf '%s' "$out" | jq -S '{generated_utc:(now|todate), endpoints:.}' > current-fingerprint.json
+          echo "Wrote current-fingerprint.json"
+
+      - name: 'Diff against baseline'
+        if: ${{ !inputs.update_baseline }}
+        run: |
+          set -euo pipefail
+          baseline=security/cpanel-audit-baseline.json
+          if [ ! -f "$baseline" ]; then
+            echo "::warning::No baseline at $baseline yet. Run this workflow with update_baseline=true to establish one."
+            jq '.endpoints' current-fingerprint.json
+            exit 0
+          fi
+          # Compare endpoint-by-endpoint on (count, sha256). Report only labels + counts.
+          drift=$(jq -n --slurpfile a "$baseline" --slurpfile b current-fingerprint.json '
+            ($a[0].endpoints) as $base | ($b[0].endpoints) as $cur
+            | [ ($base + $cur | keys[]) as $k
+                | { key:$k,
+                    base:($base[$k] // {count:0,sha256:""}),
+                    cur:($cur[$k]  // {count:0,sha256:""}) }
+                | select(.base.sha256 != .cur.sha256) ]')
+          if [ "$(printf '%s' "$drift" | jq 'length')" -eq 0 ]; then
+            echo "✅ No configuration drift detected."
+            exit 0
+          fi
+          echo "::error::cPanel configuration drift detected:"
+          printf '%s' "$drift" | jq -r '.[] | "  - \(.key): count \(.base.count) -> \(.cur.count) (fingerprint changed)"'
+          {
+            echo "## ⚠️ cPanel drift detected"
+            echo ""
+            printf '%s' "$drift" | jq -r '.[] | "- **\(.key)**: count \(.base.count) → \(.cur.count) — fingerprint changed"'
+            echo ""
+            echo "Investigate via the gateway; if the change is expected, re-run with \`update_baseline=true\` and commit the new baseline."
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit 1
+
+      - name: 'Produce new baseline (manual, after an intended change)'
+        if: ${{ inputs.update_baseline }}
+        run: |
+          set -euo pipefail
+          mkdir -p security
+          cp current-fingerprint.json security/cpanel-audit-baseline.json
+          echo "New baseline written. Download the artifact below and commit it to"
+          echo "security/cpanel-audit-baseline.json via a PR (branch protection keeps"
+          echo "this review-gated). It contains only counts + SHA-256 hashes, no raw data."
+
+      - name: 'Upload new baseline artifact'
+        if: ${{ inputs.update_baseline }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: cpanel-audit-baseline
+          path: security/cpanel-audit-baseline.json
+          if-no-files-found: error
