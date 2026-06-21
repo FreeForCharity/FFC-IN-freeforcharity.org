@@ -16,6 +16,7 @@ name: 'cPanel backup via APIM'
 #   APIM_SUBSCRIPTION_KEY  the "cpanel-ops" subscription primary key
 #   CPANEL_USER            cPanel account username (used for the home path + file glob)
 # Only required when offsite_upload is enabled:
+#   CPANEL_SERVER          cPanel hostname for the FTPS pull (e.g. webhosting1900.is.cc)
 #   CPANEL_FTP_PASSWORD    FTPS password for CPANEL_USER (port 21 is reachable from runners)
 #   RCLONE_CONFIG_BASE64   base64 of an rclone.conf containing a remote named "offsite"
 #
