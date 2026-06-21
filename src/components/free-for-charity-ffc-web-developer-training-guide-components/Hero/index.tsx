@@ -233,8 +233,12 @@ const Index = () => {
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px] ">
-              <a href="https://docs.whmcs.com/" target="_blank" rel="noopener noreferrer">
-                WHMCS Official Documentation
+              <a
+                href="https://docs.whmcs.com/9-0/installation-guide/initial-configuration/enhancing-security/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                WHMCS Security Best Practices (Official Guide)
               </a>
             </li>
             <li className="underline  pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px] ">
