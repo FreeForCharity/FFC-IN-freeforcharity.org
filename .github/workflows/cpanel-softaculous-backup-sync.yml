@@ -1,0 +1,118 @@
+name: 'cPanel Softaculous backups -> OneDrive'
+
+# Softaculous already creates app-aware, RESTORABLE backups on the server
+# (WHMCS daily ~00:50, WordPress weekly) under ~/softaculous_backups, but the
+# host only keeps ~7 days. This job pulls each new archive over FTPS and
+# uploads it to the matching OneDrive folder, then prunes OneDrive to:
+#   keep ALL backups <= 90 days, then one-per-month up to 1 year, delete older.
+#
+# Unlike a full-account tarball, these can actually be restored (Softaculous
+# -> Restore rebuilds files + DB), with the SQL inside each archive. WHMCS is
+# the priority and is captured daily.
+#
+# Auth/secrets (Key Vault, via the deploy OIDC identity):
+#   FTP:      wr-all-cbm-cpanel-ffc-interserver-ftp-{host,user,password,port}
+#   OneDrive: read-all-ffc-onedrive-backup-{client-id,tenant-id}
+#             wr-all-ffc-onedrive-backup-refresh-token   (delegated, rotated)
+#
+# The Azure identity needs Key Vault *Secrets User* (read) and, to persist the
+# rotated OneDrive refresh token, *Secrets Officer* (set) on
+# wr-all-ffc-onedrive-backup-refresh-token. If the writeback role is missing,
+# the run still succeeds (the token rotates ~every 90 days otherwise).
+
+on:
+  schedule:
+    - cron: '0 6 * * *' # daily 06:00 UTC, after Softaculous' 00:50 WHMCS run
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'List actions without uploading/deleting'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: cpanel-softaculous-backup
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: 'Pull Softaculous backups and sync to OneDrive'
+    runs-on: ubuntu-latest
+    environment: cpanel-apim-deploy
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_DEPLOY_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: 'Mint Graph token + load FTP creds from Key Vault'
+        id: secrets
+        env:
+          KV: kv-ffc-admin-prod-cbm
+        run: |
+          set -euo pipefail
+          kv() { az keyvault secret show --vault-name "$KV" --name "$1" --query value -o tsv; }
+
+          # --- OneDrive: refresh-token grant (delegated public client) ---
+          od_tenant=$(kv read-all-ffc-onedrive-backup-tenant-id)
+          od_client=$(kv read-all-ffc-onedrive-backup-client-id)
+          od_rt=$(kv wr-all-ffc-onedrive-backup-refresh-token)
+          echo "::add-mask::$od_rt"
+          # -S surfaces transport errors; not -f, because we must read the JSON
+          # error body (.error_description) when the grant is rejected (e.g. an
+          # expired refresh token) to print an actionable message.
+          resp=$(curl -sS -X POST "https://login.microsoftonline.com/${od_tenant}/oauth2/v2.0/token" \
+            -d "client_id=${od_client}" -d "grant_type=refresh_token" \
+            --data-urlencode "scope=https://graph.microsoft.com/Files.ReadWrite.All offline_access" \
+            --data-urlencode "refresh_token=${od_rt}")
+          graph_token=$(printf '%s' "$resp" | jq -r '.access_token // empty')
+          new_rt=$(printf '%s' "$resp" | jq -r '.refresh_token // empty')
+          [ -n "$new_rt" ] && echo "::add-mask::$new_rt"
+          if [ -z "$graph_token" ]; then
+            echo "::error::OneDrive refresh-token grant failed. Re-auth the ffc-onedrive-backup app (device code) and update the KV secret."
+            printf '%s' "$resp" | jq -r '.error_description // .error' | head -1
+            exit 1
+          fi
+          echo "::add-mask::$graph_token"
+          echo "GRAPH_TOKEN=$graph_token" >> "$GITHUB_ENV"
+
+          # Persist the rotated refresh token (best-effort; needs Secrets Officer).
+          if [ -n "$new_rt" ] && [ "$new_rt" != "$od_rt" ]; then
+            if az keyvault secret set --vault-name "$KV" --name wr-all-ffc-onedrive-backup-refresh-token --value "$new_rt" -o none 2>/dev/null; then
+              echo "rotated OneDrive refresh token persisted to Key Vault"
+            else
+              echo "::warning::could not persist rotated refresh token (grant Key Vault Secrets Officer to enable rotation)"
+            fi
+          fi
+
+          # --- cPanel FTPS creds ---
+          # Connect by HOSTNAME (derived from the ...-server URL), not the raw
+          # IP, so the FTPS certificate's hostname can be verified (the script
+          # verifies against the system CA store by default). cPanel AutoSSL
+          # normally provisions a valid cert for the server hostname. If the
+          # host presents a self-signed cert, pin it with FTPS_CACERT or, as a
+          # logged last resort, set FTPS_INSECURE=1 in the run step below.
+          ftp_host=$(kv wr-all-cbm-cpanel-ffc-interserver-server | sed -E 's#^https?://##; s#[:/].*$##')
+          {
+            echo "FTP_HOST=$ftp_host"
+            echo "FTP_USER=$(kv wr-all-cbm-cpanel-ffc-interserver-ftp-user)"
+            echo "FTP_PORT=$(kv wr-all-cbm-cpanel-ffc-interserver-ftp-port)"
+          } >> "$GITHUB_ENV"
+          fp=$(kv wr-all-cbm-cpanel-ffc-interserver-ftp-password)
+          echo "::add-mask::$fp"
+          echo "FTP_PASS=$fp" >> "$GITHUB_ENV"
+
+      - name: 'Sync Softaculous backups to OneDrive'
+        env:
+          DRY_RUN: ${{ github.event.inputs.dry_run == 'true' && '1' || '0' }}
+        run: python3 scripts/onedrive_backup_sync.py
