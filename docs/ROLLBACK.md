@@ -1,108 +1,128 @@
-# Rollback Procedure: cPanel Document-Root Swap
+# Rollback Procedure: apex static → WordPress (snapshot restore)
 
-Roll back the freeforcharity.org website from the Next.js static export
-(`public_html_next`) back to the WordPress install (`public_html`).
-Used when something breaks in the first 14 days after cutover.
+Roll back freeforcharity.org from the Next.js static export back to the
+WordPress install, after the **in-place overwrite cutover** (executed
+**2026-06-22** via the automated two-phase workflows).
 
-**Estimated rollback time: 2–5 minutes.** No DNS propagation involved
-— the document-root swap takes effect immediately on the InterServer
-cPanel host.
+> **What the cutover actually did** (this supersedes the older document-root
+> swap plan): the apex docroot **stayed `~/public_html`**. STEP 1 copied the
+> WordPress files into a sister snapshot dir, then STEP 2 mirrored the static
+> export into `public_html` with `--delete`, **excluding the keepers** (`hub/`
+> = WHMCS, `cgi-bin/`, `.well-known/`, the parked-domain docroot, and the PHP
+> config / cPanel status dotfiles). So WordPress files were **removed** from
+> `public_html` — there is no docroot to "swap back". Rollback **restores the
+> WordPress files** from the snapshot (or the OneDrive backup).
 
----
-
-## Prerequisites
-
-You will need access to:
-
-- **InterServer cPanel** for the freeforcharity.org account.
-- (Optional) SSH/Terminal access in cPanel for verifying file state.
-- The full cPanel backup downloaded during pre-flight (see
-  `docs/CUTOVER-HANDOFF.md` → "Pre-flight" step 1) — only needed if the
-  swap doesn't recover the WP files for some reason.
-
-The WordPress install at `~/public_html/` is **never modified** during or
-after cutover. It remains in place as the rollback target for at least
-14 days.
+WHMCS at `~/public_html/hub/` is **never modified** in either direction.
 
 ---
 
-## Step 1 — Swap the document root back in cPanel
+## Rollback sources (two layers)
 
-1. Log in to InterServer cPanel.
-2. Go to **Domains → manage `freeforcharity.org`**.
-3. Change the document root from `public_html_next` back to `public_html`.
-4. Save / apply. The swap takes effect on the next HTTP request.
-
----
-
-## Step 2 — Bust the Cloudflare cache
-
-Cloudflare caches HTML aggressively. After the swap, force a refresh
-so visitors see the WordPress site immediately:
-
-1. Cloudflare dashboard → `freeforcharity.org` zone → **Caching → Configuration**.
-2. **Purge Everything**. Confirm.
+1. **On-server snapshot (instant):** `~/public_html_wp_precutover_<ts>/` — a
+   full, verified copy of the WordPress files made by STEP 1 _before_ the flip.
+   The cutover on 2026-06-22 produced **`public_html_wp_precutover_20260622193234`**
+   (36,163 files, incl. `wp-config.php`). Kept on-server ~14 days.
+2. **Durable backup:** the daily Softaculous → OneDrive WordPress archive
+   (see [BACKUPS.md](BACKUPS.md)). Restore via _Softaculous → Restore_ if the
+   on-server snapshot is gone.
 
 ---
 
-## Step 3 — Verify WordPress is responding
+## Option A — Automated rollback (preferred)
+
+GitHub → Actions → **cPanel APEX cutover (WordPress -> static, /hub-safe)** →
+Run workflow:
+
+| Input          | Value                                                       |
+| -------------- | ----------------------------------------------------------- |
+| `action`       | `rollback`                                                  |
+| `snapshot_dir` | `public_html_wp_precutover_20260622193234` (or the current) |
+| `dry_run`      | `true` first (preview), then `false`                        |
+| `confirm`      | `CUTOVER freeforcharity.org` (required for the live write)  |
+
+It validates the snapshot exists, **deletes the static files** from
+`public_html` (keepers preserved), and **moves the snapshot WordPress files
+back**. Then do **Step C** (Cloudflare purge) and **Step D** (verify).
+
+`gh` equivalent:
 
 ```bash
-curl -I https://freeforcharity.org
-# Expect: HTTP/2 200 with WordPress-style headers (link rel="https://api.w.org/", etc.)
-
-curl -I https://freeforcharity.org/hub/
-# Expect: HTTP/2 200 — WHMCS still works (it never moved)
-
-curl -I https://freeforcharity.org/wp-login.php
-# Expect: HTTP/2 200 — WP admin reachable again
+gh workflow run cpanel-apex-cutover.yml \
+  -f action=rollback \
+  -f snapshot_dir=public_html_wp_precutover_20260622193234 \
+  -f dry_run=false -f confirm='CUTOVER freeforcharity.org'
 ```
 
-Also verify visually in an incognito browser. If you see the Figma
-redesign, Cloudflare cache hasn't purged yet — wait 1–2 minutes and
-retry.
+---
+
+## Option B — Manual rollback (fallback, no workflow)
+
+In cPanel **File Manager** (or over FTPS with the main account):
+
+1. In `~/public_html/`, delete the static-export entries **except the keepers**
+   (`hub`, `cgi-bin`, `.well-known`, `wh1319644.ispot.cc`, `.user.ini`,
+   `php.ini`, `.cache`, `.tmb`, `.ftpquota`, `.htpasswd*`, `error_log`,
+   `.s3backupstatus`, `.synthquota`, `.ht_wsr.txt`).
+2. Move every entry from `~/public_html_wp_precutover_<ts>/` back into
+   `~/public_html/`.
+3. If the snapshot is gone, instead restore the WordPress app from the
+   OneDrive Softaculous archive via _cPanel → Softaculous → Backups → Restore_.
 
 ---
 
-## Step 4 — Disable the Next.js deploy workflow (optional)
+## Step C — Purge the Cloudflare cache
 
-If you want to prevent accidental redeploys to `public_html_next/`
-while you investigate:
+Cloudflare zone `freeforcharity.org` (id `650f9e6595252cde90a01409289b6e66`):
 
-1. GitHub repo → **Settings → Actions → General → Workflow permissions**, or
-2. Open `.github/workflows/deploy-cpanel.yml` and add `if: false` to the job, or
-3. Disable the workflow from the Actions tab in GitHub UI.
-
-This step is optional — the workflow is already manual-trigger only.
-
----
-
-## Step 5 — Open a post-mortem issue
-
-After stabilizing, open a GitHub issue documenting:
-
-- What broke (specific pages, features, or infra).
-- When it was detected.
-- How long the outage lasted.
-- Root cause.
-- Fix required before re-attempting cutover.
+- Dashboard → **Caching → Configuration → Purge Everything**, or
+- API (token in Key Vault `wr-all-ffc-cloudflare-api-token-zone-and-dns`):
+  ```bash
+  curl -X POST "https://api.cloudflare.com/client/v4/zones/650f9e6595252cde90a01409289b6e66/purge_cache" \
+    -H "Authorization: Bearer $CF_TOKEN" -H "Content-Type: application/json" \
+    --data '{"purge_everything":true}'
+  ```
 
 ---
 
-## Important Notes
+## Step D — Verify (use a real browser, not curl)
 
-| Item                         | Detail                                                                                                                                           |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `~/public_html/`             | Original WordPress install. Do not touch for at least 14 days post-cutover.                                                                      |
-| `~/public_html/hub/`         | WHMCS. Never modified by the cutover; same files serve both before and after.                                                                    |
-| `~/public_html_next/`        | Next.js static export. Created by the first `deploy-cpanel.yml` run.                                                                             |
-| `~/public_html_next/hub`     | Symlink to `~/public_html/hub`. Keeps `/hub/` working under the new document root.                                                               |
-| Cloudflare role              | Continues to proxy as before — no DNS change in either direction.                                                                                |
-| `docs/cutover-redirects.csv` | If Cloudflare Bulk Redirects were enabled, disable that rule too — `.htaccess` redirects vanish automatically when the document root swaps back. |
+> **Important:** the host returns an intermittent `415` to `curl`/bare HTTP
+> clients (a client-fingerprint/bot mitigation); **real browsers get 200**.
+> Verify with the visual check or an actual browser, not `curl -I`.
+
+```bash
+# Real-browser screenshots + content assertions for apex and /hub:
+gh workflow run live-visual-check.yml
+# or locally:
+BASE_URL=https://freeforcharity.org IGNORE_HTTPS=1 node scripts/live-visual-check.mjs
+```
+
+Confirm in an incognito browser: apex shows WordPress, `/hub/` shows the WHMCS
+portal, `/wp-login.php` reachable.
 
 ---
 
-## Escalation Contacts
+## Step E — Post-mortem
+
+Open a GitHub issue: what broke, when, duration, root cause, and the fix needed
+before re-attempting. Keep the snapshot dir until the post-mortem is closed.
+
+---
+
+## Important notes
+
+| Item                                 | Detail                                                                                     |
+| ------------------------------------ | ------------------------------------------------------------------------------------------ |
+| `~/public_html/hub/`                 | WHMCS. Never modified by cutover or rollback; same files serve before and after.           |
+| `~/public_html_wp_precutover_<ts>/`  | The on-server WordPress snapshot — the instant rollback source. Don't delete for ~14 days. |
+| PHP config (`.user.ini` / `php.ini`) | Kept in `public_html` through the flip so `/hub` (which inherits them) keeps its PHP env.  |
+| Cloudflare                           | Proxies as before; no DNS change in either direction. Purge after any flip.                |
+| `415` from `curl`                    | Client-fingerprint/bot mitigation — affects automated clients, not real browsers/users.    |
+
+---
+
+## Escalation contacts
 
 | Role                          | Contact                                             |
 | ----------------------------- | --------------------------------------------------- |
@@ -113,4 +133,6 @@ After stabilizing, open a GitHub issue documenting:
 
 ---
 
-_Last updated: 2026-05-15 (rewrote for cPanel document-root swap; previous version was for a DNS-flip rollback that no longer applies)._
+_Last updated: 2026-06-22 (rewrote for the snapshot-based rollback after the
+in-place-overwrite cutover; the previous document-root-swap version no longer
+applies)._

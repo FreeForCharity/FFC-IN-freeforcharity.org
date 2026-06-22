@@ -1,5 +1,31 @@
 # Cutover Day Runbook
 
+> **✅ CUTOVER COMPLETED — 2026-06-22.** The apex was flipped from WordPress to
+> the Next.js static export. **The method actually used was NOT the document-root
+> swap described below** (that was the original plan). It was an **automated,
+> two-phase in-place overwrite** that keeps the docroot at `~/public_html` and
+> never moves WHMCS:
+>
+> 1. **STEP 1 — `cpanel-apex-snapshot.yml`** (non-destructive): copied the
+>    WordPress files into a verified sister snapshot
+>    `~/public_html_wp_precutover_20260622193234` while the site stayed live.
+> 2. **STEP 2 — `cpanel-apex-cutover.yml`** (gated flip): mirrored the static
+>    export into `~/public_html` with `--delete`, **excluding** `hub/` (WHMCS),
+>    `cgi-bin/`, `.well-known/`, the parked-domain docroot, and the PHP-config /
+>    cPanel status dotfiles. The static `.htaccess` hands `/hub/` to WHMCS
+>    untouched, so **no `/hub` symlink is needed** (WHMCS is a real subdir that
+>    never moved).
+>
+> **Rollback** is now snapshot-based — see **[ROLLBACK.md](ROLLBACK.md)** (the
+> document-root-swap rollback no longer applies). **Verification** must use a
+> real browser (`live-visual-check.yml`), because the host returns an
+> intermittent `415` to `curl`/bare HTTP clients but `200` to real browsers.
+> Post-flip: **Cloudflare "Purge Everything"** on zone `freeforcharity.org`.
+>
+> The historical plan below is kept for reference.
+
+---
+
 A single, chronological checklist for flipping freeforcharity.org from
 WordPress to the Next.js static export. Follow top to bottom. Each step
 links to the detailed doc when you need the full reasoning.
