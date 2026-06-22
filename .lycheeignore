@@ -106,6 +106,10 @@ https://help.candid.org/**
 https://www.zeffy.com/**
 https://zeffy.com/**
 
+# Microsoft Tech Community intermittently 403s CI crawlers (same bot-block as
+# privacy.microsoft.com / microsoft.com/nonprofits, already pinned). Real URL.
+https://techcommunity.microsoft.com/**
+
 # Microsoft privacy statement 403s on bots; the canonical /en-us/ variant is what users get redirected to
 https://privacy.microsoft.com/privacystatement
 https://privacy.microsoft.com/**
