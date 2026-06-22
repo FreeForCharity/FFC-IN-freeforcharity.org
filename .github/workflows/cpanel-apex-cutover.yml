@@ -181,7 +181,7 @@ jobs:
           base="${APIM_BASE:-https://apim-ffc-gateway-prod.azure-api.net}"
           api(){ curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${APIM_KEY}" -H 'Accept: application/json' "$@"; }
           # WHMCS must be a real dir with configuration.php — abort if not.
-          whmcs=$(api --get --data-urlencode "dir=/home/${CPANEL_FTP_USER}/public_html/hub" \
+          whmcs=$(api --get --data-urlencode "dir=public_html/hub" \
                     --data-urlencode "only_these_files=configuration.php" --data-urlencode "types=file" \
                     "${base}/cpanel/execute/Fileman/list_files" | jq -r '[.data[]?.file]|length')
           if [ "${whmcs:-0}" -lt 1 ]; then echo "::error::WHMCS configuration.php not found at public_html/hub — aborting."; exit 1; fi
@@ -201,7 +201,7 @@ jobs:
           api(){ curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${APIM_KEY}" -H 'Accept: application/json' "$@"; }
           # The flip is refused unless STEP 1's WordPress copy actually exists and
           # is non-trivial — this is the "make sure the copy worked first" gate.
-          snap=$(api --get --data-urlencode "dir=/home/${CPANEL_FTP_USER}/${SNAP}" --data-urlencode "show_hidden=1" \
+          snap=$(api --get --data-urlencode "dir=${SNAP}" --data-urlencode "show_hidden=1" \
                    "${base}/cpanel/execute/Fileman/list_files")
           [ "$(printf '%s' "$snap" | jq -r '.status')" = "1" ] || { echo "::error::snapshot ${SNAP} not found — run STEP 1 (cpanel-apex-snapshot.yml) first."; exit 1; }
           n=$(printf '%s' "$snap" | jq -r '[.data[]?.file]|length')
@@ -258,10 +258,10 @@ jobs:
           esac
           base="${APIM_BASE:-https://apim-ffc-gateway-prod.azure-api.net}"
           api(){ curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${APIM_KEY}" -H 'Accept: application/json' "$@"; }
-          snaplist=$(api --get --data-urlencode "dir=/home/${CPANEL_FTP_USER}/${SNAP}" --data-urlencode "show_hidden=1" \
+          snaplist=$(api --get --data-urlencode "dir=${SNAP}" --data-urlencode "show_hidden=1" \
                        "${base}/cpanel/execute/Fileman/list_files")
           [ "$(printf '%s' "$snaplist" | jq -r '.status')" = "1" ] || { echo "::error::snapshot ${SNAP} not found"; exit 1; }
-          cur=$(api --get --data-urlencode "dir=/home/${CPANEL_FTP_USER}/public_html" --data-urlencode "show_hidden=1" \
+          cur=$(api --get --data-urlencode "dir=public_html" --data-urlencode "show_hidden=1" \
                   "${base}/cpanel/execute/Fileman/list_files")
           # current non-keeper entries (the static files) -> delete; snapshot entries -> move back
           dels=$(printf '%s' "$cur" | jq -r --arg keep "$KEEP" '($keep|split(" ")) as $k | [.data[]?.file|select(. as $f|($k|index($f))|not)]|.[]')
