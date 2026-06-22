@@ -100,7 +100,7 @@ jobs:
           set -euo pipefail
           base="${APIM_BASE:-https://apim-ffc-gateway-prod.azure-api.net}"
           api(){ curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${APIM_KEY}" -H 'Accept: application/json' "$@"; }
-          listing=$(api --get --data-urlencode "dir=/home/${CPANEL_FTP_USER}/public_html" --data-urlencode "show_hidden=1" \
+          listing=$(api --get --data-urlencode "dir=public_html" --data-urlencode "show_hidden=1" \
                       "${base}/cpanel/execute/Fileman/list_files")
           [ "$(printf '%s' "$listing" | jq -r '.status')" = "1" ] || { echo "::error::cannot list public_html"; exit 1; }
           # WP files = everything except keepers and (system dotfiles, but keep WP's .htaccess).
@@ -165,7 +165,7 @@ jobs:
           set -euo pipefail
           base="${APIM_BASE:-https://apim-ffc-gateway-prod.azure-api.net}"
           api(){ curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${APIM_KEY}" -H 'Accept: application/json' "$@"; }
-          snaplist=$(api --get --data-urlencode "dir=/home/${CPANEL_FTP_USER}/${SNAP}" --data-urlencode "show_hidden=1" \
+          snaplist=$(api --get --data-urlencode "dir=${SNAP}" --data-urlencode "show_hidden=1" \
                        "${base}/cpanel/execute/Fileman/list_files")
           [ "$(printf '%s' "$snaplist" | jq -r '.status')" = "1" ] || { echo "::error::snapshot ${SNAP} not found after copy"; exit 1; }
           # Use the same (C-locale) sort for both sides so comm pairs correctly.
