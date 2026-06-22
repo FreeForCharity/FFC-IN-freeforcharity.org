@@ -1,0 +1,328 @@
+name: 'cPanel APEX cutover (WordPress -> static, /hub-safe)'
+
+# THE real apex cutover for freeforcharity.org, and its rollback. This is
+# destructive and runs against the LIVE site, so it is heavily gated:
+#   * dry_run defaults to TRUE and prints an exact plan (incl. lftp --dry-run
+#     showing every add/delete) without writing anything;
+#   * a typed `confirm` phrase is required for any live write;
+#   * runs in the cpanel-staging Environment (proven creds); add required
+#     reviewers to a dedicated environment for a second human approval gate;
+#   * a fresh WordPress + WHMCS backup is REQUIRED before a live cutover.
+#
+# Mechanic (proven /hub-safe by cpanel-cutover-rehearse.yml on staging):
+#   The apex docroot stays ~/public_html. We DON'T move it (WHMCS lives at
+#   ~/public_html/hub as a real dir and must not move). Instead:
+#     1. MOVE the WordPress files aside, server-side, into a timestamped sister
+#        dir ~/public_html_wp_precutover_<ts>/ (FTP rename = instant, no
+#        download) — this is the on-server rollback snapshot. hub/, cgi-bin/,
+#        .well-known/, the parked-domain docroot and system dotfiles are KEPT
+#        in place (never moved, never deleted).
+#     2. Mirror the Next.js static export into the now-clean ~/public_html/.
+#   The static export's own .htaccess hands /hub/ off to WHMCS untouched
+#   (`RewriteRule ^hub($|/) - [L]` + `DirectoryIndex index.html index.php`).
+#
+# Rollback = delete the static files from ~/public_html/ (keepers preserved)
+# and move the snapshot WordPress files back. WHMCS and both databases are
+# never touched by either direction.
+#
+# Creds: GH OIDC -> Azure -> Key Vault (MAIN cPanel FTP creds + the read-only
+# gateway subscription key). The MAIN FTP account is homed at the account root,
+# so it can write ~/public_html and create sibling dirs.
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'cutover (WP->static) or rollback (static->WP)'
+        required: true
+        default: 'cutover'
+        type: choice
+        options: [cutover, rollback]
+      confirm:
+        description: 'Type exactly: CUTOVER freeforcharity.org   (required for any live write)'
+        required: false
+        default: ''
+        type: string
+      snapshot_dir:
+        description: 'Rollback only: the public_html_wp_precutover_<ts> dir to restore from'
+        required: false
+        default: ''
+        type: string
+      dry_run:
+        description: 'Preview only — write nothing (default true)'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read # backup-freshness gate reads sync run history
+
+concurrency:
+  group: cpanel-apex-cutover
+  cancel-in-progress: false
+
+env:
+  APEX: freeforcharity.org
+  DOCROOT: public_html
+  # Entries in ~/public_html that must NEVER be moved or deleted by either
+  # direction. hub = WHMCS; wh1319644.ispot.cc = a parked-domain docroot;
+  # the rest are cPanel/system. The static export replaces everything else.
+  KEEP: 'hub cgi-bin .well-known .cache .tmb .ftpquota .htpasswd error_log .htpasswds wh1319644.ispot.cc'
+
+jobs:
+  cutover:
+    name: 'Apex cutover / rollback'
+    runs-on: ubuntu-latest
+    # Reuses the proven cpanel-staging environment (it holds the MAIN-account
+    # FTP creds + the OIDC federated credential that deploy-cpanel.yml uses).
+    # For a second, human approval gate, create a dedicated environment with a
+    # federated credential for its subject + required reviewers and switch here.
+    environment: cpanel-staging
+    timeout-minutes: 60
+    steps:
+      - name: 'Gate: confirm phrase (required for live writes)'
+        env:
+          ACTION: ${{ inputs.action }}
+          CONFIRM: ${{ inputs.confirm }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          echo "action=${ACTION} dry_run=${DRY_RUN}"
+          if [ "$DRY_RUN" != "true" ]; then
+            if [ "$CONFIRM" != "CUTOVER freeforcharity.org" ]; then
+              echo "::error::Live write requires confirm='CUTOVER freeforcharity.org' exactly."
+              exit 1
+            fi
+          fi
+
+      - uses: actions/checkout@v6
+
+      - name: Setup Node
+        if: ${{ inputs.action == 'cutover' }}
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install + build static export
+        if: ${{ inputs.action == 'cutover' }}
+        env:
+          NEXT_PUBLIC_BASE_PATH: ''
+        run: |
+          set -euo pipefail
+          npm ci
+          npm run build
+          test -f ./out/index.html
+          test -f ./out/.htaccess
+          test -f ./out/about-us/index.html
+          echo "out/ ready: $(find out -type f | wc -l) files"
+
+      - name: 'Backup-freshness gate (cutover, live only)'
+        if: ${{ inputs.action == 'cutover' && inputs.dry_run == false }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          # Refuse to wipe WordPress unless a successful Softaculous->OneDrive
+          # sync (the restorable WP+WHMCS backup) ran in the last 30h.
+          ok=$(gh run list --workflow cpanel-softaculous-backup-sync.yml --limit 20 \
+                 --json conclusion,updatedAt \
+               | jq -r '[.[]|select(.conclusion=="success")]|sort_by(.updatedAt)|last|.updatedAt // empty')
+          if [ -z "$ok" ]; then echo "::error::No successful backup sync found — run it before cutover."; exit 1; fi
+          age=$(( $(date -u +%s) - $(date -u -d "$ok" +%s) ))
+          echo "Last successful backup sync: ${ok} ($((age/3600))h ago)"
+          if [ "$age" -gt 108000 ]; then
+            echo "::error::Latest restorable backup is >30h old. Run cpanel-softaculous-backup-sync.yml first."
+            exit 1
+          fi
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.WR_ALL_FFC_AZURE_KV_CLIENT_ID }}
+          tenant-id: ${{ secrets.WR_ALL_FFC_AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+
+      - name: Fetch creds from Key Vault (FTP + gateway key)
+        shell: pwsh
+        env:
+          KV_NAME: kv-ffc-admin-prod-cbm
+        run: |
+          $ErrorActionPreference = 'Stop'
+          . ./.github/scripts/Get-KvSecret.ps1
+          $v = $env:KV_NAME.Trim()
+          $h = Get-KvSecret -VaultName $v -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-host'
+          $p = Get-KvSecret -VaultName $v -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-port'
+          $u = Get-KvSecret -VaultName $v -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-user'
+          $pw= Get-KvSecret -VaultName $v -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-password'
+          $key=Get-KvSecret -VaultName $v -Name 'read-all-ffc-apim-gateway-subscription-key'
+          foreach ($s in @($h,$u,$pw,$key)) { Write-Host "::add-mask::$s" }
+          "CPANEL_FTP_HOST=$h"  | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_PORT=$p"  | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_USER=$u"  | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_PASSWORD=$pw" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+          "APIM_KEY=$key"       | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: 'Pre-flight: WHMCS present + capture /hub baseline'
+        env:
+          APIM_BASE: ${{ secrets.APIM_GATEWAY_URL }}
+        run: |
+          set -euo pipefail
+          base="${APIM_BASE:-https://apim-ffc-gateway-prod.azure-api.net}"
+          api(){ curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${APIM_KEY}" -H 'Accept: application/json' "$@"; }
+          # WHMCS must be a real dir with configuration.php — abort if not.
+          whmcs=$(api --get --data-urlencode "dir=/home/${CPANEL_FTP_USER}/public_html/hub" \
+                    --data-urlencode "only_these_files=configuration.php" --data-urlencode "types=file" \
+                    "${base}/cpanel/execute/Fileman/list_files" | jq -r '[.data[]?.file]|length')
+          if [ "${whmcs:-0}" -lt 1 ]; then echo "::error::WHMCS configuration.php not found at public_html/hub — aborting."; exit 1; fi
+          echo "WHMCS present at public_html/hub ✓"
+          # Baseline /hub/ (WHMCS) so we can prove it's unchanged after cutover.
+          hb=$(curl -sSL -m 25 -o /dev/null -w '%{http_code}' "https://${APEX}/hub/?cb=$$" || echo 000)
+          echo "HUB_BASELINE=$hb" >> "$GITHUB_ENV"
+          echo "/hub/ baseline status: ${hb}"
+
+      - name: 'Plan move-set (entries to snapshot)'
+        if: ${{ inputs.action == 'cutover' }}
+        env:
+          APIM_BASE: ${{ secrets.APIM_GATEWAY_URL }}
+        run: |
+          set -euo pipefail
+          base="${APIM_BASE:-https://apim-ffc-gateway-prod.azure-api.net}"
+          api(){ curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${APIM_KEY}" -H 'Accept: application/json' "$@"; }
+          listing=$(api --get --data-urlencode "dir=/home/${CPANEL_FTP_USER}/public_html" \
+                      --data-urlencode "show_hidden=1" "${base}/cpanel/execute/Fileman/list_files")
+          [ "$(printf '%s' "$listing" | jq -r '.status')" = "1" ] || { echo "::error::cannot list public_html"; exit 1; }
+          # Move everything EXCEPT keepers and dotfiles (but DO move WP's .htaccess,
+          # which the static export replaces). Keepers/dotfiles stay in place.
+          moveset=$(printf '%s' "$listing" | jq -r --arg keep "$KEEP" '
+            ($keep|split(" ")) as $k
+            | [ .data[]?.file
+                | select(. as $f | ($k|index($f))|not)
+                | select((startswith(".")|not) or . == ".htaccess") ] | .[]')
+          printf '%s\n' "$moveset" > moveset.txt
+          echo "Will snapshot $(wc -l < moveset.txt) entries:"; sed 's/^/  - /' moveset.txt
+          if ! grep -q . moveset.txt; then echo "::warning::move-set is empty (already cut over?)"; fi
+
+      - name: 'CUTOVER'
+        if: ${{ inputs.action == 'cutover' }}
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          ts=$(date -u +%Y%m%d%H%M%S)
+          snap="public_html_wp_precutover_${ts}"
+          echo "SNAPSHOT_DIR=${snap}" >> "$GITHUB_ENV"
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "DRY RUN — would:"
+            echo "  1) mkdir ~/${snap}"
+            echo "  2) server-side MOVE each move-set entry: public_html/<e> -> ${snap}/<e>"
+            sed 's/^/       - /' moveset.txt
+            echo "  3) mirror --delete ./out/ -> ./public_html/ (keeping: ${KEEP})"
+            sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+            echo "  --- lftp --dry-run preview of step 3 (no writes) ---"
+            lftp <<LFTP 2>&1 | tail -120
+              set ftp:ssl-allow yes; set ftp:ssl-force yes; set ftp:ssl-protect-data yes; set ssl:verify-certificate no
+              open -p "$CPANEL_FTP_PORT" -u "$CPANEL_FTP_USER","$CPANEL_FTP_PASSWORD" "ftp://$CPANEL_FTP_HOST"
+              mirror --reverse --delete --dry-run --verbose=1 \
+                --exclude-glob 'hub' --exclude-glob 'hub/' --exclude-glob 'cgi-bin/' \
+                --exclude-glob '.well-known/' --exclude-glob 'wh1319644.ispot.cc/' \
+                --exclude-glob '.ftpquota' --exclude-glob '.htpasswd' --exclude-glob 'error_log' \
+                ./out/ ./public_html/
+              bye
+          LFTP
+            echo "DRY RUN complete — nothing was written."
+            exit 0
+          fi
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          # Build the server-side move commands (FTP rename; instant, no download).
+          # Newlines are produced at runtime by printf so the YAML block scalar
+          # stays intact.
+          mv_cmds=$(while IFS= read -r e; do [ -n "$e" ] && printf 'mv "public_html/%s" "%s/%s"\n' "$e" "$snap" "$e"; done < moveset.txt)
+          lftp <<LFTP 2>&1 | tail -200
+            set ftp:ssl-allow yes; set ftp:ssl-force yes; set ftp:ssl-protect-data yes; set ssl:verify-certificate no
+            set net:max-retries 3; set net:timeout 60
+            open -p "$CPANEL_FTP_PORT" -u "$CPANEL_FTP_USER","$CPANEL_FTP_PASSWORD" "ftp://$CPANEL_FTP_HOST"
+            mkdir -p "${snap}"
+            ${mv_cmds}
+            mirror --reverse --delete --parallel=4 --verbose=1 \
+              --exclude-glob 'hub' --exclude-glob 'hub/' --exclude-glob 'cgi-bin/' \
+              --exclude-glob '.well-known/' --exclude-glob 'wh1319644.ispot.cc/' \
+              --exclude-glob '.ftpquota' --exclude-glob '.htpasswd' --exclude-glob 'error_log' \
+              ./out/ ./public_html/
+            bye
+          LFTP
+          echo "Cutover writes complete. Snapshot: ~/${snap}"
+
+      - name: 'ROLLBACK'
+        if: ${{ inputs.action == 'rollback' }}
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+          SNAP: ${{ inputs.snapshot_dir }}
+          APIM_BASE: ${{ secrets.APIM_GATEWAY_URL }}
+        run: |
+          set -euo pipefail
+          case "$SNAP" in
+            public_html_wp_precutover_*) : ;;
+            *) echo "::error::snapshot_dir must be a public_html_wp_precutover_* dir"; exit 1 ;;
+          esac
+          base="${APIM_BASE:-https://apim-ffc-gateway-prod.azure-api.net}"
+          api(){ curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${APIM_KEY}" -H 'Accept: application/json' "$@"; }
+          snaplist=$(api --get --data-urlencode "dir=/home/${CPANEL_FTP_USER}/${SNAP}" --data-urlencode "show_hidden=1" \
+                       "${base}/cpanel/execute/Fileman/list_files")
+          [ "$(printf '%s' "$snaplist" | jq -r '.status')" = "1" ] || { echo "::error::snapshot ${SNAP} not found"; exit 1; }
+          cur=$(api --get --data-urlencode "dir=/home/${CPANEL_FTP_USER}/public_html" --data-urlencode "show_hidden=1" \
+                  "${base}/cpanel/execute/Fileman/list_files")
+          # current non-keeper entries (the static files) -> delete; snapshot entries -> move back
+          dels=$(printf '%s' "$cur" | jq -r --arg keep "$KEEP" '($keep|split(" ")) as $k | [.data[]?.file|select(. as $f|($k|index($f))|not)]|.[]')
+          restores=$(printf '%s' "$snaplist" | jq -r '[.data[]?.file]|.[]')
+          echo "Would DELETE from public_html (static files):"; printf '%s\n' "$dels" | sed 's/^/  - /'
+          echo "Would RESTORE from ${SNAP}:"; printf '%s\n' "$restores" | sed 's/^/  - /'
+          if [ "$DRY_RUN" = "true" ]; then echo "DRY RUN — nothing written."; exit 0; fi
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          rm_cmds=$(while IFS= read -r e; do [ -n "$e" ] && printf 'rm -r "public_html/%s"\n' "$e"; done <<< "$dels")
+          mv_cmds=$(while IFS= read -r e; do [ -n "$e" ] && printf 'mv "%s/%s" "public_html/%s"\n' "$SNAP" "$e" "$e"; done <<< "$restores")
+          lftp <<LFTP 2>&1 | tail -200
+            set ftp:ssl-allow yes; set ftp:ssl-force yes; set ftp:ssl-protect-data yes; set ssl:verify-certificate no
+            set net:max-retries 3; set net:timeout 60
+            open -p "$CPANEL_FTP_PORT" -u "$CPANEL_FTP_USER","$CPANEL_FTP_PASSWORD" "ftp://$CPANEL_FTP_HOST"
+            ${rm_cmds}
+            ${mv_cmds}
+            bye
+          LFTP
+          echo "Rollback writes complete. WordPress restored from ${SNAP}."
+
+      - name: 'Verify the live apex (and /hub unchanged)'
+        if: ${{ inputs.dry_run == false }}
+        env:
+          ACTION: ${{ inputs.action }}
+        run: |
+          set -euo pipefail
+          cb="cb=$(date -u +%s)_${RANDOM}"
+          get(){ curl -sSL -m 25 -H 'Cache-Control: no-cache' -w '\n%{http_code}' "https://${APEX}$1?$cb"; }
+          code(){ curl -sSL -m 25 -o /dev/null -w '%{http_code}' -H 'Cache-Control: no-cache' "https://${APEX}$1?$cb"; }
+          fail=0
+          # /hub/ must still serve (status unchanged from the pre-flight baseline)
+          hc=$(code "/hub/")
+          if [ "$hc" = "${HUB_BASELINE}" ] && [ "$hc" != "000" ]; then echo "  ✓ /hub/ -> ${hc} (unchanged — WHMCS intact)";
+          else echo "  ✗ /hub/ -> ${hc} (baseline ${HUB_BASELINE}) — investigate / rollback!"; fail=1; fi
+          r=$(get "/"); c=$(printf '%s' "$r"|tail -n1); b=$(printf '%s' "$r"|sed '$d')
+          if [ "$ACTION" = "cutover" ]; then
+            # apex should now be the static export
+            if [ "$c" = "200" ] && printf '%s' "$b" | grep -qi 'next\|<title>'; then echo "  ✓ / -> 200 static site";
+            else echo "  ✗ / -> ${c} (expected static)"; fail=1; fi
+            wc=$(code "/wp-login.php"); case "$wc" in 301|302|403|404) echo "  ✓ /wp-login.php -> ${wc} (blocked)";; *) echo "  ✗ /wp-login.php -> ${wc}"; fail=1;; esac
+          else
+            [ "$c" = "200" ] && echo "  ✓ / -> 200 (WordPress restored)" || { echo "  ✗ / -> ${c}"; fail=1; }
+          fi
+          {
+            echo "## Apex ${ACTION} on ${APEX}"
+            echo ""
+            echo "- /hub/ (WHMCS): ${hc} (baseline ${HUB_BASELINE})"
+            echo "- snapshot dir: \`${SNAPSHOT_DIR:-${{ inputs.snapshot_dir }}}\`"
+            echo "- result: $( [ "$fail" -eq 0 ] && echo '✅ ok' || echo '⛔ CHECK FAILED — see ROLLBACK' )"
+          } >> "$GITHUB_STEP_SUMMARY"
+          [ "$fail" -eq 0 ] || { echo "::error::Post-${ACTION} verification failed. To revert a cutover, re-run with action=rollback snapshot_dir=${SNAPSHOT_DIR:-<snapshot>}."; exit 1; }
+          echo "✅ ${ACTION} verified."
