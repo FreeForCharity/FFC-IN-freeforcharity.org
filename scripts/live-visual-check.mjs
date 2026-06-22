@@ -46,7 +46,7 @@ async function gotoWithRetry(page, url) {
       statuses.push(status)
       last = status
       if (status === 200) return { status, attempts: i, statuses }
-    } catch (e) {
+    } catch {
       statuses.push('ERR')
       last = 'ERR'
     }
@@ -57,8 +57,11 @@ async function gotoWithRetry(page, url) {
 
 async function main() {
   await mkdir(OUTDIR, { recursive: true })
-  const browser = await chromium.launch()
+  const browser = await chromium.launch({ args: ['--no-sandbox'] })
   const ctx = await browser.newContext({
+    // CI runners trust real CAs (keep validation on). Set IGNORE_HTTPS=1 only
+    // for local/sandboxed runs whose Chromium lacks a CA trust store.
+    ignoreHTTPSErrors: process.env.IGNORE_HTTPS === '1',
     viewport: { width: 1366, height: 900 },
     userAgent:
       'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36',
