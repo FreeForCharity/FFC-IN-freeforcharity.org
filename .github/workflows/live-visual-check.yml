@@ -1,0 +1,61 @@
+name: 'Live visual check (apex + WHMCS /hub)'
+
+# Drives a real Chromium browser against the LIVE site and the WHMCS /hub,
+# captures full-page screenshots (uploaded as artifacts), asserts real page
+# content, and reports how many retries each page needed (a concrete flakiness
+# signal). Use after a cutover/deploy to SEE what users see — screenshots are
+# evidence, not curl status guesses.
+#
+# NOTE: GitHub runners egress from datacenter IPs. If the host/WAF rejects
+# those intermittently, the per-page retry counter quantifies it (it does not
+# silently pass). Run with a different BASE_URL to point at staging.
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: 'Site to check'
+        required: false
+        default: 'https://freeforcharity.org'
+        type: string
+      attempts:
+        description: 'Max navigations per page before failing'
+        required: false
+        default: '8'
+        type: string
+  schedule:
+    - cron: '0 */6 * * *' # every 6h, lightweight visual heartbeat
+
+permissions:
+  contents: read
+
+concurrency:
+  group: live-visual-check
+  cancel-in-progress: true
+
+jobs:
+  visual:
+    name: 'Screenshot + content check'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: 'Run live visual check'
+        env:
+          BASE_URL: ${{ inputs.base_url || 'https://freeforcharity.org' }}
+          ATTEMPTS: ${{ inputs.attempts || '8' }}
+          OUTDIR: artifacts
+        run: node scripts/live-visual-check.mjs
+      - name: 'Upload screenshots'
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: live-screenshots
+          path: artifacts/*.png
+          if-no-files-found: warn
