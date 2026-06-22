@@ -71,8 +71,10 @@ env:
   DOCROOT: public_html
   # Entries in ~/public_html that must NEVER be moved or deleted by either
   # direction. hub = WHMCS; wh1319644.ispot.cc = a parked-domain docroot;
-  # the rest are cPanel/system. The static export replaces everything else.
-  KEEP: 'hub cgi-bin .well-known .cache .tmb .ftpquota .htpasswd error_log .htpasswds wh1319644.ispot.cc'
+  # .user.ini + php.ini are PHP configs that /hub INHERITS (it has none of its
+  # own), so keep them or WHMCS's PHP env changes; the rest are cPanel/system.
+  # The static export replaces everything else.
+  KEEP: 'hub cgi-bin .well-known .cache .tmb .ftpquota .htpasswd error_log .htpasswds wh1319644.ispot.cc .user.ini php.ini .s3backupstatus .synthquota .ht_wsr.txt'
 
 jobs:
   cutover:
@@ -239,6 +241,8 @@ jobs:
               --exclude-glob '.well-known/' --exclude-glob 'wh1319644.ispot.cc/' \
               --exclude-glob '.cache/' --exclude-glob '.tmb/' \
               --exclude-glob '.ftpquota' --exclude-glob '.htpasswd' --exclude-glob 'error_log' \
+              --exclude-glob '.user.ini' --exclude-glob 'php.ini' \
+              --exclude-glob '.s3backupstatus' --exclude-glob '.synthquota' --exclude-glob '.ht_wsr.txt' \
               ./out/ ./public_html/
             bye
           LFTP
