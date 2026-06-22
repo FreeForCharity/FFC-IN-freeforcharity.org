@@ -1,0 +1,188 @@
+name: 'Apex cutover STEP 1 — backup gate + WP snapshot (non-destructive)'
+
+# Phase 1 of the freeforcharity.org cutover, split out from the flip so the
+# rollback snapshot is created and VERIFIED while WordPress is still live.
+# This step writes only to a NEW sister directory; it never modifies
+# ~/public_html, so the live site is untouched and this is safe to run/re-run.
+#
+# What it does:
+#   1. (live) requires a fresh restorable backup (Softaculous->OneDrive < 30h);
+#   2. copies the WordPress files from ~/public_html into a new timestamped
+#      sister dir ~/public_html_wp_precutover_<ts>/  — a real server-side COPY
+#      (down to the runner over FTPS, back up to the sister dir), so the live
+#      docroot keeps serving; hub/ (WHMCS), cgi-bin/, .well-known/, the
+#      parked-domain docroot and system dotfiles are NOT copied (they stay put
+#      and are not part of a WordPress rollback);
+#   3. verifies the copy: the sister dir's entry set must match the WP entry
+#      set in public_html (count + names) — otherwise it fails.
+#
+# The snapshot dir name it prints is the input you pass to STEP 2
+# (cpanel-apex-cutover.yml), which refuses to flip without a verified snapshot.
+#
+# Creds: GH OIDC -> Azure -> Key Vault (MAIN cPanel FTP creds + read-only
+# gateway subscription key). MAIN FTP is homed at the account root.
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Preview only — write nothing (default true)'
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
+concurrency:
+  group: cpanel-apex-cutover # shares the lock with STEP 2
+  cancel-in-progress: false
+
+env:
+  KEEP: 'hub cgi-bin .well-known .cache .tmb .ftpquota .htpasswd error_log .htpasswds wh1319644.ispot.cc'
+
+jobs:
+  snapshot:
+    name: 'Backup gate + copy WP to sister dir + verify'
+    runs-on: ubuntu-latest
+    environment: cpanel-staging
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: 'Backup-freshness gate (live only)'
+        if: ${{ inputs.dry_run == false }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          ok=$(gh run list --workflow cpanel-softaculous-backup-sync.yml --limit 20 --json conclusion,updatedAt \
+               | jq -r '[.[]|select(.conclusion=="success")]|sort_by(.updatedAt)|last|.updatedAt // empty')
+          if [ -z "$ok" ]; then echo "::error::No successful backup sync found — run it before snapshotting/cutover."; exit 1; fi
+          age=$(( $(date -u +%s) - $(date -u -d "$ok" +%s) ))
+          echo "Last successful backup sync: ${ok} ($((age/3600))h ago)"
+          [ "$age" -le 108000 ] || { echo "::error::Latest restorable backup is >30h old. Run the backup sync first."; exit 1; }
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.WR_ALL_FFC_AZURE_KV_CLIENT_ID }}
+          tenant-id: ${{ secrets.WR_ALL_FFC_AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+
+      - name: Fetch creds from Key Vault (FTP + gateway key)
+        shell: pwsh
+        env:
+          KV_NAME: kv-ffc-admin-prod-cbm
+        run: |
+          $ErrorActionPreference = 'Stop'
+          . ./.github/scripts/Get-KvSecret.ps1
+          $v = $env:KV_NAME.Trim()
+          $h = Get-KvSecret -VaultName $v -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-host'
+          $p = Get-KvSecret -VaultName $v -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-port'
+          $u = Get-KvSecret -VaultName $v -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-user'
+          $pw= Get-KvSecret -VaultName $v -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-password'
+          $key=Get-KvSecret -VaultName $v -Name 'read-all-ffc-apim-gateway-subscription-key'
+          foreach ($s in @($h,$u,$pw,$key)) { Write-Host "::add-mask::$s" }
+          "CPANEL_FTP_HOST=$h"  | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_PORT=$p"  | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_USER=$u"  | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+          "CPANEL_FTP_PASSWORD=$pw" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+          "APIM_KEY=$key"       | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: 'Compute WP copy-set from public_html'
+        env:
+          APIM_BASE: ${{ secrets.APIM_GATEWAY_URL }}
+        run: |
+          set -euo pipefail
+          base="${APIM_BASE:-https://apim-ffc-gateway-prod.azure-api.net}"
+          api(){ curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${APIM_KEY}" -H 'Accept: application/json' "$@"; }
+          listing=$(api --get --data-urlencode "dir=/home/${CPANEL_FTP_USER}/public_html" --data-urlencode "show_hidden=1" \
+                      "${base}/cpanel/execute/Fileman/list_files")
+          [ "$(printf '%s' "$listing" | jq -r '.status')" = "1" ] || { echo "::error::cannot list public_html"; exit 1; }
+          # WP files = everything except keepers and (system dotfiles, but keep WP's .htaccess).
+          printf '%s' "$listing" | jq -r --arg keep "$KEEP" '
+            ($keep|split(" ")) as $k
+            | [ .data[]?.file
+                | select(. as $f | ($k|index($f))|not)
+                | select((startswith(".")|not) or . == ".htaccess") ] | .[]' > copyset.txt
+          n=$(grep -c . copyset.txt || true)
+          echo "WP copy-set (${n} entries):"; sed 's/^/  - /' copyset.txt
+          [ "$n" -gt 0 ] || { echo "::error::copy-set is empty — is WordPress still in public_html?"; exit 1; }
+          echo "COPYSET_N=$n" >> "$GITHUB_ENV"
+
+      - name: 'Copy WP -> sister dir (down then up), or preview'
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          ts=$(date -u +%Y%m%d%H%M%S)
+          snap="public_html_wp_precutover_${ts}"
+          echo "SNAP=$snap" >> "$GITHUB_ENV"
+          if [ "$DRY_RUN" = "true" ]; then
+            echo "DRY RUN — would create ~/${snap} and COPY these from public_html:"
+            sed 's/^/  - /' copyset.txt
+            echo "(non-destructive: public_html is only READ; the live site is untouched)"
+            exit 0
+          fi
+          sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+          mkdir -p ./wpsnap
+          # 1) download the WP files (everything EXCEPT keepers) to the runner.
+          #    mirror copies dotfiles too, so WP's .htaccess is included; the
+          #    keeper dirs/files are excluded so hub/ (WHMCS) etc. are not pulled.
+          lftp <<LFTP 2>&1 | tail -120
+            set ftp:ssl-allow yes; set ftp:ssl-force yes; set ftp:ssl-protect-data yes; set ssl:verify-certificate no
+            set net:max-retries 3; set net:timeout 60
+            open -p "$CPANEL_FTP_PORT" -u "$CPANEL_FTP_USER","$CPANEL_FTP_PASSWORD" "ftp://$CPANEL_FTP_HOST"
+            mirror --parallel=4 --verbose=0 \
+              --exclude-glob 'hub' --exclude-glob 'hub/' --exclude-glob 'cgi-bin/' \
+              --exclude-glob '.well-known/' --exclude-glob 'wh1319644.ispot.cc/' \
+              --exclude-glob '.cache/' --exclude-glob '.tmb/' \
+              --exclude-glob '.ftpquota' --exclude-glob '.htpasswd' --exclude-glob 'error_log' \
+              public_html ./wpsnap
+            bye
+          LFTP
+          echo "Downloaded WP to runner: $(find ./wpsnap -type f | wc -l) files, $(du -sh ./wpsnap | cut -f1)"
+          # 2) upload to the sister dir (server-side copy completed).
+          lftp <<LFTP 2>&1 | tail -120
+            set ftp:ssl-allow yes; set ftp:ssl-force yes; set ftp:ssl-protect-data yes; set ssl:verify-certificate no
+            set net:max-retries 3; set net:timeout 60
+            open -p "$CPANEL_FTP_PORT" -u "$CPANEL_FTP_USER","$CPANEL_FTP_PASSWORD" "ftp://$CPANEL_FTP_HOST"
+            mkdir -p "${snap}"
+            mirror --reverse --parallel=4 --verbose=0 ./wpsnap/ "./${snap}/"
+            bye
+          LFTP
+          echo "Uploaded snapshot to ~/${snap}"
+
+      - name: 'Verify the snapshot copy'
+        if: ${{ inputs.dry_run == false }}
+        env:
+          APIM_BASE: ${{ secrets.APIM_GATEWAY_URL }}
+        run: |
+          set -euo pipefail
+          base="${APIM_BASE:-https://apim-ffc-gateway-prod.azure-api.net}"
+          api(){ curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${APIM_KEY}" -H 'Accept: application/json' "$@"; }
+          snaplist=$(api --get --data-urlencode "dir=/home/${CPANEL_FTP_USER}/${SNAP}" --data-urlencode "show_hidden=1" \
+                       "${base}/cpanel/execute/Fileman/list_files")
+          [ "$(printf '%s' "$snaplist" | jq -r '.status')" = "1" ] || { echo "::error::snapshot ${SNAP} not found after copy"; exit 1; }
+          # Use the same (C-locale) sort for both sides so comm pairs correctly.
+          printf '%s' "$snaplist" | jq -r '.data[]?.file' | LC_ALL=C sort > snap_have.txt
+          LC_ALL=C sort copyset.txt > snap_want.txt
+          echo "snapshot ~/${SNAP} top-level entries:"; sed 's/^/  - /' snap_have.txt
+          miss=$(comm -23 snap_want.txt snap_have.txt)
+          if [ -n "$miss" ]; then
+            echo "::error::snapshot is missing expected WP entr(ies):"
+            printf '%s\n' "$miss" | sed 's/^/  - /'
+            exit 1
+          fi
+          {
+            echo "## Apex snapshot complete ✅"
+            echo ""
+            echo "- Snapshot dir: \`${SNAP}\`  (pass this to STEP 2 as \`snapshot_dir\`)"
+            echo "- WP entries copied: ${COPYSET_N}"
+            echo "- public_html (live WordPress) was NOT modified."
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "✅ Verified copy. Snapshot dir = ${SNAP}"
