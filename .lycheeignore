@@ -101,6 +101,11 @@ http://www.fiverr.com/**
 https://www.guidestar.org/**
 https://help.candid.org/**
 
+# Zeffy donation-form/thermometer embeds return 403 to CI crawlers — the
+# embeds render fine in browsers (used on the endowment fund + homepage).
+https://www.zeffy.com/**
+https://zeffy.com/**
+
 # Microsoft privacy statement 403s on bots; the canonical /en-us/ variant is what users get redirected to
 https://privacy.microsoft.com/privacystatement
 https://privacy.microsoft.com/**
