@@ -9,7 +9,7 @@ import { axe } from '../utils/axe'
  * page-section components). The suite asserts the component mounts and
  * produces DOM, then runs the shared fragment-axe config to catch real
  * accessibility regressions. ui/* primitives that require props are
- * covered separately in ui-components.test.tsx.
+ * covered separately in ui/ui-batch-{1,2,3}.test.tsx.
  *
  * Keep this list in sync with the .tsx files under src/components
  * (excluding src/components/ui) when components are added or removed.

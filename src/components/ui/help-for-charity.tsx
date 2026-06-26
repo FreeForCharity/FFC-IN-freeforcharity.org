@@ -18,7 +18,7 @@ const InfoSection: React.FC<SectionProps> = ({
   return (
     <div style={{ backgroundColor: bg }}>
       <div className="py-[0px]">
-        {title && (
+        {title.trim() && (
           <h1 className={`text-[#b35000] text-[28px] font-[700] mb-[15px] text-${titleAlign}`}>
             {title}
           </h1>
