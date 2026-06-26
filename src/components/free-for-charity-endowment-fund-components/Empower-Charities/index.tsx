@@ -42,12 +42,19 @@ const DonationSection: FC = () => {
   }
 
   return (
-    <div className="bg-[#003566] py-[54px]">
+    <div id="donate" className="bg-[#003566] py-[54px] scroll-mt-[80px]">
       <div className="w-[90%] md:w-[80%] mx-auto py-[27px]">
         <div className="mb-[10px]">
-          <h3 className="text-[32px] font-[500] leading-[42px] pb-[10px] text-white" id="cinzel">
-            Empower Charities with Your Generosity
-          </h3>
+          <h2 className="text-[32px] font-[500] leading-[42px] pb-[10px] text-white" id="cinzel">
+            Make Your Gift
+          </h2>
+          <p
+            className="text-white/85 text-[16px] sm:text-[18px] leading-[28px] max-w-[680px]"
+            id="fauna-font"
+          >
+            Any amount &mdash; one-time or monthly &mdash; goes straight into the endowment corpus.
+            Zeffy passes 100% of your donation to Free For Charity; no platform fee is deducted.
+          </p>
         </div>
 
         <div className="h-full min-h-[1374px] pt-[120px]">

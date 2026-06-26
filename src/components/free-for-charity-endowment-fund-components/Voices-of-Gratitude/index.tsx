@@ -3,12 +3,12 @@ import React from 'react'
 const index = () => {
   return (
     <div className="py-[54px] w-[90%] md:w-[80%] mx-auto">
-      <h1
+      <h2
         className="text-[30px] md:text-[50px] font-[500] text-[#111] mb-[10px] pb-[10px] py-[27px] leading-[60px]"
         id="cinzel"
       >
-        Voices of Gratitude
-      </h1>
+        Why Donors Give
+      </h2>
 
       {/* ---- Responsive wrapper ---- */}
       <div className="py-[27px] flex flex-wrap -mx-4 md:-mx-0">

@@ -23,12 +23,12 @@ const Index = () => {
 
           {/* Left Column – Text Content */}
           <div className="w-full md:w-[47.25%]">
-            <h1
+            <h2
               className="mb-[20px] text-[32px] sm:text-[40px] md:text-[50px] text-[#111111] font-[500] leading-[42px] sm:leading-[50px] md:leading-[60px] text-center md:text-left"
               id="cinzel"
             >
-              Endowment Features
-            </h1>
+              How the Endowment Works
+            </h2>
 
             <div className="space-y-[30px]">
               {/* Feature 1 */}
