@@ -110,6 +110,12 @@ https://zeffy.com/**
 # privacy.microsoft.com / microsoft.com/nonprofits, already pinned). Real URL.
 https://techcommunity.microsoft.com/**
 
+# WHMCS Community forum sits behind Cloudflare bot protection that 403s
+# GitHub Actions runner IPs while staying reachable in browsers (verified
+# 200 with a normal UA). Linked from the web-developer training guide.
+https://whmcs.community/
+https://whmcs.community/**
+
 # Microsoft privacy statement 403s on bots; the canonical /en-us/ variant is what users get redirected to
 https://privacy.microsoft.com/privacystatement
 https://privacy.microsoft.com/**
