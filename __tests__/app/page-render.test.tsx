@@ -1,5 +1,6 @@
 import React from 'react'
 import { render } from '@testing-library/react'
+import { axe } from '../utils/axe'
 
 /**
  * Page render smoke tests.
@@ -97,4 +98,23 @@ describe('Page render smoke tests', () => {
     const { container } = render(<Page />)
     expect(container).not.toBeEmptyDOMElement()
   })
+})
+
+describe('Page accessibility (jest-axe)', () => {
+  // Renders each route's composed page and asserts no axe violations using
+  // the shared fragment config (page-context-only rules disabled, since the
+  // layout's <main>/header/footer are not part of the page component).
+  // Catches cross-component issues a single-component test can't, e.g.
+  // duplicate ids when two sections collide on the same page. Full-page
+  // a11y against the built site is additionally covered in
+  // tests/accessibility.spec.ts (Playwright, real browser).
+  it.each(pages)(
+    '%s has no axe violations',
+    async (_name, Page) => {
+      const { container } = render(<Page />)
+      const results = await axe(container)
+      expect(results).toHaveNoViolations()
+    },
+    30000
+  )
 })
