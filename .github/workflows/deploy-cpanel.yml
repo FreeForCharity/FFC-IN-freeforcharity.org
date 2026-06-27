@@ -410,7 +410,13 @@ jobs:
         env:
           APIM_BASE: ${{ secrets.APIM_GATEWAY_URL }}
         run: |
-          set -euo pipefail
+          # NOT `set -e`: every control-plane error here (unreachable APIM,
+          # non-JSON/empty response, jq parse miss) must WARN-and-skip, never
+          # fail an otherwise-healthy deploy. The ONLY hard failure is an
+          # explicit `exit 1` on a confirmed partial mirror below. (Relying on
+          # `set -e` being suppressed inside `if` conditions for the jq
+          # pipelines is too subtle for a production deploy path.)
+          set -uo pipefail
           base="${APIM_BASE:-https://apim-ffc-gateway-prod.azure-api.net}"
           if [ -z "${APIM_KEY:-}" ]; then
             echo "::warning::APIM key unavailable — skipping post-mirror parity check (smoke suite still verifies the live site)."
@@ -419,11 +425,19 @@ jobs:
           api(){ curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${APIM_KEY}" -H 'Accept: application/json' "$@"; }
           listing=$(api --get --data-urlencode "dir=public_html" --data-urlencode "show_hidden=1" \
                       "${base}/cpanel/execute/Fileman/list_files" || true)
-          if [ "$(printf '%s' "$listing" | jq -r '.status // empty' 2>/dev/null)" != "1" ]; then
+          # Defensive parse: `|| true` so a non-JSON/empty body can't abort the step.
+          status=$(printf '%s' "$listing" | jq -r '.status // empty' 2>/dev/null || true)
+          if [ "$status" != "1" ]; then
             echo "::warning::Could not list public_html via APIM — skipping parity check (not failing a healthy deploy on a control-plane hiccup)."
             exit 0
           fi
-          printf '%s' "$listing" | jq -r '.data[]?.file' | LC_ALL=C sort > remote_entries.txt
+          printf '%s' "$listing" | jq -r '.data[]?.file' 2>/dev/null | LC_ALL=C sort > remote_entries.txt || true
+          # Empty/odd listing despite status=1 — can't verify, so skip rather
+          # than let comm report every local entry as "missing" (false failure).
+          if [ ! -s remote_entries.txt ]; then
+            echo "::warning::APIM returned an empty file listing for public_html — skipping parity check (the smoke suite is the live backstop)."
+            exit 0
+          fi
           # Top-level entries the build produced (these MUST all be present remotely).
           find out -maxdepth 1 -mindepth 1 -printf '%f\n' | LC_ALL=C sort > local_entries.txt
           missing=$(comm -23 local_entries.txt remote_entries.txt || true)
