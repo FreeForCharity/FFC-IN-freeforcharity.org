@@ -11,7 +11,7 @@ const Page = () => {
 
         <p
           className="text-[18px] md:text-[20px] font-[500] leading-[28px] md:leading-[30px] mt-[30px] md:mt-[50px] text-center w-[95%] md:w-[85%] mx-auto"
-          id="lato-font"
+          data-font="lato-font"
         >
           This charity for charities seeks to replace as many functions as possible&nbsp;that
           current nonprofits pay for&nbsp;to for-profit companies with free or at-cost work from our

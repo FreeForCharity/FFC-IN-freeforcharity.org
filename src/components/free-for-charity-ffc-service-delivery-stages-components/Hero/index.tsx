@@ -3,11 +3,11 @@ import React from 'react'
 const index = () => {
   return (
     <div className="pt-[135px] pb-[50px]">
-      <div className="py-[24px] w-[90%] md:w-[80%] max-w-[1080px] mx-auto" id="aria-font">
+      <div className="py-[24px] w-[90%] md:w-[80%] max-w-[1080px] mx-auto" data-font="aria-font">
         {/* header  */}
         <div
           className="bg-[#1f2937] text-white p-8 text-center shadow-lg shadow-black/20"
-          id="aria-font"
+          data-font="aria-font"
         >
           <h1 className="text-[36px] font-[700] leading-[36px] mb-[8px] pb-[10px]">
             Free For Charity (FFC)
@@ -211,7 +211,7 @@ const index = () => {
                   </ul>
                   <pre
                     className="bg-[#111827] text-white p-[1rem] rounded-md my-4 text-[14px] leading-[24px] font-[500] whitespace-pre-wrap break-words"
-                    id="courier-font"
+                    data-font="courier-font"
                   >
                     <code>
                       {`// ** Fixes admin portal CloudFlare re-direct issue ** //

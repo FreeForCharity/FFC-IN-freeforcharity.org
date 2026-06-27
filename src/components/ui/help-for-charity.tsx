@@ -23,7 +23,10 @@ const InfoSection: React.FC<SectionProps> = ({
             {title}
           </h1>
         )}
-        <p className={`text-[18px] font-[500] text-black text-${descriptionAlign}`} id="lato-font">
+        <p
+          className={`text-[18px] font-[500] text-black text-${descriptionAlign}`}
+          data-font="lato-font"
+        >
           {description}
         </p>
       </div>

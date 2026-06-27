@@ -18,7 +18,7 @@ export default function StepsCard({ title, children, className, id }: StepsCardP
       {/* Title */}
       <h2
         className="text-center text-[30px] md:text-[35px] font-[700] leading-[46px] text-[#0567B1] mb-[10px] mt-[3px]"
-        id="cantata-font"
+        data-font="cantata-font"
       >
         {title}
       </h2>

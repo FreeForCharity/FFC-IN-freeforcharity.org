@@ -8,7 +8,7 @@ const index: React.FC = () => {
       <div className="w-[90%] md:w-[80%] mx-auto text-center">
         <h1
           className="text-[22px] sm:text-[24px] md:text-[26px] font-medium text-[#333] mb-6"
-          id="aria-font"
+          data-font="aria-font"
         >
           Ready to Get Started Now?
         </h1>

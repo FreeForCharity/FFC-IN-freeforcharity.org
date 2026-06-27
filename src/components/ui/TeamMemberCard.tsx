@@ -32,10 +32,10 @@ export default function TeamMemberCard({
 
       {/* Text Content */}
       <div className="text-center space-y-2">
-        <h3 className="text-[32px] font-[400]" id="lato-font">
+        <h3 className="text-[32px] font-[400]" data-font="lato-font">
           {name}
         </h3>
-        <p className="text-[25px] font-[400]" id="lato-font">
+        <p className="text-[25px] font-[400]" data-font="lato-font">
           {title}
         </p>
       </div>

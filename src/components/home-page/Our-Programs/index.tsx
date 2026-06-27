@@ -9,7 +9,7 @@ const index = () => {
       <div className="w-[90%] lg:px-[20px] mx-auto">
         <h2
           className="font-[400] text-[40px] lg:text-[48px]  tracking-[0] text-center mx-auto mb-[50px]"
-          id="faustina-font"
+          data-font="faustina-font"
         >
           Help for Charities
         </h2>
@@ -21,11 +21,11 @@ const index = () => {
                 <Image src={assetPath('/Svgs/FFC-Domains.svg')} alt="FFC-Domains" fill></Image>
               </div>
             </div>
-            <h3 className="text-[36px] font-[400] " id="lato-font">
+            <h3 className="text-[36px] font-[400] " data-font="lato-font">
               FFC Domains
             </h3>
           </div>
-          <p className="text-[25px] font-[400] " id="lato-font">
+          <p className="text-[25px] font-[400] " data-font="lato-font">
             Provides free .org domain names, Microsoft 365 with Outlook email, & Microsoft Teams to
             501c3 charities.
           </p>
@@ -77,11 +77,11 @@ const index = () => {
                 <Image src={assetPath('/Svgs/FFC-Hosting.svg')} alt="FFC-Domains" fill></Image>
               </div>
             </div>
-            <h3 className="text-[36px] font-[400]  " id="lato-font">
+            <h3 className="text-[36px] font-[400]  " data-font="lato-font">
               FFC Hosting
             </h3>
           </div>
-          <p className="text-[25px] font-[400]  " id="lato-font">
+          <p className="text-[25px] font-[400]  " data-font="lato-font">
             Free static site hosting for nonprofit organizations using Microsoft GitHub Pages, with
             websites built using GitHub Copilot AI:
           </p>
@@ -143,11 +143,11 @@ const index = () => {
                 <Image src={assetPath('/Svgs/FFC-Consulting.svg')} alt="FFC-Domains" fill></Image>
               </div>
             </div>
-            <h3 className="text-[36px] font-[400]  " id="lato-font">
+            <h3 className="text-[36px] font-[400]  " data-font="lato-font">
               FFC Consulting
             </h3>
           </div>
-          <p className="text-[25px] font-[400]  " id="lato-font">
+          <p className="text-[25px] font-[400]  " data-font="lato-font">
             FFC Consulting is about helping charities get the most out of their digital
             infrastructure including from other charities for charities like ours or from partners.
             We introduce charities to each major service that supports the charity mission of our
@@ -195,7 +195,7 @@ const index = () => {
         </div>
 
         <div className="lg:w-[90%] mx-auto text-center pb-[54px] pt-[20px]">
-          <h3 className="text-[36px] font-[400] pt-[22px] pb-[30px]" id="lato-font">
+          <h3 className="text-[36px] font-[400] pt-[22px] pb-[30px]" data-font="lato-font">
             Ready to Get Started Now?
           </h3>
 
@@ -203,14 +203,14 @@ const index = () => {
             <a
               href="/501c3/"
               className="rounded-[20px] border-[5px] border-[#2A6682] flex items-center justify-center text-black font-[400] text-[25px] px-[28px] py-[16px]"
-              id="lato-font"
+              data-font="lato-font"
             >
               501 (c)3 Charities Click Here To Get Started!
             </a>
             <a
               href="/pre501c3/"
               className="rounded-[20px] border-[5px] border-[#2A6682] flex items-center justify-center text-black font-[400] text-[25px] px-[28px] py-[16px]"
-              id="lato-font"
+              data-font="lato-font"
             >
               Pre-501 (c)3 Charities Click Here To Get Started!
             </a>

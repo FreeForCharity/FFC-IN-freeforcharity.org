@@ -52,7 +52,10 @@ const WorkforceDevelopmentPage = () => {
               <h3 className="text-[24px] font-[700] text-[#1D6E90] leading-[32px] mb-4">
                 Web Developer / Web Design
               </h3>
-              <p className="text-[16px] font-[500] leading-[26px] text-[#333] mb-6" id="lato-font">
+              <p
+                className="text-[16px] font-[500] leading-[26px] text-[#333] mb-6"
+                data-font="lato-font"
+              >
                 Learn how to create and manage web pages. Use the tools and applications that are
                 used every day by businesses. Learn new skills and practice them by making websites
                 and applications for charities. You will be able to learn:
@@ -62,7 +65,7 @@ const WorkforceDevelopmentPage = () => {
                   <li
                     key={skill}
                     className="flex items-center gap-3 text-[16px] font-[500] text-[#333]"
-                    id="lato-font"
+                    data-font="lato-font"
                   >
                     <div className="w-2 h-2 bg-[#b35000] rounded-full flex-shrink-0" />
                     {skill}
@@ -76,7 +79,10 @@ const WorkforceDevelopmentPage = () => {
               <h3 className="text-[24px] font-[700] text-[#1D6E90] leading-[32px] mb-4">
                 Programming
               </h3>
-              <p className="text-[16px] font-[500] leading-[26px] text-[#333] mb-6" id="lato-font">
+              <p
+                className="text-[16px] font-[500] leading-[26px] text-[#333] mb-6"
+                data-font="lato-font"
+              >
                 Build your resume and hone your skills by programming for nonprofits. Build your
                 programming profile on GitHub. Help produce solutions for problems charities face
                 every day. You will be able to:
@@ -86,7 +92,7 @@ const WorkforceDevelopmentPage = () => {
                   <li
                     key={skill}
                     className="flex items-center gap-3 text-[16px] font-[500] text-[#333]"
-                    id="lato-font"
+                    data-font="lato-font"
                   >
                     <div className="w-2 h-2 bg-[#b35000] rounded-full flex-shrink-0" />
                     {skill}
@@ -96,7 +102,7 @@ const WorkforceDevelopmentPage = () => {
             </div>
           </div>
 
-          <p className="text-[14px] text-[#666] italic mt-8 text-center" id="lato-font">
+          <p className="text-[14px] text-[#666] italic mt-8 text-center" data-font="lato-font">
             NOTE: Workforce Development Programs are only accessible to US citizens who are not dual
             citizens of any other nation.
           </p>
@@ -109,7 +115,10 @@ const WorkforceDevelopmentPage = () => {
           <h3 className="text-[24px] md:text-[30px] font-[600] text-white leading-[36px] mb-4">
             Ready to Get Started?
           </h3>
-          <p className="text-[18px] text-white font-[500] leading-[28px] mb-4" id="lato-font">
+          <p
+            className="text-[18px] text-white font-[500] leading-[28px] mb-4"
+            data-font="lato-font"
+          >
             Give a real person a text:
           </p>
           <p className="text-[20px] text-white font-[600] mb-6">
@@ -121,7 +130,7 @@ const WorkforceDevelopmentPage = () => {
           <a
             href="/volunteer/"
             className="inline-block px-[30px] py-[10px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
-            id="montserrat-font"
+            data-font="montserrat-font"
           >
             Volunteer Now
           </a>

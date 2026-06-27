@@ -13,20 +13,20 @@ const index = () => {
         <div className="pt-[24px] pb-[3px] w-[80%] mx-auto">
           <h1
             className="mt-[2px] mb-[12px] pb-[10px] text-[30px] md:text-[35px] font-[700] leading-[46px] text-[#0567B1] text-center"
-            id="cantata-font"
+            data-font="cantata-font"
           >
             HOW TO VERIFY YOUR DOMAIN WITH ICANN
           </h1>
           <p
             className="mb-[13px] w-full lg:w-[85%] mx-auto font-[500] text-[20px] leading-[30px] text-center"
-            id="raleway-font"
+            data-font="raleway-font"
           >
             Please note that you will now own this domain but several emails from the domain
             registrar system will need to be accepted as they verify your account to own the domain.
           </p>
           <p
             className="mt-[30px] font-[600] text-[27px] leading-[35px] text-center"
-            id="raleway-font"
+            data-font="raleway-font"
           >
             What to do then?
           </p>
@@ -50,10 +50,13 @@ const index = () => {
 
             {/* Text */}
             <div className="text-center md:text-left">
-              <h4 className="text-[31px] font-[700] leading-[31px] pb-[10px]" id="cantata-font">
+              <h4
+                className="text-[31px] font-[700] leading-[31px] pb-[10px]"
+                data-font="cantata-font"
+              >
                 Step 1
               </h4>
-              <p className="text-[23px] font-[500] leading-[30px]" id="raleway-font">
+              <p className="text-[23px] font-[500] leading-[30px]" data-font="raleway-font">
                 Check for emails about verification to the email address you used to register this
                 domain
               </p>
@@ -62,7 +65,7 @@ const index = () => {
         </div>
 
         {/* Bottom note */}
-        <p className="font-[500] text-[20px] leading-[30px] text-center" id="raleway-font">
+        <p className="font-[500] text-[20px] leading-[30px] text-center" data-font="raleway-font">
           There are three main things to keep in mind.
         </p>
       </div>
@@ -102,16 +105,22 @@ const index = () => {
 
             {/* Text */}
             <div className="text-center md:text-left">
-              <h4 className="text-[31px] font-[700] leading-[31px] pb-[10px]" id="cantata-font">
+              <h4
+                className="text-[31px] font-[700] leading-[31px] pb-[10px]"
+                data-font="cantata-font"
+              >
                 Step 2
               </h4>
-              <p className="text-[23px] font-[500] leading-[30px] pb-[1em]" id="raleway-font">
+              <p
+                className="text-[23px] font-[500] leading-[30px] pb-[1em]"
+                data-font="raleway-font"
+              >
                 You can manage your domain anytime by accessing our system with the account you
                 created at checkout.
               </p>
               <a
                 href={hubUrl()}
-                id="raleway-font"
+                data-font="raleway-font"
                 className="italic text-[23px] font-[500] leading-[46px] break-all"
               >
                 https://freeforcharity.org/hub
@@ -127,14 +136,14 @@ const index = () => {
           <div className="mt-[2px] mb-[12px]">
             <h2
               className="pb-[10px] text-[#333] text-[35px] font-[700] leading-[46px] text-center"
-              id="cantata-font"
+              data-font="cantata-font"
             >
               Have any Question
             </h2>
           </div>
           <p
             className="w-full md:w-[85%] mx-auto text-[27px] font-[600] leading-[35px] text-center"
-            id="raleway-font"
+            data-font="raleway-font"
           >
             If at anytime 72 hours after your order has been placed you have any questions about
             these verifications please contact
@@ -145,7 +154,7 @@ const index = () => {
         <div className="w-full lg:w-auto md:pl-[15px] flex flex-col items-center lg:items-start">
           <h2
             className="pb-[10px] mt-2 mb-[12px] text-[35px] font-[700] leading-[46px] text-center lg:text-left"
-            id="cantata-font"
+            data-font="cantata-font"
           >
             Contact <br /> Clarke Moyer
           </h2>
@@ -155,7 +164,7 @@ const index = () => {
             <a
               href="tel:+15202228104"
               className="pl-[15px] text-[28px] font-[500] leading-[42px] text-[#0567B1]"
-              id="raleway-font"
+              data-font="raleway-font"
             >
               520-222-8104
             </a>
@@ -165,7 +174,7 @@ const index = () => {
             <a
               href="mailto:clarkemoyer@freeforcharity.org"
               className="text-center pl-[15px] text-[28px] font-[500] leading-[42px] text-[#0567B1] break-all  inline-block"
-              id="raleway-font"
+              data-font="raleway-font"
             >
               clarkemoyer@freeforcharity.org
             </a>

@@ -98,19 +98,22 @@ const TestimonialSlider: React.FC = () => {
 
                   <h3
                     className="text-[22px] font-bold mb-[10px] text-[#333] leading-6 italic"
-                    id="aria-font"
+                    data-font="aria-font"
                   >
                     {t.heading}
                   </h3>
                   <p
                     className="text-[17px] font-medium text-black italic px-0 sm:px-4 md:px-8"
-                    id="aria-font"
+                    data-font="aria-font"
                   >
                     {t.text}
                   </p>
 
                   {t.name && (
-                    <p className="text-[14px] font-medium my-2 text-[#666666]" id="aria-font">
+                    <p
+                      className="text-[14px] font-medium my-2 text-[#666666]"
+                      data-font="aria-font"
+                    >
                       {t.name}
                     </p>
                   )}
@@ -121,7 +124,7 @@ const TestimonialSlider: React.FC = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <p className="text-[14px] font-medium text-[#0567B1]" id="aria-font">
+                      <p className="text-[14px] font-medium text-[#0567B1]" data-font="aria-font">
                         {t.location}
                       </p>
                     </a>

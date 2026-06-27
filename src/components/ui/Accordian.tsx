@@ -61,7 +61,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ number, title, children }
         <div
           ref={contentRef}
           className="px-4 pb-4 pt-2 text-gray-700 text-[18px] font-[500] transition-colors duration-300"
-          id="lato-font"
+          data-font="lato-font"
         >
           {children}
         </div>

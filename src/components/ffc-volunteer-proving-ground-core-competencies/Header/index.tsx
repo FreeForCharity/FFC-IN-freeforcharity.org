@@ -2,7 +2,7 @@ import React from 'react'
 
 const index = () => {
   return (
-    <div className="mb-[3rem]" id="segoe-font">
+    <div className="mb-[3rem]" data-font="segoe-font">
       <h1 className="text-[30px] md:text-[36px] font-[700] leading-[36px] text-center pb-[10px]">
         FFC Volunteer Proving Ground: Core Competencies
       </h1>

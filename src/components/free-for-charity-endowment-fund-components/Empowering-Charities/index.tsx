@@ -9,7 +9,7 @@ const Index = () => {
       <section className="py-[54px] w-[90%] md:w-[80%] mx-auto">
         <h1
           className="pt-[27px] mb-[10px] text-[32px] sm:text-[42px] md:text-[50px] text-[#111111] text-center font-[500] leading-[42px] sm:leading-[52px] md:leading-[60px] pb-[37px]"
-          id="cinzel"
+          data-font="cinzel"
         >
           Empowering Charities Through Endowment
         </h1>
@@ -32,7 +32,7 @@ const Index = () => {
           <div className="w-full md:w-[57.8%] text-center md:text-left">
             <p
               className="text-[15px] sm:text-[16px] text-[#000000a3] font-[500] leading-[26px] sm:leading-[28px]"
-              id="fauna-font"
+              data-font="fauna-font"
             >
               Our Free For Charity Domain Program has already supported over 200 charitable
               organizations, providing them with essential digital tools to enhance their outreach

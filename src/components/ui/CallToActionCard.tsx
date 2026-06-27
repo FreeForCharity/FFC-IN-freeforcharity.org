@@ -63,7 +63,10 @@ const IconTextCard: React.FC<IconTextCardProps> = ({ icon, iconLabel = 'icon', t
       </div>
 
       {/* Text */}
-      <h3 className="text-[30px] font-bold leading-[30px] text-center text-gray-900" id="lato-font">
+      <h3
+        className="text-[30px] font-bold leading-[30px] text-center text-gray-900"
+        data-font="lato-font"
+      >
         {text}
       </h3>
     </a>

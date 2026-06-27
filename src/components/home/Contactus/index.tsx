@@ -31,7 +31,7 @@ const ContactUsSection: React.FC = () => {
             <a
               href={`mailto:${contact.email}`}
               className="font-[600] text-[#0567B1] text-[18px]"
-              id="lato-font"
+              data-font="lato-font"
             >
               {contact.email}
             </a>
@@ -41,7 +41,7 @@ const ContactUsSection: React.FC = () => {
           <div className="w-full max-w-[550px]">
             <MdLocationOn className="w-[55px] h-[55px] text-[#1D6E90] mx-auto mb-4" />
             <p className="font-[600] text-[24px] text-black mb-2">Main Address</p>
-            <p className="font-[600] text-[18px] text-[#666666]" id="lato-font">
+            <p className="font-[600] text-[18px] text-[#666666]" data-font="lato-font">
               {contact.mainAddress}
             </p>
           </div>
@@ -53,7 +53,7 @@ const ContactUsSection: React.FC = () => {
             <a
               href={`tel:${contact.phone.replace(/[^0-9]/g, '')}`}
               className="font-[600] text-[#0567B1] text-[18px]"
-              id="lato-font"
+              data-font="lato-font"
             >
               {contact.phone}
             </a>
@@ -64,7 +64,7 @@ const ContactUsSection: React.FC = () => {
         <div className="w-full max-w-[550px] mx-auto">
           <MdLocationOn className="w-[55px] h-[55px] text-[#1D6E90] mx-auto mb-4" />
           <p className="font-[600] text-[24px] text-black mb-2">PA Office Address</p>
-          <p className="font-[600] text-[18px] text-[#666666]" id="lato-font">
+          <p className="font-[600] text-[18px] text-[#666666]" data-font="lato-font">
             {contact.paAddress}
           </p>
         </div>

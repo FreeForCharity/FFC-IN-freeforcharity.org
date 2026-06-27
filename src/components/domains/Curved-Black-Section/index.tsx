@@ -23,7 +23,7 @@ const Index = () => {
           <div className="w-full md:w-[48.5%] text-[15px] leading-[1.6]">
             <ul
               className="list-disc pl-[20px] text-[17px] leading-[26px] font-[500]"
-              id="raleway-font"
+              data-font="raleway-font"
             >
               <li>
                 NOTE: Save the account name and password that you set up as well as the subdomain
@@ -58,7 +58,10 @@ const Index = () => {
         </div>
 
         <div className="py-[27px]">
-          <p className="text-[14px] font-[500] leading-[24px] text-[#666] pt-[25px]" id="aria-font">
+          <p
+            className="text-[14px] font-[500] leading-[24px] text-[#666] pt-[25px]"
+            data-font="aria-font"
+          >
             DOMAIN NAME COUPON CODE Thank you for choosing us to help with your domain name and
             email setup. To get the code please complete the onboarding form for either 501c3 or
             pre-501c3 and you will see the code in the email confirmation that comes after you

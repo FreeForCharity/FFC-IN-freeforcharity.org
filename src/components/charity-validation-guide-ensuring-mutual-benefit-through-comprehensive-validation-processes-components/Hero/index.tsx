@@ -4,7 +4,7 @@ import React from 'react'
 
 export default function CharityValidationGuide() {
   return (
-    <div className="pt-40 pb-12 bg-white min-h-screen" id="aria-font">
+    <div className="pt-40 pb-12 bg-white min-h-screen" data-font="aria-font">
       <div className="w-[90%] mx-auto md:max-w-[80%]">
         <h1 className="text-[30px] font-[500] text-[#333] mb-[30px] leading-[30px]">
           Charity Validation Guide: Ensuring Mutual Benefit Through Comprehensive Validation

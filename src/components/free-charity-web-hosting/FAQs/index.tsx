@@ -47,7 +47,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
                 ? 'text-[22px] text-[#0567B1]'
                 : 'text-[18px] text-black'
           }`}
-          id="cantata-font"
+          data-font="cantata-font"
         >
           {title}
         </span>
@@ -73,7 +73,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
           className={`px-4 pb-4 pt-2 font-[500] transition-colors duration-300 ${
             small ? 'text-[16px] leading-[26px]' : 'text-[18px] leading-[29px]'
           }`}
-          id="raleway-font"
+          data-font="raleway-font"
         >
           {children}
         </div>
@@ -104,7 +104,7 @@ const AccordionLayout = () => {
         <div className="py-[24px]">
           <h1
             className="mt-[2px] mb-[12px] pb-[10px] text-[31px] font-[700] leading-[31px] text-[#0567B1] text-center"
-            id="cantata-font"
+            data-font="cantata-font"
           >
             FAQS
           </h1>

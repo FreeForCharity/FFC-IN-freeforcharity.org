@@ -58,7 +58,7 @@ const HowToOrderDomain = () => {
         <div className="pb-[3px] w-[80%] max-w-6xl mx-auto mt-[2px] pt-[30px]">
           <h2
             className="text-center mb-[16px] text-[30px] md:text-[35px] text-[#0567B1] font-[700] leading-[46px]"
-            id="cantata-font"
+            data-font="cantata-font"
           >
             HOW TO ORDER YOUR DOMAIN NAME
           </h2>

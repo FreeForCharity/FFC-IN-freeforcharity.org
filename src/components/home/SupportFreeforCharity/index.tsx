@@ -17,7 +17,7 @@ const SupportFreeForCharity: React.FC = () => {
             </h1>
             <p
               className="w-full max-w-[650px] font-[500] text-[18px] leading-[27px] text-black"
-              id="montserrat-font"
+              data-font="montserrat-font"
             >
               By donating you help drive our mission and allow us to support more charities with our
               Domain, Website, and other services.
@@ -35,7 +35,7 @@ const SupportFreeForCharity: React.FC = () => {
           <div>
             <h1
               className="text-center mb-10 font-[600] text-[18px] leading-[27px] text-black px-1"
-              id="montserrat-font"
+              data-font="montserrat-font"
             >
               LOOKING TO GET FREE SKILLS TRAINING AND HELP CHARITIES AT THE SAME TIME? START A
               TRAINING PROGRAM.
@@ -52,7 +52,7 @@ const SupportFreeForCharity: React.FC = () => {
           <div>
             <h1
               className="text-center mb-10 font-[600] text-[18px] leading-[27px] text-black px-1"
-              id="montserrat-font"
+              data-font="montserrat-font"
             >
               CHARITY IN NEED OF HELP? GET FREE SUPPORT WITH YOUR ONLINE AND OFFLINE CRITICAL
               PROJECTS.
@@ -69,7 +69,7 @@ const SupportFreeForCharity: React.FC = () => {
           <div>
             <h1
               className="text-center mb-10 font-[600] text-[18px] leading-[27px] text-black px-1"
-              id="montserrat-font"
+              data-font="montserrat-font"
             >
               ARE YOU A BUSINESS OR INDIVIDUAL LOOKING TO DONATE OR PARTNER WITH FREE FOR CHARITY?
             </h1>

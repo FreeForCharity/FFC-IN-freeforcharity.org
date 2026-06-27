@@ -9,7 +9,10 @@ export const metadata: Metadata = {
 
 export default function CpanelBackupSop() {
   return (
-    <div className="lg:min-h-screen w-[90%] md:w-[80%] max-w-[1080px] mx-auto" id="aria-font">
+    <div
+      className="lg:min-h-screen w-[90%] md:w-[80%] max-w-[1080px] mx-auto"
+      data-font="aria-font"
+    >
       <div className="pt-[138px] pb-[60px]">
         <p className="text-[14px] font-[500] text-[#666] uppercase tracking-wider mb-[10px]">
           Internal SOP &mdash; FFC Admin

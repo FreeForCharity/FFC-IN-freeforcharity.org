@@ -32,7 +32,7 @@ const Index = () => {
       <div className="w-[90%] mx-auto py-[27px] mb-[60px] px-[20px] max-w-[1280px]">
         <h2
           className="font-[400] text-[40px] lg:text-[48px] leading-[100%] tracking-[0] text-center mx-auto mb-[60px]"
-          id="faustina-font"
+          data-font="faustina-font"
         >
           Support Free For Charity
         </h2>
@@ -42,7 +42,7 @@ const Index = () => {
           <div className="flex flex-col w-full lg:w-[50%]">
             <p
               className="mb-[20px] font-[400] text-[25px] leading-[150%] tracking-[0] text-center lg:text-left"
-              id="lato-font"
+              data-font="lato-font"
             >
               By donating you help drive our mission and allow us to support more charities with our
               Domain, Website, and other services.

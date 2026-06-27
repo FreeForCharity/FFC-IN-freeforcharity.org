@@ -40,7 +40,7 @@ const EducationalSitesSection = () => {
         {/* Heading */}
         <h2
           className="text-[40px] font-[700] text-white text-center leading-[44px] mb-4 [font-variant:small-caps] tracking-[1px]"
-          id="lato-font"
+          data-font="lato-font"
         >
           Educational Sites for
           <span className="text-[#b35000]"> Everyone</span>
@@ -68,7 +68,7 @@ const EducationalSitesSection = () => {
               <div className="flex-1">
                 <h3
                   className="text-[24px] font-[700] text-white leading-[31px] pb-[10px]"
-                  id="faustina-font"
+                  data-font="faustina-font"
                 >
                   {card.title}
                 </h3>
@@ -87,7 +87,7 @@ const EducationalSitesSection = () => {
                     shadow-md leading-[31px] font-[600]
                     hover:shadow-[0px_12px_18px_-6px_#b35000]
                   "
-                  id="montserrat-font"
+                  data-font="montserrat-font"
                 >
                   <span className="transition-all duration-300 group-hover:translate-x-1">
                     Check Here!

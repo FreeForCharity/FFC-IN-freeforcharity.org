@@ -47,7 +47,7 @@ const ServiceDirectoryPage = () => {
             ))}
           </div>
 
-          <div className="space-y-6" id="lato-font">
+          <div className="space-y-6" data-font="lato-font">
             <p className="text-[18px] font-[500] leading-[28px] text-[#333]">
               Every nonprofit organization needs help from time to time and there is no reason why
               they can&apos;t ask for it through the various services and consultants that are out
@@ -98,14 +98,17 @@ const ServiceDirectoryPage = () => {
           <h2 className="text-[28px] md:text-[36px] font-[700] text-white leading-[40px] mb-4">
             Want to Be Listed in the Directory?
           </h2>
-          <p className="text-[18px] text-white font-[500] leading-[28px] mb-6" id="lato-font">
+          <p
+            className="text-[18px] text-white font-[500] leading-[28px] mb-6"
+            data-font="lato-font"
+          >
             For more information about Free for Charity or to obtain information about being added
             to the directory, please contact us.
           </p>
           <a
             href="/contact-us/"
             className="inline-block px-[30px] py-[10px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
-            id="montserrat-font"
+            data-font="montserrat-font"
           >
             Contact Us
           </a>

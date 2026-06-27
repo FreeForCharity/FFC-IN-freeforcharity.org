@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const index = () => {
   return (
     <div>
-      <div className="" id="segoe-font">
+      <div className="" data-font="segoe-font">
         <Hero />
       </div>
     </div>

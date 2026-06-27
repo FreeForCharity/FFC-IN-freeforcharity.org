@@ -11,7 +11,7 @@ export default function TermsOfService() {
   return (
     <div className="pt-[130px] pb-[54px]">
       <div className="py-[27px] w-[90%] md:w-[80%] mx-auto">
-        <div id="aria-font">
+        <div data-font="aria-font">
           {/* Effective Date */}
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
             <em>Effective Date: 11-20-2024</em>

@@ -11,7 +11,7 @@ const Mission: React.FC = () => {
 
         <p
           className="font-bold text-[16px] sm:text-[17px] md:text-[18px] leading-[26px] sm:leading-[27px] my-3 text-black px-2 sm:px-0"
-          id="lato-font"
+          data-font="lato-font"
         >
           Reduce costs and increase revenues for nonprofits; putting that money back into their
           charitable mission where it belongs.
@@ -19,7 +19,7 @@ const Mission: React.FC = () => {
 
         <p
           className="font-medium text-[16px] sm:text-[17px] md:text-[18px] leading-[26px] sm:leading-[27px] text-black px-2 sm:px-0"
-          id="lato-font"
+          data-font="lato-font"
         >
           This charity for charities seeks to replace as many functions as possible that current
           nonprofits pay for to for-profit companies with free or at cost work from our campus, on

@@ -66,7 +66,7 @@ const FreeTrainingProgramsPage = () => {
 
           <p
             className="text-[18px] font-[500] leading-[28px] text-[#333] text-center mb-8"
-            id="lato-font"
+            data-font="lato-font"
           >
             At Free for Charity the projects you will work on while training and expanding your
             skills will help both Free for Charity directly and the assisted charities that we work
@@ -77,14 +77,14 @@ const FreeTrainingProgramsPage = () => {
             <div className="bg-white rounded-[10px] shadow-[0px_2px_12px_0px_rgba(0,0,0,0.08)] p-6 text-center">
               <div className="text-[40px] mb-2">&#127891;</div>
               <h3 className="text-[18px] font-[700] text-[#1D6E90] mb-2">You Win</h3>
-              <p className="text-[15px] font-[500] text-[#333]" id="lato-font">
+              <p className="text-[15px] font-[500] text-[#333]" data-font="lato-font">
                 Get training and skills in real work needed by for-profit and nonprofits alike.
               </p>
             </div>
             <div className="bg-white rounded-[10px] shadow-[0px_2px_12px_0px_rgba(0,0,0,0.08)] p-6 text-center">
               <div className="text-[40px] mb-2">&#10084;&#65039;</div>
               <h3 className="text-[18px] font-[700] text-[#1D6E90] mb-2">Charities Win</h3>
-              <p className="text-[15px] font-[500] text-[#333]" id="lato-font">
+              <p className="text-[15px] font-[500] text-[#333]" data-font="lato-font">
                 Instead of your work never being seen again after training, your projects are all
                 real-world things needed today.
               </p>
@@ -92,7 +92,7 @@ const FreeTrainingProgramsPage = () => {
             <div className="bg-white rounded-[10px] shadow-[0px_2px_12px_0px_rgba(0,0,0,0.08)] p-6 text-center">
               <div className="text-[40px] mb-2">&#127775;</div>
               <h3 className="text-[18px] font-[700] text-[#1D6E90] mb-2">FFC Wins</h3>
-              <p className="text-[15px] font-[500] text-[#333]" id="lato-font">
+              <p className="text-[15px] font-[500] text-[#333]" data-font="lato-font">
                 Free for Charity captures your skills and motivation to bring efficiencies to the
                 nonprofit industry as a whole.
               </p>
@@ -121,7 +121,7 @@ const FreeTrainingProgramsPage = () => {
                   </span>
                 </div>
                 <p className="text-[16px] font-[600] text-[#555] italic mb-4">{program.subtitle}</p>
-                <div className="space-y-4" id="lato-font">
+                <div className="space-y-4" data-font="lato-font">
                   <p className="text-[16px] font-[500] leading-[26px] text-[#333]">
                     {program.description}
                   </p>
@@ -137,7 +137,7 @@ const FreeTrainingProgramsPage = () => {
                 <a
                   href="/volunteer/"
                   className="inline-block mt-6 px-[24px] py-[8px] text-white border border-[#b35000] rounded-[10px] text-[16px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
-                  id="montserrat-font"
+                  data-font="montserrat-font"
                 >
                   Sign Up Now
                 </a>

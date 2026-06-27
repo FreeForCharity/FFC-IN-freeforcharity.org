@@ -38,7 +38,7 @@ export default function TestimonialSlider() {
       <div className="w-[90%] md:w-[85%] max-w-[1300px] mx-auto text-center">
         <h1
           className="mt-[2px] mb-[42px] pb-[10px] text-[31px] font-[700] leading-[31px] text-[#0567B1] text-center"
-          id="cantata-font"
+          data-font="cantata-font"
         >
           Client Testimonials
         </h1>
@@ -80,7 +80,7 @@ export default function TestimonialSlider() {
                 >
                   <p
                     className="text-[16px] leading-[25px] sm:text-[17px] sm:leading-[27px] font-[400] w-full"
-                    id="raleway-font"
+                    data-font="raleway-font"
                   >
                     {testimonial.quote}
                   </p>
@@ -88,13 +88,13 @@ export default function TestimonialSlider() {
                   <div className="mt-5">
                     <h4
                       className="text-[22px] leading-[22px] font-[500] pb-[10px]"
-                      id="raleway-font"
+                      data-font="raleway-font"
                     >
                       {testimonial.author}
                     </h4>
                     <p
                       className="text-[14px] font-[500] leading-[14px] text-[#fff]"
-                      id="raleway-font"
+                      data-font="raleway-font"
                     >
                       {testimonial.role}
                     </p>

@@ -53,7 +53,10 @@ const Index = () => {
               Volunteer Match (Free basic account paid upgrades)
             </h3>
 
-            <div className="text-[18px] leading-[24px] font-[500] text-[#666]" id="lato-font">
+            <div
+              className="text-[18px] leading-[24px] font-[500] text-[#666]"
+              data-font="lato-font"
+            >
               The best volunteer sourcing tool. Links with linkedin.com, your website, and many
               other sources creating a job board for your charities needs. Create a profile and post
               offers for all your needs.
@@ -65,7 +68,7 @@ const Index = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="relative group inline-flex items-center justify-center gap-2 mt-[25px] px-[30px] py-[6px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] transition-all duration-300 ease-in-out shadow-md leading-[31px] font-[600] hover:shadow-[0px_12px_18px_-6px_#b35000]"
-              id="montserrat-font"
+              data-font="montserrat-font"
             >
               <span className="transition-all duration-300 group-hover:translate-x-1">
                 Get Started
@@ -95,7 +98,10 @@ const Index = () => {
               FreeForCharity (No costs for anything we directly provide … really)
             </h3>
 
-            <div className="text-[18px] leading-[24px] font-[500] text-[#666]" id="lato-font">
+            <div
+              className="text-[18px] leading-[24px] font-[500] text-[#666]"
+              data-font="lato-font"
+            >
               My personal charity focused on bridging the gaps between the big players in the
               charity for charities section. Focus is on IT Project Management support and other
               business level support. Free For Charity leverages and simplifies the plethora of
@@ -106,7 +112,7 @@ const Index = () => {
             <Link
               href="/"
               className="relative group inline-flex items-center justify-center gap-2 mt-[25px] px-[30px] py-[6px] border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] transition-all duration-300 ease-in-out text-white shadow-md leading-[31px] font-[600] hover:shadow-[0px_12px_18px_-6px_#b35000]"
-              id="montserrat-font"
+              data-font="montserrat-font"
             >
               <span className="transition-all duration-300 group-hover:translate-x-1">
                 Get Started

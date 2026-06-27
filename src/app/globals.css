@@ -56,37 +56,37 @@ body {
 #header {
   font-family: 'Open Sans', sans-serif !important;
 }
-#aria-font {
+[data-font='aria-font'] {
   font-family: 'Open Sans', sans-serif !important;
 }
-#lato-font {
+[data-font='lato-font'] {
   font-family: 'Lato', sans-serif !important;
 }
-#montserrat-font {
+[data-font='montserrat-font'] {
   font-family: 'Montserrat', sans-serif !important;
 }
-#abeezee {
+[data-font='abeezee'] {
   font-family: 'ABeeZee', sans-serif !important;
 }
-#segoe-font {
+[data-font='segoe-font'] {
   font-family: 'Segoe UI', sans-serif !important;
 }
-#cinzel {
+[data-font='cinzel'] {
   font-family: 'Cinzel', sans-serif !important;
 }
-#fauna-font {
+[data-font='fauna-font'] {
   font-family: 'Fauna One', sans-serif !important;
 }
-#cantata-font {
+[data-font='cantata-font'] {
   font-family: 'Cantata One', sans-serif !important;
 }
-#raleway-font {
+[data-font='raleway-font'] {
   font-family: 'Raleway', sans-serif !important;
 }
-#courier-font {
+[data-font='courier-font'] {
   font-family: 'Courier Prime', sans-serif !important;
 }
-#faustina-font {
+[data-font='faustina-font'] {
   font-family: 'Faustina', sans-serif !important;
 }
 

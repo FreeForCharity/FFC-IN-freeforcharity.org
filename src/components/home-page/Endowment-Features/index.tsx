@@ -8,7 +8,7 @@ const Home: React.FC = () => {
         <div>
           <h2
             className="font-[400] text-[40px] lg:text-[48px] leading-[100%] tracking-[0] text-center mx-auto mb-[30px]"
-            id="faustina-font"
+            data-font="faustina-font"
           >
             Free For Charity Endowment Features
           </h2>

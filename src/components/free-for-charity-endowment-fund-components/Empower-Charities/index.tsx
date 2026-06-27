@@ -45,7 +45,10 @@ const DonationSection: FC = () => {
     <div className="bg-[#003566] py-[54px]">
       <div className="w-[90%] md:w-[80%] mx-auto py-[27px]">
         <div className="mb-[10px]">
-          <h3 className="text-[32px] font-[500] leading-[42px] pb-[10px] text-white" id="cinzel">
+          <h3
+            className="text-[32px] font-[500] leading-[42px] pb-[10px] text-white"
+            data-font="cinzel"
+          >
             Empower Charities with Your Generosity
           </h3>
         </div>
