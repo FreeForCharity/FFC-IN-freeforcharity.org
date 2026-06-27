@@ -227,6 +227,12 @@ jobs:
           # workflow_dispatch input for it narrows attack surface -- nobody
           # can re-point a dispatch at an unrelated KV name.
           KV_NAME: kv-ffc-admin-prod-cbm
+          # KV secret name for the Cloudflare API token used by the post-deploy
+          # edge-cache purge. Fetched defensively below — if the secret is
+          # absent (or this name is wrong), the purge step logs a warning and
+          # skips; it NEVER fails the deploy. Correct this one value if the
+          # token lives under a different name.
+          CF_KV_SECRET_NAME: wr-all-cbm-cloudflare-ffc-api-token
         run: |
           $ErrorActionPreference = 'Stop'
           . ./.github/scripts/Get-KvSecret.ps1
@@ -237,7 +243,6 @@ jobs:
           $ftpPort = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-port'
           $ftpUser = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-user'
           $ftpPw   = Get-KvSecret -VaultName $vault -Name 'wr-all-cbm-cpanel-ffc-interserver-ftp-password'
-
           # Mask everything that could fingerprint or authenticate. ftp-port
           # is left unmasked because it is a low-entropy small integer.
           Write-Host "::add-mask::$ftpHost"
@@ -248,6 +253,33 @@ jobs:
           "CPANEL_FTP_PORT=$ftpPort"     | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           "CPANEL_FTP_USER=$ftpUser"     | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           "CPANEL_FTP_PASSWORD=$ftpPw"   | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+          # APIM gateway subscription key — used by the post-mirror parity check
+          # (Fileman/list_files via the APIM gateway). Same secret the snapshot
+          # and deploy-verify workflows use. DEFENSIVE: if it can't be read the
+          # parity check skips (it is defense-in-depth, not the live backstop) —
+          # never fail the deploy on a control-plane credential hiccup.
+          try {
+            $apimKey = Get-KvSecret -VaultName $vault -Name 'read-all-ffc-apim-gateway-subscription-key'
+            Write-Host "::add-mask::$apimKey"
+            "APIM_KEY=$apimKey" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          } catch {
+            Write-Host "::warning::APIM gateway key unavailable — post-mirror parity check will be skipped. $($_.Exception.Message)"
+            "APIM_KEY=" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          }
+
+          # Cloudflare token — DEFENSIVE: a missing/renamed secret must not fail
+          # the deploy. On any error, leave CF_API_TOKEN empty so the purge step
+          # cleanly skips with a warning.
+          try {
+            $cfToken = Get-KvSecret -VaultName $vault -Name $env:CF_KV_SECRET_NAME.Trim()
+            Write-Host "::add-mask::$cfToken"
+            "CF_API_TOKEN=$cfToken" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+            Write-Host "Cloudflare token loaded from KV ($($env:CF_KV_SECRET_NAME))."
+          } catch {
+            Write-Host "::warning::Cloudflare token '$($env:CF_KV_SECRET_NAME)' not found in $vault — post-deploy edge purge will be skipped. $($_.Exception.Message)"
+            "CF_API_TOKEN=" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+          }
 
       - name: Upload out/ to ~/public_html/ (live apex docroot)
         if: ${{ steps.freshness.outputs.superseded != 'true' }}
@@ -365,6 +397,64 @@ jobs:
             exit 1
           fi
 
+      # Post-mirror parity check (defense-in-depth). lftp's exit code can mask
+      # non-fatal per-file errors (and the `| tail -200` pipe hides it), so a
+      # partial/truncated mirror could slip past as "success". List the live
+      # docroot via the APIM Fileman/list_files UAPI and assert every top-level
+      # entry the build produced actually landed, plus the key files. A
+      # confirmed mismatch fails the job (→ incident alert). If the API itself
+      # is unreachable we WARN and skip — APIM flakiness must not fail a healthy
+      # deploy (the smoke suite is the live backstop).
+      - name: Verify mirror landed (parity check vs out/)
+        if: ${{ steps.freshness.outputs.superseded != 'true' }}
+        env:
+          APIM_BASE: ${{ secrets.APIM_GATEWAY_URL }}
+        run: |
+          # NOT `set -e`: every control-plane error here (unreachable APIM,
+          # non-JSON/empty response, jq parse miss) must WARN-and-skip, never
+          # fail an otherwise-healthy deploy. The ONLY hard failure is an
+          # explicit `exit 1` on a confirmed partial mirror below. (Relying on
+          # `set -e` being suppressed inside `if` conditions for the jq
+          # pipelines is too subtle for a production deploy path.)
+          set -uo pipefail
+          base="${APIM_BASE:-https://apim-ffc-gateway-prod.azure-api.net}"
+          if [ -z "${APIM_KEY:-}" ]; then
+            echo "::warning::APIM key unavailable — skipping post-mirror parity check (smoke suite still verifies the live site)."
+            exit 0
+          fi
+          api(){ curl -sS --max-time 45 -H "Ocp-Apim-Subscription-Key: ${APIM_KEY}" -H 'Accept: application/json' "$@"; }
+          listing=$(api --get --data-urlencode "dir=public_html" --data-urlencode "show_hidden=1" \
+                      "${base}/cpanel/execute/Fileman/list_files" || true)
+          # Defensive parse: `|| true` so a non-JSON/empty body can't abort the step.
+          status=$(printf '%s' "$listing" | jq -r '.status // empty' 2>/dev/null || true)
+          if [ "$status" != "1" ]; then
+            echo "::warning::Could not list public_html via APIM — skipping parity check (not failing a healthy deploy on a control-plane hiccup)."
+            exit 0
+          fi
+          printf '%s' "$listing" | jq -r '.data[]?.file' 2>/dev/null | LC_ALL=C sort > remote_entries.txt || true
+          # Empty/odd listing despite status=1 — can't verify, so skip rather
+          # than let comm report every local entry as "missing" (false failure).
+          if [ ! -s remote_entries.txt ]; then
+            echo "::warning::APIM returned an empty file listing for public_html — skipping parity check (the smoke suite is the live backstop)."
+            exit 0
+          fi
+          # Top-level entries the build produced (these MUST all be present remotely).
+          find out -maxdepth 1 -mindepth 1 -printf '%f\n' | LC_ALL=C sort > local_entries.txt
+          missing=$(comm -23 local_entries.txt remote_entries.txt || true)
+          if [ -n "$missing" ]; then
+            echo "::error::Mirror parity FAILED — these top-level entries from out/ are missing in public_html (partial mirror?):"
+            printf '%s\n' "$missing" | sed 's/^/  - /'
+            exit 1
+          fi
+          # Key files must exist regardless.
+          for must in index.html 404.html .htaccess _next; do
+            if ! grep -qxF "$must" remote_entries.txt; then
+              echo "::error::Mirror parity FAILED — required entry '$must' is absent from public_html."
+              exit 1
+            fi
+          done
+          echo "Parity OK: all $(grep -c . local_entries.txt) build entries present in public_html, key files verified."
+
       - name: Deploy summary
         if: ${{ steps.freshness.outputs.superseded != 'true' }}
         env:
@@ -403,6 +493,45 @@ jobs:
             -w "Home: %{http_code} on %{url_effective} in %{time_total}s\n" \
             "${BASE_URL%/}/"
           npm run smoke-test
+
+      # Purge the Cloudflare edge cache after a verified-good deploy so visitors
+      # see the new build immediately instead of waiting out the edge TTL. The
+      # deploy/smoke steps send `Cache-Control: no-cache` (a request directive
+      # Cloudflare can ignore for cached HTML), so without this purge the origin
+      # is fresh but the edge can serve stale pages.
+      #
+      # NON-FATAL by design: the site is already live and healthy at the origin,
+      # so a purge hiccup (or an absent token) must NEVER mark the deploy failed.
+      # Only runs after the upload + smoke succeeded and this commit wasn't
+      # superseded. The zone id is resolved at runtime from the token, so no
+      # zone-id secret is stored.
+      - name: Purge Cloudflare cache (non-fatal)
+        if: ${{ steps.freshness.outputs.superseded != 'true' && (github.event_name == 'workflow_run' || inputs.run_smoke) }}
+        env:
+          ZONE_NAME: freeforcharity.org
+        run: |
+          set -uo pipefail   # NOT -e: this step must never fail the deploy
+          note() { echo "$1"; echo "$1" >> "$GITHUB_STEP_SUMMARY"; }
+          echo "### Cloudflare edge purge" >> "$GITHUB_STEP_SUMMARY"
+          if [ -z "${CF_API_TOKEN:-}" ]; then
+            note ":warning: Skipped — no Cloudflare API token in Key Vault (set the secret or fix CF_KV_SECRET_NAME). Origin is live; edge cache will refresh on its own TTL."
+            exit 0
+          fi
+          cf() { curl -sS --max-time 30 -H "Authorization: Bearer ${CF_API_TOKEN}" -H 'Content-Type: application/json' "$@"; }
+          zresp=$(cf --get --data-urlencode "name=${ZONE_NAME}" "https://api.cloudflare.com/client/v4/zones" || true)
+          zid=$(printf '%s' "$zresp" | jq -r '.result[0].id // empty' 2>/dev/null)
+          if [ -z "$zid" ]; then
+            note ":warning: Could not resolve Cloudflare zone for ${ZONE_NAME} (token scope/zone?). Skipping purge; origin is live."
+            exit 0
+          fi
+          presp=$(cf -X POST "https://api.cloudflare.com/client/v4/zones/${zid}/purge_cache" --data '{"purge_everything":true}' || true)
+          if [ "$(printf '%s' "$presp" | jq -r '.success // false' 2>/dev/null)" = "true" ]; then
+            note ":white_check_mark: Purged Cloudflare cache for ${ZONE_NAME}."
+          else
+            errs=$(printf '%s' "$presp" | jq -rc '.errors // empty' 2>/dev/null)
+            note ":warning: Cloudflare purge did not confirm success (${errs:-no detail}). Origin is live; edge will refresh on TTL."
+          fi
+          exit 0
 
       # High-priority alert: if ANY step above failed (build, credential
       # fetch, lftp upload, or the post-deploy smoke), open/append an incident
@@ -506,3 +635,47 @@ jobs:
               labels: ['deploy-failure', 'incident', 'production-health'],
             })
             console.log('Created high-priority deploy-failure issue')
+
+      # Lifecycle close: when a deploy + smoke fully succeed, auto-close any open
+      # deploy-failure incident so the tracker reflects that production
+      # recovered. This is the other half of the alert loop — without it an
+      # incident lingers open after the next green deploy (which is why #267 had
+      # to be closed by hand). Only on a real, non-superseded success.
+      - name: Close open deploy-failure incident on success
+        if: ${{ success() && steps.freshness.outputs.superseded != 'true' && (github.event_name == 'workflow_run' || inputs.run_smoke) }}
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+            const sha = (context.payload.workflow_run && context.payload.workflow_run.head_sha) || context.sha
+            const shortSha = sha.slice(0, 8)
+            const date = new Date().toISOString().slice(0, 10)
+            // Same PR-filtered dedupe predicate as the open path: only act on
+            // real issues, never a PR that happens to carry the label.
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'deploy-failure',
+              state: 'open',
+            })
+            const openIssues = existing.data.filter((i) => !i.pull_request)
+            if (openIssues.length === 0) {
+              console.log('No open deploy-failure incident to close.')
+              return
+            }
+            for (const issue of openIssues) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `✅ Production recovered — deploy + smoke passed on ${date} for \`${shortSha}\`: ${runUrl}\n\nAuto-closing this incident.`,
+              })
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed',
+                state_reason: 'completed',
+              })
+              console.log(`Closed deploy-failure issue #${issue.number}`)
+            }

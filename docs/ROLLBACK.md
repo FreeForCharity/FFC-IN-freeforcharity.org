@@ -165,6 +165,21 @@ The deploy workflow auto-opens a `🚨 HIGH … deploy/smoke FAILED`
 incident issue on failure — fold the post-mortem into that issue if one
 exists.
 
+### Incident alert lifecycle
+
+`deploy-cpanel.yml` manages the incident automatically:
+
+- **Open / dedupe** — on any deploy or smoke failure it opens a
+  `deploy-failure` issue, or appends a comment to the open one (so a
+  flapping deploy doesn't spam the tracker).
+- **Auto-close** — when a later deploy + smoke fully succeed, it comments
+  with the green run and closes the open `deploy-failure` issue. You don't
+  close it by hand.
+
+To verify the loop end-to-end after a change: dispatch the deploy with a
+deliberately bad `public_url_base` (smoke fails) → confirm an issue opens;
+run a normal deploy → confirm it auto-closes.
+
 ---
 
 ## Reference
