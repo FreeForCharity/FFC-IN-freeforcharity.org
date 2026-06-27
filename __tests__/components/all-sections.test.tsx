@@ -238,15 +238,14 @@ const sectionComponents: [string, string][] = [
   ],
   ['pre501c3-components/Faqs', '../../src/components/pre501c3-components/Faqs/index'],
   ['pre501c3-components/charity', '../../src/components/pre501c3-components/charity/index'],
-  ['sentry-init', '../../src/components/sentry-init/index'],
   ['techstack-components/Hero', '../../src/components/techstack-components/Hero/index'],
   ['volunteer/Free-For-Charity', '../../src/components/volunteer/Free-For-Charity/index'],
 ]
 
 // Side-effect-only components that intentionally render no DOM (they exist
-// to run an effect, e.g. analytics/error-tracking init). They must still
-// mount without throwing, but are exempt from the non-empty-DOM assertion.
-const rendersNull = new Set(['sentry-init'])
+// only to run an effect) would be exempt from the non-empty-DOM assertion.
+// None currently, but the guard is kept so adding one later is a one-liner.
+const rendersNull = new Set<string>()
 
 describe('Section components — render + a11y', () => {
   it.each(sectionComponents)(
