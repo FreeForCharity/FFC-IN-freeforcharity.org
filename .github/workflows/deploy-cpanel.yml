@@ -1,34 +1,30 @@
 name: Deploy to InterServer cPanel (production)
 
-# Builds the Next.js static export and uploads it to ~/public_html_next/
-# on the InterServer cPanel host, alongside (not over) the live docroot at
-# ~/public_html/ and the WHMCS instance at ~/public_html/hub/.
+# Builds the Next.js static export and mirrors it into ~/public_html/ — the
+# LIVE apex docroot — on the InterServer cPanel host. The apex cutover
+# (cpanel-apex-cutover.yml) mirrored the static site straight into
+# ~/public_html (the docroot was NOT swapped to a sibling dir), and WHMCS
+# lives at ~/public_html/hub as a real directory, so this deploy targets
+# ~/public_html and excludes the same proven /hub-safe keeper set (hub,
+# cgi-bin, .well-known, the parked-domain docroot, PHP configs, dotfiles).
 #
 # Credential model: GH OIDC -> Azure -> Key Vault (kv-ffc-admin-prod-cbm) ->
-# MAIN cPanel FTP creds -> lftp mirror over FTPS (AUTH TLS) ->
-# ~/public_html_next/. It reuses the
-# existing `cpanel-staging` GitHub Environment (same Azure federated
-# credential + WR_ALL_* env secrets proven by deploy-cpanel-staging.yml), so
-# NO new environment, federated credential, or secret is required. There are
-# no raw FTP_* repository secrets (the old SamKirkland/FTP-Deploy-Action
-# model was retired in favour of KV-OIDC, so no plaintext FTP password ever
-# lives in GitHub).
+# MAIN cPanel FTP creds -> lftp mirror over FTPS (AUTH TLS) -> ~/public_html.
+# It reuses the existing `cpanel-staging` GitHub Environment (same Azure
+# federated credential + WR_ALL_* env secrets proven by
+# deploy-cpanel-staging.yml), so NO new environment, federated credential, or
+# secret is required. There are no raw FTP_* repository secrets (the old
+# SamKirkland/FTP-Deploy-Action model was retired in favour of KV-OIDC, so no
+# plaintext FTP password ever lives in GitHub).
 #
-# Why the MAIN account: the `deploy-prod` FTP login is chrooted to the LIVE
-# ~/public_html/ docroot (verified 2026-06-20) and cannot reach the sibling
-# ~/public_html_next/ parking dir. The main cPanel account is homed at the
-# account root, so it can create/write ~/public_html_next/. deploy-staging is
-# jailed to the staging docroot. Re-verify any account with the reusable
-# "Verify cPanel FTP credential (read-only)" workflow.
+# Why the MAIN account: it is homed at the account root, so it can write
+# ~/public_html. Re-verify any account with the reusable "Verify cPanel FTP
+# credential (read-only)" workflow.
 #
-# POST-CUTOVER: the apex docroot has been swapped to ~/public_html_next/,
-# so this upload IS the live site. The workflow auto-deploys on every merge
-# to main (via workflow_run, after "CI - Build and Test" passes) and runs the
-# live-apex smoke suite afterward. Manual workflow_dispatch is retained for
-# forced/ad-hoc deploys, where the run_smoke/delete_remote inputs still apply.
-#
-# The /hub WHMCS symlink is excluded from the lftp mirror (see the Upload
-# step), so a clean --delete mirror never removes the billing portal.
+# The workflow auto-deploys on every merge to main (via workflow_run, after
+# "CI - Build and Test" passes) and runs the live-apex smoke suite afterward.
+# Manual workflow_dispatch is retained for forced/ad-hoc deploys, where the
+# run_smoke/delete_remote inputs still apply.
 #
 # === Prerequisites -- all already in place (no admin setup remaining) ===
 #   * GitHub Environment `cpanel-staging` with WR_ALL_FFC_AZURE_KV_CLIENT_ID
@@ -53,12 +49,12 @@ on:
   workflow_dispatch:
     inputs:
       delete_remote:
-        description: 'Remove remote files in public_html_next not in the local build (lftp --delete). True = clean mirror; False = additive upload.'
+        description: 'Remove remote files in public_html not in the local build (lftp --delete). True = clean mirror; False = additive upload.'
         required: false
         default: true
         type: boolean
       run_smoke:
-        description: 'Run the full live-apex smoke suite after upload. Only set true AFTER the apex docroot has been cut over to public_html_next.'
+        description: 'Run the full live-apex smoke suite against production after upload.'
         required: false
         default: false
         type: boolean
@@ -80,7 +76,7 @@ concurrency:
 
 jobs:
   build-and-deploy:
-    name: Build + deploy to ~/public_html_next/
+    name: Build + deploy to ~/public_html/ (live apex)
     runs-on: ubuntu-latest
     environment: cpanel-staging
     # Auto-trigger: only deploy when the CI run that fired this succeeded
@@ -203,7 +199,15 @@ jobs:
           # to *.html, and deploy-cpanel-staging.yml asserts the same. Without
           # it the upload would "succeed" but the site would be broken.
           test -f out/.htaccess
-          echo "out/ ready, $(find out -type f | wc -l) files"
+          # Floor on file count: the mirror does a --delete against the LIVE
+          # docroot, so a truncated/partial build must NOT proceed (it would
+          # wipe the live site). A healthy export is ~hundreds of files.
+          count=$(find out -type f | wc -l)
+          if [ "$count" -lt 50 ]; then
+            echo "::error::out/ has only $count files — suspiciously small build, refusing to deploy."
+            exit 1
+          fi
+          echo "out/ ready, $count files"
 
       - name: Azure login (OIDC)
         if: ${{ steps.freshness.outputs.superseded != 'true' }}
@@ -243,7 +247,7 @@ jobs:
           "CPANEL_FTP_USER=$ftpUser"     | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
           "CPANEL_FTP_PASSWORD=$ftpPw"   | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
-      - name: Upload out/ to ~/public_html_next/
+      - name: Upload out/ to ~/public_html/ (live apex docroot)
         if: ${{ steps.freshness.outputs.superseded != 'true' }}
         env:
           DELETE_REMOTE: ${{ inputs.delete_remote }}
@@ -260,33 +264,29 @@ jobs:
             DELETE_FLAG="--delete"
           fi
 
-          # lftp mirror notes (identical pattern to deploy-cpanel-staging.yml):
-          #   --reverse           upload (local -> remote) instead of download
-          #   --delete            remove remote files not in local (gated by input)
-          #   --parallel=4        4 concurrent transfers
-          # We mirror ./out/ into ./public_html_next/ (relative to the FTP
-          # user's home). 'hub' is excluded because the cutover runbook
-          # creates a ~/public_html_next/hub SYMLINK to ~/public_html/hub so
-          # WHMCS keeps serving after the docroot swap -- without excluding
-          # it, a --delete re-deploy would remove that symlink and 404 the
-          # billing portal. Both 'hub' and 'hub/' are listed so the exclude
-          # holds whether lftp sees it as a symlink or a directory path. cgi-bin, .well-known, .htpasswd, error_log and
-          # .ftpquota are excluded as defence-in-depth in case the server
-          # ever places them in this dir. The two directory excludes use a
-          # trailing slash ('.well-known/', 'cgi-bin/') so lftp skips the
-          # whole subtree -- a bare name could let --delete recurse into and
-          # remove their children.
-          # NOTE: .htaccess is NOT excluded -- the Next.js out/.htaccess must
-          # deploy or routing breaks (see "Verify build output" above).
-          # Script is piped to lftp via stdin (heredoc) rather than `lftp -c
-          # "..."` so the embedded password never lands in the process argv
-          # (readable via /proc by any side-car). lftp is run without -d so
-          # debug output can't leak transformed credentials past GH masking.
-          # Explicit FTPS (AUTH TLS): ssl-force aborts rather than fall back
-          # to plaintext, so the MAIN-account password is never sent in the
-          # clear; ssl-protect-data encrypts the data channel too;
-          # verify-certificate no accepts cPanel's self-signed/host-mismatched
-          # cert (the connection is still encrypted).
+          # ~/public_html IS the live apex docroot. The apex cutover
+          # (cpanel-apex-cutover.yml) mirrored the static export straight into
+          # ~/public_html — the docroot was NOT swapped to a sibling dir — so
+          # this deploy must target ~/public_html too. (Deploying to
+          # ~/public_html_next/ would write to a dead parking dir and never
+          # reach the live site.)
+          #
+          # The exclude list is the EXACT proven /hub-safe keeper set from
+          # cpanel-apex-cutover.yml. A --delete mirror removes everything in
+          # ~/public_html that isn't in out/, so every keeper MUST be excluded:
+          #   hub, hub/                WHMCS — a REAL directory at ~/public_html/hub
+          #   cgi-bin/, .well-known/   cPanel/system dirs
+          #   wh1319644.ispot.cc/      a parked-domain docroot
+          #   .user.ini, php.ini       PHP configs that /hub INHERITS (it has none)
+          #   .cache/ .tmb/ + dotfiles cPanel/system state
+          # Missing any one would wipe WHMCS, the parked domain, or /hub's PHP
+          # env on the next deploy. .htaccess is NOT excluded — the Next.js
+          # out/.htaccess must deploy or routing/redirects break.
+          #
+          # Creds piped via heredoc stdin (not `lftp -c`) so the password never
+          # lands in the process argv (/proc-readable). FTPS forced (ssl-force),
+          # so the password is never sent in the clear; verify-certificate no
+          # accepts cPanel's self-signed cert (channel still encrypted).
           lftp <<LFTP_SCRIPT 2>&1 | tail -200
             set ftp:ssl-allow yes
             set ftp:ssl-force yes
@@ -299,15 +299,23 @@ jobs:
             mirror --reverse $DELETE_FLAG --parallel=4 --verbose=1 \
               --exclude-glob 'hub' \
               --exclude-glob 'hub/' \
+              --exclude-glob 'cgi-bin/' \
+              --exclude-glob '.well-known/' \
+              --exclude-glob 'wh1319644.ispot.cc/' \
+              --exclude-glob '.cache/' \
+              --exclude-glob '.tmb/' \
               --exclude-glob '.ftpquota' \
               --exclude-glob '.htpasswd' \
               --exclude-glob 'error_log' \
-              --exclude-glob '.well-known/' \
-              --exclude-glob 'cgi-bin/' \
-              ./out/ ./public_html_next/
+              --exclude-glob '.user.ini' \
+              --exclude-glob 'php.ini' \
+              --exclude-glob '.s3backupstatus' \
+              --exclude-glob '.synthquota' \
+              --exclude-glob '.ht_wsr.txt' \
+              ./out/ ./public_html/
             bye
           LFTP_SCRIPT
-          echo "Upload to ~/public_html_next/ complete."
+          echo "Upload to ~/public_html/ (live docroot) complete."
 
       - name: Deploy summary
         if: ${{ steps.freshness.outputs.superseded != 'true' }}
@@ -316,15 +324,15 @@ jobs:
         run: |
           if [ -z "${DELETE_REMOTE:-}" ]; then DELETE_REMOTE=true; fi
           {
-            echo "## Production deploy to ~/public_html_next/"
+            echo "## Production deploy to ~/public_html/ (live apex docroot)"
             echo ""
             echo "- **Trigger:** ${{ github.event_name }}"
             echo "- **Files uploaded:** $(find out -type f | wc -l)"
             echo "- **Clean mirror (--delete):** ${DELETE_REMOTE}"
             echo ""
-            echo "Post-cutover, ~/public_html_next/ is the live apex docroot,"
-            echo "so this upload is live as soon as the Cloudflare cache"
-            echo "refreshes. The smoke step verifies the live apex."
+            echo "~/public_html is the live apex docroot, so this upload is"
+            echo "live as soon as the Cloudflare cache refreshes. The smoke"
+            echo "step verifies the live apex."
           } >> "$GITHUB_STEP_SUMMARY"
 
       # Post-cutover only. Full smoke suite: every sitemap URL returns 200,
@@ -391,8 +399,11 @@ jobs:
               labels: 'deploy-failure',
               state: 'open',
             })
-            if (existing.data.length > 0) {
-              const issue = existing.data[0]
+            // listForRepo returns PRs too (they're issues to the API); only
+            // reuse a real issue, never a PR that happens to carry the label.
+            const openIssue = existing.data.find((i) => !i.pull_request)
+            if (openIssue) {
+              const issue = openIssue
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,

@@ -155,6 +155,10 @@ async function checkNextAssetLoads() {
 // .htaccess / Cloudflare drift that a status-code check can't see.
 async function checkHeader(name, path, header, matcher) {
   const r = await request(path)
+  if (r.error) {
+    record(name, false, `${path} → ${r.status} (${r.error})`)
+    return
+  }
   const val = r.headers && r.headers.get(header)
   const ok = val
     ? matcher instanceof RegExp
@@ -174,6 +178,10 @@ async function checkSecurityHeaders(name, path) {
     'strict-transport-security': /max-age=\d+/i,
   }
   const r = await request(path)
+  if (r.error) {
+    record(name, false, `${path} → ${r.status} (${r.error})`)
+    return
+  }
   const missing = []
   for (const [h, re] of Object.entries(required)) {
     const val = r.headers && r.headers.get(h)
