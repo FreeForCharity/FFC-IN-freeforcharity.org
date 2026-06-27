@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import { FaPlus, FaMinus } from 'react-icons/fa'
 
 /* ---------------------------------------------------
@@ -21,19 +21,32 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
   small = false,
 }) => {
   const [height, setHeight] = useState('0px')
-  const contentRef = useRef<HTMLDivElement>(null)
+  const [measured, setMeasured] = useState(false)
+  const contentRef = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    if (contentRef.current) {
-      setHeight(isOpen ? `${contentRef.current.scrollHeight}px` : '0px')
+  // Ref callback measures the content the moment the node mounts so that
+  // items rendered open on first paint expand without a layout effect.
+  const measureRef = (node: HTMLDivElement | null) => {
+    contentRef.current = node
+    if (node && isOpen && !measured) {
+      setHeight(`${node.scrollHeight}px`)
+      setMeasured(true)
     }
-  }, [isOpen])
+  }
+
+  const handleToggle = () => {
+    const next = !isOpen
+    if (contentRef.current) {
+      setHeight(next ? `${contentRef.current.scrollHeight}px` : '0px')
+    }
+    onToggle()
+  }
 
   return (
     <div className="mb-4 border-2 border-[#0567B1] rounded-[10px] overflow-hidden transition-all duration-300">
       {/* Header */}
       <button
-        onClick={onToggle}
+        onClick={handleToggle}
         className={`w-full px-4 py-3 flex items-center justify-between text-left transition-all duration-300 cursor-pointer ${
           isOpen ? 'bg-white/90' : 'bg-none'
         }`}
@@ -66,10 +79,10 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
         className={`overflow-hidden transition-all duration-500 ease-in-out ${
           isOpen ? 'bg-white/90' : 'bg-white'
         }`}
-        style={{ maxHeight: height }}
+        style={{ maxHeight: isOpen ? height : '0px' }}
       >
         <div
-          ref={contentRef}
+          ref={measureRef}
           className={`px-4 pb-4 pt-2 font-[500] transition-colors duration-300 ${
             small ? 'text-[16px] leading-[26px]' : 'text-[18px] leading-[29px]'
           }`}

@@ -307,6 +307,7 @@ export default function CookieConsent() {
     }
 
     // Check if user has already made a choice with error handling
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- must read persisted consent from localStorage on the client after hydration; a lazy useState initializer runs during static prerender where localStorage is undefined, so it can never load saved prefs
     loadPreferencesFromLocalStorage(true)
 
     // Cleanup function to remove the window method

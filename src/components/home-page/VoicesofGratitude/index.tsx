@@ -20,7 +20,7 @@ export default function TestimonialSlider() {
     }, 4000) // Change slide every 4 seconds
 
     return () => clearInterval(interval)
-  }, [isPaused, testimonials.length])
+  }, [isPaused])
 
   const goToSlide = (index: number) => {
     setCurrentIndex(index)

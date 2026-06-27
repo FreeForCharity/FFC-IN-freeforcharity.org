@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import Image from 'next/image'
 import { assetPath } from '@/lib/assetPath'
 
@@ -14,13 +14,13 @@ const FrequentlyAskedQuestions: React.FC<AccordionItemProps> = ({ title, childre
   const [height, setHeight] = useState('0px')
   const contentRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
+  const toggle = () => {
+    const next = !isOpen
+    setIsOpen(next)
     if (contentRef.current) {
-      setHeight(isOpen ? `${contentRef.current.scrollHeight}px` : '0px')
+      setHeight(next ? `${contentRef.current.scrollHeight}px` : '0px')
     }
-  }, [isOpen])
-
-  const toggle = () => setIsOpen(!isOpen)
+  }
 
   return (
     <div className="mb-5 overflow-hidden" data-font="lato-font">

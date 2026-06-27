@@ -53,6 +53,7 @@ const TestimonialSlider: React.FC = () => {
           prevEl?: HTMLElement | null
           nextEl?: HTMLElement | null
         }
+        // eslint-disable-next-line react-hooks/immutability -- intentional Swiper navigation wiring: assigning prev/next els to the instance's navigation params before init() is the library's documented imperative pattern
         navigationParams.prevEl = prevRef.current
         navigationParams.nextEl = nextRef.current
       }
