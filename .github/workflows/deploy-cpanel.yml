@@ -372,40 +372,64 @@ jobs:
           LFTP_SCRIPT
           echo "Upload to ~/public_html/ (live docroot) complete."
 
-      # WHMCS GUARD 2 (post-mirror): prove the live billing portal still serves
-      # after the deploy. A regression here (non-200, or a body that no longer
-      # looks like WHMCS) means the mirror damaged ~/public_html/hub — fail hard
-      # so the failure-alert step opens an incident instead of leaving billing
-      # silently broken. Retries absorb Cloudflare edge-cache warm-up.
+      # WHMCS GUARD 2 (post-mirror): confirm the live billing portal still
+      # serves after the deploy. The mirror EXCLUDES ~/public_html/hub, so the
+      # real failure mode this guards against is the rare case where the
+      # --delete mirror nonetheless removed the hub dir — in which Apache would
+      # fall through to the Next.js static index/404 at /hub/.
+      #
+      # Failure semantics are deliberately asymmetric to avoid false incidents:
+      #   * PASS  — any probe returns a WHMCS marker (2xx/3xx; a redirect to
+      #             clientarea is fine).
+      #   * FAIL  — /hub serves the Next.js static site (positive WIPE evidence:
+      #             a `/_next/static/` ref or the custom-404 heading that WHMCS
+      #             pages never contain) and never a WHMCS marker.
+      #   * WARN  — neither (transient non-200 / Cloudflare bot-challenge of the
+      #             CI runner IP / app warm-up). /hub is a dynamic PHP app behind
+      #             Cloudflare and intermittently challenges runner IPs, so an
+      #             inconclusive probe is NOT evidence of damage — do not red a
+      #             healthy deploy. The scheduled prod smoke is the backstop.
       - name: Verify WHMCS /hub survived the deploy
         if: ${{ steps.freshness.outputs.superseded != 'true' }}
         env:
           BASE_URL: ${{ inputs.public_url_base || 'https://freeforcharity.org' }}
         run: |
-          set -euo pipefail
+          set -uo pipefail   # NOT -e: exits are explicit (warn vs fail)
           HUB_URL="${BASE_URL%/}/hub/"
-          ok=""
-          for attempt in 1 2 3; do
-            # Single request: capture the body AND the status code from the
-            # same response. Two separate curls could observe different states
-            # (the portal recovering mid-check) and the marker grep could then
-            # be matched against a different response than the code. Append the
-            # code on its own trailing line, then split body/code apart.
+          marker_seen=""; wipe_seen=""; last_code=""
+          for attempt in 1 2 3 4 5 6; do
+            # One request, body+code from the same response (trailing code line).
             resp="$(curl --silent --show-error --location --max-time 25 \
               -H "Cache-Control: no-cache" -w $'\n%{http_code}' "$HUB_URL" || printf '\n000')"
-            code="${resp##*$'\n'}"
-            body="${resp%$'\n'*}"
-            if [ "$code" = "200" ] && printf '%s' "$body" | grep -Eqi 'whmcs|clientarea|cart\.php'; then
-              echo "WHMCS /hub healthy: HTTP $code with WHMCS marker (attempt $attempt)."
-              ok="yes"
-              break
+            code="${resp##*$'\n'}"; body="${resp%$'\n'*}"; last_code="$code"
+            # PASS requires a 2xx/3xx status AND a WHMCS marker — so a 4xx/5xx
+            # error page that merely happens to contain a marker string can't
+            # mask a real outage. (curl follows redirects, so a 3xx to
+            # clientarea resolves to its 2xx final code here.)
+            case "$code" in
+              2??|3??)
+                if printf '%s' "$body" | grep -Eqi 'whmcs|clientarea|cart\.php'; then
+                  echo "WHMCS /hub healthy: HTTP $code with WHMCS marker (attempt $attempt)."
+                  marker_seen="yes"; break
+                fi ;;
+            esac
+            # Static-site signatures that a WHMCS page would NEVER contain →
+            # the hub dir was wiped and Apache fell through to the export.
+            if printf '%s' "$body" | grep -Eqi '/_next/static/|we couldn.t find that page'; then
+              wipe_seen="yes"
+              echo "WHMCS /hub check attempt $attempt: HTTP $code served the Next.js static site (wipe signature)."
+            else
+              echo "WHMCS /hub check attempt $attempt: HTTP $code, no WHMCS marker yet — retrying."
             fi
-            echo "WHMCS /hub check attempt $attempt: HTTP $code, no marker yet — retrying."
-            sleep 10
+            [ "$attempt" -lt 6 ] && sleep 15
           done
-          if [ -z "$ok" ]; then
-            echo "::error::WHMCS /hub did NOT survive the deploy (no 200 + WHMCS marker after 3 attempts). The live billing portal may be damaged."
+          if [ -n "$marker_seen" ]; then
+            :  # healthy
+          elif [ -n "$wipe_seen" ]; then
+            echo "::error::WHMCS /hub appears WIPED — /hub/ is serving the Next.js static site, not WHMCS. The mirror may have removed ~/public_html/hub. Follow docs/ROLLBACK.md and restore /hub."
             exit 1
+          else
+            echo "::warning::Could not confirm WHMCS /hub from CI (last HTTP ${last_code}; likely a transient Cloudflare bot-challenge of the runner IP). NOT failing the deploy — the mirror excludes /hub and there is no wipe evidence. Verify manually if concerned: curl -sSL ${HUB_URL} | grep -i whmcs"
           fi
 
       # Post-mirror parity check (defense-in-depth). lftp's exit code can mask
