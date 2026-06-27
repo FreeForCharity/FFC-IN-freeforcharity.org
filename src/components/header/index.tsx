@@ -7,6 +7,7 @@ import { FiMenu, FiChevronDown } from 'react-icons/fi'
 import { LiaSearchSolid } from 'react-icons/lia'
 import { RxCross2 } from 'react-icons/rx'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 import { assetPath } from '@/lib/assetPath'
 
 interface DropdownItem {
@@ -155,10 +156,12 @@ const Header: React.FC = () => {
               className={`transition-all duration-300 ${isScrolled ? 'w-[110px]' : 'w-[150px]'}`}
             >
               <Link href="/" onClick={handleLinkClick} className="block">
-                <img
+                <Image
                   src={assetPath('/Images/ffc-logo-banner.webp')}
                   alt="Free For Charity"
-                  className={`transition-all duration-300 ${isScrolled ? 'h-7' : 'h-11'}`}
+                  width={686}
+                  height={234}
+                  className={`w-auto transition-all duration-300 ${isScrolled ? 'h-7' : 'h-11'}`}
                 />
               </Link>
             </div>

@@ -33,6 +33,7 @@ const GeneralDonationCard: React.FC<GeneralDonationCardProps> = ({
 
       {/* Image */}
       <div className="flex justify-center">
+        {/* eslint-disable-next-line @next/next/no-img-element -- dynamic donation logo; intrinsic aspect ratio varies per image (w-auto), so next/Image's fixed dimensions would distort it */}
         <img src={assetPath(img)} alt="Donation image" className="h-12 w-auto object-contain" />
       </div>
     </Link>

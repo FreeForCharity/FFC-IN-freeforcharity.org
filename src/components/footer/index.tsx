@@ -7,6 +7,7 @@ import { hubUrl } from '@/lib/config'
 
 import { FaFacebookF, FaLinkedinIn, FaGithub } from 'react-icons/fa'
 import { FaXTwitter } from 'react-icons/fa6'
+import Image from 'next/image'
 import { assetPath } from '@/lib/assetPath'
 
 const Footer: React.FC = () => {
@@ -38,10 +39,12 @@ const Footer: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img
+              <Image
                 src={assetPath('/Svgs/footerImage.svg')}
                 alt="GuideStar Platinum Seal of Transparency"
                 aria-label="GuideStar Platinum Seal of Transparency"
+                width={108}
+                height={108}
               />
             </a>
             <Link
