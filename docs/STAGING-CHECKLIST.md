@@ -1,5 +1,9 @@
 # Staging Verification Checklist
 
+> **✅ Cutover complete.** The document-root swap has happened and the
+> apex now serves the Next.js build. This checklist is retained as a
+> historical record / template for future staged deploys.
+
 Use this checklist to verify the staged Next.js site before swapping
 the cPanel document root from `public_html` (WordPress) to
 `public_html_next` (the new build).

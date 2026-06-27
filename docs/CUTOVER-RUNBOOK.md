@@ -1,5 +1,9 @@
 # Cutover Day Runbook
 
+> **✅ Cutover complete.** freeforcharity.org has been flipped to the
+> Next.js static export. This runbook is retained for historical reference
+> and in case a future re-cutover or rollback is needed.
+
 A single, chronological checklist for flipping freeforcharity.org from
 WordPress to the Next.js static export. Follow top to bottom. Each step
 links to the detailed doc when you need the full reasoning.

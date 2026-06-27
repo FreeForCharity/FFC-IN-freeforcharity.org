@@ -1,5 +1,9 @@
 # Cutover Redirect Plan
 
+> **✅ Cutover complete.** These redirects are live in
+> [`public/.htaccess`](../public/.htaccess) on the cPanel server and are
+> verified by `scripts/smoke-test.mjs`.
+
 URL changes between the WordPress site (`wordpress-static-export-2026-02-16`
 tag, 60 pages) and the Next.js redesign (~36 routes).
 
