@@ -1,12 +1,18 @@
 # Staging Verification Checklist
 
-> **✅ Cutover complete.** The document-root swap has happened and the
-> apex now serves the Next.js build. This checklist is retained as a
-> historical record / template for future staged deploys.
+> **✅ Cutover complete.** No document-root swap happened. The apex
+> `freeforcharity.org` cutover mirrored the Next.js static export
+> straight into `~/public_html` (the live apex docroot), excluding WHMCS
+> at `~/public_html/hub` and the other cPanel keepers. Production now
+> deploys via `.github/workflows/deploy-cpanel.yml` (mirror-in-place into
+> `~/public_html`); rollback is `docs/ROLLBACK.md`. This checklist is
+> retained as a historical record and remains a valid template for
+> verifying a STAGING deploy before promotion. References to
+> `public_html_next` below describe the SEPARATE staging docroot/account,
+> not production.
 
-Use this checklist to verify the staged Next.js site before swapping
-the cPanel document root from `public_html` (WordPress) to
-`public_html_next` (the new build).
+Use this checklist to verify a staged Next.js build (on the STAGING
+surface) before promoting it to production.
 
 The cutover target is **InterServer cPanel**, not GitHub Pages — the
 apex domain stays on the existing origin so that WHMCS at `/hub/`
@@ -28,22 +34,22 @@ CI-based checks in this table run automatically on every push to `main`; rows
 marked `manual` must be run by hand. Confirm all checks are green or completed
 before proceeding to the manual checks below.
 
-| Check             | Workflow                      | What It Verifies                                                                                                                             |
-| ----------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| Format            | `ci.yml`                      | Prettier formatting                                                                                                                          |
-| Lint              | `ci.yml`                      | ESLint — no errors                                                                                                                           |
-| Unit tests        | `ci.yml`                      | Jest (metadata, sitemap, data files, assetPath)                                                                                              |
-| Build             | `ci.yml`                      | `next build` — static export succeeds                                                                                                        |
-| Internal links    | `ci.yml`                      | Playwright: no broken internal links (`post-deploy-smoke.spec.ts`)                                                                           |
-| External links    | `lychee.yml`                  | Scheduled Lychee link checker against deployed site                                                                                          |
-| Accessibility     | `ci.yml`                      | axe-core via Playwright (`tests/accessibility.spec.ts`) — WCAG 2.1 AA                                                                        |
-| E2E tests         | `ci.yml`                      | Playwright: navigation, images, cookie consent, copyright, contact page, footer, team, mobile nav, dropdowns, external links                 |
-| Lighthouse        | `lighthouse.yml`              | Performance / a11y / SEO / best practices thresholds on multiple URLs                                                                        |
-| CodeQL            | `codeql.yml`                  | Static analysis for JS/TS and Actions                                                                                                        |
-| Linkinator        | manual                        | Optional: run `npm run check-links` on `./out` for additional coverage                                                                       |
-| Visual regression | manual                        | Run `npm run visual-regression` to compare each non-homepage page against the live WordPress origin (see `docs/visual-regression/README.md`) |
-| Deploy            | `deploy-cpanel.yml`           | Manual-trigger FTPS upload of `out/` to `~/public_html_next/` on InterServer cPanel (production)                                             |
-| Staging preview   | `deploy-gh-pages-staging.yml` | Manual-trigger GitHub Pages preview build (optional; useful for `npm run visual-regression`)                                                 |
+| Check             | Workflow                      | What It Verifies                                                                                                                                             |
+| ----------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Format            | `ci.yml`                      | Prettier formatting                                                                                                                                          |
+| Lint              | `ci.yml`                      | ESLint — no errors                                                                                                                                           |
+| Unit tests        | `ci.yml`                      | Jest (metadata, sitemap, data files, assetPath)                                                                                                              |
+| Build             | `ci.yml`                      | `next build` — static export succeeds                                                                                                                        |
+| Internal links    | `ci.yml`                      | Playwright: no broken internal links (`post-deploy-smoke.spec.ts`)                                                                                           |
+| External links    | `lychee.yml`                  | Scheduled Lychee link checker against deployed site                                                                                                          |
+| Accessibility     | `ci.yml`                      | axe-core via Playwright (`tests/accessibility.spec.ts`) — WCAG 2.1 AA                                                                                        |
+| E2E tests         | `ci.yml`                      | Playwright: navigation, images, cookie consent, copyright, contact page, footer, team, mobile nav, dropdowns, external links                                 |
+| Lighthouse        | `lighthouse.yml`              | Performance / a11y / SEO / best practices thresholds on multiple URLs                                                                                        |
+| CodeQL            | `codeql.yml`                  | Static analysis for JS/TS and Actions                                                                                                                        |
+| Linkinator        | manual                        | Optional: run `npm run check-links` on `./out` for additional coverage                                                                                       |
+| Visual regression | manual                        | Run `npm run visual-regression` to compare each non-homepage page against the live WordPress origin (see `docs/visual-regression/README.md`)                 |
+| Deploy            | `deploy-cpanel.yml`           | Manual-trigger FTPS mirror of `out/` into `~/public_html` on InterServer cPanel (production, mirror-in-place — excludes `hub/` and the other cPanel keepers) |
+| Staging preview   | `deploy-gh-pages-staging.yml` | Manual-trigger GitHub Pages preview build (optional; useful for `npm run visual-regression`)                                                                 |
 
 ---
 

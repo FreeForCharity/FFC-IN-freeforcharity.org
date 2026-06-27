@@ -102,6 +102,13 @@ async function checkStatus(name, path, expected) {
 
 async function checkRedirect(name, path, expectedStatus, expectedLocationSuffix) {
   const r = await request(path, { followRedirects: false })
+  // Surface the underlying fetch failure (timeout / DNS / TLS) so a flaky
+  // network blip is distinguishable from a real redirect regression —
+  // critical now that revenue flows (donation-confirmation) assert redirects.
+  if (r.error) {
+    record(name, false, `${path} → ${r.status} (${r.error})`)
+    return
+  }
   const locOk = r.location && r.location.endsWith(expectedLocationSuffix)
   const ok = r.status === expectedStatus && locOk
   record(name, ok, `${path} → ${r.status} ${r.location || '(no Location)'}`)

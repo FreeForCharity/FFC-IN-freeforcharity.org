@@ -1,8 +1,14 @@
 # Cutover Day Runbook
 
-> **✅ Cutover complete.** freeforcharity.org has been flipped to the
-> Next.js static export. This runbook is retained for historical reference
-> and in case a future re-cutover or rollback is needed.
+> **⚠️ Historical planning document — superseded.** The cutover did NOT
+> swap the document root to `public_html_next`. It mirrored the Next.js
+> static export straight into `~/public_html` (the live apex docroot),
+> excluding WHMCS at `~/public_html/hub` and the other cPanel keepers.
+> Production now deploys via
+> [`.github/workflows/deploy-cpanel.yml`](../.github/workflows/deploy-cpanel.yml)
+> (mirror-in-place into `~/public_html`); rollback is
+> [`docs/ROLLBACK.md`](ROLLBACK.md). The steps below describe the original
+> swap-based plan and are kept for historical context only.
 
 A single, chronological checklist for flipping freeforcharity.org from
 WordPress to the Next.js static export. Follow top to bottom. Each step

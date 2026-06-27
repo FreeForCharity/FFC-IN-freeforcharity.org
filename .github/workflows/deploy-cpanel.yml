@@ -411,8 +411,13 @@ jobs:
       # CI before it can deploy, so an issue here is something the gates can't
       # see — cPanel/Cloudflare drift, an FTP/credential fault, or a live
       # third-party widget regression.
+      # Gated on `superseded != 'true'` so a stale/superseded run that fails
+      # in a non-gated early step (CI lookup, npm ci) can't open a false
+      # production incident — no upload happened on a superseded run. If the
+      # freshness step itself failed/skipped, `superseded` is empty (!= 'true'),
+      # so a genuine early failure still alerts.
       - name: Open high-priority issue on deploy/smoke failure
-        if: failure()
+        if: ${{ failure() && steps.freshness.outputs.superseded != 'true' }}
         uses: actions/github-script@v9
         with:
           script: |

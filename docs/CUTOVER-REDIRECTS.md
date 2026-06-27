@@ -107,9 +107,11 @@ inbound links.
 
 No action required at cutover. The rules are part of
 [`public/.htaccess`](../public/.htaccess), which is included in
-`out/.htaccess` after `next build` and uploaded as part of the cPanel
-deploy. They activate the moment the document root is swapped to
-`public_html_next` (see `docs/CUTOVER-HANDOFF.md`).
+`out/.htaccess` after `next build` and mirrored into `~/public_html`
+(the live apex docroot) on every production deploy. They are live the
+moment that `.htaccess` lands in `~/public_html` — no document-root swap
+is involved (see `docs/CUTOVER-HANDOFF.md` and
+[`.github/workflows/deploy-cpanel.yml`](../.github/workflows/deploy-cpanel.yml)).
 
 After cutover, smoke-test 5 sample URLs in an incognito browser:
 
@@ -146,10 +148,13 @@ guessing. Until then, don't.
 
 ## Rollback
 
-The cutover rollback (cPanel document-root swap from `public_html_next`
-back to `public_html`) automatically deactivates all `.htaccess`
-redirects, because the old `public_html/.htaccess` (WordPress) takes
-over. No separate redirect-rollback step needed.
+There is no document-root swap to reverse. Because the redirects ship in
+`out/.htaccess` and are mirrored into `~/public_html` on every deploy,
+rolling back the site (revert + redeploy on `main`, a manual
+`workflow_dispatch` of a known-good ref, or a cPanel backup restore)
+also rolls back the redirect set — the redeployed `.htaccess` replaces
+the current one. Follow [`docs/ROLLBACK.md`](ROLLBACK.md); no separate
+redirect-rollback step is needed.
 
 If Cloudflare Bulk Redirects are enabled, disable that rule in
 Cloudflare with a single toggle.
