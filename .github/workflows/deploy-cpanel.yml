@@ -72,6 +72,7 @@ permissions:
   id-token: write # required for OIDC to Azure
   contents: read
   actions: read # required for the CI-green gate (gh run list)
+  issues: write # required to open a high-priority incident issue on failure
 
 concurrency:
   group: deploy-cpanel
@@ -346,3 +347,82 @@ jobs:
             -w "Home: %{http_code} on %{url_effective} in %{time_total}s\n" \
             "${BASE_URL%/}/"
           npm run smoke-test
+
+      # High-priority alert: if ANY step above failed (build, credential
+      # fetch, lftp upload, or the post-deploy smoke), open/append an incident
+      # issue. The live apex serves from the dir this workflow deploys to, so
+      # a failure can mean the site is broken or only partially deployed.
+      # A superseded run skips its steps (success), so it never lands here.
+      # These should be RARE: lint/jest/build/Playwright gate every commit in
+      # CI before it can deploy, so an issue here is something the gates can't
+      # see — cPanel/Cloudflare drift, an FTP/credential fault, or a live
+      # third-party widget regression.
+      - name: Open high-priority issue on deploy/smoke failure
+        if: failure()
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+            const sha = (context.payload.workflow_run && context.payload.workflow_run.head_sha) || context.sha
+            const shortSha = sha.slice(0, 8)
+            const date = new Date().toISOString().slice(0, 10)
+            const trigger = context.eventName
+            // Dedupe: append to an open deploy-failure issue so a flapping
+            // deploy doesn't spam the tracker.
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'deploy-failure',
+              state: 'open',
+            })
+            if (existing.data.length > 0) {
+              const issue = existing.data[0]
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `Deploy/smoke failed again on ${date} for \`${shortSha}\` (${trigger}): ${runUrl}`,
+              })
+              console.log(`Appended to open deploy-failure issue #${issue.number}`)
+              return
+            }
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 HIGH: production deploy/smoke FAILED — ${shortSha} (${date})`,
+              body: [
+                '## Production deploy or post-deploy smoke failed',
+                '',
+                '**This is a high-priority incident.** The live apex serves from the',
+                'directory this workflow deploys to, so a failure here may mean the',
+                'site is broken or a deploy landed only partially.',
+                '',
+                `- **Workflow run:** ${runUrl}`,
+                `- **Commit:** \`${shortSha}\``,
+                `- **Trigger:** ${trigger}`,
+                '',
+                'Open the run above and read which step failed:',
+                '- **Build / Verify** — a build regression slipped past CI (rare).',
+                '- **Azure login / Key Vault** — OIDC or credential issue.',
+                '- **Upload (lftp)** — FTP/network failure; the live site may be',
+                '  partially mirrored. Re-running the deploy re-mirrors cleanly.',
+                '- **Smoke suite** — the site deployed but a live check failed (broken',
+                '  URL, missing asset, /hub down, PayPal/Zeffy regression, redirect',
+                '  drift). Reproduce: `BASE_URL=https://freeforcharity.org npm run smoke-test`.',
+                '',
+                '## Next steps',
+                '1. Read the failed step\'s logs in the run above.',
+                '2. If the live site is broken, follow `docs/ROLLBACK.md`.',
+                '3. Fix the root cause, then re-run the deploy (or merge a fix — main',
+                '   auto-deploys).',
+                '4. Close this issue once production is verified green.',
+                '',
+                'These should be rare — every commit passes lint/jest/build/Playwright',
+                'in CI before it can deploy. An issue here is something those gates',
+                'cannot catch.',
+                '',
+                '_Opened automatically by `.github/workflows/deploy-cpanel.yml`._',
+              ].join('\n'),
+              labels: ['deploy-failure', 'incident', 'production-health'],
+            })
+            console.log('Created high-priority deploy-failure issue')

@@ -99,6 +99,21 @@ async function checkBodyContains(name, path, expectedSubstrings) {
   record(name, ok, detail)
 }
 
+// Verify the hashed Next.js JS bundle is actually on the server. A partial
+// or interrupted upload can leave the HTML at 200 while the /_next/static
+// chunks 404 — a status-only homepage check would miss that (the page would
+// be blank/non-interactive for real users).
+async function checkNextAssetLoads() {
+  const home = await request('/', { readBody: true })
+  const match = home.body && home.body.match(/\/_next\/static\/[^"')\s]+\.js/)
+  if (!match) {
+    record(`Next.js bundle referenced on homepage`, false, '/ → no /_next/static/*.js reference')
+    return
+  }
+  const r = await request(match[0])
+  record(`Next.js JS bundle loads`, r.status === 200, `${match[0]} → ${r.status}`)
+}
+
 function parseSitemap(xml) {
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])
   return locs.map((u) => new URL(u).pathname)
@@ -200,6 +215,30 @@ async function main() {
   await checkStatus(`favicon`, '/favicon.ico', 200)
   await checkStatus(`sitemap.xml`, '/sitemap.xml', 200)
   await checkStatus(`robots.txt`, '/robots.txt', 200)
+
+  console.log(`\n-- special components`)
+  // The two donation/revenue surfaces — a 200 isn't enough; assert the
+  // actual payment integrations are present in the rendered HTML so a
+  // retired PayPal button or a dropped Zeffy embed is caught.
+  await checkBodyContains(`/donate exposes the PayPal hosted button`, '/donate/', ['9ZKQ23YC3G2J2'])
+  await checkBodyContains(
+    `/free-for-charity-endowment-fund mounts the Zeffy form`,
+    '/free-for-charity-endowment-fund/',
+    ['zeffy']
+  )
+  // Mandatory FFC-wide homepage sections (Team + testimonials) — their
+  // absence means a broken/partial render, not just a styling diff.
+  await checkBodyContains(`homepage renders the Team section`, '/', ['the free for charity team'])
+  await checkBodyContains(`homepage renders testimonials`, '/', ['testimonial'])
+  // Contact page (no form, by policy) must still expose the contact methods.
+  await checkBodyContains(`/contact-us exposes a mailto link`, '/contact-us/', ['mailto:'])
+  // robots.txt must advertise the sitemap (proves it's the FFC robots.txt,
+  // not a host default, and keeps SEO crawling intact).
+  await checkBodyContains(`robots.txt references the sitemap`, '/robots.txt', ['sitemap:'])
+  // Header/footer logo asset must be on the server.
+  await checkStatus(`logo asset loads`, '/Images/ffc-logo-banner.webp', 200)
+  // The built JS bundle must actually have uploaded (catches partial deploys).
+  await checkNextAssetLoads()
 
   const failed = results.filter((r) => !r.ok)
   console.log(`\n${results.length - failed.length}/${results.length} passed`)
