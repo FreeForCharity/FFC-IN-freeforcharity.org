@@ -36,39 +36,61 @@ function record(name, ok, detail) {
   process.stdout.write(`${ok ? PASS : FAIL} ${name}${detail ? ` — ${detail}` : ''}\n`)
 }
 
-async function request(path, { followRedirects = true, readBody = false } = {}) {
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+
+async function request(path, { followRedirects = true, readBody = false, retries = 2 } = {}) {
   const url = path.startsWith('http') ? path : `${BASE_URL}${path}`
-  const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
-  try {
-    const res = await fetch(url, {
-      method: 'GET',
-      redirect: followRedirects ? 'follow' : 'manual',
-      signal: controller.signal,
-      headers: {
-        'User-Agent': 'ffc-smoke-test/1.0',
-        // Bust the Cloudflare edge cache so a freshly-deployed origin
-        // is observed instead of a stale cached version. Without this,
-        // a smoke run immediately after deploy can pass against the
-        // pre-deploy HTML and report green on a regression.
-        'Cache-Control': 'no-cache',
-        Pragma: 'no-cache',
-      },
-    })
-    let body
-    if (readBody) {
-      body = await res.text()
-    } else {
-      // Eagerly discard the response stream — without this Node's fetch
-      // keeps the body buffer around until GC, which adds up across
-      // ~50 sitemap+redirect checks per run.
-      await res.body?.cancel?.()
+  // Retry transient failures — a network blip (DNS/TLS/timeout) or an
+  // upstream 5xx (Cloudflare/origin) on any one of ~90 checks would otherwise
+  // red the whole run. Real regressions (4xx, wrong redirect, missing marker)
+  // are NOT retried, so this only suppresses flakes, never masks a failure.
+  for (let attempt = 0; ; attempt++) {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
+    try {
+      const res = await fetch(url, {
+        method: 'GET',
+        redirect: followRedirects ? 'follow' : 'manual',
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'ffc-smoke-test/1.0',
+          // Bust the Cloudflare edge cache so a freshly-deployed origin
+          // is observed instead of a stale cached version. Without this,
+          // a smoke run immediately after deploy can pass against the
+          // pre-deploy HTML and report green on a regression.
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+        },
+      })
+      let body
+      if (readBody) {
+        body = await res.text()
+      } else {
+        // Eagerly discard the response stream — without this Node's fetch
+        // keeps the body buffer around until GC, which adds up across
+        // ~50 sitemap+redirect checks per run.
+        await res.body?.cancel?.()
+      }
+      clearTimeout(timer)
+      if (res.status >= 500 && attempt < retries) {
+        await sleep(500 * (attempt + 1))
+        continue
+      }
+      return {
+        status: res.status,
+        location: res.headers.get('location'),
+        headers: res.headers,
+        url: res.url,
+        body,
+      }
+    } catch (err) {
+      clearTimeout(timer)
+      if (attempt < retries) {
+        await sleep(500 * (attempt + 1))
+        continue
+      }
+      return { status: 0, error: err.message }
     }
-    return { status: res.status, location: res.headers.get('location'), url: res.url, body }
-  } catch (err) {
-    return { status: 0, error: err.message }
-  } finally {
-    clearTimeout(timer)
   }
 }
 
@@ -117,6 +139,71 @@ async function checkNextAssetLoads() {
   const r = await request(match[0])
   const detail = r.error ? `${match[0]} → ${r.status} (${r.error})` : `${match[0]} → ${r.status}`
   record(`Next.js JS bundle loads`, r.status === 200, detail)
+  // Content-hashed chunks must be cached long and immutable, or every visit
+  // re-downloads the bundle (perf regression / wrong cache config).
+  if (r.status === 200) {
+    const cc = r.headers && r.headers.get('cache-control')
+    record(
+      `static assets immutably cached`,
+      Boolean(cc && /immutable/i.test(cc)),
+      `${match[0]} cache-control: ${cc || '(absent)'}`
+    )
+  }
+}
+
+// Assert a single response header matches (substring or RegExp). Catches
+// .htaccess / Cloudflare drift that a status-code check can't see.
+async function checkHeader(name, path, header, matcher) {
+  const r = await request(path)
+  const val = r.headers && r.headers.get(header)
+  const ok = val
+    ? matcher instanceof RegExp
+      ? matcher.test(val)
+      : val.toLowerCase().includes(String(matcher).toLowerCase())
+    : false
+  record(name, Boolean(ok), `${path} ${header}: ${val || '(absent)'}`)
+}
+
+// The security headers the .htaccess is expected to set. A missing/weakened
+// header is a real security regression even though the page still 200s.
+async function checkSecurityHeaders(name, path) {
+  const required = {
+    'x-content-type-options': /nosniff/i,
+    'x-frame-options': /sameorigin|deny/i,
+    'referrer-policy': /.+/,
+    'strict-transport-security': /max-age=\d+/i,
+  }
+  const r = await request(path)
+  const missing = []
+  for (const [h, re] of Object.entries(required)) {
+    const val = r.headers && r.headers.get(h)
+    if (!val || !re.test(val)) missing.push(val ? `${h}=${val}` : `${h} (absent)`)
+  }
+  record(
+    name,
+    missing.length === 0,
+    missing.length ? `${path} → ${missing.join('; ')}` : `${path} → all present`
+  )
+}
+
+// http:// must 301/308 to https:// — never serve the site in the clear.
+async function checkHttpsRedirect(name) {
+  const httpUrl = `${BASE_URL.replace(/^https:/, 'http:')}/`
+  const r = await request(httpUrl, { followRedirects: false })
+  const ok = [301, 302, 307, 308].includes(r.status) && /^https:\/\//.test(r.location || '')
+  record(name, ok, `${httpUrl} → ${r.status} ${r.location || '(no Location)'}`)
+}
+
+// A 404 must render the custom Next.js not-found page, not just return the
+// status — a server/host default 404 (or a blank body) would still be 404.
+async function check404Renders(name) {
+  const r = await request('/this-page-does-not-exist-xyz/', { readBody: true })
+  const hasMarker = r.body ? /page not|404|free for charity/i.test(r.body) : false
+  record(
+    name,
+    r.status === 404 && hasMarker,
+    `/…nonexistent → ${r.status}${hasMarker ? ' (custom 404 body)' : ' (no 404 marker)'}`
+  )
 }
 
 function parseSitemap(xml) {
@@ -208,10 +295,19 @@ async function main() {
   // 200 can mask an empty/partial index.html (e.g. a truncated upload), so
   // assert a known marker from the rendered page.
   await checkBodyContains(`/ renders homepage content`, '/', ['free for charity'])
-  await checkStatus(`unknown URL returns 404`, '/this-page-does-not-exist-xyz/', 404)
+  await check404Renders(`custom 404 page renders`)
   await checkStatus(`favicon`, '/favicon.ico', 200)
   await checkStatus(`sitemap.xml`, '/sitemap.xml', 200)
   await checkStatus(`robots.txt`, '/robots.txt', 200)
+
+  console.log(`\n-- security, headers & transport`)
+  // Security headers the .htaccess sets — a missing one is a real regression.
+  await checkSecurityHeaders(`homepage sets security headers`, '/')
+  // The site must never be served over plaintext HTTP.
+  await checkHttpsRedirect(`http:// redirects to https://`)
+  // Content types: a wrong type (e.g. the 415 class of bug) breaks consumers.
+  await checkHeader(`sitemap.xml served as XML`, '/sitemap.xml', 'content-type', /xml/i)
+  await checkHeader(`robots.txt served as text`, '/robots.txt', 'content-type', /text\/plain/i)
 
   console.log(`\n-- special components`)
   // The two donation/revenue surfaces — a 200 isn't enough; assert the
