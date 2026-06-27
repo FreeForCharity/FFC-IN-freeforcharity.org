@@ -82,9 +82,11 @@ jobs:
     name: Build + deploy to ~/public_html_next/
     runs-on: ubuntu-latest
     environment: cpanel-staging
-    # Auto-trigger: only deploy when the CI run that fired this succeeded.
-    # Manual dispatch is always allowed (explicit operator intent).
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    # Auto-trigger: only deploy when the CI run that fired this succeeded
+    # AND was triggered by a push to main (an actual merge) — not a manual
+    # workflow_dispatch re-run of CI, which shouldn't ship to production.
+    # Manual dispatch of THIS deploy workflow is always allowed (operator intent).
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push') }}
 
     steps:
       - name: Checkout repository
