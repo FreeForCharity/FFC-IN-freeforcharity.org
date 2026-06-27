@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef } from 'react'
 import { FaPlus, FaMinus } from 'react-icons/fa'
 
 interface AccordionItemProps {
@@ -14,13 +14,13 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ number, title, children }
   const [height, setHeight] = useState('0px')
   const contentRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
+  const toggle = () => {
+    const next = !isOpen
+    setIsOpen(next)
     if (contentRef.current) {
-      setHeight(isOpen ? `${contentRef.current.scrollHeight}px` : '0px')
+      setHeight(next ? `${contentRef.current.scrollHeight}px` : '0px')
     }
-  }, [isOpen])
-
-  const toggle = () => setIsOpen(!isOpen)
+  }
 
   return (
     <div className="mb-5 border-[6px] border-[#0C71C3] rounded-[25px] overflow-hidden">

@@ -13,6 +13,7 @@ const IconTextCard: React.FC<IconTextCardProps> = ({ icon, iconLabel = 'icon', t
   const cardRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
+    const node = cardRef.current
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -25,10 +26,10 @@ const IconTextCard: React.FC<IconTextCardProps> = ({ icon, iconLabel = 'icon', t
       { threshold: 0.3 } // 30% visible triggers animation
     )
 
-    if (cardRef.current) observer.observe(cardRef.current)
+    if (node) observer.observe(node)
 
     return () => {
-      if (cardRef.current) observer.unobserve(cardRef.current)
+      if (node) observer.unobserve(node)
     }
   }, [])
 
