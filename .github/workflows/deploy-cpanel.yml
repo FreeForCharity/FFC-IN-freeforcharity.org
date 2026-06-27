@@ -264,6 +264,16 @@ jobs:
             DELETE_FLAG="--delete"
           fi
 
+          # WHMCS GUARD 1 (pre-mirror): the live WHMCS billing portal lives at
+          # ~/public_html/hub. It is excluded from the mirror below, but if the
+          # Next.js build ever emitted its own out/hub entry, the upload would
+          # push it INTO the live portal directory. Refuse to deploy if out/
+          # contains any 'hub' entry — the build must never own that path.
+          if [ -e out/hub ]; then
+            echo "::error::out/ contains a 'hub' entry — refusing to deploy (would risk the live WHMCS at ~/public_html/hub)."
+            exit 1
+          fi
+
           # ~/public_html IS the live apex docroot. The apex cutover
           # (cpanel-apex-cutover.yml) mirrored the static export straight into
           # ~/public_html — the docroot was NOT swapped to a sibling dir — so
@@ -316,6 +326,37 @@ jobs:
             bye
           LFTP_SCRIPT
           echo "Upload to ~/public_html/ (live docroot) complete."
+
+      # WHMCS GUARD 2 (post-mirror): prove the live billing portal still serves
+      # after the deploy. A regression here (non-200, or a body that no longer
+      # looks like WHMCS) means the mirror damaged ~/public_html/hub — fail hard
+      # so the failure-alert step opens an incident instead of leaving billing
+      # silently broken. Retries absorb Cloudflare edge-cache warm-up.
+      - name: Verify WHMCS /hub survived the deploy
+        if: ${{ steps.freshness.outputs.superseded != 'true' }}
+        env:
+          BASE_URL: ${{ inputs.public_url_base || 'https://freeforcharity.org' }}
+        run: |
+          set -euo pipefail
+          HUB_URL="${BASE_URL%/}/hub/"
+          ok=""
+          for attempt in 1 2 3; do
+            body="$(curl --silent --show-error --location --max-time 25 \
+              -H "Cache-Control: no-cache" "$HUB_URL" || true)"
+            code="$(curl --silent --output /dev/null --location --max-time 25 \
+              -H "Cache-Control: no-cache" -w '%{http_code}' "$HUB_URL" || echo 000)"
+            if [ "$code" = "200" ] && printf '%s' "$body" | grep -Eqi 'whmcs|clientarea|cart\.php'; then
+              echo "WHMCS /hub healthy: HTTP $code with WHMCS marker (attempt $attempt)."
+              ok="yes"
+              break
+            fi
+            echo "WHMCS /hub check attempt $attempt: HTTP $code, no marker yet — retrying."
+            sleep 10
+          done
+          if [ -z "$ok" ]; then
+            echo "::error::WHMCS /hub did NOT survive the deploy (no 200 + WHMCS marker after 3 attempts). The live billing portal may be damaged."
+            exit 1
+          fi
 
       - name: Deploy summary
         if: ${{ steps.freshness.outputs.superseded != 'true' }}
