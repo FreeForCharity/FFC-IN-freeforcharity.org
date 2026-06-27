@@ -402,10 +402,17 @@ jobs:
             resp="$(curl --silent --show-error --location --max-time 25 \
               -H "Cache-Control: no-cache" -w $'\n%{http_code}' "$HUB_URL" || printf '\n000')"
             code="${resp##*$'\n'}"; body="${resp%$'\n'*}"; last_code="$code"
-            if printf '%s' "$body" | grep -Eqi 'whmcs|clientarea|cart\.php'; then
-              echo "WHMCS /hub healthy: HTTP $code with WHMCS marker (attempt $attempt)."
-              marker_seen="yes"; break
-            fi
+            # PASS requires a 2xx/3xx status AND a WHMCS marker — so a 4xx/5xx
+            # error page that merely happens to contain a marker string can't
+            # mask a real outage. (curl follows redirects, so a 3xx to
+            # clientarea resolves to its 2xx final code here.)
+            case "$code" in
+              2??|3??)
+                if printf '%s' "$body" | grep -Eqi 'whmcs|clientarea|cart\.php'; then
+                  echo "WHMCS /hub healthy: HTTP $code with WHMCS marker (attempt $attempt)."
+                  marker_seen="yes"; break
+                fi ;;
+            esac
             # Static-site signatures that a WHMCS page would NEVER contain →
             # the hub dir was wiped and Apache fell through to the export.
             if printf '%s' "$body" | grep -Eqi '/_next/static/|we couldn.t find that page'; then
@@ -422,7 +429,7 @@ jobs:
             echo "::error::WHMCS /hub appears WIPED — /hub/ is serving the Next.js static site, not WHMCS. The mirror may have removed ~/public_html/hub. Follow docs/ROLLBACK.md and restore /hub."
             exit 1
           else
-            echo "::warning::Could not confirm WHMCS /hub from CI (last HTTP ${last_code}; likely a transient Cloudflare bot-challenge of the runner IP). NOT failing the deploy — the mirror excludes /hub and there is no wipe evidence. Verify manually if concerned: curl -sSL https://freeforcharity.org/hub/ | grep -i whmcs"
+            echo "::warning::Could not confirm WHMCS /hub from CI (last HTTP ${last_code}; likely a transient Cloudflare bot-challenge of the runner IP). NOT failing the deploy — the mirror excludes /hub and there is no wipe evidence. Verify manually if concerned: curl -sSL ${HUB_URL} | grep -i whmcs"
           fi
 
       # Post-mirror parity check (defense-in-depth). lftp's exit code can mask
