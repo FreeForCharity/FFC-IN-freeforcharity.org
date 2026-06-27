@@ -1,3 +1,7 @@
+# NOTE: this workflow's `name` ("CI - Build and Test") is load-bearing —
+# deploy-cpanel.yml chains off it via `on.workflow_run.workflows`. If you
+# rename it, update that trigger in deploy-cpanel.yml or auto-deploy will
+# silently stop firing.
 name: CI - Build and Test
 
 on:

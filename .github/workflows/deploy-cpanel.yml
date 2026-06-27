@@ -21,16 +21,14 @@ name: Deploy to InterServer cPanel (production)
 # jailed to the staging docroot. Re-verify any account with the reusable
 # "Verify cPanel FTP credential (read-only)" workflow.
 #
-# Upload vs. cutover are deliberately SEPARATE:
-#   * This workflow only ever writes to ~/public_html_next/ -- a parking
-#     directory that is NOT served at any URL until an operator swaps the
-#     apex docroot to it in cPanel. So a dispatch with run_smoke=false has
-#     zero live impact and is safe to run repeatedly.
-#   * The full live-apex smoke suite (npm run smoke-test against
-#     https://freeforcharity.org/) only makes sense AFTER the docroot swap.
-#     It is therefore gated behind the run_smoke input (default false) so a
-#     pre-cutover upload can go green without depending on the apex already
-#     serving this build.
+# POST-CUTOVER: the apex docroot has been swapped to ~/public_html_next/,
+# so this upload IS the live site. The workflow auto-deploys on every merge
+# to main (via workflow_run, after "CI - Build and Test" passes) and runs the
+# live-apex smoke suite afterward. Manual workflow_dispatch is retained for
+# forced/ad-hoc deploys, where the run_smoke/delete_remote inputs still apply.
+#
+# The /hub WHMCS symlink is excluded from the lftp mirror (see the Upload
+# step), so a clean --delete mirror never removes the billing portal.
 #
 # === Prerequisites -- all already in place (no admin setup remaining) ===
 #   * GitHub Environment `cpanel-staging` with WR_ALL_FFC_AZURE_KV_CLIENT_ID
@@ -44,6 +42,14 @@ name: Deploy to InterServer cPanel (production)
 #        wr-all-cbm-cpanel-ffc-interserver-ftp-password   (MAIN cPanel account)
 
 on:
+  # Seamless production deploy: fire automatically once CI passes on main.
+  # workflow_run (not push) so the deploy waits for "CI - Build and Test" to
+  # finish on the merge commit instead of racing it. The job-level `if`
+  # guard below requires that CI run to have succeeded.
+  workflow_run:
+    workflows: ['CI - Build and Test']
+    types: [completed]
+    branches: [main]
   workflow_dispatch:
     inputs:
       delete_remote:
@@ -76,10 +82,40 @@ jobs:
     name: Build + deploy to ~/public_html_next/
     runs-on: ubuntu-latest
     environment: cpanel-staging
+    # Auto-trigger: only deploy when the CI run that fired this succeeded
+    # AND was triggered by a push to main (an actual merge) — not a manual
+    # workflow_dispatch re-run of CI, which shouldn't ship to production.
+    # Manual dispatch of THIS deploy workflow is always allowed (operator intent).
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push') }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+        with:
+          # On workflow_run, build the exact commit CI validated rather than
+          # the moving branch tip. Falls back to github.sha on manual dispatch.
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      # Out-of-order protection: the deploy concurrency group serializes runs
+      # but does NOT order them by merge time, and CI runs for two merges can
+      # finish out of order. Without this, an older commit whose CI finished
+      # late could mirror over a newer deploy and regress production. If this
+      # commit is no longer main's tip, skip the live upload/smoke (the build
+      # still runs harmlessly; the newer commit's deploy is authoritative).
+      - name: Check this commit is still main's tip
+        id: freshness
+        env:
+          REF: ${{ github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          set -euo pipefail
+          git fetch --quiet origin main
+          TIP=$(git rev-parse origin/main)
+          if [ "$REF" != "$TIP" ]; then
+            echo "::warning::Commit $REF is superseded by $TIP on main — skipping this stale deploy."
+            echo "superseded=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "superseded=false" >> "$GITHUB_OUTPUT"
+          fi
 
       # Safety gate: refuse to deploy if the CI workflow (lint, jest,
       # build, Playwright) on this exact commit isn't green. The deploy
@@ -89,11 +125,15 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          REF: ${{ github.sha }}
+          REF: ${{ github.event.workflow_run.head_sha || github.sha }}
         run: |
           set -e
+          # Reference CI by filename (rename-proof) rather than display name.
+          # NOTE: the on.workflow_run.workflows trigger above must use the
+          # display name "CI - Build and Test" (GitHub requires the name
+          # there) — keep both in sync with .github/workflows/ci.yml.
           rows=$(gh run list \
-            --workflow="CI - Build and Test" \
+            --workflow="ci.yml" \
             --commit="$REF" \
             --limit 5 \
             --json status,conclusion,databaseId,createdAt)
@@ -138,6 +178,7 @@ jobs:
         run: npm ci
 
       - name: Build with Next.js (production basePath -- root)
+        if: ${{ steps.freshness.outputs.superseded != 'true' }}
         run: npm run build
         env:
           # Apex domain, no subpath -- same as deploy-cpanel-staging.yml.
@@ -154,6 +195,7 @@ jobs:
           NEXT_PUBLIC_TAWK_TO_PROPERTY: ${{ secrets.NEXT_PUBLIC_TAWK_TO_PROPERTY }}
 
       - name: Verify build output
+        if: ${{ steps.freshness.outputs.superseded != 'true' }}
         run: |
           test -f out/index.html
           # Hard-fail without .htaccess: Apache needs it to route clean URLs
@@ -163,6 +205,7 @@ jobs:
           echo "out/ ready, $(find out -type f | wc -l) files"
 
       - name: Azure login (OIDC)
+        if: ${{ steps.freshness.outputs.superseded != 'true' }}
         uses: azure/login@v3
         with:
           client-id: ${{ secrets.WR_ALL_FFC_AZURE_KV_CLIENT_ID }}
@@ -170,6 +213,7 @@ jobs:
           allow-no-subscriptions: true
 
       - name: Fetch production FTP creds from Key Vault
+        if: ${{ steps.freshness.outputs.superseded != 'true' }}
         shell: pwsh
         env:
           # Hardcoded: this workflow targets exactly one vault. Not taking a
@@ -199,6 +243,7 @@ jobs:
           "CPANEL_FTP_PASSWORD=$ftpPw"   | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
       - name: Upload out/ to ~/public_html_next/
+        if: ${{ steps.freshness.outputs.superseded != 'true' }}
         env:
           DELETE_REMOTE: ${{ inputs.delete_remote }}
         run: |
@@ -206,6 +251,9 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq lftp
 
+          # On auto-deploy (workflow_run) there is no dispatch input, so
+          # DELETE_REMOTE arrives empty -> default to a clean mirror.
+          if [ -z "${DELETE_REMOTE:-}" ]; then DELETE_REMOTE=true; fi
           DELETE_FLAG=""
           if [ "$DELETE_REMOTE" = "true" ]; then
             DELETE_FLAG="--delete"
@@ -261,18 +309,21 @@ jobs:
           echo "Upload to ~/public_html_next/ complete."
 
       - name: Deploy summary
+        if: ${{ steps.freshness.outputs.superseded != 'true' }}
         env:
           DELETE_REMOTE: ${{ inputs.delete_remote }}
         run: |
+          if [ -z "${DELETE_REMOTE:-}" ]; then DELETE_REMOTE=true; fi
           {
-            echo "## Production upload to ~/public_html_next/"
+            echo "## Production deploy to ~/public_html_next/"
             echo ""
+            echo "- **Trigger:** ${{ github.event_name }}"
             echo "- **Files uploaded:** $(find out -type f | wc -l)"
             echo "- **Clean mirror (--delete):** ${DELETE_REMOTE}"
             echo ""
-            echo "This directory is NOT live yet. To cut over, swap the apex"
-            echo "docroot to public_html_next in cPanel, then re-dispatch this"
-            echo "workflow with run_smoke=true to verify the live apex."
+            echo "Post-cutover, ~/public_html_next/ is the live apex docroot,"
+            echo "so this upload is live as soon as the Cloudflare cache"
+            echo "refreshes. The smoke step verifies the live apex."
           } >> "$GITHUB_STEP_SUMMARY"
 
       # Post-cutover only. Full smoke suite: every sitemap URL returns 200,
@@ -280,9 +331,11 @@ jobs:
       # target, /hub/ serves a WHMCS-marker body, an unknown URL returns 404,
       # and key assets (sitemap.xml, robots.txt, favicon) are reachable.
       - name: Full smoke suite (post-cutover)
-        if: ${{ inputs.run_smoke }}
+        # Always verify on auto-deploy; on manual dispatch honor the input.
+        # Skipped when this commit was superseded (no upload happened).
+        if: ${{ steps.freshness.outputs.superseded != 'true' && (github.event_name == 'workflow_run' || inputs.run_smoke) }}
         env:
-          BASE_URL: ${{ inputs.public_url_base }}
+          BASE_URL: ${{ inputs.public_url_base || 'https://freeforcharity.org' }}
         run: |
           # Quick reachability first -- bust Cloudflare cache so we observe
           # the freshly-deployed origin, not an edge-cached old response.

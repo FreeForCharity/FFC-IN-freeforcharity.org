@@ -53,17 +53,18 @@ https://sdgs.un.org/goals/**
 # Internal GitHub Actions badge URLs — always valid when the workflow exists
 https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/**
 
-# Post-cutover: the apex now serves the Next.js static site from cPanel,
-# so lychee validates every internal link (/about-us, /donate, /volunteer,
-# etc.) against the live new site — catching broken internal links the next
-# time someone touches a navigation component. Only the paths we don't own
-# stay excluded:
-#     /hub/**     → WHMCS (third-party app, served via symlink)
-#     /cdn-cgi/** → Cloudflare-managed endpoints
-https://freeforcharity.org/hub/**
-https://www.freeforcharity.org/hub/**
-https://freeforcharity.org/cdn-cgi/**
-https://www.freeforcharity.org/cdn-cgi/**
+# Post-cutover the apex serves the Next.js static site from cPanel, but it
+# sits behind Cloudflare / cPanel edge security that intermittently returns
+# 415/403 to lychee's automated requests from GitHub Actions IPs — even
+# though the pages serve 200 in browsers and via curl. Validating internal
+# links against production therefore produces flaky false failures, so the
+# whole apex is excluded here. Internal route/link correctness is covered
+# instead by tests/navigation.spec.ts + tests/trailing-slash.spec.ts
+# (Playwright) and the post-deploy smoke suite (scripts/smoke-test.mjs),
+# which hits every sitemap URL and the WP→Next redirects. /hub (WHMCS) and
+# /cdn-cgi (Cloudflare) are third-party regardless.
+https://freeforcharity.org/**
+https://www.freeforcharity.org/**
 
 # Sites that block CI crawlers or are intentionally placeholder / flaky
 https://my.interserver.net/**
