@@ -279,6 +279,7 @@ const index = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
+              {/* eslint-disable-next-line @next/next/no-img-element -- external dynamic GuideStar badge served from their host; not a local optimizable asset */}
               <img
                 src="https://widgets.guidestar.org/TransparencySeal/9326392"
                 alt="GuideStar Transparency Seal"

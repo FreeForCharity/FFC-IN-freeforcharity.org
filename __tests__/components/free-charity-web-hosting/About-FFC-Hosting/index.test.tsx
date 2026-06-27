@@ -21,7 +21,7 @@ describe('AboutFFCHosting Component', () => {
 
   it('renders the image with correct alt text', () => {
     render(<AboutFFCHosting />)
-    const image = screen.getByAltText('Example')
+    const image = screen.getByAltText('Free For Charity hosting dashboard')
     expect(image).toBeInTheDocument()
     expect(image).toHaveAttribute('src', '/Images/About-FFC-Hosting.webp')
   })
