@@ -133,9 +133,9 @@ npm run build  # Type checking is part of build process
 
 ### Overview
 
-The project uses **Playwright** for end-to-end testing. All tests run automatically in CI before deployment.
+The project uses **Playwright** for end-to-end (E2E) testing and **Jest + React Testing Library + jest-axe** (jsdom) for unit, component, and accessibility tests. All tests run automatically in CI (`.github/workflows/ci.yml`) before the production deploy to InterServer cPanel (`.github/workflows/deploy-cpanel.yml`). GitHub Pages is now a manual staging/preview surface only (`.github/workflows/deploy-gh-pages-staging.yml`), not production.
 
-**Test Framework**: Playwright v1.56.0  
+**E2E Test Framework**: Playwright v1.56.0  
 **Browser**: Chromium (uses system browser to avoid network restrictions)  
 **Test Statistics**:
 
@@ -178,14 +178,15 @@ npx playwright test --debug
 
 #### CI/CD Environment
 
-Tests run automatically in GitHub Actions:
+Tests run automatically in GitHub Actions (`ci.yml`):
 
-- **Trigger**: Every push to main branch
-- **Environment**: Ubuntu latest with Node.js 24
+- **Trigger**: Every push / pull request to the `main` branch
+- **Environment**: Ubuntu latest with Node.js 24.x
+- **Pipeline**: Format check, lint, Jest unit/component tests, build, internal link check, then Playwright E2E
 - **Browser Setup**: `npx playwright install --with-deps chromium`
-- **Build**: Built with `NEXT_PUBLIC_BASE_PATH=/freeforcharity-web`
-- **Retry Logic**: Failed tests retry 2 times
-- **Failure Handling**: Deployment blocked if tests fail
+- **Production build**: Built at root path with `NEXT_PUBLIC_BASE_PATH=''` (the cPanel apex docroot). The GitHub Pages staging build uses `NEXT_PUBLIC_BASE_PATH=/FFC-IN-freeforcharity.org`.
+- **Retry Logic**: Failed E2E tests retry 2 times
+- **Failure Handling**: The production deploy (`deploy-cpanel.yml`) only runs after CI is green
 
 ### Test Files and Coverage
 
@@ -371,32 +372,43 @@ Key settings:
 
 ## CI/CD Integration
 
-### GitHub Actions Workflow
+### GitHub Actions Workflows
 
-**File**: `.github/workflows/nextjs.yml`
-
-**Pipeline Steps**:
+**CI** (`.github/workflows/ci.yml`) — runs on every push / PR to `main`:
 
 1. ✅ Checkout repository
-2. ✅ Setup Node.js 24 with caching
+2. ✅ Setup Node.js 24.x with caching
 3. ✅ Install dependencies (`npm ci`)
-4. ✅ Restore Next.js build cache
-5. ✅ Install Playwright browsers with system dependencies
-6. ✅ Build with `NEXT_PUBLIC_BASE_PATH=/freeforcharity-web`
-7. ✅ Run Playwright test suite (with `CI=true`)
-8. ✅ Upload build artifacts (`./out` directory)
-9. ✅ Deploy to GitHub Pages (only if tests pass)
+4. ✅ Format check and lint
+5. ✅ Run Jest unit/component/a11y tests (jest-axe, jsdom)
+6. ✅ Build the site
+7. ✅ Internal link check
+8. ✅ Install Playwright browsers with system dependencies
+9. ✅ Run Playwright E2E suite (with `CI=true`)
 
-**Triggers**:
+**Production deploy** (`.github/workflows/deploy-cpanel.yml`) — runs only after CI is green on `main`. It mirrors the built `out/` directory into `~/public_html` on InterServer cPanel (the live apex docroot for `freeforcharity.org`, served at the root path with `NEXT_PUBLIC_BASE_PATH=''`), excluding the WHMCS install at `~/public_html/hub`.
 
-- Push to `main` branch
-- Manual workflow dispatch
+**Staging / preview deploy** (`.github/workflows/deploy-gh-pages-staging.yml`) — manual only. Publishes to GitHub Pages at the subpath `https://freeforcharity.github.io/FFC-IN-freeforcharity.org/`, where `basePath` `/FFC-IN-freeforcharity.org` plus the `assetPath()` helper apply.
+
+**Other workflows**: `lighthouse.yml` (performance), `lychee.yml` (link checking), `scheduled-prod-smoke.yml` (scheduled production smoke checks).
+
+> Note: the old GitHub Pages **production** workflows (`deploy.yml` / `nextjs.yml`) have been removed — production is no longer served from GitHub Pages.
 
 **Failure Handling**:
 
-- Tests must pass before deployment
+- CI must pass before the production deploy runs
 - Build artifacts uploaded even on test failure
 - Traces and screenshots available for debugging
+
+### Post-Deploy Smoke Tests
+
+After a production deploy, run the smoke harness against the live site:
+
+```bash
+npm run smoke-test    # runs scripts/smoke-test.mjs
+```
+
+It hits the live apex (`freeforcharity.org`), the WHMCS hub at `/hub`, and verifies key redirects. The `scheduled-prod-smoke.yml` workflow runs these checks on a schedule.
 
 ### TypeScript
 
@@ -439,7 +451,7 @@ npm audit
 
 - [ ] Logo displays in Header (top navigation)
 - [ ] Logo renders correctly on all pages
-- [ ] Images load on both custom domain and GitHub Pages
+- [ ] Images load on both the production apex (root path) and the GitHub Pages staging/preview subpath
 - [ ] Responsive design works on mobile, tablet, desktop
 - [ ] Mobile navigation menu functions correctly
 - [ ] All animations work smoothly
@@ -570,9 +582,9 @@ cat src/data/team.ts
 
 **Issue: Images not loading**
 
-- **Custom domain**: Images should load from root path
-- **GitHub Pages**: Images need basePath prefix
-- **Solution**: Use `assetPath()` helper from `src/lib/assetPath.ts`
+- **Production (cPanel apex)**: Images load from the root path (`NEXT_PUBLIC_BASE_PATH=''`)
+- **GitHub Pages staging/preview**: Images need the `/FFC-IN-freeforcharity.org` basePath prefix
+- **Solution**: Use `assetPath()` helper from `src/lib/assetPath.ts` so both surfaces resolve correctly
 
 ## File Structure Reference
 
@@ -584,7 +596,9 @@ freeforcharity-web/
 │   └── README.md                  # Test documentation
 ├── playwright.config.ts            # Playwright configuration
 ├── .github/workflows/
-│   └── nextjs.yml                 # CI/CD pipeline with automated tests
+│   ├── ci.yml                     # CI: format, lint, Jest, build, links, Playwright E2E
+│   ├── deploy-cpanel.yml          # Production deploy to InterServer cPanel (apex)
+│   └── deploy-gh-pages-staging.yml # Manual GitHub Pages staging/preview deploy
 ├── public/                         # Static assets
 ├── src/data/
 │   ├── faqs/
@@ -611,10 +625,10 @@ freeforcharity-web/
 
 ### High Priority
 
-1. **Accessibility Testing**
-   - Tool: @axe-core/playwright
+1. **Accessibility Testing** (partially adopted)
+   - Tool: `@axe-core/playwright` (E2E) and `jest-axe` (unit/component)
    - Purpose: Automated WCAG 2.1 compliance checks
-   - Benefit: Ensure site is accessible to all users
+   - Status: In use today; expand coverage to remaining pages/components
 
 2. **Mobile Responsive Testing**
    - Tool: Playwright viewport configuration

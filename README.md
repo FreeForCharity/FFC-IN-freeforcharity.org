@@ -1,11 +1,11 @@
 # Free For Charity
 
 [![CI - Build and Test](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/ci.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/ci.yml)
-[![Deploy to GitHub Pages](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/deploy.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/deploy.yml)
+[![Deploy to cPanel (production)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/deploy-cpanel.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/deploy-cpanel.yml)
 [![CodeQL](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/codeql.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/codeql.yml)
 [![Lighthouse CI](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/lighthouse.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/lighthouse.yml)
 
-Free For Charity website built with Next.js 16.0.10 (App Router).
+Free For Charity website built with Next.js 16 (App Router).
 
 ## Organization
 
@@ -31,17 +31,17 @@ For a complete list, see the [Site Map](#site-map) section below.
 
 ## Deployment
 
-- **Primary Site**: [https://www.freeforcharity.org](https://www.freeforcharity.org) (custom domain with CNAME)
-- **GitHub Pages**: [https://freeforcharity.github.io/FFC-IN-freeforcharity.org/](https://freeforcharity.github.io/FFC-IN-freeforcharity.org/)
-- **Hosting**: GitHub Pages
-- **Deployment**: Automated via GitHub Actions on push to `main` branch
-- **Build Configuration**: Dual deployment support (custom domain and GitHub Pages basePath)
+- **Primary Site**: [https://www.freeforcharity.org](https://www.freeforcharity.org) (apex domain, served from root path)
+- **Production Hosting**: InterServer cPanel — the static export is served from `~/public_html` at the root path
+- **Production Deployment**: Auto-deploy on merge to `main` after CI passes, via [`.github/workflows/deploy-cpanel.yml`](.github/workflows/deploy-cpanel.yml) (FTPS mirror of `out/` into `~/public_html`)
+- **Staging / Preview**: GitHub Pages is a manual preview surface at [https://freeforcharity.github.io/FFC-IN-freeforcharity.org/](https://freeforcharity.github.io/FFC-IN-freeforcharity.org/) (project subpath); a separate cPanel staging account is also available
+- **Build Configuration**: Production builds at the root path (`NEXT_PUBLIC_BASE_PATH=''`); the GitHub Pages staging build uses the `/FFC-IN-freeforcharity.org` basePath
 
 ## Tech Stack
 
-- **Framework**: Next.js 16.0.10 (App Router with TypeScript)
-- **React**: 19.2.0
-- **Styling**: Tailwind CSS 4.1.12
+- **Framework**: Next.js 16 (App Router with TypeScript)
+- **React**: 19.2.7
+- **Styling**: Tailwind CSS v4
 - **UI Components**:
   - Framer Motion 12.23.24 (animations)
   - Lucide React 0.469.0 (icons)
@@ -49,7 +49,7 @@ For a complete list, see the [Site Map](#site-map) section below.
   - Swiper 12.0.3 (carousels)
 - **Testing**: Playwright 1.56.0
 - **Linting**: ESLint 9 with Next.js config
-- **Build**: Static export for GitHub Pages deployment
+- **Build**: Static export (`output: export`) deployed to cPanel; also previewable on GitHub Pages staging
 
 ## Local Development
 
@@ -232,7 +232,8 @@ Reusable components in `src/components/UI/`:
 FFC-IN-freeforcharity.org/
 ├── .github/
 │   ├── workflows/
-│   │   └── nextjs.yml          # CI/CD pipeline for GitHub Pages
+│   │   ├── ci.yml              # CI - Build and Test (runs on every push/PR)
+│   │   └── deploy-cpanel.yml   # Production deploy to cPanel on merge to main
 │   └── copilot-instructions.md # Instructions for GitHub Copilot agents
 ├── public/                      # Static assets
 │   ├── Images/                  # Image files
@@ -263,7 +264,7 @@ FFC-IN-freeforcharity.org/
 │   │   ├── team.ts            # Team data loader
 │   │   └── testimonials.ts     # Testimonial data loader
 │   └── lib/
-│       └── assetPath.ts        # Helper for GitHub Pages asset paths
+│       └── assetPath.ts        # Helper for basePath-aware asset paths (GitHub Pages staging subpath)
 ├── tests/                       # Playwright tests
 │   ├── logo.spec.ts            # Logo visibility tests
 │   ├── image-loading.spec.ts   # Image loading tests
@@ -383,26 +384,31 @@ vi src/app/robots.ts
 
 ## Deployment Details
 
-### Production Deployment
+### Production Deployment (cPanel)
 
-The site uses **dual deployment** strategy:
+Production runs on **InterServer cPanel** at the apex domain [https://www.freeforcharity.org](https://www.freeforcharity.org), served from the **root path**.
 
-1. **Custom Domain**: [https://www.freeforcharity.org](https://www.freeforcharity.org)
-   - Primary production site
-   - CNAME configured in DNS
-   - No basePath required
-   - Assets served from root path
+- **Hosting**: InterServer cPanel
+- **Docroot**: `~/public_html` (the live apex docroot)
+- **basePath**: none — `NEXT_PUBLIC_BASE_PATH` is empty (`''`); assets served from root
+- **How it deploys**: every merge to `main` runs the **CI - Build and Test** workflow (`.github/workflows/ci.yml`); on green, `.github/workflows/deploy-cpanel.yml` auto-deploys by `lftp`-mirroring the static export `out/` into `~/public_html` over FTPS. The mirror excludes the WHMCS billing portal at `~/public_html/hub` and the cPanel keeper files.
 
-2. **GitHub Pages**: [https://freeforcharity.github.io/FFC-IN-freeforcharity.org/](https://freeforcharity.github.io/FFC-IN-freeforcharity.org/)
-   - Backup/alternative URL
-   - Requires basePath: `/FFC-IN-freeforcharity.org`
-   - Assets served from subpath
+### Staging / Preview Surfaces
 
-### CI/CD Pipeline
+These are secondary, non-production surfaces:
 
-**Workflow**: `.github/workflows/nextjs.yml`
+1. **GitHub Pages** (manual preview): [https://freeforcharity.github.io/FFC-IN-freeforcharity.org/](https://freeforcharity.github.io/FFC-IN-freeforcharity.org/)
+   - Triggered manually via `.github/workflows/deploy-gh-pages-staging.yml`
+   - Served at the project subpath, so it requires basePath `/FFC-IN-freeforcharity.org`
+   - Assets served from the subpath (this is why `NEXT_PUBLIC_BASE_PATH` and the `assetPath()` helper exist)
 
-**Trigger**: Push to `main` branch
+2. **cPanel staging**: a separate staging cPanel account via `.github/workflows/deploy-cpanel-staging.yml`
+
+### CI Pipeline
+
+**Workflow**: `.github/workflows/ci.yml` (CI - Build and Test)
+
+**Trigger**: Pushes and pull requests (and as the gate before production deploy on `main`)
 
 **Pipeline Steps**:
 
@@ -410,19 +416,18 @@ The site uses **dual deployment** strategy:
 2. Setup Node.js 24
 3. Install dependencies with `npm ci`
 4. Install Playwright browsers
-5. Build with `NEXT_PUBLIC_BASE_PATH=/FFC-IN-freeforcharity.org`
+5. Build the static export
 6. Run Playwright tests
-7. Upload build artifacts (./out directory)
-8. Deploy to GitHub Pages (only if tests pass)
+
+On a green run against `main`, `deploy-cpanel.yml` then mirrors `out/` into `~/public_html`.
 
 **Environment Variables**:
 
-- `NEXT_PUBLIC_BASE_PATH`: Set to `/FFC-IN-freeforcharity.org` for GitHub Pages deployment
-- Not set (empty) for custom domain deployment
+- `NEXT_PUBLIC_BASE_PATH`: empty (`''`) for the production/root-path build (cPanel); set to `/FFC-IN-freeforcharity.org` only for the GitHub Pages staging build
 
 ### Local Production Build
 
-**Build for custom domain** (default):
+**Build for production / root path** (default — matches cPanel):
 
 ```bash
 npm run build
@@ -430,7 +435,7 @@ npm run preview
 # Visit http://localhost:3000
 ```
 
-**Build for GitHub Pages** (with basePath):
+**Build for GitHub Pages staging** (with basePath subpath):
 
 ```bash
 NEXT_PUBLIC_BASE_PATH=/FFC-IN-freeforcharity.org npm run build
@@ -448,7 +453,7 @@ npm run preview
 - `assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH || ""` - Asset path prefix
 
 **Asset Path Helper**:
-When adding images that need to work on both deployments, use the `assetPath()` helper:
+When adding images that need to work on both the production root path and the GitHub Pages staging subpath, use the `assetPath()` helper:
 
 ```typescript
 import { assetPath } from "@/lib/assetPath";
@@ -456,7 +461,7 @@ import { assetPath } from "@/lib/assetPath";
 <img src={assetPath("/Images/my-image.png")} alt="Description" />
 ```
 
-This automatically handles the basePath for both deployment scenarios.
+This automatically handles the basePath for both scenarios (empty in production, the subpath on GitHub Pages staging).
 
 ### Build Output
 
@@ -587,6 +592,6 @@ This project is maintained by Free For Charity, a 501(c)(3) nonprofit organizati
 
 ---
 
-**Documentation Status**: ✅ Updated February 2026  
-**Next.js Version**: 16.0.10  
+**Documentation Status**: ✅ Updated June 2026  
+**Next.js Version**: 16  
 **Node.js Version**: 24.x required

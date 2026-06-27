@@ -1,6 +1,6 @@
 # Test Suite
 
-This directory contains automated end-to-end tests for the Free For Charity web application using Playwright.
+This directory contains automated end-to-end (E2E) tests for the Free For Charity web application using Playwright. The project also has Jest + React Testing Library + jest-axe unit, component, and accessibility tests (jsdom) that live alongside the source and run in CI before the E2E suite.
 
 ## Test Statistics
 
@@ -292,8 +292,8 @@ npm run test:ui
 # Run only logo tests
 npx playwright test logo.spec.ts
 
-# Run only GitHub Pages tests
-npx playwright test github-pages.spec.ts
+# Run only the post-deploy smoke tests
+npx playwright test post-deploy-smoke.spec.ts
 
 # Run a specific test by name
 npx playwright test -g "should display logo in top left corner"
@@ -328,27 +328,31 @@ Tests are configured in `playwright.config.ts` at the project root.
 
 ## CI/CD Integration
 
-Tests are automatically run in GitHub Actions on every push to the main branch.
+Tests run automatically in GitHub Actions on every push / PR to the `main` branch.
 
-**Workflow**: `.github/workflows/nextjs.yml`
+**Workflow**: `.github/workflows/ci.yml` ("CI - Build and Test")
 
 **CI Pipeline Steps**:
 
 1. ✅ Checkout repository
-2. ✅ Setup Node.js 20
+2. ✅ Setup Node.js 24.x
 3. ✅ Install dependencies (`npm ci`)
-4. ✅ Install Playwright browsers with system deps
-5. ✅ Build Next.js with GitHub Pages basePath
-6. ✅ Run test suite
-7. ✅ Upload test artifacts on failure
-8. ✅ Deploy only if tests pass
+4. ✅ Format check and lint
+5. ✅ Run Jest unit/component/a11y tests (jest-axe, jsdom)
+6. ✅ Build the production site (root path, `NEXT_PUBLIC_BASE_PATH=''`)
+7. ✅ Internal link check
+8. ✅ Install Playwright browsers with system deps
+9. ✅ Run Playwright E2E suite
+
+On green, the production deploy (`.github/workflows/deploy-cpanel.yml`) mirrors `out/` into `~/public_html` on InterServer cPanel (the live apex docroot for `freeforcharity.org`), excluding the WHMCS hub at `~/public_html/hub`. GitHub Pages is now a manual staging/preview surface only (`deploy-gh-pages-staging.yml`) at the `/FFC-IN-freeforcharity.org` subpath, where `basePath` + `assetPath()` apply. The old GitHub Pages production workflows (`deploy.yml` / `nextjs.yml`) have been removed.
+
+After deploy, `npm run smoke-test` (`scripts/smoke-test.mjs`, also run on a schedule via `scheduled-prod-smoke.yml`) verifies the live apex, the WHMCS `/hub`, and key redirects.
 
 **Test Failure Handling**:
 
-- If any test fails, the build is marked as failed
-- Deployment to GitHub Pages is blocked
+- If any test fails, CI is marked as failed
+- The production deploy is blocked until CI is green
 - Test artifacts and traces are uploaded for debugging
-- Team is notified of failure
 
 ## Writing New Tests
 

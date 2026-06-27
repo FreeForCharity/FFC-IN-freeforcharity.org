@@ -92,5 +92,5 @@ Invoke these when the task matches their purpose. If no matching agent exists, p
 - **Footer and Team sections are mandatory FFC-wide standards.** See AGENTS.md for requirements.
 - All content is **hardcoded in components** — there is no CMS.
 - Content data lives in `src/data/` (team members, FAQs, testimonials as JSON).
-- Currently on Next.js 15.5.7 — upgrade to Next.js 16 is planned.
+- On Next.js 16 (App Router) with React 19.
 - Tailwind CSS v4 with CSS-based config (no tailwind.config file).
