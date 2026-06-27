@@ -266,6 +266,10 @@ jobs:
           } catch {
             Write-Host "::warning::APIM gateway key unavailable — post-mirror parity check will be skipped. $($_.Exception.Message)"
             "APIM_KEY=" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+            # Get-KvSecret's `az` call left $LASTEXITCODE=1 before throwing;
+            # clear it or GitHub's pwsh wrapper exits the step non-zero even
+            # though we deliberately handled this as non-fatal.
+            $global:LASTEXITCODE = 0
           }
 
           # Cloudflare token — DEFENSIVE: a missing/renamed secret must not fail
@@ -279,7 +283,14 @@ jobs:
           } catch {
             Write-Host "::warning::Cloudflare token '$($env:CF_KV_SECRET_NAME)' not found in $vault — post-deploy edge purge will be skipped. $($_.Exception.Message)"
             "CF_API_TOKEN=" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+            # Clear the failed `az` exit code so this handled-as-non-fatal miss
+            # doesn't make GitHub's pwsh wrapper fail the whole step.
+            $global:LASTEXITCODE = 0
           }
+          # Final guard: a caught optional-secret miss above must never leave a
+          # non-zero exit code for the step. (Required FTP creds throw uncaught
+          # and abort earlier, so reaching here means they loaded fine.)
+          exit 0
 
       - name: Upload out/ to ~/public_html/ (live apex docroot)
         if: ${{ steps.freshness.outputs.superseded != 'true' }}
