@@ -367,6 +367,22 @@ jobs:
             const shortSha = sha.slice(0, 8)
             const date = new Date().toISOString().slice(0, 10)
             const trigger = context.eventName
+            // Ensure the labels exist first. Creating an issue with a missing
+            // label (and the dedupe query below) would otherwise misbehave, so
+            // upsert them (422 = already exists). Same pattern as
+            // deploy-gh-pages-staging.yml.
+            const labelsNeeded = [
+              { name: 'deploy-failure', color: 'b60205', description: 'A production deploy or post-deploy smoke run failed' },
+              { name: 'incident', color: 'd93f0b', description: 'Production incident requiring immediate attention' },
+              { name: 'production-health', color: 'fbca04', description: 'Production health / smoke monitoring' },
+            ]
+            for (const label of labelsNeeded) {
+              try {
+                await github.rest.issues.createLabel({ owner: context.repo.owner, repo: context.repo.repo, ...label })
+              } catch (e) {
+                if (e.status !== 422) throw e // 422 = label already exists
+              }
+            }
             // Dedupe: append to an open deploy-failure issue so a flapping
             // deploy doesn't spam the tracker.
             const existing = await github.rest.issues.listForRepo({

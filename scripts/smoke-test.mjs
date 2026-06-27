@@ -105,13 +105,18 @@ async function checkBodyContains(name, path, expectedSubstrings) {
 // be blank/non-interactive for real users).
 async function checkNextAssetLoads() {
   const home = await request('/', { readBody: true })
+  if (home.error) {
+    record(`Next.js JS bundle loads`, false, `/ → ${home.status} (${home.error})`)
+    return
+  }
   const match = home.body && home.body.match(/\/_next\/static\/[^"')\s]+\.js/)
   if (!match) {
-    record(`Next.js bundle referenced on homepage`, false, '/ → no /_next/static/*.js reference')
+    record(`Next.js JS bundle loads`, false, '/ → no /_next/static/*.js reference found')
     return
   }
   const r = await request(match[0])
-  record(`Next.js JS bundle loads`, r.status === 200, `${match[0]} → ${r.status}`)
+  const detail = r.error ? `${match[0]} → ${r.status} (${r.error})` : `${match[0]} → ${r.status}`
+  record(`Next.js JS bundle loads`, r.status === 200, detail)
 }
 
 function parseSitemap(xml) {
@@ -203,14 +208,6 @@ async function main() {
   // 200 can mask an empty/partial index.html (e.g. a truncated upload), so
   // assert a known marker from the rendered page.
   await checkBodyContains(`/ renders homepage content`, '/', ['free for charity'])
-  // WHMCS at /hub/ — assert response includes a WHMCS-specific marker so
-  // a stale index.html or directory listing doesn't pass as a healthy hub.
-  await checkBodyContains(`/hub/ serves WHMCS (not a placeholder)`, '/hub/', [
-    'whmcs',
-    'WHMCompleteSolution',
-    'cart.php',
-    'clientarea',
-  ])
   await checkStatus(`unknown URL returns 404`, '/this-page-does-not-exist-xyz/', 404)
   await checkStatus(`favicon`, '/favicon.ico', 200)
   await checkStatus(`sitemap.xml`, '/sitemap.xml', 200)
@@ -226,6 +223,16 @@ async function main() {
     '/free-for-charity-endowment-fund/',
     ['zeffy']
   )
+  // PayPal return flow: the donation-confirmation callback must 302 to
+  // /donate AND preserve the transaction query (tx=...), or the post-donation
+  // confirmation params are lost. (The CSV loop above only covers the
+  // no-query case; this asserts the param actually survives.)
+  await checkRedirect(
+    `/donation-confirmation preserves the PayPal tx param`,
+    '/donation-confirmation/?tx=SMOKE123',
+    302,
+    '/donate/?tx=SMOKE123'
+  )
   // Mandatory FFC-wide homepage sections (Team + testimonials) — their
   // absence means a broken/partial render, not just a styling diff.
   await checkBodyContains(`homepage renders the Team section`, '/', ['the free for charity team'])
@@ -239,6 +246,27 @@ async function main() {
   await checkStatus(`logo asset loads`, '/Images/ffc-logo-banner.webp', 200)
   // The built JS bundle must actually have uploaded (catches partial deploys).
   await checkNextAssetLoads()
+
+  console.log(`\n-- WHMCS billing portal (/hub — third-party PHP app via symlink)`)
+  // Every /hub endpoint must serve real WHMCS, not a Next.js 404 or a
+  // placeholder — proves the public_html_next/hub symlink and the WHMCS app
+  // survived the deploy. These are live customer flows: store, cart, login,
+  // announcements, and the admin console.
+  const WHMCS_MARKERS = ['whmcs', 'WHMCompleteSolution', 'cart.php', 'clientarea']
+  await checkBodyContains(`/hub/ storefront`, '/hub/', WHMCS_MARKERS)
+  await checkBodyContains(`/hub/cart.php (order/cart)`, '/hub/cart.php', WHMCS_MARKERS)
+  await checkBodyContains(
+    `/hub/clientarea.php (client login)`,
+    '/hub/clientarea.php',
+    WHMCS_MARKERS
+  )
+  await checkBodyContains(`/hub/announcements.php`, '/hub/announcements.php', WHMCS_MARKERS)
+  await checkBodyContains(
+    `/hub/store product page`,
+    '/hub/store/ffc-consulting/nonprofit-charity-onboarding',
+    WHMCS_MARKERS
+  )
+  await checkBodyContains(`/hub/globaladmin (admin login)`, '/hub/globaladmin', WHMCS_MARKERS)
 
   const failed = results.filter((r) => !r.ok)
   console.log(`\n${results.length - failed.length}/${results.length} passed`)
