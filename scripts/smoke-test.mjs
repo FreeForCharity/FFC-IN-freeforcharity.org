@@ -206,11 +206,19 @@ async function checkHttpsRedirect(name) {
 // status — a server/host default 404 (or a blank body) would still be 404.
 async function check404Renders(name) {
   const r = await request('/this-page-does-not-exist-xyz/', { readBody: true })
-  const hasMarker = r.body ? /page not|404|free for charity/i.test(r.body) : false
+  if (r.error) {
+    record(name, false, `/…nonexistent → ${r.status} (${r.error})`)
+    return
+  }
+  // Marker is the unique <h1> from src/app/not-found.tsx ("We couldn't find
+  // that page"). The served apostrophe is U+2019 (&rsquo;), so `.` spans it.
+  // A generic host/CDN 404 (just "404" / "page not found") won't match this,
+  // avoiding the false positives the broad old marker produced.
+  const hasMarker = r.body ? /we couldn.t find that page/i.test(r.body) : false
   record(
     name,
     r.status === 404 && hasMarker,
-    `/…nonexistent → ${r.status}${hasMarker ? ' (custom 404 body)' : ' (no 404 marker)'}`
+    `/…nonexistent → ${r.status}${hasMarker ? ' (custom 404 body)' : ' (no custom-404 marker)'}`
   )
 }
 
