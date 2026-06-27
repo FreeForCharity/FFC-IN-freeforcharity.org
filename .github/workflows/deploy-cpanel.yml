@@ -202,7 +202,9 @@ jobs:
           # Floor on file count: the mirror does a --delete against the LIVE
           # docroot, so a truncated/partial build must NOT proceed (it would
           # wipe the live site). A healthy export is ~hundreds of files.
-          count=$(find out -type f | wc -l)
+          # Trim whitespace: `wc -l` can pad with leading spaces on some
+          # platforms, which would break the numeric `-lt` test below.
+          count=$(find out -type f | wc -l | tr -d '[:space:]')
           if [ "$count" -lt 50 ]; then
             echo "::error::out/ has only $count files — suspiciously small build, refusing to deploy."
             exit 1

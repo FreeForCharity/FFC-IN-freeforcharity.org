@@ -63,7 +63,7 @@ src/
     globals.css         # Global styles (Tailwind v4 imports)
     sitemap.ts          # Dynamic sitemap generator
     robots.ts           # Robots.txt generator
-    [route]/page.tsx    # ~29 additional routes
+    [route]/page.tsx    # ~35 routes total
   components/           # Reusable UI components
     footer/             # Mandatory 3-column footer (FFC standard)
     header/             # Navigation header

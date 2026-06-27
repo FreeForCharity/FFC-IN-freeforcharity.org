@@ -7,7 +7,7 @@ This directory contains automated end-to-end (E2E) tests for the Free For Charit
 - **Total Tests**: 125 tests across 9 test suites
 - **Status**: ✅ 124 passing, ⏭️ 1 skipped
 - **Execution Time**: ~40-60 seconds
-- **Framework**: Playwright v1.56.0
+- **Framework**: Playwright v1.60
 
 ## Test Files
 
@@ -532,4 +532,4 @@ When tests fail in CI:
 
 **Test Suite Status**: ✅ 124 passing, 1 skipped
 **Last Updated**: February 2026
-**Framework**: Playwright v1.56.0
+**Framework**: Playwright v1.60

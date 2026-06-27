@@ -13,16 +13,17 @@ This guide provides comprehensive documentation for testing the Free For Charity
 ### Run Tests
 
 ```bash
-# Build the application
-npm run build
+# Jest unit / component / a11y tests (jsdom — no build required)
+npm test              # Run the Jest suite once
+npm run test:watch    # Jest in watch mode
+npm run test:coverage # Jest with coverage report
 
-# Install Playwright browsers (first time only)
-npx playwright install chromium
-
-# Run tests
-npm test              # Headless mode (default)
-npm run test:headed   # With visible browser
-npm run test:ui       # Interactive Playwright UI
+# Playwright E2E tests (require a production build first)
+npm run build                       # Build the static site
+npx playwright install chromium     # Install browsers (first time only)
+npm run test:e2e          # Headless mode (default)
+npm run test:e2e:headed   # With visible browser
+npm run test:e2e:ui       # Interactive Playwright UI
 ```
 
 ## Quick Test Checklist
@@ -43,7 +44,7 @@ npm install           # Takes ~10-15 seconds
 ### 3. Run Linter
 
 ```bash
-npm run lint          # Expect 11 warnings (see below)
+npm run lint          # Passes clean: 0 errors
 ```
 
 ### 4. Build Application
@@ -61,7 +62,8 @@ npm run preview       # Visit http://localhost:3000
 ### 6. Run Automated Tests
 
 ```bash
-npm test              # Requires build first
+npm test              # Jest unit/component/a11y tests (no build required)
+npm run test:e2e      # Playwright E2E tests (requires build first)
 ```
 
 ## Code Quality & Linting
@@ -74,28 +76,9 @@ npm test              # Requires build first
 npm run lint
 ```
 
-**Current Output**: 11 warnings (expected)
+**Current Output**: Passes clean — **0 errors**.
 
-**Warning Breakdown**:
-
-1. **Image Optimization Warnings** (6 warnings)
-   - Files: `Footer/index.tsx`, `Header/index.tsx`, `General-Donation-Card.tsx`, `trainingcard.tsx`, `About-FFC-Hosting/index.tsx`, `Hero/index.tsx` (endowment fund)
-   - Issue: Using `<img>` instead of Next.js `<Image />` component
-   - Status: ✅ **Acceptable** - Required for static export with unoptimized images
-   - Recommendation: No action needed for static export
-
-2. **Unused Import Warnings** (3 warnings)
-   - `Link` in `501c3-components/Ready-to-get-started-and-faqs/index.tsx`
-   - `assetPath` in `Figma-Home-Page-Components/Mission/index.tsx`
-   - `Image` in `free-charity-web-hosting/About-FFC-Hosting/index.tsx`
-   - Status: ⚠️ **Can be cleaned up**
-   - Recommendation: Remove unused imports
-
-3. **React Hooks Warnings** (2 warnings)
-   - `useEffect` missing dependency in `ClientTestimonials/index.tsx`
-   - `ref` cleanup function warning in `CallToActionCard.tsx`
-   - Status: ⚠️ **Review recommended**
-   - Recommendation: Review and fix if causing issues
+The source tree lints without errors. (A trivial "Unused eslint-disable directive" warning may surface in generated files under `coverage/`, which is not part of the source and can be ignored.)
 
 **Rules Enabled**:
 
@@ -135,41 +118,44 @@ npm run build  # Type checking is part of build process
 
 The project uses **Playwright** for end-to-end (E2E) testing and **Jest + React Testing Library + jest-axe** (jsdom) for unit, component, and accessibility tests. All tests run automatically in CI (`.github/workflows/ci.yml`) before the production deploy to InterServer cPanel (`.github/workflows/deploy-cpanel.yml`). GitHub Pages is now a manual staging/preview surface only (`.github/workflows/deploy-gh-pages-staging.yml`), not production.
 
-**E2E Test Framework**: Playwright v1.56.0  
-**Browser**: Chromium (uses system browser to avoid network restrictions)  
-**Test Statistics**:
+The suite is organized in two layers:
 
-- **Total**: 29 tests across 6 test suites
-- **Passing**: 28 tests ✅
-- **Skipped**: 1 test ⏭️
-- **Execution Time**: ~25-30 seconds
+- **Jest unit / component / a11y layer** — **20 test files** under `__tests__/`. Uses Jest + React Testing Library + jest-axe in a jsdom environment to render components and pages and assert on markup, behavior, data integrity, and accessibility (axe). Runs with `npm test` (no build required).
+- **Playwright E2E layer** — **18 spec files** in `tests/` (`*.spec.ts`). Drives a real browser against the built site to verify end-to-end behavior, navigation, and rendering. Runs with `npm run test:e2e` (requires `npm run build` first).
+
+**E2E Test Framework**: Playwright (Chromium — uses system browser to avoid network restrictions)  
+**Unit/Component Framework**: Jest + React Testing Library + jest-axe (jsdom)
 
 ### Running Tests
 
 #### Local Development
 
 ```bash
-# Build the site first (required)
-npm run build
+# Jest unit/component/a11y tests (no build required)
+npm test              # Run once
+npm run test:watch    # Watch mode
+npm run test:coverage # With coverage
 
-# Install Playwright browsers (first time only)
-npx playwright install chromium
-
-# Run tests in different modes
-npm test              # Headless mode (default)
-npm run test:headed   # With browser visible
-npm run test:ui       # Interactive Playwright UI
+# Playwright E2E tests
+npm run build                       # Build the site first (required)
+npx playwright install chromium     # Install browsers (first time only)
+npm run test:e2e          # Headless mode (default)
+npm run test:e2e:headed   # With browser visible
+npm run test:e2e:ui       # Interactive Playwright UI
 ```
 
 #### Individual Test Execution
 
 ```bash
-# Run specific test file
+# Run a specific Jest test file
+npx jest __tests__/components/header/index.test.tsx
+
+# Run a specific Playwright spec file
 npx playwright test logo.spec.ts
 npx playwright test image-loading.spec.ts
 npx playwright test animated-numbers.spec.ts
 
-# Run specific test by name
+# Run a specific Playwright test by name
 npx playwright test -g "should display logo"
 
 # Debug mode
@@ -190,163 +176,67 @@ Tests run automatically in GitHub Actions (`ci.yml`):
 
 ### Test Files and Coverage
 
-This section details all 6 test suites and their 29 test cases.
+This section summarizes the two test layers by file and area. It describes coverage by file/category rather than enumerating individual test cases, since both suites evolve.
 
-#### 1. Logo and Image Visibility (`tests/logo.spec.ts`) - 3 tests
+#### Playwright E2E layer (`tests/` — 18 spec files)
 
-Tests that verify the Free For Charity logo and images display correctly.
+Each file below is a `*.spec.ts` in `tests/`, grouped by area:
 
-**Test Cases:**
+**Navigation & layout**
 
-1. **`should display logo in header`**
-   - **Purpose**: Verifies logo appears in site header
-   - **Checks**: Logo visibility, src attribute, alt text
-2. **`should display hero section image`**
-   - **Purpose**: Validates hero section image displays correctly
-   - **Checks**: Hero image element present and visible
+- `navigation.spec.ts` — primary site navigation and routing
+- `dropdown-navigation.spec.ts` — dropdown menu behavior
+- `mobile-navigation.spec.ts` — mobile menu / hamburger navigation
+- `trailing-slash.spec.ts` — trailing-slash URL handling
+- `external-links.spec.ts` — external link targets and attributes
 
-3. **`both header logo and hero image should be present on the same page`**
-   - **Purpose**: Ensures both logo and hero image are visible simultaneously
-   - **Checks**: Both images present, consistent display
+**Page content & sections**
 
-#### 2. Image Loading (`tests/image-loading.spec.ts`) - 3 tests
+- `contact-page.spec.ts` — contact page rendering and behavior
+- `team-section.spec.ts` — team / board member section
+- `footer-complete.spec.ts` — footer content and completeness
+- `copyright.spec.ts` — footer copyright notice (current year, org link)
+- `logo.spec.ts` — header logo and hero image visibility
+- `image-loading.spec.ts` — image loading and visibility
+- `mission-video.spec.ts` — mission section video element
+- `animated-numbers.spec.ts` — Results section animated statistics
 
-Tests that verify image loading performance and visibility.
+**Behavior & integrations**
 
-**Test Cases:**
+- `cookie-consent.spec.ts` — cookie consent banner and preferences modal
+- `donation-flows.spec.ts` — donation flow paths
+- `analytics-loading.spec.ts` — analytics script loading
+- `accessibility.spec.ts` — accessibility checks (`@axe-core/playwright`)
+- `post-deploy-smoke.spec.ts` — post-deploy smoke checks
 
-1. **`images should load correctly and be visible`**
-   - **Purpose**: Confirms images load without errors
-   - **Checks**: Image visibility, no broken images
+#### Jest unit / component / a11y layer (`__tests__/` — 20 test files)
 
-2. **`hero image should load from local assets`**
-   - **Purpose**: Verifies hero image loads from correct local asset path
-   - **Checks**: Hero image src attribute, visibility, not broken
+Jest + React Testing Library + jest-axe (jsdom) render components and pages and assert on markup, behavior, data integrity, and accessibility. Grouped by area:
 
-3. **`images have natural dimensions indicating successful load`** ⏭️ **SKIPPED**
-   - **Purpose**: Checks images have natural (non-zero) dimensions after loading
-   - **Checks**: naturalWidth and naturalHeight properties are greater than zero
-   - **Status**: Skipped due to timing/rendering differences in CI
+**App / routing / metadata**
 
-#### 3. Animated Numbers (`tests/animated-numbers.spec.ts`) - 5 tests
+- `app/metadata.test.ts` — page metadata
+- `app/sitemap.test.ts` — sitemap generation
+- `app/page-render.test.tsx` — page render smoke tests
+- `app/all-sections` and `components/all-sections.test.tsx` — broad section rendering coverage
 
-Tests the Results 2023 section with animated statistics.
+**Components**
 
-**Test Cases:**
+- `components/header/index.test.tsx` — site header
+- `components/home/MissionSection.test.tsx`, `home/Contactus/index.test.tsx`, `home/Ourblogs/index.test.tsx` — homepage sections
+- `components/donate-components/Free-for-Charity-Donation-Options/index.test.tsx`, `donate-components/measurable-impact.test.tsx` — donate components
+- `components/guidestar-guide/Faqs.test.tsx`, `guidestar-guide/Free-for-charity/index.test.tsx` — GuideStar guide components
+- `components/free-charity-web-hosting/About-FFC-Hosting/index.test.tsx` — hosting page component
+- `components/ui/ui-batch-1.test.tsx`, `ui/ui-batch-2.test.tsx`, `ui/ui-batch-3.test.tsx` — UI component batches
 
-1. **`should display the Results-2023 section with all four statistics`**
-   - **Purpose**: Verifies all statistics cards are present
-   - **Checks**: Four result cards display correctly
+**Data & libraries**
 
-2. **`should start with numbers at 0 before scrolling into view`**
-   - **Purpose**: Ensures numbers are not pre-animated
-   - **Checks**: All statistics display 0 before scrolling into view
+- `data/data-files.test.ts` — data file integrity (team, FAQs, testimonials)
+- `data/image-paths.test.ts` — image path validity
+- `lib/assetPath.test.ts` — `assetPath()` helper
+- `lib/config.test.ts` — configuration helpers
 
-3. **`should animate numbers only once when scrolled into view`**
-   - **Purpose**: Verifies animation triggers on scroll and does not repeat
-   - **Checks**: Numbers animate from 0 to target values only once per page load
-
-4. **`should display correct descriptions for each statistic`**
-   - **Purpose**: Ensures each statistic card has the correct label/description
-   - **Checks**: Descriptions match expected text for each statistic
-
-5. **`should respect prefers-reduced-motion preference`**
-   - **Purpose**: Accessibility for users with motion sensitivity
-   - **Checks**: Animation is disabled when prefers-reduced-motion is set
-
-#### 4. Mission Video (`tests/mission-video.spec.ts`) - 2 tests
-
-Tests the video element in the mission section.
-
-**Test Cases:**
-
-1. **`should display video in mission section`**
-   - **Purpose**: Verifies video element exists
-   - **Checks**: Video element present and visible
-
-2. **`should have video source configured correctly`**
-   - **Purpose**: Validates video source configuration
-   - **Checks**: Video src attribute is set correctly
-
-#### 5. Cookie Consent Banner (`tests/cookie-consent.spec.ts`) - 14 tests
-
-Tests the cookie consent banner functionality across 3 test suites.
-
-**Test Suite 1: Cookie Consent Banner** (5 tests)
-
-1. **`should display cookie consent banner on first visit`**
-   - **Purpose**: Verifies banner appears for new users
-   - **Checks**: Banner visible on initial page load
-
-2. **`should hide banner after clicking Accept All`**
-   - **Purpose**: Tests accept all button functionality
-   - **Checks**: Banner disappears after clicking Accept All
-
-3. **`should hide banner after clicking Decline All`**
-   - **Purpose**: Tests decline all button functionality
-   - **Checks**: Banner disappears after clicking Decline All
-
-4. **`should persist Accept All choice and not show banner on subsequent visits`**
-   - **Purpose**: Validates accept preference persistence
-   - **Checks**: Banner doesn't reappear after acceptance
-
-5. **`should persist Decline All choice and not show banner on subsequent visits`**
-   - **Purpose**: Validates decline preference persistence
-   - **Checks**: Banner doesn't reappear after declining
-
-**Test Suite 2: Cookie Preferences Modal** (7 tests)
-
-6. **`should open preferences modal when clicking Customize`**
-   - **Purpose**: Tests customize button opens modal
-   - **Checks**: Modal becomes visible
-
-7. **`should close modal when clicking Cancel`**
-   - **Purpose**: Tests cancel button closes modal
-   - **Checks**: Modal disappears without saving
-
-8. **`should close modal when pressing Escape key`**
-   - **Purpose**: Tests keyboard accessibility
-   - **Checks**: Escape key closes modal
-
-9. **`should close modal when clicking outside (overlay)`**
-   - **Purpose**: Tests clicking overlay closes modal
-   - **Checks**: Modal closes on overlay click
-
-10. **`should have necessary and functional cookies always checked and disabled`**
-    - **Purpose**: Ensures essential cookies cannot be disabled
-    - **Checks**: Essential cookies checkbox is checked and disabled
-
-11. **`should allow toggling analytics and marketing cookies`**
-    - **Purpose**: Tests cookie preference toggles
-    - **Checks**: Analytics and marketing checkboxes can be toggled
-
-12. **`should save custom preferences correctly`**
-    - **Purpose**: Validates saving custom cookie preferences
-    - **Checks**: Selected preferences are saved and persisted
-
-**Test Suite 3: Cookie Consent Accessibility** (2 tests)
-
-13. **`modal should have proper ARIA attributes`**
-    - **Purpose**: Ensures modal accessibility
-    - **Checks**: Modal has proper ARIA attributes
-
-14. **`banner should have proper ARIA attributes`**
-    - **Purpose**: Ensures banner accessibility
-    - **Checks**: Banner has proper ARIA attributes
-
-#### 6. Footer Copyright (`tests/copyright.spec.ts`) - 2 tests
-
-Tests the footer copyright notice.
-
-**Test Cases:**
-
-1. **`should display copyright notice with current year`**
-   - **Purpose**: Verifies copyright text includes current year
-   - **Checks**: Current year appears in copyright notice
-
-2. **`should display link to freeforcharity.org in copyright notice`**
-   - **Purpose**: Ensures footer contains link to organization's website
-   - **Checks**: Link to https://freeforcharity.org is present in copyright notice
+Many component and page tests include jest-axe assertions for accessibility; a shared axe helper lives at `__tests__/utils/axe.ts`.
 
 ### Test Configuration
 
@@ -459,7 +349,7 @@ npm audit
 ### Content Verification
 
 - [ ] Homepage loads completely
-- [ ] All 29 pages are accessible
+- [ ] All 35 page routes are accessible
 - [ ] Team members display correctly (5 board members)
 - [ ] Testimonials render properly (3 testimonials)
 - [ ] FAQs are visible and formatted correctly
@@ -590,10 +480,17 @@ cat src/data/team.ts
 
 ```
 freeforcharity-web/
-├── tests/                          # Test suite
-│   ├── logo.spec.ts               # Logo visibility tests (3 tests)
-│   ├── github-pages.spec.ts       # Deployment compatibility tests (3 tests)
-│   └── README.md                  # Test documentation
+├── tests/                          # Playwright E2E specs (18 *.spec.ts files)
+│   ├── logo.spec.ts               # Logo / hero image visibility
+│   ├── navigation.spec.ts         # Site navigation
+│   ├── cookie-consent.spec.ts     # Cookie consent banner & modal
+│   └── ...                        # (see "Test Files and Coverage")
+├── __tests__/                      # Jest unit/component/a11y tests (20 files)
+│   ├── components/                # Component render + axe tests
+│   ├── app/                       # Page render, metadata, sitemap
+│   ├── data/                      # Data file integrity
+│   ├── lib/                       # Helper unit tests
+│   └── utils/axe.ts               # Shared jest-axe helper
 ├── playwright.config.ts            # Playwright configuration
 ├── .github/workflows/
 │   ├── ci.yml                     # CI: format, lint, Jest, build, links, Playwright E2E
@@ -716,6 +613,5 @@ freeforcharity-web/
 
 ---
 
-**Test Suite Status**: ✅ 5 passing, 1 skipped  
-**Integration Status**: ✅ Complete  
-**Last Tested**: October 2025
+**Test Suite Status**: ✅ Jest (20 test files) + Playwright E2E (18 spec files), lint clean (0 errors)  
+**Integration Status**: ✅ Complete

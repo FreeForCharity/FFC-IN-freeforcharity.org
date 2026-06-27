@@ -18,7 +18,7 @@ On merge to `main`, CI (`.github/workflows/ci.yml`, "CI - Build and Test") runs;
 
 - **Framework:** Next.js 16 (`^16.2.9`) App Router, React 19.2.7, TypeScript, Tailwind CSS v4 (Node 24.x)
 - **Output:** Static export (`output: 'export'` in next.config.ts)
-- **Pages:** `src/app/` (~29 routes, App Router conventions)
+- **Pages:** `src/app/` (~35 routes, App Router conventions)
 - **Components:** `src/components/` (footer/, header/, home-page/, ui/)
 - **Content:** `src/data/` (team/, faqs/, testimonials/ as JSON + .ts loaders)
 - **Utilities:** `src/lib/`

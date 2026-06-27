@@ -87,7 +87,7 @@ Invoke these when the task matches their purpose. If no matching agent exists, p
 
 ## Project-Specific Notes
 
-- This is a **multi-page site** (not single-page like the template). ~29 routes under `src/app/`.
+- This is a **multi-page site** (not single-page like the template). ~35 routes under `src/app/`.
 - The homepage uses the **Figma redesign layout**, not the template order.
 - **Footer and Team sections are mandatory FFC-wide standards.** See AGENTS.md for requirements.
 - All content is **hardcoded in components** — there is no CMS.

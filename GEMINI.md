@@ -45,7 +45,7 @@ npm run preview      # Serve built output locally
 
 ```
 src/
-  app/            --> Pages and routes (App Router, ~29 routes)
+  app/            --> Pages and routes (App Router, ~35 routes)
   components/     --> Reusable UI components (footer/, header/, home-page/, ui/)
   data/           --> Content modules (.ts loaders) and JSON data files (team/, faqs/, testimonials/)
   lib/            --> Utilities (including assetPath helper)
