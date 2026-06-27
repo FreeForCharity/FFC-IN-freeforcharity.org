@@ -58,8 +58,9 @@ RewriteRule ^testimonial/keith-ray/?$ /#testimonials [R=301,L]
 RewriteRule ^testimonial/pardhasaradhi-namburi/?$ /#testimonials [R=301,L]
 RewriteRule ^testimonial/tashonda-payne/?$ /#testimonials [R=301,L]
 
-# Dropped WP archives + plumbing → home
-RewriteRule ^author/(adagraves|admin|clarkemoyer|globaladmin|joel|tempmigrationadmin)/?$ / [R=301,L]
+# Author archives dropped → closest equivalent content
+RewriteRule ^author/(adagraves|admin|clarkemoyer|globaladmin|joel|tempmigrationadmin)/?$ /about-us/ [R=301,L]
+# Dropped WP archives + plumbing → home (or closest section)
 RewriteRule ^category/uncategorized/?$ /blog/ [R=301,L]
 RewriteRule ^layout_type/(row|section)/?$ / [R=301,L]
 RewriteRule ^module_width/regular/?$ / [R=301,L]

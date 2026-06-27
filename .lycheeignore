@@ -53,21 +53,17 @@ https://sdgs.un.org/goals/**
 # Internal GitHub Actions badge URLs — always valid when the workflow exists
 https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/**
 
-# Pre-cutover: the apex domain still points at WordPress, so any link in
-# the Next.js source pointing at https://freeforcharity.org/* would hit
-# WP and report misleading 200s/404s. Skip until cutover lands.
-#
-# POST-CUTOVER ACTION: once the document-root swap is complete and the
-# 48-hour soak has passed, narrow these to only the paths we don't own:
-#     https://freeforcharity.org/hub/**          (WHMCS, third-party)
-#     https://www.freeforcharity.org/hub/**      (WHMCS, third-party)
-#     https://freeforcharity.org/cdn-cgi/**      (Cloudflare-managed)
-#     https://www.freeforcharity.org/cdn-cgi/**  (Cloudflare-managed)
-# That lets lychee validate every /about-us, /donate, /volunteer, etc.
-# against the live new site, catching broken internal links the next
-# time someone touches a navigation component.
-https://freeforcharity.org/**
-https://www.freeforcharity.org/**
+# Post-cutover: the apex now serves the Next.js static site from cPanel,
+# so lychee validates every internal link (/about-us, /donate, /volunteer,
+# etc.) against the live new site — catching broken internal links the next
+# time someone touches a navigation component. Only the paths we don't own
+# stay excluded:
+#     /hub/**     → WHMCS (third-party app, served via symlink)
+#     /cdn-cgi/** → Cloudflare-managed endpoints
+https://freeforcharity.org/hub/**
+https://www.freeforcharity.org/hub/**
+https://freeforcharity.org/cdn-cgi/**
+https://www.freeforcharity.org/cdn-cgi/**
 
 # Sites that block CI crawlers or are intentionally placeholder / flaky
 https://my.interserver.net/**

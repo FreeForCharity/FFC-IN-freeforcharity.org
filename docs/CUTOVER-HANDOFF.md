@@ -1,7 +1,11 @@
 # Cutover Handoff — Free For Charity WordPress → Next.js (InterServer cPanel)
 
+> **✅ Cutover complete.** The apex `freeforcharity.org` now serves the
+> Next.js static export from cPanel (`public_html_next`). This document is
+> retained as a historical record and rollback reference.
+
 The pre-cutover engineering work is complete. This document describes
-what is done and the operator steps that remain.
+what was done and the operator steps that remain.
 
 > **Cutover day?** Follow [CUTOVER-RUNBOOK.md](CUTOVER-RUNBOOK.md) — a
 > single chronological checklist that links back here for the details.

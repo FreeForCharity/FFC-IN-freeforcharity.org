@@ -177,12 +177,10 @@ async function main() {
   console.log(`\n-- WP→Next legacy redirects from docs/cutover-redirects.csv`)
   const redirects = loadCsvRedirects()
   for (const r of redirects) {
-    await checkRedirect(
-      `${r.code} ${r.sourcePath}`,
-      r.sourcePath,
-      r.code,
-      r.targetPath.split('#')[0]
-    )
+    // Match the full target including any #fragment. Apache emits the
+    // fragment in the Location header (e.g. /testimonial/* → /#testimonials),
+    // so stripping it here would falsely reject correct redirects.
+    await checkRedirect(`${r.code} ${r.sourcePath}`, r.sourcePath, r.code, r.targetPath)
   }
 
   console.log(`\n-- defense-in-depth`)
