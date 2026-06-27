@@ -34,11 +34,7 @@ export const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID ?? 
 export const TAWK_TO_PROPERTY =
   process.env.NEXT_PUBLIC_TAWK_TO_PROPERTY ?? '65bf15eb0ff6374032c915d9/1hlp6r8hc'
 
-// No Meta Pixel or Sentry project configured yet — these stay empty
-// until an operator sets the env var (or adds a default here once a
-// real ID exists). Empty = the corresponding loader is a no-op.
+// No Meta Pixel configured yet — stays empty until an operator sets the
+// env var (or adds a default here once a real ID exists). Empty = the
+// corresponding loader is a no-op.
 export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID ?? ''
-
-export const SENTRY_DSN = process.env.NEXT_PUBLIC_SENTRY_DSN ?? ''
-
-export const SENTRY_ENVIRONMENT = process.env.NEXT_PUBLIC_SENTRY_ENVIRONMENT ?? 'production'
