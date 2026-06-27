@@ -11,28 +11,37 @@ const Index = () => {
           <h1 className="text-[30px] md:text-[40px] font-[700] leading-[44px] text-[#b35000] mb-[20px]">
             Free for Charity Volunteer Options
           </h1>
-          <p className="text-[18px] font-[500] text-black pb-[1em]" id="lato-font">
+          <p className="text-[18px] font-[500] text-black pb-[1em]" data-font="lato-font">
             Free for Charity is always looking for motivated and skilled people from around the US
             to help guide and participate in our training programs and direct support to charities.
           </p>
-          <p className="text-[18px] font-[700] text-black mb-[50px]" id="lato-font">
+          <p className="text-[18px] font-[700] text-black mb-[50px]" data-font="lato-font">
             You can help in the following ways:
           </p>
         </div>
 
         {/* Callout Box */}
         <div className="bg-[#2D7F87] py-[20px] md:py-[40px] md:px-[60px]  px-[30px] flex flex-col items-center justify-center text-center">
-          <h1 className="text-[26px] font-[500] leading-[26px] text-white pb-[10px]" id="aria-font">
+          <h1
+            className="text-[26px] font-[500] leading-[26px] text-white pb-[10px]"
+            data-font="aria-font"
+          >
             IMPORTANT: A Prerequisite for All Applicants
           </h1>
-          <p className="text-[14px] font-[500] leading-[24px] text-white pb-[1em]" id="aria-font">
+          <p
+            className="text-[14px] font-[500] leading-[24px] text-white pb-[1em]"
+            data-font="aria-font"
+          >
             To ensure the highest standards of security and competence for the non-profits we serve,
             all prospective volunteers must first complete our{' '}
             <span className="font-[700]">Core Competencies Training Program.</span> This mandatory
             first step is our “proving ground” and ensures you have the foundational skills needed
             to succeed.
           </p>
-          <p className="text-[14px] font-[500] leading-[24px] text-white pb-[20px]" id="aria-font">
+          <p
+            className="text-[14px] font-[500] leading-[24px] text-white pb-[20px]"
+            data-font="aria-font"
+          >
             After you have successfully completed the training and received your certificate, you
             may then apply for one of the specific roles listed below.
           </p>
@@ -52,7 +61,10 @@ const Index = () => {
             You can create a measurable impact to the success of charities nation wide with your
             donation or volunteer hours.
           </h1>
-          <p className="text-[18px] font-[500] leading-[27px] mb-[5.82%] mt-[20px]" id="lato-font">
+          <p
+            className="text-[18px] font-[500] leading-[27px] mb-[5.82%] mt-[20px]"
+            data-font="lato-font"
+          >
             Every organizations success ultimately falls down to how much support the organization
             received for its causes. Here at Free for Charity it is our mission to provide world
             class training programs that at the same time help charities throughout the United
@@ -61,12 +73,15 @@ const Index = () => {
           <h1 className="text-[28px] font-[700] leading-[31px] text-[#b35000]">
             We cannot do the work we do without your support.
           </h1>
-          <p className="text-[18px] font-[500] leading-[27px] pb-[1em] mt-[20px]" id="lato-font">
+          <p
+            className="text-[18px] font-[500] leading-[27px] pb-[1em] mt-[20px]"
+            data-font="lato-font"
+          >
             From the day to day costs of running servers, websites, and paying for software to
             support our training programs; Free for Charity can always put to good use your
             donation. Consider your options to donate today.
           </p>
-          <p className="text-[18px] font-[500] leading-[27px] mb-[5.82%]" id="lato-font">
+          <p className="text-[18px] font-[500] leading-[27px] mb-[5.82%]" data-font="lato-font">
             In addition to financial support, Free for Charity also needs community support through{' '}
             <a href="/volunteer/" className="text-[#0567B1]">
               skilled volunteers
@@ -81,7 +96,7 @@ const Index = () => {
           <a
             href="https://www.idealist.org/en/nonprofit/356bfc8e2ae64f83beea4a4e677e99d7-free-for-charity-state-college#opportunities"
             className="inline-block px-6 py-3 text-[16px] font-bold text-white bg-[#0056B3] rounded-md text-center no-underline transition-colors duration-300 ease-in-out hover:bg-[#004494]"
-            id="aria-font"
+            data-font="aria-font"
             target="_blank"
             rel="noopener noreferrer"
           >

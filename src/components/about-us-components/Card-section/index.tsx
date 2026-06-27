@@ -15,7 +15,7 @@ const Index = () => {
             </h1>
             <ul
               className="mt-[20px] md:mt-[30px] list-disc text-[16px] md:text-[18px] font-[500] leading-[28px] md:leading-[31px] pb-[10px] pl-[1.5em]"
-              id="lato-font"
+              data-font="lato-font"
             >
               <li>1 on 1 Charity / Nonprofit Consulting</li>
               <li>Free Charity Domain Name</li>

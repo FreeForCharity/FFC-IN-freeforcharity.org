@@ -27,20 +27,20 @@ const CharityHeroBackground = () => {
         <div className="w-full lg:w-[565px]">
           <h1
             className="text-[50px] lg:text-[60px] font-[500] text-[#FFFFFF] leading-[120%] mb-[20px]"
-            id="faustina-font"
+            data-font="faustina-font"
           >
             Welcome to <br /> Free For Charity
           </h1>
           <p
             className="text-[24px] font-[400] leading-[120%] text-[#FFFFFF] mb-[20px]"
-            id="lato-font"
+            data-font="lato-font"
           >
             Connecting Students, Professionals, & Businesses with Charities in Need
           </p>
           <a
             href="#volunteer"
             className="top-[378px] w-[300px] lg:w-[351px] h-[54px] opacity-100 rounded-[27px] px-[32px] py-[18px] flex items-center justify-center gap-[10px] bg-[#FFFFFF] text-[#113563] text-[20px] font-[400] leading-[100%] mb-[10px] whitespace-nowrap"
-            id="lato-font"
+            data-font="lato-font"
           >
             Volunteer
           </a>
@@ -48,14 +48,14 @@ const CharityHeroBackground = () => {
             <a
               href="#donate"
               className="top-[442px] w-[130px] lg:w-[173px] h-[54px] opacity-100 rounded-[27px] px-[32px] py-[18px] flex items-center justify-center gap-[10px] bg-[#FFFFFF] text-[#113563] text-[20px] font-[400] leading-[100%] whitespace-nowrap"
-              id="lato-font"
+              data-font="lato-font"
             >
               Donate
             </a>
             <a
               href="#programs"
               className="top-[442px] w-[173px] h-[54px] opacity-100 rounded-[27px] px-[32px] py-[18px] flex items-center justify-center gap-[10px] bg-[#FFFFFF] text-[#113563] text-[20px] font-[400] leading-[100%] whitespace-nowrap"
-              id="lato-font"
+              data-font="lato-font"
             >
               Help for Charities
             </a>

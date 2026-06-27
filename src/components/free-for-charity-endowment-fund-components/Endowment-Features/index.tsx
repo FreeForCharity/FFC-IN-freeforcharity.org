@@ -25,7 +25,7 @@ const Index = () => {
           <div className="w-full md:w-[47.25%]">
             <h1
               className="mb-[20px] text-[32px] sm:text-[40px] md:text-[50px] text-[#111111] font-[500] leading-[42px] sm:leading-[50px] md:leading-[60px] text-center md:text-left"
-              id="cinzel"
+              data-font="cinzel"
             >
               Endowment Features
             </h1>
@@ -35,12 +35,15 @@ const Index = () => {
               <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left">
                 <FaInfoCircle className="text-[#003566] text-[36px] sm:text-[40px] flex-shrink-0 mb-[10px] sm:mb-0" />
                 <div className="sm:pl-[15px]">
-                  <h2 className="text-[18px] text-[#111111] pb-[10px] font-[500]" id="cinzel">
+                  <h2
+                    className="text-[18px] text-[#111111] pb-[10px] font-[500]"
+                    data-font="cinzel"
+                  >
                     Sustainable Funding
                   </h2>
                   <p
                     className="text-[15px] sm:text-[16px] text-[#000000a3] font-[500] leading-[26px] sm:leading-[28px]"
-                    id="fauna-font"
+                    data-font="fauna-font"
                   >
                     The Endowment ensures that only the investment gains are used, providing a
                     sustainable funding source for the Free For Charity Domain Program.
@@ -52,12 +55,15 @@ const Index = () => {
               <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left">
                 <FaChartPie className="text-[#003566] text-[40px] sm:text-[44px] flex-shrink-0 mb-[10px] sm:mb-0" />
                 <div className="sm:pl-[15px]">
-                  <h2 className="text-[18px] text-[#111111] pb-[10px] font-[500]" id="cinzel">
+                  <h2
+                    className="text-[18px] text-[#111111] pb-[10px] font-[500]"
+                    data-font="cinzel"
+                  >
                     Long-Term Impact
                   </h2>
                   <p
                     className="text-[15px] sm:text-[16px] text-[#000000a3] font-[500] leading-[26px] sm:leading-[28px]"
-                    id="fauna-font"
+                    data-font="fauna-font"
                   >
                     By supporting the Endowment, you contribute to a lasting legacy that will
                     continuously support charities in need of digital resources.
@@ -69,12 +75,15 @@ const Index = () => {
               <div className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left">
                 <FaCreditCard className="text-[#003566] text-[44px] sm:text-[50px] flex-shrink-0 mb-[10px] sm:mb-0" />
                 <div className="sm:pl-[15px]">
-                  <h2 className="text-[18px] text-[#111111] pb-[10px] font-[500]" id="cinzel">
+                  <h2
+                    className="text-[18px] text-[#111111] pb-[10px] font-[500]"
+                    data-font="cinzel"
+                  >
                     Goal of $1,000,000
                   </h2>
                   <p
                     className="text-[15px] sm:text-[16px] text-[#000000a3] font-[500] leading-[26px] sm:leading-[28px]"
-                    id="fauna-font"
+                    data-font="fauna-font"
                   >
                     Our target is to raise $1,000,000 to secure the future of the program, ensuring
                     ongoing support for countless charities.

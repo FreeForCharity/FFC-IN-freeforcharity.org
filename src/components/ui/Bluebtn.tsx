@@ -27,7 +27,7 @@ const BlueBtn: React.FC<BlueBtnProps> = ({ children = 'Learn More', href, ...pro
         text-[18px] font-semibold bg-[#1D6E90]
         flex items-center justify-center
       "
-      id="montserrat-font"
+      data-font="montserrat-font"
       onClick={handleClick} // handle link click
       {...props}
     >

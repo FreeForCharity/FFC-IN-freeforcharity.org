@@ -29,7 +29,7 @@ const ConsultingPage = () => {
 
           <p
             className="text-[18px] md:text-[20px] font-[500] leading-[28px] md:leading-[30px] text-[#333] mb-8"
-            id="lato-font"
+            data-font="lato-font"
           >
             Have questions about consultation services? Want to know more about nonprofits? Looking
             to chat? Give a real person a call for free:
@@ -50,13 +50,16 @@ const ConsultingPage = () => {
           <h2 className="text-[28px] md:text-[36px] font-[700] text-white leading-[40px] mb-4">
             Ready to Get Started?
           </h2>
-          <p className="text-[18px] text-white font-[500] leading-[28px] mb-6" id="lato-font">
+          <p
+            className="text-[18px] text-white font-[500] leading-[28px] mb-6"
+            data-font="lato-font"
+          >
             Reach out today and let us help your nonprofit succeed.
           </p>
           <a
             href="/contact-us/"
             className="inline-block px-[30px] py-[10px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
-            id="montserrat-font"
+            data-font="montserrat-font"
           >
             Contact Us
           </a>

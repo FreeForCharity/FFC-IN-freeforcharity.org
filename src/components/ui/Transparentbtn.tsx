@@ -20,7 +20,7 @@ const Transparentbtn: React.FC<TransparentbtnProps> = ({ text, href, color = '#0
           hover:border-transparent hover:bg-gray-200 mx-auto md:mx-0 max-w-fit
         `}
         style={{ borderColor: color, color }}
-        id="aria-font"
+        data-font="aria-font"
       >
         <span className="text-[17px] font-medium leading-tight sm:text-[18px] md:text-[20px] transition-transform duration-300 group-hover:-translate-x-1">
           {text}

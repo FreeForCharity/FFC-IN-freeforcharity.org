@@ -56,18 +56,18 @@ const StepCard: React.FC<{ step: Step }> = ({ step }) => {
           </div>
         </div>
 
-        <h4 className="text-[31px] font-bold leading-[31px] pb-[10px]" id="cantata-font">
+        <h4 className="text-[31px] font-bold leading-[31px] pb-[10px]" data-font="cantata-font">
           {step.title}
         </h4>
 
-        <p className="text-[25px] font-bold leading-[33px] pb-[1em]" id="raleway-font">
+        <p className="text-[25px] font-bold leading-[33px] pb-[1em]" data-font="raleway-font">
           {step.description}
         </p>
 
         <a
           href={step.linkUrl}
           className="text-[30px] font-bold text-white leading-[33px]"
-          id="raleway-font"
+          data-font="raleway-font"
         >
           {step.linkText}
         </a>

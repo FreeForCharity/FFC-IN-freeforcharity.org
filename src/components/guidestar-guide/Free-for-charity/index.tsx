@@ -12,7 +12,7 @@ const Index = () => {
         {/* GuideStar Instruction Text */}
         <p
           className="text-[14px] text-[#666] font-semibold leading-relaxed mb-8"
-          id="aria-font"
+          data-font="aria-font"
           aria-describedby="GuideStar is required for onboarding verification"
         >
           GuideStar is the main tool for helping you gather the information to complete our

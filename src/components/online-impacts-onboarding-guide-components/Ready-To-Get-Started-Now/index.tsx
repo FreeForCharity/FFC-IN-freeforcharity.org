@@ -9,7 +9,7 @@ const index = () => {
     <div className="bg-white">
       <div className="w-full max-w-[90%] mx-auto">
         <div className="flex items-center flex-col text-center pb-[40px]">
-          <h1 className="text-[26px] font-[500] text-[#333] pb-[10px]" id="aria-font">
+          <h1 className="text-[26px] font-[500] text-[#333] pb-[10px]" data-font="aria-font">
             Ready to Get Started Now?
           </h1>
           <TransparentBtn
@@ -22,7 +22,7 @@ const index = () => {
           number="3"
           title=" Free For Charity Domain Name and Microsoft 365 Email Hosting Request"
         >
-          <p className="text-[18px] font-[500] text-[#4a4a4a] mb-[1em]" id="lato-font">
+          <p className="text-[18px] font-[500] text-[#4a4a4a] mb-[1em]" data-font="lato-font">
             Free For Charity Provides free .org domain names to US 501c3 organizations. Once your
             onboarding forms are accepted you will receive an email from the system with the
             discount code to request a new domain name or to transfer your current domain name to us

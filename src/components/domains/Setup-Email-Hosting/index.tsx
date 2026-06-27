@@ -9,13 +9,13 @@ const index = () => {
         <div className="pt-[24px] pb-[3px]">
           <h1
             className="mt-[2px] mb-[12px] pb-[10px] text-[30px] md:text-[35px] font-[700] leading-[46px] text-[#0567B1] text-center"
-            id="cantata-font"
+            data-font="cantata-font"
           >
             HOW TO SET UP EMAIL HOSTING FOR THE NEW DOMAIN
           </h1>
           <p
             className="mb-[13px] w-[85%] mx-auto font-[500] text-[20px] leading-[30px] text-center"
-            id="raleway-font"
+            data-font="raleway-font"
           >
             Email hosting means that you can have email addresses at your domain name. e.g.
           </p>
@@ -29,7 +29,7 @@ const index = () => {
     border-l-[8px] border-[#0567B1]
     p-[20px] text-center text-[20px] md:text-[22px] font-[600] leading-[31px] text-[#0567B1]
     break-words inline-block"
-          id="raleway-font"
+          data-font="raleway-font"
         >
           yourname@yourdomain.org
         </a>
@@ -40,7 +40,7 @@ const index = () => {
     border-l-[8px] border-[#0567B1]
     p-[20px] text-center text-[20px] md:text-[22px] font-[600] leading-[31px] text-[#0567B1]
     break-words inline-block"
-          id="raleway-font"
+          data-font="raleway-font"
         >
           contactus@yourdomain.org
         </a>
@@ -51,7 +51,7 @@ const index = () => {
     border-l-[8px] border-[#0567B1]
     p-[20px] text-center text-[20px] md:text-[22px] font-[600] leading-[31px] text-[#0567B1]
     break-words inline-block"
-          id="raleway-font"
+          data-font="raleway-font"
         >
           board@yourdomain.org
         </a>
@@ -72,19 +72,19 @@ const index = () => {
 
           <h4
             className="text-[31px] font-[700] leading-[31px] pb-[30px] text-[#0567B1]"
-            id="cantata-font"
+            data-font="cantata-font"
           >
             Step 1
           </h4>
           <p
             className="text-[#333] text-[22px] font-[700] leading-[22px] text-center pb-[10px]"
-            id="raleway-font"
+            data-font="raleway-font"
           >
             Select an email provider
           </p>
 
           {/* Text Content */}
-          <p className="text-[18px] leading-[32px] font-[500]" id="raleway-font">
+          <p className="text-[18px] leading-[32px] font-[500]" data-font="raleway-font">
             Free For Charity recommends Microsoft as your email provider as it is free to charities
             and comes with many additional services at no cost
           </p>
@@ -104,25 +104,25 @@ const index = () => {
 
           <h4
             className="text-[31px] font-[700] leading-[31px] pb-[30px] text-[#0567B1]"
-            id="cantata-font"
+            data-font="cantata-font"
           >
             Step 2
           </h4>
           <p
             className="text-[#333] text-[22px] font-[700] leading-[22px] text-center pb-[10px]"
-            id="raleway-font"
+            data-font="raleway-font"
           >
             Set up a Microsoft 365 Business Premium account
           </p>
 
           {/* Text Content */}
-          <p className="text-[18px] leading-[32px] font-[500] pb-[1em]" id="raleway-font">
+          <p className="text-[18px] leading-[32px] font-[500] pb-[1em]" data-font="raleway-font">
             Follow the following simple steps to set up your Microsoft 365 Business Premium Account
           </p>
           <a
             href="/domains/#setupstep2"
             className="text-[25px] leading-[32px] font-[600] text-[#0460C0]"
-            id="raleway-font"
+            data-font="raleway-font"
           >
             Click here
           </a>

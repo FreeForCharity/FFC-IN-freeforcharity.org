@@ -12,7 +12,7 @@ const Hero: React.FC = () => {
             Welcome to Free For Charity
           </h1>
           <p
-            id="lato-font"
+            data-font="lato-font"
             className="font-medium text-black text-[20px] leading-[30px] sm:text-[28px] sm:leading-[40px] md:text-[35px] md:leading-[49px] mt-4"
           >
             Connecting Students, Professionals, & Businesses with Charities in Need

@@ -14,12 +14,15 @@ const CharityFAQ: React.FC = () => {
           <h1 className="font-bold text-[28px] text-[#b35000] mb-4">
             We can’t test them without helping your charity or non profit.
           </h1>
-          <p className="text-[18px] font-medium text-black" id="lato-font">
+          <p className="text-[18px] font-medium text-black" data-font="lato-font">
             Our main goal is to train people in the skills of effective business and technology
             management. We accomplish this goal of providing help for charities by producing
             in-house projects like:
           </p>
-          <ul className="list-disc pl-5 text-[18px] font-medium text-black mt-4" id="lato-font">
+          <ul
+            className="list-disc pl-5 text-[18px] font-medium text-black mt-4"
+            data-font="lato-font"
+          >
             <li>
               Research papers, case studies, and use cases from other industries and nonprofits.
             </li>

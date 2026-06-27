@@ -7,7 +7,7 @@ const index = () => {
       <div className="w-[90%] mx-auto lg:px-[20px]">
         <h2
           className="font-[400] text-[40px] lg:text-[48px]  tracking-[0] text-center mx-auto mb-[50px]"
-          id="faustina-font"
+          data-font="faustina-font"
         >
           Frequently Asked Questions
         </h2>

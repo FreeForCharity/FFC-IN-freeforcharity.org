@@ -7,7 +7,7 @@ interface ProvingGroundSectionProps {
 
 const ProvingGroundSection: React.FC<ProvingGroundSectionProps> = ({ title, children }) => {
   return (
-    <section className="w-full mx-auto py-[2em] md:px-[2em]" id="segoe-font">
+    <section className="w-full mx-auto py-[2em] md:px-[2em]" data-font="segoe-font">
       {/* Title with Bottom Border */}
       <h1 className="text-[25px] md:text-[30px] font-[600] text-[#111827] leading-[30px] border-b-[2px] w-full border-[#3B82F6] inline-block mb-[1.5rem] pb-[0.5rem]">
         {title}

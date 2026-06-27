@@ -37,7 +37,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ number, title, children }
           className={`font-[500] text-[20px] md:text-[26px] flex-1 pr-3 transition-colors duration-300 ${
             isOpen ? 'text-[#333]' : 'text-[#666]'
           }`}
-          id="aria-font"
+          data-font="aria-font"
         >
           {number}.{title}
         </span>
@@ -62,7 +62,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ number, title, children }
         <div
           ref={contentRef}
           className="px-4 pb-4 pt-2 text-gray-700 text-[14px] font-[500] transition-colors duration-300"
-          id="aria-font"
+          data-font="aria-font"
         >
           {children}
         </div>

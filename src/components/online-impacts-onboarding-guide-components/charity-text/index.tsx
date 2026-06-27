@@ -11,15 +11,15 @@ const index = () => {
           title="Free For Charity 501c3 Supported Charity Products and Services for Former Online Impacts Supported Charities"
           description=""
         />
-        <h1 className="text-[26px] font-[500] text-[#333] my-[20px]" id="lato-font">
+        <h1 className="text-[26px] font-[500] text-[#333] my-[20px]" data-font="lato-font">
           Lets get started on your transfer today
         </h1>
-        <p className="text-[18px] font-[500] pb-[1em]" id="lato-font">
+        <p className="text-[18px] font-[500] pb-[1em]" data-font="lato-font">
           Great News. As an Online Impacts supported charity you already are likely using many of
           the products and features needed to convert over to Free For Charity to support your .org
           Domain Name, WordPress hosting, and more!
         </p>
-        <p className="text-[18px] font-[500]" id="lato-font">
+        <p className="text-[18px] font-[500]" data-font="lato-font">
           Depending on when you signed up or were transferred to Online Impacts you are already
           likey using a registered .org domain name, Cloudflare for DNS and DDoS Protection, Web
           Hosting with interserver.net, a Softaculous managed WordPress Website, WPMUDEV Plugins for
@@ -28,7 +28,7 @@ const index = () => {
         </p>
         <h1
           className="text-[23px] sm:text-[26px] font-[500] text-[#333] my-[20px] leading-[1.4]"
-          id="lato-font"
+          data-font="lato-font"
         >
           We are here to help. If you run into any issues or have questions about the changes,
           please reach out directly to:
@@ -36,14 +36,14 @@ const index = () => {
 
         <h1
           className="text-[23px] sm:text-[26px] font-[500] text-[#333] my-[20px] leading-[1.4]"
-          id="lato-font"
+          data-font="lato-font"
         >
           Clarke Moyer the founder of Free For Charity at clarkemoyer@freeforcharity.org or text me
           at 520-222-8104
         </h1>
         <h1
           className="text-[23px] sm:text-[26px] font-[500] text-[#333] my-[20px] leading-[1.4]"
-          id="lato-font"
+          data-font="lato-font"
         >
           Pardhasaradhi Namburi the founder of Online Impacts at pardhu@onlineimpacts.org
         </h1>
@@ -54,16 +54,16 @@ const index = () => {
         />
 
         <div className="w-full h-[1px] bg-[#2D7F87] mt-[30px] mb-[50px]"></div>
-        <h1 className="text-[26px] font-[500] text-[#333] mt-[20px]" id="lato-font">
+        <h1 className="text-[26px] font-[500] text-[#333] mt-[20px]" data-font="lato-font">
           Before You Begin Onboarding
         </h1>
-        <p className="text-[18px] font-[600] text-[#666]" id="abeezee">
+        <p className="text-[18px] font-[600] text-[#666]" data-font="abeezee">
           Obtain the following information and materials ready to ensure you can complete the
           onboarding steps:
         </p>
         <ol
           className="text-[18px] mb-[50px] font-[600] text-[#666] list-decimal list-inside "
-          id="abeezee"
+          data-font="abeezee"
         >
           <li>501(c)(3) determination letter from the IRS</li>
           <li>EIN (Employer Identification Number)</li>
@@ -159,7 +159,7 @@ const index = () => {
 
         <AccordionItem number="2" title="Free For Charity Onboarding Form">
           {/* Step 1 */}
-          <h1 className="text-[18px] font-[700] text-[#4a4a4a] mb-[1em]" id="lato-font">
+          <h1 className="text-[18px] font-[700] text-[#4a4a4a] mb-[1em]" data-font="lato-font">
             Step 1: 501(c)(3) Status Verification via GuideStar
           </h1>
 

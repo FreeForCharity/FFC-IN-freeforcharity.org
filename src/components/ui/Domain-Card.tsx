@@ -36,7 +36,7 @@ export default function StepCard({
       </div>
 
       {/* Text Content */}
-      <p className="text-[20px] leading-[28px] font-[500]" id="raleway-font">
+      <p className="text-[20px] leading-[28px] font-[500]" data-font="raleway-font">
         {text}
       </p>
     </div>

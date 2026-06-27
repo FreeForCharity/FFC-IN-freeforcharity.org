@@ -9,7 +9,10 @@ const index = () => {
     <div className="w-full">
       <div className="w-[90%] mx-auto py-[40px] ">
         <div className="pt-[26px] w-full max-w-[90%] sm:max-w-[90%] mx-auto">
-          <h1 className="text-[25px] md:text-[30px] font-[500] text-[#333] pb-[1em]" id="aria-font">
+          <h1
+            className="text-[25px] md:text-[30px] font-[500] text-[#333] pb-[1em]"
+            data-font="aria-font"
+          >
             1. Achieving Gold or Platinum Seal of Transparency
           </h1>
           <AccordianBold number="1" title=" Claim Your Nonprofit Profile">
@@ -223,10 +226,13 @@ const index = () => {
         </div>
 
         <div className="pt-[26px] max-w-[90%] sm:max-w-[90%] mx-auto">
-          <h1 className="text-[25px] md:text-[30px] font-[500] text-[#333] pb-[1em]" id="aria-font">
+          <h1
+            className="text-[25px] md:text-[30px] font-[500] text-[#333] pb-[1em]"
+            data-font="aria-font"
+          >
             2. Preparing to share your profile with Free For Charity
           </h1>
-          <p className="text-[14px] font-[500] text-[#666] mb-[30px]" id="aria-font">
+          <p className="text-[14px] font-[500] text-[#666] mb-[30px]" data-font="aria-font">
             Once you have published your report you will then be given a link to share your profile
             as well as some option for posting this badge to your website that we will need later.
           </p>
@@ -239,7 +245,7 @@ const index = () => {
           />
         </div>
 
-        <div className="pt-[26px] w-[90%] mx-auto text-[14px]" id="aria-font">
+        <div className="pt-[26px] w-[90%] mx-auto text-[14px]" data-font="aria-font">
           <p className="font-[700] text-[#666] pb-[1em]">
             Here is an example of the links to copy into the FFC onboarding form:
           </p>

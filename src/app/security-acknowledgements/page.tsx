@@ -13,7 +13,7 @@ const index = () => {
   return (
     <div className="pt-[130px] pb-[54px]">
       <div className="py-[27px] w-[90%] md:w-[80%] mx-auto">
-        <div className="border-t-[5px] border-[#0073e6] pt-[25px]" id="lato-font">
+        <div className="border-t-[5px] border-[#0073e6] pt-[25px]" data-font="lato-font">
           <h2 className="text-[30px] leading-[30px] font-[700] text-[#333] mt-[20px] mb-[25px]">
             Security Acknowledgements
           </h2>
@@ -25,7 +25,7 @@ const index = () => {
           </p>
           <div
             className="bg-[#f9f9f9] border-l-[5px] border-[#cccccc] p-[20px] mt-[30px] mb-[30px]"
-            id="lato-font"
+            data-font="lato-font"
           >
             <p className="mb-[10px]  text-[14px] font-[500] leading-[25px] text-[#666]">
               As of now, we have not received any vulnerability reports that qualify for public

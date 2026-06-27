@@ -13,11 +13,11 @@ const HeroSection = () => {
         <div className="w-full md:w-[47%] mx-auto mb-8 md:mb-0 text-center">
           <h1
             className="mt-[48px] mb-[12px] text-white text-[31px] font-[700] leading-[37px] pb-[10px]"
-            id="cantata-font"
+            data-font="cantata-font"
           >
             Free For Charity <br /> Hosting
           </h1>
-          <p className="text-white text-[18px] font-[600] leading-[29px]" id="raleway-font">
+          <p className="text-white text-[18px] font-[600] leading-[29px]" data-font="raleway-font">
             FFC HOSTING IS THE FIRST US BASED 501C3 NONPROFIT ‘CHARITY FOR CHARITIES’ providing free
             domains and hosting services to other Non-Profit Organizations
           </p>

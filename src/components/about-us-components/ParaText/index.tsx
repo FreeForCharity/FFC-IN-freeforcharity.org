@@ -5,7 +5,7 @@ const index = () => {
     <div className="py-[54px] bg-[#fcfcfc]">
       <div
         className="w-[90%] lg:w-[85%] max-w-[1200px] mx-auto pt-[30px] md:px-[31px] pb-[19px]"
-        id="lato-font"
+        data-font="lato-font"
       >
         <p className="text-[18px] font-[500] leading-[27px] text-center pb-[1em]">
           Free for Charity engages in full cycle training and direct volunteering programs to

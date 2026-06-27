@@ -9,17 +9,17 @@ const index = () => {
           Free For Charity 501c3 Supported Charity Products and Services
         </h1>
         <div className="mt-[20px] mb-[2.5%]">
-          <p className="text-[18px] font-[500] color-black pb-[1em]" id="lato-font">
+          <p className="text-[18px] font-[500] color-black pb-[1em]" data-font="lato-font">
             Free For Charity is a US based 501c3 charity for charities that provides other US based
             501(c)(3) organizations with free .org domain name registration, professional website
             design tools and templates, as well as ongoing website management and digital
             infrastructure services.
           </p>
-          <p className="text-[18px] font-[500] color-black pb-[1em]" id="lato-font">
+          <p className="text-[18px] font-[500] color-black pb-[1em]" data-font="lato-font">
             Our mission is to empower charities with a strong digital presence, enabling them to
             effectively communicate their cause and engage supporters online.
           </p>
-          <p className="text-[18px] font-[500] color-black" id="lato-font">
+          <p className="text-[18px] font-[500] color-black" data-font="lato-font">
             By offering these essential services always at no cost, we ensure that even small
             non-profits can present themselves professionally in the digital world, enhancing their
             visibility and impact.
@@ -27,17 +27,23 @@ const index = () => {
         </div>
 
         <div className="mb-[70px]">
-          <h1 className="text-[26px] font-[500] color-[#333] text-center pb-[10px]" id="aria-font">
+          <h1
+            className="text-[26px] font-[500] color-[#333] text-center pb-[10px]"
+            data-font="aria-font"
+          >
             Before You Begin Onboarding
           </h1>
-          <h3 className="text-[14px] font-[700] underline text-center text-[#666]" id="aria-font">
+          <h3
+            className="text-[14px] font-[700] underline text-center text-[#666]"
+            data-font="aria-font"
+          >
             Obtain the following information and materials ready to ensure you can complete the
             onboarding steps
           </h3>
 
           <ol
             className="text-[14px] font-[500] text-[#666] list-decimal list-outside space-y-3 pl-5 mb-[1em]"
-            id="aria-font"
+            data-font="aria-font"
           >
             <li>501(c)(3) determination letter from the IRS</li>
             <li>EIN (Employer Identification Number)</li>
@@ -65,12 +71,15 @@ const index = () => {
         </div>
 
         <AccordionItem number="1" title=" External Validation Preparation">
-          <h1 className="font-[700] text-[18px] text-[#4A4A44] pb-[1em] underline" id="lato-font">
+          <h1
+            className="font-[700] text-[18px] text-[#4A4A44] pb-[1em] underline"
+            data-font="lato-font"
+          >
             Before proceeding, ensure your charity agrees to use and sets up:
           </h1>
           <ol
             className="text-[18px] font-[500] text-[#4A4A44] list-decimal list-outside pl-5 pb-[23px]"
-            id="lato-font"
+            data-font="lato-font"
           >
             <li>
               A yourcharityname@outlook.com Email Address
@@ -147,11 +156,11 @@ const index = () => {
         </AccordionItem>
 
         <AccordionItem number="2" title=" Free For Charity Onboarding Form">
-          <h1 className="font-[700] text-[18px] text-[#4A4A44] pb-[1em]" id="lato-font">
+          <h1 className="font-[700] text-[18px] text-[#4A4A44] pb-[1em]" data-font="lato-font">
             Step 1: 501C3 Status Verification via GuideStar (Only approves US Based 501c
             organizations)
           </h1>
-          <h1 className="font-[700] text-[18px] text-[#4A4A44] pb-[1em]" id="lato-font">
+          <h1 className="font-[700] text-[18px] text-[#4A4A44] pb-[1em]" data-font="lato-font">
             What is GuideStar?
           </h1>
           <p className="text-[18px] font-[500] mb-[1em]">
@@ -178,7 +187,7 @@ const index = () => {
             </Link>
             .
           </p>
-          <h1 className="font-[700] text-[18px] text-[#4A4A44] pb-[1em]" id="lato-font">
+          <h1 className="font-[700] text-[18px] text-[#4A4A44] pb-[1em]" data-font="lato-font">
             Step 2: Board Contact Information
           </h1>
           <p className="text-[18px] font-[500] mb-[1em]">
@@ -187,7 +196,7 @@ const index = () => {
             a Vice President / Vice Chair and/or an additional Member-At-Large, but the three key
             roles are non-optional.
           </p>
-          <h1 className="font-[700] text-[18px] text-[#4A4A44] pb-[1em]" id="lato-font">
+          <h1 className="font-[700] text-[18px] text-[#4A4A44] pb-[1em]" data-font="lato-font">
             Step 3: Primary and Technical Contact Information
           </h1>
           <p className="text-[18px] font-[500]">

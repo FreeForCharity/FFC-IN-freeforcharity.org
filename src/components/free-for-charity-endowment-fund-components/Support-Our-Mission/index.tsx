@@ -33,21 +33,21 @@ const SupportMissionSection: React.FC<SupportMissionSectionProps> = ({
         <h1
           className="text-[32px] font-[500] text-gray-900 mb-[10px] pb-[10px] sm:leading-[60px]
           sm:text-[50px] leading-[40px]"
-          id="cinzel"
+          data-font="cinzel"
         >
           {title}
         </h1>
         <p
           className="sm:text-[16px] font-[500] text-[#000000a3] mb-6 sm:leading-[28px]
           text-[14px] leading-[24px]"
-          id="fauna-font"
+          data-font="fauna-font"
         >
           {description1}
         </p>
         <p
           className="sm:text-[16px] font-[500] text-[#000000a3] mb-6 sm:leading-[28px]
           text-[14px] leading-[24px]"
-          id="fauna-font"
+          data-font="fauna-font"
         >
           {description2}
         </p>

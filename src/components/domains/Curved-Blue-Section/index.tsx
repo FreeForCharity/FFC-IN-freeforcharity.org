@@ -16,7 +16,7 @@ const Index = () => {
         <div className="w-full md:w-[48.5%] md:mr-[32px] text-[15px] leading-[1.6]">
           <ul
             className="list-disc pl-[20px] text-[17px] leading-[26px] font-[500] md:w-[85%] mx-auto "
-            id="raleway-font"
+            data-font="raleway-font"
           >
             <li>
               Go to{' '}

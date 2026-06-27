@@ -51,7 +51,7 @@ const Footer: React.FC = () => {
               className="group relative my-4 flex w-full max-w-[230px] items-center justify-between
                 border-2 border-[#5BA3D9] bg-black px-5 py-2.5 text-[#5BA3D9]
                 transition-all duration-300 hover:border-transparent"
-              id="aria-font"
+              data-font="aria-font"
             >
               <span className="text-[17px] font-medium leading-tight sm:text-[18px] md:text-[20px] transition-transform duration-300 group-hover:-translate-x-1">
                 Direct GuideStar Profile Link
@@ -73,7 +73,7 @@ const Footer: React.FC = () => {
         <div className="space-y-6 px-4 sm:px-0">
           <h3 className="text-[28px] text-white">Quick Links</h3>
 
-          <ul className="space-y-2 text-sm" id="lato-font">
+          <ul className="space-y-2 text-sm" data-font="lato-font">
             {[
               { name: 'Home', href: '/' },
               { name: 'About Us', href: '/about-us' },
@@ -110,7 +110,7 @@ const Footer: React.FC = () => {
 
           <div className="space-y-3">
             <h4 className="text-[28px] text-white">Free For Charity Policy</h4>
-            <ul className="space-y-1 text-sm" id="lato-font">
+            <ul className="space-y-1 text-sm" data-font="lato-font">
               {[
                 {
                   name: 'Donation Policy',
@@ -166,7 +166,7 @@ const Footer: React.FC = () => {
                 <a
                   href="mailto:clarkemoyer@freeforcharity.org"
                   className="font-[500] text-[15px] hover:text-cyan-400 transition-colors break-all"
-                  id="aria-font"
+                  data-font="aria-font"
                 >
                   clarkemoyer@freeforcharity.org
                 </a>
@@ -180,7 +180,7 @@ const Footer: React.FC = () => {
                 <a
                   href="tel:+15202228104"
                   className="font-[500] text-[16px] hover:text-cyan-400 transition-colors"
-                  id="aria-font"
+                  data-font="aria-font"
                 >
                   (520) 222-8104
                 </a>
@@ -197,7 +197,7 @@ const Footer: React.FC = () => {
               <MapPin className="w-10 h-10 text-orange-500 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-[500] text-[22px]">Main Address</p>
-                <p className="font-[500] text-[16px]" id="aria-font">
+                <p className="font-[500] text-[16px]" data-font="aria-font">
                   4030 Wake Forrest Road
                   <br />
                   Suite 349 Raleigh North
@@ -217,7 +217,7 @@ const Footer: React.FC = () => {
               <MapPin className="w-10 h-10 text-orange-500 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-[500] text-[22px]">PA Office Address</p>
-                <p className="font-[500] text-[16px]" id="aria-font">
+                <p className="font-[500] text-[16px]" data-font="aria-font">
                   301 Science Park Road Suite
                   <br />
                   119 State College PA 16803
@@ -246,7 +246,7 @@ const Footer: React.FC = () => {
       {/* Bottom Bar */}
       <div
         className="mt-12 py-6 px-4 border-t border-gray-800 text-center text-[18px] font-[500] w-full"
-        id="aria-font"
+        data-font="aria-font"
       >
         <p>
           © {currentYear} All Rights Are Reserved by Free For Charity a US 501c3 Non Profit | A

@@ -20,7 +20,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ title, percentage }) => {
   return (
     <div className="w-full">
       {/* Title */}
-      <p className="text-[14px] font-[700] text-[#111111] mb-1" id="fauna-font">
+      <p className="text-[14px] font-[700] text-[#111111] mb-1" data-font="fauna-font">
         {title}
       </p>
 

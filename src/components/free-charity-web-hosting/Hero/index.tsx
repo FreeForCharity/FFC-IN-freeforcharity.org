@@ -14,13 +14,13 @@ const Index = () => {
         <div className="w-full md:w-[38.2%] mb-8 md:mb-0 md:mr-[39px]">
           <h1
             className="md:mt-[60px] mb-[20px] font-[700] text-[40px] md:text-[50px] leading-[50px] md:leading-[65px] text-[#1a2e35]"
-            id="cantata-font"
+            data-font="cantata-font"
           >
             Free For Charity <br />
             Hosting
           </h1>
           <p
-            id="raleway-font"
+            data-font="raleway-font"
             className="text-[18px] md:text-[20px] font-[600] leading-[28px] md:leading-[30px]"
           >
             Welcome to Free For Charity Hosting, a project of Free For Charity providing free

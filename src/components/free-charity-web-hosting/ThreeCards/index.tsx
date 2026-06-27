@@ -21,7 +21,7 @@ const DonateSection: React.FC = () => {
           </div>
           <h1
             className="text-[31px] leading-[31px] font-bold text-white text-center"
-            id="cantata-font"
+            data-font="cantata-font"
           >
             <a href="/donate/">Donate Now</a>
           </h1>
@@ -31,11 +31,14 @@ const DonateSection: React.FC = () => {
         <div className="w-full rounded-[10px] overflow-hidden pt-[30px] pr-[20px] pb-[30px] pl-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.3)] flex flex-col items-center">
           <h1
             className="text-[31px] leading-[31px] font-bold text-[#0567B1] text-center pb-[10px]"
-            id="cantata-font"
+            data-font="cantata-font"
           >
             Help us in our cause
           </h1>
-          <p className="text-[18px] leading-[32px] font-medium text-center" id="raleway-font">
+          <p
+            className="text-[18px] leading-[32px] font-medium text-center"
+            data-font="raleway-font"
+          >
             If you don’t need a domain name today but want to support us please share this page or
             donate directly so we can provide more and more services to non-profits
           </p>
@@ -54,7 +57,7 @@ const DonateSection: React.FC = () => {
           </div>
           <h1
             className="text-[31px] leading-[31px] font-bold text-white text-center"
-            id="cantata-font"
+            data-font="cantata-font"
           >
             <a href="/volunteer/">Be a Volunteer</a>
           </h1>

@@ -11,7 +11,7 @@ const ContactSection = () => {
           </h1>
           <p
             className="text-[18px] font-[500] leading-[27px] text-black text-center"
-            id="lato-font"
+            data-font="lato-font"
           >
             Have questions about consultation or hosting? Want to know more about nonprofits?
             Looking to chat? Give a real person a call:
@@ -26,7 +26,7 @@ const ContactSection = () => {
             <a
               href="mailto:clarkemoyer@freeforcharity.org"
               className="font-[600] text-[#0567B1] text-[18px] break-all "
-              id="lato-font"
+              data-font="lato-font"
             >
               clarkemoyer@freeforcharity.org
             </a>
@@ -37,7 +37,7 @@ const ContactSection = () => {
             <div className="w-full text-center">
               <MdLocationOn className="w-[55px] h-[55px] text-[#1D6E90] mx-auto mb-4" />
               <p className="font-[600] text-[24px] text-black mb-2">Main Address</p>
-              <p className="font-[600] text-[18px] text-[#666666]" id="lato-font">
+              <p className="font-[600] text-[18px] text-[#666666]" data-font="lato-font">
                 4030 Wake Forrest Road STE 349 Raleigh North Carolina 27609
               </p>
             </div>
@@ -45,7 +45,7 @@ const ContactSection = () => {
             <div className="text-center">
               <MdLocationOn className="w-[55px] h-[55px] text-[#1D6E90] mx-auto mb-4" />
               <p className="font-[600] text-[24px] text-black mb-2">PA Office Address</p>
-              <p className="font-[600] text-[18px] text-[#666666]" id="lato-font">
+              <p className="font-[600] text-[18px] text-[#666666]" data-font="lato-font">
                 301 Science Park Road Suite 119 State College PA 16803
               </p>
             </div>
@@ -58,7 +58,7 @@ const ContactSection = () => {
             <a
               href="tel:+15202228104"
               className="font-[600] text-[#0567B1] text-[18px]"
-              id="lato-font"
+              data-font="lato-font"
             >
               (520) 222-8104
             </a>

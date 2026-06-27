@@ -61,7 +61,7 @@ export default function ToolCard({ logo, title, description, link }: ToolCardPro
         {description && (
           <p
             className="mb-[22px] text-[18px] leading-[24px] font-[500] text-[#666] text-center"
-            id="lato-font"
+            data-font="lato-font"
           >
             {description}
           </p>
@@ -72,7 +72,7 @@ export default function ToolCard({ logo, title, description, link }: ToolCardPro
           target="_blank"
           rel="noopener noreferrer"
           className="relative group inline-flex items-center justify-center gap-2 px-[30px] py-[6px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] transition-all duration-300 ease-in-out shadow-md leading-[31px] font-[600] hover:shadow-[0px_12px_18px_-6px_#b35000]"
-          id="montserrat-font"
+          data-font="montserrat-font"
         >
           <span className="transition-all duration-300 group-hover:translate-x-1">Get Started</span>
           <IoIosArrowForward className="opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 ease-in-out w-[20px] h-[20px]" />

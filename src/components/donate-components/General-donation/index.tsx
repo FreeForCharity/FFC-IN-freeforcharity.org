@@ -7,7 +7,7 @@ const index = () => {
       <div className="w-[90%] md:w-[80%] mx-auto pb-[80px]">
         <h1
           className="text-center pt-[40px] pb-[45px] text-[#333] leading-[30px] text-[30px] font-[500]"
-          id="aria-font"
+          data-font="aria-font"
         >
           General Donations
         </h1>

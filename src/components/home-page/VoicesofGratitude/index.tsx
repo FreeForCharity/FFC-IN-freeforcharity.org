@@ -31,7 +31,7 @@ export default function TestimonialSlider() {
       <div className="py-[30px]">
         <h2
           className="font-[400] text-[40px] lg:text-[48px]  tracking-[0] text-center mx-auto mb-[50px]"
-          id="faustina-font"
+          data-font="faustina-font"
         >
           Voices of Gratitude
         </h2>
@@ -56,7 +56,10 @@ export default function TestimonialSlider() {
                         }`}
                         style={{ minHeight: '200px' }}
                       >
-                        <p className="text-center font-[400] text-[28px] mb-3" id="fauna-font">
+                        <p
+                          className="text-center font-[400] text-[28px] mb-3"
+                          data-font="fauna-font"
+                        >
                           {testimonial.author}
                         </p>
                         <div className="flex justify-center mb-3">
@@ -72,7 +75,7 @@ export default function TestimonialSlider() {
                           ))}
                         </div>
 
-                        <p className="text-center text-[21px] font-[400]" id="fauna-font">
+                        <p className="text-center text-[21px] font-[400]" data-font="fauna-font">
                           &ldquo;{testimonial.quote}&rdquo;
                         </p>
                       </div>

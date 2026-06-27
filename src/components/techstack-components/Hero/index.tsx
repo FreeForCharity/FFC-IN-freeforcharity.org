@@ -4,7 +4,7 @@ import React from 'react'
 const UnderstandingHosting: React.FC = () => {
   return (
     <div className="min-h-screen w-full pt-[160px] pb-[70px]">
-      <div className="w-full max-w-[90%] md:max-w-[80%] mx-auto" id="aria-font">
+      <div className="w-full max-w-[90%] md:max-w-[80%] mx-auto" data-font="aria-font">
         <h1 className="font-[400] text-[30px] text-[#333] leading-[30px] pb-[10px]">
           Understanding Your Free For Charity WordPress Website Hosting: A Layered Approach
         </h1>

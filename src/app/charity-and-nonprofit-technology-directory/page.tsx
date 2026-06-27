@@ -51,7 +51,7 @@ const TechDirectoryPage = () => {
             Charity Nonprofit Tech Directory
           </h2>
 
-          <div className="space-y-6 mb-12" id="lato-font">
+          <div className="space-y-6 mb-12" data-font="lato-font">
             <p className="text-[18px] font-[500] leading-[28px] text-[#333]">
               The Nonprofit technology directory will focus on the startup charity and will have a
               heavy preference for items that are open source or free. At the end of the day however
@@ -84,7 +84,7 @@ const TechDirectoryPage = () => {
                     <li
                       key={item}
                       className="text-[16px] font-[500] text-[#333] pl-4 border-l-2 border-[#b35000]"
-                      id="lato-font"
+                      data-font="lato-font"
                     >
                       {item}
                     </li>
@@ -102,7 +102,10 @@ const TechDirectoryPage = () => {
           <h2 className="text-[28px] md:text-[36px] font-[700] text-white leading-[40px] mb-4">
             Have Questions?
           </h2>
-          <p className="text-[18px] text-white font-[500] leading-[28px] mb-4" id="lato-font">
+          <p
+            className="text-[18px] text-white font-[500] leading-[28px] mb-4"
+            data-font="lato-font"
+          >
             Have questions about consultation or hosting? Want to know more about nonprofits? Give a
             real person a call:
           </p>
@@ -117,7 +120,7 @@ const TechDirectoryPage = () => {
           <a
             href="/contact-us/"
             className="inline-block px-[30px] py-[10px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
-            id="montserrat-font"
+            data-font="montserrat-font"
           >
             Contact Us
           </a>

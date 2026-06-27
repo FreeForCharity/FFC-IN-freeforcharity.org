@@ -19,7 +19,7 @@ const popularDestinations = [
 export default function NotFound() {
   return (
     <div className="pt-[140px] pb-[80px]">
-      <div className="w-[90%] md:w-[80%] mx-auto max-w-[720px] text-center" id="aria-font">
+      <div className="w-[90%] md:w-[80%] mx-auto max-w-[720px] text-center" data-font="aria-font">
         <p className="text-[14px] font-[500] text-[#666] uppercase tracking-wider mb-[10px]">
           404 &mdash; Page Not Found
         </p>

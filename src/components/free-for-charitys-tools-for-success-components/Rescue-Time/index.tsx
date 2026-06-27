@@ -48,7 +48,7 @@ const Index = () => {
               Credit Karma (free add supported)
             </h3>
 
-            <div className="text-white text-[18px] leading-[24px] font-[500]" id="lato-font">
+            <div className="text-white text-[18px] leading-[24px] font-[500]" data-font="lato-font">
               Credit Karma actually gives you a FREE credit score and report from transunion. When I
               say free I mean it. At no time does it even ask you for a credit card so it is
               impossible to charge you. It uses the same model as Mint.com for income and serves you
@@ -70,7 +70,7 @@ const Index = () => {
                 shadow-md leading-[31px] font-[600]
                 hover:shadow-[0px_12px_18px_-6px_#b35000]
               "
-              id="montserrat-font"
+              data-font="montserrat-font"
             >
               <span className="transition-all duration-300 group-hover:translate-x-1">
                 Get Started
@@ -116,7 +116,7 @@ const Index = () => {
               Rescue Time (free with a paid premium version)
             </h3>
 
-            <div className="text-white text-[18px] leading-[24px] font-[500]" id="lato-font">
+            <div className="text-white text-[18px] leading-[24px] font-[500]" data-font="lato-font">
               Rescue Time is another FREE tool that really tells you about yourself and how you
               spend your time. It is amazing once you get it set up. The only downside is that you
               may not be able to install this on your work computer. NOTE: I use the paid version on
@@ -137,7 +137,7 @@ const Index = () => {
                 shadow-md leading-[31px] font-[600]
                 hover:shadow-[0px_12px_18px_-6px_#b35000]
               "
-              id="montserrat-font"
+              data-font="montserrat-font"
             >
               <span className="transition-all duration-300 group-hover:translate-x-1">
                 Get Started

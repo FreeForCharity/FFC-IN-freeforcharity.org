@@ -40,7 +40,7 @@ const CaseStudiesPage = () => {
       {/* Intro */}
       <section className="py-[60px] bg-[#fcfcfc]">
         <div className="w-[90%] md:w-[80%] max-w-[900px] mx-auto">
-          <div className="space-y-6 mb-12" id="lato-font">
+          <div className="space-y-6 mb-12" data-font="lato-font">
             <p className="text-[18px] font-[500] leading-[28px] text-[#333]">
               A nonprofit organization is the coming together of some groups of people for a purpose
               other than generating profit. And no part of the management income is shared or
@@ -74,7 +74,10 @@ const CaseStudiesPage = () => {
             <h2 className="text-[24px] md:text-[30px] font-[700] leading-[36px] text-[#b35000] mb-4">
               What Case Studies Cover
             </h2>
-            <p className="text-[18px] font-[500] leading-[28px] text-[#333] mb-6" id="lato-font">
+            <p
+              className="text-[18px] font-[500] leading-[28px] text-[#333] mb-6"
+              data-font="lato-font"
+            >
               What is a charity case study? It is a set of skills-based volunteer studies to answer
               the numerous questions people might have, accomplished by looking at real-life
               examples.
@@ -87,7 +90,7 @@ const CaseStudiesPage = () => {
                   className="flex items-center gap-3 p-3 bg-white rounded-[10px] shadow-[0px_2px_12px_0px_rgba(0,0,0,0.05)]"
                 >
                   <div className="w-2 h-2 bg-[#b35000] rounded-full flex-shrink-0" />
-                  <p className="text-[16px] font-[500] text-[#333]" id="lato-font">
+                  <p className="text-[16px] font-[500] text-[#333]" data-font="lato-font">
                     {topic}
                   </p>
                 </div>
@@ -96,7 +99,7 @@ const CaseStudiesPage = () => {
           </div>
 
           {/* Why Case Studies */}
-          <div className="space-y-6" id="lato-font">
+          <div className="space-y-6" data-font="lato-font">
             <p className="text-[18px] font-[500] leading-[28px] text-[#333]">
               You will not want to keep experimenting with the resources of your organization. You
               might end up getting what works but in most cases you might end up wasting your
@@ -124,14 +127,17 @@ const CaseStudiesPage = () => {
           <h2 className="text-[28px] md:text-[36px] font-[700] text-white leading-[40px] mb-4">
             Have a Case Study Request?
           </h2>
-          <p className="text-[18px] text-white font-[500] leading-[28px] mb-6" id="lato-font">
+          <p
+            className="text-[18px] text-white font-[500] leading-[28px] mb-6"
+            data-font="lato-font"
+          >
             Contact us if you have a particular case study request or want to be featured in a case
             study.
           </p>
           <a
             href="/contact-us/"
             className="inline-block px-[30px] py-[10px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
-            id="montserrat-font"
+            data-font="montserrat-font"
           >
             Contact Us
           </a>

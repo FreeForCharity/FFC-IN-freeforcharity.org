@@ -9,7 +9,7 @@ const index = () => {
         <div className="w-[90%] md:w-[80%] mx-auto text-center pb-[54px]">
           <h1
             className="text-[22px] sm:text-[24px] md:text-[26px] font-medium text-[#333] pt-[22px]"
-            id="aria-font"
+            data-font="aria-font"
           >
             Ready to Get Started Now?
           </h1>
@@ -32,13 +32,13 @@ const index = () => {
           <div className="pt-[24px] pb-[3px] w-[90%] md:w-[80%] mx-auto max-w-[1080px]">
             <h1
               className="mt-[2px] mb-[12px] pb-[10px] text-[30px] md:text-[35px] font-[700] leading-[46px] text-[#0567B1] text-center"
-              id="cantata-font"
+              data-font="cantata-font"
             >
               STEPS TO GET A NEW WEBSITE DESIGNED AND HOSTED
             </h1>
             <p
               className="mb-[13px] w-[85%] mx-auto font-[500] text-[20px] leading-[30px] text-center"
-              id="raleway-font"
+              data-font="raleway-font"
             >
               New site design has a backlog with Free for Charity but please reach out to get on the
               list for a new free charity website. We try to support 100 Charities a year. If you
