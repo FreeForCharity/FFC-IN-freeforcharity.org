@@ -184,6 +184,10 @@ async function main() {
   }
 
   console.log(`\n-- defense-in-depth`)
+  // Homepage must render real content, not a blank or stale shell. A bare
+  // 200 can mask an empty/partial index.html (e.g. a truncated upload), so
+  // assert a known marker from the rendered page.
+  await checkBodyContains(`/ renders homepage content`, '/', ['free for charity'])
   // WHMCS at /hub/ — assert response includes a WHMCS-specific marker so
   // a stale index.html or directory listing doesn't pass as a healthy hub.
   await checkBodyContains(`/hub/ serves WHMCS (not a placeholder)`, '/hub/', [

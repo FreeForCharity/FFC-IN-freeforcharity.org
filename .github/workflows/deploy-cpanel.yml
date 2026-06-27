@@ -96,6 +96,27 @@ jobs:
           # the moving branch tip. Falls back to github.sha on manual dispatch.
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
 
+      # Out-of-order protection: the deploy concurrency group serializes runs
+      # but does NOT order them by merge time, and CI runs for two merges can
+      # finish out of order. Without this, an older commit whose CI finished
+      # late could mirror over a newer deploy and regress production. If this
+      # commit is no longer main's tip, skip the live upload/smoke (the build
+      # still runs harmlessly; the newer commit's deploy is authoritative).
+      - name: Check this commit is still main's tip
+        id: freshness
+        env:
+          REF: ${{ github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          set -euo pipefail
+          git fetch --quiet origin main
+          TIP=$(git rev-parse origin/main)
+          if [ "$REF" != "$TIP" ]; then
+            echo "::warning::Commit $REF is superseded by $TIP on main — skipping this stale deploy."
+            echo "superseded=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "superseded=false" >> "$GITHUB_OUTPUT"
+          fi
+
       # Safety gate: refuse to deploy if the CI workflow (lint, jest,
       # build, Playwright) on this exact commit isn't green. The deploy
       # workflow itself doesn't re-run the test suite, so without this
@@ -107,8 +128,12 @@ jobs:
           REF: ${{ github.event.workflow_run.head_sha || github.sha }}
         run: |
           set -e
+          # Reference CI by filename (rename-proof) rather than display name.
+          # NOTE: the on.workflow_run.workflows trigger above must use the
+          # display name "CI - Build and Test" (GitHub requires the name
+          # there) — keep both in sync with .github/workflows/ci.yml.
           rows=$(gh run list \
-            --workflow="CI - Build and Test" \
+            --workflow="ci.yml" \
             --commit="$REF" \
             --limit 5 \
             --json status,conclusion,databaseId,createdAt)
@@ -214,6 +239,7 @@ jobs:
           "CPANEL_FTP_PASSWORD=$ftpPw"   | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
 
       - name: Upload out/ to ~/public_html_next/
+        if: ${{ steps.freshness.outputs.superseded != 'true' }}
         env:
           DELETE_REMOTE: ${{ inputs.delete_remote }}
         run: |
@@ -279,6 +305,7 @@ jobs:
           echo "Upload to ~/public_html_next/ complete."
 
       - name: Deploy summary
+        if: ${{ steps.freshness.outputs.superseded != 'true' }}
         env:
           DELETE_REMOTE: ${{ inputs.delete_remote }}
         run: |
@@ -301,7 +328,8 @@ jobs:
       # and key assets (sitemap.xml, robots.txt, favicon) are reachable.
       - name: Full smoke suite (post-cutover)
         # Always verify on auto-deploy; on manual dispatch honor the input.
-        if: ${{ github.event_name == 'workflow_run' || inputs.run_smoke }}
+        # Skipped when this commit was superseded (no upload happened).
+        if: ${{ steps.freshness.outputs.superseded != 'true' && (github.event_name == 'workflow_run' || inputs.run_smoke) }}
         env:
           BASE_URL: ${{ inputs.public_url_base || 'https://freeforcharity.org' }}
         run: |
