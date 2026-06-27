@@ -178,6 +178,7 @@ jobs:
         run: npm ci
 
       - name: Build with Next.js (production basePath -- root)
+        if: ${{ steps.freshness.outputs.superseded != 'true' }}
         run: npm run build
         env:
           # Apex domain, no subpath -- same as deploy-cpanel-staging.yml.
@@ -194,6 +195,7 @@ jobs:
           NEXT_PUBLIC_TAWK_TO_PROPERTY: ${{ secrets.NEXT_PUBLIC_TAWK_TO_PROPERTY }}
 
       - name: Verify build output
+        if: ${{ steps.freshness.outputs.superseded != 'true' }}
         run: |
           test -f out/index.html
           # Hard-fail without .htaccess: Apache needs it to route clean URLs
@@ -203,6 +205,7 @@ jobs:
           echo "out/ ready, $(find out -type f | wc -l) files"
 
       - name: Azure login (OIDC)
+        if: ${{ steps.freshness.outputs.superseded != 'true' }}
         uses: azure/login@v3
         with:
           client-id: ${{ secrets.WR_ALL_FFC_AZURE_KV_CLIENT_ID }}
@@ -210,6 +213,7 @@ jobs:
           allow-no-subscriptions: true
 
       - name: Fetch production FTP creds from Key Vault
+        if: ${{ steps.freshness.outputs.superseded != 'true' }}
         shell: pwsh
         env:
           # Hardcoded: this workflow targets exactly one vault. Not taking a
