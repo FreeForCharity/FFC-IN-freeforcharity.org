@@ -341,10 +341,15 @@ jobs:
           HUB_URL="${BASE_URL%/}/hub/"
           ok=""
           for attempt in 1 2 3; do
-            body="$(curl --silent --show-error --location --max-time 25 \
-              -H "Cache-Control: no-cache" "$HUB_URL" || true)"
-            code="$(curl --silent --output /dev/null --location --max-time 25 \
-              -H "Cache-Control: no-cache" -w '%{http_code}' "$HUB_URL" || echo 000)"
+            # Single request: capture the body AND the status code from the
+            # same response. Two separate curls could observe different states
+            # (the portal recovering mid-check) and the marker grep could then
+            # be matched against a different response than the code. Append the
+            # code on its own trailing line, then split body/code apart.
+            resp="$(curl --silent --show-error --location --max-time 25 \
+              -H "Cache-Control: no-cache" -w $'\n%{http_code}' "$HUB_URL" || printf '\n000')"
+            code="${resp##*$'\n'}"
+            body="${resp%$'\n'*}"
             if [ "$code" = "200" ] && printf '%s' "$body" | grep -Eqi 'whmcs|clientarea|cart\.php'; then
               echo "WHMCS /hub healthy: HTTP $code with WHMCS marker (attempt $attempt)."
               ok="yes"
