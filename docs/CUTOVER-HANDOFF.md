@@ -1,8 +1,17 @@
 # Cutover Handoff — Free For Charity WordPress → Next.js (InterServer cPanel)
 
-> **✅ Cutover complete.** The apex `freeforcharity.org` now serves the
-> Next.js static export from cPanel (`public_html_next`). This document is
-> retained as a historical record and rollback reference.
+> **⚠️ Historical planning document — superseded.** The cutover did NOT
+> swap the document root to `public_html_next`, and there is NO
+> `~/public_html_next/hub -> ~/public_html/hub` symlink. The cutover
+> mirrored the Next.js static export straight into `~/public_html` (the
+> live apex docroot), excluding WHMCS at `~/public_html/hub` (a real
+> directory) and the other cPanel keepers. Production now deploys via
+> [`.github/workflows/deploy-cpanel.yml`](../.github/workflows/deploy-cpanel.yml)
+> (mirror-in-place into `~/public_html`); rollback is
+> [`docs/ROLLBACK.md`](ROLLBACK.md). (`~/public_html_next` is a SEPARATE
+> staging account/docroot used by `deploy-cpanel-staging.yml`, not a
+> production or rollback target.) The body below describes the original
+> swap-based plan and is kept for historical context only.
 
 The pre-cutover engineering work is complete. This document describes
 what was done and the operator steps that remain.

@@ -36,39 +36,61 @@ function record(name, ok, detail) {
   process.stdout.write(`${ok ? PASS : FAIL} ${name}${detail ? ` — ${detail}` : ''}\n`)
 }
 
-async function request(path, { followRedirects = true, readBody = false } = {}) {
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
+
+async function request(path, { followRedirects = true, readBody = false, retries = 2 } = {}) {
   const url = path.startsWith('http') ? path : `${BASE_URL}${path}`
-  const controller = new AbortController()
-  const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
-  try {
-    const res = await fetch(url, {
-      method: 'GET',
-      redirect: followRedirects ? 'follow' : 'manual',
-      signal: controller.signal,
-      headers: {
-        'User-Agent': 'ffc-smoke-test/1.0',
-        // Bust the Cloudflare edge cache so a freshly-deployed origin
-        // is observed instead of a stale cached version. Without this,
-        // a smoke run immediately after deploy can pass against the
-        // pre-deploy HTML and report green on a regression.
-        'Cache-Control': 'no-cache',
-        Pragma: 'no-cache',
-      },
-    })
-    let body
-    if (readBody) {
-      body = await res.text()
-    } else {
-      // Eagerly discard the response stream — without this Node's fetch
-      // keeps the body buffer around until GC, which adds up across
-      // ~50 sitemap+redirect checks per run.
-      await res.body?.cancel?.()
+  // Retry transient failures — a network blip (DNS/TLS/timeout) or an
+  // upstream 5xx (Cloudflare/origin) on any one of ~90 checks would otherwise
+  // red the whole run. Real regressions (4xx, wrong redirect, missing marker)
+  // are NOT retried, so this only suppresses flakes, never masks a failure.
+  for (let attempt = 0; ; attempt++) {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), TIMEOUT_MS)
+    try {
+      const res = await fetch(url, {
+        method: 'GET',
+        redirect: followRedirects ? 'follow' : 'manual',
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'ffc-smoke-test/1.0',
+          // Bust the Cloudflare edge cache so a freshly-deployed origin
+          // is observed instead of a stale cached version. Without this,
+          // a smoke run immediately after deploy can pass against the
+          // pre-deploy HTML and report green on a regression.
+          'Cache-Control': 'no-cache',
+          Pragma: 'no-cache',
+        },
+      })
+      let body
+      if (readBody) {
+        body = await res.text()
+      } else {
+        // Eagerly discard the response stream — without this Node's fetch
+        // keeps the body buffer around until GC, which adds up across
+        // ~50 sitemap+redirect checks per run.
+        await res.body?.cancel?.()
+      }
+      clearTimeout(timer)
+      if (res.status >= 500 && attempt < retries) {
+        await sleep(500 * (attempt + 1))
+        continue
+      }
+      return {
+        status: res.status,
+        location: res.headers.get('location'),
+        headers: res.headers,
+        url: res.url,
+        body,
+      }
+    } catch (err) {
+      clearTimeout(timer)
+      if (attempt < retries) {
+        await sleep(500 * (attempt + 1))
+        continue
+      }
+      return { status: 0, error: err.message }
     }
-    return { status: res.status, location: res.headers.get('location'), url: res.url, body }
-  } catch (err) {
-    return { status: 0, error: err.message }
-  } finally {
-    clearTimeout(timer)
   }
 }
 
@@ -80,6 +102,13 @@ async function checkStatus(name, path, expected) {
 
 async function checkRedirect(name, path, expectedStatus, expectedLocationSuffix) {
   const r = await request(path, { followRedirects: false })
+  // Surface the underlying fetch failure (timeout / DNS / TLS) so a flaky
+  // network blip is distinguishable from a real redirect regression —
+  // critical now that revenue flows (donation-confirmation) assert redirects.
+  if (r.error) {
+    record(name, false, `${path} → ${r.status} (${r.error})`)
+    return
+  }
   const locOk = r.location && r.location.endsWith(expectedLocationSuffix)
   const ok = r.status === expectedStatus && locOk
   record(name, ok, `${path} → ${r.status} ${r.location || '(no Location)'}`)
@@ -97,6 +126,107 @@ async function checkBodyContains(name, path, expectedSubstrings) {
     ? `${path} → ${r.status} (${r.error})`
     : `${path} → ${r.status}${matched ? ` (body matches "${matched}")` : ' (no marker found)'}`
   record(name, ok, detail)
+}
+
+// Verify the hashed Next.js JS bundle is actually on the server. A partial
+// or interrupted upload can leave the HTML at 200 while the /_next/static
+// chunks 404 — a status-only homepage check would miss that (the page would
+// be blank/non-interactive for real users).
+async function checkNextAssetLoads() {
+  const home = await request('/', { readBody: true })
+  if (home.error) {
+    record(`Next.js JS bundle loads`, false, `/ → ${home.status} (${home.error})`)
+    return
+  }
+  const match = home.body && home.body.match(/\/_next\/static\/[^"')\s]+\.js/)
+  if (!match) {
+    record(`Next.js JS bundle loads`, false, '/ → no /_next/static/*.js reference found')
+    return
+  }
+  const r = await request(match[0])
+  const detail = r.error ? `${match[0]} → ${r.status} (${r.error})` : `${match[0]} → ${r.status}`
+  record(`Next.js JS bundle loads`, r.status === 200, detail)
+  // Content-hashed chunks must be cached long and immutable, or every visit
+  // re-downloads the bundle (perf regression / wrong cache config).
+  if (r.status === 200) {
+    const cc = r.headers && r.headers.get('cache-control')
+    record(
+      `static assets immutably cached`,
+      Boolean(cc && /immutable/i.test(cc)),
+      `${match[0]} cache-control: ${cc || '(absent)'}`
+    )
+  }
+}
+
+// Assert a single response header matches (substring or RegExp). Catches
+// .htaccess / Cloudflare drift that a status-code check can't see.
+async function checkHeader(name, path, header, matcher) {
+  const r = await request(path)
+  if (r.error) {
+    record(name, false, `${path} → ${r.status} (${r.error})`)
+    return
+  }
+  const val = r.headers && r.headers.get(header)
+  const ok = val
+    ? matcher instanceof RegExp
+      ? matcher.test(val)
+      : val.toLowerCase().includes(String(matcher).toLowerCase())
+    : false
+  record(name, Boolean(ok), `${path} ${header}: ${val || '(absent)'}`)
+}
+
+// The security headers the .htaccess is expected to set. A missing/weakened
+// header is a real security regression even though the page still 200s.
+async function checkSecurityHeaders(name, path) {
+  const required = {
+    'x-content-type-options': /nosniff/i,
+    'x-frame-options': /sameorigin|deny/i,
+    'referrer-policy': /.+/,
+    'strict-transport-security': /max-age=\d+/i,
+  }
+  const r = await request(path)
+  if (r.error) {
+    record(name, false, `${path} → ${r.status} (${r.error})`)
+    return
+  }
+  const missing = []
+  for (const [h, re] of Object.entries(required)) {
+    const val = r.headers && r.headers.get(h)
+    if (!val || !re.test(val)) missing.push(val ? `${h}=${val}` : `${h} (absent)`)
+  }
+  record(
+    name,
+    missing.length === 0,
+    missing.length ? `${path} → ${missing.join('; ')}` : `${path} → all present`
+  )
+}
+
+// http:// must 301/308 to https:// — never serve the site in the clear.
+async function checkHttpsRedirect(name) {
+  const httpUrl = `${BASE_URL.replace(/^https:/, 'http:')}/`
+  const r = await request(httpUrl, { followRedirects: false })
+  const ok = [301, 302, 307, 308].includes(r.status) && /^https:\/\//.test(r.location || '')
+  record(name, ok, `${httpUrl} → ${r.status} ${r.location || '(no Location)'}`)
+}
+
+// A 404 must render the custom Next.js not-found page, not just return the
+// status — a server/host default 404 (or a blank body) would still be 404.
+async function check404Renders(name) {
+  const r = await request('/this-page-does-not-exist-xyz/', { readBody: true })
+  if (r.error) {
+    record(name, false, `/…nonexistent → ${r.status} (${r.error})`)
+    return
+  }
+  // Marker is the unique <h1> from src/app/not-found.tsx ("We couldn't find
+  // that page"). The served apostrophe is U+2019 (&rsquo;), so `.` spans it.
+  // A generic host/CDN 404 (just "404" / "page not found") won't match this,
+  // avoiding the false positives the broad old marker produced.
+  const hasMarker = r.body ? /we couldn.t find that page/i.test(r.body) : false
+  record(
+    name,
+    r.status === 404 && hasMarker,
+    `/…nonexistent → ${r.status}${hasMarker ? ' (custom 404 body)' : ' (no custom-404 marker)'}`
+  )
 }
 
 function parseSitemap(xml) {
@@ -188,18 +318,74 @@ async function main() {
   // 200 can mask an empty/partial index.html (e.g. a truncated upload), so
   // assert a known marker from the rendered page.
   await checkBodyContains(`/ renders homepage content`, '/', ['free for charity'])
-  // WHMCS at /hub/ — assert response includes a WHMCS-specific marker so
-  // a stale index.html or directory listing doesn't pass as a healthy hub.
-  await checkBodyContains(`/hub/ serves WHMCS (not a placeholder)`, '/hub/', [
-    'whmcs',
-    'WHMCompleteSolution',
-    'cart.php',
-    'clientarea',
-  ])
-  await checkStatus(`unknown URL returns 404`, '/this-page-does-not-exist-xyz/', 404)
+  await check404Renders(`custom 404 page renders`)
   await checkStatus(`favicon`, '/favicon.ico', 200)
   await checkStatus(`sitemap.xml`, '/sitemap.xml', 200)
   await checkStatus(`robots.txt`, '/robots.txt', 200)
+
+  console.log(`\n-- security, headers & transport`)
+  // Security headers the .htaccess sets — a missing one is a real regression.
+  await checkSecurityHeaders(`homepage sets security headers`, '/')
+  // The site must never be served over plaintext HTTP.
+  await checkHttpsRedirect(`http:// redirects to https://`)
+  // Content types: a wrong type (e.g. the 415 class of bug) breaks consumers.
+  await checkHeader(`sitemap.xml served as XML`, '/sitemap.xml', 'content-type', /xml/i)
+  await checkHeader(`robots.txt served as text`, '/robots.txt', 'content-type', /text\/plain/i)
+
+  console.log(`\n-- special components`)
+  // The two donation/revenue surfaces — a 200 isn't enough; assert the
+  // actual payment integrations are present in the rendered HTML so a
+  // retired PayPal button or a dropped Zeffy embed is caught.
+  await checkBodyContains(`/donate exposes the PayPal hosted button`, '/donate/', ['9ZKQ23YC3G2J2'])
+  await checkBodyContains(
+    `/free-for-charity-endowment-fund mounts the Zeffy form`,
+    '/free-for-charity-endowment-fund/',
+    ['zeffy']
+  )
+  // PayPal return flow: the donation-confirmation callback must 302 to
+  // /donate AND preserve the transaction query (tx=...), or the post-donation
+  // confirmation params are lost. (The CSV loop above only covers the
+  // no-query case; this asserts the param actually survives.)
+  await checkRedirect(
+    `/donation-confirmation preserves the PayPal tx param`,
+    '/donation-confirmation/?tx=SMOKE123',
+    302,
+    '/donate/?tx=SMOKE123'
+  )
+  // Mandatory FFC-wide homepage sections (Team + testimonials) — their
+  // absence means a broken/partial render, not just a styling diff.
+  await checkBodyContains(`homepage renders the Team section`, '/', ['the free for charity team'])
+  await checkBodyContains(`homepage renders testimonials`, '/', ['testimonial'])
+  // Contact page (no form, by policy) must still expose the contact methods.
+  await checkBodyContains(`/contact-us exposes a mailto link`, '/contact-us/', ['mailto:'])
+  // robots.txt must advertise the sitemap (proves it's the FFC robots.txt,
+  // not a host default, and keeps SEO crawling intact).
+  await checkBodyContains(`robots.txt references the sitemap`, '/robots.txt', ['sitemap:'])
+  // Header/footer logo asset must be on the server.
+  await checkStatus(`logo asset loads`, '/Images/ffc-logo-banner.webp', 200)
+  // The built JS bundle must actually have uploaded (catches partial deploys).
+  await checkNextAssetLoads()
+
+  console.log(`\n-- WHMCS billing portal (/hub — third-party PHP app via symlink)`)
+  // Every /hub endpoint must serve real WHMCS, not a Next.js 404 or a
+  // placeholder — proves the public_html_next/hub symlink and the WHMCS app
+  // survived the deploy. These are live customer flows: store, cart, login,
+  // announcements, and the admin console.
+  const WHMCS_MARKERS = ['whmcs', 'WHMCompleteSolution', 'cart.php', 'clientarea']
+  await checkBodyContains(`/hub/ storefront`, '/hub/', WHMCS_MARKERS)
+  await checkBodyContains(`/hub/cart.php (order/cart)`, '/hub/cart.php', WHMCS_MARKERS)
+  await checkBodyContains(
+    `/hub/clientarea.php (client login)`,
+    '/hub/clientarea.php',
+    WHMCS_MARKERS
+  )
+  await checkBodyContains(`/hub/announcements.php`, '/hub/announcements.php', WHMCS_MARKERS)
+  await checkBodyContains(
+    `/hub/store product page`,
+    '/hub/store/ffc-consulting/nonprofit-charity-onboarding',
+    WHMCS_MARKERS
+  )
+  await checkBodyContains(`/hub/globaladmin (admin login)`, '/hub/globaladmin', WHMCS_MARKERS)
 
   const failed = results.filter((r) => !r.ok)
   console.log(`\n${results.length - failed.length}/${results.length} passed`)

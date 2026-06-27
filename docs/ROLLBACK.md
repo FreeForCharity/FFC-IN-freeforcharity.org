@@ -1,104 +1,181 @@
-# Rollback Procedure: cPanel Document-Root Swap
+# Rollback Procedure: Production Apex (cPanel mirror-in-place)
 
-Roll back the freeforcharity.org website from the Next.js static export
-(`public_html_next`) back to the WordPress install (`public_html`).
-Used when something breaks in the first 14 days after cutover.
+Roll back freeforcharity.org when a deploy ships a broken build to the
+live apex.
 
-**Estimated rollback time: 2–5 minutes.** No DNS propagation involved
-— the document-root swap takes effect immediately on the InterServer
-cPanel host.
+> **Architecture (read this first).** The apex cutover mirrored the
+> Next.js static export **straight into `~/public_html`** — the document
+> root was **never swapped** to a sibling directory. Every production
+> deploy (`.github/workflows/deploy-cpanel.yml`) does an `lftp` mirror of
+> `out/` into `~/public_html` with `--delete`, **excluding** the proven
+> keeper set so it never touches WHMCS, the parked domain, or the cPanel
+> system files. Consequences for rollback:
+>
+> - There is **no document-root swap** to undo. The old DNS-flip /
+>   doc-root-swap rollbacks no longer apply.
+> - `~/public_html` no longer contains the old WordPress install — it
+>   holds the Next.js static files. You roll back by **re-mirroring a
+>   known-good build**, not by pointing the doc root elsewhere.
+> - **WHMCS at `~/public_html/hub/` is never modified** by any deploy
+>   (it is excluded from the mirror). A bad apex deploy does **not** take
+>   billing down, and rollback must likewise leave `/hub/` untouched.
+> - `~/public_html_next` is the **staging** docroot (a separate cPanel
+>   account / URL), not production. Don't deploy production there.
 
----
-
-## Prerequisites
-
-You will need access to:
-
-- **InterServer cPanel** for the freeforcharity.org account.
-- (Optional) SSH/Terminal access in cPanel for verifying file state.
-- The full cPanel backup downloaded during pre-flight (see
-  `docs/CUTOVER-HANDOFF.md` → "Pre-flight" step 1) — only needed if the
-  swap doesn't recover the WP files for some reason.
-
-The WordPress install at `~/public_html/` is **never modified** during or
-after cutover. It remains in place as the rollback target for at least
-14 days.
-
----
-
-## Step 1 — Swap the document root back in cPanel
-
-1. Log in to InterServer cPanel.
-2. Go to **Domains → manage `freeforcharity.org`**.
-3. Change the document root from `public_html_next` back to `public_html`.
-4. Save / apply. The swap takes effect on the next HTTP request.
+**Estimated rollback time: 5–10 minutes** (one revert + the auto-deploy
+that follows, or a single manual `workflow_dispatch`). No DNS
+propagation is involved.
 
 ---
 
-## Step 2 — Bust the Cloudflare cache
+## Decision: which rollback do I need?
 
-Cloudflare caches HTML aggressively. After the swap, force a refresh
-so visitors see the WordPress site immediately:
+| Situation                                                 | Use          |
+| --------------------------------------------------------- | ------------ |
+| A bad commit shipped; the previous commit was good        | **Option A** |
+| You need the site good _right now_, can't wait for CI     | **Option B** |
+| The mirror was interrupted / files on disk look corrupted | **Option C** |
+| `/hub/` (WHMCS) itself is down                            | **See note** |
 
-1. Cloudflare dashboard → `freeforcharity.org` zone → **Caching → Configuration**.
-2. **Purge Everything**. Confirm.
+> **Note on WHMCS.** Deploys exclude `~/public_html/hub`, so an apex
+> deploy cannot break `/hub/`. If `/hub/` is down, it is **not** an apex
+> deploy regression — do not roll back the apex. Treat it as a WHMCS /
+> cPanel / Cloudflare incident: check InterServer cPanel and the WHMCS
+> admin at `freeforcharity.org/hub/globaladmin`, and the escalation
+> contacts below.
 
 ---
 
-## Step 3 — Verify WordPress is responding
+## Option A — Revert the bad commit (preferred)
+
+Main auto-deploys: reverting on `main` re-mirrors the previous-good
+static export automatically.
 
 ```bash
-curl -I https://freeforcharity.org
-# Expect: HTTP/2 200 with WordPress-style headers (link rel="https://api.w.org/", etc.)
-
-curl -I https://freeforcharity.org/hub/
-# Expect: HTTP/2 200 — WHMCS still works (it never moved)
-
-curl -I https://freeforcharity.org/wp-login.php
-# Expect: HTTP/2 200 — WP admin reachable again
+git switch main && git pull
+git revert --no-edit <bad-commit-sha>   # or a range: <oldest>^..<newest>
+git push origin main
 ```
 
-Also verify visually in an incognito browser. If you see the Figma
-redesign, Cloudflare cache hasn't purged yet — wait 1–2 minutes and
+Then watch it ship:
+
+1. **CI — Build and Test** runs on the revert commit.
+2. On green, **Deploy to InterServer cPanel (production)** fires via
+   `workflow_run` and mirrors the reverted (good) `out/` into
+   `~/public_html`.
+3. The post-deploy smoke suite + the "Verify WHMCS /hub survived"
+   step confirm the apex and billing are healthy.
+
+This is the cleanest path: the rolled-back state is a real commit on
+`main`, so history and production stay in sync.
+
+---
+
+## Option B — Redeploy a known-good commit now (fastest)
+
+Skips the revert/CI round-trip — deploy a prior good commit directly.
+
+1. GitHub repo → **Actions → Deploy to InterServer cPanel (production)**
+   → **Run workflow**.
+2. Set **Use workflow from** to the **known-good ref** (a tag or commit;
+   pick the last commit whose deploy was green).
+3. Leave `delete_remote = true` (clean mirror) and set
+   `run_smoke = true` so the live checks run after upload.
+4. Run it. The CI-green gate requires that ref to have passed CI, and
+   the freshness guard is bypassed on manual dispatch (operator intent).
+
+> Follow up with **Option A** afterward so `main` reflects the
+> rolled-back state — otherwise the next merge re-ships the bad commit.
+
+---
+
+## Option C — Restore `~/public_html` from a cPanel backup (last resort)
+
+Only if the mirror left the apex files corrupted in a way a redeploy
+can't fix (e.g. a half-finished upload plus an unrelated disk issue).
+
+1. Log in to **InterServer cPanel** for the freeforcharity.org account.
+2. **Files → Backup / File Manager** → restore `~/public_html` from the
+   most recent good backup (the pre-flight backup from
+   `docs/CUTOVER-HANDOFF.md` → "Pre-flight" step 1, or a nightly).
+3. **Do not** restore over `~/public_html/hub` unless WHMCS itself is
+   the problem — keep billing's live state.
+4. Once stable, run **Option A or B** to get a clean, known-good static
+   export back in place from CI.
+
+---
+
+## Bust the Cloudflare cache (after any option)
+
+Cloudflare caches HTML aggressively. After the files are good, force a
+refresh so visitors stop seeing the broken version:
+
+1. Cloudflare dashboard → `freeforcharity.org` zone →
+   **Caching → Configuration**.
+2. **Purge Everything**. Confirm.
+
+The deploy/smoke steps send `Cache-Control: no-cache`, but visitor
+traffic still hits the edge cache until it's purged.
+
+---
+
+## Verify production is healthy
+
+```bash
+curl -I https://freeforcharity.org/
+# Expect: HTTP/2 200 — the Next.js apex
+
+curl -sS https://freeforcharity.org/hub/ | grep -iE 'whmcs|clientarea|cart\.php'
+# Expect: a WHMCS marker — billing still works (it never moved)
+
+BASE_URL=https://freeforcharity.org npm run smoke-test
+# Full live suite: every sitemap URL, the WP->Next redirects, /hub, assets.
+```
+
+Also check visually in an incognito browser. If you still see the broken
+version, the Cloudflare cache hasn't purged yet — wait 1–2 minutes and
 retry.
 
 ---
 
-## Step 4 — Disable the Next.js deploy workflow (optional)
+## Stop further auto-deploys while investigating (optional)
 
-If you want to prevent accidental redeploys to `public_html_next/`
-while you investigate:
+If you need to freeze production while you dig in:
 
-1. GitHub repo → **Settings → Actions → General → Workflow permissions**, or
-2. Open `.github/workflows/deploy-cpanel.yml` and add `if: false` to the job, or
-3. Disable the workflow from the Actions tab in GitHub UI.
+1. GitHub repo → **Actions** tab → **Deploy to InterServer cPanel
+   (production)** → **⋯ → Disable workflow**, or
+2. Add `if: false` to the job in `.github/workflows/deploy-cpanel.yml`
+   and push (this also stops the auto-deploy on the revert — re-enable
+   before using Option A).
 
-This step is optional — the workflow is already manual-trigger only.
+Re-enable once you're ready to ship the fix.
 
 ---
 
-## Step 5 — Open a post-mortem issue
+## Open a post-mortem issue
 
 After stabilizing, open a GitHub issue documenting:
 
 - What broke (specific pages, features, or infra).
-- When it was detected.
-- How long the outage lasted.
+- When it was detected and how long the degradation lasted.
 - Root cause.
-- Fix required before re-attempting cutover.
+- The guard/test that should have caught it (so we close the gap).
+
+The deploy workflow auto-opens a `🚨 HIGH … deploy/smoke FAILED`
+incident issue on failure — fold the post-mortem into that issue if one
+exists.
 
 ---
 
-## Important Notes
+## Reference
 
-| Item                         | Detail                                                                                                                                           |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `~/public_html/`             | Original WordPress install. Do not touch for at least 14 days post-cutover.                                                                      |
-| `~/public_html/hub/`         | WHMCS. Never modified by the cutover; same files serve both before and after.                                                                    |
-| `~/public_html_next/`        | Next.js static export. Created by the first `deploy-cpanel.yml` run.                                                                             |
-| `~/public_html_next/hub`     | Symlink to `~/public_html/hub`. Keeps `/hub/` working under the new document root.                                                               |
-| Cloudflare role              | Continues to proxy as before — no DNS change in either direction.                                                                                |
-| `docs/cutover-redirects.csv` | If Cloudflare Bulk Redirects were enabled, disable that rule too — `.htaccess` redirects vanish automatically when the document root swaps back. |
+| Item                  | Detail                                                                                               |
+| --------------------- | ---------------------------------------------------------------------------------------------------- |
+| `~/public_html/`      | **Live apex docroot.** Holds the Next.js static export; re-mirrored on every production deploy.      |
+| `~/public_html/hub/`  | **WHMCS billing.** Excluded from every deploy mirror — never modified by an apex deploy or rollback. |
+| `~/public_html_next/` | **Staging** docroot (separate cPanel account / URL). Not production; not a rollback target.          |
+| Cloudflare role       | Proxies the apex — purge the cache after a rollback so visitors leave the broken edge copy.          |
+| Deploy workflow       | `.github/workflows/deploy-cpanel.yml` (auto on merge to `main` after CI; manual dispatch for B).     |
 
 ---
 
@@ -113,4 +190,6 @@ After stabilizing, open a GitHub issue documenting:
 
 ---
 
-_Last updated: 2026-05-15 (rewrote for cPanel document-root swap; previous version was for a DNS-flip rollback that no longer applies)._
+_Last updated: 2026-06-27 (rewritten for the mirror-in-place apex model;
+the previous version described a `public_html_next` document-root swap
+that never reflected how the cutover actually deployed)._

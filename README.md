@@ -1,11 +1,11 @@
 # Free For Charity
 
 [![CI - Build and Test](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/ci.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/ci.yml)
-[![Deploy to GitHub Pages](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/deploy.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/deploy.yml)
+[![Deploy to cPanel (production)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/deploy-cpanel.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/deploy-cpanel.yml)
 [![CodeQL](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/codeql.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/codeql.yml)
 [![Lighthouse CI](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/lighthouse.yml/badge.svg)](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/actions/workflows/lighthouse.yml)
 
-Free For Charity website built with Next.js 16.0.10 (App Router).
+Free For Charity website built with Next.js 16 (App Router).
 
 ## Organization
 
@@ -17,7 +17,7 @@ Free For Charity connects students, professionals, and businesses with nonprofit
 
 ## Site Structure
 
-The website consists of **29 pages** covering:
+The website consists of **35 page routes** covering:
 
 - **Main pages**: Home, About Us, Contact Us
 - **Program pages**: 501c3, Pre-501c3, Help for Charities, Domains, Free Charity Web Hosting, Endowment Fund
@@ -31,25 +31,25 @@ For a complete list, see the [Site Map](#site-map) section below.
 
 ## Deployment
 
-- **Primary Site**: [https://www.freeforcharity.org](https://www.freeforcharity.org) (custom domain with CNAME)
-- **GitHub Pages**: [https://freeforcharity.github.io/FFC-IN-freeforcharity.org/](https://freeforcharity.github.io/FFC-IN-freeforcharity.org/)
-- **Hosting**: GitHub Pages
-- **Deployment**: Automated via GitHub Actions on push to `main` branch
-- **Build Configuration**: Dual deployment support (custom domain and GitHub Pages basePath)
+- **Primary Site**: [https://www.freeforcharity.org](https://www.freeforcharity.org) (apex domain, served from root path)
+- **Production Hosting**: InterServer cPanel — the static export is served from `~/public_html` at the root path
+- **Production Deployment**: Auto-deploy on merge to `main` after CI passes, via [`.github/workflows/deploy-cpanel.yml`](.github/workflows/deploy-cpanel.yml) (FTPS mirror of `out/` into `~/public_html`)
+- **Staging / Preview**: GitHub Pages is a manual preview surface at [https://freeforcharity.github.io/FFC-IN-freeforcharity.org/](https://freeforcharity.github.io/FFC-IN-freeforcharity.org/) (project subpath); a separate cPanel staging account is also available
+- **Build Configuration**: Production builds at the root path (`NEXT_PUBLIC_BASE_PATH=''`); the GitHub Pages staging build uses the `/FFC-IN-freeforcharity.org` basePath
 
 ## Tech Stack
 
-- **Framework**: Next.js 16.0.10 (App Router with TypeScript)
-- **React**: 19.2.0
-- **Styling**: Tailwind CSS 4.1.12
+- **Framework**: Next.js 16 (App Router with TypeScript)
+- **React**: 19.2.7
+- **Styling**: Tailwind CSS v4
 - **UI Components**:
-  - Framer Motion 12.23.24 (animations)
-  - Lucide React 0.469.0 (icons)
-  - React Icons 5.5.0 (additional icons)
-  - Swiper 12.0.3 (carousels)
-- **Testing**: Playwright 1.56.0
+  - Framer Motion 12.40 (animations)
+  - Lucide React 0.575 (icons)
+  - React Icons 5.6 (additional icons)
+  - Swiper 12.2 (carousels)
+- **Testing**: Playwright 1.60 (E2E) + Jest 30 with React Testing Library & jest-axe (unit/component/a11y)
 - **Linting**: ESLint 9 with Next.js config
-- **Build**: Static export for GitHub Pages deployment
+- **Build**: Static export (`output: export`) deployed to cPanel; also previewable on GitHub Pages staging
 
 ## Local Development
 
@@ -89,7 +89,7 @@ _Server starts in ~1 second with Turbopack. Visit http://localhost:3000_
 npm run dev          # Start development server (with Turbopack)
 npm run build        # Build for production (~15-20 seconds)
 npm run preview      # Preview production build (requires build first)
-npm run lint         # Run ESLint (expect 11 warnings)
+npm run lint         # Run ESLint (expect 0 errors)
 npm test             # Run Playwright tests (requires build first)
 npm run test:headed  # Run tests with visible browser
 npm run test:ui      # Run tests in interactive UI mode
@@ -97,7 +97,7 @@ npm run test:ui      # Run tests in interactive UI mode
 
 ## Testing
 
-This project uses Playwright for end-to-end testing to ensure quality and consistency.
+This project uses **Playwright** for end-to-end testing and **Jest + React Testing Library + jest-axe** for unit, component, and accessibility tests, ensuring quality and consistency.
 
 ### Quick Start
 
@@ -116,51 +116,35 @@ npm run test:ui       # Interactive UI mode
 
 ### Test Coverage
 
-**Test Statistics**: 29 tests across 6 test suites
+**Two test layers:**
 
-- ✅ 28 passing tests
-- ⏭️ 1 skipped test (image dimensions - unreliable in CI)
-- 📊 Execution time: ~25-30 seconds
+- **Playwright E2E** — 18 spec files in `tests/` covering navigation, images,
+  cookie consent, copyright, contact, footer, team, mobile nav, dropdowns,
+  external links, analytics loading, donation flows, trailing-slash behavior,
+  accessibility (axe-core), and the post-deploy smoke spec.
+- **Jest + React Testing Library + jest-axe** — 20 unit/component/a11y test
+  files in `__tests__/` rendering components and asserting they have no axe
+  violations.
 
-The test suite includes:
+The Playwright E2E suites include:
 
-1. **Logo and Image Visibility** (`tests/logo.spec.ts`) - 3 tests
-   - Header logo display
-   - Hero section image display
-   - Logo consistency verification
-
-2. **Image Loading** (`tests/image-loading.spec.ts`) - 3 tests
-   - Image visibility and loading
-   - Hero image from local assets
-   - Image dimensions check (skipped)
-
-3. **Animated Numbers** (`tests/animated-numbers.spec.ts`) - 5 tests
-   - Results 2023 section statistics
-   - Animation from 0 on scroll
-   - Animation triggers once
-   - Reduced motion support
-
-4. **Mission Video** (`tests/mission-video.spec.ts`) - 2 tests
-   - Video element presence
-   - Video source configuration
-
-5. **Cookie Consent Banner** (`tests/cookie-consent.spec.ts`) - 14 tests
-   - Banner display and interactions (5 tests)
-   - Preferences modal functionality (7 tests)
-   - Accessibility attributes (2 tests)
-
-6. **Footer Copyright** (`tests/copyright.spec.ts`) - 2 tests
-   - Copyright notice with current year
-   - Link to freeforcharity.org
+- **Logo & Image Visibility** (`tests/logo.spec.ts`, `tests/image-loading.spec.ts`)
+- **Animated Numbers** (`tests/animated-numbers.spec.ts`) — Results 2023 stats, scroll triggers, reduced-motion
+- **Mission Video** (`tests/mission-video.spec.ts`)
+- **Cookie Consent Banner** (`tests/cookie-consent.spec.ts`) — banner, preferences modal, a11y attributes
+- **Navigation & Footer** (`tests/navigation.spec.ts`, `tests/footer-complete.spec.ts`, `tests/mobile-navigation.spec.ts`, `tests/dropdown-navigation.spec.ts`)
+- **Accessibility** (`tests/accessibility.spec.ts`) — WCAG 2.1 AA via axe-core
+- **Donation flows, contact, team, analytics, external links, trailing-slash, post-deploy smoke**
 
 **Test Configuration** (`playwright.config.ts`)
 
 - Uses system Chromium to avoid network restrictions
-- Runs against production build (`npm run preview`)
+- Runs against the production build (`npm run preview`)
 - Retries failed tests 2x in CI, 0x locally
 - Collects traces on first retry for debugging
 
-Tests run automatically on every push to main via GitHub Actions before deployment.
+Both layers run automatically on every push/PR to `main` via the
+`CI - Build and Test` workflow, before the production deploy.
 
 **Full Testing Documentation**: See [TESTING.md](./TESTING.md) for complete details.
 
@@ -172,11 +156,9 @@ Tests run automatically on every push to main via GitHub Actions before deployme
 npm run lint
 ```
 
-Currently reports **11 warnings** (expected):
-
-- 6 warnings about using `<img>` instead of Next.js `<Image>` component (acceptable for static export)
-- 3 warnings about unused imports
-- 2 warnings about React hooks dependencies
+Currently passes with **0 errors**. ESLint runs clean in CI (the
+`<img>`-over-`next/image` rule is intentionally relaxed for the static
+export). Treat any new error as a blocker before committing.
 
 **TypeScript**
 
@@ -232,7 +214,8 @@ Reusable components in `src/components/UI/`:
 FFC-IN-freeforcharity.org/
 ├── .github/
 │   ├── workflows/
-│   │   └── nextjs.yml          # CI/CD pipeline for GitHub Pages
+│   │   ├── ci.yml              # CI - Build and Test (runs on every push/PR)
+│   │   └── deploy-cpanel.yml   # Production deploy to cPanel on merge to main
 │   └── copilot-instructions.md # Instructions for GitHub Copilot agents
 ├── public/                      # Static assets
 │   ├── Images/                  # Image files
@@ -245,7 +228,7 @@ FFC-IN-freeforcharity.org/
 │   │   ├── globals.css         # Global styles
 │   │   ├── sitemap.ts          # Sitemap generation
 │   │   ├── robots.ts           # Robots.txt generation
-│   │   ├── [29 page routes]/  # All site pages
+│   │   ├── [35 page routes]/  # All site pages
 │   │   └── Figma-Home-page/    # Main homepage component
 │   ├── components/              # React components
 │   │   ├── Header/             # Site header
@@ -263,7 +246,7 @@ FFC-IN-freeforcharity.org/
 │   │   ├── team.ts            # Team data loader
 │   │   └── testimonials.ts     # Testimonial data loader
 │   └── lib/
-│       └── assetPath.ts        # Helper for GitHub Pages asset paths
+│       └── assetPath.ts        # Helper for basePath-aware asset paths (GitHub Pages staging subpath)
 ├── tests/                       # Playwright tests
 │   ├── logo.spec.ts            # Logo visibility tests
 │   ├── image-loading.spec.ts   # Image loading tests
@@ -383,26 +366,31 @@ vi src/app/robots.ts
 
 ## Deployment Details
 
-### Production Deployment
+### Production Deployment (cPanel)
 
-The site uses **dual deployment** strategy:
+Production runs on **InterServer cPanel** at the apex domain [https://www.freeforcharity.org](https://www.freeforcharity.org), served from the **root path**.
 
-1. **Custom Domain**: [https://www.freeforcharity.org](https://www.freeforcharity.org)
-   - Primary production site
-   - CNAME configured in DNS
-   - No basePath required
-   - Assets served from root path
+- **Hosting**: InterServer cPanel
+- **Docroot**: `~/public_html` (the live apex docroot)
+- **basePath**: none — `NEXT_PUBLIC_BASE_PATH` is empty (`''`); assets served from root
+- **How it deploys**: every merge to `main` runs the **CI - Build and Test** workflow (`.github/workflows/ci.yml`); on green, `.github/workflows/deploy-cpanel.yml` auto-deploys by `lftp`-mirroring the static export `out/` into `~/public_html` over FTPS. The mirror excludes the WHMCS billing portal at `~/public_html/hub` and the cPanel keeper files.
 
-2. **GitHub Pages**: [https://freeforcharity.github.io/FFC-IN-freeforcharity.org/](https://freeforcharity.github.io/FFC-IN-freeforcharity.org/)
-   - Backup/alternative URL
-   - Requires basePath: `/FFC-IN-freeforcharity.org`
-   - Assets served from subpath
+### Staging / Preview Surfaces
 
-### CI/CD Pipeline
+These are secondary, non-production surfaces:
 
-**Workflow**: `.github/workflows/nextjs.yml`
+1. **GitHub Pages** (manual preview): [https://freeforcharity.github.io/FFC-IN-freeforcharity.org/](https://freeforcharity.github.io/FFC-IN-freeforcharity.org/)
+   - Triggered manually via `.github/workflows/deploy-gh-pages-staging.yml`
+   - Served at the project subpath, so it requires basePath `/FFC-IN-freeforcharity.org`
+   - Assets served from the subpath (this is why `NEXT_PUBLIC_BASE_PATH` and the `assetPath()` helper exist)
 
-**Trigger**: Push to `main` branch
+2. **cPanel staging**: a separate staging cPanel account via `.github/workflows/deploy-cpanel-staging.yml`
+
+### CI Pipeline
+
+**Workflow**: `.github/workflows/ci.yml` (CI - Build and Test)
+
+**Trigger**: Pushes and pull requests (and as the gate before production deploy on `main`)
 
 **Pipeline Steps**:
 
@@ -410,19 +398,18 @@ The site uses **dual deployment** strategy:
 2. Setup Node.js 24
 3. Install dependencies with `npm ci`
 4. Install Playwright browsers
-5. Build with `NEXT_PUBLIC_BASE_PATH=/FFC-IN-freeforcharity.org`
+5. Build the static export
 6. Run Playwright tests
-7. Upload build artifacts (./out directory)
-8. Deploy to GitHub Pages (only if tests pass)
+
+On a green run against `main`, `deploy-cpanel.yml` then mirrors `out/` into `~/public_html`.
 
 **Environment Variables**:
 
-- `NEXT_PUBLIC_BASE_PATH`: Set to `/FFC-IN-freeforcharity.org` for GitHub Pages deployment
-- Not set (empty) for custom domain deployment
+- `NEXT_PUBLIC_BASE_PATH`: empty (`''`) for the production/root-path build (cPanel); set to `/FFC-IN-freeforcharity.org` only for the GitHub Pages staging build
 
 ### Local Production Build
 
-**Build for custom domain** (default):
+**Build for production / root path** (default — matches cPanel):
 
 ```bash
 npm run build
@@ -430,7 +417,7 @@ npm run preview
 # Visit http://localhost:3000
 ```
 
-**Build for GitHub Pages** (with basePath):
+**Build for GitHub Pages staging** (with basePath subpath):
 
 ```bash
 NEXT_PUBLIC_BASE_PATH=/FFC-IN-freeforcharity.org npm run build
@@ -448,7 +435,7 @@ npm run preview
 - `assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH || ""` - Asset path prefix
 
 **Asset Path Helper**:
-When adding images that need to work on both deployments, use the `assetPath()` helper:
+When adding images that need to work on both the production root path and the GitHub Pages staging subpath, use the `assetPath()` helper:
 
 ```typescript
 import { assetPath } from "@/lib/assetPath";
@@ -456,19 +443,19 @@ import { assetPath } from "@/lib/assetPath";
 <img src={assetPath("/Images/my-image.png")} alt="Description" />
 ```
 
-This automatically handles the basePath for both deployment scenarios.
+This automatically handles the basePath for both scenarios (empty in production, the subpath on GitHub Pages staging).
 
 ### Build Output
 
 - **Directory**: `./out`
 - **Files**: Static HTML, CSS, JS, and assets
-- **Routes**: 29 page routes + 3 system routes (`/_not-found`, `/robots.txt`, `/sitemap.xml`) = 32 total
+- **Routes**: 35 page routes + system routes (`/_not-found`, `/robots.txt`, `/sitemap.xml`)
 - **Size**: ~180 kB First Load JS (homepage)
 - **Build Time**: ~15-20 seconds
 
 ## Site Map
 
-The website consists of 29 page routes organized as follows:
+The website consists of 35 page routes organized as follows:
 
 ### Main Pages
 
@@ -587,6 +574,6 @@ This project is maintained by Free For Charity, a 501(c)(3) nonprofit organizati
 
 ---
 
-**Documentation Status**: ✅ Updated February 2026  
-**Next.js Version**: 16.0.10  
+**Documentation Status**: ✅ Updated June 2026  
+**Next.js Version**: 16  
 **Node.js Version**: 24.x required

@@ -12,14 +12,15 @@ See **AGENTS.md** for the complete project reference. This file gives you the pr
 
 ## Quick Context
 
-| What      | Detail                                             |
-| --------- | -------------------------------------------------- |
-| Framework | Next.js with App Router (see package.json)         |
-| Language  | TypeScript (strict)                                |
-| Styling   | Tailwind CSS v4 (CSS-based config, no config file) |
-| Output    | Static export (`output: 'export'`)                 |
-| Hosting   | GitHub Pages (custom domain freeforcharity.org)    |
-| Tests     | Playwright (E2E)                                   |
+| What      | Detail                                                       |
+| --------- | ------------------------------------------------------------ |
+| Framework | Next.js 16 (App Router) — `next ^16.2.9`, React `19.2.7`     |
+| Runtime   | Node 24.x                                                    |
+| Language  | TypeScript (strict)                                          |
+| Styling   | Tailwind CSS v4 (CSS-based config, no config file)           |
+| Output    | Static export (`output: 'export'`)                           |
+| Hosting   | InterServer cPanel (apex freeforcharity.org, served at root) |
+| Tests     | Playwright (E2E)                                             |
 
 The site is **fully static**. No server-side rendering, no API routes, no middleware. Every page must be renderable at build time.
 
@@ -44,7 +45,7 @@ npm run preview      # Serve built output locally
 
 ```
 src/
-  app/            --> Pages and routes (App Router, ~29 routes)
+  app/            --> Pages and routes (App Router, ~35 routes)
   components/     --> Reusable UI components (footer/, header/, home-page/, ui/)
   data/           --> Content modules (.ts loaders) and JSON data files (team/, faqs/, testimonials/)
   lib/            --> Utilities (including assetPath helper)
@@ -103,13 +104,13 @@ Most text content lives in `src/data/` as `.ts` modules or `.json` files in subd
 1. Create a branch: `git checkout -b fix/descriptive-name`
 2. Make your changes and commit using Conventional Commits: `git commit -m "fix: resolve broken link on about page"`
 3. Push and open a PR that references the issue: `Fixes #42`
-4. All CI checks must pass before merging
+4. All CI checks must pass before merging. Once merged to `main`, CI (`ci.yml`) runs and, on green, `deploy-cpanel.yml` auto-deploys to production.
 
 ---
 
 ## Asset Path Helper
 
-The site deploys to `https://freeforcharity.org` (custom domain) and `https://freeforcharity.github.io/FFC-IN-freeforcharity.org/` (subpath fallback). The `assetPath()` function from `src/lib/assetPath.ts` handles this automatically.
+Production is `https://freeforcharity.org` (InterServer cPanel, served from root, no basePath). The GitHub Pages staging/preview surface at `https://freeforcharity.github.io/FFC-IN-freeforcharity.org/` serves from a subpath (`/FFC-IN-freeforcharity.org`). The `assetPath()` function from `src/lib/assetPath.ts` handles both automatically.
 
 ```tsx
 // Always use assetPath() for images and static assets
@@ -117,7 +118,7 @@ import { assetPath } from '@/lib/assetPath'
 ;<img src={assetPath('/Images/logo.png')} alt="Logo" />
 ```
 
-Never hardcode absolute paths to assets. They will break on one of the two deployment targets.
+Never hardcode absolute paths to assets. They will break on the subpath preview surface.
 
 ---
 

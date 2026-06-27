@@ -8,15 +8,16 @@
 
 ## Tech Stack
 
-| Layer     | Technology                                                  |
-| --------- | ----------------------------------------------------------- |
-| Framework | Next.js with App Router (see package.json for version)      |
-| Language  | TypeScript (strict mode)                                    |
-| Styling   | Tailwind CSS v4 (CSS-based config, no tailwind.config file) |
-| Export    | Static (`output: 'export'` in next.config.ts)               |
-| Hosting   | GitHub Pages (custom domain freeforcharity.org)             |
-| CI/CD     | GitHub Actions                                              |
-| Testing   | Playwright (E2E)                                            |
+| Layer     | Technology                                                       |
+| --------- | ---------------------------------------------------------------- |
+| Framework | Next.js 16 (App Router) — `next ^16.2.9`, React `19.2.7`         |
+| Runtime   | Node 24.x                                                        |
+| Language  | TypeScript (strict mode)                                         |
+| Styling   | Tailwind CSS v4 (CSS-based config, no tailwind.config file)      |
+| Export    | Static (`output: 'export'` in next.config.ts)                    |
+| Hosting   | InterServer cPanel (apex freeforcharity.org, served from root)   |
+| CI/CD     | GitHub Actions (`ci.yml` build+test, `deploy-cpanel.yml` deploy) |
+| Testing   | Playwright (E2E)                                                 |
 
 ---
 
@@ -48,6 +49,7 @@ All changes follow this process:
    3. `npm run test` -- Run Playwright E2E tests
 5. **PR** -- Open a Pull Request, link to the issue with `Fixes #NNN`
 6. **Merge** -- Merge via PR review (no direct commits to `main`)
+7. **Deploy** -- Every merge to `main` runs CI (`.github/workflows/ci.yml`). On green, `.github/workflows/deploy-cpanel.yml` auto-deploys to production by `lftp`-mirroring `out/` into `~/public_html` (the live apex docroot) over FTPS, excluding WHMCS at `~/public_html/hub` and cPanel keepers.
 
 ---
 
@@ -61,7 +63,7 @@ src/
     globals.css         # Global styles (Tailwind v4 imports)
     sitemap.ts          # Dynamic sitemap generator
     robots.ts           # Robots.txt generator
-    [route]/page.tsx    # ~29 additional routes
+    [route]/page.tsx    # ~35 routes total
   components/           # Reusable UI components
     footer/             # Mandatory 3-column footer (FFC standard)
     header/             # Navigation header
@@ -106,11 +108,11 @@ Component files use PascalCase: `HeroSection.tsx`, `DonateButton.tsx`.
 
 ---
 
-## GitHub Pages & Asset Paths
+## Deployment Targets & Asset Paths
 
-This site deploys to `https://freeforcharity.org` (custom domain) via GitHub Pages.
+**Production** is `https://freeforcharity.org` (apex), served from **InterServer cPanel** out of `~/public_html` at the site root. Production serves from root, so `NEXT_PUBLIC_BASE_PATH=''` (no subpath) and the `basePath`/`assetPrefix` in `next.config.ts` remain empty. WHMCS lives at `~/public_html/hub` and is excluded from deploys. Auto-deploy happens on every merge to `main` after CI passes (`deploy-cpanel.yml`).
 
-The `basePath` and `assetPrefix` in `next.config.ts` are controlled by `NEXT_PUBLIC_BASE_PATH` for subpath fallback support. For custom domain deployment, these remain empty.
+**Staging / preview** uses GitHub Pages as a manual preview via `.github/workflows/deploy-gh-pages-staging.yml`, served at the subpath `https://freeforcharity.github.io/FFC-IN-freeforcharity.org/`. There the `basePath`/`assetPrefix` are set to `/FFC-IN-freeforcharity.org` (via `NEXT_PUBLIC_BASE_PATH`) and the `assetPath()` helper (`src/lib/assetPath.ts`) resolves correctly. A cPanel staging target also exists via `deploy-cpanel-staging.yml`. Always use `assetPath()` for images and assets so they work on both root (production) and subpath (preview) surfaces.
 
 ---
 

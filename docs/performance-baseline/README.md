@@ -35,6 +35,6 @@ Compare against the Next.js Lighthouse CI after cutover.
 
 ## How to compare post-cutover
 
-After the document-root swap and 48-hour soak, run Lighthouse against the new
+After cutover and a 48-hour soak, run Lighthouse against the new
 Next.js export at the same URLs and append a `next-` prefixed report set.
 Delta of > 10 points on perf or LCP > +500ms is worth investigating.
