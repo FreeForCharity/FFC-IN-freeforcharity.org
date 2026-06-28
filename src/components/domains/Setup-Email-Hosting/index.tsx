@@ -1,6 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
 import { assetPath } from '@/lib/assetPath'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
 const index = () => {
   return (
@@ -127,6 +129,13 @@ const index = () => {
             Click here
           </a>
         </div>
+      </div>
+
+      <div className="w-[90%] md:w-[80%] max-w-[680px] mx-auto mt-[40px]">
+        <AdminGuideLink
+          href={ffcAdminUrl(adminLinks.domains.newModel)}
+          description="Follow the full Microsoft 365 email setup guide on the FFC Admin portal."
+        />
       </div>
     </div>
   )

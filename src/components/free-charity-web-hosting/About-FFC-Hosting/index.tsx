@@ -1,6 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
 import { assetPath } from '@/lib/assetPath'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
 const index = () => {
   return (
@@ -31,6 +33,21 @@ const index = () => {
             501(c)3 designation; Free For Charity was founded to help charities avoid these costly
             problems and focus on doing the great work they need to do.
           </p>
+          <p
+            className="mt-[16px] text-[18px] font-[500] leading-[29px] text-center"
+            data-font="raleway-font"
+          >
+            Today we deliver each charity a free, professionally built website—a fast, secure GitHub
+            Pages static site built with AI development agents (Claude and GitHub Copilot)—plus free
+            .org domains and Microsoft 365. WordPress hosting remains available as a labeled legacy
+            option for existing sites.
+          </p>
+          <div className="mt-[20px] max-w-[560px] mx-auto">
+            <AdminGuideLink
+              href={ffcAdminUrl(adminLinks['free-charity-web-hosting'].newModel)}
+              description="See what FFC delivers and how each charity site is built on the FFC Admin portal."
+            />
+          </div>
         </div>
       </div>
     </div>
