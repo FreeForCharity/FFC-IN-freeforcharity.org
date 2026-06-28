@@ -14,12 +14,16 @@ export const metadata: Metadata = {
     template: '%s | Free For Charity',
   },
   description:
-    'Free For Charity connects students, professionals, and businesses with nonprofits to reduce costs and increase revenues—putting more resources back into their missions.',
+    'Free For Charity builds free websites for nonprofits—fast, secure GitHub Pages static sites built with AI development agents—plus free domains and Microsoft 365, so charities put more resources back into their missions.',
   keywords: [
     'nonprofit',
     'charity',
     'volunteer',
     'donate',
+    'free nonprofit website',
+    'GitHub Pages hosting',
+    'static site',
+    'AI website development',
     'free hosting',
     'domains',
     'Microsoft 365',
