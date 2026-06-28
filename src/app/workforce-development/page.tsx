@@ -1,19 +1,22 @@
 import React from 'react'
 import type { Metadata } from 'next'
 import HeroSection from '@/components/ui/HeroSection'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
 export const metadata: Metadata = {
   title: 'Workforce Development',
   description:
-    'Free workforce development and training programs in web development and programming. Build your skills while helping charities.',
+    'Free workforce development and training in modern web development—building GitHub Pages static sites with AI development agents (Claude and GitHub Copilot)—and programming. Build your skills while helping charities.',
   alternates: {
     canonical: '/workforce-development/',
   },
 }
 
 const webDevSkills = [
+  'Building GitHub Pages static sites (Next.js, React, Tailwind CSS)',
+  'AI-assisted website development (Claude and GitHub Copilot)',
   'Website Maintenance',
-  'WordPress Theme and Plugin Setup',
   'Content Creation',
   'Form Creation',
   'CSS Customization',
@@ -37,6 +40,13 @@ const WorkforceDevelopmentPage = () => {
         paragraph="Build your career skills through hands-on experience helping nonprofits. Learn web development and programming while making a difference."
         heroImg="/Images/donation.webp"
       />
+
+      <div className="w-[90%] max-w-[720px] mx-auto mt-[32px]">
+        <AdminGuideLink
+          href={ffcAdminUrl(adminLinks['workforce-development'].newModel)}
+          description="Explore the full training tracks and the AI-driven development workflow on the FFC Admin portal."
+        />
+      </div>
 
       {/* Main Content */}
       <section className="py-[60px] bg-[#fcfcfc]">
