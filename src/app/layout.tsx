@@ -7,14 +7,21 @@ import CookieConsent from '@/components/cookie-consent'
 // Get basePath for GitHub Pages deployment
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
+// Single source of truth for the site description so the meta, OpenGraph, and
+// Twitter tags never drift. SITE_DESCRIPTION is the full SEO description;
+// SOCIAL_DESCRIPTION is the shorter line used for social previews.
+const SITE_DESCRIPTION =
+  'Free For Charity builds free websites for nonprofits—fast, secure GitHub Pages static sites built with AI development agents—plus free domains and Microsoft 365, so charities put more resources back into their missions.'
+const SOCIAL_DESCRIPTION =
+  'Free websites for nonprofits—fast, secure GitHub Pages static sites built with AI—plus free domains and Microsoft 365.'
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.freeforcharity.org'),
   title: {
     default: 'Free For Charity | Reduce Costs, Increase Impact',
     template: '%s | Free For Charity',
   },
-  description:
-    'Free For Charity builds free websites for nonprofits—fast, secure GitHub Pages static sites built with AI development agents—plus free domains and Microsoft 365, so charities put more resources back into their missions.',
+  description: SITE_DESCRIPTION,
   keywords: [
     'nonprofit',
     'charity',
@@ -47,8 +54,7 @@ export const metadata: Metadata = {
     url: 'https://www.freeforcharity.org/',
     siteName: 'Free For Charity',
     title: 'Free For Charity | Reduce Costs, Increase Impact',
-    description:
-      'Connecting students, professionals, and businesses with nonprofits to reduce costs and increase revenues.',
+    description: SOCIAL_DESCRIPTION,
     images: [
       {
         url: `${basePath}/web-app-manifest-512x512.png`,
@@ -62,8 +68,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@freeforcharity',
     title: 'Free For Charity | Reduce Costs, Increase Impact',
-    description:
-      'Connecting students, professionals, and businesses with nonprofits to reduce costs and increase revenues.',
+    description: SOCIAL_DESCRIPTION,
     images: [`${basePath}/web-app-manifest-512x512.png`],
   },
   icons: {
