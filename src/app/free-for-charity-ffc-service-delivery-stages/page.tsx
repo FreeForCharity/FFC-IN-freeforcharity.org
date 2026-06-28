@@ -5,7 +5,7 @@ import Hero from '@/components/free-for-charity-ffc-service-delivery-stages-comp
 export const metadata: Metadata = {
   title: 'Service Delivery Stages',
   description:
-    'Free For Charity service delivery process: charity validation stages, onboarding philosophy, and how we deliver free technology services to nonprofits.',
+    'How Free For Charity delivers a free nonprofit website—a fast, secure GitHub Pages static site built with AI—through our charity validation, onboarding, and launch stages, with the legacy WordPress build retained as an option.',
   alternates: { canonical: '/free-for-charity-ffc-service-delivery-stages/' },
 }
 

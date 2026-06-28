@@ -4,11 +4,13 @@ import HeroSection from '@/components/ui/HeroSection'
 import ReadyToGetStarted from '@/components/help-for-charities-components/Ready-to-Get-Started-Now'
 import CharityNonprofitDirectorFaq from '@/components/help-for-charities-components/Charity-Nonprofit-Director-Faq'
 import CallSection from '@/components/help-for-charities-components/call-section'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
 export const metadata: Metadata = {
   title: 'Pre-501(c)(3) Onboarding Guide',
   description:
-    'Onboarding guide for charities pending 501(c)(3) status. Access free tools and services from Free For Charity while your application is in progress.',
+    'For charities pending 501(c)(3) status: apply to get a free website—a fast, secure GitHub Pages site built with AI—plus free tools and services from Free For Charity while your application is in progress.',
   alternates: { canonical: '/pre501c3/' },
 }
 import Faqs from '@/components/pre501c3-components/Faqs'
@@ -19,9 +21,15 @@ const index = () => {
     <div className="w-full">
       <HeroSection
         heading="Pre-501(c)3 Onboarding Guide"
-        paragraph="If you are representing a charity or you currently work for a charity and want to improve your own skills start here to get help for your organization. You get instant access to many of our free tools and products right away!"
+        paragraph="Even while your 501(c)(3) is pending, apply to start getting help for your organization—including a free, professionally built website (a fast, secure GitHub Pages site built with AI), free domains, and Microsoft 365. You get instant access to many of our free products right away."
         heroImg="/Images/volunteer.webp"
       />
+      <div className="w-[90%] max-w-[720px] mx-auto mt-[32px]">
+        <AdminGuideLink
+          href={ffcAdminUrl(adminLinks.onboarding.newModel)}
+          description="Before you apply: review the charity prerequisites and the full step-by-step onboarding on the FFC Admin portal."
+        />
+      </div>
       <Charity />
       <Faqs />
       <ReadyToGetStarted />
