@@ -66,7 +66,7 @@ const UnderstandingHosting: React.FC = () => {
         <div className="max-w-[680px] pb-[1.5em]">
           <AdminGuideLink
             variant="legacy"
-            href={ffcAdminUrl(adminLinks.techstack.legacy ?? '/')}
+            href={ffcAdminUrl(adminLinks.techstack.legacy)}
             description="Legacy WordPress hosting tech stack reference on the FFC Admin portal."
           />
         </div>
