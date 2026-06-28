@@ -43,7 +43,9 @@ const AdminGuideLink: React.FC<AdminGuideLinkProps> = ({
         target="_blank"
         rel="noopener noreferrer"
         className={`inline-flex items-center gap-[8px] text-[16px] font-[600] underline-offset-4 hover:underline ${
-          isLegacy ? 'text-[#555]' : 'text-[#f47c20]'
+          // #9a3412 (deep brand orange) clears WCAG AA contrast on the pale
+          // #fff7f0 callout (~7:1); the lighter #f47c20 is only 2.55:1 as text.
+          isLegacy ? 'text-[#555]' : 'text-[#9a3412]'
         }`}
       >
         <span>{text}</span>
