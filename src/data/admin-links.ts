@@ -104,7 +104,11 @@ export const adminLinks = {
     newModel: '/',
   },
   'cpanel-backup-sop': {
-    newModel: '/legacy-wordpress-administration/wordpress-cpanel-backup-sop/',
+    // No current-model equivalent: cPanel backups are a legacy WordPress-hosting
+    // concern, so newModel points at the FFC Admin portal home and the SOP lives
+    // under legacy (keeps the newModel = current / legacy = WordPress contract).
+    newModel: '/',
+    legacy: '/legacy-wordpress-administration/wordpress-cpanel-backup-sop/',
   },
 } satisfies Record<string, AdminLink>
 

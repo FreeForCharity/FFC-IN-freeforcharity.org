@@ -1,11 +1,13 @@
 import React from 'react'
 import type { Metadata } from 'next'
 import HeroSection from '@/components/ui/HeroSection'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
 export const metadata: Metadata = {
   title: 'Charity and Nonprofit Technology Directory',
   description:
-    'Explore free and open source technology tools for nonprofit organizations. Find solutions for web hosting, office automation, CRM, and more.',
+    'Explore free and open source technology tools for nonprofit organizations. Find solutions for static-site web hosting, AI-assisted development, office automation, CRM, and more.',
   alternates: {
     canonical: '/charity-and-nonprofit-technology-directory/',
   },
@@ -15,10 +17,10 @@ const categories = [
   {
     name: 'Charity Websites',
     items: [
-      'WordPress Web Hosting',
-      'WordPress Themes',
-      'WordPress Plugins',
-      'WordPress Management',
+      'GitHub Pages Static Site Hosting',
+      'AI-Assisted Site Development (Claude, GitHub Copilot)',
+      'Next.js / React / Tailwind CSS',
+      'Legacy: WordPress Hosting, Themes & Plugins',
     ],
   },
   {
@@ -43,6 +45,13 @@ const TechDirectoryPage = () => {
         paragraph="A nonprofit technology directory focused on startup charities with a preference for open source and free solutions."
         heroImg="/Images/donation.webp"
       />
+
+      <div className="w-[90%] max-w-[720px] mx-auto mt-[32px]">
+        <AdminGuideLink
+          href={ffcAdminUrl(adminLinks.consulting.newModel)}
+          description="See the curated guides and partner tools FFC recommends on the FFC Admin portal."
+        />
+      </div>
 
       {/* Intro */}
       <section className="py-[60px] bg-[#fcfcfc]">

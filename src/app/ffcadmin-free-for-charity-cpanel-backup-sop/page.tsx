@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
 export const metadata: Metadata = {
   title: 'cPanel Backup SOP',
@@ -43,6 +45,13 @@ export default function CpanelBackupSop() {
           </Link>
           .
         </p>
+        <div className="max-w-[560px]">
+          <AdminGuideLink
+            variant="legacy"
+            href={ffcAdminUrl(adminLinks['cpanel-backup-sop'].legacy)}
+            description="Legacy WordPress/cPanel backup SOP reference on the FFC Admin portal."
+          />
+        </div>
       </div>
     </div>
   )
