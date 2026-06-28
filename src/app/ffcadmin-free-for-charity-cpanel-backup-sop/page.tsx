@@ -48,7 +48,7 @@ export default function CpanelBackupSop() {
         <div className="max-w-[560px]">
           <AdminGuideLink
             variant="legacy"
-            href={ffcAdminUrl(adminLinks['cpanel-backup-sop'].newModel)}
+            href={ffcAdminUrl(adminLinks['cpanel-backup-sop'].legacy)}
             description="Legacy WordPress/cPanel backup SOP reference on the FFC Admin portal."
           />
         </div>
