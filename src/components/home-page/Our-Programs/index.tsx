@@ -1,6 +1,8 @@
 import React from 'react'
 import Image from 'next/image'
 import OrangeFaqItem from '@/components/ui/OrangeFaqItem'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 import { assetPath } from '@/lib/assetPath'
 
 const index = () => {
@@ -82,8 +84,8 @@ const index = () => {
             </h3>
           </div>
           <p className="text-[25px] font-[400]  " data-font="lato-font">
-            Free static site hosting for nonprofit organizations using Microsoft GitHub Pages, with
-            websites built using GitHub Copilot AI:
+            Free static-site hosting for nonprofits on GitHub Pages, with modern websites built by
+            AI development agents (Claude and GitHub Copilot):
           </p>
         </div>
 
@@ -134,6 +136,13 @@ const index = () => {
               </li>
             </ul>
           </OrangeFaqItem>
+        </div>
+
+        <div className="lg:pl-[50px] mt-[24px] max-w-[680px]">
+          <AdminGuideLink
+            href={ffcAdminUrl(adminLinks['build-from-template'].newModel)}
+            description="Ready to build? Charities and volunteers follow the full step-by-step site build on the FFC Admin portal."
+          />
         </div>
 
         <div className="mt-[60px]">
