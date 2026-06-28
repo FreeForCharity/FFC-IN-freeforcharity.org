@@ -1,6 +1,8 @@
 import React from 'react'
 import type { Metadata } from 'next'
 import HeroSection from '@/components/ui/HeroSection'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
 export const metadata: Metadata = {
   title: 'Consulting',
@@ -19,6 +21,13 @@ const ConsultingPage = () => {
         paragraph="Free For Charity provides free consulting services to nonprofits. Our team helps charities with technology, operations, and strategy — all at no cost."
         heroImg="/Images/donation.webp"
       />
+
+      <div className="w-[90%] max-w-[720px] mx-auto mt-[32px]">
+        <AdminGuideLink
+          href={ffcAdminUrl(adminLinks.consulting.newModel)}
+          description="Browse the partner tools and step-by-step guides FFC uses with charities on the FFC Admin portal."
+        />
+      </div>
 
       {/* Main Content */}
       <section className="py-[60px] bg-[#fcfcfc]">

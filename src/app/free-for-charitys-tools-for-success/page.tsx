@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import React from 'react'
 import HeroSection from '@/components/ui/HeroSection'
 import CardSection from '@/components/free-for-charitys-tools-for-success-components/Card-section'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
 export const metadata: Metadata = {
   title: 'Tools for Success',
@@ -29,6 +31,12 @@ const index = () => {
         lineHeight={40}
         imageContainerWidth="w-[55%]"
       />
+      <div className="w-[90%] max-w-[720px] mx-auto mt-[32px]">
+        <AdminGuideLink
+          href={ffcAdminUrl(adminLinks['tools-for-success'].newModel)}
+          description="Find the full set of FFC guides and recommended tools on the FFC Admin portal."
+        />
+      </div>
       <CardSection />
       <RescueTime />
       <TwoCards />
