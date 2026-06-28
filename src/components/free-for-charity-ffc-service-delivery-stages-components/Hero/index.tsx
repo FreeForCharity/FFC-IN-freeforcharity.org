@@ -51,7 +51,7 @@ const index = () => {
           <div className="mt-[16px]">
             <AdminGuideLink
               variant="legacy"
-              href={ffcAdminUrl(adminLinks['service-delivery-stages'].legacy ?? '/')}
+              href={ffcAdminUrl(adminLinks['service-delivery-stages'].legacy)}
               description="The WordPress/Divi build steps below are retained as a labeled legacy option for charities still on the legacy stack."
             />
           </div>
