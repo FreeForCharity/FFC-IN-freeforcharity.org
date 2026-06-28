@@ -22,7 +22,15 @@ export type AdminLink = {
   legacy?: string
 }
 
-/** Keyed by the freeforcharity.org route the link is surfaced on. */
+/**
+ * Keyed by a stable guide topic — usually the page's route slug (e.g.
+ * `techstack`, `domains`), but intentionally NOT a 1:1 mirror of `src/app/`
+ * folder names: long routes use a short, readable alias (e.g.
+ * `service-delivery-stages` for the `free-for-charity-ffc-service-delivery-stages`
+ * page), and some entries are supplementary ffcadmin.org guides referenced
+ * alongside a page rather than a page of their own (e.g. `build-from-template`,
+ * `developer-environment-setup`, `contributor-ladder`, `site-owner`).
+ */
 export const adminLinks = {
   techstack: {
     newModel: '/tech-stack/',
