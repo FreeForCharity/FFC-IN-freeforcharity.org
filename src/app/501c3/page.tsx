@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import HeroSection from '@/components/ui/HeroSection'
 import HelpForCharitiesandNonprofit from '@/components/501c3-components/Help-For-Charities-and-Nonprofit'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
 export const metadata: Metadata = {
   title: '501(c)(3) Onboarding Guide',
   description:
-    'Onboarding guide for verified 501(c)(3) charities. Get instant access to free domains, hosting, email, and technology tools from Free For Charity.',
+    'Apply to get a free website for your 501(c)(3)—a fast, secure GitHub Pages site built with AI—plus free domains, Microsoft 365 email, and technology tools from Free For Charity.',
   alternates: { canonical: '/501c3/' },
 }
 import ReadyToGetStartedAndFaq from '@/components/501c3-components/Ready-to-get-started-and-faqs'
@@ -16,9 +18,15 @@ const page = () => {
     <div>
       <HeroSection
         heading="501(c)3 Onboarding Guide"
-        paragraph="If you are representing a charity or you currently work for a charity and want to improve your own skills start here to get help for your organization. You get instant access to many of our free tools and products right away!"
+        paragraph="Apply to get a free, professionally built website for your charity—a fast, secure GitHub Pages site built with AI—plus free .org domains, Microsoft 365 email, and technology tools. Start your application below; you get instant access to many of our free products right away."
         heroImg="/Images/volunteer.webp"
       />
+      <div className="w-[90%] max-w-[720px] mx-auto mt-[32px]">
+        <AdminGuideLink
+          href={ffcAdminUrl(adminLinks.onboarding.newModel)}
+          description="Before you apply: review the charity prerequisites and the full step-by-step onboarding on the FFC Admin portal."
+        />
+      </div>
       <HelpForCharitiesandNonprofit />
       <ReadyToGetStartedAndFaq />
       <CallSection />

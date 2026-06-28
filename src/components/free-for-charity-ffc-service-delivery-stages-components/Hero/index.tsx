@@ -1,4 +1,6 @@
 import React from 'react'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
 const index = () => {
   return (
@@ -15,6 +17,44 @@ const index = () => {
           <h2 className="text-[24px] font-[600] leading-[24px] pb-[10px]">
             Service Delivery Stages
           </h2>
+        </div>
+
+        {/* new-model reframe + apply CTA  */}
+        <div className="bg-white p-6 rounded-lg shadow-md my-8 max-w-[960px] mx-auto">
+          <p className="text-[#374151] text-[16px] leading-[26px] font-[500]">
+            Today FFC delivers each charity a{' '}
+            <strong>
+              free, professionally built website—a fast, secure GitHub Pages static site
+            </strong>{' '}
+            built with AI development agents (Claude and GitHub Copilot), plus free .org domains and
+            Microsoft 365. The stages below outline how we validate, onboard, and launch your
+            organization. The detailed, step-by-step build now lives on the FFC Admin portal.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-[16px] mt-[20px] mb-[24px]">
+            <a
+              href="/501c3/"
+              className="rounded-[10px] bg-[#2A6682] text-white text-center font-[600] text-[16px] px-[24px] py-[14px]"
+            >
+              501(c)(3) charities: apply now
+            </a>
+            <a
+              href="/pre501c3/"
+              className="rounded-[10px] border-[2px] border-[#2A6682] text-[#2A6682] text-center font-[600] text-[16px] px-[24px] py-[14px]"
+            >
+              Pre-501(c)(3): start here
+            </a>
+          </div>
+          <AdminGuideLink
+            href={ffcAdminUrl(adminLinks['service-delivery-stages'].newModel)}
+            description="See how we build and hand off each charity site on the FFC Admin portal."
+          />
+          <div className="mt-[16px]">
+            <AdminGuideLink
+              variant="legacy"
+              href={ffcAdminUrl(adminLinks['service-delivery-stages'].legacy)}
+              description="The WordPress/Divi build steps below are retained as a labeled legacy option for charities still on the legacy stack."
+            />
+          </div>
         </div>
 
         {/* main full content  */}
@@ -37,6 +77,11 @@ const index = () => {
             <h2 className="mb-[18px] pb-[8px] border-b border-[#e5e7eb] text-[24px] leading-[40px] font-[700] text-[#111827]">
               Supported Organization Establishment: Order of Operations
             </h2>
+            <p className="mb-[18px] text-[#6b7280] text-[13px] leading-[22px] font-[500] italic">
+              Legacy WordPress build reference. New charity sites are delivered as GitHub Pages
+              static sites built with AI agents; these steps are kept for organizations still on the
+              legacy WordPress stack.
+            </p>
             <div>
               <div className="flex-start flex flex-col gap-5 sm:flex-row sm:gap-[0px]">
                 <div className="bg-[#1f2937] text-white rounded-full w-10 h-10 flex items-center justify-center font-bold text-xl flex-shrink-0 mr-4">
