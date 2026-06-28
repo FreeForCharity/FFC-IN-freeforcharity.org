@@ -5,7 +5,7 @@ import Hero from '@/components/techstack-components/Hero'
 export const metadata: Metadata = {
   title: 'Tech Stack',
   description:
-    'Understanding the Free For Charity WordPress hosting architecture, including Cloudflare, DirectAdmin, and Microsoft 365 integration layers.',
+    'The Free For Charity tech stack: free GitHub Pages static-site hosting, Next.js, AI-built sites (Claude and GitHub Copilot), GitHub Actions CI/CD, Cloudflare, and Microsoft 365—with the legacy WordPress architecture retained for existing sites.',
   alternates: { canonical: '/techstack/' },
 }
 

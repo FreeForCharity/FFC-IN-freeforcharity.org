@@ -1,19 +1,75 @@
 'use client'
 import React from 'react'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
 const UnderstandingHosting: React.FC = () => {
   return (
     <div className="min-h-screen w-full pt-[160px] pb-[70px]">
       <div className="w-full max-w-[90%] md:max-w-[80%] mx-auto" data-font="aria-font">
         <h1 className="font-[400] text-[30px] text-[#333] leading-[30px] pb-[10px]">
-          Understanding Your Free For Charity WordPress Website Hosting: A Layered Approach
+          Your Free For Charity Tech Stack: GitHub Pages + AI-Built Static Sites
         </h1>
 
         <p className="font-[400] text-[14px] text-[#666] leading-[24px] pb-[1em]">
-          Your FreeForCharity.org website utilizes a powerful combination of services to provide a
-          secure, reliable, and feature-rich online presence. Think of it like a layered cake, with
-          each layer playing a crucial role:
+          Today FreeForCharity.org delivers each charity a fast, secure static website built with a
+          modern, low-maintenance stack. Think of it like a layered cake, with each layer playing a
+          crucial role:
         </p>
+
+        {/* New-model layers */}
+        <ul className="list-disc list-inside pb-[1em] space-y-[6px]">
+          <li className="font-[400] text-[14px] text-[#666] leading-[24px]">
+            <span className="font-[700]">Hosting: GitHub Pages</span> — free, reliable static
+            hosting with automatic HTTPS and custom-domain support; no server to maintain.
+          </li>
+          <li className="font-[400] text-[14px] text-[#666] leading-[24px]">
+            <span className="font-[700]">
+              Framework: Next.js (static export) + React + Tailwind CSS
+            </span>{' '}
+            — modern, responsive, fast-loading sites built from version-controlled source.
+          </li>
+          <li className="font-[400] text-[14px] text-[#666] leading-[24px]">
+            <span className="font-[700]">
+              Build: AI development agents (Claude and GitHub Copilot)
+            </span>{' '}
+            — professional sites delivered faster, with consistent quality across every charity.
+          </li>
+          <li className="font-[400] text-[14px] text-[#666] leading-[24px]">
+            <span className="font-[700]">CI/CD: GitHub Actions</span> — automated tests,
+            accessibility checks, and security scanning gate every change before it deploys.
+          </li>
+          <li className="font-[400] text-[14px] text-[#666] leading-[24px]">
+            <span className="font-[700]">DNS &amp; SSL: Cloudflare</span> — fast, secure delivery
+            and DNS management connecting your domain to your site.
+          </li>
+          <li className="font-[400] text-[14px] text-[#666] leading-[24px]">
+            <span className="font-[700]">Email: Microsoft 365</span> — professional email and
+            collaboration tools for your organization.
+          </li>
+        </ul>
+
+        <div className="max-w-[680px] pb-[1.5em]">
+          <AdminGuideLink
+            href={ffcAdminUrl(adminLinks.techstack.newModel)}
+            description="See the full, current tech stack and how each charity site is built on the FFC Admin portal."
+          />
+        </div>
+
+        <h2 className="font-[400] text-[24px] text-[#333] leading-[30px] pt-[1em] pb-[6px] border-t border-[#e5e5e5] mt-[1em]">
+          Legacy WordPress Architecture
+        </h2>
+        <p className="font-[400] text-[14px] text-[#666] leading-[24px] pb-[1em] italic">
+          The layered WordPress hosting below is retained for charities still on the legacy stack.
+          New sites use the GitHub Pages + AI stack above.
+        </p>
+        <div className="max-w-[680px] pb-[1.5em]">
+          <AdminGuideLink
+            variant="legacy"
+            href={ffcAdminUrl(adminLinks.techstack.legacy)}
+            description="Legacy WordPress hosting tech stack reference on the FFC Admin portal."
+          />
+        </div>
 
         {/* 1️⃣ Foundation */}
         <ol className="list-decimal list-inside pb-[1em]">
