@@ -148,19 +148,25 @@ async function checkBodyContains(name, path, expectedSubstrings) {
 const CF_CHALLENGE_MARKERS = [
   'just a moment',
   'attention required',
+  'checking your browser',
   'cf-chl',
-  'cf-mitigated',
   'cdn-cgi/challenge',
+  'challenge-platform',
   'enable javascript and cookies',
 ]
 
-function isBotChallenge(status, body) {
-  if ([403, 415, 429, 503].includes(status)) return true
-  if (body) {
-    const b = body.toLowerCase()
-    return CF_CHALLENGE_MARKERS.some((m) => b.includes(m))
-  }
-  return false
+// True only with POSITIVE evidence of a Cloudflare interstitial — a challenge
+// body marker or a `cf-mitigated: challenge` header. We deliberately do NOT
+// treat a bare 403/415/429/503 as a challenge: a real origin 503 or a
+// misconfigured 403 on /hub must FAIL, not be masked as a skippable challenge.
+// A genuine Cloudflare challenge always ships the interstitial body (or header),
+// so this still catches the runner-IP challenges it's meant to tolerate.
+function isBotChallenge(res) {
+  if (!res) return false
+  const cfMitigated = (res.headers && res.headers.get && res.headers.get('cf-mitigated')) || ''
+  if (/challenge/i.test(cfMitigated)) return true
+  const b = (res.body || '').toLowerCase()
+  return CF_CHALLENGE_MARKERS.some((m) => b.includes(m))
 }
 
 // Accumulate Set-Cookie name=value pairs into a jar (fetch has no cookie store).
@@ -189,7 +195,7 @@ async function checkHubBody(name, path, markers) {
     record(name, false, `${path} → ${r.status} (${r.error})`)
     return
   }
-  if (isBotChallenge(r.status, r.body)) {
+  if (isBotChallenge(r)) {
     record(name, true, `${path} → skipped (Cloudflare challenge of CI runner, HTTP ${r.status})`)
     return
   }
@@ -215,7 +221,7 @@ async function checkHubOrderFunnel() {
   const prod = await request('/hub/store/ffc-consulting/nonprofit-charity-onboarding', {
     readBody: true,
   })
-  if (isBotChallenge(prod.status, prod.body)) {
+  if (isBotChallenge(prod)) {
     record(label('product page'), true, `skipped (Cloudflare challenge, HTTP ${prod.status})`)
     return
   }
@@ -223,9 +229,10 @@ async function checkHubOrderFunnel() {
   // Prefer the product's own "Order Now" link (cart.php?a=add&pid=N) over any
   // generic add link on the page (e.g. the storefront's domain-search box,
   // cart.php?a=add&domain=register), so the funnel exercises the onboarding
-  // product. Fall back to any add link if the product uses a non-pid format.
+  // product. The `&` is usually HTML-escaped to `&amp;` in markup, so accept
+  // both. Fall back to any add link if the product uses a non-pid format.
   const addMatch =
-    (prod.body && prod.body.match(/cart\.php\?a=add&pid=\d+[^"'\s)]*/i)) ||
+    (prod.body && prod.body.match(/cart\.php\?a=add(?:&|&amp;)pid=\d+[^"'\s)]*/i)) ||
     (prod.body && prod.body.match(/cart\.php\?a=add[^"'\s)]*/i))
   const prodOk =
     prod.status >= 200 &&
@@ -248,7 +255,7 @@ async function checkHubOrderFunnel() {
     followRedirects: false,
     cookie: jarToHeader(jar),
   })
-  if (isBotChallenge(add.status, add.body)) {
+  if (isBotChallenge(add)) {
     record(label('add to cart'), true, `skipped (Cloudflare challenge, HTTP ${add.status})`)
     return
   }
@@ -263,7 +270,7 @@ async function checkHubOrderFunnel() {
       /* use Location as-is */
     }
     cart = await request(loc, { readBody: true, cookie: jarToHeader(jar) })
-    if (isBotChallenge(cart.status, cart.body)) {
+    if (isBotChallenge(cart)) {
       record(label('cart'), true, `skipped (Cloudflare challenge, HTTP ${cart.status})`)
       return
     }
@@ -283,7 +290,7 @@ async function checkHubOrderFunnel() {
     readBody: true,
     cookie: jarToHeader(jar),
   })
-  if (isBotChallenge(checkout.status, checkout.body)) {
+  if (isBotChallenge(checkout)) {
     record(label('checkout'), true, `skipped (Cloudflare challenge, HTTP ${checkout.status})`)
     return
   }
