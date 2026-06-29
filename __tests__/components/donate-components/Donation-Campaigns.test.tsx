@@ -4,6 +4,10 @@ import '@testing-library/jest-dom'
 import DonationCampaigns from '@/components/donate-components/Donation-Campaigns/index'
 import { campaigns } from '@/data/donation-campaigns'
 
+// Escape regex metacharacters so titles containing (), +, ?, etc. don't break
+// or throw when used as an accessible-name matcher.
+const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
 describe('DonationCampaigns Component', () => {
   it('renders without crashing', () => {
     render(<DonationCampaigns />)
@@ -22,7 +26,7 @@ describe('DonationCampaigns Component', () => {
     render(<DonationCampaigns />)
     const featured = campaigns.filter((c) => c.featured && !c.embed)
     for (const c of featured) {
-      const link = screen.getByRole('link', { name: new RegExp(c.title, 'i') })
+      const link = screen.getByRole('link', { name: new RegExp(escapeRegExp(c.title), 'i') })
       expect(link).toHaveAttribute('href', c.formUrl)
       expect(link.getAttribute('href')).toContain('zeffy.com')
     }

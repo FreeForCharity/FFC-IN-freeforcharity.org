@@ -120,5 +120,13 @@ export const campaigns: DonationCampaign[] = [
   },
 ]
 
-/** The general unrestricted campaign — reused by CTAs that just say "donate". */
-export const generalCampaign: DonationCampaign = campaigns.find((c) => c.embed) ?? campaigns[0]
+// The general unrestricted campaign — reused by CTAs that just say "donate".
+// Selected explicitly by key and asserted at module load so a misconfigured
+// registry fails loudly at build time instead of silently breaking a CTA.
+const general = campaigns.find((c) => c.key === 'general')
+if (!general) {
+  throw new Error(
+    'donation-campaigns: a campaign with key "general" is required (used by the donate CTAs).'
+  )
+}
+export const generalCampaign: DonationCampaign = general

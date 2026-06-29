@@ -45,10 +45,24 @@ const DonationCampaigns = () => {
             >
               General Fund — Give Now
             </h3>
-            <ZeffyDonationForm
-              src={general.embedUrl ?? general.formUrl}
-              title={`${general.title} — donation form powered by Zeffy`}
-            />
+            {general.embedUrl ? (
+              // Only inline-embed when a real embed URL is configured — a hosted
+              // page URL inside an <iframe> would be blocked/broken. If it's
+              // missing, degrade to a card linking to the hosted donation form.
+              <ZeffyDonationForm
+                src={general.embedUrl}
+                title={`${general.title} — donation form powered by Zeffy`}
+              />
+            ) : (
+              <div className="max-w-[420px] mx-auto">
+                <GeneralDonationCard
+                  title={general.title}
+                  description={general.blurb}
+                  img="/Images/payment.gif"
+                  href={general.formUrl}
+                />
+              </div>
+            )}
           </div>
         ) : null}
 
