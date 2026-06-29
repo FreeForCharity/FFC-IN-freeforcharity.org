@@ -336,7 +336,9 @@ async function main() {
   // The two donation/revenue surfaces — a 200 isn't enough; assert the
   // actual payment integrations are present in the rendered HTML so a
   // retired PayPal button or a dropped Zeffy embed is caught.
-  await checkBodyContains(`/donate exposes the PayPal hosted button`, '/donate/', ['9ZKQ23YC3G2J2'])
+  await checkBodyContains(`/donate embeds the Zeffy donation form`, '/donate/', [
+    'zeffy.com/embed/donation-form',
+  ])
   await checkBodyContains(
     `/free-for-charity-endowment-fund mounts the Zeffy form`,
     '/free-for-charity-endowment-fund/',

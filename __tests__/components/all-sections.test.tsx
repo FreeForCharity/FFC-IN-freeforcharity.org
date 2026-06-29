@@ -57,8 +57,8 @@ const sectionComponents: [string, string][] = [
     '../../src/components/donate-components/Free-for-Charity-Donation-Options/index',
   ],
   [
-    'donate-components/General-donation',
-    '../../src/components/donate-components/General-donation/index',
+    'donate-components/Donation-Campaigns',
+    '../../src/components/donate-components/Donation-Campaigns/index',
   ],
   [
     'donate-components/measurable-impact',

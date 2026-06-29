@@ -23,14 +23,13 @@ describe('MeasurableImpact Component', () => {
     expect(volunteerLink).toHaveAttribute('href', '/volunteer/')
   })
 
-  it('renders the PayPal donation button', () => {
+  it('renders the Zeffy donation button (no PayPal)', () => {
     render(<MeasurableImpact />)
     const donateButton = screen.getByRole('link', { name: /Donate Today/i })
     expect(donateButton).toBeInTheDocument()
-    expect(donateButton).toHaveAttribute(
-      'href',
-      'https://www.paypal.com/donate/?hosted_button_id=9ZKQ23YC3G2J2'
-    )
+    const href = donateButton.getAttribute('href') || ''
+    expect(href).toContain('zeffy.com')
+    expect(href).not.toContain('paypal.com')
   })
 
   it('renders the thank you heading', () => {

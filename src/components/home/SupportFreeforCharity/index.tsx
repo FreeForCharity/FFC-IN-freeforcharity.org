@@ -23,8 +23,8 @@ const SupportFreeForCharity: React.FC = () => {
               Domain, Website, and other services.
             </p>
           </div>
-          {/* Right – PayPal Donate button */}
-          <Transparentbtn text="Donate With Paypal" href="/donate/" />
+          {/* Right – Donate button */}
+          <Transparentbtn text="Donate" href="/donate/" />
         </div>
       </section>
 
