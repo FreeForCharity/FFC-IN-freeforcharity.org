@@ -9,12 +9,15 @@
 // ⚠️ VERIFY URLS BEFORE MERGE. The pop-up link comes from the Zeffy dashboard
 // (campaign → Share → Pop-up) and looks like:
 //   https://www.zeffy.com/embed/<type>/<slug>?modal=true
-// The <type> segment (donation-form | ticketing | membership | shop) is NOT
-// derivable from the campaign name — e.g. "Website Design and Development" is
-// `ticketing`, not `donation-form`. Copy each link from the dashboard. Zeffy
-// 403s CI crawlers (see `.lycheeignore`), so these can't be link-checked here.
-// CONFIRMED so far: website-design (ticketing) and endowment (donation-form,
-// from the live endowment-page iframe). All others are derived guesses — VERIFY.
+// Neither the <type> segment (donation-form | ticketing | membership | shop)
+// NOR the slug is derivable from the campaign name: the type varies (e.g.
+// "Website Design and Development" is `ticketing`, not `donation-form`) and the
+// slug is sometimes a readable name and sometimes an opaque UUID. Copy each link
+// verbatim from the dashboard. Zeffy 403s CI crawlers (see `.lycheeignore`), so
+// these can't be link-checked here.
+// CONFIRMED: free-domain (donation-form, UUID), website-design (ticketing),
+// endowment (donation-form, from the live endowment-page iframe). All others
+// are placeholders — VERIFY.
 
 export const ZEFFY_BASE = 'https://www.zeffy.com'
 
@@ -77,7 +80,8 @@ export const campaigns: DonationCampaign[] = [
       'Fund free .org domain names and DNS for nonprofits — one of the most-used Free For Charity programs.',
     category: 'Donation',
     featured: true,
-    zeffyFormLink: zeffyPopupLink('donation-form/free-domain-names-for-charity'), // VERIFY (type + slug)
+    // CONFIRMED. Zeffy uses an opaque UUID slug here (not the readable name).
+    zeffyFormLink: zeffyPopupLink('donation-form/345319a9-b5ed-4ee9-af45-89dc01acc111'),
   },
   {
     key: 'website-design',
