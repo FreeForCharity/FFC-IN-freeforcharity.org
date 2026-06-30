@@ -6,6 +6,7 @@ import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 export const metadata: Metadata = {
   title: 'cPanel Backup SOP',
   description: 'Internal Free For Charity admin runbook for cPanel backups.',
+  alternates: { canonical: '/ffcadmin-free-for-charity-cpanel-backup-sop/' },
   robots: { index: false, follow: false },
 }
 
@@ -40,7 +41,7 @@ export default function CpanelBackupSop() {
             Free For Charity homepage
           </Link>{' '}
           or the{' '}
-          <Link href="/about-us" className="text-[#0567B1] underline">
+          <Link href="/about-us/" className="text-[#0567B1] underline">
             About Us page
           </Link>
           .

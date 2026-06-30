@@ -9,11 +9,11 @@ export const metadata: Metadata = {
 
 const popularDestinations = [
   { href: '/', label: 'Home' },
-  { href: '/about-us', label: 'About Us' },
-  { href: '/donate', label: 'Donate' },
-  { href: '/volunteer', label: 'Volunteer' },
-  { href: '/help-for-charities', label: 'Help for Charities' },
-  { href: '/contact-us', label: 'Contact Us' },
+  { href: '/about-us/', label: 'About Us' },
+  { href: '/donate/', label: 'Donate' },
+  { href: '/volunteer/', label: 'Volunteer' },
+  { href: '/help-for-charities/', label: 'Help for Charities' },
+  { href: '/contact-us/', label: 'Contact Us' },
 ]
 
 export default function NotFound() {
@@ -48,7 +48,7 @@ export default function NotFound() {
 
         <p className="text-[14px] leading-[22px] font-[500] text-[#888]">
           Still can&rsquo;t find what you&rsquo;re looking for?{' '}
-          <Link href="/contact-us" className="text-[#f47c20] underline">
+          <Link href="/contact-us/" className="text-[#f47c20] underline">
             Get in touch
           </Link>
           .
