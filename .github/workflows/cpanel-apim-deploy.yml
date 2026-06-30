@@ -60,7 +60,7 @@ jobs:
     environment: cpanel-apim-deploy
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Azure login (deploy identity)
         uses: azure/login@v3
