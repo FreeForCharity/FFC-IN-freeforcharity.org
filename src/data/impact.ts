@@ -13,6 +13,7 @@
 // authoritative source — components must not render them as precise figures.
 
 import data from './impact.json'
+import vhModel from './volunteer-hours-model.json'
 
 export type MetricConfidence = 'high' | 'medium' | 'low' | 'unknown'
 
@@ -109,3 +110,65 @@ export const resultCards: ResultCard[] = [
   },
   { key: 'yearsServing', title: String(yearsServing), description: 'Years serving nonprofits' },
 ]
+
+// --- Volunteer hours (modeled per engagement, not per person) ---------------
+// Per-person hour logging is ineffective and no more valid than a structured
+// assumption, so volunteer hours are estimated as `hoursPerUnit x unit count`
+// for each major engagement/product type. Coefficients live in
+// `volunteer-hours-model.json` (proposed, pending org ratification); the unit
+// counts come from the metrics above so the estimate refreshes with them.
+
+export type VolunteerHoursCoefficient = {
+  key: string
+  label: string
+  hoursPerUnit: number
+  unitMetric?: string | null
+  unitCount?: number | null
+  rationale: string
+}
+
+type VolunteerHoursModel = { version: string; coefficients: VolunteerHoursCoefficient[] }
+
+const volunteerHoursModel = vhModel as VolunteerHoursModel
+
+export const volunteerHoursModelVersion = volunteerHoursModel.version
+
+export type VolunteerHoursLine = {
+  key: string
+  label: string
+  hoursPerUnit: number
+  unitCount: number | null
+  hours: number | null
+  rationale: string
+}
+
+// One line per engagement type: resolve the unit count (explicit `unitCount`,
+// else the referenced metric's numeric value) and compute `hours`. A line with
+// no resolvable count is "pending" (hours = null) and excluded from the total.
+export const volunteerHoursBreakdown: VolunteerHoursLine[] = volunteerHoursModel.coefficients.map(
+  (c) => {
+    let unitCount: number | null = null
+    if (typeof c.unitCount === 'number') {
+      unitCount = c.unitCount
+    } else if (c.unitMetric) {
+      const v = impact.metrics[c.unitMetric]?.value
+      if (typeof v === 'number') unitCount = v
+    }
+    return {
+      key: c.key,
+      label: c.label,
+      hoursPerUnit: c.hoursPerUnit,
+      unitCount,
+      hours: unitCount === null ? null : c.hoursPerUnit * unitCount,
+      rationale: c.rationale,
+    }
+  }
+)
+
+/** Modeled total volunteer hours (sum of resolved lines; pending lines excluded). */
+export const volunteerHours = volunteerHoursBreakdown.reduce((sum, l) => sum + (l.hours ?? 0), 0)
+
+/** Engagement keys whose unit count isn't wired to an authoritative source yet. */
+export const volunteerHoursPending = volunteerHoursBreakdown
+  .filter((l) => l.hours === null)
+  .map((l) => l.key)

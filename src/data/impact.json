@@ -53,7 +53,7 @@
     "volunteerHours": {
       "value": null,
       "label": "Volunteer hours contributed",
-      "source": "pending — manual log (no API)",
+      "source": "Not tracked per person (ineffective); modeled per engagement in volunteer-hours-model.json and computed in impact.ts (`volunteerHours`)",
       "confidence": "unknown"
     },
     "textMessagesHandled": {

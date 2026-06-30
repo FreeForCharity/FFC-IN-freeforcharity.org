@@ -255,9 +255,44 @@ WHMCS clients  <  true reach    (the deficit ≈ legacy WP + uncaptured comms)
 
 - The **Gmail sender/label** for SMS-to-email forwards (unblocks Gmail/text counting).
 - The **definition of "charity partner"** and whether to add the WHMCS field/group.
-- A lightweight method to log **volunteer hours** (the one metric with no API).
+- Ratify the **volunteer-hours model** coefficients (§11) and wire the pending
+  engagement counts (M365 email, onboarding) once their WHMCS/M365 exports land.
 - Which mailboxes to mine for discovery, and the reporting window.
 - Confirm `endowmentRaisedUsd` comes from the Zeffy export (vs. manual figure).
 - Whether metric derivation lives in `FFC-Cloudflare-Automation` (next to the
   data) or in this repo (next to the consumer). Recommendation: derive next to
   the data, commit only the small `impact.json` here.
+
+---
+
+## 11. Volunteer hours — modeled per engagement, not per person
+
+Per-person hour logging is ineffective and, in practice, no more valid than a
+structured assumption. So volunteer hours are **estimated per engagement /
+product type**: `hours = hoursPerUnit × unit count`, summed across engagements.
+The coefficients live in `src/data/volunteer-hours-model.json` and are computed
+in `src/data/impact.ts` (`volunteerHours`, `volunteerHoursBreakdown`,
+`volunteerHoursPending`); the unit counts come from the same `impact.json`
+metrics, so the estimate refreshes automatically as those numbers do.
+
+**Proposed coefficients (pending org ratification):**
+
+| Engagement / product                        | Hours/unit | Unit count source       |
+| ------------------------------------------- | ---------: | ----------------------- |
+| Charity website built (GitHub Pages)        |         20 | `sitesBuilt`            |
+| Legacy WordPress → static migration         |         12 | `migratedStable`        |
+| Domain registration + Cloudflare DNS        |          1 | `domainsManaged`        |
+| Ongoing hosting & maintenance (per site/yr) |          3 | `sitesBuilt`            |
+| Microsoft 365 email + grant assistance      |          4 | _pending_ (M365/WHMCS)  |
+| 501c3 / Pre-501c3 onboarding + Candid       |          3 | _pending_ (WHMCS gid-6) |
+
+With the current counts (41 sites, 6 migrations, 376 domains) the resolved lines
+total **≈ 1,391 volunteer hours**; the two _pending_ engagements are excluded
+from the total until their counts are wired, and are reported via
+`volunteerHoursPending` so the figure is never silently undercounted.
+
+**Why this is defensible:** each coefficient is a transparent, reviewable
+assumption tied to a concrete deliverable (not a guess about individuals), and
+the estimate is reproducible from committed data. Ratify or adjust the
+coefficients in one place (`volunteer-hours-model.json`, bump `version`); the
+total and the Candid figure follow.

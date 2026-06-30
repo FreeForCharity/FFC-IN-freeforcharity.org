@@ -1,0 +1,50 @@
+{
+  "_comment": "Defensible volunteer-hours model. Per-person hour tracking is ineffective and no more valid than a structured assumption, so volunteer hours are ESTIMATED per engagement/product type: hoursPerUnit x unit count. Coefficients are proposed defaults pending org ratification; bump the version when they change. unitMetric references a key in impact.json metrics (the count is taken from that metric's value when it is a number); unitCount is an explicit override when no metric supplies the count yet (null = pending an authoritative count, contributes 0 but is reported as pending).",
+  "version": "2026-06-30",
+  "coefficients": [
+    {
+      "key": "websiteBuild",
+      "label": "Charity website built (GitHub Pages)",
+      "hoursPerUnit": 20,
+      "unitMetric": "sitesBuilt",
+      "rationale": "Discovery, template apply, content migration, accessibility/SEO review, deploy."
+    },
+    {
+      "key": "legacyMigration",
+      "label": "Legacy WordPress -> static migration",
+      "hoursPerUnit": 12,
+      "unitMetric": "migratedStable",
+      "rationale": "Capture, rebuild, verify, and cut over an existing site (on top of a build)."
+    },
+    {
+      "key": "domainDns",
+      "label": "Domain registration + Cloudflare DNS",
+      "hoursPerUnit": 1,
+      "unitMetric": "domainsManaged",
+      "rationale": "Registration/transfer, zone setup, DNS records, verification. Heavily automated, so low per-unit."
+    },
+    {
+      "key": "maintenance",
+      "label": "Ongoing hosting & maintenance (per active site / year)",
+      "hoursPerUnit": 3,
+      "unitMetric": "sitesBuilt",
+      "rationale": "Monitoring, dependency/security updates, and support per active site per year."
+    },
+    {
+      "key": "m365Email",
+      "label": "Microsoft 365 email + grant assistance",
+      "hoursPerUnit": 4,
+      "unitMetric": null,
+      "unitCount": null,
+      "rationale": "Tenant/domain setup, DKIM, MS-900 grant guidance. Count pending the M365/WHMCS export."
+    },
+    {
+      "key": "onboarding",
+      "label": "501c3 / Pre-501c3 onboarding + Candid guidance",
+      "hoursPerUnit": 3,
+      "unitMetric": null,
+      "unitCount": null,
+      "rationale": "Eligibility validation and Candid/GuideStar profile guidance. Count pending the WHMCS gid-6 (pid 16/33) export."
+    }
+  ]
+}

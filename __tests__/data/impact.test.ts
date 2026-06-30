@@ -1,4 +1,13 @@
-import { impact, reportingYear, yearsServing, resultCards, metric } from '../../src/data/impact'
+import {
+  impact,
+  reportingYear,
+  yearsServing,
+  resultCards,
+  metric,
+  volunteerHours,
+  volunteerHoursBreakdown,
+  volunteerHoursPending,
+} from '../../src/data/impact'
 
 describe('impact data', () => {
   it('exposes a numeric reporting year and IRS designation year', () => {
@@ -36,5 +45,30 @@ describe('impact data', () => {
 
   it('throws for an unknown metric key', () => {
     expect(() => metric('does-not-exist')).toThrow()
+  })
+
+  describe('modeled volunteer hours', () => {
+    it('computes hours = hoursPerUnit x unit count for resolved lines', () => {
+      for (const line of volunteerHoursBreakdown) {
+        if (line.unitCount === null) {
+          expect(line.hours).toBeNull()
+        } else {
+          expect(line.hours).toBe(line.hoursPerUnit * line.unitCount)
+        }
+      }
+    })
+
+    it('totals only the resolved lines and is a non-negative number', () => {
+      const expected = volunteerHoursBreakdown.reduce((s, l) => s + (l.hours ?? 0), 0)
+      expect(volunteerHours).toBe(expected)
+      expect(volunteerHours).toBeGreaterThanOrEqual(0)
+    })
+
+    it('reports pending engagement types (no double counting)', () => {
+      const pendingFromBreakdown = volunteerHoursBreakdown
+        .filter((l) => l.hours === null)
+        .map((l) => l.key)
+      expect(volunteerHoursPending).toEqual(pendingFromBreakdown)
+    })
   })
 })
