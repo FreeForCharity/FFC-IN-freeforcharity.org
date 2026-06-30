@@ -154,7 +154,9 @@ export const campaigns: DonationCampaign[] = [
     title: "Free For Charity's Shop",
     blurb: 'Shop Free For Charity merchandise — proceeds fund free technology for nonprofits.',
     category: 'Shop',
-    zeffyFormLink: zeffyPopupLink('shop/free-for-charitys-shop'), // VERIFY (type + slug)
+    confirmed: true,
+    // CONFIRMED from the Zeffy Share → Pop-up snippet (type `ticketing`).
+    zeffyFormLink: zeffyPopupLink('ticketing/free-for-charitys-shop'),
   },
 ]
 
