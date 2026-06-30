@@ -52,7 +52,7 @@ const Index = () => {
               <div className="relative w-full max-w-[400px] aspect-[578/386]">
                 <Image
                   src={assetPath('/Images/support-free-for-charity.webp')}
-                  alt="support free for charity image"
+                  alt="support Free For Charity image"
                   fill
                   className="object-contain scale-x-[-1]"
                 />

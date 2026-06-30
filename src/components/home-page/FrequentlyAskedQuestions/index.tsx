@@ -95,15 +95,14 @@ const index = () => {
               massive amount of paid marketing by well-funded for profit companies.
             </p>
             <p>
-              The Free For Charity services, consultant, and technology products directories seeks
-              to fix this problem with our motto “Decisions should be made by metrics not
-              marketing.”
+              The Free For Charity services, consultant, and technology products directories seek to
+              fix this problem with our motto “Decisions should be made by metrics not marketing.”
             </p>
           </FrequentlyAskedQuestions>
 
           <FrequentlyAskedQuestions title="Where did the idea come from?">
             <p className="mb-[30px]">
-              Free for charity was started when the founder first started as a board member on the
+              Free For Charity was started when the founder first started as a board member on the
               local children’s museum’s board of directors. In just a few short weeks he
               uncovered many items the museum was paying for that were free to charities but the
               museum was paying for anyways.
@@ -128,7 +127,7 @@ const index = () => {
               trained in the specialty of the charities mission, in this case child education and
               development. It is unreasonable to expect every charity director to be up to date on
               all procurement management methods and the technology that supports business and still
-              run the day-to-day mission. This is where free for charity will come in to help your
+              run the day-to-day mission. This is where Free For Charity will come in to help your
               charities projects to thrive.
             </p>
           </FrequentlyAskedQuestions>
@@ -152,7 +151,7 @@ const index = () => {
             <p>
               Paying someone on the non program admin staff or the director of the charity to
               research and call companies for discounts is a labor cost that counts as “overhead”
-              because it helps more than one program. With free for charity doing the work the
+              because it helps more than one program. With Free For Charity doing the work the
               target charity does not have to claim costs for overhead. Your nonprofit or charity
               group will gain access to professionals that have more expertise with the common
               business tasks like researching products to meet the charities needs. Free For Charity
@@ -223,7 +222,7 @@ const index = () => {
 
           <FrequentlyAskedQuestions title="What do I need to get started?">
             <p>
-              All you need to do to get free for charity to provide help for your charities
+              All you need to do to get Free For Charity to provide help for your charities
               mission today is to contact us with some basic information about your charity. We need
               to know what type of projects that you would like us to look at or undertake. Please
               fill out the form below and we will be in touch shortly.
@@ -233,7 +232,7 @@ const index = () => {
           <FrequentlyAskedQuestions title="How can you afford to give away free domain names?">
             <p>
               As a 501(c)3 charity ourselves we seek individual, business, and grant sources of
-              funding. At current, free for charity has not received a grant specifically for domain
+              funding. At current, Free For Charity has not received a grant specifically for domain
               names or hosting but uses individual and business contributions to fund this program.
             </p>
           </FrequentlyAskedQuestions>

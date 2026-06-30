@@ -27,11 +27,11 @@ For our training programs we help charities navigate through the MS-900 Microsof
     question: 'Is there a need for a charity to provide help for charities?',
     answer: `Yes there is a need to provide help for charities in many ways! Free For Charity is not the only ‘charity for charities’ helping to lower your costs. Another great charity showing all the big name things you can get for free or at heavy discounts is TechSoup.org. Even with these other sites many charities and non profits still pay for profit companies to do work every day or buy products at full cost. Some do so without knowing that as a charity they qualify for lower rates or even free services from major companies. Others because it is hard to find the free products needed though the massive amount of paid marketing by well-funded for profit companies.
 
-The Free For Charity services, consultant, and technology products directories seeks to fix this problem with our motto “Decisions should be made by metrics not marketing.”`,
+The Free For Charity services, consultant, and technology products directories seek to fix this problem with our motto “Decisions should be made by metrics not marketing.”`,
   },
   {
     question: 'Where did the idea come from?',
-    answer: `Free for charity was started when the founder first started as a board member on the local children’s museum’s board of directors. In just a few short weeks he uncovered many items the museum was paying for that were free to charities but the museum was paying for anyways.
+    answer: `Free For Charity was started when the founder first started as a board member on the local children’s museum’s board of directors. In just a few short weeks he uncovered many items the museum was paying for that were free to charities but the museum was paying for anyways.
 
 In addition, for big projects the museum was not following any procurement management procedures at all. Items such as quoting from multiple vendors before a bid or cross leveling the bids for price and quality were not being done.
 
@@ -39,7 +39,7 @@ Other issues found were the reliance on outdated technology because better alter
   },
   {
     question: 'Why do charities pay for items they can get for free?',
-    answer: `The first reaction to uncovering these issues with the board was anger. The museum was losing or wasting thousands each year; money that could be used to keep admission prices lower and serve more children! After a deeper look it all came back to training and experience. Most charity founders and directors of small and medium charities are trained in the specialty of the charities mission, in this case child education and development. It is unreasonable to expect every charity director to be up to date on all procurement management methods and the technology that supports business and still run the day-to-day mission. This is where free for charity will come in to help your charities projects to thrive.`,
+    answer: `The first reaction to uncovering these issues with the board was anger. The museum was losing or wasting thousands each year; money that could be used to keep admission prices lower and serve more children! After a deeper look it all came back to training and experience. Most charity founders and directors of small and medium charities are trained in the specialty of the charities mission, in this case child education and development. It is unreasonable to expect every charity director to be up to date on all procurement management methods and the technology that supports business and still run the day-to-day mission. This is where Free For Charity will come in to help your charities projects to thrive.`,
   },
   {
     question: 'Where does Free For Charity come in to help our charity or nonprofit?',
@@ -47,7 +47,7 @@ Other issues found were the reliance on outdated technology because better alter
 
 Because of this common practice by large donors and grant institutions it is actually better for a small charity to waste money due to mismanagement such as by paying for something they could get for free because the item is put on the books as a ‘program expense’ and not questioned. Program expenses do not count against the charity like “overhead” does.
 
-Paying someone on the non program admin staff or the director of the charity to research and call companies for discounts is a labor cost that counts as “overhead” because it helps more than one program. With free for charity doing the work the target charity does not have to claim costs for overhead. Your nonprofit or charity group will gain access to professionals that have more expertise with the common business tasks like researching products to meet the charities needs. Free For Charity will also show you recommended technology and business practices that can save thousands each year.`,
+Paying someone on the non program admin staff or the director of the charity to research and call companies for discounts is a labor cost that counts as “overhead” because it helps more than one program. With Free For Charity doing the work the target charity does not have to claim costs for overhead. Your nonprofit or charity group will gain access to professionals that have more expertise with the common business tasks like researching products to meet the charities needs. Free For Charity will also show you recommended technology and business practices that can save thousands each year.`,
   },
   {
     question: 'How can I tell if we have high overhead? / My charity does not have high overhead!',
@@ -69,11 +69,11 @@ We also provide many physical services like nonprofit websites and hosting that 
   },
   {
     question: 'What do I need to get started?',
-    answer: `All you need to do to get free for charity to provide help for your charities mission today is to contact us with some basic information about your charity. We need to know what type of projects that you would like us to look at or undertake. Please fill out the form below and we will be in touch shortly.`,
+    answer: `All you need to do to get Free For Charity to provide help for your charities mission today is to contact us with some basic information about your charity. We need to know what type of projects that you would like us to look at or undertake. Please fill out the form below and we will be in touch shortly.`,
   },
   {
     question: 'How can you afford to give away free domain names?',
-    answer: `As a 501(c)3 charity ourselves we seek individual, business, and grant sources of funding. At current, free for charity has not received a grant specifically for domain names or hosting but uses individual and business contributions to fund this program.`,
+    answer: `As a 501(c)3 charity ourselves we seek individual, business, and grant sources of funding. At current, Free For Charity has not received a grant specifically for domain names or hosting but uses individual and business contributions to fund this program.`,
   },
   {
     question: 'Where do you get your domain name packages?',

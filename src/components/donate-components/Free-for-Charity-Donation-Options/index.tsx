@@ -11,7 +11,7 @@ const index = () => {
             Free For Charity Donation Options
           </h1>
           <p className="text-[18px] font-[500] text-black pb-[1em]" data-font="lato-font">
-            Here at free for charity we make it easy to donate and help the cause of great free
+            Here at Free For Charity we make it easy to donate and help the cause of great free
             training programs and free services for charities.
           </p>
           <p className="text-[18px] font-[700] text-black mb-[50px]" data-font="lato-font">

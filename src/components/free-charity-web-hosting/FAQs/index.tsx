@@ -134,7 +134,7 @@ const AccordionLayout = () => {
                 onToggle={() => toggleLeft('left1')}
               >
                 As a 501(c)3 charity ourselves we seek individual, business, and grant sources of
-                funding. At current, free for charity has not received a grant specifically for
+                funding. At current, Free For Charity has not received a grant specifically for
                 domain names or hosting but uses individual and business contributions to fund this
                 program.
               </AccordionItem>
