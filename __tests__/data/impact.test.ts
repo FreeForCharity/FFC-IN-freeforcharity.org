@@ -7,6 +7,10 @@ import {
   volunteerHours,
   volunteerHoursBreakdown,
   volunteerHoursPending,
+  textMetrics,
+  textSupportHoursByYear,
+  textSupportHours,
+  reachoutVelocityByYear,
 } from '../../src/data/impact'
 
 describe('impact data', () => {
@@ -69,6 +73,36 @@ describe('impact data', () => {
         .filter((l) => l.hours === null)
         .map((l) => l.key)
       expect(volunteerHoursPending).toEqual(pendingFromBreakdown)
+    })
+  })
+
+  describe('text-derived metrics (2025 template)', () => {
+    const y2025 = textMetrics.years['2025']
+
+    it('2025 byParty sums to the total thread count', () => {
+      expect(y2025.byParty).not.toBeNull()
+      const p = y2025.byParty!
+      expect(p.volunteer + p.newCharity + p.existingCharity + p.noise).toBe(y2025.totalThreads)
+    })
+
+    it('2025 category split sums to charityThreads', () => {
+      expect(y2025.charityThreadsByCategory).not.toBeNull()
+      const sum = Object.values(y2025.charityThreadsByCategory!).reduce((s, n) => s + n, 0)
+      expect(sum).toBe(y2025.charityThreads)
+    })
+
+    it('derives a positive 2025 text-support hour figure and surfaces velocity', () => {
+      expect(textSupportHoursByYear['2025']).toBeGreaterThan(0)
+      expect(textSupportHours).toBeGreaterThanOrEqual(textSupportHoursByYear['2025'])
+      expect(reachoutVelocityByYear['2025']).toEqual({ volunteer: 34, newCharity: 42 })
+    })
+
+    it('leaves pending years null (no fabricated splits)', () => {
+      for (const yr of ['2023', '2024', '2026']) {
+        expect(textMetrics.years[yr].byParty).toBeNull()
+        expect(textMetrics.years[yr].charityThreadsByCategory).toBeNull()
+        expect(textSupportHoursByYear[yr]).toBeUndefined()
+      }
     })
   })
 })

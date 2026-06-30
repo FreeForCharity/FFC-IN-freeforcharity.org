@@ -14,6 +14,7 @@
 
 import data from './impact.json'
 import vhModel from './volunteer-hours-model.json'
+import textData from './text-metrics.json'
 
 export type MetricConfidence = 'high' | 'medium' | 'low' | 'unknown'
 
@@ -172,3 +173,65 @@ export const volunteerHours = volunteerHoursBreakdown.reduce((sum, l) => sum + (
 export const volunteerHoursPending = volunteerHoursBreakdown
   .filter((l) => l.hours === null)
   .map((l) => l.key)
+
+// --- Text-derived metrics (per calendar year) -------------------------------
+// Google Voice support texts, classified per year by party + product category +
+// net-new reach-out (see docs/METRICS-PLAYBOOK.md section 12 and the FFC-Cloudflare-
+// Automation runbook). The classification is human-in-the-loop (personal account);
+// a year stays `pending-classification` (null splits) until its pass is done.
+
+export type TextParty = 'volunteer' | 'newCharity' | 'existingCharity' | 'noise'
+
+export type TextYear = {
+  coverage: string
+  status: string
+  totalThreads: number | null
+  charityThreads: number | null
+  byParty: Record<TextParty, number> | null
+  netNewReachouts: { volunteer: number; newCharity: number } | null
+  charityThreadsByCategory: Record<string, number> | null
+  confidence?: string
+}
+
+export type TextMetrics = {
+  version: string
+  categories: string[]
+  parties: string[]
+  years: Record<string, TextYear>
+}
+
+export const textMetrics = textData as unknown as TextMetrics
+
+type TextSupportModel = {
+  minutesPerCharityTextByCategory: Record<string, number>
+  minutesPerVolunteerCoordinationText: number
+}
+
+const textSupportModel = (vhModel as unknown as { textSupport: TextSupportModel }).textSupport
+
+// Per-year text-derived volunteer hours: charity-org support texts attributed by
+// product category + volunteer-coordination texts at a flat rate. Years still
+// pending classification contribute nothing.
+export const textSupportHoursByYear: Record<string, number> = {}
+for (const [yr, y] of Object.entries(textMetrics.years)) {
+  let minutes = 0
+  if (y.charityThreadsByCategory) {
+    for (const [cat, n] of Object.entries(y.charityThreadsByCategory)) {
+      const per = textSupportModel.minutesPerCharityTextByCategory[cat]
+      if (typeof n === 'number' && typeof per === 'number') minutes += n * per
+    }
+  }
+  if (y.byParty && typeof y.byParty.volunteer === 'number') {
+    minutes += y.byParty.volunteer * textSupportModel.minutesPerVolunteerCoordinationText
+  }
+  if (minutes > 0) textSupportHoursByYear[yr] = Math.round(minutes / 60)
+}
+
+/** Total text-derived volunteer hours across all classified years. */
+export const textSupportHours = Object.values(textSupportHoursByYear).reduce((s, h) => s + h, 0)
+
+/** Net-new reach-out velocity per year (first-contact charity & volunteer senders). */
+export const reachoutVelocityByYear: Record<string, { volunteer: number; newCharity: number }> = {}
+for (const [yr, y] of Object.entries(textMetrics.years)) {
+  if (y.netNewReachouts) reachoutVelocityByYear[yr] = y.netNewReachouts
+}

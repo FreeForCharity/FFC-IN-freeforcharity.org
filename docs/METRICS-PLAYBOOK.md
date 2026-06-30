@@ -296,3 +296,54 @@ assumption tied to a concrete deliverable (not a guess about individuals), and
 the estimate is reproducible from committed data. Ratify or adjust the
 coefficients in one place (`volunteer-hours-model.json`, bump `version`); the
 total and the Candid figure follow.
+
+---
+
+## 12. Text-derived metrics system (per calendar year)
+
+Text messages are not just counted — they are a managed metrics source. Each
+Google Voice thread (a personal account; pulled **human-in-the-loop**, see the
+FFC-Cloudflare-Automation runbook) is classified along three dimensions and
+bucketed by **calendar year** in `src/data/text-metrics.json`:
+
+- **Party** — `volunteer` · `newCharity` · `existingCharity` · `noise`
+  (`existingCharity` = matches an `FFC-EX-*` repo; `newCharity` = a nonprofit
+  with no repo yet). `charityThreads` = newCharity + existingCharity.
+- **Product category** (charity-org threads) — website · domain · m365 ·
+  onboarding · migration · maintenance · general.
+- **Net-new reach-out** — a sender's first-ever contact, split volunteer vs
+  new-charity → the **reach-out velocity** per year.
+
+### Derived metrics (computed in `impact.ts`)
+
+1. **Volume** per year: `totalThreads`, `charityThreads`, `byParty`.
+2. **Reach-out velocity** per year: `reachoutVelocityByYear` (net-new volunteer
+   vs new-charity contacts) — the cadence of new reach into the community.
+3. **Texts → volunteer hours**: `textSupport` in `volunteer-hours-model.json`
+   gives per-category minutes for charity-org texts plus a flat rate for
+   volunteer-coordination texts; `textSupportHoursByYear` /`textSupportHours`
+   compute the implied hours (separate from the §11 engagement total, since text
+   support is per-year rather than cumulative).
+
+### 2025 (template — fully classified)
+
+| Metric                         | Value                                                                                         |
+| ------------------------------ | --------------------------------------------------------------------------------------------- |
+| Total threads                  | **2,079** (exact)                                                                             |
+| Noise                          | 1,440                                                                                         |
+| Volunteer                      | 253                                                                                           |
+| New charity / Existing charity | 237 / 149 (charity-org = **386**)                                                             |
+| Net-new reach-outs             | **42 new charities, 34 volunteers**                                                           |
+| Charity threads by category    | migration 94 · general 95 · website 83 · maintenance 59 · onboarding 28 · m365 14 · domain 13 |
+| Implied text-support hours     | **≈ 95 hrs**                                                                                  |
+
+Splits are ~95%-calibrated (a 40-thread deep-read sample); the largest single
+uncertainty is one high-volume contributor (~94 threads) classed as volunteer.
+
+### Replicating to other years
+
+2024, 2023 (full-year bucket; data begins ~Jun 2023), and 2026-YTD are
+`pending-classification` (null splits — never fabricated). Re-run the same pass
+per year (totals are exact once pagination is exhausted; splits calibrated on a
+sample) and drop the numbers into `text-metrics.json`; the derived metrics and
+the Candid figures follow automatically.

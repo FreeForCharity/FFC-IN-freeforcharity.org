@@ -46,5 +46,18 @@
       "unitCount": null,
       "rationale": "Eligibility validation and Candid/GuideStar profile guidance. Count pending the WHMCS gid-6 (pid 16/33) export."
     }
-  ]
+  ],
+  "textSupport": {
+    "_comment": "Volunteer minutes implied by each support text message (text-metrics.json). Charity-org texts are attributed by product category; volunteer-coordination texts use a flat rate. Proposed defaults, pending org ratification. hours/yr = sum_category(charityThreadsByCategory x minutes)/60 + volunteerThreads x minutesPerVolunteerCoordinationText/60.",
+    "minutesPerCharityTextByCategory": {
+      "website": 15,
+      "domain": 5,
+      "m365": 10,
+      "onboarding": 12,
+      "migration": 10,
+      "maintenance": 8,
+      "general": 5
+    },
+    "minutesPerVolunteerCoordinationText": 8
+  }
 }
