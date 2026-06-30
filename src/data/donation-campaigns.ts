@@ -137,7 +137,9 @@ export const campaigns: DonationCampaign[] = [
     blurb:
       'Membership supporting the volunteer administrators who run the Free For Charity platform.',
     category: 'Membership',
-    zeffyFormLink: zeffyPopupLink('membership/free-for-charity-global-administrators-membership'), // VERIFY (type + slug)
+    confirmed: true,
+    // CONFIRMED from the Zeffy Share → Pop-up snippet (type `ticketing`).
+    zeffyFormLink: zeffyPopupLink('ticketing/free-for-charity-global-administrators-membership'),
   },
   {
     key: 'annual-gala',

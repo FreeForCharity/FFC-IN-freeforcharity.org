@@ -37,11 +37,12 @@ describe('DonationCampaigns Component', () => {
     expect(container.querySelector(`[zeffy-form-link="${dir.zeffyFormLink}"]`)).toBeTruthy()
   })
 
-  it('fail-safe: does NOT render unconfirmed campaigns', () => {
+  it('fail-safe: never renders an unconfirmed campaign', () => {
     const { container } = render(<DonationCampaigns />)
-    const unconfirmed = campaigns.filter((c) => !c.confirmed)
-    expect(unconfirmed.length).toBeGreaterThan(0) // there are still placeholders
-    for (const c of unconfirmed) {
+    // Whatever placeholders remain must NOT render. When every campaign is
+    // confirmed this is correctly a no-op, so the test never breaks at full
+    // coverage — it only guards against shipping an unverified donate link.
+    for (const c of campaigns.filter((c) => !c.confirmed)) {
       expect(container.querySelector(`[zeffy-form-link="${c.zeffyFormLink}"]`)).toBeNull()
     }
   })
