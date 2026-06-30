@@ -10,9 +10,9 @@ import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
 export const metadata: Metadata = {
-  title: 'Help For Charities',
+  title: 'Help for Charities',
   description:
-    'Get help for your nonprofit from Free For Charity—free tools plus a free, AI-built GitHub Pages website, domains, and Microsoft 365, even while your 501(c)(3) status is pending.',
+    'Resources and support for charity and nonprofit directors. Get instant access to free tools, domains, hosting, and technology services from Free For Charity.',
   alternates: { canonical: '/help-for-charities/' },
 }
 
