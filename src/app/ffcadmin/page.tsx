@@ -6,6 +6,7 @@ import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 export const metadata: Metadata = {
   title: 'FFC Admin',
   description: 'Free For Charity internal administration portal.',
+  alternates: { canonical: '/ffcadmin/' },
   robots: { index: false, follow: false },
 }
 
