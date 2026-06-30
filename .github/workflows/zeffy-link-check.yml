@@ -1,0 +1,49 @@
+name: Zeffy link check (live)
+
+# Verifies that every CONFIRMED Zeffy campaign link in
+# src/data/donation-campaigns.ts resolves to a real Zeffy form, using a real
+# Chromium browser on a GitHub-hosted runner (which has the browser egress to
+# zeffy.com that our normal CI / sandbox lacks — Zeffy 403s plain crawlers).
+#
+# Not part of the blocking CI: run on demand (and weekly) so a retired or
+# mis-pasted campaign link is caught without gating PR merges on a third party.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '37 13 * * 1' # weekly, Monday 13:37 UTC (off the :00 spike)
+
+permissions:
+  contents: read
+
+jobs:
+  zeffy-links:
+    name: Check confirmed Zeffy links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Check confirmed Zeffy campaign links
+        env:
+          ZEFFY_LIVE: '1'
+        run: npx playwright test --config playwright.zeffy-links.config.ts
+
+      - name: Upload report on failure
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: zeffy-link-check-report
+          path: playwright-report/
+          retention-days: 7

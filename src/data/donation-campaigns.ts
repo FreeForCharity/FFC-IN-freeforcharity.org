@@ -41,6 +41,12 @@ export type DonationCampaign = {
   /** Render as a prominent "most popular" card above the directory. */
   featured?: boolean
   /**
+   * The `zeffyFormLink` has been verified against the Zeffy dashboard (not a
+   * derived placeholder). Only `confirmed` campaigns are exercised by the live
+   * Zeffy link check (scripts can't reach Zeffy from CI; see zeffy-links spec).
+   */
+  confirmed?: boolean
+  /**
    * Zeffy pop-up embed link (Share → Pop-up), e.g.
    * `https://www.zeffy.com/embed/<type>/<slug>?modal=true`. Used as the
    * `zeffy-form-link` trigger; a hosted-form fallback href is derived from it.
@@ -80,6 +86,7 @@ export const campaigns: DonationCampaign[] = [
       'Fund free .org domain names and DNS for nonprofits — one of the most-used Free For Charity programs.',
     category: 'Donation',
     featured: true,
+    confirmed: true,
     // CONFIRMED. Zeffy uses an opaque UUID slug here (not the readable name).
     zeffyFormLink: zeffyPopupLink('donation-form/345319a9-b5ed-4ee9-af45-89dc01acc111'),
   },
@@ -90,6 +97,7 @@ export const campaigns: DonationCampaign[] = [
       'Support the AI-driven design and development of fast, secure GitHub Pages websites built for charities.',
     category: 'Custom',
     featured: true,
+    confirmed: true,
     // CONFIRMED from the Zeffy Share → Pop-up snippet.
     zeffyFormLink: zeffyPopupLink('ticketing/website-design-and-development'),
   },
@@ -99,6 +107,7 @@ export const campaigns: DonationCampaign[] = [
     blurb:
       'Back the endowment that sustains domains and email for charities — the largest fundraising campaign in Free For Charity history.',
     category: 'Donation',
+    confirmed: true,
     // Type confirmed (donation-form) from the live endowment-page iframe.
     zeffyFormLink: zeffyPopupLink('donation-form/free-for-charity-endowment-fund'),
   },
