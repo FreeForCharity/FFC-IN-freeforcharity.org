@@ -1,5 +1,6 @@
 import React, { CSSProperties, IframeHTMLAttributes } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { assetPath } from '@/lib/assetPath'
 
 interface ExtendedIframeProps extends IframeHTMLAttributes<HTMLIFrameElement> {
@@ -47,6 +48,14 @@ const Index = () => {
               By donating you help drive our mission and allow us to support more charities with our
               Domain, Website, and other services.
             </p>
+            <Link
+              href="/donate/"
+              className="inline-flex items-center gap-[8px] mb-[20px] text-[20px] font-[500] text-[#b35000] hover:underline lg:justify-start justify-center"
+              data-font="lato-font"
+            >
+              See all donation campaigns
+              <span aria-hidden="true">→</span>
+            </Link>
             {/* Pointing hands image - flipped horizontally to point toward the form on the right */}
             <div className="w-full flex justify-center lg:justify-end">
               <div className="relative w-full max-w-[400px] aspect-[578/386]">
