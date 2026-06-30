@@ -6,6 +6,8 @@ import CharityNonprofitDirectorFaq from '@/components/help-for-charities-compone
 import CallSection from '@/components/help-for-charities-components/call-section'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
+import Faqs from '@/components/pre501c3-components/Faqs'
+import Charity from '@/components/pre501c3-components/charity'
 
 export const metadata: Metadata = {
   title: 'Pre-501(c)(3) Onboarding Guide',
@@ -13,8 +15,6 @@ export const metadata: Metadata = {
     'For charities pending 501(c)(3) status: apply to get a free website—a fast, secure GitHub Pages site built with AI—plus free tools and services from Free For Charity while your application is in progress.',
   alternates: { canonical: '/pre501c3/' },
 }
-import Faqs from '@/components/pre501c3-components/Faqs'
-import Charity from '@/components/pre501c3-components/charity'
 
 const index = () => {
   return (

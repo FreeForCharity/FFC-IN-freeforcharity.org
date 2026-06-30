@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   alternates: { canonical: '/' },
 }
 
-const page = () => {
+const index = () => {
   return (
     <div>
       {/* <HomePage /> */}
@@ -19,4 +19,4 @@ const page = () => {
   )
 }
 
-export default page
+export default index

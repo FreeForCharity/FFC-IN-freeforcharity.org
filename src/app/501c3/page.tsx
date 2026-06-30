@@ -3,6 +3,8 @@ import HeroSection from '@/components/ui/HeroSection'
 import HelpForCharitiesandNonprofit from '@/components/501c3-components/Help-For-Charities-and-Nonprofit'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
+import ReadyToGetStartedAndFaq from '@/components/501c3-components/Ready-to-get-started-and-faqs'
+import CallSection from '@/components/help-for-charities-components/call-section'
 
 export const metadata: Metadata = {
   title: '501(c)(3) Onboarding Guide',
@@ -10,10 +12,8 @@ export const metadata: Metadata = {
     'Apply to get a free website for your 501(c)(3)—a fast, secure GitHub Pages site built with AI—plus free domains, Microsoft 365 email, and technology tools from Free For Charity.',
   alternates: { canonical: '/501c3/' },
 }
-import ReadyToGetStartedAndFaq from '@/components/501c3-components/Ready-to-get-started-and-faqs'
-import CallSection from '@/components/help-for-charities-components/call-section'
 
-const page = () => {
+const index = () => {
   return (
     <div>
       <HeroSection
@@ -34,4 +34,4 @@ const page = () => {
   )
 }
 
-export default page
+export default index
