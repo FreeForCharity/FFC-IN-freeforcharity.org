@@ -1,0 +1,90 @@
+{
+  "generatedAt": "2026-06-30",
+  "reportingYear": 2026,
+  "irsDesignationYear": 2014,
+  "metrics": {
+    "domainsManaged": {
+      "value": 376,
+      "label": "Charity domains under management",
+      "source": "ffcadmin.org/sites-list (FFC-Cloudflare-Automation: sites_list.json)",
+      "verifiedAt": "2026-06-08",
+      "confidence": "high"
+    },
+    "sitesBuilt": {
+      "value": 41,
+      "label": "Charity websites built",
+      "source": "GitHub FreeForCharity FFC-EX-* repositories (active, non-archived)",
+      "verifiedAt": "2026-06-30",
+      "confidence": "high"
+    },
+    "organizationsSupported": {
+      "value": 200,
+      "label": "Charitable organizations supported",
+      "source": "Free For Charity Domain Program (ffcadmin.org/sites-list)",
+      "verifiedAt": "2026-06-08",
+      "confidence": "medium"
+    },
+    "newCharitiesAnnualTarget": {
+      "value": 100,
+      "label": "New charities supported annually (with endowment)",
+      "source": "Endowment program target",
+      "confidence": "high"
+    },
+    "legacyToMigrate": {
+      "value": 64,
+      "label": "Legacy sites in migration",
+      "source": "ffcadmin.org/sites-list tier 3",
+      "verifiedAt": "2026-06-08",
+      "confidence": "high"
+    },
+    "migratedStable": {
+      "value": 6,
+      "label": "Sites fully migrated and stable",
+      "source": "ffcadmin.org/sites-list tier 4",
+      "verifiedAt": "2026-06-08",
+      "confidence": "high"
+    },
+    "volunteers": {
+      "value": null,
+      "label": "Active volunteers",
+      "source": "pending — GitHub contributors + manual roster",
+      "confidence": "unknown"
+    },
+    "volunteerHours": {
+      "value": null,
+      "label": "Volunteer hours contributed",
+      "source": "pending — manual log (no API)",
+      "confidence": "unknown"
+    },
+    "textMessagesHandled": {
+      "value": null,
+      "label": "Support text messages handled",
+      "source": "pending — Gmail Google Voice export (FFC-Cloudflare-Automation#490 Gap B)",
+      "confidence": "unknown"
+    },
+    "uncapturedLeads": {
+      "value": null,
+      "label": "Charity leads in discovery pipeline",
+      "source": "pending — email/text discovery (FFC-Cloudflare-Automation#490 Gap B)",
+      "confidence": "unknown"
+    },
+    "endowmentGoalUsd": {
+      "value": 1000000,
+      "label": "Endowment goal",
+      "source": "static program goal",
+      "confidence": "high"
+    },
+    "endowmentRaisedUsd": {
+      "value": null,
+      "label": "Endowment raised to date",
+      "source": "pending — Zeffy export (FFC-Cloudflare-Automation 45-zeffy-payments-export)",
+      "confidence": "unknown"
+    },
+    "costPerCharityUsdPerYear": {
+      "value": 16.5,
+      "label": "Cost per charity per year",
+      "source": "eNom .org domain cost",
+      "confidence": "medium"
+    }
+  }
+}

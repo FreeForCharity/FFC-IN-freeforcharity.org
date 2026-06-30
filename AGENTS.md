@@ -74,7 +74,7 @@ src/
       Endowment-Features/
       Our-Programs/
       Volunteer-with-Us/
-      Results-2023/
+      Results/
       VoicesofGratitude/
       TheFreeForCharityTeam/
       FrequentlyAskedQuestions/

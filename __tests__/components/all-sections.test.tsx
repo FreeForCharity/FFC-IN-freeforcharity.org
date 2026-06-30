@@ -217,7 +217,7 @@ const sectionComponents: [string, string][] = [
   ['home-page/Hero', '../../src/components/home-page/Hero/index'],
   ['home-page/Mission', '../../src/components/home-page/Mission/index'],
   ['home-page/Our-Programs', '../../src/components/home-page/Our-Programs/index'],
-  ['home-page/Results-2023', '../../src/components/home-page/Results-2023/index'],
+  ['home-page/Results', '../../src/components/home-page/Results/index'],
   ['home-page/SupportFreeForCharity', '../../src/components/home-page/SupportFreeForCharity/index'],
   ['home-page/TheFreeForCharityTeam', '../../src/components/home-page/TheFreeForCharityTeam/index'],
   ['home-page/VoicesofGratitude', '../../src/components/home-page/VoicesofGratitude/index'],
