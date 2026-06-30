@@ -40,7 +40,7 @@ const CharityHeroBackground = () => {
           </p>
           <Link
             href="/volunteer/"
-            className="top-[378px] w-[300px] lg:w-[351px] h-[54px] opacity-100 rounded-[27px] px-[32px] py-[18px] flex items-center justify-center gap-[10px] bg-[#FFFFFF] text-[#113563] text-[20px] font-[400] leading-[100%] mb-[10px] whitespace-nowrap"
+            className="w-[300px] lg:w-[351px] h-[54px] opacity-100 rounded-[27px] px-[32px] py-[18px] flex items-center justify-center gap-[10px] bg-[#FFFFFF] text-[#113563] text-[20px] font-[400] leading-[100%] mb-[10px] whitespace-nowrap"
             data-font="lato-font"
           >
             Volunteer
@@ -48,14 +48,14 @@ const CharityHeroBackground = () => {
           <div className="flex gap-[5px]">
             <Link
               href="/donate/"
-              className="top-[442px] w-[130px] lg:w-[173px] h-[54px] opacity-100 rounded-[27px] px-[32px] py-[18px] flex items-center justify-center gap-[10px] bg-[#FFFFFF] text-[#113563] text-[20px] font-[400] leading-[100%] whitespace-nowrap"
+              className="w-[130px] lg:w-[173px] h-[54px] opacity-100 rounded-[27px] px-[32px] py-[18px] flex items-center justify-center gap-[10px] bg-[#FFFFFF] text-[#113563] text-[20px] font-[400] leading-[100%] whitespace-nowrap"
               data-font="lato-font"
             >
               Donate
             </Link>
             <Link
               href="/help-for-charities/"
-              className="top-[442px] w-[173px] h-[54px] opacity-100 rounded-[27px] px-[32px] py-[18px] flex items-center justify-center gap-[10px] bg-[#FFFFFF] text-[#113563] text-[20px] font-[400] leading-[100%] whitespace-nowrap"
+              className="w-[173px] h-[54px] opacity-100 rounded-[27px] px-[32px] py-[18px] flex items-center justify-center gap-[10px] bg-[#FFFFFF] text-[#113563] text-[20px] font-[400] leading-[100%] whitespace-nowrap"
               data-font="lato-font"
             >
               Help for Charities
