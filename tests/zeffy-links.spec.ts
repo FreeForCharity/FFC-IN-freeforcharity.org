@@ -19,7 +19,7 @@ const LIVE = process.env.ZEFFY_LIVE === '1'
 const t = LIVE ? test : test.skip
 const confirmed = campaigns.filter((c) => c.confirmed)
 
-// Markers a real Zeffy form/landing page contains; a bare 404 page won't.
+// Markers that a real Zeffy form/landing page contains; a bare 404 page won't.
 const ZEFFY_FORM_MARKERS = [
   'zeffy',
   'donation',
