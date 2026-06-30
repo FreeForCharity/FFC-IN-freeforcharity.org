@@ -16,7 +16,7 @@ jest.mock('@/components/ui/Transparentbtn', () => {
 describe('Free-for-Charity-Donation-Options Component', () => {
   it('renders the header correctly', () => {
     render(<FreeForCharityDonationOptions />)
-    const headerElement = screen.getByText('Free for Charity Donation Options')
+    const headerElement = screen.getByText('Free For Charity Donation Options')
     expect(headerElement).toBeInTheDocument()
   })
 

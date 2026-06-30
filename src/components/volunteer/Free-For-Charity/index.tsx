@@ -9,10 +9,10 @@ const Index = () => {
         {/* Header Section */}
         <div className="text-center">
           <h1 className="text-[30px] md:text-[40px] font-[700] leading-[44px] text-[#b35000] mb-[20px]">
-            Free for Charity Volunteer Options
+            Free For Charity Volunteer Options
           </h1>
           <p className="text-[18px] font-[500] text-black pb-[1em]" data-font="lato-font">
-            Free for Charity is always looking for motivated and skilled people from around the US
+            Free For Charity is always looking for motivated and skilled people from around the US
             to help guide and participate in our training programs and direct support to charities.
           </p>
           <p className="text-[18px] font-[700] text-black mb-[50px]" data-font="lato-font">
@@ -66,7 +66,7 @@ const Index = () => {
             data-font="lato-font"
           >
             Every organizations success ultimately falls down to how much support the organization
-            received for its causes. Here at Free for Charity it is our mission to provide world
+            received for its causes. Here at Free For Charity it is our mission to provide world
             class training programs that at the same time help charities throughout the United
             States.
           </p>
@@ -78,11 +78,11 @@ const Index = () => {
             data-font="lato-font"
           >
             From the day to day costs of running servers, websites, and paying for software to
-            support our training programs; Free for Charity can always put to good use your
+            support our training programs; Free For Charity can always put to good use your
             donation. Consider your options to donate today.
           </p>
           <p className="text-[18px] font-[500] leading-[27px] mb-[5.82%]" data-font="lato-font">
-            In addition to financial support, Free for Charity also needs community support through{' '}
+            In addition to financial support, Free For Charity also needs community support through{' '}
             <a href="/volunteer/" className="text-[#0567B1]">
               skilled volunteers
             </a>{' '}

@@ -51,7 +51,7 @@ const CharityFAQ: React.FC = () => {
           >
             Yes, there is a need to provide help for charities in many{' '}
             <strong>
-              ways! Free for Charity is not the only ‘charity for charities’ helping to lower your
+              ways! Free For Charity is not the only ‘charity for charities’ helping to lower your
               costs.
             </strong>{' '}
             Another great charity showing all the big name things you can get for free or at heavy
@@ -71,13 +71,13 @@ const CharityFAQ: React.FC = () => {
               marketing by well-funded for profit companies.
             </strong>
             <br /> <br />
-            The Free for Charity services, consultant, and technology products directories seek to
+            The Free For Charity services, consultant, and technology products directories seek to
             fix this problem with our motto:{' '}
             <strong>“Decisions should be made by metrics, not marketing.”</strong>
           </AccordionItem>
 
           <AccordionItem number="2" title="Where did the idea come from?">
-            Free for Charity was started when the founder first became a board member on the local
+            Free For Charity was started when the founder first became a board member on the local
             children’s museum’s board of directors. In just a few short weeks he uncovered{' '}
             <strong>
               many items the museum was paying for that were free to charities but the museum was
@@ -110,14 +110,14 @@ const CharityFAQ: React.FC = () => {
               procurement management methods and the technology that supports business while still
               running day-to-day operations.
             </strong>{' '}
-            This is where Free for Charity helps charities’ projects to thrive.
+            This is where Free For Charity helps charities’ projects to thrive.
           </AccordionItem>
 
           <AccordionItem
             number="4"
-            title="Where does Free for Charity come in to help our charity or nonprofit?"
+            title="Where does Free For Charity come in to help our charity or nonprofit?"
           >
-            Free for Charity will fill these vital roles for non profits and charities saving money
+            Free For Charity will fill these vital roles for non profits and charities saving money
             for real program expenses.{' '}
             <strong>
               Most small to medium charities do not have the budget for full-time IT staff or
@@ -139,14 +139,14 @@ const CharityFAQ: React.FC = () => {
             and call companies for discounts is a labor cost that counts as “overhead” because it
             helps more than one program.{' '}
             <strong>
-              With Free for Charity doing the work the target charity does not have to claim costs
+              With Free For Charity doing the work the target charity does not have to claim costs
               for overhead.
             </strong>{' '}
             Your nonprofit or charity group will gain access to professionals that have more
             expertise with the common business tasks like researching products to meet the charities
             needs.{' '}
             <strong>
-              Free for Charity will also show you recommended technology and business practices that
+              Free For Charity will also show you recommended technology and business practices that
               can save thousands each year.
             </strong>
           </AccordionItem>
@@ -155,7 +155,7 @@ const CharityFAQ: React.FC = () => {
             number="5"
             title="How can I tell if we have high overhead? / My charity does not have high overhead!"
           >
-            Free for Charity is all about efficiency.{' '}
+            Free For Charity is all about efficiency.{' '}
             <strong>
               Many charities ‘fix’ this overhead problem by treating all staff as working on / in
               the programs or pro-rating between them all and hoping they will not get audited.
@@ -211,7 +211,7 @@ const CharityFAQ: React.FC = () => {
             </strong>
             <br /> <br />
             <strong>
-              Free for Charity will manage both the work and the results of the projects in-house.
+              Free For Charity will manage both the work and the results of the projects in-house.
               All you have to do as a charity is to work with your project manager to set
               expectations and define results at each stage of the project.
             </strong>
@@ -224,14 +224,14 @@ const CharityFAQ: React.FC = () => {
             management support once it is done unless that one person stays on as a volunteer
             permanently.{' '}
             <strong>
-              With Free for Charity if your initial volunteer leaves another from the web team still
+              With Free For Charity if your initial volunteer leaves another from the web team still
               works on your project
             </strong>{' '}
             and keeps your websites running and maintained. This is just one example.
           </AccordionItem>
 
           <AccordionItem number="8" title="What do I need to get started?">
-            All you need to do to get Free for Charity to provide help for your charity’s mission
+            All you need to do to get Free For Charity to provide help for your charity’s mission
             today is to contact us with some basic information about your charity. We need to know
             what type of projects you would like us to look at or undertake. Please fill out the
             form below and we will be in touch shortly.

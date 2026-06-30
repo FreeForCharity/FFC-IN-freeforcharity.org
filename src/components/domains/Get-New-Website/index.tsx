@@ -40,7 +40,7 @@ const index = () => {
               className="mb-[13px] w-[85%] mx-auto font-[500] text-[20px] leading-[30px] text-center"
               data-font="raleway-font"
             >
-              New site design has a backlog with Free for Charity but please reach out to get on the
+              New site design has a backlog with Free For Charity but please reach out to get on the
               list for a new free charity website. We try to support 100 Charities a year. If you
               have your own design team and just need our hosting, plugins, and themes; follow the
               steps at either the 501c3 or pre-501c3 onboarding pages to complete next steps.

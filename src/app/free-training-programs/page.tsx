@@ -8,7 +8,7 @@ import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 export const metadata: Metadata = {
   title: 'Free Training Programs',
   description:
-    'Build real-world skills in business and technology through hands-on projects that help nonprofit organizations. Free for Charity offers training in research, business analysis, and web development.',
+    'Build real-world skills in business and technology through hands-on projects that help nonprofit organizations. Free For Charity offers training in research, business analysis, and web development.',
   alternates: {
     canonical: '/free-training-programs/',
   },
@@ -20,32 +20,32 @@ const programs = [
     subtitle: 'Online and offline research and data control training program',
     level: 'Entry to mid-level program',
     description:
-      'Everyone knows how to search the web to find what they need. Now it is time to move beyond Google and learn how to research and control data with Free for Charity projects. For our research projects you will help the whole nonprofit community. Your research is used by charities to make decisions on how best to use their resources.',
+      'Everyone knows how to search the web to find what they need. Now it is time to move beyond Google and learn how to research and control data with Free For Charity projects. For our research projects you will help the whole nonprofit community. Your research is used by charities to make decisions on how best to use their resources.',
     skillNote:
       'In addition to helping charities you are starting to learn a key skill set of research and data control. These skills are geographically independent and you can help growing businesses from anywhere as an online employee.',
     salary: '$24,000 to $52,000 per year',
-    cta: 'Click here now to sign up for the research and data control training programs with Free for Charity.',
+    cta: 'Click here now to sign up for the research and data control training programs with Free For Charity.',
   },
   {
     title: 'Business Analysts',
     subtitle: 'Online and offline business analyst training program',
     level: 'Entry to high-level program',
     description:
-      'In your day to day life you might never meet a fully paid business or market analyst but you do make decisions about what to buy and from whom every day. That is the basic level of what a company or product analyst does. Free for Charity is offering a program to train you on how to take that skill of comparing products, companies, and services to a professional level.',
+      'In your day to day life you might never meet a fully paid business or market analyst but you do make decisions about what to buy and from whom every day. That is the basic level of what a company or product analyst does. Free For Charity is offering a program to train you on how to take that skill of comparing products, companies, and services to a professional level.',
     skillNote:
       'This means something as simple as a comparison between two similar products based on your research or something as complex as deciding what types of products meet a specific business need. Most people with the formal title of Business Analyst have a college degree but many employers still want to see work product to back it up.',
     salary: '$52,898 average per year',
-    cta: 'Click here now to sign up for the business analyst training program with Free for Charity.',
+    cta: 'Click here now to sign up for the business analyst training program with Free For Charity.',
   },
   {
     title: 'Web Developers',
     subtitle: 'Website, web application, web development training program',
     level: 'Entry to high-level program',
     description:
-      'From creating free charity websites to creating engaging content for a charity; web developers are critical members of any team. You can learn or expand on your skills in the Free for Charity web developer training program. With such a broad range of skills it is common for someone to be an expert in a single area.',
+      'From creating free charity websites to creating engaging content for a charity; web developers are critical members of any team. You can learn or expand on your skills in the Free For Charity web developer training program. With such a broad range of skills it is common for someone to be an expert in a single area.',
     skillNote: '',
     salary: '$69,781 average per year',
-    cta: 'Click here now to sign up for the web developer training program with Free for Charity.',
+    cta: 'Click here now to sign up for the web developer training program with Free For Charity.',
   },
 ]
 
@@ -77,8 +77,8 @@ const FreeTrainingProgramsPage = () => {
             className="text-[18px] font-[500] leading-[28px] text-[#333] text-center mb-8"
             data-font="lato-font"
           >
-            At Free for Charity the projects you will work on while training and expanding your
-            skills will help both Free for Charity directly and the assisted charities that we work
+            At Free For Charity the projects you will work on while training and expanding your
+            skills will help both Free For Charity directly and the assisted charities that we work
             with. It is truly a win-win-win.
           </p>
 
@@ -102,7 +102,7 @@ const FreeTrainingProgramsPage = () => {
               <div className="text-[40px] mb-2">&#127775;</div>
               <h3 className="text-[18px] font-[700] text-[#1D6E90] mb-2">FFC Wins</h3>
               <p className="text-[15px] font-[500] text-[#333]" data-font="lato-font">
-                Free for Charity captures your skills and motivation to bring efficiencies to the
+                Free For Charity captures your skills and motivation to bring efficiencies to the
                 nonprofit industry as a whole.
               </p>
             </div>

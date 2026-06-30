@@ -37,7 +37,7 @@ const index = () => {
       <div className="flex w-full max-w-[90%] mx-auto">
         <HelpForCharities
           title="Help For Charities and Nonprofit Groups from an Unbiased Fellow Charity"
-          description="Free for Charity is working every day to provide your charity, and you the charity or nonprofit director with the tools and techniques needed to thrive, FREE. Sign up today to get access to all of this for your nonprofit or charity group today even if you are still pending final 501c3 status."
+          description="Free For Charity is working every day to provide your charity, and you the charity or nonprofit director with the tools and techniques needed to thrive, FREE. Sign up today to get access to all of this for your nonprofit or charity group today even if you are still pending final 501c3 status."
           bg="#FCFCFC"
         />
       </div>

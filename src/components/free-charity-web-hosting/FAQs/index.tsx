@@ -200,7 +200,7 @@ const AccordionLayout = () => {
           {/* Bottom Independent Accordion */}
           <div className="w-full max-w-md mx-auto">
             <AccordionItem
-              title="If I am an individual or business and donate money for a domain package to Free for Charity is this tax-deductible?"
+              title="If I am an individual or business and donate money for a domain package to Free For Charity is this tax-deductible?"
               isOpen={bottomOpen}
               onToggle={() => setBottomOpen(!bottomOpen)}
               small

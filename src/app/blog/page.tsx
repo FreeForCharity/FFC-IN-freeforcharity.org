@@ -52,7 +52,7 @@ const blogPosts = [
     heading: 'Podio Sponsorship Program',
     date: '',
     description:
-      'With our brand new 501c3 status we are getting access to a lot of new and exciting tools. Free for Charity is now formally testing out Podio. Once tested we will add it to our technology directory.',
+      'With our brand new 501c3 status we are getting access to a lot of new and exciting tools. Free For Charity is now formally testing out Podio. Once tested we will add it to our technology directory.',
     imageUrl: '/Images/donation.webp',
   },
 ]
