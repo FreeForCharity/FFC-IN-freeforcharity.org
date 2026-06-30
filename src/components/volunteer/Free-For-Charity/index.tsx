@@ -1,7 +1,149 @@
 import React from 'react'
 import Transparentbtn from '@/components/ui/Transparentbtn'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
+
+// Free For Charity's Idealist presence. The general board lists every live
+// opportunity; specific postings are linked where they exist.
+const IDEALIST_BOARD =
+  'https://www.idealist.org/en/nonprofit/356bfc8e2ae64f83beea4a4e677e99d7-free-for-charity-state-college#opportunities'
+const IDEALIST_WEB_DEVELOPER =
+  'https://www.idealist.org/en/volunteer-opportunity/c3d5f8b143224d4dbe7074d138a63370-charity-web-developer-state-college-pa-free-for-charity-state-college'
+const IDEALIST_RECRUITER =
+  'https://www.idealist.org/en/volunteer-opportunity/685f715b4d294936898237da5d2649a6-volunteer-recruiter-and-onboarding-manager-state-college-pa-free-for-charity-state-college'
+
+// Established volunteer roles beyond the featured Web Developer track. Each
+// links to its FFC Admin detail page (`adminPath`, null where one doesn't exist
+// yet), a free training track (`trainingPath`, null for non-track roles), and an
+// Idealist application (`idealistUrl` — a specific posting where one exists,
+// otherwise the general board until a posting is created). `group` splits the
+// skill-based technical tracks from the cross-cutting / operations roles.
+type VolunteerRole = {
+  title: string
+  blurb: string
+  adminPath: string | null
+  trainingPath: string | null
+  idealistUrl: string
+  group: 'tech' | 'other'
+}
+
+const volunteerRoles: VolunteerRole[] = [
+  {
+    title: 'Microsoft 365 Administrator',
+    blurb:
+      'Run email, identity, and security for charities—and earn the AB-900 Microsoft 365 fundamentals certification (FFC sponsors the exam).',
+    adminPath: '/volunteer/microsoft-365-admin/',
+    trainingPath: '/training-plan/',
+    idealistUrl: IDEALIST_BOARD,
+    group: 'tech',
+  },
+  {
+    title: 'Google Workspace Administrator',
+    blurb:
+      'Provision users, drives, and security controls, and support charity staff across Google Workspace.',
+    adminPath: '/volunteer/google-workspace-admin/',
+    trainingPath: '/training/google-workspace-admin/',
+    idealistUrl: IDEALIST_BOARD,
+    group: 'tech',
+  },
+  {
+    title: 'Data & Analytics',
+    blurb:
+      'Measure impact with consent-gated analytics, dashboards, and on-page SEO alongside the web team.',
+    adminPath: '/volunteer/data-analytics/',
+    trainingPath: '/training/data-analytics/',
+    idealistUrl: IDEALIST_BOARD,
+    group: 'tech',
+  },
+  {
+    title: 'Canva Designer',
+    blurb:
+      'Create brand kits, social templates, and marketing collateral for nonprofits with Canva Pro.',
+    adminPath: '/volunteer/canva-designer/',
+    trainingPath: '/canva-designer-path/',
+    idealistUrl: IDEALIST_BOARD,
+    group: 'tech',
+  },
+  {
+    title: 'Volunteer Recruiter & Onboarding Manager',
+    blurb:
+      'Manage FFC’s volunteer pipeline: post opportunities, screen applicants, and onboard new volunteers.',
+    // FFC Admin detail page pending; the role details live on the Idealist posting for now.
+    adminPath: null,
+    trainingPath: null,
+    idealistUrl: IDEALIST_RECRUITER,
+    group: 'other',
+  },
+  {
+    title: 'Military Volunteers (MOVSM)',
+    blurb:
+      'Serving or a veteran? Contribute in any FFC role and track hours toward MOVSM recognition.',
+    adminPath: '/volunteer/military-volunteers/',
+    trainingPath: null,
+    idealistUrl: IDEALIST_BOARD,
+    group: 'other',
+  },
+]
 
 const Index = () => {
+  const techRoles = volunteerRoles.filter((r) => r.group === 'tech')
+  const otherRoles = volunteerRoles.filter((r) => r.group === 'other')
+
+  const roleCard = (role: VolunteerRole) => (
+    <div
+      key={role.title}
+      className="flex flex-col bg-white rounded-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.08)] p-6"
+    >
+      <h4 className="text-[22px] font-[700] text-[#1D6E90] mb-[10px]" data-font="lato-font">
+        {role.title}
+      </h4>
+      <p
+        className="text-[16px] font-[500] leading-[26px] text-[#333] mb-[18px] grow"
+        data-font="lato-font"
+      >
+        {role.blurb}
+      </p>
+      <div className="flex flex-wrap gap-x-[20px] gap-y-[8px]">
+        {role.adminPath ? (
+          <a
+            href={ffcAdminUrl(role.adminPath)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-[6px] text-[15px] font-[600] text-[#1D6E90] hover:underline"
+            data-font="lato-font"
+          >
+            <span>Position details</span>
+            <span aria-hidden="true">&rarr;</span>
+            <span className="sr-only">on FFC Admin (opens in a new tab)</span>
+          </a>
+        ) : null}
+        {role.trainingPath ? (
+          <a
+            href={ffcAdminUrl(role.trainingPath)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-[6px] text-[15px] font-[600] text-[#1D6E90] hover:underline"
+            data-font="lato-font"
+          >
+            <span>Free training</span>
+            <span aria-hidden="true">&rarr;</span>
+            <span className="sr-only">on FFC Admin (opens in a new tab)</span>
+          </a>
+        ) : null}
+        <a
+          href={role.idealistUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-[6px] text-[15px] font-[600] text-[#b35000] hover:underline"
+          data-font="lato-font"
+        >
+          <span>Apply on Idealist</span>
+          <span aria-hidden="true">&rarr;</span>
+          <span className="sr-only">(opens Idealist in a new tab)</span>
+        </a>
+      </div>
+    </div>
+  )
+
   return (
     <div className="w-full pt-[60px] pb-[40px] bg-[#FCFCFC]">
       {/* Main Content Container */}
@@ -53,6 +195,178 @@ const Index = () => {
         </div>
       </div>
 
+      {/* Volunteer Roles We're Seeking */}
+      <div className="w-full max-w-[90%] md:max-w-[80%] mx-auto pt-[20px] pb-[20px]">
+        <div className="text-center mb-[40px]">
+          <h2 className="text-[28px] md:text-[36px] font-[700] leading-[40px] text-[#b35000] mb-[14px]">
+            Volunteer Roles We&rsquo;re Seeking
+          </h2>
+          <p
+            className="text-[18px] font-[500] leading-[28px] text-black max-w-[820px] mx-auto"
+            data-font="lato-font"
+          >
+            Our biggest need is building free charity websites with AI development agents&mdash;but
+            we staff every part of a nonprofit&rsquo;s technology: Microsoft 365 and Google
+            Workspace administration, data &amp; analytics, design, and the people who recruit and
+            onboard volunteers. Most roles have full details and a free training track on the FFC
+            Admin portal, and every one links to an application on Idealist. Pick the one that fits
+            you&mdash;then complete the Core Competencies prerequisite above to get started.
+          </p>
+        </div>
+
+        {/* Featured: AI-assisted web development (our largest workflow) */}
+        <div className="bg-[#2A6682] rounded-[20px] p-8 text-white mb-[24px]">
+          <span className="inline-block text-[13px] font-[700] uppercase tracking-wider bg-white text-[#2A6682] px-[12px] py-[4px] rounded-full mb-[14px]">
+            Most needed
+          </span>
+          <h3 className="text-[26px] font-[700] mb-[10px]" data-font="lato-font">
+            AI-Assisted Web Developers
+          </h3>
+          <p className="text-[16px] font-[500] leading-[26px] mb-[20px]" data-font="lato-font">
+            Build fast, secure GitHub Pages websites for nonprofits using AI development agents
+            (Claude and GitHub Copilot) with Next.js, React, and Tailwind CSS. This is our largest
+            and fastest-growing volunteer workflow&mdash;every site you help ship puts another
+            charity online for free.
+          </p>
+          <div className="flex flex-wrap gap-x-[24px] gap-y-[12px] items-center">
+            <a
+              href={IDEALIST_WEB_DEVELOPER}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-[8px] rounded-[10px] bg-white px-[24px] py-[10px] text-[16px] font-[700] text-[#2A6682] transition-opacity hover:opacity-90"
+              data-font="lato-font"
+            >
+              <span>Apply on Idealist</span>
+              <span aria-hidden="true">&rarr;</span>
+              <span className="sr-only">(opens Idealist in a new tab)</span>
+            </a>
+            <a
+              href={ffcAdminUrl('/volunteer/web-developer/')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-[8px] text-[16px] font-[600] text-white underline-offset-4 hover:underline"
+              data-font="lato-font"
+            >
+              <span>Position details on FFC Admin</span>
+              <span aria-hidden="true">&rarr;</span>
+              <span className="sr-only">(opens FFC Admin in a new tab)</span>
+            </a>
+            <a
+              href={ffcAdminUrl(adminLinks['web-developer-training'].newModel)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-[8px] text-[16px] font-[600] text-white underline-offset-4 hover:underline"
+              data-font="lato-font"
+            >
+              <span>Free web developer training</span>
+              <span aria-hidden="true">&rarr;</span>
+              <span className="sr-only">(opens FFC Admin in a new tab)</span>
+            </a>
+            <a
+              href={ffcAdminUrl(adminLinks['developer-environment-setup'].newModel)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-[8px] text-[16px] font-[600] text-white underline-offset-4 hover:underline"
+              data-font="lato-font"
+            >
+              <span>Set up your AI dev environment</span>
+              <span aria-hidden="true">&rarr;</span>
+              <span className="sr-only">(opens FFC Admin in a new tab)</span>
+            </a>
+          </div>
+        </div>
+
+        {/* Technical tracks */}
+        <h3
+          className="text-[22px] md:text-[26px] font-[700] text-[#333] mb-[16px] mt-[8px]"
+          data-font="lato-font"
+        >
+          Build &amp; run charity technology
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">{techRoles.map(roleCard)}</div>
+
+        {/* More ways to serve */}
+        <h3
+          className="text-[22px] md:text-[26px] font-[700] text-[#333] mb-[16px] mt-[40px]"
+          data-font="lato-font"
+        >
+          More ways to serve
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">{otherRoles.map(roleCard)}</div>
+
+        {/* Grow with us — certifications, CE credits, advancement */}
+        <h3
+          className="text-[22px] md:text-[26px] font-[700] text-[#333] mb-[6px] mt-[44px]"
+          data-font="lato-font"
+        >
+          Grow with us
+        </h3>
+        <p
+          className="text-[16px] font-[500] leading-[26px] text-[#555] mb-[20px] max-w-[820px]"
+          data-font="lato-font"
+        >
+          Volunteering at Free For Charity is also a career on-ramp: earn industry certifications,
+          log professional continuing-education credits for your hours, and advance as you
+          contribute.
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-[24px]">
+          <div className="rounded-[20px] border border-[#e5e5e5] bg-white p-6">
+            <h4 className="text-[18px] font-[700] text-[#1D6E90] mb-[8px]" data-font="lato-font">
+              Free certifications
+            </h4>
+            <p className="text-[15px] font-[500] leading-[24px] text-[#333]" data-font="lato-font">
+              Work toward AB-900 (Microsoft 365 Copilot &amp; agent fundamentals; FFC sponsors the
+              exam), GitHub Foundations, and Canva Design School credentials while you serve.
+            </p>
+          </div>
+          <div className="flex flex-col rounded-[20px] border border-[#e5e5e5] bg-white p-6">
+            <h4 className="text-[18px] font-[700] text-[#1D6E90] mb-[8px]" data-font="lato-font">
+              Professional CE credits
+            </h4>
+            <p
+              className="text-[15px] font-[500] leading-[24px] text-[#333] mb-[12px] grow"
+              data-font="lato-font"
+            >
+              Log your volunteer hours as ISC2 CPEs, PMI PDUs, CompTIA CEUs, or CFRE points.
+            </p>
+            <a
+              href={ffcAdminUrl('/continuing-education/')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-[6px] text-[15px] font-[600] text-[#9a3412] hover:underline"
+              data-font="lato-font"
+            >
+              <span>See the credits you can earn</span>
+              <span aria-hidden="true">&rarr;</span>
+              <span className="sr-only">on FFC Admin (opens in a new tab)</span>
+            </a>
+          </div>
+          <div className="flex flex-col rounded-[20px] border border-[#e5e5e5] bg-white p-6">
+            <h4 className="text-[18px] font-[700] text-[#1D6E90] mb-[8px]" data-font="lato-font">
+              A path to grow
+            </h4>
+            <p
+              className="text-[15px] font-[500] leading-[24px] text-[#333] mb-[12px] grow"
+              data-font="lato-font"
+            >
+              Advance the contributor ladder: Contributor &rarr; Intern &rarr; Mentor &rarr;
+              Maintainer.
+            </p>
+            <a
+              href={ffcAdminUrl(adminLinks['contributor-ladder'].newModel)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-[6px] text-[15px] font-[600] text-[#9a3412] hover:underline"
+              data-font="lato-font"
+            >
+              <span>See the contributor ladder</span>
+              <span aria-hidden="true">&rarr;</span>
+              <span className="sr-only">on FFC Admin (opens in a new tab)</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
       {/* Two-Column Section - Responsive */}
       <div className="w-full max-w-[90%] mx-auto py-[3%] flex flex-col md:flex-row gap-8 md:gap-0">
         {/* Left Column */}
@@ -94,13 +408,13 @@ const Index = () => {
         {/* Right Column - Button */}
         <div>
           <a
-            href="https://www.idealist.org/en/nonprofit/356bfc8e2ae64f83beea4a4e677e99d7-free-for-charity-state-college#opportunities"
+            href={IDEALIST_BOARD}
             className="inline-block px-6 py-3 text-[16px] font-bold text-white bg-[#0056B3] rounded-md text-center no-underline transition-colors duration-300 ease-in-out hover:bg-[#004494]"
             data-font="aria-font"
             target="_blank"
             rel="noopener noreferrer"
           >
-            View Our Volunteer Opportunities on Idealist
+            Browse all volunteer opportunities on Idealist
           </a>
         </div>
       </div>
