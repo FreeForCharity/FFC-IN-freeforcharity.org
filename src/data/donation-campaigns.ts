@@ -6,18 +6,18 @@
 // turns any element carrying a `zeffy-form-link` attribute into a trigger that
 // opens that campaign's form in a modal.
 //
-// ⚠️ VERIFY URLS BEFORE MERGE. The pop-up link comes from the Zeffy dashboard
-// (campaign → Share → Pop-up) and looks like:
-//   https://www.zeffy.com/embed/<type>/<slug>?modal=true
-// Neither the <type> segment (donation-form | ticketing | membership | shop)
-// NOR the slug is derivable from the campaign name: the type varies (e.g.
-// "Website Design and Development" is `ticketing`, not `donation-form`) and the
-// slug is sometimes a readable name and sometimes an opaque UUID. Copy each link
-// verbatim from the dashboard. Zeffy 403s CI crawlers (see `.lycheeignore`), so
-// these can't be link-checked here.
-// CONFIRMED: free-domain (donation-form, UUID), website-design (ticketing),
-// endowment (donation-form, from the live endowment-page iframe). All others
-// are placeholders — VERIFY.
+// All nine campaigns below are CONFIRMED: each `zeffyFormLink` was copied
+// verbatim from the Zeffy dashboard (campaign → Share → Pop-up), which looks
+// like https://www.zeffy.com/embed/<type>/<slug>?modal=true.
+//
+// When ADDING a campaign, treat it as unverified until checked: neither the
+// <type> segment (donation-form | ticketing | membership | shop) NOR the slug
+// is derivable from the campaign name (e.g. "Website Design and Development" is
+// `ticketing`, not `donation-form`; slugs are sometimes opaque UUIDs). Copy the
+// link verbatim and set `confirmed: true` only once verified. Zeffy 403s CI
+// crawlers (see `.lycheeignore`), so links can't be link-checked in normal CI —
+// the live `zeffy-links` workflow checks every `confirmed` campaign with a real
+// browser, and only `confirmed` campaigns render on /donate (fail-safe).
 
 export const ZEFFY_BASE = 'https://www.zeffy.com'
 
@@ -63,10 +63,13 @@ export function zeffyPopupLink(typeAndSlug: string): string {
 /**
  * Hosted-form URL derived from a pop-up embed link, used as the no-JS / new-tab
  * fallback href (the embed script intercepts the click for the modal when JS is
- * available). Strips the `/embed/` segment and the `?modal=true` query.
+ * available). Strips the `/embed/` segment and removes ONLY the `modal` query
+ * param, preserving any others Zeffy may add (e.g. locale / UTM).
  */
 export function zeffyHostedUrl(formLink: string): string {
-  return formLink.replace('/embed/', '/').replace(/\?.*$/, '')
+  const url = new URL(formLink.replace('/embed/', '/'))
+  url.searchParams.delete('modal')
+  return url.toString()
 }
 
 export const campaigns: DonationCampaign[] = [
@@ -147,7 +150,9 @@ export const campaigns: DonationCampaign[] = [
     blurb:
       'Reserve tickets to the annual gala celebrating the charities and volunteers we support.',
     category: 'Event',
-    zeffyFormLink: zeffyPopupLink('ticketing/free-for-charity-annual-gala'), // VERIFY (type + slug)
+    confirmed: true,
+    // CONFIRMED from the Zeffy Share → Pop-up snippet (type `ticketing`).
+    zeffyFormLink: zeffyPopupLink('ticketing/free-for-charity-annual-gala'),
   },
   {
     key: 'shop',

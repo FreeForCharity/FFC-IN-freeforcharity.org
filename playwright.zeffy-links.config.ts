@@ -35,7 +35,9 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 1,
-  reporter: process.env.CI ? 'list' : 'html',
+  // On CI emit both: 'list' for inline log output AND 'html' so the
+  // playwright-report/ artifact the workflow uploads on failure is populated.
+  reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'html',
   use: {
     ...devices['Desktop Chrome'],
     launchOptions: {
