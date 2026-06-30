@@ -33,7 +33,9 @@ const ZEFFY_FORM_MARKERS = [
 const NOT_FOUND_MARKERS = ['page not found', "doesn't exist", 'page you are looking for']
 
 test.describe('Zeffy confirmed campaign links (live)', () => {
-  test.describe.configure({ timeout: 60_000, retries: 1 })
+  // Per-suite timeout only; let the config control retries (CI gets 2, to
+  // tolerate transient Zeffy flakiness).
+  test.describe.configure({ timeout: 60_000 })
 
   for (const c of confirmed) {
     t(`${c.key}: pop-up embed link resolves to a Zeffy form`, async ({ page }) => {
