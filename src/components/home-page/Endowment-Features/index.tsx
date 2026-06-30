@@ -41,7 +41,7 @@ const Home: React.FC = () => {
               className="inline-flex items-center gap-[8px] rounded-[27px] bg-[#2A6682] px-[36px] py-[16px] text-[20px] font-[500] text-white transition-colors hover:bg-[#22556b]"
               data-font="lato-font"
             >
-              Support the Endowment Fund
+              <span>Support the Endowment Fund</span>
               <span aria-hidden="true">→</span>
             </Link>
           </div>
