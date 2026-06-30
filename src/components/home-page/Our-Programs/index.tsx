@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import OrangeFaqItem from '@/components/ui/OrangeFaqItem'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
@@ -31,6 +32,14 @@ const index = () => {
             Provides free .org domain names, Microsoft 365 with Outlook email, & Microsoft Teams to
             501c3 charities.
           </p>
+          <Link
+            href="/domains/"
+            className="inline-flex items-center gap-[8px] mt-[16px] text-[20px] font-[500] text-[#b35000] hover:underline"
+            data-font="lato-font"
+          >
+            <span>Learn more about FFC Domains</span>
+            <span aria-hidden="true">→</span>
+          </Link>
         </div>
 
         {/* faqs  */}
@@ -87,6 +96,14 @@ const index = () => {
             Free static-site hosting for nonprofits on GitHub Pages, with modern websites built by
             AI development agents (Claude and GitHub Copilot):
           </p>
+          <Link
+            href="/free-charity-web-hosting/"
+            className="inline-flex items-center gap-[8px] mt-[16px] text-[20px] font-[500] text-[#b35000] hover:underline"
+            data-font="lato-font"
+          >
+            <span>Learn more about FFC Hosting</span>
+            <span aria-hidden="true">→</span>
+          </Link>
         </div>
 
         {/* faqs  */}
@@ -163,6 +180,14 @@ const index = () => {
             sponsored organizations. We benefit when you use these services as well as your
             organization benefiting.
           </p>
+          <Link
+            href="/consulting/"
+            className="inline-flex items-center gap-[8px] mt-[16px] text-[20px] font-[500] text-[#b35000] hover:underline"
+            data-font="lato-font"
+          >
+            <span>Learn more about FFC Consulting</span>
+            <span aria-hidden="true">→</span>
+          </Link>
         </div>
 
         {/* faqs  */}

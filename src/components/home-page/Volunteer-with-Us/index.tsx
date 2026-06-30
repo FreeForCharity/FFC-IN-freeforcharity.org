@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { assetPath } from '@/lib/assetPath'
 
 const index = () => {
@@ -20,17 +21,15 @@ const index = () => {
           providing technical expertise, or supporting our programs, your contributions are
           invaluable to our mission.
         </p>
-        <a
-          href="https://www.idealist.org/en/nonprofit/356bfc8e2ae64f83beea4a4e677e99d7-free-for-charity-state-college#opportunities"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-[216px] h-[62px] top-[261px] left-[611px] rounded-[27px] 
-             flex items-center justify-center px-[32px] py-[18px] gap-[10px] 
+        <Link
+          href="/volunteer/"
+          className="w-[216px] h-[62px] rounded-[27px]
+             flex items-center justify-center px-[32px] py-[18px] gap-[10px]
              text-[#113563] mx-auto mt-[30px] bg-white text-[20px] font-[400] font-sans text-center"
           data-font="lato-font"
         >
           Volunteer
-        </a>
+        </Link>
 
         <Image
           src={assetPath('/Images/Volunteer-with-Us.webp')}
