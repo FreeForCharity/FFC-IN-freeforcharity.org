@@ -11,7 +11,7 @@ describe('DonationCampaigns Component', () => {
 
   it('renders the general fund as a Zeffy pop-up CTA', () => {
     render(<DonationCampaigns />)
-    const general = campaigns.find((c) => c.embed)!
+    const general = campaigns.find((c) => c.primary)!
     const btn = screen.getByRole('link', { name: /Donate Now/i })
     expect(btn).toHaveAttribute('zeffy-form-link', general.zeffyFormLink)
     // Degrades to the hosted form when JS is unavailable.
@@ -20,7 +20,7 @@ describe('DonationCampaigns Component', () => {
 
   it('renders a Zeffy pop-up button for every featured campaign', () => {
     const { container } = render(<DonationCampaigns />)
-    const featured = campaigns.filter((c) => c.featured && !c.embed)
+    const featured = campaigns.filter((c) => c.featured && !c.primary)
     for (const c of featured) {
       const trigger = container.querySelector(`[zeffy-form-link="${c.zeffyFormLink}"]`)
       expect(trigger).toBeTruthy()

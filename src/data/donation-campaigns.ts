@@ -37,7 +37,7 @@ export type DonationCampaign = {
   /** Zeffy campaign type (informational; does not always match the URL type). */
   category: ZeffyCategory
   /** The prominent general-fund CTA (rendered first, larger). */
-  embed?: boolean
+  primary?: boolean
   /** Render as a prominent "most popular" card above the directory. */
   featured?: boolean
   /**
@@ -70,7 +70,7 @@ export const campaigns: DonationCampaign[] = [
     blurb:
       'Give to the general unrestricted fund — used where the need is greatest to keep free, AI-built websites, domains, and Microsoft 365 flowing to nonprofits.',
     category: 'Donation',
-    embed: true,
+    primary: true,
     zeffyFormLink: zeffyPopupLink('donation-form/donate-to-make-a-difference'), // VERIFY (type + slug)
   },
   {

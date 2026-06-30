@@ -32,9 +32,9 @@ const CampaignCard = ({ campaign, cta }: { campaign: DonationCampaign; cta: stri
  * via the Free-for-Charity-Donation-Options callout.
  */
 const DonationCampaigns = () => {
-  const general = campaigns.find((c) => c.embed)
-  const featured = campaigns.filter((c) => c.featured && !c.embed)
-  const directory = campaigns.filter((c) => !c.featured && !c.embed && c.key !== 'endowment')
+  const general = campaigns.find((c) => c.primary)
+  const featured = campaigns.filter((c) => c.featured && !c.primary)
+  const directory = campaigns.filter((c) => !c.featured && !c.primary && c.key !== 'endowment')
 
   return (
     <div className="w-full pt-[40px] pb-[80px] bg-[#FCFCFC]">
