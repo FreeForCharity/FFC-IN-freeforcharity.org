@@ -103,6 +103,13 @@ https://help.candid.org/**
 https://www.zeffy.com/**
 https://zeffy.com/**
 
+# Idealist volunteer postings (linked from /volunteer). The deep
+# /volunteer-opportunity/ URLs rate-limit/redirect CI crawlers even though
+# they return 200 in browsers and via curl; pin the host to avoid flaky
+# failures on the role "Apply on Idealist" links.
+https://www.idealist.org/**
+https://idealist.org/**
+
 # Microsoft Tech Community intermittently 403s CI crawlers (same bot-block as
 # privacy.microsoft.com / microsoft.com/nonprofits, already pinned). Real URL.
 https://techcommunity.microsoft.com/**

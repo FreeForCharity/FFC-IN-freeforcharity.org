@@ -1,8 +1,71 @@
 import React from 'react'
-import Link from 'next/link'
 import Transparentbtn from '@/components/ui/Transparentbtn'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
+
+// Free For Charity's Idealist presence. The general board lists every live
+// opportunity; specific postings are linked where they exist.
+const IDEALIST_BOARD =
+  'https://www.idealist.org/en/nonprofit/356bfc8e2ae64f83beea4a4e677e99d7-free-for-charity-state-college#opportunities'
+const IDEALIST_WEB_DEVELOPER =
+  'https://www.idealist.org/en/volunteer-opportunity/c3d5f8b143224d4dbe7074d138a63370-charity-web-developer-state-college-pa-free-for-charity-state-college'
+const IDEALIST_RECRUITER =
+  'https://www.idealist.org/en/volunteer-opportunity/685f715b4d294936898237da5d2649a6-volunteer-recruiter-and-onboarding-manager-state-college-pa-free-for-charity-state-college'
+
+// Established volunteer roles beyond the featured Web Developer track. Each
+// links to its FFC Admin detail page (`adminPath`, null where one doesn't exist
+// yet) and an Idealist application (`idealistUrl` — a specific posting where
+// one exists, otherwise the general board until a posting is created).
+const volunteerRoles: {
+  title: string
+  blurb: string
+  adminPath: string | null
+  idealistUrl: string
+}[] = [
+  {
+    title: 'Microsoft 365 Administrator',
+    blurb:
+      'Run email, identity, and security for charities—and earn your MS-900 (FFC sponsors the exam).',
+    adminPath: '/volunteer/microsoft-365-admin/',
+    idealistUrl: IDEALIST_BOARD,
+  },
+  {
+    title: 'Google Workspace Administrator',
+    blurb:
+      'Provision users, drives, and security controls, and support charity staff across Google Workspace.',
+    adminPath: '/volunteer/google-workspace-admin/',
+    idealistUrl: IDEALIST_BOARD,
+  },
+  {
+    title: 'Data & Analytics',
+    blurb:
+      'Measure impact with consent-gated analytics, dashboards, and on-page SEO alongside the web team.',
+    adminPath: '/volunteer/data-analytics/',
+    idealistUrl: IDEALIST_BOARD,
+  },
+  {
+    title: 'Canva Designer',
+    blurb:
+      'Create brand kits, social templates, and marketing collateral for nonprofits with Canva Pro.',
+    adminPath: '/volunteer/canva-designer/',
+    idealistUrl: IDEALIST_BOARD,
+  },
+  {
+    title: 'Volunteer Recruiter & Onboarding Manager',
+    blurb:
+      'Manage FFC’s volunteer pipeline: post opportunities, screen applicants, and onboard new volunteers.',
+    // FFC Admin detail page pending; the role details live on the Idealist posting for now.
+    adminPath: null,
+    idealistUrl: IDEALIST_RECRUITER,
+  },
+  {
+    title: 'Military Volunteers (MOVSM)',
+    blurb:
+      'Serving or a veteran? Contribute in any FFC role and track hours toward MOVSM recognition.',
+    adminPath: '/volunteer/military-volunteers/',
+    idealistUrl: IDEALIST_BOARD,
+  },
+]
 
 const Index = () => {
   return (
@@ -66,10 +129,12 @@ const Index = () => {
             className="text-[18px] font-[500] leading-[28px] text-black max-w-[820px] mx-auto"
             data-font="lato-font"
           >
-            Our biggest need is building free charity websites with AI development agents.
-            Researchers and business analysts power the decisions behind that work. Pick the track
-            that fits you&mdash;then complete the Core Competencies prerequisite above to get
-            started.
+            Our biggest need is building free charity websites with AI development agents&mdash;but
+            we staff every part of a nonprofit&rsquo;s technology: Microsoft 365 and Google
+            Workspace administration, data &amp; analytics, design, and the people who recruit and
+            onboard volunteers. Every role has full details on the FFC Admin portal and an
+            application on Idealist. Pick the one that fits you&mdash;then complete the Core
+            Competencies prerequisite above to get started.
           </p>
         </div>
 
@@ -87,15 +152,29 @@ const Index = () => {
             and fastest-growing volunteer workflow&mdash;every site you help ship puts another
             charity online for free.
           </p>
-          <div className="flex flex-wrap gap-[16px] items-center">
-            <Link
-              href="/free-training-programs/"
+          <div className="flex flex-wrap gap-x-[24px] gap-y-[12px] items-center">
+            <a
+              href={IDEALIST_WEB_DEVELOPER}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-[8px] rounded-[10px] bg-white px-[24px] py-[10px] text-[16px] font-[700] text-[#2A6682] transition-opacity hover:opacity-90"
               data-font="lato-font"
             >
-              <span>Start web developer training</span>
+              <span>Apply on Idealist</span>
               <span aria-hidden="true">&rarr;</span>
-            </Link>
+              <span className="sr-only">(opens Idealist in a new tab)</span>
+            </a>
+            <a
+              href={ffcAdminUrl('/volunteer/web-developer/')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-[8px] text-[16px] font-[600] text-white underline-offset-4 hover:underline"
+              data-font="lato-font"
+            >
+              <span>Position details on FFC Admin</span>
+              <span aria-hidden="true">&rarr;</span>
+              <span className="sr-only">(opens FFC Admin in a new tab)</span>
+            </a>
             <a
               href={ffcAdminUrl(adminLinks['developer-environment-setup'].newModel)}
               target="_blank"
@@ -110,48 +189,50 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Supporting tracks */}
+        {/* The rest of the established roles */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
-          <div className="bg-white rounded-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.08)] p-6">
-            <h3 className="text-[22px] font-[700] text-[#1D6E90] mb-[10px]" data-font="lato-font">
-              Researchers
-            </h3>
-            <p
-              className="text-[16px] font-[500] leading-[26px] text-[#333] mb-[16px]"
-              data-font="lato-font"
+          {volunteerRoles.map((role) => (
+            <div
+              key={role.title}
+              className="flex flex-col bg-white rounded-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.08)] p-6"
             >
-              Move beyond Google with research and data-control projects that charities use to
-              decide how best to use their resources&mdash;skills you can use from anywhere.
-            </p>
-            <Link
-              href="/free-training-programs/"
-              className="inline-flex items-center gap-[8px] text-[16px] font-[600] text-[#b35000] hover:underline"
-              data-font="lato-font"
-            >
-              <span>Explore the research track</span>
-              <span aria-hidden="true">&rarr;</span>
-            </Link>
-          </div>
-          <div className="bg-white rounded-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.08)] p-6">
-            <h3 className="text-[22px] font-[700] text-[#1D6E90] mb-[10px]" data-font="lato-font">
-              Business Analysts
-            </h3>
-            <p
-              className="text-[16px] font-[500] leading-[26px] text-[#333] mb-[16px]"
-              data-font="lato-font"
-            >
-              Compare products, services, and vendors to a professional standard so nonprofits spend
-              on their mission instead of overhead.
-            </p>
-            <Link
-              href="/free-training-programs/"
-              className="inline-flex items-center gap-[8px] text-[16px] font-[600] text-[#b35000] hover:underline"
-              data-font="lato-font"
-            >
-              <span>Explore the analyst track</span>
-              <span aria-hidden="true">&rarr;</span>
-            </Link>
-          </div>
+              <h3 className="text-[22px] font-[700] text-[#1D6E90] mb-[10px]" data-font="lato-font">
+                {role.title}
+              </h3>
+              <p
+                className="text-[16px] font-[500] leading-[26px] text-[#333] mb-[18px] grow"
+                data-font="lato-font"
+              >
+                {role.blurb}
+              </p>
+              <div className="flex flex-wrap gap-x-[20px] gap-y-[8px]">
+                {role.adminPath ? (
+                  <a
+                    href={ffcAdminUrl(role.adminPath)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-[6px] text-[15px] font-[600] text-[#1D6E90] hover:underline"
+                    data-font="lato-font"
+                  >
+                    <span>Position details on FFC Admin</span>
+                    <span aria-hidden="true">&rarr;</span>
+                    <span className="sr-only">(opens FFC Admin in a new tab)</span>
+                  </a>
+                ) : null}
+                <a
+                  href={role.idealistUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-[6px] text-[15px] font-[600] text-[#b35000] hover:underline"
+                  data-font="lato-font"
+                >
+                  <span>Apply on Idealist</span>
+                  <span aria-hidden="true">&rarr;</span>
+                  <span className="sr-only">(opens Idealist in a new tab)</span>
+                </a>
+              </div>
+            </div>
+          ))}
         </div>
 
         <div className="max-w-[720px] mx-auto mt-[28px]">
