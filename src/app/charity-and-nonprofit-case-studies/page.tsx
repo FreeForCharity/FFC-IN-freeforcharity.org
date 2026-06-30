@@ -113,7 +113,7 @@ const CaseStudiesPage = () => {
             </p>
 
             <p className="text-[18px] font-[500] leading-[28px] text-[#333]">
-              Free for Charity has built these nonprofit charity case studies to help many nonprofit
+              Free For Charity has built these nonprofit charity case studies to help many nonprofit
               organizations in making a rightful decision without wasting time and money on
               experimentation.
             </p>

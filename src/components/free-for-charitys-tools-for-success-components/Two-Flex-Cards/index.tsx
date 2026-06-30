@@ -95,7 +95,7 @@ const Index = () => {
             </div>
 
             <h3 className="text-[28px] font-[600] text-[#333] leading-[36px] pb-[10px]">
-              FreeForCharity (No costs for anything we directly provide … really)
+              Free For Charity (No costs for anything we directly provide … really)
             </h3>
 
             <div

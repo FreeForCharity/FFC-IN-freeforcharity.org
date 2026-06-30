@@ -69,7 +69,7 @@ const ServiceDirectoryPage = () => {
             </p>
 
             <p className="text-[18px] font-[500] leading-[28px] text-[#333]">
-              Free for Charity is a resource that, as the name implies, is free for charities.
+              Free For Charity is a resource that, as the name implies, is free for charities.
               Charities are already doing something good for their community or for a specific
               cause, so they need to have the assistance they require available to them without
               adding a lot of work to their plate.
@@ -85,7 +85,7 @@ const ServiceDirectoryPage = () => {
             <p className="text-[18px] font-[500] leading-[28px] text-[#333]">
               The Charity and Nonprofit Service and Consultant Directory is constantly growing and
               evolving. The goal is for it to be a free resource. As nonprofits discuss their needs
-              with Free for Charity, the directory is likely going to change in order to meet those
+              with Free For Charity, the directory is likely going to change in order to meet those
               needs.
             </p>
           </div>
@@ -102,7 +102,7 @@ const ServiceDirectoryPage = () => {
             className="text-[18px] text-white font-[500] leading-[28px] mb-6"
             data-font="lato-font"
           >
-            For more information about Free for Charity or to obtain information about being added
+            For more information about Free For Charity or to obtain information about being added
             to the directory, please contact us.
           </p>
           <a

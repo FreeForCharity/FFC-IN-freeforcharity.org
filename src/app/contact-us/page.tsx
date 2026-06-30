@@ -15,7 +15,7 @@ const index = () => {
     <div>
       <div>
         <HeroSection
-          heading="Get In Touch with Free for Charity"
+          heading="Get In Touch with Free For Charity"
           paragraph="Connecting Students, Professionals, & Businesses with Charities in Need"
           heroImg="/Images/about-us.webp"
           fontSize={36}

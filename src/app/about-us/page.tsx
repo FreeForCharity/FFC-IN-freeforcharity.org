@@ -18,7 +18,7 @@ const index = () => {
     <div className="w-full">
       <HeroSection
         heading="About Free For Charity"
-        paragraph="Free for Charity has a simple mission with broad implications."
+        paragraph="Free For Charity has a simple mission with broad implications."
         heroImg="/Images/donation.webp"
         fontSize={35}
         lineHeight={50}

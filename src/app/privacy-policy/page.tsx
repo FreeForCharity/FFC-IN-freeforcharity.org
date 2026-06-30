@@ -29,7 +29,7 @@ export default function PrivacyPolicy() {
             </li>
           </ol>
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-            At Free for Charity, accessible from https://freeforcharity.org, your privacy is one of
+            At Free For Charity, accessible from https://freeforcharity.org, your privacy is one of
             our primary concerns. This Privacy Policy document contains types of information we
             collect and record, and how we use it. By using our website, you hereby consent to our
             Privacy Policy and agree to its terms.

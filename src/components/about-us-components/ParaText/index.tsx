@@ -8,18 +8,18 @@ const index = () => {
         data-font="lato-font"
       >
         <p className="text-[18px] font-[500] leading-[27px] text-center pb-[1em]">
-          Free for Charity engages in full cycle training and direct volunteering programs to
+          Free For Charity engages in full cycle training and direct volunteering programs to
           develop the needed talent by leveraging the growing use of unified communications and
           information technology from a virtual or campus environment
         </p>
         <p className="text-[18px] font-[500] leading-[27px] text-center pb-[1em]">
-          Free for Charity trains both the in-house staff of existing charities, as well as direct
-          employees and volunteers of Free for Charity who will then perform work for charities as
+          Free For Charity trains both the in-house staff of existing charities, as well as direct
+          employees and volunteers of Free For Charity who will then perform work for charities as
           out of house consultants.
         </p>
         <p className="text-[18px] font-[500] leading-[27px] text-center pb-[1em]">
           Cultivation of information technology and business skills is the charitable purpose and
-          the net result of Free for Charity. As part of the educational mission Free for Charity
+          the net result of Free For Charity. As part of the educational mission Free For Charity
           trainees engage local residents, small businesses, and pre 501c3 charities to build up the
           skills needed to work on complex non-profit projects.
         </p>

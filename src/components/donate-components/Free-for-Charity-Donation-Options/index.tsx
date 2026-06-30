@@ -8,10 +8,10 @@ const index = () => {
         {/* Header Section */}
         <div className="text-center">
           <h1 className="text-[30px] md:text-[40px] font-[700] leading-[44px] text-[#b35000] mb-[20px]">
-            Free for Charity Donation Options
+            Free For Charity Donation Options
           </h1>
           <p className="text-[18px] font-[500] text-black pb-[1em]" data-font="lato-font">
-            Here at free for charity we make it easy to donate and help the cause of great free
+            Here at Free For Charity we make it easy to donate and help the cause of great free
             training programs and free services for charities.
           </p>
           <p className="text-[18px] font-[700] text-black mb-[50px]" data-font="lato-font">

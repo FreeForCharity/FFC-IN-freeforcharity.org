@@ -89,7 +89,7 @@ const menuItems: MenuItem[] = [
     dropdownItems: [
       { label: 'Free For Charity Domains', path: '/domains' },
       {
-        label: 'Free for Charity’s Tools for Success',
+        label: 'Free For Charity’s Tools for Success',
         path: '/free-for-charitys-tools-for-success',
       },
       {

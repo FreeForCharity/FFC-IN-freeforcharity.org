@@ -16,14 +16,14 @@ jest.mock('@/components/ui/Transparentbtn', () => {
 describe('Free-for-Charity-Donation-Options Component', () => {
   it('renders the header correctly', () => {
     render(<FreeForCharityDonationOptions />)
-    const headerElement = screen.getByText('Free for Charity Donation Options')
+    const headerElement = screen.getByText('Free For Charity Donation Options')
     expect(headerElement).toBeInTheDocument()
   })
 
   it('renders the descriptions correctly', () => {
     render(<FreeForCharityDonationOptions />)
     const description1 = screen.getByText(
-      'Here at free for charity we make it easy to donate and help the cause of great free training programs and free services for charities.'
+      'Here at Free For Charity we make it easy to donate and help the cause of great free training programs and free services for charities.'
     )
     const description2 = screen.getByText('We have the following options:')
 

@@ -134,7 +134,7 @@ const AccordionLayout = () => {
                 onToggle={() => toggleLeft('left1')}
               >
                 As a 501(c)3 charity ourselves we seek individual, business, and grant sources of
-                funding. At current, free for charity has not received a grant specifically for
+                funding. At current, Free For Charity has not received a grant specifically for
                 domain names or hosting but uses individual and business contributions to fund this
                 program.
               </AccordionItem>
@@ -200,7 +200,7 @@ const AccordionLayout = () => {
           {/* Bottom Independent Accordion */}
           <div className="w-full max-w-md mx-auto">
             <AccordionItem
-              title="If I am an individual or business and donate money for a domain package to Free for Charity is this tax-deductible?"
+              title="If I am an individual or business and donate money for a domain package to Free For Charity is this tax-deductible?"
               isOpen={bottomOpen}
               onToggle={() => setBottomOpen(!bottomOpen)}
               small

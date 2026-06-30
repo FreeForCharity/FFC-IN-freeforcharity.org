@@ -7,7 +7,7 @@ describe('MissionSection', () => {
   it('renders the Mission section heading', () => {
     render(<Mission />)
     const heading = screen.getByRole('heading', {
-      name: /Free for Charity has a simple mission with broad implications/i,
+      name: /Free For Charity has a simple mission with broad implications/i,
     })
     expect(heading).toBeInTheDocument()
   })
