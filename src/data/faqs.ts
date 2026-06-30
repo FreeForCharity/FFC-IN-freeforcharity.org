@@ -17,7 +17,7 @@ FFC is also employing a premium subscription to volunteer match to source additi
     question: "What are the organization's capabilities for doing this?",
     answer: `We already have the accounts set up in eNOM to provide enterprise level domain procurement and by using WHMCS with coupon codes specifically for our 501c3 and pre 501c3 organizations we can provision full hosting and domain names automatically without staff input.
 
-For our training programs we help charities navigate through the AB-900 Microsoft 365 training and certification program while pursuing their "Microsoft 365 Grants". We further provide access to the Divi and WPMUDEV website design and maintenance product that each come with their own vendor provided training.`,
+For our training programs we help charities navigate through the AB-900 (Microsoft 365 Copilot and Agent Administration Fundamentals) certification program while pursuing their "Microsoft 365 Grants". We further provide access to the Divi and WPMUDEV website design and maintenance product that each come with their own vendor provided training.`,
   },
   {
     question: "What have and haven't they accomplished so far?",
