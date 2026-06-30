@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { assetPath } from '@/lib/assetPath'
 
 const index = () => {
@@ -39,6 +40,16 @@ const index = () => {
             <source src={assetPath('/videos/mission-video.mp4')} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
+        </div>
+        <div className="mt-[40px] text-center">
+          <Link
+            href="/about-us/"
+            className="inline-flex items-center gap-[8px] text-[20px] font-[500] text-[#b35000] hover:underline"
+            data-font="lato-font"
+          >
+            <span>Learn more about us</span>
+            <span aria-hidden="true">→</span>
+          </Link>
         </div>
       </div>
 
