@@ -3,6 +3,7 @@ import './globals.css'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import CookieConsent from '@/components/cookie-consent'
+import ZeffyEmbedScript from '@/components/ui/ZeffyEmbedScript'
 
 // Get basePath for GitHub Pages deployment
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
@@ -93,6 +94,11 @@ export default function RootLayout({
         {children}
         <Footer />
         <CookieConsent />
+        {/* Global Zeffy pop-up engine: wires every `zeffy-form-link` element
+            (incl. the footer donate button) to open its campaign in a modal,
+            site-wide. Next.js dedupes the <Script>, so pages that also use
+            Zeffy buttons don't double-load it. */}
+        <ZeffyEmbedScript />
         {/* <PopupsRootClient /> */}
         {/* </PopupProvider> */}
       </body>

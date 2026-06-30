@@ -47,6 +47,25 @@ test.describe('Donation flows', () => {
     expect(await paypalLinks.count(), 'PayPal links should be fully removed from /donate').toBe(0)
   })
 
+  test('the footer donate button + Zeffy engine work on a non-/donate page', async ({ page }) => {
+    // The footer is global, so its donate button must work everywhere — which
+    // requires the embed script to be loaded globally (layout.tsx), not only on
+    // /donate. Verify both on the homepage.
+    await page.goto('/')
+
+    const footerTrigger = page.locator('footer [zeffy-form-link]').first()
+    await expect(footerTrigger).toBeAttached()
+    const formLink = await footerTrigger.getAttribute('zeffy-form-link')
+    const href = await footerTrigger.getAttribute('href')
+    expect(formLink).toContain('zeffy.com')
+    expect(href).toContain('zeffy.com')
+
+    // The global embed script powers the footer pop-up site-wide.
+    await expect(page.locator('script[src*="zeffy-scripts"]').first()).toBeAttached({
+      timeout: 15000,
+    })
+  })
+
   test('/free-for-charity-endowment-fund mounts the Zeffy donation iframe', async ({ page }) => {
     await page.goto('/free-for-charity-endowment-fund')
 
