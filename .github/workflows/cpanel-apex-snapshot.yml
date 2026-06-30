@@ -50,7 +50,7 @@ jobs:
     environment: cpanel-staging
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: 'Backup-freshness gate (live only)'
         if: ${{ inputs.dry_run == false }}

@@ -82,7 +82,7 @@ jobs:
           esac
           echo "Rehearsing on '${TARGET}' (docroot './${DOCROOT}/'), dry_run=${{ inputs.dry_run }}"
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Setup Node
         uses: actions/setup-node@v6
