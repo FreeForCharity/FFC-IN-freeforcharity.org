@@ -118,7 +118,9 @@ export const campaigns: DonationCampaign[] = [
     title: 'Free Charity Website Hosting and Maintenance',
     blurb: 'Keep nonprofit websites online and maintained at no cost to the charity.',
     category: 'Custom',
-    zeffyFormLink: zeffyPopupLink('ticketing/free-charity-website-hosting-and-maintenance'), // VERIFY (type + slug)
+    confirmed: true,
+    // CONFIRMED from the Zeffy Share → Pop-up snippet (type `ticketing`).
+    zeffyFormLink: zeffyPopupLink('ticketing/free-charity-website-hosting-and-maintenance'),
   },
   {
     key: 'hosting-support-membership',
