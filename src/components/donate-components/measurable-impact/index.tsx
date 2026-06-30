@@ -1,5 +1,6 @@
 import React from 'react'
-import Transparentbtn from '@/components/ui/Transparentbtn'
+import ZeffyPopupButton from '@/components/ui/ZeffyPopupButton'
+import { generalCampaign } from '@/data/donation-campaigns'
 
 const Index = () => {
   return (
@@ -57,18 +58,33 @@ const Index = () => {
               className="text-[14px] font-[500] leading-[24px] text-white pb-[1em]"
               data-font="aria-font"
             >
-              Click the button below to make a donation at PayPal and support Free For Charity. Your
-              contribution will make a meaningful impact in helping us provide world-class training
-              programs and support charities throughout the United States. From covering the costs
-              of running servers and websites to supporting our training programs, every donation
-              counts. Help us continue our mission by donating today.
+              Click the button below to donate securely through Zeffy. Zeffy charges nonprofits 0%
+              platform fees, so 100% of your gift supports Free For Charity—helping us provide
+              world-class training programs and free technology to charities throughout the United
+              States. From covering the costs of running servers and websites to supporting our
+              training programs, every donation counts. Help us continue our mission by donating
+              today.
             </p>
 
-            <Transparentbtn
-              text="Donate Today"
-              href="https://www.paypal.com/donate/?hosted_button_id=9ZKQ23YC3G2J2"
-              color="#fff"
-            />
+            {/* Fail-safe: only show the general-fund button once its Zeffy link
+                is verified, so we never ship a broken donate link. Until then
+                the verified campaigns below (Choose a Campaign) carry the CTAs. */}
+            {generalCampaign.confirmed ? (
+              <ZeffyPopupButton
+                formLink={generalCampaign.zeffyFormLink}
+                label="Donate Today"
+                variant="secondary"
+                className="bg-white"
+              />
+            ) : (
+              <a
+                href="#choose-a-campaign"
+                className="inline-block cursor-pointer rounded-[10px] text-center font-[600] text-[16px] px-[24px] py-[14px] bg-white text-[#2D7F87]"
+                data-font="lato-font"
+              >
+                See donation campaigns
+              </a>
+            )}
           </div>
         </div>
       </div>

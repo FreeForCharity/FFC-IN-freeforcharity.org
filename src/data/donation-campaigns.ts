@@ -1,0 +1,178 @@
+// Zeffy donation campaigns — the single source of truth for the /donate page.
+//
+// Free For Charity raises through Zeffy, which charges nonprofits 0% platform
+// fees, so 100% of each gift reaches the mission. Each campaign is surfaced on
+// /donate as a Zeffy "pop-up" button: the embed script (ZEFFY_EMBED_SCRIPT)
+// turns any element carrying a `zeffy-form-link` attribute into a trigger that
+// opens that campaign's form in a modal.
+//
+// All nine campaigns below are CONFIRMED: each `zeffyFormLink` was copied
+// verbatim from the Zeffy dashboard (campaign → Share → Pop-up), which looks
+// like https://www.zeffy.com/embed/<type>/<slug>?modal=true.
+//
+// When ADDING a campaign, treat it as unverified until checked: neither the
+// <type> segment (donation-form | ticketing | membership | shop) NOR the slug
+// is derivable from the campaign name (e.g. "Website Design and Development" is
+// `ticketing`, not `donation-form`; slugs are sometimes opaque UUIDs). Copy the
+// link verbatim and set `confirmed: true` only once verified. Zeffy 403s CI
+// crawlers (see `.lycheeignore`), so links can't be link-checked in normal CI —
+// the live `zeffy-links` workflow checks every `confirmed` campaign with a real
+// browser, and only `confirmed` campaigns render on /donate (fail-safe).
+
+export const ZEFFY_BASE = 'https://www.zeffy.com'
+
+// Loaded once on /donate; powers every `zeffy-form-link` pop-up trigger.
+export const ZEFFY_EMBED_SCRIPT =
+  'https://zeffy-scripts.s3.ca-central-1.amazonaws.com/embed-form-script.min.js'
+
+export type ZeffyCategory = 'Donation' | 'Membership' | 'Event' | 'Shop' | 'Custom'
+
+export type DonationCampaign = {
+  /** Stable key for React keys / tests. */
+  key: string
+  /** Display title — matches the Zeffy campaign name. */
+  title: string
+  /** Short description shown on the card. */
+  blurb: string
+  /** Zeffy campaign type (informational; does not always match the URL type). */
+  category: ZeffyCategory
+  /** The prominent general-fund CTA (rendered first, larger). */
+  primary?: boolean
+  /** Render as a prominent "most popular" card above the directory. */
+  featured?: boolean
+  /**
+   * The `zeffyFormLink` has been verified against the Zeffy dashboard (not a
+   * derived placeholder). Only `confirmed` campaigns are exercised by the live
+   * Zeffy link check (scripts can't reach Zeffy from CI; see zeffy-links spec).
+   */
+  confirmed?: boolean
+  /**
+   * Zeffy pop-up embed link (Share → Pop-up), e.g.
+   * `https://www.zeffy.com/embed/<type>/<slug>?modal=true`. Used as the
+   * `zeffy-form-link` trigger; a hosted-form fallback href is derived from it.
+   */
+  zeffyFormLink: string
+}
+
+/** Build a Zeffy pop-up embed link from a `<type>/<slug>` path. */
+export function zeffyPopupLink(typeAndSlug: string): string {
+  const p = typeAndSlug.replace(/^\//, '')
+  return `${ZEFFY_BASE}/embed/${p}?modal=true`
+}
+
+/**
+ * Hosted-form URL derived from a pop-up embed link, used as the no-JS / new-tab
+ * fallback href (the embed script intercepts the click for the modal when JS is
+ * available). Strips the `/embed/` segment and removes ONLY the `modal` query
+ * param, preserving any others Zeffy may add (e.g. locale / UTM).
+ */
+export function zeffyHostedUrl(formLink: string): string {
+  const url = new URL(formLink.replace('/embed/', '/'))
+  url.searchParams.delete('modal')
+  return url.toString()
+}
+
+export const campaigns: DonationCampaign[] = [
+  {
+    key: 'general',
+    title: 'Donate to Make a Difference',
+    blurb:
+      'Give to the general unrestricted fund — used where the need is greatest to keep free, AI-built websites, domains, and Microsoft 365 flowing to nonprofits.',
+    category: 'Donation',
+    primary: true,
+    confirmed: true,
+    // CONFIRMED from the Zeffy Share → Pop-up snippet (donation-form, UUID slug).
+    zeffyFormLink: zeffyPopupLink('donation-form/da2dd4cf-1027-4444-b602-c8656398436e'),
+  },
+  {
+    key: 'free-domain',
+    title: 'Free Domain Names For Charity',
+    blurb:
+      'Fund free .org domain names and DNS for nonprofits — one of the most-used Free For Charity programs.',
+    category: 'Donation',
+    featured: true,
+    confirmed: true,
+    // CONFIRMED. Zeffy uses an opaque UUID slug here (not the readable name).
+    zeffyFormLink: zeffyPopupLink('donation-form/345319a9-b5ed-4ee9-af45-89dc01acc111'),
+  },
+  {
+    key: 'website-design',
+    title: 'Website Design and Development',
+    blurb:
+      'Support the AI-driven design and development of fast, secure GitHub Pages websites built for charities.',
+    category: 'Custom',
+    featured: true,
+    confirmed: true,
+    // CONFIRMED from the Zeffy Share → Pop-up snippet.
+    zeffyFormLink: zeffyPopupLink('ticketing/website-design-and-development'),
+  },
+  {
+    key: 'endowment',
+    title: 'Free For Charity Endowment Fund',
+    blurb:
+      'Back the endowment that sustains domains and email for charities — the largest fundraising campaign in Free For Charity history.',
+    category: 'Donation',
+    confirmed: true,
+    // Type confirmed (donation-form) from the live endowment-page iframe.
+    zeffyFormLink: zeffyPopupLink('donation-form/free-for-charity-endowment-fund'),
+  },
+  {
+    key: 'website-hosting-maintenance',
+    title: 'Free Charity Website Hosting and Maintenance',
+    blurb: 'Keep nonprofit websites online and maintained at no cost to the charity.',
+    category: 'Custom',
+    confirmed: true,
+    // CONFIRMED from the Zeffy Share → Pop-up snippet (type `ticketing`).
+    zeffyFormLink: zeffyPopupLink('ticketing/free-charity-website-hosting-and-maintenance'),
+  },
+  {
+    key: 'hosting-support-membership',
+    title: 'Website Hosting and Support Membership',
+    blurb: 'A recurring membership that funds ongoing hosting and support for charity sites.',
+    category: 'Membership',
+    confirmed: true,
+    // CONFIRMED from the Zeffy Share → Pop-up snippet (type is `ticketing`).
+    zeffyFormLink: zeffyPopupLink('ticketing/website-hosting-and-support-membership'),
+  },
+  {
+    key: 'global-admins-membership',
+    title: 'Free For Charity Global Administrators Membership',
+    blurb:
+      'Membership supporting the volunteer administrators who run the Free For Charity platform.',
+    category: 'Membership',
+    confirmed: true,
+    // CONFIRMED from the Zeffy Share → Pop-up snippet (type `ticketing`).
+    zeffyFormLink: zeffyPopupLink('ticketing/free-for-charity-global-administrators-membership'),
+  },
+  {
+    key: 'annual-gala',
+    title: 'Free For Charity Annual Gala',
+    blurb:
+      'Reserve tickets to the annual gala celebrating the charities and volunteers we support.',
+    category: 'Event',
+    confirmed: true,
+    // CONFIRMED from the Zeffy Share → Pop-up snippet (type `ticketing`).
+    zeffyFormLink: zeffyPopupLink('ticketing/free-for-charity-annual-gala'),
+  },
+  {
+    key: 'shop',
+    title: "Free For Charity's Shop",
+    blurb: 'Shop Free For Charity merchandise — proceeds fund free technology for nonprofits.',
+    category: 'Shop',
+    confirmed: true,
+    // CONFIRMED from the Zeffy Share → Pop-up snippet (type `ticketing`).
+    zeffyFormLink: zeffyPopupLink('ticketing/free-for-charitys-shop'),
+  },
+]
+
+// The general unrestricted campaign — reused by CTAs that just say "donate".
+// Asserted at module load so a misconfigured registry fails loudly at build
+// time instead of silently omitting or mis-selecting the prominent /donate CTA:
+// there must be exactly one `primary` campaign, and it must be `general`.
+const primaries = campaigns.filter((c) => c.primary)
+if (primaries.length !== 1 || primaries[0].key !== 'general') {
+  throw new Error(
+    `donation-campaigns: exactly one campaign must be \`primary\` and it must be "general" (found ${primaries.length}: ${primaries.map((c) => c.key).join(', ') || 'none'}).`
+  )
+}
+export const generalCampaign: DonationCampaign = primaries[0]
