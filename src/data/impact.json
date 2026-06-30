@@ -59,14 +59,14 @@
     "textMessagesHandled": {
       "value": null,
       "label": "Support text messages handled",
-      "source": "pending — Gmail Google Voice export (FFC-Cloudflare-Automation#490 Gap B)",
+      "source": "Gmail Google Voice: ~201 text threads, ~48% charity-related per a 2026-06-30 manual sample (~148 scanned); precise count pending the automated export (FFC-Cloudflare-Automation#492)",
       "confidence": "unknown"
     },
     "uncapturedLeads": {
-      "value": null,
+      "value": 6,
       "label": "Charity leads in discovery pipeline",
-      "source": "pending — email/text discovery (FFC-Cloudflare-Automation#490 Gap B)",
-      "confidence": "unknown"
+      "source": "Gmail Google Voice discovery, manual sample 2026-06-30 (~148 of ~201 threads); ≥6 charity orgs with no FFC site yet. Full count pending the automated export (FFC-Cloudflare-Automation#492)",
+      "confidence": "low"
     },
     "endowmentGoalUsd": {
       "value": 1000000,
