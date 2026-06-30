@@ -66,12 +66,25 @@ const Index = () => {
               today.
             </p>
 
-            <ZeffyPopupButton
-              formLink={generalCampaign.zeffyFormLink}
-              label="Donate Today"
-              variant="secondary"
-              className="bg-white"
-            />
+            {/* Fail-safe: only show the general-fund button once its Zeffy link
+                is verified, so we never ship a broken donate link. Until then
+                the verified campaigns below (Choose a Campaign) carry the CTAs. */}
+            {generalCampaign.confirmed ? (
+              <ZeffyPopupButton
+                formLink={generalCampaign.zeffyFormLink}
+                label="Donate Today"
+                variant="secondary"
+                className="bg-white"
+              />
+            ) : (
+              <a
+                href="#choose-a-campaign"
+                className="inline-block cursor-pointer rounded-[10px] text-center font-[600] text-[16px] px-[24px] py-[14px] bg-white text-[#2D7F87]"
+                data-font="lato-font"
+              >
+                See donation campaigns
+              </a>
+            )}
           </div>
         </div>
       </div>

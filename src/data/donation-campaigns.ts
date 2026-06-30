@@ -77,7 +77,9 @@ export const campaigns: DonationCampaign[] = [
       'Give to the general unrestricted fund — used where the need is greatest to keep free, AI-built websites, domains, and Microsoft 365 flowing to nonprofits.',
     category: 'Donation',
     primary: true,
-    zeffyFormLink: zeffyPopupLink('donation-form/donate-to-make-a-difference'), // VERIFY (type + slug)
+    confirmed: true,
+    // CONFIRMED from the Zeffy Share → Pop-up snippet (donation-form, UUID slug).
+    zeffyFormLink: zeffyPopupLink('donation-form/da2dd4cf-1027-4444-b602-c8656398436e'),
   },
   {
     key: 'free-domain',
@@ -123,7 +125,9 @@ export const campaigns: DonationCampaign[] = [
     title: 'Website Hosting and Support Membership',
     blurb: 'A recurring membership that funds ongoing hosting and support for charity sites.',
     category: 'Membership',
-    zeffyFormLink: zeffyPopupLink('membership/website-hosting-and-support-membership'), // VERIFY (type + slug)
+    confirmed: true,
+    // CONFIRMED from the Zeffy Share → Pop-up snippet (type is `ticketing`).
+    zeffyFormLink: zeffyPopupLink('ticketing/website-hosting-and-support-membership'),
   },
   {
     key: 'global-admins-membership',

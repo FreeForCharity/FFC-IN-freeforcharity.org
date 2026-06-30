@@ -30,14 +30,21 @@ const CampaignCard = ({ campaign, cta }: { campaign: DonationCampaign; cta: stri
  * Each button is a Zeffy pop-up trigger (the form opens in a modal). The
  * endowment is excluded from the directory because the page already features it
  * via the Free-for-Charity-Donation-Options callout.
+ *
+ * Fail-safe: only `confirmed` campaigns render. A campaign whose `zeffyFormLink`
+ * is still a derived placeholder (unverified against the Zeffy dashboard) is
+ * omitted rather than shipping a potentially broken donate link; it appears
+ * automatically once its real link is added and `confirmed: true` is set.
  */
 const DonationCampaigns = () => {
-  const general = campaigns.find((c) => c.primary)
-  const featured = campaigns.filter((c) => c.featured && !c.primary)
-  const directory = campaigns.filter((c) => !c.featured && !c.primary && c.key !== 'endowment')
+  const general = campaigns.find((c) => c.primary && c.confirmed)
+  const featured = campaigns.filter((c) => c.featured && !c.primary && c.confirmed)
+  const directory = campaigns.filter(
+    (c) => !c.featured && !c.primary && c.confirmed && c.key !== 'endowment'
+  )
 
   return (
-    <div className="w-full pt-[40px] pb-[80px] bg-[#FCFCFC]">
+    <div id="choose-a-campaign" className="w-full pt-[40px] pb-[80px] bg-[#FCFCFC]">
       <div className="w-[90%] md:w-[80%] mx-auto">
         <div className="text-center pb-[30px]">
           <h2
