@@ -4,6 +4,8 @@ import React from 'react'
 import Link from 'next/link'
 import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react'
 import { hubUrl } from '@/lib/config'
+import ZeffyPopupButton from '@/components/ui/ZeffyPopupButton'
+import { freeDomainCampaign } from '@/data/donation-campaigns'
 
 import { FaFacebookF, FaLinkedinIn, FaGithub } from 'react-icons/fa'
 import { FaXTwitter } from 'react-icons/fa6'
@@ -110,6 +112,28 @@ const Footer: React.FC = () => {
               )
             })}
           </ul>
+
+          {/* Fail-safe (mirrors /donate): only render when the campaign's Zeffy
+              link is verified, so the footer never ships a broken donate entry
+              point. Opens a Zeffy modal (embed script is global, in layout.tsx);
+              degrades to the hosted form in a new tab without JS. */}
+          {freeDomainCampaign?.confirmed ? (
+            <div className="space-y-2 pt-2">
+              <h4 className="text-[22px] text-white" data-font="lato-font">
+                Fund Free Domains for Charities
+              </h4>
+              <p className="text-[15px] font-[500] text-gray-300" data-font="lato-font">
+                Give a nonprofit a free .org domain &amp; DNS. 100% of your gift reaches the mission
+                (Zeffy charges 0% fees).
+              </p>
+              <ZeffyPopupButton
+                formLink={freeDomainCampaign.zeffyFormLink}
+                label="Donate Free Domains"
+                variant="primary"
+                className="w-full max-w-[260px]"
+              />
+            </div>
+          ) : null}
 
           <div className="space-y-3">
             <h4 className="text-[28px] text-white">Free For Charity Policy</h4>
