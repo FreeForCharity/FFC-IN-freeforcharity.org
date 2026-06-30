@@ -252,7 +252,7 @@ const Index = () => {
               <span className="sr-only">(opens FFC Admin in a new tab)</span>
             </a>
             <a
-              href={ffcAdminUrl('/training/web-developer/')}
+              href={ffcAdminUrl(adminLinks['web-developer-training'].newModel)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-[8px] text-[16px] font-[600] text-white underline-offset-4 hover:underline"
@@ -408,7 +408,7 @@ const Index = () => {
         {/* Right Column - Button */}
         <div>
           <a
-            href="https://www.idealist.org/en/nonprofit/356bfc8e2ae64f83beea4a4e677e99d7-free-for-charity-state-college#opportunities"
+            href={IDEALIST_BOARD}
             className="inline-block px-6 py-3 text-[16px] font-bold text-white bg-[#0056B3] rounded-md text-center no-underline transition-colors duration-300 ease-in-out hover:bg-[#004494]"
             data-font="aria-font"
             target="_blank"
