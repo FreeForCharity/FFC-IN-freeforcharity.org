@@ -13,7 +13,9 @@ describe('impact data', () => {
 
   it('renders exactly four headline result cards with concrete values', () => {
     expect(resultCards).toHaveLength(4)
+    expect(new Set(resultCards.map((c) => c.key)).size).toBe(resultCards.length)
     for (const card of resultCards) {
+      expect(card.key).toBeTruthy()
       expect(card.title).toBeTruthy()
       expect(card.title).not.toBe('null')
       expect(card.title).not.toBe('undefined')

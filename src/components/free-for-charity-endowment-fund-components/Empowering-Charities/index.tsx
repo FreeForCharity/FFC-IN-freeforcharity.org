@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import ProgressBar from '@/components/ui/ProgressBar'
 import { assetPath } from '@/lib/assetPath'
-import { metric } from '@/data/impact'
+import { requireValue } from '@/data/impact'
 
 const Index = () => {
   return (
@@ -36,10 +36,10 @@ const Index = () => {
               data-font="fauna-font"
             >
               Our Free For Charity Domain Program has already supported over{' '}
-              {metric('organizationsSupported').value} charitable organizations, providing them with
+              {requireValue('organizationsSupported')} charitable organizations, providing them with
               essential digital tools to enhance their outreach and impact. With the establishment
               of the endowment we can sustainably maintain our current charities and support{' '}
-              {metric('newCharitiesAnnualTarget').value} new charities annually.
+              {requireValue('newCharitiesAnnualTarget')} new charities annually.
             </p>
 
             <div className="mt-[30px] space-y-[20px] md:space-y-[30px]">

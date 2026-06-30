@@ -14,7 +14,7 @@ const index = () => {
         </h2>
         <div className="pt-[30px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[20px]">
           {resultCards.map((card) => (
-            <ResultCard key={card.description} title={card.title} description={card.description} />
+            <ResultCard key={card.key} title={card.title} description={card.description} />
           ))}
         </div>
       </div>

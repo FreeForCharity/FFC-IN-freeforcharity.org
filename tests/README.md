@@ -66,7 +66,7 @@ data-driven from `src/data/impact.json` (see `docs/METRICS-PLAYBOOK.md`).
 
 2. **`should start with numbers at 0 before scrolling into view`**
    - Ensures numbers are not pre-animated
-   - Verifies all statistics display 0 before scrolling into view
+   - Verifies a numeric card (Charity domains under management) starts at 0 before scrolling into view (the non-numeric "200+" card renders as-is and does not animate)
 
 3. **`should animate numbers only once when scrolled into view`**
    - Verifies animation triggers on scroll and does not repeat
