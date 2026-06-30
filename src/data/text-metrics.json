@@ -1,0 +1,53 @@
+{
+  "_comment": "Text-derived metrics system (Gap B). Per CALENDAR YEAR, from the human-in-the-loop Google Voice classification (personal account; see FFC-Cloudflare-Automation docs/runbooks/google-voice-metrics.md). Each thread is classified by party; charity-org threads are tagged by product category; net-new reach-outs (first-contact senders) give the velocity. Totals are exact when a year's pagination is exhausted; party/category/velocity splits come from the classification pass (calibrated ~95% on a sample). 'charityThreads' = newCharity + existingCharity (charity orgs); volunteer threads are counted separately in byParty. 2023 is a full calendar-year bucket but forwarding began ~Jun 2023 (partial coverage). 2025 is the template; other years are pending the same pass.",
+  "version": "2026-06-30",
+  "categories": ["website", "domain", "m365", "onboarding", "migration", "maintenance", "general"],
+  "parties": ["volunteer", "newCharity", "existingCharity", "noise"],
+  "years": {
+    "2023": {
+      "coverage": "full-year bucket; data from ~Jun 2023",
+      "status": "pending-classification",
+      "totalThreads": null,
+      "charityThreads": null,
+      "byParty": null,
+      "netNewReachouts": null,
+      "charityThreadsByCategory": null
+    },
+    "2024": {
+      "coverage": "full",
+      "status": "pending-classification",
+      "totalThreads": null,
+      "charityThreads": null,
+      "byParty": null,
+      "netNewReachouts": null,
+      "charityThreadsByCategory": null
+    },
+    "2025": {
+      "coverage": "full",
+      "status": "classified",
+      "totalThreads": 2079,
+      "charityThreads": 386,
+      "byParty": { "volunteer": 253, "newCharity": 237, "existingCharity": 149, "noise": 1440 },
+      "netNewReachouts": { "volunteer": 34, "newCharity": 42 },
+      "charityThreadsByCategory": {
+        "website": 83,
+        "domain": 13,
+        "m365": 14,
+        "onboarding": 28,
+        "migration": 94,
+        "maintenance": 59,
+        "general": 95
+      },
+      "confidence": "exact total (2079); party/category splits ~95% calibrated on a 40-thread sample; main uncertainty is one high-volume contributor (~94 threads) classed as volunteer; net-new reach-outs are rate-extrapolated"
+    },
+    "2026": {
+      "coverage": "YTD",
+      "status": "pending-classification",
+      "totalThreads": null,
+      "charityThreads": null,
+      "byParty": null,
+      "netNewReachouts": null,
+      "charityThreadsByCategory": null
+    }
+  }
+}

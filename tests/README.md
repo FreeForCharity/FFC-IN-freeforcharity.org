@@ -53,19 +53,20 @@ Tests image loading performance and visibility.
 
 ### `animated-numbers.spec.ts` - Animated Statistics (5 tests)
 
-Tests the Results 2023 section with animated statistics.
+Tests the homepage Results section with animated statistics. The section is
+data-driven from `src/data/impact.json` (see `docs/METRICS-PLAYBOOK.md`).
 
-**Test Suite**: `Results 2023 Animated Numbers`
+**Test Suite**: `Results Animated Numbers`
 
 **Tests:**
 
-1. **`should display the Results-2023 section with all four statistics`**
+1. **`should display the Results section with all four statistics`**
    - Verifies all four statistics cards display
-   - Checks for: Organizational partners, Total volunteers, Organizations accessing technical assistance offerings, and Volunteer hours contributed to the organization
+   - Checks for: Charity domains under management, Charity websites built, Charitable organizations supported, and Years serving nonprofits
 
 2. **`should start with numbers at 0 before scrolling into view`**
    - Ensures numbers are not pre-animated
-   - Verifies all statistics display 0 before scrolling into view
+   - Verifies a numeric card (Charity domains under management) starts at 0 before scrolling into view (the non-numeric "200+" card renders as-is and does not animate)
 
 3. **`should animate numbers only once when scrolled into view`**
    - Verifies animation triggers on scroll and does not repeat
