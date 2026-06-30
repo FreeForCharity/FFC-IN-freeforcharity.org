@@ -57,10 +57,10 @@
       "confidence": "unknown"
     },
     "textMessagesHandled": {
-      "value": null,
+      "value": 2780,
       "label": "Charity/volunteer support text messages handled (3 yrs)",
-      "source": "Gmail Google Voice human-in-the-loop scan 2026-06-30: >=3,650 total text threads confirmed (floor; pagination halted at Oct 2024, ~16 mo short), ~45% charity/volunteer => >=1,640 charity threads (floor, ~2,000 projected for full 3 yrs). Exact total pending an exhaustive re-run.",
-      "confidence": "low"
+      "source": "Gmail Google Voice exhaustive scan 2026-06-30: 6,193 total text threads over 3 yrs (pagination exhausted to the 2023-06-29 boundary; Gmail's ~201 estimate was wrong); ~45% charity/volunteer (calibrated on 2,250 classified) => ~2,780 charity/volunteer threads (estimate; threads, not individual messages)",
+      "confidence": "medium"
     },
     "uncapturedLeads": {
       "value": 6,
