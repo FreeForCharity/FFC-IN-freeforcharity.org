@@ -37,7 +37,7 @@ const index = () => {
             className="inline-flex items-center gap-[8px] mt-[16px] text-[20px] font-[500] text-[#b35000] hover:underline"
             data-font="lato-font"
           >
-            Learn more about FFC Domains
+            <span>Learn more about FFC Domains</span>
             <span aria-hidden="true">→</span>
           </Link>
         </div>
@@ -101,7 +101,7 @@ const index = () => {
             className="inline-flex items-center gap-[8px] mt-[16px] text-[20px] font-[500] text-[#b35000] hover:underline"
             data-font="lato-font"
           >
-            Learn more about FFC Hosting
+            <span>Learn more about FFC Hosting</span>
             <span aria-hidden="true">→</span>
           </Link>
         </div>
@@ -185,7 +185,7 @@ const index = () => {
             className="inline-flex items-center gap-[8px] mt-[16px] text-[20px] font-[500] text-[#b35000] hover:underline"
             data-font="lato-font"
           >
-            Learn more about FFC Consulting
+            <span>Learn more about FFC Consulting</span>
             <span aria-hidden="true">→</span>
           </Link>
         </div>
