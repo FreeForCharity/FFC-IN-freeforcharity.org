@@ -3,6 +3,9 @@ import React from 'react'
 import Header from '@/components/ffc-volunteer-proving-ground-core-competencies/Header'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
+import ContentSection from '@/components/ffc-volunteer-proving-ground-core-competencies/ContentSection'
+import Modulessection from '@/components/ffc-volunteer-proving-ground-core-competencies/Modules-section'
+import Footer from '@/components/ffc-volunteer-proving-ground-core-competencies/Footer'
 
 export const metadata: Metadata = {
   title: 'Volunteer Proving Ground: Core Competencies',
@@ -10,9 +13,6 @@ export const metadata: Metadata = {
     'Mandatory first step for FFC volunteers. Learn foundational tools for security and effective collaboration in nonprofit technology services—and the path into our AI-driven static-site development workflow.',
   alternates: { canonical: '/ffc-volunteer-proving-ground-core-competencies/' },
 }
-import ContentSection from '@/components/ffc-volunteer-proving-ground-core-competencies/ContentSection'
-import Modulessection from '@/components/ffc-volunteer-proving-ground-core-competencies/Modules-section'
-import Footer from '@/components/ffc-volunteer-proving-ground-core-competencies/Footer'
 
 const index = () => {
   return (
