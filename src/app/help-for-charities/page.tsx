@@ -1,5 +1,4 @@
-'use client'
-
+import type { Metadata } from 'next'
 import React from 'react'
 import HeroSection from '@/components/ui/HeroSection'
 import HelpForCharities from '@/components/ui/help-for-charity'
@@ -10,7 +9,14 @@ import CallSection from '@/components/help-for-charities-components/call-section
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
-const Page: React.FC = () => {
+export const metadata: Metadata = {
+  title: 'Help for Charities',
+  description:
+    'Resources and support for charity and nonprofit directors. Get instant access to free tools, domains, hosting, and technology services from Free For Charity.',
+  alternates: { canonical: '/help-for-charities/' },
+}
+
+const index = () => {
   return (
     <div className="bg-[#FCFCFC]">
       <HeroSection
@@ -45,4 +51,4 @@ const Page: React.FC = () => {
   )
 }
 
-export default Page
+export default index
