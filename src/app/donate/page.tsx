@@ -4,6 +4,7 @@ import HeroSection from '@/components/ui/HeroSection'
 import Measurableimpact from '@/components/donate-components/measurable-impact'
 import FreeForCharityDonationOptions from '@/components/donate-components/Free-for-Charity-Donation-Options'
 import DonationCampaigns from '@/components/donate-components/Donation-Campaigns'
+import ZeffyEmbedScript from '@/components/ui/ZeffyEmbedScript'
 
 export const metadata: Metadata = {
   title: 'Donate',
@@ -26,6 +27,8 @@ const index = () => {
         <Measurableimpact />
         <FreeForCharityDonationOptions />
         <DonationCampaigns />
+        {/* Powers every Zeffy pop-up button on this page. */}
+        <ZeffyEmbedScript />
       </div>
     </div>
   )

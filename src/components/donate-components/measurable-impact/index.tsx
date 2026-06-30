@@ -1,5 +1,5 @@
 import React from 'react'
-import Transparentbtn from '@/components/ui/Transparentbtn'
+import ZeffyPopupButton from '@/components/ui/ZeffyPopupButton'
 import { generalCampaign } from '@/data/donation-campaigns'
 
 const Index = () => {
@@ -66,7 +66,12 @@ const Index = () => {
               today.
             </p>
 
-            <Transparentbtn text="Donate Today" href={generalCampaign.formUrl} color="#fff" />
+            <ZeffyPopupButton
+              formLink={generalCampaign.zeffyFormLink}
+              label="Donate Today"
+              variant="secondary"
+              className="bg-white"
+            />
           </div>
         </div>
       </div>

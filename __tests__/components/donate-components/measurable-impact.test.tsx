@@ -23,10 +23,12 @@ describe('MeasurableImpact Component', () => {
     expect(volunteerLink).toHaveAttribute('href', '/volunteer/')
   })
 
-  it('renders the Zeffy donation button (no PayPal)', () => {
+  it('renders the Zeffy pop-up donation button (no PayPal)', () => {
     render(<MeasurableImpact />)
     const donateButton = screen.getByRole('link', { name: /Donate Today/i })
     expect(donateButton).toBeInTheDocument()
+    // Pop-up trigger points at Zeffy; the hosted-form fallback href is Zeffy too.
+    expect(donateButton.getAttribute('zeffy-form-link') || '').toContain('zeffy.com')
     const href = donateButton.getAttribute('href') || ''
     expect(href).toContain('zeffy.com')
     expect(href).not.toContain('paypal.com')
