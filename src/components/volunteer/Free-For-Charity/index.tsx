@@ -1,5 +1,8 @@
 import React from 'react'
+import Link from 'next/link'
 import Transparentbtn from '@/components/ui/Transparentbtn'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
 const Index = () => {
   return (
@@ -49,6 +52,113 @@ const Index = () => {
             text="Click Here to Start the Core Competencies Training"
             href="/ffc-volunteer-proving-ground-core-competencies/"
             color="#fff"
+          />
+        </div>
+      </div>
+
+      {/* Volunteer Roles We're Seeking */}
+      <div className="w-full max-w-[90%] md:max-w-[80%] mx-auto pt-[20px] pb-[20px]">
+        <div className="text-center mb-[40px]">
+          <h2 className="text-[28px] md:text-[36px] font-[700] leading-[40px] text-[#b35000] mb-[14px]">
+            Volunteer Roles We&rsquo;re Seeking
+          </h2>
+          <p
+            className="text-[18px] font-[500] leading-[28px] text-black max-w-[820px] mx-auto"
+            data-font="lato-font"
+          >
+            Our biggest need is building free charity websites with AI development agents.
+            Researchers and business analysts power the decisions behind that work. Pick the track
+            that fits you&mdash;then complete the Core Competencies prerequisite above to get
+            started.
+          </p>
+        </div>
+
+        {/* Featured: AI-assisted web development (our largest workflow) */}
+        <div className="bg-[#2A6682] rounded-[20px] p-8 text-white mb-[24px]">
+          <span className="inline-block text-[13px] font-[700] uppercase tracking-wider bg-white text-[#2A6682] px-[12px] py-[4px] rounded-full mb-[14px]">
+            Most needed
+          </span>
+          <h3 className="text-[26px] font-[700] mb-[10px]" data-font="lato-font">
+            AI-Assisted Web Developers
+          </h3>
+          <p className="text-[16px] font-[500] leading-[26px] mb-[20px]" data-font="lato-font">
+            Build fast, secure GitHub Pages websites for nonprofits using AI development agents
+            (Claude and GitHub Copilot) with Next.js, React, and Tailwind CSS. This is our largest
+            and fastest-growing volunteer workflow&mdash;every site you help ship puts another
+            charity online for free.
+          </p>
+          <div className="flex flex-wrap gap-[16px] items-center">
+            <Link
+              href="/free-training-programs/"
+              className="inline-flex items-center gap-[8px] rounded-[10px] bg-white px-[24px] py-[10px] text-[16px] font-[700] text-[#2A6682] transition-opacity hover:opacity-90"
+              data-font="lato-font"
+            >
+              <span>Start web developer training</span>
+              <span aria-hidden="true">&rarr;</span>
+            </Link>
+            <a
+              href={ffcAdminUrl(adminLinks['developer-environment-setup'].newModel)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-[8px] text-[16px] font-[600] text-white underline-offset-4 hover:underline"
+              data-font="lato-font"
+            >
+              <span>Set up your AI dev environment</span>
+              <span aria-hidden="true">&rarr;</span>
+              <span className="sr-only">(opens FFC Admin in a new tab)</span>
+            </a>
+          </div>
+        </div>
+
+        {/* Supporting tracks */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-[24px]">
+          <div className="bg-white rounded-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.08)] p-6">
+            <h3 className="text-[22px] font-[700] text-[#1D6E90] mb-[10px]" data-font="lato-font">
+              Researchers
+            </h3>
+            <p
+              className="text-[16px] font-[500] leading-[26px] text-[#333] mb-[16px]"
+              data-font="lato-font"
+            >
+              Move beyond Google with research and data-control projects that charities use to
+              decide how best to use their resources&mdash;skills you can use from anywhere.
+            </p>
+            <Link
+              href="/free-training-programs/"
+              className="inline-flex items-center gap-[8px] text-[16px] font-[600] text-[#b35000] hover:underline"
+              data-font="lato-font"
+            >
+              <span>Explore the research track</span>
+              <span aria-hidden="true">&rarr;</span>
+            </Link>
+          </div>
+          <div className="bg-white rounded-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.08)] p-6">
+            <h3 className="text-[22px] font-[700] text-[#1D6E90] mb-[10px]" data-font="lato-font">
+              Business Analysts
+            </h3>
+            <p
+              className="text-[16px] font-[500] leading-[26px] text-[#333] mb-[16px]"
+              data-font="lato-font"
+            >
+              Compare products, services, and vendors to a professional standard so nonprofits spend
+              on their mission instead of overhead.
+            </p>
+            <Link
+              href="/free-training-programs/"
+              className="inline-flex items-center gap-[8px] text-[16px] font-[600] text-[#b35000] hover:underline"
+              data-font="lato-font"
+            >
+              <span>Explore the analyst track</span>
+              <span aria-hidden="true">&rarr;</span>
+            </Link>
+          </div>
+        </div>
+
+        <div className="max-w-[720px] mx-auto mt-[28px]">
+          <AdminGuideLink
+            href={ffcAdminUrl(adminLinks['contributor-ladder'].newModel)}
+            label="See the FFC contributor ladder"
+            description="Wondering how volunteers grow into bigger roles? Follow the contributor ladder on the FFC Admin portal."
           />
         </div>
       </div>
