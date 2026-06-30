@@ -53,7 +53,7 @@ const Index = () => {
               className="inline-flex items-center gap-[8px] mb-[20px] text-[20px] font-[500] text-[#b35000] hover:underline lg:justify-start justify-center"
               data-font="lato-font"
             >
-              See all donation campaigns
+              <span>See all donation campaigns</span>
               <span aria-hidden="true">→</span>
             </Link>
             {/* Pointing hands image - flipped horizontally to point toward the form on the right */}

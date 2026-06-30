@@ -47,7 +47,7 @@ const index = () => {
             className="inline-flex items-center gap-[8px] text-[20px] font-[500] text-[#b35000] hover:underline"
             data-font="lato-font"
           >
-            Learn more about us
+            <span>Learn more about us</span>
             <span aria-hidden="true">→</span>
           </Link>
         </div>
