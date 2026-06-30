@@ -178,11 +178,14 @@ const index = () => {
         </div>
       </Modulecard>
 
-      <Modulecard title="Module 3: MS-900 Microsoft 365 Fundamentals" id="module3">
+      <Modulecard
+        title="Module 3: AB-900 Microsoft 365 Copilot and Agent Administration Fundamentals"
+        id="module3"
+      >
         <p className="font-[500]">
-          <span className="font-[700]">Objective:</span> To gain a foundational knowledge of
-          Microsoft 365 cloud services, including its apps, security, compliance, and pricing
-          models.
+          <span className="font-[700]">Objective:</span> To gain foundational knowledge of Microsoft
+          365 cloud services&mdash;its core apps, security, and compliance&mdash;plus the
+          administration of Microsoft 365 Copilot and AI agents.
         </p>
 
         <p className="mt-6 font-[500]">
@@ -203,23 +206,23 @@ const index = () => {
         <ul className="list-disc list-inside space-y-2 text-gray-700 font-[500]">
           <li>
             <a
-              href="https://learn.microsoft.com/en-us/training/courses/ms-900t01"
+              href="https://learn.microsoft.com/en-us/credentials/certifications/exams/ab-900"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 underline"
             >
-              Microsoft Learn Self-Paced Course (Official)
+              Microsoft Learn Training &amp; Exam Page (Official)
             </a>{' '}
-            - This is the primary, self-paced learning path provided directly by Microsoft.
+            - The official AB-900 page with Microsoft&rsquo;s recommended self-paced learning paths.
           </li>
           <li>
             <a
-              href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/ms-900"
+              href="https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/ab-900"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 underline"
             >
-              Official MS-900 Study Guide
+              Official AB-900 Study Guide
             </a>{' '}
             - A detailed guide from Microsoft that outlines all exam objectives.
           </li>
