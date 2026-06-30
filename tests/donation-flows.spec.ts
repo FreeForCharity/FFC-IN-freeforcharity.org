@@ -27,11 +27,15 @@ test.describe('Donation flows', () => {
     await expect(triggers.first()).toBeVisible()
     expect(await triggers.count()).toBeGreaterThan(1)
 
-    // Every trigger (and its no-JS fallback href) points at Zeffy.
+    // Every trigger's pop-up link AND its no-JS fallback href point at Zeffy.
     const links = await triggers.evaluateAll((nodes) =>
-      nodes.map((n) => n.getAttribute('zeffy-form-link') || '')
+      nodes.map((n) => ({
+        formLink: n.getAttribute('zeffy-form-link') || '',
+        href: n.getAttribute('href') || '',
+      }))
     )
-    expect(links.every((l) => l.includes('zeffy.com'))).toBe(true)
+    expect(links.every((l) => l.formLink.includes('zeffy.com'))).toBe(true)
+    expect(links.every((l) => l.href.includes('zeffy.com'))).toBe(true)
 
     // The Zeffy embed script that powers the pop-ups must be present.
     await expect(page.locator('script[src*="zeffy-scripts"]').first()).toBeAttached({

@@ -335,9 +335,11 @@ async function main() {
   console.log(`\n-- special components`)
   // The two donation/revenue surfaces — a 200 isn't enough; assert the
   // actual payment integrations are present in the rendered HTML so a
-  // retired PayPal button or a dropped Zeffy embed is caught.
-  await checkBodyContains(`/donate embeds the Zeffy donation form`, '/donate/', [
-    'zeffy.com/embed/donation-form',
+  // dropped Zeffy embed is caught. /donate uses Zeffy pop-up triggers
+  // (zeffy-form-link → .../embed/<type>/...), not an inline iframe.
+  await checkBodyContains(`/donate exposes Zeffy pop-up triggers`, '/donate/', [
+    'zeffy-form-link',
+    'zeffy.com/embed/',
   ])
   await checkBodyContains(
     `/free-for-charity-endowment-fund mounts the Zeffy form`,

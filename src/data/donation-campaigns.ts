@@ -142,12 +142,13 @@ export const campaigns: DonationCampaign[] = [
 ]
 
 // The general unrestricted campaign — reused by CTAs that just say "donate".
-// Selected explicitly by key and asserted at module load so a misconfigured
-// registry fails loudly at build time instead of silently breaking a CTA.
-const general = campaigns.find((c) => c.key === 'general')
-if (!general) {
+// Asserted at module load so a misconfigured registry fails loudly at build
+// time instead of silently omitting or mis-selecting the prominent /donate CTA:
+// there must be exactly one `primary` campaign, and it must be `general`.
+const primaries = campaigns.filter((c) => c.primary)
+if (primaries.length !== 1 || primaries[0].key !== 'general') {
   throw new Error(
-    'donation-campaigns: a campaign with key "general" is required (used by the donate CTAs).'
+    `donation-campaigns: exactly one campaign must be \`primary\` and it must be "general" (found ${primaries.length}: ${primaries.map((c) => c.key).join(', ') || 'none'}).`
   )
 }
-export const generalCampaign: DonationCampaign = general
+export const generalCampaign: DonationCampaign = primaries[0]

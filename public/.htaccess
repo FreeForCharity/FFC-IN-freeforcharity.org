@@ -184,8 +184,9 @@ ErrorDocument 404 /404.html
 
   # Content-Security-Policy in Report-Only mode. Lets us discover the
   # exact set of inline-style / inline-script / third-party origins
-  # Tailwind + Lucide + Swiper + cookie-consent + Zeffy + PayPal + GA4
-  # actually need, without blocking the site if the policy is too tight.
+  # Tailwind + Lucide + Swiper + cookie-consent + Zeffy + GA4 actually
+  # need, without blocking the site if the policy is too tight.
+  # (PayPal was removed when donations moved to Zeffy.)
   #
   # No report-uri/report-to directive is set today: violations surface
   # in browser DevTools (Console + Network) for manual collection while
