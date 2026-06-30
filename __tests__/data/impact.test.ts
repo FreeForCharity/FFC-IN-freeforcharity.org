@@ -17,6 +17,10 @@ describe('impact data', () => {
       expect(card.title).toBeTruthy()
       expect(card.title).not.toBe('null')
       expect(card.title).not.toBe('undefined')
+      // a missing value must never leak through a formatter as "null+", nor
+      // should an already-"+"-suffixed value double up to "++"
+      expect(card.title).not.toContain('null')
+      expect(card.title).not.toContain('++')
       expect(card.description).toBeTruthy()
     }
   })

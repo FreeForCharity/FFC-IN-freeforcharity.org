@@ -47,23 +47,37 @@ export function metric(key: string): Metric {
 
 export type ResultCard = { title: string; description: string }
 
+// A metric's value, asserting it is actually present. Throws at module load so a
+// malformed/incomplete data file fails the build instead of silently shipping a
+// bogus card. Centralising the null/empty check here (rather than string-matching
+// the formatted title) means formatters like `approxValue` can't smuggle a
+// missing value through as "null"/"null+".
+function requireValue(key: string): number | string {
+  const v = metric(key).value
+  if (v === null || v === undefined || v === '') {
+    throw new Error(`impact: metric "${key}" has no value but is required for a result card`)
+  }
+  return v
+}
+
+// Format an "approximate" count like "200+", without doubling a "+" if the data
+// already stores the value as the string "200+".
+function approxValue(key: string): string {
+  const s = String(requireValue(key))
+  return s.endsWith('+') ? s : `${s}+`
+}
+
 // The headline cards rendered in the homepage "Results" section. Only
 // high/medium-confidence metrics with a real value are shown here; the
 // volunteer/pipeline metrics stay out until the automation backs them with a
 // source (see the playbook). `title` is a string so `ResultCard` animates the
 // numeric ones and renders the rest (e.g. "200+") as-is.
 export const resultCards: ResultCard[] = [
-  { title: String(metric('domainsManaged').value), description: metric('domainsManaged').label },
-  { title: String(metric('sitesBuilt').value), description: metric('sitesBuilt').label },
+  { title: String(requireValue('domainsManaged')), description: metric('domainsManaged').label },
+  { title: String(requireValue('sitesBuilt')), description: metric('sitesBuilt').label },
   {
-    title: `${metric('organizationsSupported').value}+`,
+    title: approxValue('organizationsSupported'),
     description: metric('organizationsSupported').label,
   },
   { title: String(yearsServing), description: 'Years serving nonprofits' },
 ]
-
-// Asserted at module load so a malformed data file fails the build instead of
-// silently shipping an empty or partial Results section.
-if (resultCards.some((c) => !c.title || c.title === 'null' || c.title === 'undefined')) {
-  throw new Error('impact: every result card must have a concrete value (check impact.json)')
-}

@@ -6,15 +6,20 @@ profile — built on the data pipelines FFC **already operates**, and closing th
 two gaps that keep the real numbers from being knowable today.
 
 > **Why this exists.** Every metric on the site is hardcoded in components (no
-> CMS). Numbers were typed by hand and drifted — the homepage still says
-> **"Results – 2023."** The same figures feed the Candid Platinum profile, which
-> is touched once a year. The goal: derive each number from an authoritative
-> system on a schedule, review it in a PR, and reuse it for the annual Candid
-> update.
+> CMS). Numbers were typed by hand and drifted — the homepage **used to show** a
+> hardcoded **"Results – 2023"** section (replaced by a data-driven section in
+> this change). The same figures feed the Candid Platinum profile, which is
+> touched once a year. The goal: derive each number from an authoritative system
+> on a schedule, review it in a PR, and reuse it for the annual Candid update.
 
 ---
 
-## 1. Current state — the metrics audit
+## 1. Pre-refactor state — the metrics audit
+
+> The file paths in the table below describe the **pre-refactor** layout (the
+> audit that motivated this work). The homepage section is now
+> `src/components/home-page/Results/` driven by `src/data/impact.json`; the
+> `Results-2023` paths no longer exist.
 
 ### 1.1 Impact / mission metrics (in scope for automation)
 
