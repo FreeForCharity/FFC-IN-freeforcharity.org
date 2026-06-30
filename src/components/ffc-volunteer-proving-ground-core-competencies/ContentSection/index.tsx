@@ -68,7 +68,8 @@ export default function Home() {
           </li>
           <li>
             <a href="#module3" className="text-blue-600 leading-[28px] underline">
-              <span className="font-[700]">Module 3:</span> MS-900 Microsoft 365 Fundamentals
+              <span className="font-[700]">Module 3:</span> AB-900 Microsoft 365 Copilot and Agent
+              Administration Fundamentals
             </a>{' '}
             (12 - 16 Hours)
           </li>

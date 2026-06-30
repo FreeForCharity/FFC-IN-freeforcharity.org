@@ -50,7 +50,7 @@ const index = () => {
               without staff input.
             </p>
             <p>
-              For our training programs we help charities navigate through the MS-900 Microsoft
+              For our training programs we help charities navigate through the AB-900 Microsoft 365
               training and certification program while pursuing their Microsoft 365 Grants. We
               further provide access to the Divi and WPMUDEV website design and maintenance product
               that each come with their own vendor provided training.
