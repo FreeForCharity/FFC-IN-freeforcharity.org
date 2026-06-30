@@ -208,9 +208,9 @@ const Index = () => {
             Our biggest need is building free charity websites with AI development agents&mdash;but
             we staff every part of a nonprofit&rsquo;s technology: Microsoft 365 and Google
             Workspace administration, data &amp; analytics, design, and the people who recruit and
-            onboard volunteers. Every role has full details on the FFC Admin portal and an
-            application on Idealist. Pick the one that fits you&mdash;then complete the Core
-            Competencies prerequisite above to get started.
+            onboard volunteers. Most roles have full details and a free training track on the FFC
+            Admin portal, and every one links to an application on Idealist. Pick the one that fits
+            you&mdash;then complete the Core Competencies prerequisite above to get started.
           </p>
         </div>
 
