@@ -525,11 +525,17 @@ jobs:
           # bot-challenges the GitHub-runner IP (seen as HTTP 415/403 on the apex
           # AND /hub, while real users get 200). With `--fail` that challenge
           # aborted the whole job and false-failed an otherwise-healthy deploy —
-          # the upload + parity check had already succeeded. Mirror the /hub
-          # guard's asymmetric logic: only a clean 2xx/3xx runs the smoke suite;
-          # a challenged runner WARNs and skips it (it can't smoke-test reliably
-          # from behind a challenge) and never fails the deploy. A real smoke
-          # regression (when the apex IS reachable) still fails the job below.
+          # the upload + parity check had already succeeded. Gate on the status
+          # after 3 retries:
+          #   * 2xx/3xx     -> apex reachable: run the full smoke suite (a real
+          #                    content/redirect/asset regression still fails it).
+          #   * 403/415/429 -> bot-challenge / WAF / rate-limit codes hitting the
+          #                    runner IP: WARN and skip the smoke suite (a
+          #                    challenged runner can't smoke-test), do NOT fail —
+          #                    the upload + parity check already verified the mirror.
+          #   * anything else (4xx/5xx/network 000) -> the apex itself looks
+          #                    unhealthy, not a known challenge code: FAIL so a
+          #                    genuinely broken deploy still opens an incident.
           code=""
           for attempt in 1 2 3; do
             code=$(curl --show-error --silent --location --max-time 20 \
@@ -543,8 +549,12 @@ jobs:
             2??|3??)
               npm run smoke-test
               ;;
+            403|415|429)
+              echo "::warning::Post-deploy reachability probe got HTTP ${code} from the runner — a Cloudflare bot-challenge / WAF block of the GitHub-runner IP (real users are typically unaffected). Skipping the smoke suite (it can't run from behind a challenge); the upload + parity check already verified the mirror. Verify manually if unsure: curl -sSIL ${URL}"
+              ;;
             *)
-              echo "::warning::Post-deploy reachability probe got HTTP ${code} from the runner — almost certainly a transient Cloudflare bot-challenge of the runner IP (real users are unaffected). The upload + parity check already verified the mirror, so NOT failing the deploy; skipping the smoke suite (it would false-fail from a challenged runner). Verify manually if concerned: curl -sSIL ${URL}"
+              echo "::error::Post-deploy reachability probe got HTTP ${code} on ${URL} after 3 attempts — not a recognized bot-challenge code, so the apex looks unhealthy. Failing the deploy."
+              exit 1
               ;;
           esac
 
