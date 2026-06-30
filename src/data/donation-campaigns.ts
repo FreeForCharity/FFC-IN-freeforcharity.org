@@ -176,3 +176,13 @@ if (primaries.length !== 1 || primaries[0].key !== 'general') {
   )
 }
 export const generalCampaign: DonationCampaign = primaries[0]
+
+/**
+ * The "Free Domain Names For Charity" campaign — surfaced as the footer donate
+ * CTA. Exported directly so the (client) footer imports just this one entry
+ * instead of the whole `campaigns` registry. `undefined` if it's ever removed,
+ * in which case the footer renders nothing (fail-safe).
+ */
+export const freeDomainCampaign: DonationCampaign | undefined = campaigns.find(
+  (c) => c.key === 'free-domain'
+)
