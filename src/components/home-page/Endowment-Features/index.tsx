@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { SustainableFundingCard } from '@/components/ui/SustainableFundingCard'
 
 const Home: React.FC = () => {
@@ -33,6 +34,16 @@ const Home: React.FC = () => {
               title="Be a Champion for Change"
               text="By taking donations on our behalf, you become an essential part of our mission, creating a ripple effect of generosity and support."
             />
+          </div>
+          <div className="text-center mt-[40px]">
+            <Link
+              href="/free-for-charity-endowment-fund/"
+              className="inline-flex items-center gap-[8px] rounded-[27px] bg-[#2A6682] px-[36px] py-[16px] text-[20px] font-[500] text-white transition-colors hover:bg-[#22556b]"
+              data-font="lato-font"
+            >
+              Support the Endowment Fund
+              <span aria-hidden="true">→</span>
+            </Link>
           </div>
         </div>
       </div>
