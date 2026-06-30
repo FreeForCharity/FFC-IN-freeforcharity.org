@@ -30,7 +30,7 @@ const volunteerRoles: VolunteerRole[] = [
   {
     title: 'Microsoft 365 Administrator',
     blurb:
-      'Run email, identity, and security for charities—and earn your MS-900 (FFC sponsors the exam).',
+      'Run email, identity, and security for charities—and earn the AB-900 Microsoft 365 fundamentals certification (FFC sponsors the exam).',
     adminPath: '/volunteer/microsoft-365-admin/',
     trainingPath: '/training-plan/',
     idealistUrl: IDEALIST_BOARD,
@@ -315,8 +315,8 @@ const Index = () => {
               Free certifications
             </h4>
             <p className="text-[15px] font-[500] leading-[24px] text-[#333]" data-font="lato-font">
-              Work toward MS-900 (FFC sponsors the exam), GitHub Foundations, and Canva Design
-              School credentials while you serve.
+              Work toward AB-900 (Microsoft 365 Copilot &amp; agent fundamentals; FFC sponsors the
+              exam), GitHub Foundations, and Canva Design School credentials while you serve.
             </p>
           </div>
           <div className="flex flex-col rounded-[20px] border border-[#e5e5e5] bg-white p-6">

@@ -90,7 +90,7 @@ split "Time Commitment" / "Commitment Details"):
 - **Participation Requirements / Skills:** GitHub + MFA, a password manager, an AI
   assistant, and a Microsoft 365 account (setup guide provided); interest in
   identity & security. No prior admin experience required.
-- **Benefits:** **MS-900 certification — FFC sponsors the exam**; real Microsoft 365
+- **Benefits:** **AB-900 certification (Microsoft 365 Copilot & Agent Administration Fundamentals) — FFC sponsors the exam**; real Microsoft 365
   tenant administration experience (MFA, Conditional Access, compliance);
   contributor-ladder progression.
 - **Description:** Run email, identity, and security for the charities FFC supports —
