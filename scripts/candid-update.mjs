@@ -31,6 +31,16 @@ const vhModel = readJson('src/data/volunteer-hours-model.json')
 const OUT_PATH = join(root, 'docs', 'candid-update.md')
 const CARD_CONFIDENCE = ['high', 'medium'] // same gate as impact.ts cardValue()
 
+// FFC's Candid profile identity — verified live via the Candid MCP
+// (search_organizations). Update sealStatus/sealVerifiedAt on each re-check.
+const CANDID_PROFILE = {
+  url: 'https://app.candid.org/profile/9326392/',
+  nonprofitId: '9326392',
+  ein: '46-2471893',
+  sealStatus: '2024 Platinum',
+  sealVerifiedAt: '2026-07-01',
+}
+
 // --- Derivations (mirror src/data/impact.ts; drift is caught by the jest
 // cross-check in __tests__/scripts/candid-update.test.ts) -------------------
 
@@ -141,6 +151,18 @@ push(
   '**Progress & results (Platinum)**, and enter each metric below with its per-year values.',
   'Definitions/methodology text is written to paste into each metric description. After',
   'submitting, update `verifiedAt` on the touched metrics in `impact.json`.',
+  '',
+  '## Profile & seal status',
+  '',
+  `- **Profile:** ${CANDID_PROFILE.url} (nonprofit_id ${CANDID_PROFILE.nonprofitId}, EIN ` +
+    `${CANDID_PROFILE.ein})`,
+  `- **Current seal:** ${CANDID_PROFILE.sealStatus} (verified ${CANDID_PROFILE.sealVerifiedAt} ` +
+    'via the Candid MCP). Candid profiles **expire two years after the last published update**,',
+  '  so a 2024 seal is at the expiration cliff — publish promptly.',
+  '- **Renewal checklist (per Candid Help):** Bronze/Silver prerequisites (basics + program',
+  '  info), Gold (2024-or-2025 financials — a Form 990/990-N upload suffices — plus leader',
+  '  demographics), then Platinum: goals & strategies, board demographics, and **at least one',
+  '  impact metric from 2025** — the per-year table below satisfies that requirement.',
   '',
   '## Per-year metrics (Progress & results)',
   '',

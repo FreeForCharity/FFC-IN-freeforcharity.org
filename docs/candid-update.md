@@ -10,6 +10,16 @@ How to use: sign in to the Candid nonprofit profile for Free For Charity, open
 Definitions/methodology text is written to paste into each metric description. After
 submitting, update `verifiedAt` on the touched metrics in `impact.json`.
 
+## Profile & seal status
+
+- **Profile:** https://app.candid.org/profile/9326392/ (nonprofit_id 9326392, EIN 46-2471893)
+- **Current seal:** 2024 Platinum (verified 2026-07-01 via the Candid MCP). Candid profiles **expire two years after the last published update**,
+  so a 2024 seal is at the expiration cliff — publish promptly.
+- **Renewal checklist (per Candid Help):** Bronze/Silver prerequisites (basics + program
+  info), Gold (2024-or-2025 financials — a Form 990/990-N upload suffices — plus leader
+  demographics), then Platinum: goals & strategies, board demographics, and **at least one
+  impact metric from 2025** — the per-year table below satisfies that requirement.
+
 ## Per-year metrics (Progress & results)
 
 Classified calendar years: 2023, 2024, 2025. Candid takes one value per year.

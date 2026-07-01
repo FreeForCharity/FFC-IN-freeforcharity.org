@@ -397,6 +397,21 @@ Design rules (enforced, not aspirational):
 Annual procedure: regenerate → open the sheet → paste into the Candid Platinum
 form → bump `verifiedAt` on the touched metrics in `impact.json` → commit both.
 
+### FFC's profile (verified live via the Candid MCP, 2026-07-01)
+
+- **Profile:** <https://app.candid.org/profile/9326392/> — nonprofit_id
+  `9326392`, EIN `46-2471893`, AKA FFCHosting / FFCdomains / FFCadmin.
+- **Seal: 2024 Platinum — at the expiration cliff.** Candid profiles expire two
+  years after the last published update, and losing the seal means losing the
+  badge everywhere it's displayed. Renewing to the current-year Platinum needs:
+  Gold prerequisites (2024-or-2025 financials — a Form 990/990-N upload is
+  enough — plus leader demographics), then goals & strategies, board
+  demographics, and **at least one impact metric from 2025** — which the paste
+  sheet's per-year table now provides.
+- **PCS codes on file** (subjects: information & communications, ICT, economic
+  development, job training, community service; populations: adults, students,
+  military, veterans) already match the mission — no taxonomy changes needed.
+
 ### Candid MCP server (read/research assist)
 
 A Candid MCP connector exists for Claude sessions (OAuth-protected; re-authorize
