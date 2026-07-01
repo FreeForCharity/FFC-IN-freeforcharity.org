@@ -116,6 +116,7 @@ describe('impact data', () => {
 
       it('category split sums to charityThreads (= newCharity + existingCharity)', () => {
         expect(y.charityThreadsByCategory).not.toBeNull()
+        expect(y.byParty).not.toBeNull()
         const p = y.byParty!
         expect(y.charityThreads).toBe(p.newCharity + p.existingCharity)
         const sum = Object.values(y.charityThreadsByCategory!).reduce((s, n) => s + n, 0)
@@ -125,11 +126,14 @@ describe('impact data', () => {
       it('derives a positive text-support hour figure and an independent velocity', () => {
         expect(textSupportHoursByYear[yr]).toBeGreaterThan(0)
         expect(y.netNewReachouts).not.toBeNull()
+        expect(y.byParty).not.toBeNull()
+        expect(reachoutVelocityByYear[yr]).toBeDefined()
         const v = reachoutVelocityByYear[yr]
+        const p = y.byParty!
         // distinct first-contact senders must not exceed the thread-level party totals
         expect(v.volunteer).toBeGreaterThan(0)
-        expect(v.volunteer).toBeLessThanOrEqual(y.byParty!.volunteer)
-        expect(v.newCharity).toBeLessThanOrEqual(y.byParty!.newCharity)
+        expect(v.volunteer).toBeLessThanOrEqual(p.volunteer)
+        expect(v.newCharity).toBeLessThanOrEqual(p.newCharity)
       })
     })
   })
