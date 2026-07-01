@@ -247,7 +247,8 @@ WHMCS clients  <  true reach    (the deficit ≈ legacy WP + uncaptured comms)
 3. **Gap A:** adopt a WHMCS partner field; graduate `charityPartners` to a clean count.
 4. **Gap B:** build the email/text discovery export in `FFC-Cloudflare-Automation`;
    feed `uncapturedLeads` + a pipeline list.
-5. **Candid sheet + cadence:** `candid-update.md` generator + monthly/annual schedule.
+5. **Candid sheet + cadence:** `candid-update.md` generator (✅ shipped —
+   `scripts/candid-update.mjs`, see §13) + monthly/annual schedule (open).
 
 ---
 
@@ -361,3 +362,52 @@ To re-run for a new year: exhaust pagination for the exact total, classify
 enumerate distinct first-contact senders across the full window for velocity, and
 drop the numbers into `text-metrics.json`; the derived metrics and Candid figures
 follow automatically.
+
+---
+
+## 13. Candid crosswalk — the generated paste sheet
+
+`docs/candid-update.md` is the **generated, paste-ready sheet** for the annual
+Candid Platinum update (rollout item 5). Candid has no public write API — the
+profile is a manual web form — so the sheet is the bridge: per-year values plus
+definition/methodology text written to be pasted directly into each Platinum
+"Progress & results" metric.
+
+```bash
+node scripts/candid-update.mjs           # regenerate docs/candid-update.md
+node scripts/candid-update.mjs --check   # exit 1 if the committed sheet is stale
+```
+
+Design rules (enforced, not aspirational):
+
+- **Same sources as the site.** The generator reads only `impact.json`,
+  `text-metrics.json`, and `volunteer-hours-model.json` — one source of truth
+  for the website AND Candid.
+- **Publication gate.** A metric is pasteable only with a concrete value and
+  high/medium confidence; per-year series only from `classified` years.
+  Everything else lands in a "Not yet Candid-attributable (do NOT paste)"
+  section with the reason. Values are never fabricated.
+- **Deterministic + CI-guarded.** Output is versioned by the data files' own
+  stamps (no wall clock), and `__tests__/scripts/candid-update.test.ts` runs
+  `--check` plus a cross-check that the sheet's hour figures equal the
+  `impact.ts` derivation — so a data change without a regenerated sheet, or a
+  drift between the script and the loader, fails `npm test`.
+- The file is in `.prettierignore` (byte-exact staleness comparison).
+
+Annual procedure: regenerate → open the sheet → paste into the Candid Platinum
+form → bump `verifiedAt` on the touched metrics in `impact.json` → commit both.
+
+### Candid MCP server (read/research assist)
+
+A Candid MCP connector exists for Claude sessions (OAuth-protected; re-authorize
+via claude.ai connector settings when it shows disconnected). It is
+**read-only** — it does not write to the profile, so the paste sheet above stays
+the update mechanism — but it directly supports this playbook:
+
+| Tool                               | What it does for this playbook                                                                                                                                                                       |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `search_organizations`             | Look up FFC's own profile (confirm what Candid currently shows vs `impact.json`) and verify each partner charity → EIN + 501(c)(3) status, turning `organizationsSupported` into a verifiable roster |
+| `identify_mentioned_organizations` | Resolve org names surfaced by the Gap B email/text discovery into real Candid orgs — uncaptured leads get an EIN before onboarding                                                                   |
+| `identify_locations`               | Normalize partner locations for geographic-reach reporting                                                                                                                                           |
+| `taxonomy_terms`                   | Map FFC programs to Candid's Philanthropy Classification System so profile text uses Candid's own vocabulary                                                                                         |
+| `knowledge_resources`              | Candid's KB — e.g. current Platinum seal requirements — straight from the source                                                                                                                     |

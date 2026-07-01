@@ -1,0 +1,58 @@
+<!-- GENERATED FILE — do not edit by hand. -->
+<!-- Regenerate: node scripts/candid-update.mjs   Verify: node scripts/candid-update.mjs --check -->
+
+# Candid (GuideStar) Platinum update — paste sheet
+
+Generated from `impact.json` (generatedAt 2026-06-30, reporting year 2026), `text-metrics.json` (v2026-07-01) and `volunteer-hours-model.json` (v2026-06-30).
+
+How to use: sign in to the Candid nonprofit profile for Free For Charity, open
+**Progress & results (Platinum)**, and enter each metric below with its per-year values.
+Definitions/methodology text is written to paste into each metric description. After
+submitting, update `verifiedAt` on the touched metrics in `impact.json`.
+
+## Per-year metrics (Progress & results)
+
+Classified calendar years: 2023, 2024, 2025. Candid takes one value per year.
+
+| Metric | 2023 | 2024 | 2025 |
+| --- | ---: | ---: | ---: |
+| Nonprofit support interactions handled (text channel) | 159 | 132 | 410 |
+| New nonprofit organizations reaching out (text channel) | 21 | 5 | 16 |
+| New volunteers engaged (text channel) | 19 | 5 | 21 |
+| Volunteer hours contributed — text-based nonprofit support | 35 | 36 | 86 |
+
+### Nonprofit support interactions handled (text channel)
+
+- **Definition:** Text-message conversation threads with nonprofit organizations (new inquiries + existing partners) handled by Free For Charity volunteers, per calendar year.
+- **Methodology:** Full census of the FFC Google Voice line: every thread individually classified by party; charity-org threads = newCharity + existingCharity. See text-metrics.json.
+
+### New nonprofit organizations reaching out (text channel)
+
+- **Definition:** Distinct nonprofit organizations making first contact with Free For Charity by text message, per calendar year.
+- **Methodology:** Distinct first-contact senders, deduplicated across all classified years by first appearance (an organization first seen in an earlier year is not recounted).
+
+### New volunteers engaged (text channel)
+
+- **Definition:** Distinct volunteers making first contact with Free For Charity by text message, per calendar year.
+- **Methodology:** Same distinct first-contact enumeration as the nonprofit series.
+
+### Volunteer hours contributed — text-based nonprofit support
+
+- **Definition:** Volunteer hours spent supporting nonprofits over the text channel, per calendar year.
+- **Methodology:** Modeled from the full thread census x per-category minutes (volunteer-hours-model.json v2026-06-30, pending org ratification): each charity thread costed by product category, volunteer-coordination threads at 8 min.
+
+## Reporting-year snapshot metrics
+
+| Candid metric | Value | Year | Source (paste as methodology) |
+| --- | ---: | --- | --- |
+| Nonprofit organizations supported (total) | 200 | 2026 | Free For Charity Domain Program (ffcadmin.org/sites-list) |
+| Nonprofit domains managed | 376 | 2026 | ffcadmin.org/sites-list (FFC-Cloudflare-Automation: sites_list.json) |
+| Nonprofit websites built (cumulative) | 41 | 2026 | GitHub FreeForCharity FFC-EX-* repositories (active, non-archived) |
+| Legacy nonprofit sites migrated to stable hosting | 6 | 2026 | ffcadmin.org/sites-list tier 4 |
+| Program cost per nonprofit per year (USD) | 16.5 | 2026 | eNom .org domain cost |
+| Support text threads handled (3-year total) | 1153 | 2026 | Gmail Google Voice FULL CENSUS 2026-07-01: every thread in CY2023-2025 individually classified (5,951 total threads: 1,999 + 1,874 + 2,078). Charity/volunteer = 701 charity-org + 452 volunteer-coordination = 1,153 threads (~19% of traffic; the rest is personal/day-job noise). Threads, not individual messages. Per-year splits in text-metrics.json. Supersedes the earlier ~45%-of-6,193 sample estimate (2,780). |
+
+## Not yet Candid-attributable (do NOT paste)
+
+- **Total modeled volunteer hours (per engagement)** — volunteer-hours-model.json coefficients are proposed but pending org ratification; m365Email/onboarding lines also lack authoritative unit counts.
+- **Uncaptured charity leads (discovery pipeline)** — confidence "low" — manual sample only, pending the automated M365 discovery run.
