@@ -58,7 +58,7 @@
     },
     "textMessagesHandled": {
       "value": 1153,
-      "label": "Charity/volunteer support text messages handled (3 yrs)",
+      "label": "Charity/volunteer support text threads handled (3 yrs)",
       "source": "Gmail Google Voice FULL CENSUS 2026-07-01: every thread in CY2023-2025 individually classified (5,951 total threads: 1,999 + 1,874 + 2,078). Charity/volunteer = 701 charity-org + 452 volunteer-coordination = 1,153 threads (~19% of traffic; the rest is personal/day-job noise). Threads, not individual messages. Per-year splits in text-metrics.json. Supersedes the earlier ~45%-of-6,193 sample estimate (2,780).",
       "confidence": "high"
     },

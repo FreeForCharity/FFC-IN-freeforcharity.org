@@ -53,10 +53,17 @@ function textSupportHours(year) {
   const y = textMetrics.years[year]
   const model = vhModel.textSupport
   let minutes = 0
-  for (const [cat, n] of Object.entries(y.charityThreadsByCategory)) {
-    minutes += n * model.minutesPerCharityTextByCategory[cat]
+  // Same null/typeof guards as impact.ts, so a missing category coefficient or
+  // a partially-null year skews toward undercounting instead of throwing/NaN.
+  if (y.charityThreadsByCategory) {
+    for (const [cat, n] of Object.entries(y.charityThreadsByCategory)) {
+      const per = model.minutesPerCharityTextByCategory[cat]
+      if (typeof n === 'number' && typeof per === 'number') minutes += n * per
+    }
   }
-  minutes += y.byParty.volunteer * model.minutesPerVolunteerCoordinationText
+  if (y.byParty && typeof y.byParty.volunteer === 'number') {
+    minutes += y.byParty.volunteer * model.minutesPerVolunteerCoordinationText
+  }
   return Math.round(minutes / 60)
 }
 
