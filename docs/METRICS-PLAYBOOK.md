@@ -325,40 +325,39 @@ bucketed by **calendar year** in `src/data/text-metrics.json`:
    compute the implied hours (separate from the §11 engagement total, since text
    support is per-year rather than cumulative).
 
-### 2025 (template — fully classified)
+### 2023–2025 (full census)
 
-| Metric                         | Value                                                                                         |
-| ------------------------------ | --------------------------------------------------------------------------------------------- |
-| Total threads                  | **2,079** (exact)                                                                             |
-| Noise                          | 1,440                                                                                         |
-| Volunteer                      | 253                                                                                           |
-| New charity / Existing charity | 237 / 149 (charity-org = **386**)                                                             |
-| Net-new reach-outs             | **42 new charities, 34 volunteers**                                                           |
-| Charity threads by category    | migration 94 · general 95 · website 83 · maintenance 59 · onboarding 28 · m365 14 · domain 13 |
-| Implied text-support hours     | **≈ 95 hrs**                                                                                  |
-
-Splits are ~95%-calibrated (a 40-thread deep-read sample); the largest single
-uncertainty is one high-volume contributor (~94 threads) classed as volunteer.
-
-### Replicating to other years
-
-2023 and 2024 have now been classified with the same pass; 2026-YTD remains
-`pending-classification` (null splits — never fabricated).
+Every thread in 2023, 2024, and 2025 was **individually classified** — no
+sampling, no ratio extrapolation, no template-shaping. Totals are exact (full
+pagination); every charity-org thread was individually assigned one category; and
+net-new reach-outs are distinct first-contact senders deduped **across all three
+years** by first appearance.
 
 | Year | Total threads | Charity threads | Party (vol / new / existing / noise) | Net-new reach-outs (vol / new) | Implied text-support hrs |
 | ---- | ------------- | --------------- | ------------------------------------ | ------------------------------ | ------------------------ |
-| 2023 | 1,999         | 282             | 61 / 40 / 242 / 1,656                | 26 / 25                        | ≈ 53 hrs                 |
-| 2024 | 1,875         | 190             | 68 / 54 / 136 / 1,617                | 15 / 16                        | ≈ 42 hrs                 |
-| 2025 | 2,079         | 386             | 253 / 237 / 149 / 1,440              | 34 / 42                        | ≈ 95 hrs                 |
+| 2023 | 1,999         | 159             | 121 / 88 / 71 / 1,719                | 19 / 21                        | ≈ 35 hrs                 |
+| 2024 | 1,874         | 132             | 126 / 40 / 92 / 1,616                | 5 / 5                          | ≈ 36 hrs                 |
+| 2025 | 2,078         | 410             | 205 / 225 / 185 / 1,463              | 21 / 16                        | ≈ 86 hrs                 |
 
-Method notes for the back-years: totals are exact (full pagination); party
-splits are sample-calibrated (~83–86% of traffic is noise — personal/family and
-day-job); **net-new reach-outs are independently enumerated distinct
-first-contact senders, deduped by first-appearance year** (so a contact first
-seen in 2023 is not counted again in 2024) rather than extrapolated; the
-**category split for 2023/2024 is extrapolated from the 2025 template shape**, so
-`migration` in particular may be overstated for the back-years. To re-run for a
-new year, exhaust pagination for the exact total, sample-classify by party +
-category, enumerate distinct first-contact senders for velocity, and drop the
-numbers into `text-metrics.json`; the derived metrics and Candid figures follow
-automatically.
+Category counts (charity-org threads only):
+
+| Year | website | domain | m365 | onboarding | migration | maintenance | general |
+| ---- | ------- | ------ | ---- | ---------- | --------- | ----------- | ------- |
+| 2023 | 16      | 13     | 15   | 9          | 2         | 2           | 102     |
+| 2024 | 28      | 17     | 15   | 10         | 5         | 18          | 39      |
+| 2025 | 110     | 31     | 17   | 37         | 6         | 5           | 204     |
+
+Notes: ~70–86% of all traffic is noise (the line doubles as a personal + day-job
+phone). The census **superseded an earlier sample-based pass** whose ratio
+extrapolation had overstated charity volume and badly overstated `migration`
+(e.g. 2025 migration 94 → **6**, general 95 → **204**); this is why the full
+census matters. `general` (charity-related but not category-specific
+coordination) dominates every year. 2024 net-new is small because most 2024
+charity contacts first appeared in 2023; 2026-YTD remains
+`pending-classification` (null splits — never fabricated).
+
+To re-run for a new year: exhaust pagination for the exact total, classify
+**every** thread by party + category (deep-read only the ambiguous ones),
+enumerate distinct first-contact senders across the full window for velocity, and
+drop the numbers into `text-metrics.json`; the derived metrics and Candid figures
+follow automatically.

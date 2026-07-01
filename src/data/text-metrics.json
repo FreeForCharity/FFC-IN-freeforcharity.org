@@ -1,6 +1,6 @@
 {
-  "_comment": "Text-derived metrics system (Gap B). Per CALENDAR YEAR, from the human-in-the-loop Google Voice classification (personal account; see FFC-Cloudflare-Automation docs/runbooks/google-voice-metrics.md). Each thread is classified by party; charity-org threads are tagged by product category; net-new reach-outs are DISTINCT first-contact senders (deduped by first-appearance year) and give the velocity. Totals are exact when a year's pagination is exhausted; party/category splits come from the classification sample. 'charityThreads' = newCharity + existingCharity (charity orgs); volunteer threads are counted separately in byParty. 2023-2025 are classified; 2026 is YTD pending. 2023 threads span the full calendar year. The category split for 2023/2024 is extrapolated from the 2025 template shape (so 'migration' in particular may be overstated for the back-years); net-new reach-outs for 2023 and 2024 are independently enumerated distinct first-contact senders (deduped by first-appearance year), while 2025's velocity was rate-extrapolated in its original template pass (see each year's confidence note).",
-  "version": "2026-06-30",
+  "_comment": "Text-derived metrics system (Gap B). Per CALENDAR YEAR, from the human-in-the-loop Google Voice classification (personal account; see FFC-Cloudflare-Automation docs/runbooks/google-voice-metrics.md). 2023-2025 are a FULL CENSUS: every thread was individually classified by party (volunteer/newCharity/existingCharity/noise), and every charity-org thread (newCharity + existingCharity) was individually assigned one product category — no sampling, no ratio extrapolation, no template-shaping. Totals are exact (pagination exhausted). Net-new reach-outs are DISTINCT first-contact senders deduped ACROSS all three years by first-appearance year (a contact first seen in 2023 is not recounted in 2024/2025), giving the velocity. 'charityThreads' = newCharity + existingCharity; volunteer threads are counted separately in byParty. 2026 is YTD pending the same census pass.",
+  "version": "2026-07-01",
   "categories": ["website", "domain", "m365", "onboarding", "migration", "maintenance", "general"],
   "parties": ["volunteer", "newCharity", "existingCharity", "noise"],
   "years": {
@@ -8,55 +8,55 @@
       "coverage": "full (threads span Jan-Dec 2023)",
       "status": "classified",
       "totalThreads": 1999,
-      "charityThreads": 282,
-      "byParty": { "volunteer": 61, "newCharity": 40, "existingCharity": 242, "noise": 1656 },
-      "netNewReachouts": { "volunteer": 26, "newCharity": 25 },
+      "charityThreads": 159,
+      "byParty": { "volunteer": 121, "newCharity": 88, "existingCharity": 71, "noise": 1719 },
+      "netNewReachouts": { "volunteer": 19, "newCharity": 21 },
       "charityThreadsByCategory": {
-        "website": 61,
-        "domain": 10,
-        "m365": 10,
-        "onboarding": 21,
-        "migration": 69,
-        "maintenance": 43,
-        "general": 68
+        "website": 16,
+        "domain": 13,
+        "m365": 15,
+        "onboarding": 9,
+        "migration": 2,
+        "maintenance": 2,
+        "general": 102
       },
-      "confidence": "Exact total 1999 via full pagination (40 pages); threads span the full calendar year (Jan 1-Dec 31 2023); party split calibrated on a ~99-thread sample (~83% noise, dominated by personal/family and day-job traffic); net-new reach-outs independently enumerated from 51 distinct charity contacts (26 volunteer, 25 newCharity); category split extrapolated from the 2025 template shape, so 'migration' may be overstated for 2023"
+      "confidence": "Full census: all 1999 threads individually classified by party from subject + snippet (~20 ambiguous threads deep-read to resolve); every charity thread individually categorized (no extrapolation). ~86% is noise (personal/family + day-job). Net-new reach-outs are distinct first-contact senders deduped across 2023-2025 by first appearance (19 volunteer, 21 newCharity)."
     },
     "2024": {
       "coverage": "full",
       "status": "classified",
-      "totalThreads": 1875,
-      "charityThreads": 190,
-      "byParty": { "volunteer": 68, "newCharity": 54, "existingCharity": 136, "noise": 1617 },
-      "netNewReachouts": { "volunteer": 15, "newCharity": 16 },
+      "totalThreads": 1874,
+      "charityThreads": 132,
+      "byParty": { "volunteer": 126, "newCharity": 40, "existingCharity": 92, "noise": 1616 },
+      "netNewReachouts": { "volunteer": 5, "newCharity": 5 },
       "charityThreadsByCategory": {
-        "website": 52,
-        "domain": 11,
-        "m365": 8,
-        "onboarding": 24,
-        "migration": 40,
-        "maintenance": 34,
-        "general": 21
+        "website": 28,
+        "domain": 17,
+        "m365": 15,
+        "onboarding": 10,
+        "migration": 5,
+        "maintenance": 18,
+        "general": 39
       },
-      "confidence": "Exact total 1875 via full pagination (38 pages); party split calibrated on a 138-thread sample (~86% noise, heavy personal/family and day-job traffic); net-new reach-outs independently enumerated as distinct first-contact senders not seen in 2023 (15 volunteer, 16 newCharity); category split extrapolated from the 2025 template shape"
+      "confidence": "Full census: all 1874 threads individually classified by party (53 ambiguous threads deep-read); every charity thread individually categorized (no extrapolation). ~86% is noise (personal/family + day-job). Net-new reach-outs deduped across 2023-2025 (5 volunteer, 5 newCharity) — small because most 2024 charity contacts first appeared in 2023."
     },
     "2025": {
       "coverage": "full",
       "status": "classified",
-      "totalThreads": 2079,
-      "charityThreads": 386,
-      "byParty": { "volunteer": 253, "newCharity": 237, "existingCharity": 149, "noise": 1440 },
-      "netNewReachouts": { "volunteer": 34, "newCharity": 42 },
+      "totalThreads": 2078,
+      "charityThreads": 410,
+      "byParty": { "volunteer": 205, "newCharity": 225, "existingCharity": 185, "noise": 1463 },
+      "netNewReachouts": { "volunteer": 21, "newCharity": 16 },
       "charityThreadsByCategory": {
-        "website": 83,
-        "domain": 13,
-        "m365": 14,
-        "onboarding": 28,
-        "migration": 94,
-        "maintenance": 59,
-        "general": 95
+        "website": 110,
+        "domain": 31,
+        "m365": 17,
+        "onboarding": 37,
+        "migration": 6,
+        "maintenance": 5,
+        "general": 204
       },
-      "confidence": "exact total (2079); party/category splits ~95% calibrated on a 40-thread sample; main uncertainty is one high-volume contributor (~94 threads) classed as volunteer; net-new reach-outs are rate-extrapolated"
+      "confidence": "Full census: all 2078 threads individually classified by party (60 ambiguous threads deep-read), replacing the earlier sample-calibrated figures; every charity thread individually categorized (no extrapolation). ~70% is noise. Net-new reach-outs deduped across 2023-2025 (21 volunteer, 16 newCharity)."
     },
     "2026": {
       "coverage": "YTD",

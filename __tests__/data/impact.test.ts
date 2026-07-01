@@ -94,7 +94,7 @@ describe('impact data', () => {
     it('derives a positive 2025 text-support hour figure and surfaces velocity', () => {
       expect(textSupportHoursByYear['2025']).toBeGreaterThan(0)
       expect(textSupportHours).toBeGreaterThanOrEqual(textSupportHoursByYear['2025'])
-      expect(reachoutVelocityByYear['2025']).toEqual({ volunteer: 34, newCharity: 42 })
+      expect(reachoutVelocityByYear['2025']).toEqual({ volunteer: 21, newCharity: 16 })
     })
 
     it('leaves pending years null (no fabricated splits)', () => {
