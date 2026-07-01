@@ -21,7 +21,7 @@ const index = () => {
               </>
             }
             buttonText="Available Here"
-            buttonLink="https://nonprofit.linkedin.com/"
+            buttonLink="https://www.linkedin.com/"
             imageSrc="/Images/Linkedin-logo.webp" // 👈 image passed as prop
           />
           <SlidingCard
