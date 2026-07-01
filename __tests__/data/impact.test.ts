@@ -98,11 +98,39 @@ describe('impact data', () => {
     })
 
     it('leaves pending years null (no fabricated splits)', () => {
-      for (const yr of ['2023', '2024', '2026']) {
+      for (const yr of ['2026']) {
         expect(textMetrics.years[yr].byParty).toBeNull()
         expect(textMetrics.years[yr].charityThreadsByCategory).toBeNull()
         expect(textSupportHoursByYear[yr]).toBeUndefined()
       }
+    })
+
+    describe.each(['2023', '2024'])('classified back-year %s', (yr) => {
+      const y = textMetrics.years[yr]
+
+      it('byParty sums to the total thread count', () => {
+        expect(y.byParty).not.toBeNull()
+        const p = y.byParty!
+        expect(p.volunteer + p.newCharity + p.existingCharity + p.noise).toBe(y.totalThreads)
+      })
+
+      it('category split sums to charityThreads (= newCharity + existingCharity)', () => {
+        expect(y.charityThreadsByCategory).not.toBeNull()
+        const p = y.byParty!
+        expect(y.charityThreads).toBe(p.newCharity + p.existingCharity)
+        const sum = Object.values(y.charityThreadsByCategory!).reduce((s, n) => s + n, 0)
+        expect(sum).toBe(y.charityThreads)
+      })
+
+      it('derives a positive text-support hour figure and an independent velocity', () => {
+        expect(textSupportHoursByYear[yr]).toBeGreaterThan(0)
+        expect(y.netNewReachouts).not.toBeNull()
+        const v = reachoutVelocityByYear[yr]
+        // distinct first-contact senders must not exceed the thread-level party totals
+        expect(v.volunteer).toBeGreaterThan(0)
+        expect(v.volunteer).toBeLessThanOrEqual(y.byParty!.volunteer)
+        expect(v.newCharity).toBeLessThanOrEqual(y.byParty!.newCharity)
+      })
     })
   })
 })

@@ -342,8 +342,23 @@ uncertainty is one high-volume contributor (~94 threads) classed as volunteer.
 
 ### Replicating to other years
 
-2024, 2023 (full-year bucket; data begins ~Jun 2023), and 2026-YTD are
-`pending-classification` (null splits — never fabricated). Re-run the same pass
-per year (totals are exact once pagination is exhausted; splits calibrated on a
-sample) and drop the numbers into `text-metrics.json`; the derived metrics and
-the Candid figures follow automatically.
+2023 and 2024 have now been classified with the same pass; 2026-YTD remains
+`pending-classification` (null splits — never fabricated).
+
+| Year | Total threads | Charity threads | Party (vol / new / existing / noise) | Net-new reach-outs (vol / new) | Implied text-support hrs |
+| ---- | ------------- | --------------- | ------------------------------------ | ------------------------------ | ------------------------ |
+| 2023 | 1,999         | 282             | 61 / 40 / 242 / 1,656                | 26 / 25                        | ≈ 53 hrs                 |
+| 2024 | 1,875         | 190             | 68 / 54 / 136 / 1,617                | 15 / 16                        | ≈ 42 hrs                 |
+| 2025 | 2,079         | 386             | 253 / 237 / 149 / 1,440              | 34 / 42                        | ≈ 95 hrs                 |
+
+Method notes for the back-years: totals are exact (full pagination); party
+splits are sample-calibrated (~83–86% of traffic is noise — personal/family and
+day-job); **net-new reach-outs are independently enumerated distinct
+first-contact senders, deduped by first-appearance year** (so a contact first
+seen in 2023 is not counted again in 2024) rather than extrapolated; the
+**category split for 2023/2024 is extrapolated from the 2025 template shape**, so
+`migration` in particular may be overstated for the back-years. To re-run for a
+new year, exhaust pagination for the exact total, sample-classify by party +
+category, enumerate distinct first-contact senders for velocity, and drop the
+numbers into `text-metrics.json`; the derived metrics and Candid figures follow
+automatically.
