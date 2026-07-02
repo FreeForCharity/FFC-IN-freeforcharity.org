@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30",
+  "generatedAt": "2026-07-02",
   "reportingYear": 2026,
   "irsDesignationYear": 2014,
   "metrics": {
@@ -20,7 +20,7 @@
     "organizationsSupported": {
       "value": 200,
       "label": "Charitable organizations supported",
-      "source": "Free For Charity Domain Program (ffcadmin.org/sites-list); corroborated by WHMCS: 211 currently-active member accounts of 418 all-time (workflow 214, 2026-07-02, whmcs-members.json)",
+      "source": "Free For Charity Domain Program (ffcadmin.org/sites-list); corroborated by WHMCS span evidence: 254 nonprofits served 2026 YTD, 352 all-time, 200 with a currently-active service (workflow 220 run 28563543349, whmcs-members.json served series — published to Candid 2026-07-02)",
       "verifiedAt": "2026-07-02",
       "confidence": "medium"
     },

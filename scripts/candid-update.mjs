@@ -41,6 +41,8 @@ const CANDID_PROFILE = {
   ein: '46-2471893',
   sealStatus: '2024 Platinum',
   sealVerifiedAt: '2026-07-01',
+  // Last time the operator published metrics to the profile (from whmcs-members.json).
+  lastPublished: whmcsMembers.candid.publishedAt,
 }
 
 // --- Derivations (mirror src/data/impact.ts; drift is caught by the jest
@@ -187,8 +189,9 @@ push(
   `- **Profile:** ${CANDID_PROFILE.url} (nonprofit_id ${CANDID_PROFILE.nonprofitId}, EIN ` +
     `${CANDID_PROFILE.ein})`,
   `- **Current seal:** ${CANDID_PROFILE.sealStatus} (verified ${CANDID_PROFILE.sealVerifiedAt} ` +
-    'via the Candid MCP). Candid profiles **expire two years after the last published update**,',
-  '  so a 2024 seal is at the expiration cliff — publish promptly.',
+    'via the Candid MCP). Candid profiles **expire two years after the last published update**.',
+  `- **Last published:** ${CANDID_PROFILE.lastPublished} — the member/domain series below and ` +
+    'the per-year text metrics were entered on the profile that day.',
   '- **Renewal checklist (per Candid Help):** Bronze/Silver prerequisites (basics + program',
   '  info), Gold (2024-or-2025 financials — a Form 990/990-N upload suffices — plus leader',
   '  demographics), then Platinum: goals & strategies, board demographics, and **at least one',
@@ -219,32 +222,44 @@ for (const m of seriesMetrics) {
   )
 }
 
-// --- WHMCS membership series -------------------------------------------------
-const whmcsYears = Object.keys(whmcsMembers.years).sort()
+// --- WHMCS membership series (canonical: span-served) -------------------------
+const served = whmcsMembers.served
+const servedYears = Object.keys(served.years).sort()
 push(
-  '## WHMCS membership series (nonprofit member accounts)',
+  '## WHMCS membership series — CANONICAL (ratified + published ' +
+    `${whmcsMembers.candid.publishedAt})`,
   '',
-  `Source: ${whmcsMembers.source} (v${whmcsMembers.version}; total clients ` +
-    `${whmcsMembers.totalClients}).`,
+  `Source: ${served.source}. All-time nonprofit members: ${served.nonprofitClientsAllTime}.`,
   '',
-  '**Use `activeCumulativeByYearEnd` to continue the profile\'s "active members" series.**',
-  'IMPORTANT methodology note to paste with it: WHMCS stores only current client status',
-  '(no history), so historical point-in-time active counts cannot be reproduced. The',
-  "profile's 2021 (76) and 2022 (104) values look like point-in-time WHMCS active",
-  "snapshots taken at the time (2022's 104 vs today's floor of 94 implies ~10 then-active",
-  "members have since closed); 2023's 221 cannot be WHMCS members (only 183 accounts of",
-  'any status existed by end-2023). From 2024 the series counts member accounts signed up',
-  'by year-end and Active today — a reproducible, conservative floor.',
+  '**"Nonprofit organizations served" is the profile\'s member series.** Methodology to',
+  'paste with it: counted from dated WHMCS records — a nonprofit is served in year Y when',
+  'a charity service or registered domain was in force during Y (span from registration',
+  'date to next-due/expiry; active services run through today). Derived programmatically',
+  'from the full 2014–present dataset; replaces earlier point-in-time dashboard reads.',
+  'The legacy 2022 value (104) is validated by span-served 99; the legacy 2023 value (221)',
+  'was a 2024 read of the TOTAL client counter and was overwritten with 108. Domains under',
+  `management merges ${served.sitesListOnlyOrgsCurrentYear} sites-list-only organizations ` +
+    'into the current year.',
   '',
-  '| Year | New members | Cumulative by year-end | Active cumulative (floor) |',
-  '| --- | ---: | ---: | ---: |'
+  '| Year | Nonprofits served | New members | Cumulative | Domains under mgmt |',
+  '| --- | ---: | ---: | ---: | ---: |'
 )
-for (const yr of whmcsYears) {
-  const m = whmcsMembers.years[yr]
-  const label = yr === whmcsMembers.ytdYear ? `${yr} (YTD)` : yr
-  push(`| ${label} | ${m.newClients} | ${m.cumulativeByYearEnd} | ${m.activeCumulativeByYearEnd} |`)
+for (const yr of servedYears) {
+  const m = served.years[yr]
+  const label = yr === served.ytdYear ? `${yr} (YTD)` : yr
+  push(
+    `| ${label} | ${m.servedNonprofits} | ${m.newMembers} | ${m.cumulativeMembers} | ` +
+      `${m.domainsUnderManagement} |`
+  )
 }
-push('')
+push(
+  '',
+  'Superseded series (do NOT paste; kept in `whmcs-members.json` for reconciliation):',
+  'the billing-active series (invoice/order-dated — undercounts free service delivery;',
+  '~85–90% of FFC invoices are $0) and the workflow-214 signup-year × current-status',
+  'client series (current status has no history).',
+  ''
+)
 
 push('## Reporting-year snapshot metrics', '')
 push('| Candid metric | Value | Year | Source (paste as methodology) |')

@@ -1,21 +1,131 @@
 {
-  "_comment": "WHMCS client-membership series per calendar year, from FFC-Cloudflare-Automation workflow '214. WHMCS - Clients Metrics (aggregate, no PII)'. Aggregate integer counts only. activeCumulativeByYearEnd = clients signed up by Dec 31 whose status is Active TODAY. WHMCS stores only each client's CURRENT status (no status history), so a historical year's true point-in-time active count cannot be reconstructed; this column is a reproducible FLOOR (members active then but closed since drop out). Legacy Candid series interpretation: 2021 (76) and 2022 (104) are plausible point-in-time WHMCS active snapshots taken at the time (2022's 104 vs today's floor of 94 implies ~10 then-active clients have since closed); 2023's 221 CANNOT be WHMCS clients — only 183 clients of any status existed by end-2023 — so it counted a different population. From 2024 the Candid series anchors to this reproducible reconstruction with a methodology-change note.",
+  "_comment": "WHMCS nonprofit-member series per calendar year. CANONICAL member metrics live under `served` (ratified 2026-07-02 and published to the Candid profile the same day): a nonprofit is SERVED in year Y when a charity service or registered domain was in force during Y (span from service/domain regdate to next-due/expiry; Active spans run through today). This replaces both the legacy point-in-time dashboard reads (2021: 76, 2022: 104, 2023: 221 — the 104 is validated by span-served 99; the 221 was a 2024 read of the TOTAL client counter and is wrong) and the billing-event series (FFC services are free, so ~85-90% of invoices are $0 and billing undercounts service delivery). The `clients` block retains the workflow-214 signup-year x current-status series for reconciliation only — current status has no history, so it must not feed Candid.",
   "version": "2026-07-02",
-  "source": "Workflow 214 run 1 (2026-07-02, run 28558629802): GetClients full pagination, 418 clients; values transcribed by the operator from the run step summary",
-  "totalClients": 418,
-  "years": {
-    "2015": { "newClients": 5, "cumulativeByYearEnd": 5, "activeCumulativeByYearEnd": 4 },
-    "2016": { "newClients": 16, "cumulativeByYearEnd": 21, "activeCumulativeByYearEnd": 13 },
-    "2017": { "newClients": 41, "cumulativeByYearEnd": 62, "activeCumulativeByYearEnd": 42 },
-    "2018": { "newClients": 21, "cumulativeByYearEnd": 83, "activeCumulativeByYearEnd": 54 },
-    "2019": { "newClients": 21, "cumulativeByYearEnd": 104, "activeCumulativeByYearEnd": 66 },
-    "2020": { "newClients": 32, "cumulativeByYearEnd": 136, "activeCumulativeByYearEnd": 81 },
-    "2021": { "newClients": 23, "cumulativeByYearEnd": 159, "activeCumulativeByYearEnd": 90 },
-    "2022": { "newClients": 6, "cumulativeByYearEnd": 165, "activeCumulativeByYearEnd": 94 },
-    "2023": { "newClients": 18, "cumulativeByYearEnd": 183, "activeCumulativeByYearEnd": 110 },
-    "2024": { "newClients": 49, "cumulativeByYearEnd": 232, "activeCumulativeByYearEnd": 127 },
-    "2025": { "newClients": 109, "cumulativeByYearEnd": 341, "activeCumulativeByYearEnd": 194 },
-    "2026": { "newClients": 77, "cumulativeByYearEnd": 418, "activeCumulativeByYearEnd": 211 }
+  "candid": {
+    "profileUrl": "https://app.candid.org/profile/9326392/",
+    "publishedAt": "2026-07-02",
+    "publishedSeries": ["servedNonprofits", "newMembers", "domainsUnderManagement"]
   },
-  "ytdYear": "2026"
+  "served": {
+    "source": "FFC-Cloudflare-Automation workflow '220. WHMCS - Served-Per-Year Metrics (span evidence, no PII)', run 28563543349 (2026-07-02); values transcribed from the run log table",
+    "definition": "servedNonprofits = distinct nonprofit clients with a charity service or registered domain in force during the year; newMembers = distinct nonprofits whose first charity service was registered in the year; cumulativeMembers = running total of newMembers; domainsUnderManagement = distinct domains with a registration span covering the year (current year additionally merges 79 sites-list-only organizations with no WHMCS record); billingActive = old event-dated comparison series (invoice/order/service-registration dated in the year) — superseded, kept for reconciliation",
+    "nonprofitClientsAllTime": 352,
+    "clientsWithSpans": 382,
+    "distinctDomainsWithSpans": 401,
+    "sitesListOnlyOrgsCurrentYear": 79,
+    "years": {
+      "2014": {
+        "servedNonprofits": 1,
+        "newMembers": 1,
+        "cumulativeMembers": 1,
+        "domainsUnderManagement": 3,
+        "billingActive": 1
+      },
+      "2015": {
+        "servedNonprofits": 4,
+        "newMembers": 3,
+        "cumulativeMembers": 4,
+        "domainsUnderManagement": 10,
+        "billingActive": 4
+      },
+      "2016": {
+        "servedNonprofits": 17,
+        "newMembers": 13,
+        "cumulativeMembers": 17,
+        "domainsUnderManagement": 35,
+        "billingActive": 17
+      },
+      "2017": {
+        "servedNonprofits": 51,
+        "newMembers": 35,
+        "cumulativeMembers": 52,
+        "domainsUnderManagement": 82,
+        "billingActive": 50
+      },
+      "2018": {
+        "servedNonprofits": 67,
+        "newMembers": 17,
+        "cumulativeMembers": 69,
+        "domainsUnderManagement": 109,
+        "billingActive": 57
+      },
+      "2019": {
+        "servedNonprofits": 79,
+        "newMembers": 15,
+        "cumulativeMembers": 84,
+        "domainsUnderManagement": 127,
+        "billingActive": 68
+      },
+      "2020": {
+        "servedNonprofits": 93,
+        "newMembers": 17,
+        "cumulativeMembers": 101,
+        "domainsUnderManagement": 131,
+        "billingActive": 81
+      },
+      "2021": {
+        "servedNonprofits": 102,
+        "newMembers": 12,
+        "cumulativeMembers": 113,
+        "domainsUnderManagement": 148,
+        "billingActive": 83
+      },
+      "2022": {
+        "servedNonprofits": 99,
+        "newMembers": 4,
+        "cumulativeMembers": 117,
+        "domainsUnderManagement": 149,
+        "billingActive": 79
+      },
+      "2023": {
+        "servedNonprofits": 108,
+        "newMembers": 9,
+        "cumulativeMembers": 126,
+        "domainsUnderManagement": 164,
+        "billingActive": 81
+      },
+      "2024": {
+        "servedNonprofits": 155,
+        "newMembers": 49,
+        "cumulativeMembers": 175,
+        "domainsUnderManagement": 194,
+        "billingActive": 130
+      },
+      "2025": {
+        "servedNonprofits": 248,
+        "newMembers": 106,
+        "cumulativeMembers": 281,
+        "domainsUnderManagement": 224,
+        "billingActive": 191
+      },
+      "2026": {
+        "servedNonprofits": 254,
+        "newMembers": 71,
+        "cumulativeMembers": 352,
+        "domainsUnderManagement": 270,
+        "billingActive": 171
+      }
+    },
+    "ytdYear": "2026"
+  },
+  "clients": {
+    "_comment": "Signup-year x current-status series from workflow 214 (all client accounts, not just nonprofits). activeCumulativeByYearEnd counts clients signed up by Dec 31 whose status is Active TODAY — a reproducible floor, NOT a historical point-in-time value (WHMCS keeps no status history). Retained for reconciliation; superseded by `served` for Candid.",
+    "source": "Workflow 214 run 1 (2026-07-02, run 28558629802): GetClients full pagination, 418 clients; values transcribed by the operator from the run step summary",
+    "totalClients": 418,
+    "years": {
+      "2015": { "newClients": 5, "cumulativeByYearEnd": 5, "activeCumulativeByYearEnd": 4 },
+      "2016": { "newClients": 16, "cumulativeByYearEnd": 21, "activeCumulativeByYearEnd": 13 },
+      "2017": { "newClients": 41, "cumulativeByYearEnd": 62, "activeCumulativeByYearEnd": 42 },
+      "2018": { "newClients": 21, "cumulativeByYearEnd": 83, "activeCumulativeByYearEnd": 54 },
+      "2019": { "newClients": 21, "cumulativeByYearEnd": 104, "activeCumulativeByYearEnd": 66 },
+      "2020": { "newClients": 32, "cumulativeByYearEnd": 136, "activeCumulativeByYearEnd": 81 },
+      "2021": { "newClients": 23, "cumulativeByYearEnd": 159, "activeCumulativeByYearEnd": 90 },
+      "2022": { "newClients": 6, "cumulativeByYearEnd": 165, "activeCumulativeByYearEnd": 94 },
+      "2023": { "newClients": 18, "cumulativeByYearEnd": 183, "activeCumulativeByYearEnd": 110 },
+      "2024": { "newClients": 49, "cumulativeByYearEnd": 232, "activeCumulativeByYearEnd": 127 },
+      "2025": { "newClients": 109, "cumulativeByYearEnd": 341, "activeCumulativeByYearEnd": 194 },
+      "2026": { "newClients": 77, "cumulativeByYearEnd": 418, "activeCumulativeByYearEnd": 211 }
+    },
+    "ytdYear": "2026"
+  }
 }

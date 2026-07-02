@@ -408,6 +408,13 @@ form → bump `verifiedAt` on the touched metrics in `impact.json` → commit bo
   enough — plus leader demographics), then goals & strategies, board
   demographics, and **at least one impact metric from 2025** — which the paste
   sheet's per-year table now provides.
+- **Metrics published 2026-07-02.** The operator entered the paste sheet's
+  values on the profile: the ratified span-served member series
+  (`whmcs-members.json` → `served`, from FFC-Cloudflare-Automation workflow
+  220 — this is now the CANONICAL member series, superseding the legacy
+  dashboard reads 76/104/221 and the billing-active series), the per-year
+  text-census metrics, and the snapshot metrics. Remaining for the 2026
+  Platinum seal: 990 upload, leader + board demographics, goals & strategies.
 - **PCS codes on file** (subjects: information & communications, ICT, economic
   development, job training, community service; populations: adults, students,
   military, veterans) already match the mission — no taxonomy changes needed.
