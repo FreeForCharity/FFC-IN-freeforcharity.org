@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 // Generates docs/candid-update.md — the paste sheet for the annual Candid
-// (GuideStar) Platinum profile update (METRICS-PLAYBOOK §4: Candid has no
+// (GuideStar) Platinum profile update (METRICS-PLAYBOOK §13: Candid has no
 // public write API, the profile is a manual web form, so the "30 minutes a
 // year" is: run this, open the sheet, paste).
 //
 // Reads the same single-source-of-truth data files the site reads
-// (src/data/impact.json, text-metrics.json, volunteer-hours-model.json) and
-// emits only metrics that pass the publication gate: a concrete value AND
-// high/medium confidence AND (for per-year series) status "classified".
+// (src/data/impact.json, text-metrics.json, volunteer-hours-model.json,
+// whmcs-members.json) and emits only metrics that pass the publication gate:
+// a concrete value AND high/medium confidence AND (for per-year series)
+// status "classified".
 // Everything else is listed under "Not yet Candid-attributable" with the
 // reason — values are never fabricated.
 //
@@ -152,8 +153,9 @@ push(
   '# Candid (GuideStar) Platinum update — paste sheet',
   '',
   `Generated from \`impact.json\` (generatedAt ${impact.generatedAt}, reporting year ` +
-    `${impact.reportingYear}), \`text-metrics.json\` (v${textMetrics.version}) and ` +
-    `\`volunteer-hours-model.json\` (v${vhModel.version}).`,
+    `${impact.reportingYear}), \`text-metrics.json\` (v${textMetrics.version}), ` +
+    `\`volunteer-hours-model.json\` (v${vhModel.version}) and \`whmcs-members.json\` ` +
+    `(v${whmcsMembers.version}).`,
   '',
   'How to use: sign in to the Candid nonprofit profile for Free For Charity, open',
   '**Progress & results (Platinum)**, and enter each metric below with its per-year values.',

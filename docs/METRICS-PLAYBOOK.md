@@ -381,8 +381,8 @@ node scripts/candid-update.mjs --check   # exit 1 if the committed sheet is stal
 Design rules (enforced, not aspirational):
 
 - **Same sources as the site.** The generator reads only `impact.json`,
-  `text-metrics.json`, and `volunteer-hours-model.json` — one source of truth
-  for the website AND Candid.
+  `text-metrics.json`, `volunteer-hours-model.json`, and `whmcs-members.json` —
+  one source of truth for the website AND Candid.
 - **Publication gate.** A metric is pasteable only with a concrete value and
   high/medium confidence; per-year series only from `classified` years.
   Everything else lands in a "Not yet Candid-attributable (do NOT paste)"

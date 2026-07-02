@@ -3,7 +3,7 @@
 
 # Candid (GuideStar) Platinum update — paste sheet
 
-Generated from `impact.json` (generatedAt 2026-06-30, reporting year 2026), `text-metrics.json` (v2026-07-01) and `volunteer-hours-model.json` (v2026-06-30).
+Generated from `impact.json` (generatedAt 2026-06-30, reporting year 2026), `text-metrics.json` (v2026-07-01), `volunteer-hours-model.json` (v2026-06-30) and `whmcs-members.json` (v2026-07-02).
 
 How to use: sign in to the Candid nonprofit profile for Free For Charity, open
 **Progress & results (Platinum)**, and enter each metric below with its per-year values.
