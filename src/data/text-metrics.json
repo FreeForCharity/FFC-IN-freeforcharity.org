@@ -11,6 +11,7 @@
       "charityThreads": 159,
       "byParty": { "volunteer": 121, "newCharity": 88, "existingCharity": 71, "noise": 1719 },
       "netNewReachouts": { "volunteer": 19, "newCharity": 21 },
+      "activeContacts": { "volunteer": 24, "charityOrgs": 24 },
       "charityThreadsByCategory": {
         "website": 16,
         "domain": 13,
@@ -29,6 +30,7 @@
       "charityThreads": 132,
       "byParty": { "volunteer": 126, "newCharity": 40, "existingCharity": 92, "noise": 1616 },
       "netNewReachouts": { "volunteer": 5, "newCharity": 5 },
+      "activeContacts": { "volunteer": 20, "charityOrgs": 32 },
       "charityThreadsByCategory": {
         "website": 28,
         "domain": 17,
@@ -47,6 +49,7 @@
       "charityThreads": 410,
       "byParty": { "volunteer": 205, "newCharity": 225, "existingCharity": 185, "noise": 1463 },
       "netNewReachouts": { "volunteer": 21, "newCharity": 16 },
+      "activeContacts": { "volunteer": 41, "charityOrgs": 61 },
       "charityThreadsByCategory": {
         "website": 110,
         "domain": 31,

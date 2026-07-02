@@ -29,6 +29,8 @@ Classified calendar years: 2023, 2024, 2025. Candid takes one value per year.
 | Nonprofit support interactions handled (text channel) | 159 | 132 | 410 |
 | New nonprofit organizations reaching out (text channel) | 21 | 5 | 16 |
 | New volunteers engaged (text channel) | 19 | 5 | 21 |
+| Active volunteers engaged (text channel) | 24 | 20 | 41 |
+| Active nonprofit organizations engaged (text channel) | 24 | 32 | 61 |
 | Volunteer hours contributed — text-based nonprofit support | 35 | 36 | 86 |
 
 ### Nonprofit support interactions handled (text channel)
@@ -46,6 +48,16 @@ Classified calendar years: 2023, 2024, 2025. Candid takes one value per year.
 - **Definition:** Distinct volunteers making first contact with Free For Charity by text message, per calendar year.
 - **Methodology:** Same distinct first-contact enumeration as the nonprofit series.
 
+### Active volunteers engaged (text channel)
+
+- **Definition:** Distinct volunteers with at least one FFC coordination thread during the calendar year (active that year, regardless of when first engaged).
+- **Methodology:** Distinct contacts per year from the full Google Voice census, merged across phone numbers; excludes contractors and non-FFC traffic.
+
+### Active nonprofit organizations engaged (text channel)
+
+- **Definition:** Distinct nonprofit organizations with at least one charity-service thread during the calendar year (an organization active in multiple years counts in each).
+- **Methodology:** Distinct organizations per year from the full Google Voice census; multiple contacts from one organization are merged and counted once.
+
 ### Volunteer hours contributed — text-based nonprofit support
 
 - **Definition:** Volunteer hours spent supporting nonprofits over the text channel, per calendar year.
@@ -56,11 +68,13 @@ Classified calendar years: 2023, 2024, 2025. Candid takes one value per year.
 Source: Workflow 214 run 1 (2026-07-02, run 28558629802): GetClients full pagination, 418 clients; values transcribed by the operator from the run step summary (v2026-07-02; total clients 418).
 
 **Use `activeCumulativeByYearEnd` to continue the profile's "active members" series.**
-IMPORTANT methodology note to paste with it: the pre-2024 values on the profile
-(2021: 76, 2022: 104, 2023: 221) came from a different counting method and do not
-reconstruct from WHMCS (221 exceeds the 183 total clients existing by end-2023); from
-2024 the series counts WHMCS member accounts signed up by year-end and Active today,
-which is a conservative floor.
+IMPORTANT methodology note to paste with it: WHMCS stores only current client status
+(no history), so historical point-in-time active counts cannot be reproduced. The
+profile's 2021 (76) and 2022 (104) values look like point-in-time WHMCS active
+snapshots taken at the time (2022's 104 vs today's floor of 94 implies ~10 then-active
+members have since closed); 2023's 221 cannot be WHMCS members (only 183 accounts of
+any status existed by end-2023). From 2024 the series counts member accounts signed up
+by year-end and Active today — a reproducible, conservative floor.
 
 | Year | New members | Cumulative by year-end | Active cumulative (floor) |
 | --- | ---: | ---: | ---: |
