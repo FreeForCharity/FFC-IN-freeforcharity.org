@@ -9,8 +9,6 @@ import { freeDomainCampaign } from '@/data/donation-campaigns'
 
 import { FaFacebookF, FaLinkedinIn, FaGithub } from 'react-icons/fa'
 import { FaXTwitter } from 'react-icons/fa6'
-import Image from 'next/image'
-import { assetPath } from '@/lib/assetPath'
 
 const Footer: React.FC = () => {
   const currentYear = React.useMemo(() => new Date().getFullYear(), [])
@@ -36,15 +34,18 @@ const Footer: React.FC = () => {
           <h3 className="text-[28px] text-white">Endorsements</h3>
 
           <div className="space-y-4">
+            {/* Candid's official seal embed: served from their widget host keyed to the
+                profile, so the seal year/level updates automatically on each publish. */}
             <a
-              href="https://www.guidestar.org/profile/46-2471893"
+              aria-label="Free For Charity Candid Seal of Transparency"
+              href="https://app.candid.org/profile/9326392/free-for-charity-46-2471893/?pkId=7232730a-03b5-467f-a82c-443dcd2122ed"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Image
-                src={assetPath('/Svgs/footerImage.svg')}
-                alt="GuideStar Platinum Seal of Transparency"
-                aria-label="GuideStar Platinum Seal of Transparency"
+              {/* eslint-disable-next-line @next/next/no-img-element -- external dynamic Candid badge; not a local optimizable asset */}
+              <img
+                src="https://widgets.guidestar.org/prod/v1/pdp/transparency-seal/9326392/svg"
+                alt="Candid Seal of Transparency"
                 width={108}
                 height={108}
               />
