@@ -247,7 +247,8 @@ WHMCS clients  <  true reach    (the deficit ≈ legacy WP + uncaptured comms)
 3. **Gap A:** adopt a WHMCS partner field; graduate `charityPartners` to a clean count.
 4. **Gap B:** build the email/text discovery export in `FFC-Cloudflare-Automation`;
    feed `uncapturedLeads` + a pipeline list.
-5. **Candid sheet + cadence:** `candid-update.md` generator + monthly/annual schedule.
+5. **Candid sheet + cadence:** `candid-update.md` generator (✅ shipped —
+   `scripts/candid-update.mjs`, see §13) + monthly/annual schedule (open).
 
 ---
 
@@ -325,25 +326,103 @@ bucketed by **calendar year** in `src/data/text-metrics.json`:
    compute the implied hours (separate from the §11 engagement total, since text
    support is per-year rather than cumulative).
 
-### 2025 (template — fully classified)
+### 2023–2025 (full census)
 
-| Metric                         | Value                                                                                         |
-| ------------------------------ | --------------------------------------------------------------------------------------------- |
-| Total threads                  | **2,079** (exact)                                                                             |
-| Noise                          | 1,440                                                                                         |
-| Volunteer                      | 253                                                                                           |
-| New charity / Existing charity | 237 / 149 (charity-org = **386**)                                                             |
-| Net-new reach-outs             | **42 new charities, 34 volunteers**                                                           |
-| Charity threads by category    | migration 94 · general 95 · website 83 · maintenance 59 · onboarding 28 · m365 14 · domain 13 |
-| Implied text-support hours     | **≈ 95 hrs**                                                                                  |
+Every thread in 2023, 2024, and 2025 was **individually classified** — no
+sampling, no ratio extrapolation, no template-shaping. Totals are exact (full
+pagination); every charity-org thread was individually assigned one category; and
+net-new reach-outs are distinct first-contact senders deduped **across all three
+years** by first appearance.
 
-Splits are ~95%-calibrated (a 40-thread deep-read sample); the largest single
-uncertainty is one high-volume contributor (~94 threads) classed as volunteer.
+| Year | Total threads | Charity threads | Party (vol / new / existing / noise) | Net-new reach-outs (vol / new) | Implied text-support hrs |
+| ---- | ------------- | --------------- | ------------------------------------ | ------------------------------ | ------------------------ |
+| 2023 | 1,999         | 159             | 121 / 88 / 71 / 1,719                | 19 / 21                        | ≈ 35 hrs                 |
+| 2024 | 1,874         | 132             | 126 / 40 / 92 / 1,616                | 5 / 5                          | ≈ 36 hrs                 |
+| 2025 | 2,078         | 410             | 205 / 225 / 185 / 1,463              | 21 / 16                        | ≈ 86 hrs                 |
 
-### Replicating to other years
+Category counts (charity-org threads only):
 
-2024, 2023 (full-year bucket; data begins ~Jun 2023), and 2026-YTD are
-`pending-classification` (null splits — never fabricated). Re-run the same pass
-per year (totals are exact once pagination is exhausted; splits calibrated on a
-sample) and drop the numbers into `text-metrics.json`; the derived metrics and
-the Candid figures follow automatically.
+| Year | website | domain | m365 | onboarding | migration | maintenance | general |
+| ---- | ------- | ------ | ---- | ---------- | --------- | ----------- | ------- |
+| 2023 | 16      | 13     | 15   | 9          | 2         | 2           | 102     |
+| 2024 | 28      | 17     | 15   | 10         | 5         | 18          | 39      |
+| 2025 | 110     | 31     | 17   | 37         | 6         | 5           | 204     |
+
+Notes: ~70–86% of all traffic is noise (the line doubles as a personal + day-job
+phone). The census **superseded an earlier sample-based pass** whose ratio
+extrapolation had overstated charity volume and badly overstated `migration`
+(e.g. 2025 migration 94 → **6**, general 95 → **204**); this is why the full
+census matters. `general` (charity-related but not category-specific
+coordination) dominates every year. 2024 net-new is small because most 2024
+charity contacts first appeared in 2023; 2026-YTD remains
+`pending-classification` (null splits — never fabricated).
+
+To re-run for a new year: exhaust pagination for the exact total, classify
+**every** thread by party + category (deep-read only the ambiguous ones),
+enumerate distinct first-contact senders across the full window for velocity, and
+drop the numbers into `text-metrics.json`; the derived metrics and Candid figures
+follow automatically.
+
+---
+
+## 13. Candid crosswalk — the generated paste sheet
+
+`docs/candid-update.md` is the **generated, paste-ready sheet** for the annual
+Candid Platinum update (rollout item 5). Candid has no public write API — the
+profile is a manual web form — so the sheet is the bridge: per-year values plus
+definition/methodology text written to be pasted directly into each Platinum
+"Progress & results" metric.
+
+```bash
+node scripts/candid-update.mjs           # regenerate docs/candid-update.md
+node scripts/candid-update.mjs --check   # exit 1 if the committed sheet is stale
+```
+
+Design rules (enforced, not aspirational):
+
+- **Same sources as the site.** The generator reads only `impact.json`,
+  `text-metrics.json`, `volunteer-hours-model.json`, and `whmcs-members.json` —
+  one source of truth for the website AND Candid.
+- **Publication gate.** A metric is pasteable only with a concrete value and
+  high/medium confidence; per-year series only from `classified` years.
+  Everything else lands in a "Not yet Candid-attributable (do NOT paste)"
+  section with the reason. Values are never fabricated.
+- **Deterministic + CI-guarded.** Output is versioned by the data files' own
+  stamps (no wall clock), and `__tests__/scripts/candid-update.test.ts` runs
+  `--check` plus a cross-check that the sheet's hour figures equal the
+  `impact.ts` derivation — so a data change without a regenerated sheet, or a
+  drift between the script and the loader, fails `npm test`.
+- The file is in `.prettierignore` (byte-exact staleness comparison).
+
+Annual procedure: regenerate → open the sheet → paste into the Candid Platinum
+form → bump `verifiedAt` on the touched metrics in `impact.json` → commit both.
+
+### FFC's profile (verified live via the Candid MCP, 2026-07-01)
+
+- **Profile:** <https://app.candid.org/profile/9326392/> — nonprofit_id
+  `9326392`, EIN `46-2471893`, AKA FFCHosting / FFCdomains / FFCadmin.
+- **Seal: 2024 Platinum — at the expiration cliff.** Candid profiles expire two
+  years after the last published update, and losing the seal means losing the
+  badge everywhere it's displayed. Renewing to the current-year Platinum needs:
+  Gold prerequisites (2024-or-2025 financials — a Form 990/990-N upload is
+  enough — plus leader demographics), then goals & strategies, board
+  demographics, and **at least one impact metric from 2025** — which the paste
+  sheet's per-year table now provides.
+- **PCS codes on file** (subjects: information & communications, ICT, economic
+  development, job training, community service; populations: adults, students,
+  military, veterans) already match the mission — no taxonomy changes needed.
+
+### Candid MCP server (read/research assist)
+
+A Candid MCP connector exists for Claude sessions (OAuth-protected; re-authorize
+via claude.ai connector settings when it shows disconnected). It is
+**read-only** — it does not write to the profile, so the paste sheet above stays
+the update mechanism — but it directly supports this playbook:
+
+| Tool                               | What it does for this playbook                                                                                                                                                                       |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `search_organizations`             | Look up FFC's own profile (confirm what Candid currently shows vs `impact.json`) and verify each partner charity → EIN + 501(c)(3) status, turning `organizationsSupported` into a verifiable roster |
+| `identify_mentioned_organizations` | Resolve org names surfaced by the Gap B email/text discovery into real Candid orgs — uncaptured leads get an EIN before onboarding                                                                   |
+| `identify_locations`               | Normalize partner locations for geographic-reach reporting                                                                                                                                           |
+| `taxonomy_terms`                   | Map FFC programs to Candid's Philanthropy Classification System so profile text uses Candid's own vocabulary                                                                                         |
+| `knowledge_resources`              | Candid's KB — e.g. current Platinum seal requirements — straight from the source                                                                                                                     |

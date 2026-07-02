@@ -33,3 +33,8 @@ playwright-report
 # prettier-formatting it would create a giant noise diff on every refresh.
 # The hand-written README stays prettier-managed.
 docs/performance-baseline/*.json
+
+# Machine-generated Candid paste sheet (scripts/candid-update.mjs writes it
+# byte-exact and verifies staleness with --check; prettier rewrapping would
+# break that byte comparison).
+docs/candid-update.md

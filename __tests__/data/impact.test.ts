@@ -94,15 +94,47 @@ describe('impact data', () => {
     it('derives a positive 2025 text-support hour figure and surfaces velocity', () => {
       expect(textSupportHoursByYear['2025']).toBeGreaterThan(0)
       expect(textSupportHours).toBeGreaterThanOrEqual(textSupportHoursByYear['2025'])
-      expect(reachoutVelocityByYear['2025']).toEqual({ volunteer: 34, newCharity: 42 })
+      expect(reachoutVelocityByYear['2025']).toEqual({ volunteer: 21, newCharity: 16 })
     })
 
     it('leaves pending years null (no fabricated splits)', () => {
-      for (const yr of ['2023', '2024', '2026']) {
+      for (const yr of ['2026']) {
         expect(textMetrics.years[yr].byParty).toBeNull()
         expect(textMetrics.years[yr].charityThreadsByCategory).toBeNull()
         expect(textSupportHoursByYear[yr]).toBeUndefined()
       }
+    })
+
+    describe.each(['2023', '2024'])('classified back-year %s', (yr) => {
+      const y = textMetrics.years[yr]
+
+      it('byParty sums to the total thread count', () => {
+        expect(y.byParty).not.toBeNull()
+        const p = y.byParty!
+        expect(p.volunteer + p.newCharity + p.existingCharity + p.noise).toBe(y.totalThreads)
+      })
+
+      it('category split sums to charityThreads (= newCharity + existingCharity)', () => {
+        expect(y.charityThreadsByCategory).not.toBeNull()
+        expect(y.byParty).not.toBeNull()
+        const p = y.byParty!
+        expect(y.charityThreads).toBe(p.newCharity + p.existingCharity)
+        const sum = Object.values(y.charityThreadsByCategory!).reduce((s, n) => s + n, 0)
+        expect(sum).toBe(y.charityThreads)
+      })
+
+      it('derives a positive text-support hour figure and an independent velocity', () => {
+        expect(textSupportHoursByYear[yr]).toBeGreaterThan(0)
+        expect(y.netNewReachouts).not.toBeNull()
+        expect(y.byParty).not.toBeNull()
+        expect(reachoutVelocityByYear[yr]).toBeDefined()
+        const v = reachoutVelocityByYear[yr]
+        const p = y.byParty!
+        // distinct first-contact senders must not exceed the thread-level party totals
+        expect(v.volunteer).toBeGreaterThan(0)
+        expect(v.volunteer).toBeLessThanOrEqual(p.volunteer)
+        expect(v.newCharity).toBeLessThanOrEqual(p.newCharity)
+      })
     })
   })
 })

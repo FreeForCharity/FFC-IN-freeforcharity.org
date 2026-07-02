@@ -18,9 +18,13 @@ http://localhost:4173/*
 https://localhost:4173
 https://localhost:4173/*
 
-# LinkedIn blocks bots with HTTP 999 — not a real broken link
+# LinkedIn blocks bots with HTTP 999 — not a real broken link. The
+# nonprofit.linkedin.com subdomain (LinkedIn for Nonprofits resource hub,
+# linked from the tools-for-success page) bot-blocks the same way; the deep
+# resource-hub URL is verified 200 in a browser/curl.
 https://www.linkedin.com/**
 https://linkedin.com/**
+https://nonprofit.linkedin.com/**
 
 # Facebook/Meta rate-limits crawlers
 https://www.facebook.com/**

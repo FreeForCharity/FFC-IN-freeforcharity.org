@@ -20,8 +20,8 @@
     "organizationsSupported": {
       "value": 200,
       "label": "Charitable organizations supported",
-      "source": "Free For Charity Domain Program (ffcadmin.org/sites-list)",
-      "verifiedAt": "2026-06-08",
+      "source": "Free For Charity Domain Program (ffcadmin.org/sites-list); corroborated by WHMCS: 211 currently-active member accounts of 418 all-time (workflow 214, 2026-07-02, whmcs-members.json)",
+      "verifiedAt": "2026-07-02",
       "confidence": "medium"
     },
     "newCharitiesAnnualTarget": {
@@ -57,10 +57,10 @@
       "confidence": "unknown"
     },
     "textMessagesHandled": {
-      "value": 2780,
-      "label": "Charity/volunteer support text messages handled (3 yrs)",
-      "source": "Gmail Google Voice exhaustive scan 2026-06-30: 6,193 total text threads over 3 yrs (pagination exhausted to the 2023-06-29 boundary; Gmail's ~201 estimate was wrong); ~45% charity/volunteer (calibrated on 2,250 classified) => ~2,780 charity/volunteer threads (estimate; threads, not individual messages)",
-      "confidence": "medium"
+      "value": 1153,
+      "label": "Charity/volunteer support text threads handled (3 yrs)",
+      "source": "Gmail Google Voice FULL CENSUS 2026-07-01: every thread in CY2023-2025 individually classified (5,951 total threads: 1,999 + 1,874 + 2,078). Charity/volunteer = 701 charity-org + 452 volunteer-coordination = 1,153 threads (~19% of traffic; the rest is personal/day-job noise). Threads, not individual messages. Per-year splits in text-metrics.json. Supersedes the earlier ~45%-of-6,193 sample estimate (2,780).",
+      "confidence": "high"
     },
     "uncapturedLeads": {
       "value": 6,
