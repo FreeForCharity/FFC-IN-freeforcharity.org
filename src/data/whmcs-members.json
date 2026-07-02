@@ -8,7 +8,7 @@
   },
   "served": {
     "source": "FFC-Cloudflare-Automation workflow '220. WHMCS - Served-Per-Year Metrics (span evidence, no PII)', run 28563543349 (2026-07-02); values transcribed from the run log table",
-    "definition": "servedNonprofits = distinct nonprofit clients with a charity service or registered domain in force during the year; newMembers = distinct nonprofits whose first charity service was registered in the year; cumulativeMembers = running total of newMembers; domainsUnderManagement = distinct domains with a registration span covering the year (current year additionally merges 79 sites-list-only organizations with no WHMCS record); billingActive = old event-dated comparison series (invoice/order/service-registration dated in the year) — superseded, kept for reconciliation",
+    "definition": "servedNonprofits = distinct nonprofit clients with a charity service or registered domain in force during the year; newMembers = distinct nonprofits whose first charity service was registered in the year; cumulativeMembers = running total of newMembers; domainsUnderManagement = distinct domains with a registration span covering the year; the current-year count additionally includes the domains of 79 organizations that appear only in the sites-list (legacy estates with no WHMCS record, one domain each); billingActive = old event-dated comparison series (invoice/order/service-registration dated in the year) — superseded, kept for reconciliation",
     "nonprofitClientsAllTime": 352,
     "clientsWithSpans": 382,
     "distinctDomainsWithSpans": 401,

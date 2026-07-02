@@ -20,7 +20,7 @@
     "organizationsSupported": {
       "value": 200,
       "label": "Charitable organizations supported",
-      "source": "Free For Charity Domain Program (ffcadmin.org/sites-list); corroborated by WHMCS span evidence: 254 nonprofits served 2026 YTD, 352 all-time, 200 with a currently-active service (workflow 220 run 28563543349, whmcs-members.json served series — published to Candid 2026-07-02)",
+      "source": "Free For Charity Domain Program (ffcadmin.org/sites-list); corroborated by WHMCS span evidence: 254 nonprofits served 2026 YTD, 352 all-time (workflow 220 run 28563543349, whmcs-members.json served series — published to Candid 2026-07-02) and by 200 clients holding a currently-Active WHMCS service (workflow 215, 2026-07-02)",
       "verifiedAt": "2026-07-02",
       "confidence": "medium"
     },

@@ -73,8 +73,9 @@ a charity service or registered domain was in force during Y (span from registra
 date to next-due/expiry; active services run through today). Derived programmatically
 from the full 2014–present dataset; replaces earlier point-in-time dashboard reads.
 The legacy 2022 value (104) is validated by span-served 99; the legacy 2023 value (221)
-was a 2024 read of the TOTAL client counter and was overwritten with 108. Domains under
-management merges 79 sites-list-only organizations into the current year.
+was a 2024 read of the TOTAL client counter and was overwritten with 108. The
+current-year "Domains under mgmt" count additionally includes the domains of
+79 organizations that appear only in the sites-list (legacy estates with no WHMCS record, one domain each).
 
 | Year | Nonprofits served | New members | Cumulative | Domains under mgmt |
 | --- | ---: | ---: | ---: | ---: |
@@ -101,7 +102,7 @@ client series (current status has no history).
 
 | Candid metric | Value | Year | Source (paste as methodology) |
 | --- | ---: | --- | --- |
-| Nonprofit organizations supported (total) | 200 | 2026 | Free For Charity Domain Program (ffcadmin.org/sites-list); corroborated by WHMCS span evidence: 254 nonprofits served 2026 YTD, 352 all-time, 200 with a currently-active service (workflow 220 run 28563543349, whmcs-members.json served series — published to Candid 2026-07-02) |
+| Nonprofit organizations supported (total) | 200 | 2026 | Free For Charity Domain Program (ffcadmin.org/sites-list); corroborated by WHMCS span evidence: 254 nonprofits served 2026 YTD, 352 all-time (workflow 220 run 28563543349, whmcs-members.json served series — published to Candid 2026-07-02) and by 200 clients holding a currently-Active WHMCS service (workflow 215, 2026-07-02) |
 | Nonprofit domains managed | 376 | 2026 | ffcadmin.org/sites-list (FFC-Cloudflare-Automation: sites_list.json) |
 | Nonprofit websites built (cumulative) | 41 | 2026 | GitHub FreeForCharity FFC-EX-* repositories (active, non-archived) |
 | Legacy nonprofit sites migrated to stable hosting | 6 | 2026 | ffcadmin.org/sites-list tier 4 |

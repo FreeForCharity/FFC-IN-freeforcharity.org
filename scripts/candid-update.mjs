@@ -237,9 +237,10 @@ push(
   'date to next-due/expiry; active services run through today). Derived programmatically',
   'from the full 2014–present dataset; replaces earlier point-in-time dashboard reads.',
   'The legacy 2022 value (104) is validated by span-served 99; the legacy 2023 value (221)',
-  'was a 2024 read of the TOTAL client counter and was overwritten with 108. Domains under',
-  `management merges ${served.sitesListOnlyOrgsCurrentYear} sites-list-only organizations ` +
-    'into the current year.',
+  'was a 2024 read of the TOTAL client counter and was overwritten with 108. The',
+  'current-year "Domains under mgmt" count additionally includes the domains of',
+  `${served.sitesListOnlyOrgsCurrentYear} organizations that appear only in the sites-list ` +
+    '(legacy estates with no WHMCS record, one domain each).',
   '',
   '| Year | Nonprofits served | New members | Cumulative | Domains under mgmt |',
   '| --- | ---: | ---: | ---: | ---: |'
