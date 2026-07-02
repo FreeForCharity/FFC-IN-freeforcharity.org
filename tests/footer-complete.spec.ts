@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test'
  * Complete Footer Verification E2E Tests
  *
  * Verifies all three columns of the footer:
- * - Column 1: Endorsements (GuideStar seal, EIN)
+ * - Column 1: Endorsements (Candid/GuideStar seal, EIN)
  * - Column 2: Quick Links (8 nav links + 7 policy links)
  * - Column 3: Contact Us (email, phone, addresses, social icons)
  * - Bottom bar: Copyright with current year
@@ -20,9 +20,13 @@ test.describe('Footer - Column 1: Endorsements', () => {
     await expect(footer.getByText('Endorsements')).toBeVisible()
   })
 
-  test('should display GuideStar Platinum seal image', async ({ page }) => {
+  test('should display Candid Seal of Transparency image', async ({ page }) => {
     const footer = page.locator('footer')
-    const sealImg = footer.locator('img[alt*="GuideStar"]')
+    // Served live from Candid's widget host (official embed), so the seal
+    // year/level update automatically on each profile publish.
+    const sealImg = footer.locator(
+      'img[src*="widgets.guidestar.org"][alt*="Candid Seal of Transparency"]'
+    )
     await expect(sealImg).toBeVisible()
   })
 
