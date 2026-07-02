@@ -27,6 +27,7 @@ const readJson = (rel) => JSON.parse(readFileSync(join(root, rel), 'utf8'))
 const impact = readJson('src/data/impact.json')
 const textMetrics = readJson('src/data/text-metrics.json')
 const vhModel = readJson('src/data/volunteer-hours-model.json')
+const whmcsMembers = readJson('src/data/whmcs-members.json')
 
 const OUT_PATH = join(root, 'docs', 'candid-update.md')
 const CARD_CONFIDENCE = ['high', 'medium'] // same gate as impact.ts cardValue()
@@ -195,6 +196,31 @@ for (const m of seriesMetrics) {
     ''
   )
 }
+
+// --- WHMCS membership series -------------------------------------------------
+const whmcsYears = Object.keys(whmcsMembers.years).sort()
+push(
+  '## WHMCS membership series (nonprofit member accounts)',
+  '',
+  `Source: ${whmcsMembers.source} (v${whmcsMembers.version}; total clients ` +
+    `${whmcsMembers.totalClients}).`,
+  '',
+  '**Use `activeCumulativeByYearEnd` to continue the profile\'s "active members" series.**',
+  'IMPORTANT methodology note to paste with it: the pre-2024 values on the profile',
+  '(2021: 76, 2022: 104, 2023: 221) came from a different counting method and do not',
+  'reconstruct from WHMCS (221 exceeds the 183 total clients existing by end-2023); from',
+  '2024 the series counts WHMCS member accounts signed up by year-end and Active today,',
+  'which is a conservative floor.',
+  '',
+  '| Year | New members | Cumulative by year-end | Active cumulative (floor) |',
+  '| --- | ---: | ---: | ---: |'
+)
+for (const yr of whmcsYears) {
+  const m = whmcsMembers.years[yr]
+  const label = yr === whmcsMembers.ytdYear ? `${yr} (YTD)` : yr
+  push(`| ${label} | ${m.newClients} | ${m.cumulativeByYearEnd} | ${m.activeCumulativeByYearEnd} |`)
+}
+push('')
 
 push('## Reporting-year snapshot metrics', '')
 push('| Candid metric | Value | Year | Source (paste as methodology) |')

@@ -51,11 +51,37 @@ Classified calendar years: 2023, 2024, 2025. Candid takes one value per year.
 - **Definition:** Volunteer hours spent supporting nonprofits over the text channel, per calendar year.
 - **Methodology:** Modeled from the full thread census x per-category minutes (volunteer-hours-model.json v2026-06-30, pending org ratification): each charity thread costed by product category, volunteer-coordination threads at 8 min.
 
+## WHMCS membership series (nonprofit member accounts)
+
+Source: Workflow 214 run 1 (2026-07-02, run 28558629802): GetClients full pagination, 418 clients; values transcribed by the operator from the run step summary (v2026-07-02; total clients 418).
+
+**Use `activeCumulativeByYearEnd` to continue the profile's "active members" series.**
+IMPORTANT methodology note to paste with it: the pre-2024 values on the profile
+(2021: 76, 2022: 104, 2023: 221) came from a different counting method and do not
+reconstruct from WHMCS (221 exceeds the 183 total clients existing by end-2023); from
+2024 the series counts WHMCS member accounts signed up by year-end and Active today,
+which is a conservative floor.
+
+| Year | New members | Cumulative by year-end | Active cumulative (floor) |
+| --- | ---: | ---: | ---: |
+| 2015 | 5 | 5 | 4 |
+| 2016 | 16 | 21 | 13 |
+| 2017 | 41 | 62 | 42 |
+| 2018 | 21 | 83 | 54 |
+| 2019 | 21 | 104 | 66 |
+| 2020 | 32 | 136 | 81 |
+| 2021 | 23 | 159 | 90 |
+| 2022 | 6 | 165 | 94 |
+| 2023 | 18 | 183 | 110 |
+| 2024 | 49 | 232 | 127 |
+| 2025 | 109 | 341 | 194 |
+| 2026 (YTD) | 77 | 418 | 211 |
+
 ## Reporting-year snapshot metrics
 
 | Candid metric | Value | Year | Source (paste as methodology) |
 | --- | ---: | --- | --- |
-| Nonprofit organizations supported (total) | 200 | 2026 | Free For Charity Domain Program (ffcadmin.org/sites-list) |
+| Nonprofit organizations supported (total) | 200 | 2026 | Free For Charity Domain Program (ffcadmin.org/sites-list); corroborated by WHMCS: 211 currently-active member accounts of 418 all-time (workflow 214, 2026-07-02, whmcs-members.json) |
 | Nonprofit domains managed | 376 | 2026 | ffcadmin.org/sites-list (FFC-Cloudflare-Automation: sites_list.json) |
 | Nonprofit websites built (cumulative) | 41 | 2026 | GitHub FreeForCharity FFC-EX-* repositories (active, non-archived) |
 | Legacy nonprofit sites migrated to stable hosting | 6 | 2026 | ffcadmin.org/sites-list tier 4 |

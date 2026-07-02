@@ -1,0 +1,21 @@
+{
+  "_comment": "WHMCS client-membership series per calendar year, from FFC-Cloudflare-Automation workflow '214. WHMCS - Clients Metrics (aggregate, no PII)'. Aggregate integer counts only. activeCumulativeByYearEnd = clients signed up by Dec 31 whose status is Active TODAY — a floor for historical active-member counts (members active then but closed since are not counted). NOTE: the legacy Candid profile series (2021: 76, 2022: 104, 2023: 221) does NOT reconstruct from WHMCS — 221 exceeds even the total clients existing by end-2023 (183) — so it counted a different population (likely domains/orgs from another source). From 2024 the Candid series anchors to this WHMCS reconstruction with a methodology-change note.",
+  "version": "2026-07-02",
+  "source": "Workflow 214 run 1 (2026-07-02, run 28558629802): GetClients full pagination, 418 clients; values transcribed by the operator from the run step summary",
+  "totalClients": 418,
+  "years": {
+    "2015": { "newClients": 5, "cumulativeByYearEnd": 5, "activeCumulativeByYearEnd": 4 },
+    "2016": { "newClients": 16, "cumulativeByYearEnd": 21, "activeCumulativeByYearEnd": 13 },
+    "2017": { "newClients": 41, "cumulativeByYearEnd": 62, "activeCumulativeByYearEnd": 42 },
+    "2018": { "newClients": 21, "cumulativeByYearEnd": 83, "activeCumulativeByYearEnd": 54 },
+    "2019": { "newClients": 21, "cumulativeByYearEnd": 104, "activeCumulativeByYearEnd": 66 },
+    "2020": { "newClients": 32, "cumulativeByYearEnd": 136, "activeCumulativeByYearEnd": 81 },
+    "2021": { "newClients": 23, "cumulativeByYearEnd": 159, "activeCumulativeByYearEnd": 90 },
+    "2022": { "newClients": 6, "cumulativeByYearEnd": 165, "activeCumulativeByYearEnd": 94 },
+    "2023": { "newClients": 18, "cumulativeByYearEnd": 183, "activeCumulativeByYearEnd": 110 },
+    "2024": { "newClients": 49, "cumulativeByYearEnd": 232, "activeCumulativeByYearEnd": 127 },
+    "2025": { "newClients": 109, "cumulativeByYearEnd": 341, "activeCumulativeByYearEnd": 194 },
+    "2026": { "newClients": 77, "cumulativeByYearEnd": 418, "activeCumulativeByYearEnd": 211 }
+  },
+  "ytdYear": "2026"
+}

@@ -20,8 +20,8 @@
     "organizationsSupported": {
       "value": 200,
       "label": "Charitable organizations supported",
-      "source": "Free For Charity Domain Program (ffcadmin.org/sites-list)",
-      "verifiedAt": "2026-06-08",
+      "source": "Free For Charity Domain Program (ffcadmin.org/sites-list); corroborated by WHMCS: 211 currently-active member accounts of 418 all-time (workflow 214, 2026-07-02, whmcs-members.json)",
+      "verifiedAt": "2026-07-02",
       "confidence": "medium"
     },
     "newCharitiesAnnualTarget": {
