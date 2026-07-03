@@ -46,7 +46,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ imageUrl, heading, date, descriptio
 
       {/* Description Section */}
       <div className="p-4">
-        <h3 className="text-[25px] font-[500] text-black leading-[25px]">
+        <h2 className="text-[25px] font-[500] text-black leading-[25px]">
           {href ? (
             <Link href={href} target="_blank" rel="noopener noreferrer">
               {heading}
@@ -54,7 +54,7 @@ const InfoCard: React.FC<InfoCardProps> = ({ imageUrl, heading, date, descriptio
           ) : (
             heading
           )}
-        </h3>
+        </h2>
         {date && (
           <p data-font="aria-font" className="text-[14px] font-[600] text-[#b35000] my-2">
             {date}

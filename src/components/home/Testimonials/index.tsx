@@ -166,12 +166,20 @@ const TestimonialSlider: React.FC = () => {
           {testimonials.map((_, i) => (
             <button
               key={i}
+              type="button"
               onClick={() => handleDotClick(i)}
-              className={`h-2 rounded-full transition-all cursor-pointer ${
-                activeIndex === i ? 'bg-orange-600 w-8' : 'bg-gray-300 w-2 hover:bg-gray-400'
-              }`}
+              className="group h-6 min-w-6 flex items-center justify-center cursor-pointer"
               aria-label={`Go to testimonial ${i + 1}`}
-            />
+            >
+              <span
+                aria-hidden="true"
+                className={`h-2 rounded-full transition-all ${
+                  activeIndex === i
+                    ? 'bg-orange-600 w-8'
+                    : 'bg-gray-300 w-2 group-hover:bg-gray-400'
+                }`}
+              />
+            </button>
           ))}
         </div>
       </div>

@@ -88,8 +88,9 @@ export default function TestimonialSlider() {
                   {testimonials.map((_, index) => (
                     <button
                       key={index}
+                      type="button"
                       onClick={() => goToSlide(index)}
-                      className="w-6 h-6 flex items-center justify-center rounded-full"
+                      className="group w-6 h-6 flex items-center justify-center rounded-full"
                       aria-label={`Go to slide ${index + 1}`}
                     >
                       <span
@@ -97,7 +98,7 @@ export default function TestimonialSlider() {
                         className={`transition-all duration-300 rounded-full ${
                           index === currentIndex
                             ? 'w-3 h-3 bg-[#D9D9D9] scale-150'
-                            : 'w-3 h-3 bg-white bg-opacity-50 hover:bg-opacity-75'
+                            : 'w-3 h-3 bg-white bg-opacity-50 group-hover:bg-opacity-75'
                         }`}
                       />
                     </button>

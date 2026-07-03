@@ -56,9 +56,9 @@ const StepCard: React.FC<{ step: Step }> = ({ step }) => {
           </div>
         </div>
 
-        <h4 className="text-[31px] font-bold leading-[31px] pb-[10px]" data-font="cantata-font">
+        <h3 className="text-[31px] font-bold leading-[31px] pb-[10px]" data-font="cantata-font">
           {step.title}
-        </h4>
+        </h3>
 
         <p className="text-[25px] font-bold leading-[33px] pb-[1em]" data-font="raleway-font">
           {step.description}

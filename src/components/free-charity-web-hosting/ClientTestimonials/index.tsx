@@ -88,12 +88,12 @@ export default function TestimonialSlider() {
                   </p>
 
                   <div className="mt-5">
-                    <h3
+                    <h2
                       className="text-[22px] leading-[22px] font-[500] pb-[10px]"
                       data-font="raleway-font"
                     >
                       {testimonial.author}
-                    </h3>
+                    </h2>
                     <p
                       className="text-[14px] font-[500] leading-[14px] text-[#fff]"
                       data-font="raleway-font"
@@ -110,8 +110,9 @@ export default function TestimonialSlider() {
               {testimonials.map((_, idx) => (
                 <button
                   key={idx}
+                  type="button"
                   onClick={() => startTransition(() => idx)}
-                  className={`w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300`}
+                  className="w-6 h-6 rounded-full flex items-center justify-center transition-all duration-300"
                   aria-label={`Go to slide ${idx + 1}`}
                 >
                   <span
