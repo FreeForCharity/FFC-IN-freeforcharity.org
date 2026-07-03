@@ -120,9 +120,9 @@ const Footer: React.FC = () => {
               degrades to the hosted form in a new tab without JS. */}
           {freeDomainCampaign?.confirmed ? (
             <div className="space-y-2 pt-2">
-              <h4 className="text-[22px] text-white" data-font="lato-font">
+              <h3 className="text-[22px] text-white" data-font="lato-font">
                 Fund Free Domains for Charities
-              </h4>
+              </h3>
               <p className="text-[15px] font-[500] text-gray-300" data-font="lato-font">
                 Give a nonprofit a free .org domain &amp; DNS. 100% of your gift reaches the mission
                 (Zeffy charges 0% fees).

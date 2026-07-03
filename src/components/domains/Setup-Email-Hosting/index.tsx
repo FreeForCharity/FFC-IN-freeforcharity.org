@@ -72,12 +72,12 @@ const index = () => {
             />
           </div>
 
-          <h3
+          <h2
             className="text-[31px] font-[700] leading-[31px] pb-[30px] text-[#0567B1]"
             data-font="cantata-font"
           >
             Step 1
-          </h3>
+          </h2>
           <p
             className="text-[#333] text-[22px] font-[700] leading-[22px] text-center pb-[10px]"
             data-font="raleway-font"
@@ -104,12 +104,12 @@ const index = () => {
             />
           </div>
 
-          <h3
+          <h2
             className="text-[31px] font-[700] leading-[31px] pb-[30px] text-[#0567B1]"
             data-font="cantata-font"
           >
             Step 2
-          </h3>
+          </h2>
           <p
             className="text-[#333] text-[22px] font-[700] leading-[22px] text-center pb-[10px]"
             data-font="raleway-font"

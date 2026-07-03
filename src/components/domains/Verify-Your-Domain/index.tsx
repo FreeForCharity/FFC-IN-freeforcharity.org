@@ -50,12 +50,12 @@ const index = () => {
 
             {/* Text */}
             <div className="text-center md:text-left">
-              <h3
+              <h2
                 className="text-[31px] font-[700] leading-[31px] pb-[10px]"
                 data-font="cantata-font"
               >
                 Step 1
-              </h3>
+              </h2>
               <p className="text-[23px] font-[500] leading-[30px]" data-font="raleway-font">
                 Check for emails about verification to the email address you used to register this
                 domain
@@ -105,12 +105,12 @@ const index = () => {
 
             {/* Text */}
             <div className="text-center md:text-left">
-              <h3
+              <h2
                 className="text-[31px] font-[700] leading-[31px] pb-[10px]"
                 data-font="cantata-font"
               >
                 Step 2
-              </h3>
+              </h2>
               <p
                 className="text-[23px] font-[500] leading-[30px] pb-[1em]"
                 data-font="raleway-font"
