@@ -80,7 +80,11 @@ export default function GuidesHub() {
         })}
 
         <p className="font-[var(--font-lato)] text-[16px] leading-[26px] text-[#555]">
-          Can&rsquo;t find what you need? Ask us via the{' '}
+          Can&rsquo;t find what you need? Try{' '}
+          <Link href="/search/" className="text-[#0567B1] underline">
+            site search
+          </Link>{' '}
+          or ask us via the{' '}
           <Link href="/contact-us/" className="text-[#0567B1] underline">
             contact page
           </Link>{' '}

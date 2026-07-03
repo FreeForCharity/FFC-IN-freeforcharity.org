@@ -13,6 +13,7 @@ const popularDestinations = [
   { href: '/donate/', label: 'Donate' },
   { href: '/volunteer/', label: 'Volunteer' },
   { href: '/help-for-charities/', label: 'Help for Charities' },
+  { href: '/search/', label: 'Search the site' },
   { href: '/contact-us/', label: 'Contact Us' },
 ]
 
