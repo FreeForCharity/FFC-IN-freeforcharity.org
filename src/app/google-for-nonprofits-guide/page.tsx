@@ -1,5 +1,7 @@
 import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { ffcAdminUrl } from '@/data/admin-links'
 
 export const metadata = pageMetadata({
   title: 'Google for Nonprofits & Ad Grants',
@@ -72,6 +74,11 @@ export default function GoogleForNonprofitsGuide() {
               signup, donations, program enrollment.
             </li>
           </ol>
+
+          <AdminGuideLink
+            href={ffcAdminUrl('/guides/google-workspace/')}
+            description="Setting up Google Workspace itself (accounts, verification via Goodstack, admin console)? The detailed workflow is on FFC Admin:"
+          />
 
           <h2 className={h2}>The rules that keep the grant alive</h2>
           <p>Google cancels inactive or low-quality grant accounts. The essentials:</p>

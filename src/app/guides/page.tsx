@@ -79,6 +79,19 @@ export default function GuidesHub() {
           )
         })}
 
+        <p className="font-[var(--font-lato)] text-[16px] leading-[26px] text-[#555] mb-4">
+          These guides are the charity-facing orientation set. Operational, click-by-click workflow
+          guides (30+ covering every tool we deploy) live on the{' '}
+          <a
+            href="https://ffcadmin.org/guides/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#0567B1] underline"
+          >
+            FFC Admin guides hub
+          </a>{' '}
+          — the operational source of truth for accepted charities and active volunteers.
+        </p>
         <p className="font-[var(--font-lato)] text-[16px] leading-[26px] text-[#555]">
           Can&rsquo;t find what you need? Try{' '}
           <Link href="/search/" className="text-[#0567B1] underline">

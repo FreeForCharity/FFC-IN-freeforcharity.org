@@ -1,5 +1,7 @@
 import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { ffcAdminUrl } from '@/data/admin-links'
 
 export const metadata = pageMetadata({
   title: 'Security Basics for Small Charities',
@@ -60,6 +62,11 @@ export default function CharitySecurityGuide() {
               vault makes this a ten-minute chore instead of a forgotten risk.
             </li>
           </ul>
+
+          <AdminGuideLink
+            href={ffcAdminUrl('/guides/multi-factor-authentication/')}
+            description="Step-by-step MFA setup — plus companion FFC Admin guides for password managers and passkeys — live on the FFC Admin portal:"
+          />
 
           <h2 className={h2}>3. Recognize the two frauds aimed at charities</h2>
           <ul>

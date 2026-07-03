@@ -31,8 +31,17 @@ export default function CharitiesWeSupport() {
           . This directory lists only currently-live public sites.)
         </p>
         <p className="font-[var(--font-lato)] text-[14px] leading-[22px] text-[#767672] mb-8">
-          Snapshot from our operational sites inventory, {snapshotDate}. Listed organization?
-          We&rsquo;re glad to feature you — or remove you on request via the{' '}
+          Snapshot from our operational sites inventory ({snapshotDate}) — the full inventory with
+          health and migration detail is public on{' '}
+          <a
+            href="https://ffcadmin.org/sites-list/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            FFC Admin
+          </a>
+          . Listed organization? We&rsquo;re glad to feature you — or remove you on request via the{' '}
           <Link href="/contact-us/" className="underline">
             contact page
           </Link>

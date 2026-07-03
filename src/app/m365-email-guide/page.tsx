@@ -1,5 +1,7 @@
 import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { ffcAdminUrl } from '@/data/admin-links'
 
 export const metadata = pageMetadata({
   title: 'Free Microsoft 365 Email for Your Charity',
@@ -104,6 +106,11 @@ export default function M365EmailGuide() {
               minutes.
             </li>
           </ul>
+
+          <AdminGuideLink
+            href={ffcAdminUrl('/guides/microsoft-365-email/')}
+            description="This page is the orientation. The authoritative click-by-click workflow (kept current by the volunteers who do this weekly) lives on FFC Admin:"
+          />
 
           <h2 className={h2}>Common problems</h2>
           <ul>

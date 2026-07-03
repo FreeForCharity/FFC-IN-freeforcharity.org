@@ -131,6 +131,64 @@ export default function VolunteerRoles() {
         </div>
 
         <p className="font-[var(--font-lato)] text-[16px] leading-[26px] text-[#555] mt-8">
+          Each technical role has a detailed working page on the FFC Admin portal —{' '}
+          <a
+            href="https://ffcadmin.org/volunteer/web-developer/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#0567B1] underline"
+          >
+            web developer
+          </a>
+          ,{' '}
+          <a
+            href="https://ffcadmin.org/volunteer/microsoft-365-admin/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#0567B1] underline"
+          >
+            Microsoft 365 admin
+          </a>
+          ,{' '}
+          <a
+            href="https://ffcadmin.org/volunteer/canva-designer/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#0567B1] underline"
+          >
+            Canva designer
+          </a>{' '}
+          — plus roles not listed here:{' '}
+          <a
+            href="https://ffcadmin.org/volunteer/google-workspace-admin/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#0567B1] underline"
+          >
+            Google Workspace admin
+          </a>
+          ,{' '}
+          <a
+            href="https://ffcadmin.org/volunteer/data-analytics/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#0567B1] underline"
+          >
+            data analytics
+          </a>
+          , and a{' '}
+          <a
+            href="https://ffcadmin.org/volunteer/military-volunteers/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#0567B1] underline"
+          >
+            military volunteers
+          </a>{' '}
+          program (MOVSM-eligible). FFC Admin is the authoritative role catalog; this page is the
+          overview.
+        </p>
+        <p className="font-[var(--font-lato)] text-[16px] leading-[26px] text-[#555] mt-4">
           Technical volunteer? Read the{' '}
           <Link href="/volunteer-onboarding-guide/" className="text-[#0567B1] underline">
             first-two-weeks onboarding guide

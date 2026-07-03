@@ -112,6 +112,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/annual-report-2025', priority: 0.6, changeFrequency: 'yearly' as const },
     { path: '/status', priority: 0.5, changeFrequency: 'weekly' as const },
     { path: '/search', priority: 0.5, changeFrequency: 'monthly' as const },
+    { path: '/other-ways-to-give', priority: 0.7, changeFrequency: 'monthly' as const },
   ]
 
   return routes.map((route) => ({
