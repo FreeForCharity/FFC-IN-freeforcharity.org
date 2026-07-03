@@ -70,6 +70,7 @@ const CharityHeroBackground = () => {
               src={assetPath('/Images/figma-hero-img.webp')}
               alt="Hero image"
               fill
+              priority
               className="object-contain"
             />
           </div>
