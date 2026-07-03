@@ -1,5 +1,6 @@
 import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
+import HoursReportCallout from '@/components/volunteer/HoursReportCallout'
 
 export const metadata = pageMetadata({
   title: 'Volunteer Roles',
@@ -129,6 +130,8 @@ export default function VolunteerRoles() {
             </section>
           ))}
         </div>
+
+        <HoursReportCallout />
 
         <p className="font-[var(--font-lato)] text-[16px] leading-[26px] text-[#555] mt-8">
           Each technical role has a detailed working page on the FFC Admin portal —{' '}
