@@ -7,7 +7,7 @@ import Link from 'next/link'
  * Shared client-side decision wizard (issues #367, #397): a small
  * question-by-question flow that ends in a recommendation. Static-export
  * friendly — pure client state, no network, fully keyboard operable
- * (radio groups + buttons).
+ * (each answer is a native button; back/restart are buttons too).
  */
 
 export interface WizardOutcome {
@@ -35,39 +35,44 @@ export interface WizardConfig {
   outcomes: WizardOutcome[]
 }
 
+interface WizardState {
+  currentId: string
+  outcomeId: string | null
+  trail: string[]
+}
+
 export default function DecisionWizard({ config }: { config: WizardConfig }) {
-  const [currentId, setCurrentId] = useState(config.firstQuestion)
-  const [outcomeId, setOutcomeId] = useState<string | null>(null)
-  const [trail, setTrail] = useState<string[]>([])
+  // Single state object updated functionally, so navigation history can never
+  // be dropped by stale closures under rapid clicks / concurrent rendering.
+  const [state, setState] = useState<WizardState>({
+    currentId: config.firstQuestion,
+    outcomeId: null,
+    trail: [],
+  })
+  const { currentId, outcomeId, trail } = state
 
   const question = config.questions.find((q) => q.id === currentId)
   const outcome = outcomeId ? config.outcomes.find((o) => o.id === outcomeId) : null
 
   function choose(option: WizardOption) {
-    if (option.next.startsWith('outcome:')) {
-      setOutcomeId(option.next.slice('outcome:'.length))
-    } else {
-      setTrail([...trail, currentId])
-      setCurrentId(option.next)
-    }
+    setState((s) =>
+      option.next.startsWith('outcome:')
+        ? { ...s, outcomeId: option.next.slice('outcome:'.length) }
+        : { currentId: option.next, outcomeId: null, trail: [...s.trail, s.currentId] }
+    )
   }
 
   function restart() {
-    setCurrentId(config.firstQuestion)
-    setOutcomeId(null)
-    setTrail([])
+    setState({ currentId: config.firstQuestion, outcomeId: null, trail: [] })
   }
 
   function back() {
-    const prev = trail[trail.length - 1]
-    if (outcomeId) {
-      setOutcomeId(null)
-      return
-    }
-    if (prev) {
-      setTrail(trail.slice(0, -1))
-      setCurrentId(prev)
-    }
+    setState((s) => {
+      if (s.outcomeId) return { ...s, outcomeId: null }
+      const prev = s.trail[s.trail.length - 1]
+      if (!prev) return s
+      return { currentId: prev, outcomeId: null, trail: s.trail.slice(0, -1) }
+    })
   }
 
   if (outcome) {
