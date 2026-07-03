@@ -1,0 +1,66 @@
+{
+  "_comment": "Single source of truth for blog posts (issue #384). Newest first. The /blog/ page renders all posts; the homepage Our Blogs section renders the first three; /rss.xml is generated from isoDate. href may point at an on-site page (deep dive) or a legacy WP slug kept alive by .htaccess redirects.",
+  "posts": [
+    {
+      "heading": "Free For Charity earns the 2026 Platinum Seal of Transparency",
+      "date": "Jul 2, 2026",
+      "isoDate": "2026-07-02",
+      "description": "We just renewed our Candid Platinum seal — and this time every published metric traces to dated records: 248 nonprofits served in 2025, 41 active volunteers, and a full census of 1,153 support conversations. See the numbers, the growth curve, and exactly how we count them on our new impact dashboard.",
+      "imageUrl": "/Images/donation.webp",
+      "href": "/impact/"
+    },
+    {
+      "heading": "New on freeforcharity.org: guides hub, eligibility check, and more",
+      "date": "Jul 3, 2026",
+      "isoDate": "2026-07-03",
+      "description": "One update, fifteen new resources for charities: a guides hub covering free email, domains, Google Ad Grants, fee-free donations, 990-N compliance, and security basics — plus a two-minute eligibility checker, a charity FAQ built from what you actually ask us, and a volunteer role quiz.",
+      "imageUrl": "/Images/donation.webp",
+      "href": "/guides/"
+    },
+    {
+      "heading": "We just updated for the 2022 GuideStar Platinum Seal",
+      "date": "Jan 9, 2023",
+      "isoDate": "2023-01-09",
+      "description": "We're excited to share that our organization has earned a 2022 Platinum Seal of Transparency with Candid! Now, you can support our work with trust and confidence by viewing our nonprofit profile.",
+      "imageUrl": "/Images/card-image.webp",
+      "href": "/we-just-updated-for-the-2022-guidestar-platinum-seal/"
+    },
+    {
+      "heading": "Our organization earned a 2021 Platinum Seal of Transparency!",
+      "date": "Jun 1, 2021",
+      "isoDate": "2021-06-01",
+      "description": "Our organization earned a 2021 Platinum Seal of Transparency! Now, everyone can see our strategy, metrics, and achievements. Check out our updated nonprofit profile on Candid.",
+      "imageUrl": "/Images/donation.webp",
+      "href": "/our-organization-earned-a-2021-platinum-seal-of-transparency/"
+    },
+    {
+      "heading": "What is the cost?",
+      "date": "Aug 24, 2017",
+      "isoDate": "2017-08-24",
+      "description": "You would be amazed at how frequently we get asked this question about our costs. For our consulting engagements we are actually 100% free. While there are many companies and other nonprofits that charge for these services, we provide them for free!",
+      "imageUrl": "/Images/donation.webp",
+      "href": "/what-is-the-cost/"
+    },
+    {
+      "heading": "Free For Charity Just Earned the Platinum Seal of Transparency",
+      "date": "2017",
+      "isoDate": "2017-06-01",
+      "description": "Great news! Free For Charity just earned the Platinum Seal of Transparency from GuideStar, the world's largest source of nonprofit information. By sharing these metrics, we're helping the sector move beyond simplistic financial ratios to assess nonprofit progress.",
+      "imageUrl": "/Images/donation.webp"
+    },
+    {
+      "heading": "Using a Registered Agent Service (Northwest Registered Agent)",
+      "date": "2016",
+      "isoDate": "2016-06-01",
+      "description": "Free For Charity uses a unique service for managing legal compliance for the non-profit. We use a registered agent service called Northwest Registered Agent.",
+      "imageUrl": "/Images/donation.webp"
+    },
+    {
+      "heading": "Podio Sponsorship Program",
+      "date": "2015",
+      "isoDate": "2015-06-01",
+      "description": "With our brand new 501c3 status we are getting access to a lot of new and exciting tools. Free For Charity is now formally testing out Podio. Once tested we will add it to our technology directory.",
+      "imageUrl": "/Images/donation.webp"
+    }
+  ]
+}
