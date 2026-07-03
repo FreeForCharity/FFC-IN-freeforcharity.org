@@ -50,6 +50,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: '/',
+    types: { 'application/rss+xml': `${basePath}/rss.xml` },
   },
   openGraph: {
     type: 'website',

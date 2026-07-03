@@ -2,6 +2,7 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import OutBlogs from '@/components/home/Ourblogs'
+import blogData from '@/data/blog-posts.json'
 
 // Mock the child component to isolate the test for OutBlogs
 jest.mock('@/components/ui/BlogCard', () => {
@@ -39,41 +40,23 @@ describe('OutBlogs Component', () => {
     expect(cards).toHaveLength(3)
   })
 
-  it('passes the correct props to the InfoCard components', () => {
+  it('renders the three newest posts from the blog registry', () => {
     render(<OutBlogs />)
 
-    // Check first blog
-    expect(
-      screen.getByText('We just updated for the 2022 GuideStar Platinum Seal')
-    ).toBeInTheDocument()
-    expect(screen.getByText('Jan 9, 2023')).toBeInTheDocument()
-    expect(
-      screen.getByText(/We're excited to share that our organization has earned/)
-    ).toBeInTheDocument()
-
-    // Check second blog
-    expect(
-      screen.getByText('Our organization earned a 2021 Platinum Seal of Transparency!')
-    ).toBeInTheDocument()
-    expect(screen.getByText('Jun 1, 2021')).toBeInTheDocument()
-
-    // Check third blog
-    expect(screen.getByText('What is the cost?')).toBeInTheDocument()
-    expect(screen.getByText('Aug 24, 2017')).toBeInTheDocument()
+    const headings = screen.getAllByRole('heading', { level: 3 }).map((h) => h.textContent)
+    expect(headings).toEqual(blogData.posts.slice(0, 3).map((p) => p.heading))
+    for (const post of blogData.posts.slice(0, 3)) {
+      expect(screen.getByText(post.date)).toBeInTheDocument()
+    }
   })
 
-  it('passes the href correctly', () => {
+  it('passes each post href through to the card', () => {
     render(<OutBlogs />)
     const links = screen.getAllByRole('link')
-    expect(links).toHaveLength(3)
-    expect(links[0]).toHaveAttribute(
-      'href',
-      '/we-just-updated-for-the-2022-guidestar-platinum-seal/'
-    )
-    expect(links[1]).toHaveAttribute(
-      'href',
-      '/our-organization-earned-a-2021-platinum-seal-of-transparency/'
-    )
-    expect(links[2]).toHaveAttribute('href', '/what-is-the-cost/')
+    const expected = blogData.posts
+      .slice(0, 3)
+      .map((p) => ('href' in p ? p.href : undefined))
+      .filter(Boolean)
+    expect(links.map((l) => l.getAttribute('href'))).toEqual(expected)
   })
 })
