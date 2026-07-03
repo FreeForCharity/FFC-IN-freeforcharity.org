@@ -85,4 +85,6 @@ export const siteRoutes = [
   { route: '/contribute', name: 'Contribute on GitHub' },
   { route: '/eligibility-check', name: 'Eligibility Check' },
   { route: '/volunteer-quiz', name: 'Volunteer Quiz' },
+  { route: '/matching-gifts', name: 'Matching Gifts' },
+  { route: '/badge', name: 'Powered-by Badge' },
 ]
