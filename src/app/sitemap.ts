@@ -108,6 +108,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/volunteer-quiz', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/matching-gifts', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/badge', priority: 0.5, changeFrequency: 'yearly' as const },
+    { path: '/charities-we-support', priority: 0.8, changeFrequency: 'weekly' as const },
   ]
 
   return routes.map((route) => ({

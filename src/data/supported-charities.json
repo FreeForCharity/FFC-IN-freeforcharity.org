@@ -1,0 +1,394 @@
+{
+  "_comment": "Public directory snapshot for /charities-we-support/ (issue #377). Derived from the FFC sites-list (FFC-Cloudflare-Automation sites-list/sites_list.json, commit c18c5c5, 2026-06-08): domains with a working site (Live/Redirect health), excluding organizations that left FFC, staging domains, and FFC's own infrastructure domains. Org domains are public project data (sites-list precedent); no contact or personal data. OPT-OUT: any organization can be removed on request via the contact page - delete its row here and note the request in the PR.",
+  "sourceCommit": "c18c5c5",
+  "snapshotDate": "2026-06-08",
+  "charities": [
+    {
+      "domain": "3dmc2.com"
+    },
+    {
+      "domain": "aariasblueelephant.org"
+    },
+    {
+      "domain": "abundances.org"
+    },
+    {
+      "domain": "acharyaapp.org"
+    },
+    {
+      "domain": "alltypetowing.com"
+    },
+    {
+      "domain": "amargraves.org"
+    },
+    {
+      "domain": "ambofoundation.org"
+    },
+    {
+      "domain": "americanlegionpost64.com"
+    },
+    {
+      "domain": "americanlegionpost64.org"
+    },
+    {
+      "domain": "amplifiedaid.org"
+    },
+    {
+      "domain": "aprilhansen.com"
+    },
+    {
+      "domain": "aprilunlimited.com"
+    },
+    {
+      "domain": "avengedfastpitch.org"
+    },
+    {
+      "domain": "bearupinternationalministries.org"
+    },
+    {
+      "domain": "bhakthinivedana.com/sandbox"
+    },
+    {
+      "domain": "bintobetter.org"
+    },
+    {
+      "domain": "bowiesblessings.org"
+    },
+    {
+      "domain": "bringingpeople2people.org"
+    },
+    {
+      "domain": "browncanyonranch.org"
+    },
+    {
+      "domain": "bucktownbullsbaseball.org"
+    },
+    {
+      "domain": "bulldogztowing.com"
+    },
+    {
+      "domain": "canadatokeywestcoastalrun.org"
+    },
+    {
+      "domain": "clarasbridge.org"
+    },
+    {
+      "domain": "clarkemoyer.com"
+    },
+    {
+      "domain": "clarkmoyer.com"
+    },
+    {
+      "domain": "coronadonationalforestheritagesociety.org"
+    },
+    {
+      "domain": "cortesdesignworks.com"
+    },
+    {
+      "domain": "ctvip.org"
+    },
+    {
+      "domain": "cucu-il.org"
+    },
+    {
+      "domain": "cvrs-us.org"
+    },
+    {
+      "domain": "database.onlineimpacts.org"
+    },
+    {
+      "domain": "e2inc.org"
+    },
+    {
+      "domain": "educationandempowerment.org"
+    },
+    {
+      "domain": "emc-professional.com"
+    },
+    {
+      "domain": "emc-professional.org"
+    },
+    {
+      "domain": "exceptionalridersprogram.org"
+    },
+    {
+      "domain": "facinggiantsnc.org"
+    },
+    {
+      "domain": "falloutshelterecovillage.org"
+    },
+    {
+      "domain": "fencingtogether.org"
+    },
+    {
+      "domain": "focus-on-free.com"
+    },
+    {
+      "domain": "foxtrotenterprises.com"
+    },
+    {
+      "domain": "freedomrisingusa.org"
+    },
+    {
+      "domain": "ftnfcog.org"
+    },
+    {
+      "domain": "ghcd.onlineimpacts.org"
+    },
+    {
+      "domain": "graftonareahistory.org"
+    },
+    {
+      "domain": "greenrecon.org"
+    },
+    {
+      "domain": "hardpointconsulting.com"
+    },
+    {
+      "domain": "harmonycenterfoundation.org"
+    },
+    {
+      "domain": "heroes2others.org"
+    },
+    {
+      "domain": "homesforchange.org"
+    },
+    {
+      "domain": "hunnewellscottages.com"
+    },
+    {
+      "domain": "iawea.net"
+    },
+    {
+      "domain": "innovatesphere.org"
+    },
+    {
+      "domain": "instituteofforgiveness.org"
+    },
+    {
+      "domain": "jwvpost619.org"
+    },
+    {
+      "domain": "kainkaryasri.org"
+    },
+    {
+      "domain": "kieranrunnelsdev.org"
+    },
+    {
+      "domain": "kierstensride.org"
+    },
+    {
+      "domain": "ksgf.org"
+    },
+    {
+      "domain": "legion-in-the-woods.org"
+    },
+    {
+      "domain": "legioninthewoods.org"
+    },
+    {
+      "domain": "letsdanceactivities.com"
+    },
+    {
+      "domain": "letsdanceactivities.org"
+    },
+    {
+      "domain": "letsleadwise.org"
+    },
+    {
+      "domain": "letspiritlead.org"
+    },
+    {
+      "domain": "lifelessonslearned.us.org"
+    },
+    {
+      "domain": "mattressfiberglass.org"
+    },
+    {
+      "domain": "mitchellnchistory.org"
+    },
+    {
+      "domain": "movewithcompassion.org"
+    },
+    {
+      "domain": "moyermanagement.com"
+    },
+    {
+      "domain": "muckfichigan.com"
+    },
+    {
+      "domain": "my-missions.org"
+    },
+    {
+      "domain": "myservicehours.org"
+    },
+    {
+      "domain": "nj4israel.org"
+    },
+    {
+      "domain": "nochaos.org"
+    },
+    {
+      "domain": "nolef.onlineimpacts.org"
+    },
+    {
+      "domain": "npbandparents.org"
+    },
+    {
+      "domain": "nu4children.org"
+    },
+    {
+      "domain": "ohiomtawest.org"
+    },
+    {
+      "domain": "onlineimpacts.org"
+    },
+    {
+      "domain": "pagbooster.org"
+    },
+    {
+      "domain": "postpartumcarefoundation.com"
+    },
+    {
+      "domain": "postpartumcarefoundation.org"
+    },
+    {
+      "domain": "ptuganda.org"
+    },
+    {
+      "domain": "rebirthsdc.org"
+    },
+    {
+      "domain": "savewatersaveplanet.org"
+    },
+    {
+      "domain": "scwcinc.org"
+    },
+    {
+      "domain": "sfcityarts.org"
+    },
+    {
+      "domain": "slopestohope.org"
+    },
+    {
+      "domain": "southamptonfriends.org"
+    },
+    {
+      "domain": "srrn.net"
+    },
+    {
+      "domain": "srs806.org"
+    },
+    {
+      "domain": "stylesbysheba.com"
+    },
+    {
+      "domain": "tamkeensports.org"
+    },
+    {
+      "domain": "tasteandseelocal.org"
+    },
+    {
+      "domain": "tech4security.com"
+    },
+    {
+      "domain": "techforsecurity.com"
+    },
+    {
+      "domain": "technologyadoptionbarriers.org"
+    },
+    {
+      "domain": "technologymonastery.org"
+    },
+    {
+      "domain": "technologymonastery.us"
+    },
+    {
+      "domain": "technomonasteries.org"
+    },
+    {
+      "domain": "thebirf.org"
+    },
+    {
+      "domain": "thecrookedhouse.net"
+    },
+    {
+      "domain": "thecrookedhouse.org"
+    },
+    {
+      "domain": "thedeviators.org"
+    },
+    {
+      "domain": "theeverythingproject.org"
+    },
+    {
+      "domain": "thegracehouseinc.org"
+    },
+    {
+      "domain": "thestudiovisit.org"
+    },
+    {
+      "domain": "thetrendylittlegeek.com"
+    },
+    {
+      "domain": "thewayofyeshuaministries.org"
+    },
+    {
+      "domain": "transferca.org"
+    },
+    {
+      "domain": "trendylittlegeek.com"
+    },
+    {
+      "domain": "trinitylutheranconcord.org"
+    },
+    {
+      "domain": "trinityucclewistown.org"
+    },
+    {
+      "domain": "turksotx.org"
+    },
+    {
+      "domain": "veterans.onlineimpacts.org"
+    },
+    {
+      "domain": "wamhelp.org"
+    },
+    {
+      "domain": "wh1374403.ispot.cc/wp"
+    },
+    {
+      "domain": "wisdomfinancialministries.org"
+    },
+    {
+      "domain": "wonderseed.org"
+    },
+    {
+      "domain": "wonderseedstudio.com"
+    },
+    {
+      "domain": "wonderseedstudios.org"
+    },
+    {
+      "domain": "workreadyrva.com"
+    },
+    {
+      "domain": "www.americanlegionpost64.org"
+    },
+    {
+      "domain": "www.henricovareentrycouncil.com"
+    },
+    {
+      "domain": "www.nolefturns.org"
+    },
+    {
+      "domain": "www.shebawilliams.com"
+    },
+    {
+      "domain": "www.virginiajusticeconference.com"
+    },
+    {
+      "domain": "youngfatherscare.org"
+    }
+  ]
+}

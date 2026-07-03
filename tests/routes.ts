@@ -87,4 +87,5 @@ export const siteRoutes = [
   { route: '/volunteer-quiz', name: 'Volunteer Quiz' },
   { route: '/matching-gifts', name: 'Matching Gifts' },
   { route: '/badge', name: 'Powered-by Badge' },
+  { route: '/charities-we-support', name: 'Charities We Support' },
 ]
