@@ -4,6 +4,7 @@ import Header from '@/components/header'
 import Footer from '@/components/footer'
 import CookieConsent from '@/components/cookie-consent'
 import ZeffyEmbedScript from '@/components/ui/ZeffyEmbedScript'
+import { organizationJsonLd, webSiteJsonLd } from '@/lib/structured-data'
 
 // Get basePath for GitHub Pages deployment
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
@@ -89,9 +90,25 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`antialiased`} suppressHydrationWarning={true}>
+        {/* Schema.org identity for search engines (NonprofitOrganization + WebSite). */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(webSiteJsonLd) }}
+        />
+        {/* Keyboard users can jump past the header; visible only while focused. */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-white focus:text-black focus:px-4 focus:py-2 focus:rounded focus:shadow-lg"
+        >
+          Skip to main content
+        </a>
         {/* <PopupProvider> */}
         <Header />
-        {children}
+        <main id="main-content">{children}</main>
         <Footer />
         <CookieConsent />
         {/* Global Zeffy pop-up engine: wires every `zeffy-form-link` element

@@ -1,0 +1,160 @@
+{
+  "_comment": "Registry behind /guides/ (issue #412). Every charity-facing guide self-registers here so the hub, cross-links, and tests stay in sync. href must be an existing kebab-case route with trailing slash. group drives the hub's journey-stage sections; order within a group is the array order.",
+  "groups": [
+    "Getting started",
+    "Email & domain",
+    "Fundraising & visibility",
+    "Compliance & trust",
+    "Security",
+    "For volunteers"
+  ],
+  "guides": [
+    {
+      "href": "/charity-onboarding-journey/",
+      "title": "Your onboarding journey",
+      "promise": "The five stages after you apply: who does what, and how long each really takes.",
+      "group": "Getting started",
+      "minutes": 5
+    },
+    {
+      "href": "/getting-started-checklist/",
+      "title": "Getting started checklist (printable)",
+      "promise": "One page covering everything to gather before, during, and after onboarding.",
+      "group": "Getting started",
+      "minutes": 3
+    },
+    {
+      "href": "/choosing-your-org-domain/",
+      "title": "Choosing your .org domain — without the fear",
+      "promise": "Naming rules, who owns it, and why the domain step is safer than you think (FFC pays).",
+      "group": "Email & domain",
+      "minutes": 7
+    },
+    {
+      "href": "/m365-email-guide/",
+      "title": "Free Microsoft 365 email at your domain",
+      "promise": "Claim Microsoft's nonprofit grant and get you@yourcharity.org, step by step.",
+      "group": "Email & domain",
+      "minutes": 10
+    },
+    {
+      "href": "/google-for-nonprofits-guide/",
+      "title": "Google for Nonprofits & the $10k/month Ad Grant",
+      "promise": "Free search advertising and YouTube tools your FFC-hosted site already qualifies for.",
+      "group": "Fundraising & visibility",
+      "minutes": 10
+    },
+    {
+      "href": "/zeffy-donations-guide/",
+      "title": "Fee-free donations with Zeffy",
+      "promise": "Keep 100% of every gift: signup, embedding on your site, receipts, and payouts.",
+      "group": "Fundraising & visibility",
+      "minutes": 8
+    },
+    {
+      "href": "/irs-990n-filing-guide/",
+      "title": "The 8-minute IRS 990-N filing",
+      "promise": "The free annual e-Postcard that keeps your 501(c)(3) from being revoked.",
+      "group": "Compliance & trust",
+      "minutes": 8
+    },
+    {
+      "href": "/charity-security-guide/",
+      "title": "Security basics for small charities",
+      "promise": "MFA, password managers, donation fraud, domain safety — and the first hour after a compromise.",
+      "group": "Security",
+      "minutes": 10
+    },
+    {
+      "href": "/free-for-charity-ffc-service-delivery-stages/",
+      "title": "How Free For Charity delivers services",
+      "promise": "The stages every supported charity moves through, from first contact to a live website.",
+      "group": "Getting started",
+      "minutes": 5
+    },
+    {
+      "href": "/charity-validation-guide-ensuring-mutual-benefit-through-comprehensive-validation-processes/",
+      "title": "Charity validation guide",
+      "promise": "How FFC validates charities — and how to prepare your organization to qualify.",
+      "group": "Getting started",
+      "minutes": 8
+    },
+    {
+      "href": "/online-impacts-onboarding-guide/",
+      "title": "Online Impacts onboarding guide",
+      "promise": "Onboarding steps for charities joining through our Online Impacts partnership.",
+      "group": "Getting started",
+      "minutes": 6
+    },
+    {
+      "href": "/free-for-charitys-tools-for-success/",
+      "title": "Tools for success",
+      "promise": "The free and discounted tools every FFC charity should know about.",
+      "group": "Fundraising & visibility",
+      "minutes": 6
+    },
+    {
+      "href": "/guidestar-guide/",
+      "title": "Earn your Candid (GuideStar) Seal of Transparency",
+      "promise": "Reach a Gold or Platinum seal in a few hours and keep it with 30 minutes a year.",
+      "group": "Compliance & trust",
+      "minutes": 120
+    },
+    {
+      "href": "/eligibility-check/",
+      "title": "Does your charity qualify? (2-minute check)",
+      "promise": "Five questions, no forms — which free FFC programs fit your organization.",
+      "group": "Getting started",
+      "minutes": 2
+    },
+    {
+      "href": "/volunteer-quiz/",
+      "title": "Which volunteer role fits you? (1-minute quiz)",
+      "promise": "Match your skills and available time to the FFC role you'll actually enjoy.",
+      "group": "For volunteers",
+      "minutes": 1
+    },
+    {
+      "href": "/charity-faq/",
+      "title": "Charity support FAQ",
+      "promise": "The ten questions charities ask us most, answered once with links to every guide.",
+      "group": "Getting started",
+      "minutes": 5
+    },
+    {
+      "href": "/volunteer-roles/",
+      "title": "Volunteer roles",
+      "promise": "Five ways to serve — skills, hours per week, and what you gain from each.",
+      "group": "For volunteers",
+      "minutes": 6
+    },
+    {
+      "href": "/volunteer-onboarding-guide/",
+      "title": "Volunteer onboarding: your first two weeks",
+      "promise": "Accounts, the repo landscape, communication norms, and your guaranteed first task.",
+      "group": "For volunteers",
+      "minutes": 8
+    },
+    {
+      "href": "/contribute/",
+      "title": "Contribute on GitHub",
+      "promise": "No signup needed — pick a good-first-issue and help charities with a pull request.",
+      "group": "For volunteers",
+      "minutes": 5
+    },
+    {
+      "href": "/free-for-charity-ffc-web-developer-training-guide/",
+      "title": "Web developer training guide",
+      "promise": "The training path for volunteers who build and maintain charity sites.",
+      "group": "For volunteers",
+      "minutes": 15
+    },
+    {
+      "href": "/ffc-volunteer-proving-ground-core-competencies/",
+      "title": "Volunteer proving ground: core competencies",
+      "promise": "The competency modules every FFC technical volunteer completes.",
+      "group": "For volunteers",
+      "minutes": 20
+    }
+  ]
+}

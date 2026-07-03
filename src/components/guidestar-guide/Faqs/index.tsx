@@ -279,12 +279,34 @@ const index = () => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element -- external dynamic GuideStar badge served from their host; not a local optimizable asset */}
+              {/* eslint-disable-next-line @next/next/no-img-element -- external dynamic Candid badge served from their host; not a local optimizable asset */}
               <img
-                src="https://widgets.guidestar.org/TransparencySeal/9326392"
-                alt="GuideStar Transparency Seal"
+                src="https://widgets.guidestar.org/prod/v1/pdp/transparency-seal/9326392/svg"
+                alt="Candid Seal of Transparency"
               />
             </a>
+          </p>
+          <h3 className="text-[20px] font-[600] text-[#333] pb-[0.5em]">
+            Put your seal on your website — and never update it again
+          </h3>
+          <p className="font-[500] text-[#666] pb-[1em]">
+            Don&rsquo;t upload the seal as an image file: a saved image goes stale the moment you
+            renew (we learned this on our own site). Use Candid&rsquo;s official embed instead — the
+            seal is served live from Candid keyed to your profile, so the year and level update
+            automatically every time you publish. Replace <code>YOUR_NONPROFIT_ID</code> with your
+            Candid nonprofit id (it&rsquo;s the number in your profile&rsquo;s app.candid.org URL)
+            and the link with your own profile URL:
+          </p>
+          <pre className="whitespace-pre-wrap break-all bg-[#f5f5f5] text-left text-[13px] leading-[20px] p-4 mb-[1em] rounded border border-gray-200">
+            {`<a aria-label="Your Organization" href="https://app.candid.org/profile/YOUR_NONPROFIT_ID/" target="_blank">
+  <img alt="Candid Seal of Transparency"
+       src="https://widgets.guidestar.org/prod/v1/pdp/transparency-seal/YOUR_NONPROFIT_ID/svg" />
+</a>`}
+          </pre>
+          <p className="font-[500] text-[#666] pb-[1em]">
+            (The seal above is exactly this embed running with FFC&rsquo;s own id, 9326392 — as is
+            the seal in this site&rsquo;s footer.) If FFC hosts your website, just send us your
+            nonprofit id and we&rsquo;ll add it for you.
           </p>
           <p className="font-[500] text-[#666] pb-[1em]">
             Please keep your GuideStar profile handy while filling out the FFC onboarding form. A
