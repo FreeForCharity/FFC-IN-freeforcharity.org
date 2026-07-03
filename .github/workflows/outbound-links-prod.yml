@@ -1,0 +1,106 @@
+name: Production outbound links
+
+# Weekly watchdog for the LIVE site's outbound links (issue #410). The PR-time
+# Lychee workflow scans source files; production content can still rot between
+# deploys, and pages like /charities-we-support/ link to a hundred-plus charity
+# destinations whose health changes independently of this repo. This crawl
+# fetches every page in the production sitemap and checks the external links
+# found there, filing/refreshing a single production-health issue on failures.
+
+on:
+  schedule:
+    # Wednesdays 07:00 UTC — offset from the Monday source-link check so the
+    # two watchdogs don't report the same transient outage twice.
+    - cron: '0 7 * * 3'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check-production-outbound-links:
+    name: Crawl production outbound links
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository (for .lycheeignore)
+        uses: actions/checkout@v7
+
+      - name: Collect page URLs from the production sitemap
+        run: |
+          curl -sSf https://www.freeforcharity.org/sitemap.xml \
+            | grep -o '<loc>[^<]*</loc>' \
+            | sed -e 's/<loc>//' -e 's#</loc>##' > sitemap-urls.txt
+          wc -l sitemap-urls.txt
+          # Guard: an empty/unfetchable sitemap should fail loudly, not pass silently.
+          test -s sitemap-urls.txt
+
+      - name: Check outbound links on every production page
+        id: lychee
+        uses: lycheeverse/lychee-action@v2
+        with:
+          # --remap is not needed: lychee fetches each sitemap URL and checks
+          # the links found in the served HTML. Internal links are excluded —
+          # the post-deploy smoke suite owns those; this watchdog is only for
+          # external destinations (charity sites, Microsoft/Google/IRS docs).
+          args: >-
+            --verbose
+            --no-progress
+            --exclude-file .lycheeignore
+            --exclude 'freeforcharity.org'
+            --timeout 60
+            --max-retries 5
+            --retry-wait-time 5
+            --accept 200,201,202,203,204,206,301,302,303,307,308,429
+            -- $(cat sitemap-urls.txt | tr '\n' ' ')
+          fail: false
+
+      - name: Create or refresh the production-health issue
+        if: steps.lychee.outputs.exit_code != 0
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
+            const marker = '<!-- outbound-links-prod-watchdog -->'
+            const body = [
+              marker,
+              '## Broken outbound links on the production site',
+              '',
+              'The weekly production crawl found external URLs that no longer resolve. These are',
+              'links our visitors (and the charities we host) actually click — review promptly.',
+              '',
+              `**Latest failing run:** ${runUrl}`,
+              '',
+              '## Next steps',
+              '1. Open the run output for the list of failing URLs and the pages that carry them',
+              '2. Charity destination down? Check whether the org moved or lapsed — update `src/data/supported-charities.json` (or contact the org) rather than silently dropping them',
+              '3. Third-party doc moved? Update the guide that links it',
+              '4. Persistent false positives (bot-blocking hosts) go in `.lycheeignore` with a comment',
+              '',
+              '_Filed automatically by the production outbound-links watchdog; it updates this issue on each failing run and stays quiet when the crawl is clean._',
+            ].join('\n')
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'production-health',
+              state: 'open',
+            })
+            const mine = existing.data.find((i) => i.body && i.body.includes(marker))
+            if (mine) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: mine.number,
+                body,
+              })
+              console.log(`Refreshed existing watchdog issue #${mine.number}`)
+              return
+            }
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🔗 Broken outbound links on production',
+              body,
+              labels: ['production-health', 'link-rot'],
+            })

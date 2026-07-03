@@ -1,0 +1,42 @@
+{
+  "_comment": "Data behind /status/ (issue #416). Not real-time monitoring: statuses reflect the named automated checks with honest lastChecked stamps, and incident notes are posted by PR — this file's git history doubles as the incident log. status is one of: operational | degraded | outage | unknown.",
+  "updatedAt": "2026-07-03",
+  "services": [
+    {
+      "name": "Charity websites (static hosting)",
+      "status": "operational",
+      "detail": "Charity sites are served from static hosting behind Cloudflare. Health is probed weekly by the sites-list pipeline; 129 public charity sites are currently live.",
+      "checkedBy": "Weekly sites-list health probe",
+      "lastChecked": "2026-06-08"
+    },
+    {
+      "name": "freeforcharity.org (this site)",
+      "status": "operational",
+      "detail": "The main site is smoke-tested on a schedule (homepage, donate flow, key routes) and on every production deploy.",
+      "checkedBy": "Scheduled production smoke suite",
+      "lastChecked": "2026-07-01"
+    },
+    {
+      "name": "DNS & domains (Cloudflare)",
+      "status": "operational",
+      "detail": "All managed charity domains resolve through Cloudflare DNS with registrations kept current by FFC.",
+      "checkedBy": "Weekly sites-list pipeline (Cloudflare inventory)",
+      "lastChecked": "2026-06-08"
+    },
+    {
+      "name": "Supported-charity portal (/hub/)",
+      "status": "operational",
+      "detail": "The WHMCS member portal for supported charities (logins, service records, tickets).",
+      "checkedBy": "Scheduled production smoke suite",
+      "lastChecked": "2026-07-01"
+    },
+    {
+      "name": "Email guidance (Microsoft 365 tenants)",
+      "status": "unknown",
+      "detail": "Charity mailboxes live in each organization's own Microsoft 365 tenant — Microsoft operates the service; FFC assists with configuration. Check Microsoft's service health for platform issues.",
+      "checkedBy": "Not centrally monitored (tenant-owned)",
+      "lastChecked": ""
+    }
+  ],
+  "incidents": []
+}

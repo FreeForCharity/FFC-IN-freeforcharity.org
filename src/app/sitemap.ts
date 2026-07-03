@@ -110,6 +110,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/badge', priority: 0.5, changeFrequency: 'yearly' as const },
     { path: '/charities-we-support', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/annual-report-2025', priority: 0.6, changeFrequency: 'yearly' as const },
+    { path: '/status', priority: 0.5, changeFrequency: 'weekly' as const },
   ]
 
   return routes.map((route) => ({
