@@ -88,4 +88,5 @@ export const siteRoutes = [
   { route: '/matching-gifts', name: 'Matching Gifts' },
   { route: '/badge', name: 'Powered-by Badge' },
   { route: '/charities-we-support', name: 'Charities We Support' },
+  { route: '/annual-report-2025', name: 'Annual Report 2025' },
 ]
