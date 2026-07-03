@@ -20,7 +20,8 @@ const paths: IntentPath[] = [
     heading: "I'm a supported charity and need help",
     body: 'Site changes, email problems, domain questions, or anything broken. Include your organization name, the page or address affected, and what you expected to happen.',
     cta: { label: 'Open the support portal', href: hubUrl(), external: true },
-    expectation: 'Typical response: 1–2 business days. Something urgent? Say “urgent” up front.',
+    expectation:
+      'Check /status/ first for known issues. Typical response: 1–2 business days; say “urgent” up front when it is.',
   },
   {
     heading: 'I want FFC to help my charity',
