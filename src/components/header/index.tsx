@@ -161,7 +161,7 @@ const Header: React.FC = () => {
                   alt="Free For Charity"
                   width={686}
                   height={234}
-                  className={`w-auto transition-all duration-300 ${isScrolled ? 'h-7' : 'h-11'}`}
+                  className={`w-auto object-contain transition-all duration-300 ${isScrolled ? 'h-7' : 'h-11'}`}
                 />
               </Link>
             </div>

@@ -89,13 +89,18 @@ export default function TestimonialSlider() {
                     <button
                       key={index}
                       onClick={() => goToSlide(index)}
-                      className={`transition-all duration-300 rounded-full ${
-                        index === currentIndex
-                          ? 'w-3 h-3 bg-[#D9D9D9] scale-150'
-                          : 'w-3 h-3 bg-white bg-opacity-50 hover:bg-opacity-75'
-                      }`}
+                      className="w-6 h-6 flex items-center justify-center rounded-full"
                       aria-label={`Go to slide ${index + 1}`}
-                    />
+                    >
+                      <span
+                        aria-hidden="true"
+                        className={`transition-all duration-300 rounded-full ${
+                          index === currentIndex
+                            ? 'w-3 h-3 bg-[#D9D9D9] scale-150'
+                            : 'w-3 h-3 bg-white bg-opacity-50 hover:bg-opacity-75'
+                        }`}
+                      />
+                    </button>
                   ))}
                 </div>
               </div>

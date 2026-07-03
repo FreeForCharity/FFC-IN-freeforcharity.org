@@ -126,7 +126,7 @@ const index = () => {
             className="text-[25px] leading-[32px] font-[600] text-[#0460C0]"
             data-font="raleway-font"
           >
-            Click here
+            See the Microsoft 365 setup steps
           </a>
         </div>
       </div>
