@@ -168,6 +168,10 @@ const Footer: React.FC = () => {
                   name: 'Free For Charity Security Acknowledgement',
                   href: '/security-acknowledgements',
                 },
+                {
+                  name: 'Free For Charity Accessibility Statement',
+                  href: '/accessibility-statement',
+                },
               ].map((link) => (
                 <li key={link.name}>
                   <Link

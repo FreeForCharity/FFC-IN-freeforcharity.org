@@ -153,3 +153,7 @@ https://embed\.tawk\.to/\$
 # (UnknownIssuer). Fine in browsers; sibling usertraining.lastpass.com is
 # already pinned above for the same reason.
 https://support.lastpass.com/**
+
+# Documentation placeholder in the GuideStar guide's copyable seal-embed
+# snippet — not a real URL (charities substitute their own nonprofit id).
+YOUR_NONPROFIT_ID

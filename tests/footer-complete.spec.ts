@@ -80,7 +80,7 @@ test.describe('Footer - Column 2: Quick Links', () => {
     await expect(footer.getByText('Free For Charity Policy')).toBeVisible()
   })
 
-  test('should have 7 policy links', async ({ page }) => {
+  test('should have 8 policy links', async ({ page }) => {
     const footer = page.locator('footer')
     const policyLinks = [
       { text: 'Donation Policy', href: '/donation-policy/' },
@@ -95,6 +95,10 @@ test.describe('Footer - Column 2: Quick Links', () => {
       {
         text: 'Free For Charity Security Acknowledgement',
         href: '/security-acknowledgements/',
+      },
+      {
+        text: 'Free For Charity Accessibility Statement',
+        href: '/accessibility-statement/',
       },
     ]
 

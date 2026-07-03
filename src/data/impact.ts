@@ -189,6 +189,7 @@ export type TextYear = {
   charityThreads: number | null
   byParty: Record<TextParty, number> | null
   netNewReachouts: { volunteer: number; newCharity: number } | null
+  activeContacts: { volunteer: number; charityOrgs: number } | null
   charityThreadsByCategory: Record<string, number> | null
   confidence?: string
 }

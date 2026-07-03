@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import React from 'react'
 import HeroSection from '@/components/ui/HeroSection'
+import IntentRouting from '@/components/contact-us-components/Intent-Routing'
 import ContactSection from '@/components/contact-us-components/Contact-Us'
 
 export const metadata: Metadata = {
@@ -23,6 +24,7 @@ const index = () => {
           imageContainerWidth="w-[100%]"
         />
 
+        <IntentRouting />
         <ContactSection />
       </div>
     </div>

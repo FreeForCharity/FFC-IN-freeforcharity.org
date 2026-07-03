@@ -7,11 +7,11 @@ describe('guidestar-guide/Faqs', () => {
   it('renders the GuideStar transparency seal as a real anchor + image (no dangerouslySetInnerHTML)', () => {
     const { container } = render(<Faqs />)
 
-    const sealImg = screen.getByAltText('GuideStar Transparency Seal') as HTMLImageElement
+    const sealImg = screen.getByAltText('Candid Seal of Transparency') as HTMLImageElement
     expect(sealImg).toBeInTheDocument()
     expect(sealImg.tagName).toBe('IMG')
     expect(sealImg.getAttribute('src')).toBe(
-      'https://widgets.guidestar.org/TransparencySeal/9326392'
+      'https://widgets.guidestar.org/prod/v1/pdp/transparency-seal/9326392/svg'
     )
 
     const wrapAnchor = sealImg.closest('a') as HTMLAnchorElement | null
