@@ -184,11 +184,11 @@ const index = () => {
 
           <p className="text-[18px] text-[#555] leading-relaxed mb-[1em]">
             We require two links from your GuideStar page — the public profile link and the “full
-            profile” link. For instructions on how to find them in GuideStar,{' '}
+            profile” link. See{' '}
             <Link href="/guidestar-guide/" className="text-[#0567B1] underline">
-              click here
-            </Link>
-            .
+              our GuideStar guide
+            </Link>{' '}
+            for instructions on how to find them.
           </p>
 
           {/* Step 2 */}

@@ -6,7 +6,7 @@ import { assetPath } from '@/lib/assetPath'
 
 const HeroSection = () => {
   return (
-    <section className="relative pb-[49px] bg-[#4f6eff]">
+    <section className="relative pb-[49px] bg-[#4560f0]">
       {/* Main Container */}
       <div className="relative w-[90%] md:w-[80%] max-w-[1080px] mx-auto flex flex-col md:flex-row items-center gap-[60px] py-[27px]">
         {/* Left Section - Text */}

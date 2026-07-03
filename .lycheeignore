@@ -157,3 +157,12 @@ https://support.lastpass.com/**
 # Documentation placeholder in the GuideStar guide's copyable seal-embed
 # snippet — not a real URL (charities substitute their own nonprofit id).
 YOUR_NONPROFIT_ID
+
+# Google Fonts preconnect origins in src/app/layout.tsx. These are
+# resource hints (rel="preconnect"), not navigable links — the bare
+# origins intentionally 404. The real stylesheet URL on
+# fonts.googleapis.com/css2 is still checked.
+https://fonts\.googleapis\.com/$
+https://fonts\.gstatic\.com/$
+https://fonts\.googleapis\.com$
+https://fonts\.gstatic\.com$

@@ -90,6 +90,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* One consolidated Google Fonts request instead of eleven serial CSS
+            @imports: preconnect + a single parallel-discovered stylesheet cuts
+            the render-blocking font chain to one early request. */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&family=Cantata+One&family=Cinzel:wght@400..900&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Faustina:ital,wght@0,300..800;1,300..800&family=Fauna+One&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+        />
+      </head>
       <body className={`antialiased`} suppressHydrationWarning={true}>
         {/* Schema.org identity for search engines (NonprofitOrganization + WebSite). */}
         <script
