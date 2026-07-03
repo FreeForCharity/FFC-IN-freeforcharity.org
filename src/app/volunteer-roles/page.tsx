@@ -1,12 +1,12 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Volunteer Roles',
   description:
     'The five Free For Charity volunteer roles — webmaster, IT project manager, graphic designer, Microsoft 365 admin, onboarding coordinator — with skills, hours, and growth paths.',
-  alternates: { canonical: '/volunteer-roles/' },
-}
+  canonical: '/volunteer-roles/',
+})
 
 interface Role {
   title: string

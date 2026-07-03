@@ -1,15 +1,15 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import HeroSection from '@/components/ui/HeroSection'
 import IntentRouting from '@/components/contact-us-components/Intent-Routing'
 import ContactSection from '@/components/contact-us-components/Contact-Us'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Contact Us',
   description:
     'Get in touch with Free For Charity. We connect students, professionals, and businesses with charities in need of support.',
-  alternates: { canonical: '/contact-us/' },
-}
+  canonical: '/contact-us/',
+})
 
 const index = () => {
   return (

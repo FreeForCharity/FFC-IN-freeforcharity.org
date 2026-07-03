@@ -1,18 +1,16 @@
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
-import type { Metadata } from 'next'
 import HeroSection from '@/components/ui/HeroSection'
 import FaqSection from '@/components/free-training-programs-components/faq-section'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Free Training Programs',
   description:
     'Build real-world skills in business and technology through hands-on projects that help nonprofit organizations. Free For Charity offers training in research, business analysis, and web development.',
-  alternates: {
-    canonical: '/free-training-programs/',
-  },
-}
+  canonical: '/free-training-programs/',
+})
 
 const programs = [
   {

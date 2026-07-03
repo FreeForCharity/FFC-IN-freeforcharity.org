@@ -1,12 +1,12 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Your Onboarding Journey',
   description:
     'What happens after your charity applies to Free For Charity: the five stages, who does what, how long each takes, and what to prepare.',
-  alternates: { canonical: '/charity-onboarding-journey/' },
-}
+  canonical: '/charity-onboarding-journey/',
+})
 
 const h2 = 'font-[var(--font-faustina)] text-[32px] leading-[40px] mt-8 mb-4'
 

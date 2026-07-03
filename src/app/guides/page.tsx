@@ -1,13 +1,13 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 import guidesData from '@/data/guides.json'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Guides for Charities & Volunteers',
   description:
     'Every Free For Charity guide in one place: getting started, email and domains, fundraising visibility, compliance, security, and volunteer training.',
-  alternates: { canonical: '/guides/' },
-}
+  canonical: '/guides/',
+})
 
 interface Guide {
   href: string

@@ -1,13 +1,13 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 import AccordionItem from '@/components/ui/Accordian'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Charity Support FAQ',
   description:
     'The questions charities actually ask Free For Charity — email at your domain, who owns the domain, onboarding timelines, site changes, migration, and costs.',
-  alternates: { canonical: '/charity-faq/' },
-}
+  canonical: '/charity-faq/',
+})
 
 // The ten most-repeated questions from the full census of FFC's support
 // conversations (2023–2025), each answered with a link to the guide that

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import HeroSection from '@/components/ui/HeroSection'
 import Content from '@/components/about-us-components/content'
@@ -6,12 +6,12 @@ import CardSection from '@/components/about-us-components/Card-section'
 import ParaText from '@/components/about-us-components/ParaText'
 import CallToAction from '@/components/about-us-components/CallToAction'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'About Us',
   description:
     "Learn about Free For Charity's mission to reduce costs and increase revenues for nonprofits by connecting students, professionals, and businesses with charities in need.",
-  alternates: { canonical: '/about-us/' },
-}
+  canonical: '/about-us/',
+})
 
 const index = () => {
   return (

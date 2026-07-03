@@ -1,16 +1,16 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import HeroSection from '@/components/ui/HeroSection'
 import FreeForCharity from '@/components/guidestar-guide/Free-for-charity'
 import Faqs from '@/components/guidestar-guide/Faqs'
 import CallSection from '@/components/help-for-charities-components/call-section'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'GuideStar Guide',
   description:
     "Guide for achieving GuideStar/Candid Platinum Seal of Transparency. Enhance your charity's credibility and visibility for donors.",
-  alternates: { canonical: '/guidestar-guide/' },
-}
+  canonical: '/guidestar-guide/',
+})
 
 const index = () => {
   return (

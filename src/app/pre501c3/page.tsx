@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import HeroSection from '@/components/ui/HeroSection'
 import ReadyToGetStarted from '@/components/help-for-charities-components/Ready-to-Get-Started-Now'
@@ -9,12 +9,12 @@ import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 import Faqs from '@/components/pre501c3-components/Faqs'
 import Charity from '@/components/pre501c3-components/charity'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Pre-501(c)(3) Onboarding Guide',
   description:
     'For charities pending 501(c)(3) status: apply to get a free website—a fast, secure GitHub Pages site built with AI—plus free tools and services from Free For Charity while your application is in progress.',
-  alternates: { canonical: '/pre501c3/' },
-}
+  canonical: '/pre501c3/',
+})
 
 const index = () => {
   return (

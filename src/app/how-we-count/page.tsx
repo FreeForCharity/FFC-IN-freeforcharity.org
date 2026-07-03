@@ -1,12 +1,12 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'How We Count What We Report',
   description:
     'The methodology behind every Free For Charity metric: span evidence from dated records, a full census of support conversations, and the corrections we made to our own history.',
-  alternates: { canonical: '/how-we-count/' },
-}
+  canonical: '/how-we-count/',
+})
 
 const h2 = 'font-[var(--font-faustina)] text-[32px] leading-[40px] mt-8 mb-4'
 

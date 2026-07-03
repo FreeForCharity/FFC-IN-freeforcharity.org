@@ -1,12 +1,12 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Security Basics for Small Charities',
   description:
     'MFA, password managers, donation fraud, and domain safety — the security floor every small nonprofit should stand on, in plain language.',
-  alternates: { canonical: '/charity-security-guide/' },
-}
+  canonical: '/charity-security-guide/',
+})
 
 const h2 = 'font-[var(--font-faustina)] text-[32px] leading-[40px] mt-8 mb-4'
 

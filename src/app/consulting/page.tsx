@@ -1,17 +1,15 @@
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
-import type { Metadata } from 'next'
 import HeroSection from '@/components/ui/HeroSection'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Consulting',
   description:
     'Free nonprofit consulting services from Free For Charity. Get expert help with charity operations, technology, and strategy at no cost.',
-  alternates: {
-    canonical: '/consulting/',
-  },
-}
+  canonical: '/consulting/',
+})
 
 const ConsultingPage = () => {
   return (

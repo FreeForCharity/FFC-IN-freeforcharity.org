@@ -1,12 +1,12 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import DecisionWizard, { type WizardConfig } from '@/components/wizards/DecisionWizard'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Charity Eligibility Check',
   description:
     'Answer five quick questions and find out which free Free For Charity programs your nonprofit qualifies for — domain, email, website, or migration.',
-  alternates: { canonical: '/eligibility-check/' },
-}
+  canonical: '/eligibility-check/',
+})
 
 const config: WizardConfig = {
   firstQuestion: 'org-status',

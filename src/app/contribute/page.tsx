@@ -1,12 +1,12 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Contribute on GitHub',
   description:
     'Free For Charity is built in the open. Pick up a good-first-issue in our repositories and help charities with a pull request — no formal signup required.',
-  alternates: { canonical: '/contribute/' },
-}
+  canonical: '/contribute/',
+})
 
 const h2 = 'font-[var(--font-faustina)] text-[32px] leading-[40px] mt-8 mb-4'
 

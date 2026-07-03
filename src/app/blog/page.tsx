@@ -1,16 +1,14 @@
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
-import type { Metadata } from 'next'
 import HeroSection from '@/components/ui/HeroSection'
 import BlogCard from '@/components/ui/BlogCard'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Blog',
   description:
     'News and updates from Free For Charity. Read about our GuideStar transparency seals, nonprofit tools, endorsements, and more.',
-  alternates: {
-    canonical: '/blog/',
-  },
-}
+  canonical: '/blog/',
+})
 
 const blogPosts = [
   {

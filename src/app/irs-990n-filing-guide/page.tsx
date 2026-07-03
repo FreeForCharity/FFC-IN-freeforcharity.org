@@ -1,12 +1,12 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'IRS Form 990-N Filing Guide',
   description:
     'Keep your 501(c)(3) alive: who files the 990-N e-Postcard, the deadline, the 8-minute filing walkthrough, and what happens if you miss three years.',
-  alternates: { canonical: '/irs-990n-filing-guide/' },
-}
+  canonical: '/irs-990n-filing-guide/',
+})
 
 const h2 = 'font-[var(--font-faustina)] text-[32px] leading-[40px] mt-8 mb-4'
 

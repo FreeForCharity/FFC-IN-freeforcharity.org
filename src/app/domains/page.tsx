@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import Hero from '@/components/domains/Hero'
 import DearProspective from '@/components/domains/Dear-Prospective'
@@ -11,12 +11,12 @@ import CurvedBlueSection from '@/components/domains/Curved-Blue-Section'
 import CurvedBlackSection from '@/components/domains/Curved-Black-Section'
 import GetNewWebsite from '@/components/domains/Get-New-Website'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Free Domains for Nonprofits',
   description:
     'Free For Charity provides free domain registration, DNS management, and email setup for verified 501(c)(3) nonprofit organizations.',
-  alternates: { canonical: '/domains/' },
-}
+  canonical: '/domains/',
+})
 
 const index = () => {
   return (

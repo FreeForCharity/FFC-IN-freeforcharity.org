@@ -1,11 +1,11 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Privacy Policy',
   description:
     'Free For Charity privacy policy describing how we collect, use, and protect your personal information.',
-  alternates: { canonical: '/privacy-policy/' },
-}
+  canonical: '/privacy-policy/',
+})
 
 export default function PrivacyPolicy() {
   return (

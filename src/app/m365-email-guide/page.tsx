@@ -1,12 +1,12 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Free Microsoft 365 Email for Your Charity',
   description:
     'Step-by-step: get free Microsoft 365 nonprofit email at your charity domain — eligibility, tenant signup, DNS verification, mailboxes, and MFA.',
-  alternates: { canonical: '/m365-email-guide/' },
-}
+  canonical: '/m365-email-guide/',
+})
 
 const h2 = 'font-[var(--font-faustina)] text-[32px] leading-[40px] mt-8 mb-4'
 

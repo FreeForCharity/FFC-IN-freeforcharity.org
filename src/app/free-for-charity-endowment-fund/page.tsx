@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import Hero from '@/components/free-for-charity-endowment-fund-components/Hero'
 import TextSection from '@/components/free-for-charity-endowment-fund-components/Text-Section'
@@ -9,12 +9,12 @@ import SupportOurMission from '@/components/free-for-charity-endowment-fund-comp
 import VoicesofGratitude from '@/components/free-for-charity-endowment-fund-components/Voices-of-Gratitude'
 import EmpowerCharities from '@/components/free-for-charity-endowment-fund-components/Empower-Charities'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Endowment Fund',
   description:
     'Support the Free For Charity Endowment Fund to sustain free domain and hosting services for nonprofits long-term.',
-  alternates: { canonical: '/free-for-charity-endowment-fund/' },
-}
+  canonical: '/free-for-charity-endowment-fund/',
+})
 
 const index = () => {
   return (

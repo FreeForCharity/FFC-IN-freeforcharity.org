@@ -1,12 +1,12 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Accessibility Statement',
   description:
     'Free For Charity is committed to WCAG 2.1 AA accessibility. How we test, what we enforce in CI, and how to report a barrier.',
-  alternates: { canonical: '/accessibility-statement/' },
-}
+  canonical: '/accessibility-statement/',
+})
 
 const heading2 = 'font-[var(--font-faustina)] text-[32px] leading-[40px] mt-8 mb-4'
 

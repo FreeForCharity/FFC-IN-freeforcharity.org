@@ -1,14 +1,14 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'cPanel Backup SOP',
   description: 'Internal Free For Charity admin runbook for cPanel backups.',
-  alternates: { canonical: '/ffcadmin-free-for-charity-cpanel-backup-sop/' },
-  robots: { index: false, follow: false },
-}
+  canonical: '/ffcadmin-free-for-charity-cpanel-backup-sop/',
+  noindex: true,
+})
 
 export default function CpanelBackupSop() {
   return (

@@ -1,15 +1,13 @@
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
-import type { Metadata } from 'next'
 import HeroSection from '@/components/ui/HeroSection'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Charity and Nonprofit Case Studies',
   description:
     'Real-world nonprofit case studies to help your organization make informed decisions without wasting time and money on experimentation.',
-  alternates: {
-    canonical: '/charity-and-nonprofit-case-studies/',
-  },
-}
+  canonical: '/charity-and-nonprofit-case-studies/',
+})
 
 const orgTypes = [
   'Charities',
