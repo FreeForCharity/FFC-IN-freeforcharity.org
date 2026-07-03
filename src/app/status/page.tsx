@@ -50,7 +50,17 @@ export default function StatusPage() {
           carries an honest last-checked date.
         </p>
         <p className="font-[var(--font-lato)] text-[14px] text-[#767672] mb-8">
-          Page last updated {updatedAt}. Something looks down and isn&rsquo;t noted here?{' '}
+          Page last updated {updatedAt}. Deeper operational dashboards (per-site health, automation
+          runs) are public on{' '}
+          <a
+            href="https://ffcadmin.org/sites-list/summary/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+          >
+            FFC Admin
+          </a>
+          . Something looks down and isn&rsquo;t noted here?{' '}
           <Link href="/contact-us/" className="underline">
             Tell us
           </Link>{' '}

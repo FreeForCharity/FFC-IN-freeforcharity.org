@@ -95,6 +95,21 @@ export default function Contribute() {
 
           <h2 className={h2}>Why this matters</h2>
           <p>
+            Sustained contributors climb the{' '}
+            <a
+              href="https://ffcadmin.org/contributor-ladder/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              contributor ladder on FFC Admin
+            </a>{' '}
+            — the operational portal also covering{' '}
+            <a href="https://ffcadmin.org/get-involved/" target="_blank" rel="noopener noreferrer">
+              other ways to get involved
+            </a>
+            .
+          </p>
+          <p>
             A fix to a shared template ships to every charity built from it; a clearer guide page
             deflects dozens of support conversations. Small PRs here have unusually large blast
             radius — that&rsquo;s the fun of it. See the <Link href="/impact/">impact page</Link>{' '}

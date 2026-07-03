@@ -99,9 +99,10 @@ export default function MatchingGifts() {
           </p>
 
           <p className="mt-8">
-            Questions, or a form that needs something we didn&rsquo;t list?{' '}
-            <Link href="/contact-us/">Contact us</Link> and we&rsquo;ll turn it around quickly —
-            matched money is the best kind of money.
+            Looking for DAF grants, stock gifts, bequests, or IRA distributions? See{' '}
+            <Link href="/other-ways-to-give/">other ways to give</Link>. Questions, or a form that
+            needs something we didn&rsquo;t list? <Link href="/contact-us/">Contact us</Link> and
+            we&rsquo;ll turn it around quickly — matched money is the best kind of money.
           </p>
         </div>
       </div>

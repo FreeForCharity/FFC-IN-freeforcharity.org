@@ -1,5 +1,7 @@
 import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { ffcAdminUrl } from '@/data/admin-links'
 
 export const metadata = pageMetadata({
   title: 'Volunteer Onboarding: Your First Two Weeks',
@@ -47,6 +49,11 @@ export default function VolunteerOnboardingGuide() {
               folder names, accessibility checks passing, and CI green before merge.
             </li>
           </ul>
+
+          <AdminGuideLink
+            href={ffcAdminUrl('/developer-environment-setup/')}
+            description="Tooling setup (VS Code, Claude Desktop, Codex, Antigravity), the training tracks, and the contributor ladder are maintained on FFC Admin — the operational source of truth:"
+          />
 
           <h2 className={h2}>How a charity site actually goes live</h2>
           <ol>

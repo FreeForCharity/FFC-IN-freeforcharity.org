@@ -111,6 +111,17 @@ export default function CharityOnboardingJourney() {
         </ol>
 
         <div className="prose max-w-none font-[var(--font-lato)] text-[18px] leading-[28px] mt-10">
+          <h2 className={h2}>Deep dives for every prerequisite</h2>
+          <p>
+            Stuck on a specific intake item — mission statement, board requirements, public contact
+            info, the 501c3 application itself, or fiscal sponsorship? Each has a dedicated
+            walkthrough in the{' '}
+            <a href="https://ffcadmin.org/intake-help/" target="_blank" rel="noopener noreferrer">
+              intake help section on FFC Admin
+            </a>
+            , our operational portal.
+          </p>
+
           <h2 className={h2}>How we communicate</h2>
           <p>
             Support happens over email and text with real volunteers. We aim to respond within a

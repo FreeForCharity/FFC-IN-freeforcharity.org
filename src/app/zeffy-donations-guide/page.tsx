@@ -83,6 +83,17 @@ export default function ZeffyDonationsGuide() {
 
           <h2 className={h2}>Beyond the basic form</h2>
           <p>
+            Moving existing member or donor data into Zeffy? Our volunteers follow the{' '}
+            <a
+              href="https://ffcadmin.org/guides/zeffy-member-data-migration/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Zeffy member-data migration guide on FFC Admin
+            </a>
+            .
+          </p>
+          <p>
             Zeffy also does event tickets, raffles (where legal), memberships, peer-to-peer
             campaigns, and e-commerce — all at 0% fees. Start with one donation form; add the rest
             when a real need appears.
