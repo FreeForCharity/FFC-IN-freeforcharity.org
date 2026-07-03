@@ -209,6 +209,10 @@ export default function ImpactPage() {
           <Link href="/cost-transparency/" className="text-[#0567B1] underline">
             what ${String(metric('costPerCharityUsdPerYear').value)} per charity per year buys
           </Link>
+          , or read the{' '}
+          <Link href="/annual-report-2025/" className="text-[#0567B1] underline">
+            2025 annual report
+          </Link>
           . Reporting year: {reportingYear}.
         </p>
       </div>
