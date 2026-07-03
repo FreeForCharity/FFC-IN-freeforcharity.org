@@ -1,11 +1,11 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Terms of Service',
   description:
     'Free For Charity terms of service governing access to our website and nonprofit technology services.',
-  alternates: { canonical: '/terms-of-service/' },
-}
+  canonical: '/terms-of-service/',
+})
 
 export default function TermsOfService() {
   return (

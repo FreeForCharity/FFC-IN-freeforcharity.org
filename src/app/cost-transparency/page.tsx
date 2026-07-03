@@ -1,13 +1,13 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 import { metric } from '@/data/impact'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'What $16.50 Per Charity Per Year Buys',
   description:
     "Free For Charity's unit economics: what one charity's full digital presence costs us, what it would cost commercially, and how far a donation multiplies.",
-  alternates: { canonical: '/cost-transparency/' },
-}
+  canonical: '/cost-transparency/',
+})
 
 const h2 = 'font-[var(--font-faustina)] text-[32px] leading-[40px] mt-8 mb-4'
 

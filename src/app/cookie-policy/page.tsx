@@ -1,11 +1,11 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Cookie Policy',
   description:
     'Free For Charity cookie policy explaining how we use cookies and similar tracking technologies on our website.',
-  alternates: { canonical: '/cookie-policy/' },
-}
+  canonical: '/cookie-policy/',
+})
 
 // Update this date when the policy changes
 const LAST_UPDATED = 'November 26, 2025'

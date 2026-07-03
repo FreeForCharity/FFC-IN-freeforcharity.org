@@ -1,15 +1,15 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 import BarChart from '@/components/impact/BarChart'
 import whmcsMembers from '@/data/whmcs-members.json'
 import { textMetrics, metric, reportingYear } from '@/data/impact'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Our Impact — Evidence-Based Metrics',
   description:
     'Free For Charity impact, from dated records: nonprofits served per year, domains under management, support interactions, and volunteers — the same numbers published on our Candid profile.',
-  alternates: { canonical: '/impact/' },
-}
+  canonical: '/impact/',
+})
 
 interface ServedYear {
   servedNonprofits: number

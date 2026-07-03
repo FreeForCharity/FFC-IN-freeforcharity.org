@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import HeroSection from '@/components/ui/HeroSection'
 import CardSection from '@/components/free-for-charitys-tools-for-success-components/Card-section'
@@ -13,12 +13,12 @@ import SixGridCards from '@/components/free-for-charitys-tools-for-success-compo
 import ToolsForBusinesses from '@/components/free-for-charitys-tools-for-success-components/Tools-For-Businesses'
 import FiveCardsGridSection from '@/components/free-for-charitys-tools-for-success-components/Five-Cards-Grid-Section'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Tools for Success',
   description:
     'Free productivity, educational, and business tools curated by Free For Charity to help nonprofits and volunteers succeed.',
-  alternates: { canonical: '/free-for-charitys-tools-for-success/' },
-}
+  canonical: '/free-for-charitys-tools-for-success/',
+})
 
 const index = () => {
   return (

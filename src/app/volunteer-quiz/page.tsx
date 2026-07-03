@@ -1,13 +1,13 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 import DecisionWizard, { type WizardConfig } from '@/components/wizards/DecisionWizard'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Which Volunteer Role Fits You?',
   description:
     'A one-minute quiz matching your skills and available time to a Free For Charity volunteer role — webmaster, project manager, designer, M365 admin, or coordinator.',
-  alternates: { canonical: '/volunteer-quiz/' },
-}
+  canonical: '/volunteer-quiz/',
+})
 
 const config: WizardConfig = {
   firstQuestion: 'energy',

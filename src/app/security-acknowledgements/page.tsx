@@ -1,13 +1,13 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Security Acknowledgements',
   description:
     'Acknowledging security researchers who have responsibly disclosed vulnerabilities to Free For Charity.',
-  alternates: { canonical: '/security-acknowledgements/' },
-}
+  canonical: '/security-acknowledgements/',
+})
 
 const index = () => {
   return (

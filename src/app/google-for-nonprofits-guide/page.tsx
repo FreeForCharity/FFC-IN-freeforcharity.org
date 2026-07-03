@@ -1,12 +1,12 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Google for Nonprofits & Ad Grants',
   description:
     'Claim Google for Nonprofits with your FFC-hosted site: eligibility, verification, the $10,000/month Ad Grant, and the rules that keep it active.',
-  alternates: { canonical: '/google-for-nonprofits-guide/' },
-}
+  canonical: '/google-for-nonprofits-guide/',
+})
 
 const h2 = 'font-[var(--font-faustina)] text-[32px] leading-[40px] mt-8 mb-4'
 

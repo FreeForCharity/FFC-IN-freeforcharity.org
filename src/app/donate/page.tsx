@@ -1,16 +1,16 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import HeroSection from '@/components/ui/HeroSection'
 import Measurableimpact from '@/components/donate-components/measurable-impact'
 import FreeForCharityDonationOptions from '@/components/donate-components/Free-for-Charity-Donation-Options'
 import DonationCampaigns from '@/components/donate-components/Donation-Campaigns'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Donate',
   description:
     'Support Free For Charity through Zeffy—100% of your gift reaches the mission (Zeffy charges 0% platform fees). Fund free, AI-built GitHub Pages websites, domains, and Microsoft 365 for nonprofits.',
-  alternates: { canonical: '/donate/' },
-}
+  canonical: '/donate/',
+})
 
 const index = () => {
   return (

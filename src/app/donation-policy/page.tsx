@@ -1,11 +1,11 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Donation Policy',
   description:
     'Free For Charity donation policy outlining guidelines for acceptance, management, and acknowledgment of tax-deductible donations.',
-  alternates: { canonical: '/donation-policy/' },
-}
+  canonical: '/donation-policy/',
+})
 
 export default function DonationPolicy() {
   return (

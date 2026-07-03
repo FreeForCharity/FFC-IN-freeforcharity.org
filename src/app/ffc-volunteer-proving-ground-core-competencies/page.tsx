@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import Header from '@/components/ffc-volunteer-proving-ground-core-competencies/Header'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
@@ -7,12 +7,12 @@ import ContentSection from '@/components/ffc-volunteer-proving-ground-core-compe
 import Modulessection from '@/components/ffc-volunteer-proving-ground-core-competencies/Modules-section'
 import Footer from '@/components/ffc-volunteer-proving-ground-core-competencies/Footer'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Volunteer Proving Ground: Core Competencies',
   description:
     'Mandatory first step for FFC volunteers. Learn foundational tools for security and effective collaboration in nonprofit technology services—and the path into our AI-driven static-site development workflow.',
-  alternates: { canonical: '/ffc-volunteer-proving-ground-core-competencies/' },
-}
+  canonical: '/ffc-volunteer-proving-ground-core-competencies/',
+})
 
 const index = () => {
   return (

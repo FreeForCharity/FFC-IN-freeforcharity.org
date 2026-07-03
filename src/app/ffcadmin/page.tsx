@@ -1,14 +1,14 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'FFC Admin',
   description: 'Free For Charity internal administration portal.',
-  alternates: { canonical: '/ffcadmin/' },
-  robots: { index: false, follow: false },
-}
+  canonical: '/ffcadmin/',
+  noindex: true,
+})
 
 const index = () => {
   return (

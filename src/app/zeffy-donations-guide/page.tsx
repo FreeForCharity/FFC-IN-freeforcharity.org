@@ -1,12 +1,12 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Fee-Free Donations with Zeffy',
   description:
     'Stop losing 3-5% of every gift: how FFC charities accept online donations with Zeffy — signup, embedding on your site, receipts, and payouts.',
-  alternates: { canonical: '/zeffy-donations-guide/' },
-}
+  canonical: '/zeffy-donations-guide/',
+})
 
 const h2 = 'font-[var(--font-faustina)] text-[32px] leading-[40px] mt-8 mb-4'
 

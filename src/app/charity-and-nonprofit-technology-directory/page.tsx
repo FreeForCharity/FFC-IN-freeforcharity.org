@@ -1,17 +1,15 @@
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
-import type { Metadata } from 'next'
 import HeroSection from '@/components/ui/HeroSection'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Charity and Nonprofit Technology Directory',
   description:
     'Explore free and open source technology tools for nonprofit organizations. Find solutions for static-site web hosting, AI-assisted development, office automation, CRM, and more.',
-  alternates: {
-    canonical: '/charity-and-nonprofit-technology-directory/',
-  },
-}
+  canonical: '/charity-and-nonprofit-technology-directory/',
+})
 
 const categories = [
   {

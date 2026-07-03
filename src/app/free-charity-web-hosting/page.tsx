@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import Hero from '@/components/free-charity-web-hosting/Hero'
 import Hosting from '@/components/free-charity-web-hosting/hosting'
@@ -9,12 +9,12 @@ import ReadyToGetStarted from '@/components/free-charity-web-hosting/ReadyToGetS
 import ClientTestimonials from '@/components/free-charity-web-hosting/ClientTestimonials'
 import FAQs from '@/components/free-charity-web-hosting/FAQs'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Free Nonprofit Web Hosting',
   description:
     'Free website hosting for nonprofits—fast, secure GitHub Pages static sites built with AI development agents—plus free domain registration and Microsoft 365 email, with legacy WordPress hosting still available. Powered by Free For Charity volunteers.',
-  alternates: { canonical: '/free-charity-web-hosting/' },
-}
+  canonical: '/free-charity-web-hosting/',
+})
 
 const index = () => {
   return (

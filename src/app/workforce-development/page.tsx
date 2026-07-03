@@ -1,17 +1,15 @@
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
-import type { Metadata } from 'next'
 import HeroSection from '@/components/ui/HeroSection'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Workforce Development',
   description:
     'Free workforce development and training in modern web development—building GitHub Pages static sites with AI development agents (Claude and GitHub Copilot)—and programming. Build your skills while helping charities.',
-  alternates: {
-    canonical: '/workforce-development/',
-  },
-}
+  canonical: '/workforce-development/',
+})
 
 const webDevSkills = [
   'Building GitHub Pages static sites (Next.js, React, Tailwind CSS)',

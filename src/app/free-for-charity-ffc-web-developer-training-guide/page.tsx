@@ -1,15 +1,15 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import Hero from '@/components/free-for-charity-ffc-web-developer-training-guide-components/Hero'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: 'Web Developer Training Guide',
   description:
     'FFC web developer training for the modern stack—building GitHub Pages static sites with AI development agents (Claude and GitHub Copilot), Next.js, Cloudflare, and Microsoft 365—with the legacy WordPress workflow retained for existing sites.',
-  alternates: { canonical: '/free-for-charity-ffc-web-developer-training-guide/' },
-}
+  canonical: '/free-for-charity-ffc-web-developer-training-guide/',
+})
 
 const index = () => {
   return (

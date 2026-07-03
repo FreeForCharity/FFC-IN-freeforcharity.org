@@ -1,12 +1,12 @@
-import type { Metadata } from 'next'
+import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
   title: "Choosing Your Charity's .org Domain",
   description:
     'How to pick a nonprofit domain name without fear: naming rules, availability, why .org, who owns it, and what Free For Charity pays for.',
-  alternates: { canonical: '/choosing-your-org-domain/' },
-}
+  canonical: '/choosing-your-org-domain/',
+})
 
 const h2 = 'font-[var(--font-faustina)] text-[32px] leading-[40px] mt-8 mb-4'
 
