@@ -105,7 +105,11 @@ export default function Irs990nFilingGuide() {
             <Link href="/google-for-nonprofits-guide/">Google for Nonprofits</Link> all depend on an
             active 501(c)(3). Compliance is the foundation everything else in our program sits on.
             If you&rsquo;re unsure of your status, check your org on the IRS{' '}
-            <a href="https://apps.irs.gov/app/eos/" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://www.irs.gov/charities-non-profits/search-for-tax-exempt-organizations"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Tax Exempt Organization Search
             </a>{' '}
             — and <Link href="/contact-us/">tell us</Link> if something looks wrong.
