@@ -90,4 +90,5 @@ export const siteRoutes = [
   { route: '/charities-we-support', name: 'Charities We Support' },
   { route: '/annual-report-2025', name: 'Annual Report 2025' },
   { route: '/status', name: 'Service Status' },
+  { route: '/search', name: 'Site Search' },
 ]
