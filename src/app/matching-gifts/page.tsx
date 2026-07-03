@@ -1,5 +1,6 @@
 import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
+import HoursReportCallout from '@/components/volunteer/HoursReportCallout'
 
 export const metadata = pageMetadata({
   title: 'Matching Gifts & Volunteer Grants',
@@ -90,6 +91,8 @@ export default function MatchingGifts() {
             grants&rdquo; or &ldquo;dollars for doers,&rdquo; and we&rsquo;ll gladly verify your
             hours. Not volunteering yet? <Link href="/volunteer-quiz/">Find your role</Link>.
           </p>
+
+          <HoursReportCallout />
 
           <h2 className={h2}>What your matched dollars do</h2>
           <p>

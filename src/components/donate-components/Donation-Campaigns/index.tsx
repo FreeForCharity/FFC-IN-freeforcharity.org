@@ -62,6 +62,14 @@ const DonationCampaigns = () => {
             domains, and Microsoft 365 for nonprofits. Give to the general fund, or choose a
             specific campaign.
           </p>
+          <p
+            className="text-[16px] font-[500] leading-[25px] text-[#555] max-w-[760px] mx-auto mt-[12px]"
+            data-font="lato-font"
+          >
+            Giving in honor of a particular nonprofit? Every campaign&apos;s checkout includes an
+            optional field to name the specific charity you want your gift to support — for example,
+            fund the domain or the website build of an organization you care about.
+          </p>
         </div>
 
         {general ? (

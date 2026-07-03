@@ -1,0 +1,7 @@
+{
+  "_comment": "Volunteer hours self-report (issue #394). Provider decision 2026-07-04: Microsoft 365 Forms in the FFC tenant. Once the Form exists, paste its share URL into formUrl and the report component switches from the email fallback to the form link automatically. Suggested Form fields: Name, Volunteer role, Month, Hours volunteered, Charity/charities helped (optional), Employer offers volunteer grants? (yes/no/unsure). Responses stay in the tenant; only aggregate hour totals ever feed the published metrics.",
+  "provider": "Microsoft 365 Forms",
+  "formUrl": "",
+  "fallbackEmail": "clarkemoyer@freeforcharity.org",
+  "fallbackSubject": "Volunteer hours report"
+}
