@@ -6,6 +6,7 @@ import EndowmentFeatures from '@/components/home-page/Endowment-Features'
 import OurPrograms from '@/components/home-page/Our-Programs'
 import VolunteerwithUs from '@/components/home-page/Volunteer-with-Us'
 import Results from '@/components/home-page/Results'
+import CharitySpotlight from '@/components/home-page/CharitySpotlight'
 import Testimonials from '@/components/home/Testimonials'
 import TheFreeForCharityTeam from '@/components/home-page/TheFreeForCharityTeam'
 import FrequentlyAskedQuestions from '@/components/home-page/FrequentlyAskedQuestions'
@@ -20,6 +21,7 @@ const index = () => {
       <OurPrograms />
       <VolunteerwithUs />
       <Results />
+      <CharitySpotlight />
       <Testimonials />
       <TheFreeForCharityTeam />
       <FrequentlyAskedQuestions />

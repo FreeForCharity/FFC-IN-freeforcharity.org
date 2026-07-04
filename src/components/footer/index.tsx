@@ -172,6 +172,10 @@ const Footer: React.FC = () => {
                   name: 'Free For Charity Accessibility Statement',
                   href: '/accessibility-statement',
                 },
+                {
+                  name: 'Publicity & Story Consent Policy',
+                  href: '/publicity-consent-policy',
+                },
               ].map((link) => (
                 <li key={link.name}>
                   <Link

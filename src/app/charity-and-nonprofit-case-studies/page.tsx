@@ -1,6 +1,8 @@
 import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import HeroSection from '@/components/ui/HeroSection'
+import SuccessStories from '@/components/case-studies/SuccessStories'
+import ShareExperienceCallout from '@/components/testimonials/ShareExperienceCallout'
 
 export const metadata = pageMetadata({
   title: 'Charity and Nonprofit Case Studies',
@@ -34,6 +36,8 @@ const CaseStudiesPage = () => {
         paragraph="Real-world case studies to help nonprofit organizations make informed decisions and succeed."
         heroImg="/Images/donation.webp"
       />
+
+      <SuccessStories />
 
       {/* Intro */}
       <section className="py-[60px] bg-[#fcfcfc]">
@@ -139,6 +143,12 @@ const CaseStudiesPage = () => {
           >
             Contact Us
           </a>
+        </div>
+      </section>
+
+      <section className="py-[40px] bg-[#fcfcfc]">
+        <div className="w-[90%] md:w-[80%] max-w-[900px] mx-auto">
+          <ShareExperienceCallout />
         </div>
       </section>
     </div>
