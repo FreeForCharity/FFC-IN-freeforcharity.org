@@ -198,7 +198,7 @@ Each file below is a `*.spec.ts` in `tests/`, grouped by area:
 - `copyright.spec.ts` — footer copyright notice (current year, org link)
 - `logo.spec.ts` — header logo and hero image visibility
 - `image-loading.spec.ts` — image loading and visibility
-- `mission-video.spec.ts` — mission section video element
+- `mission-video.spec.ts` — mission section click-to-play video facade
 - `animated-numbers.spec.ts` — Results section animated statistics
 
 **Behavior & integrations**
