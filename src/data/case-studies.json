@@ -1,0 +1,56 @@
+{
+  "_comment": "FFC success-story case studies (issue #378). Consent model (see /publicity-consent-policy/): new charities grant publicity consent at WHMCS signup alongside the other policies; organizations onboarded earlier are confirmed individually before publishing. Only entries with status 'published' render on the site; 'pending-consent' entries are held back at build time. First wave designated by the operator on 2026-07-04; story facts are drawn from information the organizations already published (their live sites and the testimonials they gave FFC for publication). Corrections/opt-out: any org can request changes or removal via the contact page — update the entry here and note the request in the PR.",
+  "caseStudies": [
+    {
+      "slug": "american-legion-post-64",
+      "organization": "American Legion Ahwatukee Post 64",
+      "website": "https://americanlegionpost64.org/",
+      "status": "published",
+      "consentNote": "Operator-designated first wave (2026-07-04); testimonial previously provided for publication and live on the homepage.",
+      "problem": "A veteran-led American Legion post with no budget line for a website, hosting, or professional email — and no easy way for local veterans and supporters to find events, programs, and contact information online.",
+      "provided": [
+        "Free .org domain registration and DNS management",
+        "A fast, secure static website built and maintained by FFC volunteers",
+        "Free Microsoft 365 nonprofit email on their own domain",
+        "Ongoing content updates through the FFC volunteer program"
+      ],
+      "outcome": "The post runs a modern site at americanlegionpost64.org with zero technology spend, so every dollar raised stays with veteran programs. Cross-country volunteer support means updates ship without any local technical burden.",
+      "quote": {
+        "text": "Knowing that I can reach out to the owner of another veteran to aid with our website's charities' needs completely across the country has been amazing for this disabled veteran.",
+        "author": "David Green",
+        "role": "Public Affairs Officer, American Legion Ahwatukee Post 64"
+      }
+    },
+    {
+      "slug": "melanin-magic-foundation",
+      "organization": "Melanin Magic Foundation",
+      "website": "",
+      "status": "published",
+      "consentNote": "Operator-designated first wave (2026-07-04); testimonial previously provided for publication and live on the homepage.",
+      "problem": "A small foundation whose mission budget could not stretch to cover the recurring costs of a domain, website hosting, and email — the basic online presence donors expect before they give.",
+      "provided": [
+        "Free domain registration and DNS management",
+        "Website setup on the FFC template stack",
+        "Free Microsoft 365 nonprofit email setup",
+        "Onboarding guidance through the FFC service journey"
+      ],
+      "outcome": "The foundation's online presence is handled at no cost, letting its team put their time and money into the mission instead of technology bills.",
+      "quote": {
+        "text": "…I'm so glad the universe aligned me with you",
+        "author": "TaShonda Payne",
+        "role": "Melanin Magic Foundation"
+      }
+    },
+    {
+      "slug": "your-charity-here",
+      "organization": "Your charity's story — third slot open",
+      "website": "",
+      "status": "pending-consent",
+      "consentNote": "Template slot: fill in after the charity approves per /publicity-consent-policy/.",
+      "problem": "",
+      "provided": [],
+      "outcome": "",
+      "quote": { "text": "", "author": "", "role": "" }
+    }
+  ]
+}

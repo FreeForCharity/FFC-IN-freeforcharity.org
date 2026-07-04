@@ -43,6 +43,20 @@ const index = () => {
       </div>
 
       <AccordionSection />
+
+      <div className="w-[90%] max-w-[720px] mx-auto py-[20px] text-center">
+        <p className="text-[18px] font-[500] leading-[28px] text-[#333]" data-font="lato-font">
+          Wondering what this looks like in practice? Read the{' '}
+          <a
+            href="/charity-and-nonprofit-case-studies/"
+            className="text-[#0567B1] underline font-[600]"
+          >
+            success stories of charities FFC serves
+          </a>{' '}
+          — what they were missing, what we provided free, and what changed.
+        </p>
+      </div>
+
       <ReadyToGetStarted />
       <CharityNonprofitDirectorFaq />
       <ReadyToGetStarted />

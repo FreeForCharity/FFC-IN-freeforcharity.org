@@ -4,6 +4,7 @@ import HeroSection from '@/components/ui/HeroSection'
 import CharityText from '@/components/online-impacts-onboarding-guide-components/charity-text'
 import ReadyToGetStartedNow from '@/components/online-impacts-onboarding-guide-components/Ready-To-Get-Started-Now'
 import CallSection from '@/components/help-for-charities-components/call-section'
+import ShareExperienceCallout from '@/components/testimonials/ShareExperienceCallout'
 
 export const metadata = pageMetadata({
   title: 'Online Impacts Onboarding Guide',
@@ -22,6 +23,9 @@ const index = () => {
       />
       <CharityText />
       <ReadyToGetStartedNow />
+      <div className="w-[90%] md:w-[80%] max-w-[900px] mx-auto">
+        <ShareExperienceCallout />
+      </div>
       <CallSection />
     </div>
   )

@@ -67,6 +67,7 @@ export const siteRoutes = [
   { route: '/vulnerability-disclosure-policy', name: 'Vulnerability Disclosure Policy' },
   { route: '/security-acknowledgements', name: 'Security Acknowledgements' },
   { route: '/accessibility-statement', name: 'Accessibility Statement' },
+  { route: '/publicity-consent-policy', name: 'Publicity & Story Consent Policy' },
   { route: '/guides', name: 'Guides Hub' },
   { route: '/charity-onboarding-journey', name: 'Charity Onboarding Journey' },
   { route: '/getting-started-checklist', name: 'Getting Started Checklist' },

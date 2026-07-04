@@ -88,6 +88,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/vulnerability-disclosure-policy', priority: 0.3, changeFrequency: 'yearly' as const },
     { path: '/security-acknowledgements', priority: 0.3, changeFrequency: 'yearly' as const },
     { path: '/accessibility-statement', priority: 0.3, changeFrequency: 'yearly' as const },
+    { path: '/publicity-consent-policy', priority: 0.3, changeFrequency: 'yearly' as const },
     { path: '/guides', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/charity-onboarding-journey', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/getting-started-checklist', priority: 0.7, changeFrequency: 'monthly' as const },
