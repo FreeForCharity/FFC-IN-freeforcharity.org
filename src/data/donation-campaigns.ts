@@ -19,6 +19,10 @@
 // the live `zeffy-links` workflow checks every `confirmed` campaign with a real
 // browser, and only `confirmed` campaigns render on /donate (fail-safe).
 
+// KEEP IN SYNC: these Zeffy hosts are also listed in the CSP in
+// public/.htaccess and in the Lighthouse CI third-party blocklist in
+// .github/workflows/lighthouse.yml. If Zeffy rotates a host, update all
+// three or the CI audit silently stops excluding Zeffy's payload.
 export const ZEFFY_BASE = 'https://www.zeffy.com'
 
 // Loaded once on /donate; powers every `zeffy-form-link` pop-up trigger.

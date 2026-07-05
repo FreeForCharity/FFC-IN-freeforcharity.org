@@ -29,33 +29,35 @@ body {
   --radius-xl: var(--ffc-radius-xl);
   --container: var(--ffc-container);
 
-  /* Fonts (provided via next/font and CSS variables on <body>) */
-  --font-serif-display: var(--font-faustina);
-  --font-serif: var(--font-fauna-one);
+  /* Fonts (provided via next/font; variable classes applied on <html>).
+     Only --font-sans has consumers (the font-sans utility); the old
+     serif-display/serif/alt aliases were dead and have been removed. */
   --font-sans: var(--font-lato);
-  --font-alt: var(--font-inter);
 }
 
+/* All web fonts are self-hosted via next/font (see src/app/layout.tsx): the
+   --font-* variables resolve to build-time-downloaded, same-origin font
+   files with size-adjusted local fallbacks. No requests ever go to
+   fonts.googleapis.com / fonts.gstatic.com. */
 body {
-  /* font-family: "Open Sans", sans-serif !important; */
-  font-family: 'Faustina', serif !important;
+  font-family: var(--font-faustina), serif !important;
   background: var(--color-paper);
   color: var(--color-ink);
 }
 #header {
-  font-family: 'Open Sans', sans-serif !important;
+  font-family: var(--font-open-sans), sans-serif !important;
 }
 [data-font='aria-font'] {
-  font-family: 'Open Sans', sans-serif !important;
+  font-family: var(--font-open-sans), sans-serif !important;
 }
 [data-font='lato-font'] {
-  font-family: 'Lato', sans-serif !important;
+  font-family: var(--font-lato), sans-serif !important;
 }
 [data-font='montserrat-font'] {
-  font-family: 'Montserrat', sans-serif !important;
+  font-family: var(--font-montserrat), sans-serif !important;
 }
 [data-font='abeezee'] {
-  font-family: 'ABeeZee', sans-serif !important;
+  font-family: var(--font-abeezee), sans-serif !important;
 }
 [data-font='segoe-font'] {
   /* System font — no webfont download needed for a UI font every OS ships. */
@@ -66,22 +68,24 @@ body {
     sans-serif !important;
 }
 [data-font='cinzel'] {
-  font-family: 'Cinzel', sans-serif !important;
+  font-family: var(--font-cinzel), serif !important;
 }
 [data-font='fauna-font'] {
-  font-family: 'Fauna One', sans-serif !important;
+  font-family: var(--font-fauna-one), serif !important;
 }
 [data-font='cantata-font'] {
-  font-family: 'Cantata One', sans-serif !important;
+  font-family: var(--font-cantata-one), serif !important;
 }
 [data-font='raleway-font'] {
-  font-family: 'Raleway', sans-serif !important;
+  font-family: var(--font-raleway), sans-serif !important;
 }
 [data-font='courier-font'] {
-  font-family: 'Courier Prime', sans-serif !important;
+  /* Courier Prime was dropped from the webfont set: it appeared exactly once
+     (service-delivery hero) and the system Courier stack reads the same. */
+  font-family: 'Courier New', Courier, monospace !important;
 }
 [data-font='faustina-font'] {
-  font-family: 'Faustina', sans-serif !important;
+  font-family: var(--font-faustina), serif !important;
 }
 
 @keyframes fadeTop {

@@ -35,6 +35,24 @@ jobs:
       - name: Build site
         run: npm run build
 
+      # The audit measures first-party payload only. Third-party embeds
+      # (the Zeffy donation iframe loads ~8MB of script) would otherwise
+      # dominate the resource budgets and swing scores between runs, and
+      # Lighthouse's blockedUrlPatterns cannot block cross-origin iframes
+      # (they run in separate renderer processes). Blocking at the DNS
+      # level covers every process.
+      #
+      # KEEP IN SYNC: the Zeffy hosts also appear in
+      # src/data/donation-campaigns.ts (ZEFFY_BASE / ZEFFY_EMBED_SCRIPT)
+      # and as hardcoded iframe URLs in Empower-Charities and
+      # SupportFreeForCharity; the full third-party host set (Zeffy,
+      # GuideStar, GTM) is mirrored in the public/.htaccess CSP. If an
+      # embed host is added or rotated anywhere, update this line too,
+      # or the audit silently re-inflates with third-party bytes.
+      - name: Block third-party embed hosts (first-party-only audit)
+        run: |
+          sudo sh -c 'echo "127.0.0.1 www.zeffy.com zeffy.com zeffy-scripts.s3.ca-central-1.amazonaws.com widgets.guidestar.org www.googletagmanager.com" >> /etc/hosts'
+
       - name: Run Lighthouse CI
         run: |
           npm install -g @lhci/cli
