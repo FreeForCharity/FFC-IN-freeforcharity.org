@@ -63,7 +63,11 @@ export default function CharitySpotlight() {
         >
           {spotlight.blurb}
         </p>
-        <p className="text-[15px] font-[500] leading-[24px] text-[#777] mt-4" data-font="lato-font">
+        {/* #6f6f6f (not #777): 4.74:1 on the section's #f4f9fd — WCAG AA needs 4.5. */}
+        <p
+          className="text-[15px] font-[500] leading-[24px] text-[#6f6f6f] mt-4"
+          data-font="lato-font"
+        >
           A different supported charity is featured each month.{' '}
           <Link href="/charity-and-nonprofit-case-studies/" className="text-[#0567B1] underline">
             Read their full stories

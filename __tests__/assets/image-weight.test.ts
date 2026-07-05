@@ -41,4 +41,12 @@ describe('public/ image weights', () => {
       .filter((i) => i.kb > MAX_KB && !GRANDFATHERED.has(i.file))
     expect(offenders).toEqual([])
   })
+
+  // The mission video once shipped as an 18.9MB 1080p60 export and pushed the
+  // homepage past 21MB. It is click-to-play now, but the file itself must
+  // stay a reasonable on-demand download (1080p30 at ~CRF 28 fits easily).
+  it('mission video stays under 6MB', () => {
+    const kb = Math.round(statSync(join(PUBLIC_DIR, 'videos', 'mission-video.mp4')).size / 1024)
+    expect(kb).toBeLessThan(6144)
+  })
 })

@@ -91,6 +91,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Array/String/TypedArray .at() polyfill for pre-ES2022 browsers
+            (Chrome <92, Safari <15.4). Both the Next.js runtime and
+            third-party monitoring scripts call .at() and throw a TypeError
+            in those engines; this must run before any other script. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              '(function(){function at(n){n=Math.trunc(n)||0;if(n<0)n+=this.length;return n<0||n>=this.length?undefined:this[n]}var protos=[Array.prototype,String.prototype];if(typeof Int8Array==="function"){var t=Object.getPrototypeOf(Int8Array.prototype);if(t)protos.push(t)}protos.forEach(function(p){if(!p.at)Object.defineProperty(p,"at",{writable:true,configurable:true,value:at})})})()',
+          }}
+        />
         {/* One consolidated Google Fonts request instead of eleven serial CSS
             @imports: preconnect + a single parallel-discovered stylesheet cuts
             the render-blocking font chain to one early request. */}

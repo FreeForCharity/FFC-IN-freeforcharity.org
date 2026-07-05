@@ -82,19 +82,23 @@ data-driven from `src/data/impact.json` (see `docs/METRICS-PLAYBOOK.md`).
 
 ### `mission-video.spec.ts` - Video Functionality (3 tests)
 
-Tests the video element in the mission section.
+Tests the click-to-play video facade in the mission section. The homepage
+ships only a poster image + play button; the real `<video>` element (and its
+multi-megabyte mp4 reference) is mounted on first click to keep initial page
+weight down.
 
 **Test Suite**: `Mission Video`
 
 **Tests:**
 
-1. **`should display video in mission section`**
-   - Verifies video element exists
-   - Checks video visibility on page
+1. **`homepage ships a play facade, not the video element`**
+   - Verifies the play button facade is visible with the correct
+     accessible name and title
+   - Asserts the `<video>` element is NOT in the initial page
 
-2. **`should have video source configured correctly`**
-   - Validates video source configuration
-   - Ensures video src attribute is set correctly
+2. **`clicking the facade mounts a configured video element`**
+   - Clicks the facade and verifies the video appears with controls,
+     aria-label, title, and a single mp4 `<source>`
 
 3. **`video source URL should resolve to a 200 (no dead off-domain redirect)`**
    - Asserts the `<source>` URL is same-origin (no `ffcsites.org` /
