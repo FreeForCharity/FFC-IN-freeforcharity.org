@@ -207,6 +207,52 @@ export default function TermsOfService() {
             principles.
           </p>
 
+          {/* Incorporated Policies */}
+          <h1 className="text-[30px] text-[#333] pb-[10px] leading-[1em] font-[500]">
+            Incorporated Policies
+          </h1>
+          <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
+            The following Free For Charity policies are incorporated into these Terms by reference.
+            By accepting these Terms — including when ordering services through our management
+            system — you also accept each of them:
+          </p>
+          <ul className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500] list-disc list-inside">
+            <li>
+              <a href="/privacy-policy/" className="text-[#0567B1] underline">
+                Privacy Policy
+              </a>
+            </li>
+            <li>
+              <a href="/cookie-policy/" className="text-[#0567B1] underline">
+                Cookie Policy
+              </a>
+            </li>
+            <li>
+              <a href="/donation-policy/" className="text-[#0567B1] underline">
+                Donation Policy
+              </a>
+            </li>
+            <li>
+              <a href="/publicity-consent-policy/" className="text-[#0567B1] underline">
+                Publicity &amp; Story Consent Policy
+              </a>{' '}
+              — permits FFC to feature your organization (name, logo, site link, mission blurb, and
+              a factual account of the free services provided) in case studies, testimonials, the
+              charity spotlight, and directory listings. You can withdraw this consent at any time
+              with no effect on your services.
+            </li>
+            <li>
+              <a href="/vulnerability-disclosure-policy/" className="text-[#0567B1] underline">
+                Vulnerability Disclosure Policy
+              </a>
+            </li>
+            <li>
+              <a href="/accessibility-statement/" className="text-[#0567B1] underline">
+                Accessibility Statement
+              </a>
+            </li>
+          </ul>
+
           {/* Changes to Terms */}
           <h1 className="text-[30px] text-[#333] pb-[10px] leading-[1em] font-[500]">
             Changes to Terms
