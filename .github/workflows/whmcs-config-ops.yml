@@ -1,0 +1,104 @@
+# WHMCS configuration ops via the WHMCS Admin API (manual dispatch only).
+#
+# Purpose: read/update WHMCS General Settings values from CI without anyone
+# handling credentials interactively — first use case is wiring the checkout
+# Terms-of-Service acceptance to the site's policy set (publicity consent,
+# issues #378/#379/#380).
+#
+# Scope is deliberately narrow: only GetConfigurationValue and
+# SetConfigurationValue are allowed, so this workflow can never create
+# clients, orders, invoices, or touch member data.
+#
+# Required repository secrets (Settings -> Secrets -> Actions):
+#   WHMCS_API_IDENTIFIER  API credential identifier (WHMCS Admin ->
+#                         Configuration -> System Settings -> API Credentials)
+#   WHMCS_API_SECRET      the paired secret
+#   WHMCS_API_ACCESS_KEY  the $api_access_key value from WHMCS
+#                         configuration.php. GitHub runners have dynamic IPs,
+#                         so the WHMCS IP allowlist cannot cover them; WHMCS's
+#                         documented bypass is an access key passed alongside
+#                         normal credentials. Add one line to
+#                         ~/public_html/hub/configuration.php:
+#                           $api_access_key = '<long random string>';
+#
+# WHMCS endpoint: https://freeforcharity.org/hub/includes/api.php
+
+name: WHMCS Config Ops
+
+on:
+  workflow_dispatch:
+    inputs:
+      api_action:
+        description: 'API action'
+        required: true
+        default: 'GetConfigurationValue'
+        type: choice
+        options:
+          - GetConfigurationValue
+          - SetConfigurationValue
+      setting:
+        description: 'Configuration setting name (e.g. EnableTOSAccept, TermsOfServiceURL)'
+        required: true
+        type: string
+      value:
+        description: 'New value (SetConfigurationValue only; ignored on reads)'
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  whmcs-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate secrets
+        run: |
+          if [ -z "${{ secrets.WHMCS_API_IDENTIFIER }}" ]; then
+            echo "::error::WHMCS_API_IDENTIFIER secret not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.WHMCS_API_SECRET }}" ]; then
+            echo "::error::WHMCS_API_SECRET secret not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.WHMCS_API_ACCESS_KEY }}" ]; then
+            echo "::error::WHMCS_API_ACCESS_KEY secret not set (required: runner IPs are dynamic)"
+            exit 1
+          fi
+
+      - name: Call WHMCS API
+        env:
+          WHMCS_API_IDENTIFIER: ${{ secrets.WHMCS_API_IDENTIFIER }}
+          WHMCS_API_SECRET: ${{ secrets.WHMCS_API_SECRET }}
+          WHMCS_API_ACCESS_KEY: ${{ secrets.WHMCS_API_ACCESS_KEY }}
+          API_ACTION: ${{ inputs.api_action }}
+          SETTING: ${{ inputs.setting }}
+          NEW_VALUE: ${{ inputs.value }}
+        run: |
+          set -euo pipefail
+          args=(
+            --data-urlencode "action=${API_ACTION}"
+            --data-urlencode "identifier=${WHMCS_API_IDENTIFIER}"
+            --data-urlencode "secret=${WHMCS_API_SECRET}"
+            --data-urlencode "accesskey=${WHMCS_API_ACCESS_KEY}"
+            --data-urlencode "setting=${SETTING}"
+            --data-urlencode "responsetype=json"
+          )
+          if [ "${API_ACTION}" = "SetConfigurationValue" ]; then
+            args+=(--data-urlencode "value=${NEW_VALUE}")
+          fi
+          http_code=$(curl -sS -o response.json -w "%{http_code}" \
+            -X POST "https://freeforcharity.org/hub/includes/api.php" "${args[@]}")
+          echo "HTTP ${http_code}"
+          # Response contains no credentials; settings values are not secret.
+          cat response.json | head -c 2000
+          echo
+          result=$(python3 -c "import json;print(json.load(open('response.json')).get('result',''))" || echo parse-error)
+          {
+            echo "## WHMCS ${API_ACTION}"
+            echo ""
+            echo "- Setting: \`${SETTING}\`"
+            echo "- Result: \`${result}\` (HTTP ${http_code})"
+          } >> "$GITHUB_STEP_SUMMARY"
+          [ "${result}" = "success" ] || exit 1
