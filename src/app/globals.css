@@ -69,13 +69,13 @@ body {
     sans-serif !important;
 }
 [data-font='cinzel'] {
-  font-family: var(--font-cinzel), sans-serif !important;
+  font-family: var(--font-cinzel), serif !important;
 }
 [data-font='fauna-font'] {
-  font-family: var(--font-fauna-one), sans-serif !important;
+  font-family: var(--font-fauna-one), serif !important;
 }
 [data-font='cantata-font'] {
-  font-family: var(--font-cantata-one), sans-serif !important;
+  font-family: var(--font-cantata-one), serif !important;
 }
 [data-font='raleway-font'] {
   font-family: var(--font-raleway), sans-serif !important;
