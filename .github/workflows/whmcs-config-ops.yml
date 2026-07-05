@@ -1,27 +1,24 @@
 # WHMCS configuration ops via the WHMCS Admin API (manual dispatch only).
 #
-# Purpose: read/update WHMCS General Settings values from CI without anyone
-# handling credentials interactively — first use case is wiring the checkout
-# Terms-of-Service acceptance to the site's policy set (publicity consent,
-# issues #378/#379/#380).
+# Purpose: read/update WHMCS General Settings values from CI — first use case
+# is wiring the checkout Terms-of-Service acceptance to the site's policy set
+# (publicity consent, issues #378/#379/#380).
+#
+# Credentials come from Azure Key Vault kv-ffc-admin-prod-cbm via the same
+# OIDC login the cpanel-* workflows use — no GitHub secrets beyond the two
+# OIDC client identifiers that already exist. Vault secrets read (masked,
+# never printed):
+#   read-all-ffc-whmcs-api-identifier      WHMCS API credential identifier
+#   read-all-ffc-whmcs-api-secret          paired secret
+#   read-all-ffc-whmcs-api-url             API endpoint to call (direct
+#                                          includes/api.php or the APIM proxy)
+#   read-all-ffc-apim-whmcs-subscription-key  sent as Ocp-Apim-Subscription-Key
+#                                          when non-empty (static-egress APIM
+#                                          route beats the WHMCS IP allowlist)
 #
 # Scope is deliberately narrow: only GetConfigurationValue and
 # SetConfigurationValue are allowed, so this workflow can never create
 # clients, orders, invoices, or touch member data.
-#
-# Required repository secrets (Settings -> Secrets -> Actions):
-#   WHMCS_API_IDENTIFIER  API credential identifier (WHMCS Admin ->
-#                         Configuration -> System Settings -> API Credentials)
-#   WHMCS_API_SECRET      the paired secret
-#   WHMCS_API_ACCESS_KEY  the $api_access_key value from WHMCS
-#                         configuration.php. GitHub runners have dynamic IPs,
-#                         so the WHMCS IP allowlist cannot cover them; WHMCS's
-#                         documented bypass is an access key passed alongside
-#                         normal credentials. Add one line to
-#                         ~/public_html/hub/configuration.php:
-#                           $api_access_key = '<long random string>';
-#
-# WHMCS endpoint: https://freeforcharity.org/hub/includes/api.php
 
 name: WHMCS Config Ops
 
@@ -46,53 +43,58 @@ on:
         type: string
 
 permissions:
-  contents: read
+  id-token: write # OIDC to Azure; no checkout needed
 
 jobs:
   whmcs-config:
     runs-on: ubuntu-latest
+    environment: cpanel-staging
     steps:
-      - name: Validate secrets
-        run: |
-          if [ -z "${{ secrets.WHMCS_API_IDENTIFIER }}" ]; then
-            echo "::error::WHMCS_API_IDENTIFIER secret not set"
-            exit 1
-          fi
-          if [ -z "${{ secrets.WHMCS_API_SECRET }}" ]; then
-            echo "::error::WHMCS_API_SECRET secret not set"
-            exit 1
-          fi
-          if [ -z "${{ secrets.WHMCS_API_ACCESS_KEY }}" ]; then
-            echo "::error::WHMCS_API_ACCESS_KEY secret not set (required: runner IPs are dynamic)"
-            exit 1
-          fi
+      - name: Azure login (OIDC)
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.WR_ALL_FFC_AZURE_KV_CLIENT_ID }}
+          tenant-id: ${{ secrets.WR_ALL_FFC_AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
 
-      - name: Call WHMCS API
+      - name: Call WHMCS API (credentials from Key Vault, masked)
         env:
-          WHMCS_API_IDENTIFIER: ${{ secrets.WHMCS_API_IDENTIFIER }}
-          WHMCS_API_SECRET: ${{ secrets.WHMCS_API_SECRET }}
-          WHMCS_API_ACCESS_KEY: ${{ secrets.WHMCS_API_ACCESS_KEY }}
           API_ACTION: ${{ inputs.api_action }}
           SETTING: ${{ inputs.setting }}
           NEW_VALUE: ${{ inputs.value }}
         run: |
           set -euo pipefail
+          v=kv-ffc-admin-prod-cbm
+          ident=$(az keyvault secret show --vault-name "$v" --name read-all-ffc-whmcs-api-identifier --query value -o tsv --only-show-errors)
+          secret=$(az keyvault secret show --vault-name "$v" --name read-all-ffc-whmcs-api-secret --query value -o tsv --only-show-errors)
+          url=$(az keyvault secret show --vault-name "$v" --name read-all-ffc-whmcs-api-url --query value -o tsv --only-show-errors)
+          apimkey=$(az keyvault secret show --vault-name "$v" --name read-all-ffc-apim-whmcs-subscription-key --query value -o tsv --only-show-errors || true)
+          echo "::add-mask::$ident"; echo "::add-mask::$secret"; echo "::add-mask::$apimkey"
+          if [ -z "$ident" ] || [ -z "$secret" ] || [ -z "$url" ]; then
+            echo "::error::WHMCS API secrets missing or empty in $v"
+            exit 1
+          fi
+
           args=(
             --data-urlencode "action=${API_ACTION}"
-            --data-urlencode "identifier=${WHMCS_API_IDENTIFIER}"
-            --data-urlencode "secret=${WHMCS_API_SECRET}"
-            --data-urlencode "accesskey=${WHMCS_API_ACCESS_KEY}"
+            --data-urlencode "identifier=${ident}"
+            --data-urlencode "secret=${secret}"
             --data-urlencode "setting=${SETTING}"
             --data-urlencode "responsetype=json"
           )
           if [ "${API_ACTION}" = "SetConfigurationValue" ]; then
             args+=(--data-urlencode "value=${NEW_VALUE}")
           fi
+          hdr=()
+          if [ -n "$apimkey" ]; then
+            hdr=(-H "Ocp-Apim-Subscription-Key: ${apimkey}")
+          fi
+
           http_code=$(curl -sS -o response.json -w "%{http_code}" \
-            -X POST "https://freeforcharity.org/hub/includes/api.php" "${args[@]}")
+            -X POST "$url" "${hdr[@]}" "${args[@]}")
           echo "HTTP ${http_code}"
-          # Response contains no credentials; settings values are not secret.
-          cat response.json | head -c 2000
+          # Response carries no credentials; settings values are not secret.
+          head -c 2000 response.json
           echo
           result=$(python3 -c "import json;print(json.load(open('response.json')).get('result',''))" || echo parse-error)
           {
@@ -100,5 +102,9 @@ jobs:
             echo ""
             echo "- Setting: \`${SETTING}\`"
             echo "- Result: \`${result}\` (HTTP ${http_code})"
+            if [ "${API_ACTION}" = "GetConfigurationValue" ] && [ "${result}" = "success" ]; then
+              val=$(python3 -c "import json;print(json.load(open('response.json')).get('value',''))" || true)
+              echo "- Value: \`${val}\`"
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
           [ "${result}" = "success" ] || exit 1
