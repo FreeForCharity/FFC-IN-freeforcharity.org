@@ -29,7 +29,7 @@ body {
   --radius-xl: var(--ffc-radius-xl);
   --container: var(--ffc-container);
 
-  /* Fonts (provided via next/font and CSS variables on <body>) */
+  /* Fonts (provided via next/font; variable classes applied on <html>) */
   --font-serif-display: var(--font-faustina);
   --font-serif: var(--font-fauna-one);
   --font-sans: var(--font-lato);
