@@ -1,19 +1,21 @@
 {
-  "_comment": "Monthly charity spotlight queue (issue #380). The homepage picks the entry whose month (YYYY-MM) matches the build month; if none matches, the most recent past entry shows, so the section never goes empty. The rotation advances with the first deployment of each month. Nomination/consent process: any FFC volunteer or the charity itself can nominate via the contact page; publicity consent per /publicity-consent-policy/ (granted at WHMCS signup for new charities, confirmed individually for earlier ones); the operator approves the entry and its consent basis is noted in consentNote. Only public facts: org name, its own site, mission blurb.",
+  "_comment": "Monthly charity spotlight queue (issue #380). Only entries with status 'published' render — mirroring case-studies.json, so a queued month cannot auto-publish before its review is done. The homepage picks the published entry whose month (YYYY-MM) matches the build month; if none matches, the most recent past published entry shows, so the section never goes empty. The rotation advances with the first deployment of each month. Nomination/consent process: any FFC volunteer or the charity itself can nominate via the contact page; publicity consent per /publicity-consent-policy/ (granted at WHMCS signup for new charities; for earlier orgs, features built strictly from material they already provided for publication plus their own public site may be operator-designated, anything beyond is confirmed individually); the operator approves the entry and its consent basis is noted in consentNote. Only public facts: org name, its own site, mission blurb.",
   "spotlights": [
     {
       "month": "2026-07",
       "organization": "American Legion Ahwatukee Post 64",
       "website": "https://americanlegionpost64.org/",
+      "status": "published",
       "blurb": "A veteran-led American Legion post in Ahwatukee, Arizona serving local veterans and their families. FFC provides their domain, website, and Microsoft 365 email free of charge — so every dollar raised goes to veteran programs, not technology bills.",
-      "consentNote": "Operator-designated first wave (2026-07-04); org already featured in published testimonials."
+      "consentNote": "Operator-designated first wave (2026-07-04); built strictly from the org's published testimonial and its own public site."
     },
     {
       "month": "2026-08",
       "organization": "Melanin Magic Foundation",
       "website": "",
+      "status": "published",
       "blurb": "A small foundation whose team puts every dollar into its mission. FFC handles their online presence — domain, website, and email — completely free, the same services we provide to every 501(c)(3) that asks.",
-      "consentNote": "Operator-designated first wave (2026-07-04); org already featured in published testimonials."
+      "consentNote": "Operator-designated first wave (2026-07-04); built strictly from the org's published testimonial."
     }
   ]
 }

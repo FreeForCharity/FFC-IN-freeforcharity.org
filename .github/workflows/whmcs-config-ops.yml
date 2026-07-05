@@ -16,9 +16,19 @@
 # 20.231.116.111 — the only IP on WHMCS's API allowlist), not the direct
 # origin URL: see FFC-Cloudflare-Automation docs/whmcs-apim-routing.md.
 #
-# Scope is deliberately narrow: only GetConfigurationValue and
-# SetConfigurationValue are allowed, so this workflow can never create
-# clients, orders, invoices, or touch member data.
+# Scope is deliberately narrow, enforced two ways:
+#   1. Only GetConfigurationValue and SetConfigurationValue actions.
+#   2. A hard allowlist of setting names (SETTING_ALLOWLIST below).
+#      tblconfiguration also stores sensitive rows (SMTP credentials,
+#      CronKey, API access keys, captcha secrets); without the allowlist
+#      this workflow would be an arbitrary config read/write primitive
+#      and reads would leak secret values into run logs and step
+#      summaries. Extend the allowlist only via reviewed PR, and only
+#      with settings whose values are safe to print.
+#
+# Operator action: ensure the cpanel-staging environment has required
+# reviewers — this workflow reads production credentials, so dispatch
+# should need a human approval, not just repo write access.
 
 name: WHMCS Config Ops
 
@@ -64,6 +74,17 @@ jobs:
           NEW_VALUE: ${{ inputs.value }}
         run: |
           set -euo pipefail
+          # Only non-sensitive checkout/policy settings. Values of anything
+          # on this list are safe to appear in logs and step summaries.
+          SETTING_ALLOWLIST="EnableTOSAccept TermsOfService"
+          allowed=false
+          for s in $SETTING_ALLOWLIST; do
+            if [ "$s" = "${SETTING}" ]; then allowed=true; break; fi
+          done
+          if [ "$allowed" != "true" ]; then
+            echo "::error::Setting '${SETTING}' is not on the allowlist (${SETTING_ALLOWLIST}). tblconfiguration holds sensitive rows; extend the allowlist via reviewed PR only."
+            exit 1
+          fi
           v=kv-ffc-admin-prod-cbm
           ident=$(az keyvault secret show --vault-name "$v" --name read-all-ffc-whmcs-api-identifier --query value -o tsv --only-show-errors)
           secret=$(az keyvault secret show --vault-name "$v" --name read-all-ffc-whmcs-api-secret --query value -o tsv --only-show-errors)
@@ -96,10 +117,12 @@ jobs:
           http_code=$(curl -sS -o response.json -w "%{http_code}" \
             -X POST "$url" "${hdr[@]}" "${args[@]}")
           echo "HTTP ${http_code}"
-          # Response carries no credentials; settings values are not secret.
-          head -c 2000 response.json
-          echo
+          # Never dump the raw response: print only the OData result/message
+          # fields. Values are printed solely for allowlisted settings, which
+          # are non-sensitive by construction.
           result=$(python3 -c "import json;print(json.load(open('response.json')).get('result',''))" || echo parse-error)
+          message=$(python3 -c "import json;print(json.load(open('response.json')).get('message',''))" || true)
+          echo "result=${result} ${message:+message=${message}}"
           {
             echo "## WHMCS ${API_ACTION}"
             echo ""
