@@ -14,7 +14,10 @@
         "http://localhost/domains/",
         "http://localhost/help-for-charities/"
       ],
-      "numberOfRuns": 3
+      "numberOfRuns": 3,
+      "settings": {
+        "blockedUrlPatterns": ["*.zeffy.com/*", "*.zeffy.org/*"]
+      }
     },
     "upload": {
       "target": "filesystem",
