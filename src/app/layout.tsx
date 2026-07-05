@@ -1,10 +1,104 @@
 import type { Metadata } from 'next'
+import {
+  ABeeZee,
+  Cantata_One,
+  Cinzel,
+  Faustina,
+  Fauna_One,
+  Lato,
+  Montserrat,
+  Open_Sans,
+  Raleway,
+} from 'next/font/google'
 import './globals.css'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import CookieConsent from '@/components/cookie-consent'
 import ZeffyEmbedScript from '@/components/ui/ZeffyEmbedScript'
 import { organizationJsonLd, webSiteJsonLd } from '@/lib/structured-data'
+
+/* Fonts are self-hosted via next/font: downloaded at build time and served
+   same-origin from /_next/static/media, so the browser never opens the
+   fonts.googleapis.com / fonts.gstatic.com connections or fetches their
+   render-blocking stylesheet. Static families list only the weights the
+   site uses (font-[400..700]); variable families ship one file. Individual
+   font files still lazy-load per page — only faces actually rendered are
+   downloaded, and only the four workhorse families are preloaded (the
+   long-tail families set preload: false and load on first use). Courier
+   Prime was dropped (single decorative use — see globals.css). */
+const faustina = Faustina({
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  variable: '--font-faustina',
+})
+const lato = Lato({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  variable: '--font-lato',
+})
+// Italic faces are included only where italic text actually renders
+// (Faustina/Lato/Raleway); the rest ship normal style only.
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-open-sans',
+})
+const raleway = Raleway({
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  display: 'swap',
+  variable: '--font-raleway',
+})
+const montserrat = Montserrat({
+  preload: false,
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-montserrat',
+})
+const cinzel = Cinzel({
+  preload: false,
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-cinzel',
+})
+const cantataOne = Cantata_One({
+  preload: false,
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  variable: '--font-cantata-one',
+})
+const faunaOne = Fauna_One({
+  preload: false,
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  variable: '--font-fauna-one',
+})
+const abeezee = ABeeZee({
+  preload: false,
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  variable: '--font-abeezee',
+})
+
+const fontVariables = [
+  faustina,
+  lato,
+  openSans,
+  raleway,
+  montserrat,
+  cinzel,
+  cantataOne,
+  faunaOne,
+  abeezee,
+]
+  .map((f) => f.variable)
+  .join(' ')
 
 // Get basePath for GitHub Pages deployment
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
@@ -89,7 +183,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={fontVariables}>
       <head>
         {/* Array/String/TypedArray .at() polyfill for pre-ES2022 browsers
             (Chrome <92, Safari <15.4). Both the Next.js runtime and
@@ -100,15 +194,6 @@ export default function RootLayout({
             __html:
               '(function(){function at(n){n=Math.trunc(n)||0;if(n<0)n+=this.length;return n<0||n>=this.length?undefined:this[n]}var protos=[Array.prototype,String.prototype];if(typeof Int8Array==="function"){var t=Object.getPrototypeOf(Int8Array.prototype);if(t)protos.push(t)}protos.forEach(function(p){if(!p.at)Object.defineProperty(p,"at",{writable:true,configurable:true,value:at})})})()',
           }}
-        />
-        {/* One consolidated Google Fonts request instead of eleven serial CSS
-            @imports: preconnect + a single parallel-discovered stylesheet cuts
-            the render-blocking font chain to one early request. */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=ABeeZee:ital@0;1&family=Cantata+One&family=Cinzel:wght@400..900&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Faustina:ital,wght@0,300..800;1,300..800&family=Fauna+One&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
         />
       </head>
       <body className={`antialiased`} suppressHydrationWarning={true}>
