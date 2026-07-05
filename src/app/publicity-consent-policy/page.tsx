@@ -64,14 +64,22 @@ export default function PublicityConsentPolicy() {
               permission to feature the organization as described above.
             </li>
             <li>
-              <strong>For organizations onboarded before this policy existed:</strong> FFC confirms
-              consent individually before publishing a new feature about them. Testimonials an
-              organization has already given publicly remain published unless they ask otherwise.
+              <strong>For organizations onboarded before this policy existed:</strong> features
+              built strictly from material the organization already provided for publication (such
+              as its testimonials) and from its own public website may be published on FFC
+              leadership&rsquo;s designation; anything beyond that is confirmed with the
+              organization individually first. Testimonials an organization has already given
+              publicly remain published unless they ask otherwise.
             </li>
             <li>
-              <strong>For quotes and photos of individuals:</strong> we attribute quotes only to
-              people who provided them for publication (for example through our testimonial form),
-              and we identify them only by name, role, and organization.
+              <strong>For quotes of individuals:</strong> we attribute quotes only to people who
+              provided them for publication (for example through our testimonial form), and we
+              identify them only by name, role, and organization.
+            </li>
+            <li>
+              <strong>For photos and logos:</strong> published only with explicit permission — the
+              testimonial form asks about photo/logo use as a separate question, and it is never
+              implied by any other consent.
             </li>
           </ul>
 
@@ -79,17 +87,17 @@ export default function PublicityConsentPolicy() {
           <p>
             Any organization can withdraw publicity consent at any time, even after accepting it at
             signup. <Link href="/contact-us/">Contact us</Link> and we will remove the requested
-            content from the next site deployment — typically within a few business days. Opting out
-            never affects the free services an organization receives from FFC.
+            content in the next site update, normally within a few business days. Opting out never
+            affects the free services an organization receives from FFC.
           </p>
 
           <h2 className={h2}>Review before publication</h2>
           <p>
             Every case study and spotlight entry is reviewed by FFC leadership before it goes live,
-            and the organization&rsquo;s approval is recorded in the public change history of this
-            website&rsquo;s repository. If we drafted a story from your organization&rsquo;s public
-            information and you&rsquo;d like it corrected, tell us and we&rsquo;ll fix it in the
-            next deployment.
+            and each entry&rsquo;s documented consent basis is recorded in the public change history
+            of this website&rsquo;s repository. If we drafted a story from your organization&rsquo;s
+            public information and you&rsquo;d like it corrected, tell us and we&rsquo;ll fix it in
+            the next update.
           </p>
 
           <p className="mt-8">

@@ -14,12 +14,15 @@ interface Spotlight {
   month: string
   organization: string
   website: string
+  status: string
   blurb: string
 }
 
 function pickSpotlight(): Spotlight | null {
+  // Same publish gate as case studies: queued-but-unreviewed months never
+  // auto-publish just because their date arrived.
   const entries = (spotlightsData.spotlights as Spotlight[])
-    .slice()
+    .filter((e) => e.status === 'published')
     .sort((a, b) => a.month.localeCompare(b.month))
   if (entries.length === 0) return null
   const buildMonth = new Date().toISOString().slice(0, 7)

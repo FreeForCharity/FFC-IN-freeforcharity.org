@@ -14,7 +14,10 @@ export default function TermsOfService() {
         <div data-font="aria-font">
           {/* Effective Date */}
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-            <em>Effective Date: 11-20-2024</em>
+            <em>
+              Effective Date: 07-05-2026 (Incorporated Policies section added; original terms
+              effective 11-20-2024)
+            </em>
           </p>
 
           {/* Main Title */}
@@ -230,6 +233,10 @@ export default function TermsOfService() {
             <li>
               <a href="/donation-policy/" className="text-[#0567B1] underline">
                 Donation Policy
+              </a>{' '}
+              and the{' '}
+              <a href="/free-for-charity-donation-policy/" className="text-[#0567B1] underline">
+                Free For Charity Donation Policy
               </a>
             </li>
             <li>
