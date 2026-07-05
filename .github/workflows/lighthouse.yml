@@ -41,6 +41,13 @@ jobs:
       # Lighthouse's blockedUrlPatterns cannot block cross-origin iframes
       # (they run in separate renderer processes). Blocking at the DNS
       # level covers every process.
+      #
+      # KEEP IN SYNC: this host list is also expressed in
+      # src/data/donation-campaigns.ts (ZEFFY_BASE / ZEFFY_EMBED_SCRIPT —
+      # the constants that actually drive the embeds) and in the CSP in
+      # public/.htaccess. If a third-party embed host is added or rotated
+      # there, update this line too, or the audit silently re-inflates
+      # with third-party bytes.
       - name: Block third-party embed hosts (first-party-only audit)
         run: |
           sudo sh -c 'echo "127.0.0.1 www.zeffy.com zeffy.com zeffy-scripts.s3.ca-central-1.amazonaws.com widgets.guidestar.org www.googletagmanager.com" >> /etc/hosts'

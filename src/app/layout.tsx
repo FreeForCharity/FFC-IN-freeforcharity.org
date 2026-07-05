@@ -21,32 +21,58 @@ import { organizationJsonLd, webSiteJsonLd } from '@/lib/structured-data'
    same-origin from /_next/static/media, so the browser never opens the
    fonts.googleapis.com / fonts.gstatic.com connections or fetches their
    render-blocking stylesheet. Static families list only the weights the
-   site uses (font-[400..700]); variable families ship one file. Individual
-   font files still lazy-load per page — only faces actually rendered are
-   downloaded, and only the four workhorse families are preloaded (the
-   long-tail families set preload: false and load on first use). Courier
-   Prime was dropped (single decorative use — see globals.css). */
+   site uses (font-[400..700]); variable families ship one file. Courier
+   Prime was dropped (single decorative use — see globals.css).
+
+   Preload policy (measured against the static export): Faustina (body),
+   Open Sans (header/footer), and Lato render on all 64 exported pages, so
+   their upright faces preload. Raleway renders on 2 pages and the italic
+   faces of Faustina/Open Sans/Lato render on a handful, so those are
+   separate preload:false registrations — next/font emits @font-face under
+   the literal family name either way, so italic text still gets the true
+   italic face, downloaded only on pages that render it. */
 const faustina = Faustina({
   subsets: ['latin'],
-  style: ['normal', 'italic'],
   display: 'swap',
   variable: '--font-faustina',
+})
+const faustinaItalic = Faustina({
+  preload: false,
+  subsets: ['latin'],
+  style: 'italic',
+  display: 'swap',
+  variable: '--font-faustina-italic',
 })
 const lato = Lato({
   subsets: ['latin'],
   weight: ['400', '700'],
-  style: ['normal', 'italic'],
   display: 'swap',
   variable: '--font-lato',
 })
-// Italic faces are included only where italic text actually renders
-// (Faustina/Lato/Raleway); the rest ship normal style only.
+// Italic Lato only ever renders at weight 400/500 (never bold), so a single
+// 400-italic face avoids shipping a dead 700-italic file.
+const latoItalic = Lato({
+  preload: false,
+  subsets: ['latin'],
+  weight: '400',
+  style: 'italic',
+  display: 'swap',
+  variable: '--font-lato-italic',
+})
 const openSans = Open_Sans({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-open-sans',
 })
+const openSansItalic = Open_Sans({
+  preload: false,
+  subsets: ['latin'],
+  style: 'italic',
+  display: 'swap',
+  variable: '--font-open-sans-italic',
+})
 const raleway = Raleway({
+  preload: false,
   subsets: ['latin'],
   style: ['normal', 'italic'],
   display: 'swap',
@@ -86,10 +112,16 @@ const abeezee = ABeeZee({
   variable: '--font-abeezee',
 })
 
+/* Every font instance must appear here so its @font-face CSS is emitted in
+   the build — the italic instances share their family's literal name (e.g.
+   'Lato'), which is how italic text resolves to a true italic face. */
 const fontVariables = [
   faustina,
+  faustinaItalic,
   lato,
+  latoItalic,
   openSans,
+  openSansItalic,
   raleway,
   montserrat,
   cinzel,

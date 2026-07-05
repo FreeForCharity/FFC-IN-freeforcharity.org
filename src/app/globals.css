@@ -29,11 +29,10 @@ body {
   --radius-xl: var(--ffc-radius-xl);
   --container: var(--ffc-container);
 
-  /* Fonts (provided via next/font; variable classes applied on <html>) */
-  --font-serif-display: var(--font-faustina);
-  --font-serif: var(--font-fauna-one);
+  /* Fonts (provided via next/font; variable classes applied on <html>).
+     Only --font-sans has consumers (the font-sans utility); the old
+     serif-display/serif/alt aliases were dead and have been removed. */
   --font-sans: var(--font-lato);
-  --font-alt: var(--font-open-sans);
 }
 
 /* All web fonts are self-hosted via next/font (see src/app/layout.tsx): the
