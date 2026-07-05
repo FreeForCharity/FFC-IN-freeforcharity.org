@@ -1,7 +1,7 @@
 {
   "_comment": "Share-your-experience testimonial collection (issue #379). Provider decision 2026-07-04: Microsoft 365 Forms in the FFC tenant (same pattern as volunteer-hours-form.json). Once the Form exists, paste its share URL into formUrl and every callout switches from the email fallback to the form link automatically. Suggested Form fields: Name, Role/title, Organization, Your experience with FFC (long text), May we publish this with your name, role, and organization on freeforcharity.org? (yes/no consent checkbox - REQUIRED), Photo/logo permission (yes/no, optional). Review step before publishing: an FFC maintainer checks the consent answer, adds the entry as a JSON file in src/data/testimonials/ (newest first in src/data/testimonials.ts), and records the form response ID in the PR. See /publicity-consent-policy/.",
   "provider": "Microsoft 365 Forms",
-  "formUrl": "",
+  "formUrl": "https://forms.office.com/Pages/ResponsePage.aspx?id=8kvGgFv6XEKaWh_PKC0ydFO8HkC0Ry1PnJZ3Shf5W_RUOTlGN1A5MzRYWEZJQTVIWFpPQ1BVNlBYQS4u",
   "fallbackEmail": "clarkemoyer@freeforcharity.org",
   "fallbackSubject": "My Free For Charity experience (OK to publish)"
 }
