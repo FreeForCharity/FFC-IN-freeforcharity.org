@@ -10,11 +10,11 @@
 # never printed):
 #   read-all-ffc-whmcs-api-identifier      WHMCS API credential identifier
 #   read-all-ffc-whmcs-api-secret          paired secret
-#   read-all-ffc-whmcs-api-url             API endpoint to call (direct
-#                                          includes/api.php or the APIM proxy)
 #   read-all-ffc-apim-whmcs-subscription-key  sent as Ocp-Apim-Subscription-Key
-#                                          when non-empty (static-egress APIM
-#                                          route beats the WHMCS IP allowlist)
+#
+# Calls go through the APIM gateway (apim-ffc-gateway-prod, static egress
+# 20.231.116.111 — the only IP on WHMCS's API allowlist), not the direct
+# origin URL: see FFC-Cloudflare-Automation docs/whmcs-apim-routing.md.
 #
 # Scope is deliberately narrow: only GetConfigurationValue and
 # SetConfigurationValue are allowed, so this workflow can never create
@@ -67,8 +67,11 @@ jobs:
           v=kv-ffc-admin-prod-cbm
           ident=$(az keyvault secret show --vault-name "$v" --name read-all-ffc-whmcs-api-identifier --query value -o tsv --only-show-errors)
           secret=$(az keyvault secret show --vault-name "$v" --name read-all-ffc-whmcs-api-secret --query value -o tsv --only-show-errors)
-          url=$(az keyvault secret show --vault-name "$v" --name read-all-ffc-whmcs-api-url --query value -o tsv --only-show-errors)
           apimkey=$(az keyvault secret show --vault-name "$v" --name read-all-ffc-apim-whmcs-subscription-key --query value -o tsv --only-show-errors || true)
+          # Gateway URL, not the direct origin from read-all-ffc-whmcs-api-url:
+          # WHMCS's IP allowlist only admits APIM's static egress (20.231.116.111).
+          # See FFC-Cloudflare-Automation docs/whmcs-apim-routing.md.
+          url="https://apim-ffc-gateway-prod.azure-api.net/whmcs/api.php"
           echo "::add-mask::$ident"; echo "::add-mask::$secret"; echo "::add-mask::$apimkey"
           if [ -z "$ident" ] || [ -z "$secret" ] || [ -z "$url" ]; then
             echo "::error::WHMCS API secrets missing or empty in $v"
