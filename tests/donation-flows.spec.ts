@@ -66,18 +66,43 @@ test.describe('Donation flows', () => {
     })
   })
 
-  test('/free-for-charity-endowment-fund mounts the Zeffy donation iframe', async ({ page }) => {
+  test('/free-for-charity-endowment-fund mounts the Zeffy donation iframe on scroll', async ({
+    page,
+  }) => {
     await page.goto('/free-for-charity-endowment-fund')
 
-    // The Zeffy form is an <iframe src="https://www.zeffy.com/embed/...">.
-    // We wait for the element to be attached, then for its src attribute
-    // to reference zeffy.com — that catches both the "iframe element
-    // never rendered" and "iframe rendered with wrong src" failure modes.
+    // Zeffy iframes are scroll-primed (LazyZeffyIframe): they mount once
+    // the visitor scrolls within ~800px of the section, so Zeffy's ~8MB
+    // embed never loads for visitors who don't reach it. Scroll to the
+    // section, then assert the iframe mounts with the right src — that
+    // catches "never mounts on scroll" and "mounted with wrong src".
+    await page
+      .getByRole('heading', { name: /Empower Charities with Your Generosity/i })
+      .scrollIntoViewIfNeeded()
+
     const zeffyFrame = page.locator('iframe[src*="zeffy.com"]').first()
     await expect(zeffyFrame).toBeAttached({ timeout: 15000 })
 
     const src = await zeffyFrame.getAttribute('src')
     expect(src).toBeTruthy()
     expect(ZEFFY_EMBED_HOSTS.some((h) => src!.includes(h))).toBe(true)
+  })
+
+  test('homepage Zeffy iframe is scroll-primed: absent initially, mounts near #donate', async ({
+    page,
+  }) => {
+    await page.goto('/')
+
+    // Before any scrolling, the ~8MB Zeffy embed must NOT be in the page —
+    // that is the entire point of the lazy mount. (The viewport-height
+    // window plus the 800px preload margin must not reach the #donate
+    // section from the top of the page; if a layout change moves #donate
+    // that high, eager loading is effectively back and this fails.)
+    expect(await page.locator('iframe[src*="zeffy.com"]').count()).toBe(0)
+
+    // Scrolling to the donate section mounts the real iframe.
+    await page.locator('#donate').scrollIntoViewIfNeeded()
+    const zeffyFrame = page.locator('iframe[src*="zeffy.com"]').first()
+    await expect(zeffyFrame).toBeAttached({ timeout: 15000 })
   })
 })

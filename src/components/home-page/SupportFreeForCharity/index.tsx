@@ -1,12 +1,8 @@
-import React, { CSSProperties, IframeHTMLAttributes } from 'react'
+import React, { CSSProperties } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { assetPath } from '@/lib/assetPath'
-
-interface ExtendedIframeProps extends IframeHTMLAttributes<HTMLIFrameElement> {
-  allowpaymentrequest?: string
-  allowtransparency?: string
-}
+import LazyZeffyIframe, { ZeffyIframeProps } from '@/components/ui/LazyZeffyIframe'
 
 const Index = () => {
   const donationFormStyle: CSSProperties = {
@@ -20,7 +16,7 @@ const Index = () => {
     height: '100%',
   }
 
-  const donationFormProps: ExtendedIframeProps = {
+  const donationFormProps: ZeffyIframeProps = {
     title: 'Donation form powered by Zeffy',
     style: donationFormStyle,
     src: 'https://www.zeffy.com/embed/donation-form/free-for-charity-endowment-fund',
@@ -76,7 +72,7 @@ const Index = () => {
               role="region"
               aria-label="Donation form"
             >
-              <iframe {...donationFormProps}></iframe>
+              <LazyZeffyIframe {...donationFormProps} />
             </div>
           </div>
         </div>
