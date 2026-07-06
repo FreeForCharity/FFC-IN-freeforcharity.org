@@ -39,6 +39,10 @@ const LazyZeffyIframe = (props: ZeffyIframeProps) => {
       const t = setTimeout(() => setMounted(true), 0)
       return () => clearTimeout(t)
     }
+    // Margin on top AND bottom so the preload lead also applies when
+    // approaching from below (e.g. after following an anchor further down
+    // the page). The top margin extends the window upward off-screen at
+    // load time, so it cannot re-trigger eager loading.
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries.some((entry) => entry.isIntersecting)) {
@@ -46,7 +50,7 @@ const LazyZeffyIframe = (props: ZeffyIframeProps) => {
           observer.disconnect()
         }
       },
-      { rootMargin: `0px 0px ${PRELOAD_MARGIN_PX}px 0px` }
+      { rootMargin: `${PRELOAD_MARGIN_PX}px 0px` }
     )
     observer.observe(el)
     return () => observer.disconnect()

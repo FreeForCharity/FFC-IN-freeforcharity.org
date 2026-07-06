@@ -80,10 +80,18 @@ test.describe('Donation flows', () => {
       .getByRole('heading', { name: /Empower Charities with Your Generosity/i })
       .scrollIntoViewIfNeeded()
 
-    const zeffyFrame = page.locator('iframe[src*="zeffy.com"]').first()
-    await expect(zeffyFrame).toBeAttached({ timeout: 15000 })
+    // The thermometer sits just below the heading, so it mounts first.
+    const thermometer = page.locator('iframe[src*="zeffy.com/embed/thermometer"]')
+    await expect(thermometer).toBeAttached({ timeout: 15000 })
 
-    const src = await zeffyFrame.getAttribute('src')
+    // The donation form is a further ~1500px down — scroll to the bottom
+    // and assert it specifically (a passing thermometer must not mask a
+    // broken donation form).
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+    const donationForm = page.locator('iframe[src*="zeffy.com/embed/donation-form"]')
+    await expect(donationForm).toBeAttached({ timeout: 15000 })
+
+    const src = await donationForm.getAttribute('src')
     expect(src).toBeTruthy()
     expect(ZEFFY_EMBED_HOSTS.some((h) => src!.includes(h))).toBe(true)
   })
@@ -98,6 +106,10 @@ test.describe('Donation flows', () => {
     // window plus the 800px preload margin must not reach the #donate
     // section from the top of the page; if a layout change moves #donate
     // that high, eager loading is effectively back and this fails.)
+    // Wait past hydration + the observer's initial callback so a mount
+    // that happens shortly after load is actually caught.
+    await page.waitForLoadState('networkidle')
+    await page.waitForTimeout(1000)
     expect(await page.locator('iframe[src*="zeffy.com"]').count()).toBe(0)
 
     // Scrolling to the donate section mounts the real iframe.
