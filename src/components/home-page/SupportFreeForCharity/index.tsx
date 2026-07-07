@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { assetPath } from '@/lib/assetPath'
 import LazyZeffyIframe, { ZeffyIframeProps } from '@/components/ui/LazyZeffyIframe'
+import { ZEFFY_BASE } from '@/data/donation-campaigns'
 
 const Index = () => {
   const donationFormStyle: CSSProperties = {
@@ -19,7 +20,7 @@ const Index = () => {
   const donationFormProps: ZeffyIframeProps = {
     title: 'Donation form powered by Zeffy',
     style: donationFormStyle,
-    src: 'https://www.zeffy.com/embed/donation-form/free-for-charity-endowment-fund',
+    src: `${ZEFFY_BASE}/embed/donation-form/free-for-charity-endowment-fund`,
     allowpaymentrequest: '',
     allowtransparency: 'true',
   }

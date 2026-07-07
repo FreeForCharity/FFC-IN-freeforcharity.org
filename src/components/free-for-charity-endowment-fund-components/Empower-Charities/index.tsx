@@ -1,5 +1,6 @@
 import React, { CSSProperties, FC } from 'react'
 import LazyZeffyIframe, { ZeffyIframeProps } from '@/components/ui/LazyZeffyIframe'
+import { ZEFFY_BASE } from '@/data/donation-campaigns'
 
 const DonationSection: FC = () => {
   const commonStyle: CSSProperties = {
@@ -25,7 +26,7 @@ const DonationSection: FC = () => {
   const donationFormProps: ZeffyIframeProps = {
     title: 'Donation form powered by Zeffy',
     style: donationFormStyle,
-    src: 'https://www.zeffy.com/embed/donation-form/free-for-charity-endowment-fund',
+    src: `${ZEFFY_BASE}/embed/donation-form/free-for-charity-endowment-fund`,
     allowpaymentrequest: '',
     allowtransparency: 'true', // ✅ fixed here
   }
@@ -33,7 +34,7 @@ const DonationSection: FC = () => {
   const thermometerProps: ZeffyIframeProps = {
     title: 'Donation thermometer powered by Zeffy',
     style: thermometerStyle,
-    src: 'https://www.zeffy.com/embed/thermometer/free-for-charity-endowment-fund',
+    src: `${ZEFFY_BASE}/embed/thermometer/free-for-charity-endowment-fund`,
     allowtransparency: 'true', // ✅ fixed here
   }
 

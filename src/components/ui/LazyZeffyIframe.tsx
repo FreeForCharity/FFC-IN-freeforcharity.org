@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useRef, useState, IframeHTMLAttributes } from 'react'
+import { zeffyHostedUrl } from '@/data/donation-campaigns'
 
 export interface ZeffyIframeProps extends IframeHTMLAttributes<HTMLIFrameElement> {
   allowpaymentrequest?: string
@@ -32,7 +33,7 @@ const LazyZeffyIframe = (props: ZeffyIframeProps) => {
 
   useEffect(() => {
     const el = hostRef.current
-    if (!el || mounted) return
+    if (!el) return
     // No IntersectionObserver (very old browsers): load immediately rather
     // than never. (Async so the effect doesn't set state synchronously.)
     if (typeof IntersectionObserver === 'undefined') {
@@ -54,13 +55,31 @@ const LazyZeffyIframe = (props: ZeffyIframeProps) => {
     )
     observer.observe(el)
     return () => observer.disconnect()
-  }, [mounted])
+  }, [])
 
   // Before mount the reserved box simply stays empty — the same thing
   // visitors saw while the Zeffy app booted when the iframe was eager.
+  // Without JavaScript the observer never fires, so <noscript> keeps a
+  // donation path alive: a link to the Zeffy-hosted page (same form,
+  // full page), matching ZeffyPopupButton's no-JS fallback pattern.
   return (
     <div ref={hostRef} className="absolute inset-0">
       {mounted && <iframe {...props}></iframe>}
+      {props.src && (
+        <noscript>
+          <a
+            href={zeffyHostedUrl(props.src)}
+            className="absolute inset-0 flex items-center justify-center"
+          >
+            <span
+              className="bg-white text-[#0567B1] underline px-4 py-2 rounded shadow"
+              data-font="lato-font"
+            >
+              {props.title ?? 'Open the donation form'}
+            </span>
+          </a>
+        </noscript>
+      )}
     </div>
   )
 }
