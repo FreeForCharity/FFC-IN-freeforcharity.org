@@ -519,10 +519,15 @@ async function main() {
     'zeffy-form-link',
     'zeffy.com/embed/',
   ])
+  // The Zeffy iframes are scroll-primed (LazyZeffyIframe), so the raw HTML
+  // contains no <iframe> tag; the embed src survives as a serialized client
+  // prop plus a <noscript> fallback link. Assert that marker — it proves
+  // the lazy-iframe wiring shipped, not that the form visually mounted
+  // (only a scrolling browser can prove that; donation-flows.spec.ts does).
   await checkBodyContains(
-    `/free-for-charity-endowment-fund mounts the Zeffy form`,
+    `/free-for-charity-endowment-fund ships the Zeffy embed wiring`,
     '/free-for-charity-endowment-fund/',
-    ['zeffy']
+    ['zeffy.com/embed/']
   )
   // PayPal return flow: the donation-confirmation callback must 302 to
   // /donate AND preserve the transaction query (tx=...), or the post-donation

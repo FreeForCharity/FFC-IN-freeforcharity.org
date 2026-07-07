@@ -67,8 +67,9 @@ Section 2c "Navigation and Footer" and the `/hub/` check below MUST be done on t
 
 ### 2a. Critical Pages
 
-- [ ] **Homepage** `/` — hero loads, Zeffy endowment-fund iframe renders in
-      the `#donate` section, team section visible
+- [ ] **Homepage** `/` — hero loads, team section visible; scroll down to
+      the `#donate` section and confirm the Zeffy endowment-fund iframe
+      mounts (scroll-primed — not present until you approach it)
 - [ ] **About Us** `/about-us` — team member cards and photos appear
 - [ ] **Donate** `/donate` — PayPal "Donate Today" button (hosted button
       `9ZKQ23YC3G2J2`) appears in the Measurable Impact section
@@ -210,7 +211,7 @@ After the document-root swap, monitor:
 - [ ] `https://freeforcharity.org/hub/` renders the WHMCS storefront — **critical billing check**
 - [ ] `https://freeforcharity.org/hub/globaladmin` reaches WHMCS admin
 - [ ] Homepage loads without any `404` or `5xx` errors
-- [ ] Donation buttons on `/donate` and the Zeffy iframe on `/free-for-charity-endowment-fund` still work
+- [ ] Donation buttons on `/donate` still work; on `/free-for-charity-endowment-fund`, scroll to the donation section and confirm the Zeffy iframes mount (scroll-primed)
 - [ ] Sample WP→Next redirects fire (see `docs/CUTOVER-REDIRECTS.md`)
 - [ ] WHMCS PHP error logs in cPanel show no new errors related to path changes
 - [ ] If problems are detected, on-call manually creates an `incident` issue and begins rollback as needed

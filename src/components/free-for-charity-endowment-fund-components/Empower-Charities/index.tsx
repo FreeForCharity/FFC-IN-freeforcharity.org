@@ -1,9 +1,6 @@
-import React, { CSSProperties, FC, IframeHTMLAttributes } from 'react'
-
-interface ExtendedIframeProps extends IframeHTMLAttributes<HTMLIFrameElement> {
-  allowpaymentrequest?: string
-  allowtransparency?: string // lowercase version for DOM compatibility
-}
+import React, { CSSProperties, FC } from 'react'
+import LazyZeffyIframe, { ZeffyIframeProps } from '@/components/ui/LazyZeffyIframe'
+import { ZEFFY_BASE } from '@/data/donation-campaigns'
 
 const DonationSection: FC = () => {
   const commonStyle: CSSProperties = {
@@ -26,18 +23,18 @@ const DonationSection: FC = () => {
     height: '120px',
   }
 
-  const donationFormProps: ExtendedIframeProps = {
+  const donationFormProps: ZeffyIframeProps = {
     title: 'Donation form powered by Zeffy',
     style: donationFormStyle,
-    src: 'https://www.zeffy.com/embed/donation-form/free-for-charity-endowment-fund',
+    src: `${ZEFFY_BASE}/embed/donation-form/free-for-charity-endowment-fund`,
     allowpaymentrequest: '',
     allowtransparency: 'true', // ✅ fixed here
   }
 
-  const thermometerProps: ExtendedIframeProps = {
+  const thermometerProps: ZeffyIframeProps = {
     title: 'Donation thermometer powered by Zeffy',
     style: thermometerStyle,
-    src: 'https://www.zeffy.com/embed/thermometer/free-for-charity-endowment-fund',
+    src: `${ZEFFY_BASE}/embed/thermometer/free-for-charity-endowment-fund`,
     allowtransparency: 'true', // ✅ fixed here
   }
 
@@ -56,14 +53,14 @@ const DonationSection: FC = () => {
         <div className="h-full min-h-[1374px] pt-[120px]">
           {/* Thermometer Embed */}
           <div className="relative w-full h-[120px]">
-            <iframe {...thermometerProps}></iframe>
+            <LazyZeffyIframe {...thermometerProps} />
           </div>
         </div>
 
         <div className="h-full min-h-[1200px] bg-white space-y-10">
           {/* Donation Form */}
           <div className="relative w-full h-[1200px]">
-            <iframe {...donationFormProps}></iframe>
+            <LazyZeffyIframe {...donationFormProps} />
           </div>
         </div>
       </div>
