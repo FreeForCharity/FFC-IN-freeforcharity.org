@@ -81,14 +81,20 @@ test.describe('Donation flows', () => {
       .scrollIntoViewIfNeeded()
 
     // The thermometer sits just below the heading, so it mounts first.
-    const thermometer = page.locator('iframe[src*="zeffy.com/embed/thermometer"]')
+    // Assert the campaign slug too — a different Zeffy campaign must not
+    // satisfy the guard.
+    const thermometer = page.locator(
+      'iframe[src*="zeffy.com/embed/thermometer/free-for-charity-endowment-fund"]'
+    )
     await expect(thermometer).toBeAttached({ timeout: 15000 })
 
     // The donation form is a further ~1500px down — scroll to the bottom
     // and assert it specifically (a passing thermometer must not mask a
     // broken donation form).
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
-    const donationForm = page.locator('iframe[src*="zeffy.com/embed/donation-form"]')
+    const donationForm = page.locator(
+      'iframe[src*="zeffy.com/embed/donation-form/free-for-charity-endowment-fund"]'
+    )
     await expect(donationForm).toBeAttached({ timeout: 15000 })
 
     const src = await donationForm.getAttribute('src')
@@ -112,9 +118,12 @@ test.describe('Donation flows', () => {
     await page.waitForTimeout(1000)
     expect(await page.locator('iframe[src*="zeffy.com"]').count()).toBe(0)
 
-    // Scrolling to the donate section mounts the real iframe.
+    // Scrolling to the donate section mounts the real iframe — assert the
+    // exact endowment-fund donation-form embed, not just any Zeffy frame.
     await page.locator('#donate').scrollIntoViewIfNeeded()
-    const zeffyFrame = page.locator('iframe[src*="zeffy.com"]').first()
+    const zeffyFrame = page.locator(
+      'iframe[src*="zeffy.com/embed/donation-form/free-for-charity-endowment-fund"]'
+    )
     await expect(zeffyFrame).toBeAttached({ timeout: 15000 })
   })
 })
