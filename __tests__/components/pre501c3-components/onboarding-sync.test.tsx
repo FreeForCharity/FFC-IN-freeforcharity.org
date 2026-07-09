@@ -22,10 +22,13 @@ describe('pre-501c3 onboarding journey sync', () => {
     expect(container.textContent).toContain('Google Workspace')
   })
 
-  it('never prints a literal coupon code on the page', () => {
+  it('never prints a coupon code on the page', () => {
+    // Match any freeforcharity<year> coupon pattern so the literal secret
+    // is never committed to the repo (epic #446 hard rule).
+    const couponPattern = /freeforcharity\d{4}/i
     const { container: charityContainer } = render(<Charity />)
     const { container: faqsContainer } = render(<Faqs />)
-    expect(charityContainer.textContent).not.toContain('freeforcharity2026')
-    expect(faqsContainer.textContent).not.toContain('freeforcharity2026')
+    expect(charityContainer.textContent).not.toMatch(couponPattern)
+    expect(faqsContainer.textContent).not.toMatch(couponPattern)
   })
 })

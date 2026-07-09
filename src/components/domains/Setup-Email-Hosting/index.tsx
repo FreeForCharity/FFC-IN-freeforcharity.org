@@ -61,7 +61,7 @@ const index = () => {
         </a>
       </div>
 
-      <div className="w-[90%] md:w-[80%] max-w-[1080px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-[27] gap-[33px] items-stretch justify-between">
+      <div className="w-[90%] md:w-[80%] max-w-[1080px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-[27px] gap-[33px] items-stretch justify-between">
         <div className="p-[20px] text-center bg-white rounded-[10px] overflow-hidden pt-[30px] pr-[20px] pb-[30px] pl-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.3)]">
           {/* Circle Image */}
           <div className="mx-auto flex-shrink-0 w-[100px] h-[100px] overflow-hidden mb-[30px]">
@@ -164,7 +164,7 @@ const index = () => {
             account
           </p>
           <a
-            href="/domains/#setupstep3"
+            href="/google-for-nonprofits-guide/"
             className="text-[25px] leading-[32px] font-[600] text-[#0460C0]"
             data-font="raleway-font"
           >

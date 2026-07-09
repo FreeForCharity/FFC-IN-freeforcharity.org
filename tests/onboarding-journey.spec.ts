@@ -13,13 +13,13 @@ import { test, expect } from '@playwright/test'
 test.describe('Onboarding journey — CTA deep links (#452)', () => {
   test('501c3 page links Get Started to onboarding product pid 33', async ({ page }) => {
     await page.goto('/501c3')
-    await expect(page.locator('a[href*="a=add&pid=33"]').first()).toHaveCount(1)
+    expect(await page.locator('a[href*="a=add&pid=33"]').count()).toBeGreaterThan(0)
     await expect(page.locator('a[href*="confproduct"]')).toHaveCount(0)
   })
 
   test('pre501c3 page links Get Started to onboarding product pid 16', async ({ page }) => {
     await page.goto('/pre501c3')
-    await expect(page.locator('a[href*="a=add&pid=16"]').first()).toHaveCount(1)
+    expect(await page.locator('a[href*="a=add&pid=16"]').count()).toBeGreaterThan(0)
     await expect(page.locator('a[href*="confproduct"]')).toHaveCount(0)
   })
 })
@@ -41,16 +41,19 @@ test.describe('Domains page — Cloudflare model, dual email (#447/#448/#449)', 
 })
 
 test.describe('Onboarding journey page — Website before Email (#450)', () => {
-  test('website stage precedes email stage and both providers appear', async ({ page }) => {
+  // The strict numbered stage ordering (3. Website before 4. Email) is
+  // asserted in the unit test __tests__/app/charity-onboarding-journey.test.tsx,
+  // which parses the headings directly. Here we assert the customer-visible
+  // outcome: the email stage states the live-website prerequisite and both
+  // providers are offered.
+  test('email stage states the live-website prerequisite and offers both providers', async ({
+    page,
+  }) => {
     await page.goto('/charity-onboarding-journey')
-    const body = await page.locator('body').innerText()
-    expect(body).toContain('Google Workspace')
-    // Stage headings are numbered; the Website stage must come before Email.
-    const websiteIdx = body.indexOf('Website')
-    const emailIdx = body.lastIndexOf('Email')
-    expect(websiteIdx).toBeGreaterThan(-1)
-    expect(emailIdx).toBeGreaterThan(-1)
-    expect(websiteIdx).toBeLessThan(emailIdx)
+    const main = await page.locator('main').innerText()
+    expect(main).toContain('Google Workspace')
+    expect(main).toContain('Microsoft 365')
+    expect(main).toMatch(/require a live website/i)
   })
 })
 
@@ -67,8 +70,10 @@ test.describe('Coupon secrecy — hard rule (#453)', () => {
   for (const route of ['/501c3', '/pre501c3', '/domains', '/charity-onboarding-journey']) {
     test(`does not publish the coupon code on ${route}`, async ({ page }) => {
       await page.goto(route)
-      const body = (await page.locator('body').innerText()).toLowerCase()
-      expect(body).not.toContain('freeforcharity2026')
+      const body = await page.locator('body').innerText()
+      // Match any freeforcharity<year> coupon pattern so the literal secret
+      // never needs to live in the repo (epic #446 hard rule).
+      expect(body).not.toMatch(/freeforcharity\d{4}/i)
     })
   }
 })
