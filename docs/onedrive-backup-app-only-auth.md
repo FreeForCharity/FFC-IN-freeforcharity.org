@@ -16,23 +16,27 @@ nothing a Conditional Access policy can expire.
 
 Two GitHub-OIDC identities, split by duty:
 
-| Purpose                   | Identity                                                                        | Grants                                                                      |
-| ------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| Key Vault (FTP creds)     | `ffc-admin-kv-writer` (`AZURE_DEPLOY_CLIENT_ID`)                                | KV Secrets User — unchanged                                                 |
-| OneDrive Graph (app-only) | **`ffc-onedrive-backup`** (`0b7ead96-…`, env secret `AZURE_ONEDRIVE_CLIENT_ID`) | **Graph `Files.ReadWrite.All` (application) only** — no subscription, no KV |
+| Purpose                   | Identity                                                          | Grants                                                                      |
+| ------------------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Key Vault (FTP creds)     | `ffc-admin-kv-writer` (env secret `AZURE_DEPLOY_CLIENT_ID`)       | KV Secrets User — unchanged                                                 |
+| OneDrive Graph (app-only) | **`ffc-onedrive-backup`** (env secret `AZURE_ONEDRIVE_CLIENT_ID`) | **Graph `Files.ReadWrite.All` (application) only** — no subscription, no KV |
+
+The concrete client-id, drive-id, and account are not repeated here (this repo is
+public) — they live in the GitHub env secret `AZURE_ONEDRIVE_CLIENT_ID` and the
+variable `ONEDRIVE_DRIVE_BASE`.
 
 - **Federated credential** on `ffc-onedrive-backup`: subject
   `repo:FreeForCharity/FFC-IN-freeforcharity.org:environment:cpanel-apim-deploy`,
   issuer `https://token.actions.githubusercontent.com`, audience `api://AzureADTokenExchange`.
-- **App-role assignment** grants _only_ `Files.ReadWrite.All` (role
+- **App-role assignment** grants _only_ `Files.ReadWrite.All` (well-known Graph role
   `75359482-378d-4052-8f01-80520e7db3cd`) on the Microsoft Graph SP — a targeted
   consent, not a blanket `admin-consent`.
 - **Why `Files.ReadWrite.All` (tenant-wide)?** The backups live in a _personal_
-  OneDrive for Business (`clarkemoyer@freeforcharity.org`), which cannot be scoped
-  with `Sites.Selected`. The broad grant is isolated to this single-purpose app.
-- **Destination pinned, folder unchanged:** repo variable
-  `ONEDRIVE_DRIVE_BASE=/drives/b!f5voUy582UuZMa0-sIt3vd2yDdTEHrVHh5f2iTzm1GJezyqVtgazR4VxjOqVqeiW`
-  — the exact drive used before, so the `/1-Backups/…` folders are untouched.
+  OneDrive for Business, which cannot be scoped with `Sites.Selected`. The broad
+  grant is isolated to this single-purpose app.
+- **Destination pinned, folder unchanged:** the variable `ONEDRIVE_DRIVE_BASE` holds
+  `/drives/<drive-id>` for the exact drive used before, so the `/1-Backups/…` folders
+  are untouched.
 
 Validated 2026-07-08 by dispatching the workflow from its branch (dry-run + real
 run both green; lists/retention against the same folders).
@@ -43,7 +47,7 @@ run both green; lists/retention against the same folders).
   (The FIC and app-role assignment don't lapse.)
 - **Re-verify / re-create** the setup with `az`:
   ```bash
-  APP=0b7ead96-9c54-470a-be6c-c27db38e3972
+  APP=<value of env secret AZURE_ONEDRIVE_CLIENT_ID>
   # app-role assignments (expect Files.ReadWrite.All on Microsoft Graph):
   sp=$(az ad sp show --id $APP --query id -o tsv)
   az rest --method GET --url "https://graph.microsoft.com/v1.0/servicePrincipals/$sp/appRoleAssignments"
