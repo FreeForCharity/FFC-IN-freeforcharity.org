@@ -105,7 +105,8 @@ test.describe('Round 2 — stale-model cleanup on the rest of the site (#455/#45
     // Word boundaries: "divi" is a substring of "individual", so match the
     // product names as whole words to avoid false positives.
     expect(body).not.toMatch(/\bDivi\b/i)
-    expect(body).not.toMatch(/\bWPMU\b/i)
+    // Substring (not \bWPMU\b) so "WPMUdev" — no word boundary before "dev" — is also caught.
+    expect(body).not.toMatch(/WPMU/i)
     expect(body.toLowerCase()).toContain('github pages')
   })
 
@@ -124,5 +125,7 @@ test.describe('Round 2 — stale-model cleanup on the rest of the site (#455/#45
     ).toHaveCount(0)
     await expect(page.locator('a[href*="confproduct"]')).toHaveCount(0)
     expect(await page.locator('a[href*="a=add&pid=39"]').count()).toBeGreaterThan(0)
+    // both domain products are now linked: register (39) and transfer (41)
+    expect(await page.locator('a[href*="a=add&pid=41"]').count()).toBeGreaterThan(0)
   })
 })

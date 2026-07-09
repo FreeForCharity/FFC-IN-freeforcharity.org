@@ -90,6 +90,22 @@ const HowToOrderDomain = () => {
             you already own? You&apos;ll need your current registrar, the authorization (EPP) code,
             and the domain unlocked with WHOIS privacy turned off before you start.
           </p>
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a
+              href={hubAddProduct(DOMAIN_PID.register)}
+              className="rounded border-2 border-[#0567B1] px-6 py-2.5 text-[18px] font-medium text-[#0567B1] transition-colors hover:bg-[#0567B1] hover:text-white"
+              data-font="raleway-font"
+            >
+              Register a new .org domain
+            </a>
+            <a
+              href={hubAddProduct(DOMAIN_PID.transfer)}
+              className="rounded border-2 border-[#0567B1] px-6 py-2.5 text-[18px] font-medium text-[#0567B1] transition-colors hover:bg-[#0567B1] hover:text-white"
+              data-font="raleway-font"
+            >
+              Transfer an existing domain
+            </a>
+          </div>
         </div>
       </div>
 
