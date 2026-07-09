@@ -37,7 +37,12 @@ TOKEN = os.environ["GRAPH_TOKEN"]
 # default "/me/drive". App-only tokens have no "me", so DRIVE_BASE must name an
 # explicit drive, e.g. "/users/{user-id-or-upn}/drive", "/drives/{drive-id}", or
 # "/sites/{site-id}/drive". Set it in the workflow when using app-only auth.
-DRIVE = os.environ.get("DRIVE_BASE", "/me/drive").rstrip("/")
+# Normalize to exactly one leading slash and no trailing slash, so a value set
+# without the leading "/" (e.g. "drives/<id>") can't build URLs like ".../v1.0drives".
+DRIVE = "/" + os.environ.get("DRIVE_BASE", "/me/drive").strip().strip("/")
+if DRIVE == "/":
+    raise SystemExit("DRIVE_BASE is empty; set it to e.g. /drives/<id> or /users/<upn>/drive")
+DRY_RUN = os.environ.get("DRY_RUN") == "1"
 DRY_RUN = os.environ.get("DRY_RUN") == "1"
 SOFTA_DIR = os.environ.get("SOFTA_DIR", "/softaculous_backups")
 
