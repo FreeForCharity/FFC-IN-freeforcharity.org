@@ -48,6 +48,24 @@ export function hubCart(productId: number | string): string {
 }
 
 /**
+ * WHMCS "add to cart" URL for a specific product id. Preferred over
+ * hubCart() index links when deep-linking to a known product, because
+ * `a=add&pid=` targets the product by its stable id rather than a
+ * cart-position index that shifts when the catalog is reordered.
+ *   hubAddProduct(16) → https://freeforcharity.org/hub/cart.php?a=add&pid=16
+ */
+export function hubAddProduct(pid: number): string {
+  return `${HUB_BASE}/cart.php?a=add&pid=${pid}`
+}
+
+/**
+ * WHMCS product ids for the charity onboarding application forms.
+ * These are the stable entry points for each charity type; see
+ * FreeForCharity/FFC-Cloudflare-Automation#657 / #658.
+ */
+export const ONBOARDING_PID = { pre501c3: 16, full501c3: 33 } as const
+
+/**
  * WHMCS store-listing URL for a slug under /hub/store/.
  *   hubStore('ffc-consulting/nonprofit-charity-onboarding')
  *     → https://freeforcharity.org/hub/store/ffc-consulting/nonprofit-charity-onboarding

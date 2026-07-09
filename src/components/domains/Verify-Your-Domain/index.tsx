@@ -15,20 +15,21 @@ const index = () => {
             className="mt-[2px] mb-[12px] pb-[10px] text-[30px] md:text-[35px] font-[700] leading-[46px] text-[#0567B1] text-center"
             data-font="cantata-font"
           >
-            HOW TO VERIFY YOUR DOMAIN WITH ICANN
+            YOUR DOMAIN IS MANAGED IN CLOUDFLARE
           </h1>
           <p
             className="mb-[13px] w-full lg:w-[85%] mx-auto font-[500] text-[20px] leading-[30px] text-center"
             data-font="raleway-font"
           >
-            Please note that you will now own this domain but several emails from the domain
-            registrar system will need to be accepted as they verify your account to own the domain.
+            Your domain is registered and managed for you in Cloudflare by Free For Charity. There
+            is nothing for you to verify — unlike a traditional registrar, there are no verification
+            emails that you need to act on.
           </p>
           <p
             className="mt-[30px] font-[600] text-[27px] leading-[35px] text-center"
             data-font="raleway-font"
           >
-            What to do then?
+            So what do you need to do?
           </p>
         </div>
       </div>
@@ -42,7 +43,7 @@ const index = () => {
                 <Image
                   src={assetPath('/Images/1.webp')}
                   fill
-                  alt="domain verification email"
+                  alt="Cloudflare managed domain"
                   className="object-contain"
                 />
               </div>
@@ -57,8 +58,8 @@ const index = () => {
                 Step 1
               </h2>
               <p className="text-[23px] font-[500] leading-[30px]" data-font="raleway-font">
-                Check for emails about verification to the email address you used to register this
-                domain
+                Nothing to verify. Free For Charity registers, manages, and renews your domain for
+                you in Cloudflare, so no action is required on your part.
               </p>
             </div>
           </div>
@@ -66,25 +67,25 @@ const index = () => {
 
         {/* Bottom note */}
         <p className="font-[500] text-[20px] leading-[30px] text-center" data-font="raleway-font">
-          There are three main things to keep in mind.
+          There are a few things to keep in mind.
         </p>
       </div>
 
       <div className="w-[87%] max-w-[1300px] mx-auto py-[22px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[35px] items-stretch">
         <DomainCard
           imageSrc="/Images/1.webp"
-          imageAlt="Email verification icon"
-          text="Check for emails about verification to the email address you used to register this domain"
+          imageAlt="Cloudflare managed domain icon"
+          text="There are no verification emails to accept — Free For Charity manages your domain in Cloudflare on your behalf."
         />
         <DomainCard
           imageSrc="/Images/2.webp"
-          imageAlt="Email verification icon"
-          text="FAILING TO RESPOND TO THESE EMAILS WILL RESULT IN SUSPENSION OF YOUR DOMAIN"
+          imageAlt="Support ticket icon"
+          text="Need a DNS record or any domain change? Open a support ticket and an FFC volunteer will take care of it for you."
         />
         <DomainCard
           imageSrc="/Images/3.webp"
-          imageAlt="Email verification icon"
-          text="Free For Charity does not send or control these emails but we will be notified if you did not verify your ownership in the time provided."
+          imageAlt="Domain hub icon"
+          text="You can view your domain anytime from the Free For Charity hub using the account you created at checkout."
         />
       </div>
 
@@ -97,7 +98,7 @@ const index = () => {
                 <Image
                   src={assetPath('/Images/2.webp')}
                   fill
-                  alt="domain verification email"
+                  alt="domain management hub"
                   className="object-contain"
                 />
               </div>
@@ -115,8 +116,8 @@ const index = () => {
                 className="text-[23px] font-[500] leading-[30px] pb-[1em]"
                 data-font="raleway-font"
               >
-                You can manage your domain anytime by accessing our system with the account you
-                created at checkout.
+                Any DNS or domain change goes through a support ticket. You can view your domain
+                anytime by accessing our system with the account you created at checkout.
               </p>
               <a
                 href={hubUrl()}
@@ -145,8 +146,8 @@ const index = () => {
             className="w-full md:w-[85%] mx-auto text-[27px] font-[600] leading-[35px] text-center"
             data-font="raleway-font"
           >
-            If at anytime 72 hours after your order has been placed you have any questions about
-            these verifications please contact
+            If at anytime after your order has been placed you have any questions about your domain
+            please contact
           </p>
         </div>
 

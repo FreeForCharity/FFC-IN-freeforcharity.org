@@ -102,6 +102,34 @@ describe('src/lib/config', () => {
     })
   })
 
+  describe('hubAddProduct()', () => {
+    beforeEach(() => {
+      delete process.env.NEXT_PUBLIC_SITE_ORIGIN
+      reloadModule()
+    })
+
+    it('builds an a=add&pid= URL that targets the product by stable id', () => {
+      expect(mod.hubAddProduct(16)).toBe('https://freeforcharity.org/hub/cart.php?a=add&pid=16')
+      expect(mod.hubAddProduct(33)).toBe('https://freeforcharity.org/hub/cart.php?a=add&pid=33')
+    })
+
+    it('does not use the fragile confproduct index format', () => {
+      expect(mod.hubAddProduct(16)).not.toContain('confproduct')
+    })
+  })
+
+  describe('ONBOARDING_PID', () => {
+    beforeEach(() => {
+      delete process.env.NEXT_PUBLIC_SITE_ORIGIN
+      reloadModule()
+    })
+
+    it('maps each charity type to its WHMCS onboarding product id', () => {
+      expect(mod.ONBOARDING_PID.pre501c3).toBe(16)
+      expect(mod.ONBOARDING_PID.full501c3).toBe(33)
+    })
+  })
+
   describe('hubStore()', () => {
     beforeEach(() => {
       delete process.env.NEXT_PUBLIC_SITE_ORIGIN

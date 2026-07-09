@@ -41,9 +41,12 @@ const index = () => {
               data-font="raleway-font"
             >
               New site design has a backlog with Free For Charity but please reach out to get on the
-              list for a new free charity website. We try to support 100 Charities a year. If you
-              have your own design team and just need our hosting, plugins, and themes; follow the
-              steps at either the 501c3 or pre-501c3 onboarding pages to complete next steps.
+              list for a new free charity website. We try to support 100 Charities a year. Free For
+              Charity builds each charity a fast, secure static website on GitHub Pages from the FFC
+              template, and a volunteer sets it up and launches it on your Cloudflare-managed
+              domain. How quickly your site goes live depends mainly on how ready your content is.
+              Follow the steps at either the 501c3 or pre-501c3 onboarding pages to complete next
+              steps.
             </p>
           </div>
         </div>

@@ -15,7 +15,7 @@ interface Stage {
   you: string
   ffc: string
   duration: string
-  link?: { href: string; label: string }
+  links?: { href: string; label: string }[]
 }
 
 const stages: Stage[] = [
@@ -24,38 +24,43 @@ const stages: Stage[] = [
     you: 'Submit the onboarding form with your EIN, legal name, and what you need. Have your IRS determination letter handy (pre-501c3 orgs: your formation documents).',
     ffc: 'We validate your organization (IRS status, Candid profile) and confirm program fit.',
     duration: 'A few days',
-    link: { href: '/help-for-charities/', label: 'Start here: Help for Charities' },
+    links: [{ href: '/help-for-charities/', label: 'Start here: Help for Charities' }],
   },
   {
     name: '2. Domain',
     you: 'Send us your top three .org name choices — or the details of a domain you already own.',
     ffc: 'We register (and pay for) the best available name, or take over management of your existing domain, and set up DNS and security.',
     duration: 'Same week',
-    link: { href: '/choosing-your-org-domain/', label: 'Guide: choosing your .org domain' },
+    links: [{ href: '/choosing-your-org-domain/', label: 'Guide: choosing your .org domain' }],
   },
   {
-    name: '3. Email',
-    you: 'Register with Microsoft for Nonprofits and tell us when the DNS verification codes appear.',
-    ffc: 'We add the DNS records so your free Microsoft 365 mailboxes go live, and confirm MFA is on.',
-    duration: '2–5 business days (Microsoft validation)',
-    link: { href: '/m365-email-guide/', label: 'Guide: free Microsoft 365 email' },
-  },
-  {
-    name: '4. Website',
+    name: '3. Website',
     you: 'Send your logo, photos, mission text, and program descriptions. A one-page outline is enough — we help with the rest.',
     ffc: 'A volunteer builds your site from the FFC template (fast, secure static hosting), reviews it with you, and launches it at your domain.',
     duration: '2–6 weeks, mostly depending on content readiness',
-    link: {
-      href: '/free-for-charity-ffc-service-delivery-stages/',
-      label: 'How FFC delivers services',
-    },
+    links: [
+      {
+        href: '/free-for-charity-ffc-service-delivery-stages/',
+        label: 'How FFC delivers services',
+      },
+    ],
+  },
+  {
+    name: '4. Email',
+    you: 'Choose Microsoft 365 or Google Workspace, then register with Microsoft for Nonprofits or Google for Nonprofits and tell us when the DNS verification codes appear. Both nonprofit email programs require a live website before they approve your 501(c)(3) — which is exactly why your website comes first.',
+    ffc: 'We add the DNS records so your free Microsoft 365 or Google Workspace mailboxes go live, and confirm MFA is on.',
+    duration: '2–5 business days (Microsoft or Google validation)',
+    links: [
+      { href: '/m365-email-guide/', label: 'Guide: free Microsoft 365 email' },
+      { href: '/google-for-nonprofits-guide/', label: 'Guide: free Google Workspace email' },
+    ],
   },
   {
     name: '5. Handoff & ongoing support',
     you: 'Learn where to send changes and questions; add the trust-builders (Candid seal, donation form) when ready.',
     ffc: 'We keep the domain renewed, DNS secure, and hosting healthy — and stay reachable for changes and fixes.',
     duration: 'Ongoing',
-    link: { href: '/guides/', label: 'All guides' },
+    links: [{ href: '/guides/', label: 'All guides' }],
   },
 ]
 
@@ -96,16 +101,16 @@ export default function CharityOnboardingJourney() {
                   <dd className="inline">{stage.duration}</dd>
                 </div>
               </dl>
-              {stage.link ? (
-                <p className="mt-3">
+              {stage.links?.map((link) => (
+                <p key={link.href} className="mt-3">
                   <Link
-                    href={stage.link.href}
+                    href={link.href}
                     className="font-[var(--font-lato)] text-[16px] text-[#0567B1] underline"
                   >
-                    {stage.link.label} →
+                    {link.label} →
                   </Link>
                 </p>
-              ) : null}
+              ))}
             </li>
           ))}
         </ol>

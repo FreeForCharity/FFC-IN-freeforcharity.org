@@ -1,6 +1,6 @@
 import React from 'react'
 import Transparentbtn from '@/components/ui/Transparentbtn'
-import { hubCart } from '@/lib/config'
+import { hubAddProduct, ONBOARDING_PID } from '@/lib/config'
 
 const index: React.FC = () => {
   return (
@@ -14,10 +14,13 @@ const index: React.FC = () => {
         </h1>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-0 sm:gap-6">
-          <Transparentbtn text="501(c)3 Charities Click Here To Get Started!" href={hubCart(0)} />
+          <Transparentbtn
+            text="501(c)3 Charities Click Here To Get Started!"
+            href={hubAddProduct(ONBOARDING_PID.full501c3)}
+          />
           <Transparentbtn
             text="Pre-501(c)3 Charities Click Here to Get Started!"
-            href={hubCart(1)}
+            href={hubAddProduct(ONBOARDING_PID.pre501c3)}
           />
         </div>
       </div>

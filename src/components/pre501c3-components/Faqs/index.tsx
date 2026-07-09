@@ -113,7 +113,10 @@ const index = () => {
                   info@yourcharityname.org
                 </a>
               </li>
-              <li>Initial Charity WordPress Website for IRS application</li>
+              <li>
+                Initial Charity GitHub Pages Website for IRS application (a fast, secure static
+                site)
+              </li>
               <li>Initial Facebook Page for volunteers / location / region management</li>
               <li>Initial LinkedIn Page for volunteers / location / region management</li>
               <li>
