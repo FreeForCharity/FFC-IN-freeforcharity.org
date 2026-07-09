@@ -24,7 +24,8 @@ Stdlib only (no pip installs). Auth/secrets come from the environment:
 Config has sensible defaults for this account; override via env if needed:
   DRIVE_BASE    Graph drive path prefix. Delegated tokens may use the default
                 "/me/drive"; app-only tokens MUST set an explicit drive, e.g.
-                "/users/{user-id-or-upn}/drive" or "/sites/{site-id}/drive".
+                "/drives/{drive-id}", "/users/{user-id-or-upn}/drive", or
+                "/sites/{site-id}/drive".
   SOFTA_DIR     remote dir (default /softaculous_backups, relative to FTP home)
   DRY_RUN       "1" to log actions without uploading/deleting
 """
@@ -42,7 +43,6 @@ TOKEN = os.environ["GRAPH_TOKEN"]
 DRIVE = "/" + os.environ.get("DRIVE_BASE", "/me/drive").strip().strip("/")
 if DRIVE == "/":
     raise SystemExit("DRIVE_BASE is empty; set it to e.g. /drives/<id> or /users/<upn>/drive")
-DRY_RUN = os.environ.get("DRY_RUN") == "1"
 DRY_RUN = os.environ.get("DRY_RUN") == "1"
 SOFTA_DIR = os.environ.get("SOFTA_DIR", "/softaculous_backups")
 
