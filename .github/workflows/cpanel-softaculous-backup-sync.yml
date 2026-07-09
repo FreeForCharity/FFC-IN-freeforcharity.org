@@ -10,18 +10,20 @@ name: 'cPanel Softaculous backups -> OneDrive'
 # -> Restore rebuilds files + DB), with the SQL inside each archive. WHMCS is
 # the priority and is captured daily.
 #
-# Auth (all via the deploy OIDC identity — no stored user credentials):
-#   FTP creds:    Key Vault wr-all-cbm-cpanel-ffc-interserver-ftp-{host,user,password,port}
-#   OneDrive:     app-only Microsoft Graph token minted from the OIDC login
-#                 (`az account get-access-token`). The identity holds a Graph
-#                 application permission (Files.ReadWrite.All or, preferred,
-#                 Sites.Selected on the backup library) granted with admin consent.
-#   Destination:  repo/environment variable ONEDRIVE_DRIVE_BASE, e.g.
-#                 /users/<upn-or-id>/drive or /sites/<site-id>/drive.
+# Auth — two GitHub-OIDC identities, no stored user credentials, no refresh token:
+#   FTP creds:  AZURE_DEPLOY_CLIENT_ID (Key Vault reader) reads
+#               wr-all-cbm-cpanel-ffc-interserver-ftp-{host,user,password,port}.
+#   OneDrive:   AZURE_ONEDRIVE_CLIENT_ID (dedicated backup app, app-only) mints a
+#               Microsoft Graph token via `az account get-access-token`. It holds
+#               ONLY Graph Files.ReadWrite.All (application, admin-consented) and no
+#               Azure subscription — isolating the broad OneDrive grant to one
+#               single-purpose identity.
+#   Dest:       variable ONEDRIVE_DRIVE_BASE, pinned to the backup drive
+#               (e.g. /drives/<drive-id>). App-only tokens have no /me.
 #
-# The Azure identity needs Key Vault *Secrets User* (read) for the FTP secrets.
 # App-only auth has no refresh token and no interactive MFA, so a Conditional
-# Access sign-in-frequency policy can no longer break the daily run.
+# Access sign-in-frequency policy can no longer break the daily run. Setup runbook:
+# docs/onedrive-backup-app-only-auth.md.
 
 on:
   schedule:
@@ -51,43 +53,21 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Azure login (OIDC)
+      - name: 'Azure login (OIDC) — Key Vault reader'
         uses: azure/login@v3
         with:
           client-id: ${{ secrets.AZURE_DEPLOY_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: 'Mint Graph token + load FTP creds from Key Vault'
-        id: secrets
+      - name: 'Load cPanel FTPS creds from Key Vault'
         env:
           KV: kv-ffc-admin-prod-cbm
-          # Drive target for app-only Graph (no /me). Set as a repo/environment
-          # variable, e.g. "/users/<upn-or-id>/drive" or "/sites/<site-id>/drive".
-          DRIVE_BASE: ${{ vars.ONEDRIVE_DRIVE_BASE }}
         run: |
           set -euo pipefail
           kv() { az keyvault secret show --vault-name "$KV" --name "$1" --query value -o tsv; }
 
-          # --- OneDrive: app-only Microsoft Graph token via the OIDC login ---
-          # The azure/login identity holds a Graph *application* permission
-          # (Files.ReadWrite.All or Sites.Selected, admin-consented), so we mint an
-          # app-only token directly. No refresh token, no device-code re-auth, and
-          # nothing a Conditional Access sign-in-frequency policy can invalidate.
-          if [ -z "${DRIVE_BASE:-}" ]; then
-            echo "::error::Set the ONEDRIVE_DRIVE_BASE variable (e.g. /users/<upn>/drive or /sites/<site-id>/drive) — app-only tokens have no /me."
-            exit 1
-          fi
-          echo "DRIVE_BASE=$DRIVE_BASE" >> "$GITHUB_ENV"
-          graph_token=$(az account get-access-token --resource https://graph.microsoft.com --query accessToken -o tsv)
-          if [ -z "$graph_token" ]; then
-            echo "::error::Failed to mint a Graph app token. Confirm the OIDC identity has a Graph application permission (Files.ReadWrite.All or Sites.Selected) with admin consent."
-            exit 1
-          fi
-          echo "::add-mask::$graph_token"
-          echo "GRAPH_TOKEN=$graph_token" >> "$GITHUB_ENV"
-
-          # --- cPanel FTPS creds ---
+          # --- cPanel FTPS creds (read under the Key Vault reader identity) ---
           # Connect by HOSTNAME (derived from the ...-server URL), not the raw
           # IP, so the FTPS certificate's hostname can be verified (the script
           # verifies against the system CA store by default). cPanel AutoSSL
@@ -103,6 +83,39 @@ jobs:
           fp=$(kv wr-all-cbm-cpanel-ffc-interserver-ftp-password)
           echo "::add-mask::$fp"
           echo "FTP_PASS=$fp" >> "$GITHUB_ENV"
+
+      # Switch to the dedicated OneDrive backup identity (app-only). It holds ONLY
+      # Microsoft Graph Files.ReadWrite.All — no Azure subscription, no Key Vault,
+      # no other tenant access — so the broad OneDrive grant is isolated here.
+      - name: 'Azure login (OIDC) — OneDrive backup app'
+        uses: azure/login@v3
+        with:
+          client-id: ${{ secrets.AZURE_ONEDRIVE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          allow-no-subscriptions: true
+
+      - name: 'Mint app-only Microsoft Graph token'
+        env:
+          # Drive target for app-only Graph (no /me). Pinned to the exact backup
+          # drive, e.g. "/drives/<drive-id>". Set as repo/environment variable.
+          DRIVE_BASE: ${{ vars.ONEDRIVE_DRIVE_BASE }}
+        run: |
+          set -euo pipefail
+          # App-only token from the dedicated backup identity. No refresh token,
+          # no device-code re-auth, nothing a Conditional Access sign-in-frequency
+          # policy can invalidate.
+          if [ -z "${DRIVE_BASE:-}" ]; then
+            echo "::error::Set the ONEDRIVE_DRIVE_BASE variable (e.g. /drives/<drive-id> or /users/<upn>/drive) — app-only tokens have no /me."
+            exit 1
+          fi
+          echo "DRIVE_BASE=$DRIVE_BASE" >> "$GITHUB_ENV"
+          graph_token=$(az account get-access-token --resource https://graph.microsoft.com --query accessToken -o tsv)
+          if [ -z "$graph_token" ]; then
+            echo "::error::Failed to mint a Graph app token. Confirm AZURE_ONEDRIVE_CLIENT_ID has Graph Files.ReadWrite.All (application) with admin consent."
+            exit 1
+          fi
+          echo "::add-mask::$graph_token"
+          echo "GRAPH_TOKEN=$graph_token" >> "$GITHUB_ENV"
 
       - name: 'Sync Softaculous backups to OneDrive'
         env:
