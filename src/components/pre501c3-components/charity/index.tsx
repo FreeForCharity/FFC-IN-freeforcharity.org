@@ -22,6 +22,11 @@ const index = () => {
             description="Looking to establish and govern your charity? We’ve got you covered. Our services include support for Charity Mission Plan “Pitch Deck” assistance, full plan development with budgeting and mission sections for IRS 1023 501c3 application, and consultation on initial board considerations. We also provide support for state and local nonprofit establishment, federal 501c3 nonprofit establishment, charity banking services, charity donation processing, and more. With Free For Charity, we connect students, professionals, and businesses with charities in need. Contact us today to get started on your charity’s mission!"
             descriptionAlign="left"
           />
+          <HelpForCharities
+            title="–What Happens Next–"
+            description="Ready to get your website live? Once you’re accepted, you’ll order your free domain name and GitHub Pages website services. At checkout you’ll see a small $1 verification charge — it simply confirms that each request comes from a real charity — and a discount code that brings your total down to $0 arrives in your onboarding acceptance email (we never post the code publicly). Charity email through Microsoft 365 or Google Workspace becomes available once your 501(c)(3) status is approved."
+            descriptionAlign="left"
+          />
         </div>
       </div>
     </div>

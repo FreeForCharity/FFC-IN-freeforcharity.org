@@ -25,7 +25,7 @@ const HowToOrderDomain = () => {
     {
       number: 3,
       title: 'Step 3',
-      description: 'Select Register a New Domain',
+      description: 'Register a new .org domain or transfer a domain you already own',
       linkText: 'Follow Steps',
       innerbg: 'bg-[#2A6F9E]',
       outerbg: 'bg-[#2A6F9E]',
@@ -78,6 +78,18 @@ const HowToOrderDomain = () => {
               <StepCard key={step.number} step={step} />
             ))}
           </div>
+        </div>
+
+        <div className="pt-[30px] w-[80%] max-w-6xl mx-auto">
+          <p
+            className="md:w-[85%] mx-auto text-center text-[20px] font-medium leading-[30px]"
+            style={{ fontFamily: 'Raleway, sans-serif' }}
+          >
+            You have two supported options: register a brand new .org domain, or transfer a domain
+            you already own into Free For Charity&apos;s Cloudflare Registrar. Transferring a domain
+            you already own? You&apos;ll need your current registrar, the authorization (EPP) code,
+            and the domain unlocked with WHOIS privacy turned off before you start.
+          </p>
         </div>
       </div>
 

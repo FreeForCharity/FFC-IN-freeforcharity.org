@@ -166,10 +166,11 @@ const AccordionLayout = () => {
                 isOpen={openRight === 'right1'}
                 onToggle={() => toggleRight('right1')}
               >
-                We are a registered reseller of eNom domain names. eNom has graciously provided us
-                with a Platinum account to support other non profits providing the lowest cost
-                domain names for a charity of our size. As we get more and more charities into the
-                domain system we expect the costs to freeforcharity.org to drop even further.
+                Domains are registered and managed directly at Cloudflare Registrar by Free For
+                Charity. Cloudflare offers domains at wholesale, at-cost pricing with no markup,
+                which lets us provide free .org names to the charities we serve. Managing everything
+                in one Cloudflare account also gives us DNS, CDN, and SSL security for every charity
+                domain out of the box.
               </AccordionItem>
 
               <AccordionItem
@@ -189,8 +190,9 @@ const AccordionLayout = () => {
                     </a>
                   </li>
                   <li>
-                    If you can provide your own qualified WordPress webmaster you may be moved up in
-                    the list.
+                    If you arrive with your content ready to go — logo, photos, mission text, and
+                    program descriptions — your GitHub Pages site can be built and launched much
+                    faster, which may move you up in the list.
                   </li>
                 </ul>
               </AccordionItem>

@@ -19,7 +19,9 @@ const index = () => {
             className="mb-[13px] w-[85%] mx-auto font-[500] text-[20px] leading-[30px] text-center"
             data-font="raleway-font"
           >
-            Email hosting means that you can have email addresses at your domain name. e.g.
+            Email hosting means that you can have email addresses at your domain name. e.g. Hosted
+            email is a 501(c)(3) benefit — eligible nonprofits get it free through Microsoft 365 or
+            Google Workspace.
           </p>
         </div>
       </div>
@@ -59,7 +61,7 @@ const index = () => {
         </a>
       </div>
 
-      <div className="w-[90%] md:w-[80%] max-w-[1080px] mx-auto grid grid-cols-1 md:grid-cols-2 py-[27] gap-[33px] items-stretch justify-between">
+      <div className="w-[90%] md:w-[80%] max-w-[1080px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-[27] gap-[33px] items-stretch justify-between">
         <div className="p-[20px] text-center bg-white rounded-[10px] overflow-hidden pt-[30px] pr-[20px] pb-[30px] pl-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.3)]">
           {/* Circle Image */}
           <div className="mx-auto flex-shrink-0 w-[100px] h-[100px] overflow-hidden mb-[30px]">
@@ -87,8 +89,9 @@ const index = () => {
 
           {/* Text Content */}
           <p className="text-[18px] leading-[32px] font-[500]" data-font="raleway-font">
-            Free For Charity recommends Microsoft as your email provider as it is free to charities
-            and comes with many additional services at no cost
+            Choose the provider that fits your charity: Microsoft 365 or Google Workspace. Both are
+            free for eligible 501(c)(3) nonprofits and come with many additional collaboration
+            services at no cost.
           </p>
         </div>
 
@@ -129,12 +132,57 @@ const index = () => {
             See the Microsoft 365 setup steps
           </a>
         </div>
+
+        <div className="p-[20px] text-center bg-white rounded-[10px] overflow-hidden pt-[30px] pr-[20px] pb-[30px] pl-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.3)]">
+          {/* Circle Image */}
+          <div className="mx-auto flex-shrink-0 w-[100px] h-[100px] overflow-hidden mb-[30px]">
+            <Image
+              src={assetPath('/Images/3.webp')}
+              alt="Step Illustration"
+              width={56}
+              height={56}
+              className="w-full h-full object-contain rounded-full"
+            />
+          </div>
+
+          <h2
+            className="text-[31px] font-[700] leading-[31px] pb-[30px] text-[#0567B1]"
+            data-font="cantata-font"
+          >
+            Step 3
+          </h2>
+          <p
+            className="text-[#333] text-[22px] font-[700] leading-[22px] text-center pb-[10px]"
+            data-font="raleway-font"
+          >
+            Or set up a Google Workspace account
+          </p>
+
+          {/* Text Content */}
+          <p className="text-[18px] leading-[32px] font-[500] pb-[1em]" data-font="raleway-font">
+            Prefer Google? Follow these simple steps to set up your Google Workspace for Nonprofits
+            account
+          </p>
+          <a
+            href="/domains/#setupstep3"
+            className="text-[25px] leading-[32px] font-[600] text-[#0460C0]"
+            data-font="raleway-font"
+          >
+            See the Google Workspace setup steps
+          </a>
+        </div>
       </div>
 
-      <div className="w-[90%] md:w-[80%] max-w-[680px] mx-auto mt-[40px]">
+      <div className="w-[90%] md:w-[80%] max-w-[680px] mx-auto mt-[40px] flex flex-col gap-[20px]">
         <AdminGuideLink
           href={ffcAdminUrl(adminLinks.domains.newModel)}
+          label="Full Microsoft 365 email guide on FFC Admin"
           description="Follow the full Microsoft 365 email setup guide on the FFC Admin portal."
+        />
+        <AdminGuideLink
+          href="/google-for-nonprofits-guide/"
+          label="Full Google Workspace email guide"
+          description="Prefer Google? Follow the full Google Workspace for Nonprofits setup guide."
         />
       </div>
     </div>
