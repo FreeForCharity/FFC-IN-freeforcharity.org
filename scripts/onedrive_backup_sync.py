@@ -12,13 +12,20 @@ the matching OneDrive folder via Microsoft Graph, then prunes OneDrive to:
 
 Stdlib only (no pip installs). Auth/secrets come from the environment:
 
-  GRAPH_TOKEN   Microsoft Graph access token (delegated Files.ReadWrite.All)
+  GRAPH_TOKEN   Microsoft Graph access token. Either a delegated token
+                (Files.ReadWrite.All) or an app-only token (Files.ReadWrite.All
+                or Sites.Selected). App-only is preferred — it never expires
+                interactively and needs no refresh token.
   FTP_HOST      cPanel FTPS host
   FTP_USER      cPanel FTP username
   FTP_PASS      cPanel FTP password
   FTP_PORT      (optional, default 21)
 
 Config has sensible defaults for this account; override via env if needed:
+  DRIVE_BASE    Graph drive path prefix. Delegated tokens may use the default
+                "/me/drive"; app-only tokens MUST set an explicit drive, e.g.
+                "/drives/{drive-id}", "/users/{user-id-or-upn}/drive", or
+                "/sites/{site-id}/drive".
   SOFTA_DIR     remote dir (default /softaculous_backups, relative to FTP home)
   DRY_RUN       "1" to log actions without uploading/deleting
 """
@@ -27,6 +34,15 @@ import urllib.request, urllib.error, urllib.parse
 
 GRAPH = "https://graph.microsoft.com/v1.0"
 TOKEN = os.environ["GRAPH_TOKEN"]
+# Drive to target, as a Graph path prefix. Delegated (user) tokens can use the
+# default "/me/drive". App-only tokens have no "me", so DRIVE_BASE must name an
+# explicit drive, e.g. "/users/{user-id-or-upn}/drive", "/drives/{drive-id}", or
+# "/sites/{site-id}/drive". Set it in the workflow when using app-only auth.
+# Normalize to exactly one leading slash and no trailing slash, so a value set
+# without the leading "/" (e.g. "drives/<id>") can't build URLs like ".../v1.0drives".
+DRIVE = "/" + os.environ.get("DRIVE_BASE", "/me/drive").strip().strip("/")
+if DRIVE == "/":
+    raise SystemExit("DRIVE_BASE is empty; set it to e.g. /drives/<id> or /users/<upn>/drive")
 DRY_RUN = os.environ.get("DRY_RUN") == "1"
 SOFTA_DIR = os.environ.get("SOFTA_DIR", "/softaculous_backups")
 
@@ -102,7 +118,7 @@ def graph(method, path, data=None, headers=None, raw_url=None):
 
 def list_children(folder):
     """Return {name: item} for a OneDrive folder (drive-root relative path)."""
-    items, url = {}, GRAPH + "/me/drive/root:" + urllib.parse.quote(folder) + ":/children?$select=name,id,size&$top=200"
+    items, url = {}, GRAPH + DRIVE + "/root:" + urllib.parse.quote(folder) + ":/children?$select=name,id,size&$top=200"
     while url:
         st, d = graph("GET", None, raw_url=url)
         if st == 404:
@@ -120,7 +136,7 @@ def upload_large(local_path, folder, name):
     item_path = urllib.parse.quote(folder + "/" + name)
     st, sess = graph(
         "POST",
-        "/me/drive/root:" + item_path + ":/createUploadSession",
+        DRIVE + "/root:" + item_path + ":/createUploadSession",
         {"item": {"@microsoft.graph.conflictBehavior": "replace"}},
     )
     if st >= 400:
@@ -165,7 +181,7 @@ def delete_item(item_id, name):
     if DRY_RUN:
         log(f"    [dry-run] would delete {name}")
         return
-    st, d = graph("DELETE", "/me/drive/items/" + item_id)
+    st, d = graph("DELETE", DRIVE + "/items/" + item_id)
     if st not in (200, 204):
         log(f"    WARN delete {name}: {st} {d}")
     else:
