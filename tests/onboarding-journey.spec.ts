@@ -77,3 +77,52 @@ test.describe('Coupon secrecy — hard rule (#453)', () => {
     })
   }
 })
+
+test.describe('Round 2 — stale-model cleanup on the rest of the site (#455/#456/#458)', () => {
+  test('homepage FAQ drops eNom/ffcdomains, uses the Cloudflare model', async ({ page }) => {
+    await page.goto('/')
+    const body = (await page.locator('body').innerText()).toLowerCase()
+    expect(body).not.toContain('enom')
+    expect(body).not.toContain('ffcdomains')
+    expect(body).not.toContain('platinum account')
+    expect(body).toContain('cloudflare')
+  })
+
+  test('Online Impacts onboarding uses GitHub Pages, not InterServer/WordPress', async ({
+    page,
+  }) => {
+    await page.goto('/online-impacts-onboarding-guide')
+    const body = (await page.locator('body').innerText()).toLowerCase()
+    expect(body).not.toContain('interserver')
+    expect(body).not.toContain('softaculous')
+    expect(body).toContain('github pages')
+    await expect(page.locator('a[href*="confproduct"]')).toHaveCount(0)
+  })
+
+  test('help-for-charities tech stack is GitHub Pages, not Divi/WPMU DEV', async ({ page }) => {
+    await page.goto('/help-for-charities')
+    const body = await page.locator('body').innerText()
+    // Word boundaries: "divi" is a substring of "individual", so match the
+    // product names as whole words to avoid false positives.
+    expect(body).not.toMatch(/\bDivi\b/i)
+    expect(body).not.toMatch(/\bWPMU\b/i)
+    expect(body.toLowerCase()).toContain('github pages')
+  })
+
+  test('choosing-your-org-domain offers both email providers', async ({ page }) => {
+    await page.goto('/choosing-your-org-domain')
+    const body = await page.locator('body').innerText()
+    expect(body).toContain('Google Workspace')
+  })
+
+  test('domains CTAs deep-link by product id, not the archived bundle or index links', async ({
+    page,
+  }) => {
+    await page.goto('/domains')
+    await expect(
+      page.locator('a[href*="free-org-domain-name-with-microsoft-email-address-setup"]')
+    ).toHaveCount(0)
+    await expect(page.locator('a[href*="confproduct"]')).toHaveCount(0)
+    expect(await page.locator('a[href*="a=add&pid=39"]').count()).toBeGreaterThan(0)
+  })
+})

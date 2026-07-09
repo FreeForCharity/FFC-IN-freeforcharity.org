@@ -1,6 +1,6 @@
 import React from 'react'
 import StepCard from '@/components/ui/StepCard'
-import { hubStore } from '@/lib/config'
+import { hubAddProduct, DOMAIN_PID } from '@/lib/config'
 
 const HowToOrderDomain = () => {
   const steps = [
@@ -16,11 +16,11 @@ const HowToOrderDomain = () => {
     {
       number: 2,
       title: 'Step 2',
-      description: 'Go to our domain management system page',
-      linkText: 'Open domain management',
+      description: 'Register your new .org domain',
+      linkText: 'Register a domain',
       innerbg: 'bg-[#2A6F9E]',
       outerbg: 'bg-[#2A6F9E]',
-      linkUrl: hubStore('ffc-consulting/free-org-domain-name-with-microsoft-email-address-setup'),
+      linkUrl: hubAddProduct(DOMAIN_PID.register),
     },
     {
       number: 3,

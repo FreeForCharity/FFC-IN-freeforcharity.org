@@ -14,12 +14,12 @@ const index = () => {
         <div>
           <FrequentlyAskedQuestions title="What is the organization aiming to accomplish?">
             <p className="mb-[30px]">
-              While in the technical process of setting up free charity hosting we discovered than
+              While in the technical process of setting up free charity hosting we discovered that
               many small or new organizations are stuck well below the need for full web hosting. As
-              an example assistance with setting up a charity email address with Microsoft at the
-              charities domain name is needed as a first step. FFC is has refactored our charity
-              on-boarding process to address email and other basic communication needs with free
-              guides and hosted on our project site ffcdomains.org
+              an example, many organizations get stuck early on the basics &mdash; a domain name and
+              a charity email address at that domain. FFC has refactored our charity onboarding
+              process to address the domain, website, and email communication needs with free guides
+              and hosted on our project site freeforcharity.org
             </p>
             <p>
               As a follow on need we identified that most charities and pre 501c3 non profits do not
@@ -44,16 +44,17 @@ const index = () => {
 
           <FrequentlyAskedQuestions title="What are the organizations capabilities for doing this?">
             <p className="mb-[30px]">
-              We already have the accounts set up in eNOM to provide enterprise level domain
-              procurement and by using WHMCS with coupon codes specifically for our 501c3 and pre
-              501c3 organizations we can provision full hosting and domain names automatically
-              without staff input.
+              We already have accounts set up at Cloudflare Registrar to provide enterprise level
+              domain procurement, and by using WHMCS specifically for our 501c3 and pre 501c3
+              organizations we can register domain names and stand up GitHub Pages static sites
+              automatically without staff input.
             </p>
             <p>
               For our training programs we help charities navigate through the AB-900 (Microsoft 365
               Copilot and Agent Administration Fundamentals) certification program while pursuing
-              their Microsoft 365 Grants. We further provide access to the Divi and WPMUDEV website
-              design and maintenance product that each come with their own vendor provided training.
+              their Microsoft 365 Grants. We further build each charity a GitHub Pages static
+              website from the Free For Charity template, assembled and refined by our AI agents, so
+              your organization gets a fast, secure site without hosting overhead.
             </p>
           </FrequentlyAskedQuestions>
 
@@ -239,10 +240,10 @@ const index = () => {
 
           <FrequentlyAskedQuestions title="Where do you get your domain name packages?">
             <p>
-              We are a registered reseller of eNom domain names. eNom has graciously provided us
-              with a Platinum account to support other non profits providing the lowest cost domain
-              names for a charity of our size. As we get more and more charities into the domain
-              system we expect the costs to freeforcharity.org to drop even further.
+              Our supported charity domains are registered and managed directly at Cloudflare
+              Registrar, which offers domains at cost so we can provide the lowest cost domain names
+              for a charity of our size. As we get more and more charities into the domain system we
+              expect the costs to freeforcharity.org to drop even further.
             </p>
           </FrequentlyAskedQuestions>
 
@@ -270,8 +271,8 @@ const index = () => {
                 freeforcharity.org/domains
               </a>
               <br />
-              2. If you can provide your own qualified WordPress webmaster you may be moved up in
-              the list.
+              2. If you arrive content-ready — with your logo, photos, mission statement, and
+              program text prepared — you may be moved up in the list.
             </p>
           </FrequentlyAskedQuestions>
 

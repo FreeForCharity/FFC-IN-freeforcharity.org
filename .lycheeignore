@@ -92,6 +92,11 @@ https://www.cloudflare.com/learning/**
 https://americanlegionpost64.org/**
 https://americanlegionpost64.org/
 
+# AppSumo intermittently returns 404 to CI crawlers on the deep
+# /courses-learning/ path (verified 200 in a browser and 308->200 via curl);
+# same bot-blocking pattern as upwork/fiverr. Linked from tools-for-success.
+https://appsumo.com/**
+
 # Fiverr blocks CI crawlers (returns 403)
 https://www.fiverr.com/**
 https://fiverr.com/**

@@ -130,6 +130,18 @@ describe('src/lib/config', () => {
     })
   })
 
+  describe('DOMAIN_PID', () => {
+    beforeEach(() => {
+      delete process.env.NEXT_PUBLIC_SITE_ORIGIN
+      reloadModule()
+    })
+
+    it('maps register/transfer to their WHMCS domain product ids', () => {
+      expect(mod.DOMAIN_PID.register).toBe(39)
+      expect(mod.DOMAIN_PID.transfer).toBe(41)
+    })
+  })
+
   describe('hubStore()', () => {
     beforeEach(() => {
       delete process.env.NEXT_PUBLIC_SITE_ORIGIN
