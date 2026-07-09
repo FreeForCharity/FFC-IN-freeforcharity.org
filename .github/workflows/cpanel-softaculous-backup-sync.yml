@@ -10,15 +10,18 @@ name: 'cPanel Softaculous backups -> OneDrive'
 # -> Restore rebuilds files + DB), with the SQL inside each archive. WHMCS is
 # the priority and is captured daily.
 #
-# Auth/secrets (Key Vault, via the deploy OIDC identity):
-#   FTP:      wr-all-cbm-cpanel-ffc-interserver-ftp-{host,user,password,port}
-#   OneDrive: read-all-ffc-onedrive-backup-{client-id,tenant-id}
-#             wr-all-ffc-onedrive-backup-refresh-token   (delegated, rotated)
+# Auth (all via the deploy OIDC identity — no stored user credentials):
+#   FTP creds:    Key Vault wr-all-cbm-cpanel-ffc-interserver-ftp-{host,user,password,port}
+#   OneDrive:     app-only Microsoft Graph token minted from the OIDC login
+#                 (`az account get-access-token`). The identity holds a Graph
+#                 application permission (Files.ReadWrite.All or, preferred,
+#                 Sites.Selected on the backup library) granted with admin consent.
+#   Destination:  repo/environment variable ONEDRIVE_DRIVE_BASE, e.g.
+#                 /users/<upn-or-id>/drive or /sites/<site-id>/drive.
 #
-# The Azure identity needs Key Vault *Secrets User* (read) and, to persist the
-# rotated OneDrive refresh token, *Secrets Officer* (set) on
-# wr-all-ffc-onedrive-backup-refresh-token. If the writeback role is missing,
-# the run still succeeds (the token rotates ~every 90 days otherwise).
+# The Azure identity needs Key Vault *Secrets User* (read) for the FTP secrets.
+# App-only auth has no refresh token and no interactive MFA, so a Conditional
+# Access sign-in-frequency policy can no longer break the daily run.
 
 on:
   schedule:
@@ -59,41 +62,30 @@ jobs:
         id: secrets
         env:
           KV: kv-ffc-admin-prod-cbm
+          # Drive target for app-only Graph (no /me). Set as a repo/environment
+          # variable, e.g. "/users/<upn-or-id>/drive" or "/sites/<site-id>/drive".
+          DRIVE_BASE: ${{ vars.ONEDRIVE_DRIVE_BASE }}
         run: |
           set -euo pipefail
           kv() { az keyvault secret show --vault-name "$KV" --name "$1" --query value -o tsv; }
 
-          # --- OneDrive: refresh-token grant (delegated public client) ---
-          od_tenant=$(kv read-all-ffc-onedrive-backup-tenant-id)
-          od_client=$(kv read-all-ffc-onedrive-backup-client-id)
-          od_rt=$(kv wr-all-ffc-onedrive-backup-refresh-token)
-          echo "::add-mask::$od_rt"
-          # -S surfaces transport errors; not -f, because we must read the JSON
-          # error body (.error_description) when the grant is rejected (e.g. an
-          # expired refresh token) to print an actionable message.
-          resp=$(curl -sS -X POST "https://login.microsoftonline.com/${od_tenant}/oauth2/v2.0/token" \
-            -d "client_id=${od_client}" -d "grant_type=refresh_token" \
-            --data-urlencode "scope=https://graph.microsoft.com/Files.ReadWrite.All offline_access" \
-            --data-urlencode "refresh_token=${od_rt}")
-          graph_token=$(printf '%s' "$resp" | jq -r '.access_token // empty')
-          new_rt=$(printf '%s' "$resp" | jq -r '.refresh_token // empty')
-          [ -n "$new_rt" ] && echo "::add-mask::$new_rt"
+          # --- OneDrive: app-only Microsoft Graph token via the OIDC login ---
+          # The azure/login identity holds a Graph *application* permission
+          # (Files.ReadWrite.All or Sites.Selected, admin-consented), so we mint an
+          # app-only token directly. No refresh token, no device-code re-auth, and
+          # nothing a Conditional Access sign-in-frequency policy can invalidate.
+          if [ -z "${DRIVE_BASE:-}" ]; then
+            echo "::error::Set the ONEDRIVE_DRIVE_BASE variable (e.g. /users/<upn>/drive or /sites/<site-id>/drive) — app-only tokens have no /me."
+            exit 1
+          fi
+          echo "DRIVE_BASE=$DRIVE_BASE" >> "$GITHUB_ENV"
+          graph_token=$(az account get-access-token --resource https://graph.microsoft.com --query accessToken -o tsv)
           if [ -z "$graph_token" ]; then
-            echo "::error::OneDrive refresh-token grant failed. Re-auth the ffc-onedrive-backup app (device code) and update the KV secret."
-            printf '%s' "$resp" | jq -r '.error_description // .error' | head -1
+            echo "::error::Failed to mint a Graph app token. Confirm the OIDC identity has a Graph application permission (Files.ReadWrite.All or Sites.Selected) with admin consent."
             exit 1
           fi
           echo "::add-mask::$graph_token"
           echo "GRAPH_TOKEN=$graph_token" >> "$GITHUB_ENV"
-
-          # Persist the rotated refresh token (best-effort; needs Secrets Officer).
-          if [ -n "$new_rt" ] && [ "$new_rt" != "$od_rt" ]; then
-            if az keyvault secret set --vault-name "$KV" --name wr-all-ffc-onedrive-backup-refresh-token --value "$new_rt" -o none 2>/dev/null; then
-              echo "rotated OneDrive refresh token persisted to Key Vault"
-            else
-              echo "::warning::could not persist rotated refresh token (grant Key Vault Secrets Officer to enable rotation)"
-            fi
-          fi
 
           # --- cPanel FTPS creds ---
           # Connect by HOSTNAME (derived from the ...-server URL), not the raw
