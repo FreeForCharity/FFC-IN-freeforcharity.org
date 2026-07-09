@@ -4,14 +4,18 @@ import { hubUrl } from '@/lib/config'
 const Index = () => {
   const sections = [
     {
+      id: 'section-current-model',
+      label: 'The Current FFC Model: GitHub Pages Static Sites (AI-Built)',
+    },
+    {
       id: 'section1',
       label: 'FFC Hub by WHMCS (Domain Orders, Client Data, Support Tickets)',
     },
     { id: 'section2', label: 'Cloudflare (DNS Management & Email Connection)' },
     { id: 'section3', label: 'Microsoft 365 (Email Hosting)' },
-    { id: 'section4', label: 'InterServer Web Hosting (with DirectAdmin)' },
-    { id: 'section5', label: 'DIVI (WordPress Theme)' },
-    { id: 'section6', label: 'WPMUdev (WordPress Plugins)' },
+    { id: 'section4', label: 'InterServer Web Hosting with DirectAdmin (Legacy)' },
+    { id: 'section5', label: 'DIVI WordPress Theme (Legacy)' },
+    { id: 'section6', label: 'WPMUdev WordPress Plugins (Legacy)' },
     { id: 'section7', label: 'Microsoft Clarity (Analytics)' },
     { id: 'section8', label: 'Tawk.to Live Chat (Support)' },
     { id: 'section9', label: 'Azure AI Language (Custom Question Answering)' },
@@ -49,6 +53,95 @@ const Index = () => {
             ))}
           </ol>
         </div>
+
+        {/* Current FFC Model: GitHub Pages static sites */}
+        <section id="section-current-model" className="mb-6">
+          <h2 className="text-[30px] md:text-[36px] font-[700] text-[#005AA0] mt-16 mb-6 pb-3 border-b border-[#e1e5eb]">
+            The Current FFC Model: GitHub Pages Static Sites
+          </h2>
+
+          <p className="text-[14px] font-[500] leading-[25px] text-[#333d47]">
+            FFC now builds every new charity website as a fast, secure{' '}
+            <span className="font-[600] text-[#1c2a38]">static site hosted on GitHub Pages</span>.
+            Sites are developed with AI development agents (Claude and GitHub Copilot), built as a
+            Next.js static export, and deployed automatically through GitHub Actions, with domains
+            managed in Cloudflare. This is the workflow you should follow for all new charity sites.
+            The InterServer / DirectAdmin / WordPress workflow in the later sections is retained
+            only as a legacy reference for sites that have not yet migrated.
+          </p>
+
+          <h3 className="text-[24px] leading-[31px] font-[700] text-[#0066B8] mt-10 mb-4">
+            How each charity site is structured
+          </h3>
+
+          <ul className="pl-[1.5rem] p-[0_0_23px_1em] list-disc">
+            <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
+              <span className="font-[600] text-[#1c2a38]">Repository per charity:</span> Each site
+              lives in its own GitHub repository, named{' '}
+              <code className="bg-[#f1f3f5] text-[#B82B5A] py-[0.3em] px-[0.5em] rounded-[6px] text-[0.9em]">
+                {'FFC-EX-<domain>'}
+              </code>{' '}
+              (for example{' '}
+              <code className="bg-[#f1f3f5] text-[#B82B5A] py-[0.3em] px-[0.5em] rounded-[6px] text-[0.9em]">
+                FFC-EX-examplecharity.org
+              </code>
+              ). All content and configuration are version-controlled in that repo.
+            </li>
+            <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
+              <span className="font-[600] text-[#1c2a38]">Framework:</span> Sites are built with{' '}
+              Next.js (configured for static export) plus React and Tailwind CSS, producing plain
+              static HTML, CSS, and JavaScript with no server to maintain.
+            </li>
+            <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
+              <span className="font-[600] text-[#1c2a38]">AI-assisted development:</span> Pages and
+              components are authored with AI development agents —{' '}
+              <span className="font-[600] text-[#1c2a38]">Claude</span> and{' '}
+              <span className="font-[600] text-[#1c2a38]">GitHub Copilot</span> — which deliver
+              professional sites faster and keep quality consistent across every charity.
+            </li>
+            <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
+              <span className="font-[600] text-[#1c2a38]">Build &amp; deploy:</span>{' '}
+              <span className="font-[600] text-[#1c2a38]">GitHub Actions</span> runs automated
+              checks and builds the static export, then deploys it to GitHub Pages with automatic
+              HTTPS on every push to the main branch.
+            </li>
+            <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
+              <span className="font-[600] text-[#1c2a38]">DNS &amp; domains:</span> Cloudflare
+              manages DNS for each charity domain and points it at the GitHub Pages site, while
+              Microsoft 365 continues to provide email hosting.
+            </li>
+          </ul>
+
+          <h3 className="text-[24px] leading-[31px] font-[700] text-[#0066B8] mt-[3rem] mb-4">
+            Learning Resources
+          </h3>
+
+          <ul className="p-[0_0_23px_1.5rem] list-disc">
+            <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px]">
+              <a href="https://docs.github.com/en/pages" target="_blank" rel="noopener noreferrer">
+                GitHub Pages Documentation
+              </a>
+            </li>
+            <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px]">
+              <a
+                href="https://docs.github.com/en/actions"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub Actions Documentation
+              </a>
+            </li>
+            <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px]">
+              <a
+                href="https://nextjs.org/docs/app/building-your-application/deploying/static-exports"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Next.js Static Exports Guide
+              </a>
+            </li>
+          </ul>
+        </section>
 
         {/* 1. FFC Hub by WHMCS */}
         <section id="section1" className="mb-6">
@@ -619,11 +712,22 @@ const Index = () => {
           </ul>
         </section>
 
-        {/* 4. InterServer */}
+        {/* Legacy WordPress workflow marker (sections 4-6) */}
+        <h2 className="text-[24px] md:text-[30px] font-[700] text-[#005AA0] mt-16 mb-4 pb-3 border-b border-[#e1e5eb]">
+          Legacy WordPress Workflow
+        </h2>
+        <p className="text-[14px] font-[500] leading-[25px] text-[#333d47] italic mb-6">
+          Sections 4-6 below (InterServer + DirectAdmin, DIVI, and WPMUdev) describe the retired
+          WordPress-based build process. They are retained for reference only, for charities still
+          on the legacy stack. New charity sites use the GitHub Pages static-site model described at
+          the top of this guide.
+        </p>
+
+        {/* 4. InterServer (Legacy) */}
         <section id="section4" className="mb-6">
           <ol className="list-decimal list-inside" start={4}>
             <li className="text-[30px] md:text-[36px]  font-[700] text-[#005AA0] mt-16 mb-6 pb-3 border-b border-[#e1e5eb]">
-              InterServer Web Hosting (with DirectAdmin)
+              InterServer Web Hosting with DirectAdmin (Legacy)
             </li>
           </ol>
 
@@ -715,7 +819,7 @@ const Index = () => {
         <section id="section5" className="mb-6">
           <ol className="list-decimal list-inside" start={5}>
             <li className="text-[30px] md:text-[36px]  font-[700] text-[#005AA0] mt-16 mb-6 pb-3 border-b border-[#e1e5eb]">
-              DIVI (WordPress Theme)
+              DIVI WordPress Theme (Legacy)
             </li>
           </ol>
 
@@ -826,7 +930,7 @@ const Index = () => {
         <section id="section6" className="mb-6">
           <ol className="list-decimal list-inside" start={6}>
             <li className="text-[30px] md:text-[36px]  font-[700] text-[#005AA0] mt-16 mb-6 pb-3 border-b border-[#e1e5eb]">
-              WPMUdev (WordPress Plugins)
+              WPMUdev WordPress Plugins (Legacy)
             </li>
           </ol>
 

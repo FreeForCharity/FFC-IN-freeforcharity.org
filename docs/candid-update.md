@@ -106,7 +106,7 @@ client series (current status has no history).
 | Nonprofit domains managed | 376 | 2026 | ffcadmin.org/sites-list (FFC-Cloudflare-Automation: sites_list.json) |
 | Nonprofit websites built (cumulative) | 41 | 2026 | GitHub FreeForCharity FFC-EX-* repositories (active, non-archived) |
 | Legacy nonprofit sites migrated to stable hosting | 6 | 2026 | ffcadmin.org/sites-list tier 4 |
-| Program cost per nonprofit per year (USD) | 16.5 | 2026 | eNom .org domain cost |
+| Program cost per nonprofit per year (USD) | 16.5 | 2026 | Cloudflare Registrar .org domain cost |
 | Support text threads handled (3-year total) | 1153 | 2026 | Gmail Google Voice FULL CENSUS 2026-07-01: every thread in CY2023-2025 individually classified (5,951 total threads: 1,999 + 1,874 + 2,078). Charity/volunteer = 701 charity-org + 452 volunteer-coordination = 1,153 threads (~19% of traffic; the rest is personal/day-job noise). Threads, not individual messages. Per-year splits in text-metrics.json. Supersedes the earlier ~45%-of-6,193 sample estimate (2,780). |
 
 ## Not yet Candid-attributable (do NOT paste)

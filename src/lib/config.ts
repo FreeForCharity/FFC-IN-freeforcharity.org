@@ -66,6 +66,13 @@ export function hubAddProduct(pid: number): string {
 export const ONBOARDING_PID = { pre501c3: 16, full501c3: 33 } as const
 
 /**
+ * WHMCS product ids for the two domain products in the charity journey:
+ * register a brand-new .org vs. transfer an existing domain (both managed
+ * in Cloudflare). See FreeForCharity/FFC-Cloudflare-Automation#657.
+ */
+export const DOMAIN_PID = { register: 39, transfer: 41 } as const
+
+/**
  * WHMCS store-listing URL for a slug under /hub/store/.
  *   hubStore('ffc-consulting/nonprofit-charity-onboarding')
  *     → https://freeforcharity.org/hub/store/ffc-consulting/nonprofit-charity-onboarding

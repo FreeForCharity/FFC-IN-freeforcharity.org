@@ -15,16 +15,16 @@ const index = () => {
           Lets get started on your transfer today
         </h1>
         <p className="text-[18px] font-[500] pb-[1em]" data-font="lato-font">
-          Great News. As an Online Impacts supported charity you already are likely using many of
-          the products and features needed to convert over to Free For Charity to support your .org
-          Domain Name, WordPress hosting, and more!
+          Great News. As an Online Impacts supported charity you already have much of what you need
+          to convert over to Free For Charity to support your .org domain name, professional
+          website, email, and more!
         </p>
         <p className="text-[18px] font-[500]" data-font="lato-font">
-          Depending on when you signed up or were transferred to Online Impacts you are already
-          likey using a registered .org domain name, Cloudflare for DNS and DDoS Protection, Web
-          Hosting with interserver.net, a Softaculous managed WordPress Website, WPMUDEV Plugins for
-          security and backups, and Divi as a core theme / template. If not, we can help you to
-          update or upgrade your technology to these supported platforms!
+          Under the Free For Charity model your .org domain is registered and managed through
+          Cloudflare Registrar, your website is a fast, secure GitHub Pages static site that we
+          build for you from the Free For Charity template, and your professional email runs on
+          Microsoft 365 or Google Workspace once your 501(c)(3) status is confirmed. We handle the
+          setup and ongoing management so you can focus on your mission.
         </p>
         <h1
           className="text-[23px] sm:text-[26px] font-[500] text-[#333] my-[20px] leading-[1.4]"

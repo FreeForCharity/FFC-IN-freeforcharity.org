@@ -1,7 +1,7 @@
 import React from 'react'
 import TransparentBtn from '@/components/ui/Transparentbtn'
 import AccordionItem from '@/components/ui/Accordian'
-import { hubCart } from '@/lib/config'
+import { hubAddProduct, ONBOARDING_PID } from '@/lib/config'
 // import { Link } from "lucide-react";
 
 const index = () => {
@@ -14,7 +14,7 @@ const index = () => {
           </h1>
           <TransparentBtn
             text="Online Impacts to Free For Charity Onboarding Form"
-            href={hubCart(3)}
+            href={hubAddProduct(ONBOARDING_PID.full501c3)}
           />
         </div>
 
@@ -49,148 +49,39 @@ const index = () => {
           </p>
         </AccordionItem>
 
-        <AccordionItem number="4" title=" InterServer Nonprofit Hosting Request">
+        <AccordionItem number="4" title=" Your Website (GitHub Pages)">
           <div className="space-y-6 font-[500] text-[#666]">
-            {/* Intro Paragraph */}
             <p className="pb-4 leading-relaxed">
-              A very small number of hosting providers provide free hosting for nonprofits. We
-              recommend InterServer, and use them for our own site to host the core WordPress files
-              for your website. Below are instructions for how to get free hosting from InterServer
-              and set it up so that we can help manage your site. Once we have access to your
-              hosting and website we can then add in the extra WPMUDEV and DIVI capabilities to
-              either create a totally new site or update your current site.
+              Free For Charity builds your website for you. We start from our tested FFC template
+              and publish a fast, secure GitHub Pages static site, then launch it on the
+              Cloudflare-managed domain we set up in the previous step. There is nothing for you to
+              install, host, or maintain — no servers, control panels, or plugins to manage.
             </p>
 
-            {/* Section 1: Get Free Hosting */}
             <div>
-              <ol className="list-decimal list-outside pl-5">
+              <h2 className="text-[22px] font-[500] text-[#333] mt-6 mb-3">What We Handle</h2>
+              <ul className="list-disc list-inside pl-1">
+                <li>Building your site from the Free For Charity template</li>
                 <li>
-                  Visit{' '}
-                  <a
-                    href="https://my.interserver.net/login.php"
-                    className="text-[#0567B1] underline"
-                  >
-                    https://my.interserver.net
-                  </a>{' '}
-                  to create a free account with your organizational email address{' '}
-                  <span className="">accounts@yourcharityname.org</span>
+                  Publishing it as a GitHub Pages static site (fast, secure, and free to host)
                 </li>
-
-                <li>
-                  Send an email to{' '}
-                  <a
-                    href="mailto:sales@interserver.net"
-                    className="text-[#0567B1] underline"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    sales@interserver.net
-                  </a>{' '}
-                  with:
-                  <ul className="list-disc list-inside ml-6 mt-2 ">
-                    <li>A copy of your IRS 501(c)(3) tax identification letter</li>
-                    <li>
-                      The domain name you want hosted with InterServer (from the Free For Charity
-                      Domain Service)
-                    </li>
-                  </ul>
-                </li>
-
-                <li>Wait for InterServer to set up your account (they will do this promptly)</li>
-                <li>Once your account is set up, log in to your DirectAdmin panel</li>
-              </ol>
-            </div>
-
-            {/* Section 2: Setting Up WordPress */}
-            <div>
-              <h2 className="text-[22px] font-[500] text-[#333] mt-6 mb-3">Setting Up WordPress</h2>
-              <ol className="list-decimal list-outside  pl-5">
-                <li>In DirectAdmin, locate and open Softaculous</li>
-                <li>Find WordPress in the list of available applications</li>
-                <li>Click “Install” next to WordPress</li>
-                <li>
-                  Fill out the installation form:
-                  <ul className="list-disc list-inside mt-2 ">
-                    <li>Choose your domain</li>
-                    <li>Leave the directory field blank for installation in the root directory</li>
-                    <li>Set up an admin username and strong password</li>
-                    <li>Choose a site name and description of your charity</li>
-                  </ul>
-                </li>
-                <li>Click “Install” to complete the WordPress setup</li>
-              </ol>
-            </div>
-
-            {/* Section 3: Adding Admin */}
-            <div>
-              <h2 className="text-[22px] font-[500] text-[#333] mt-6 mb-3">
-                Adding Free For Charity Admin
-              </h2>
-              <ol className="list-decimal list-outside  pl-5">
-                <li>Log in to your new WordPress dashboard</li>
-                <li>Go to Users → Add New</li>
-                <li>
-                  Fill out the form:
-                  <ul className="list-disc list-inside ml-6 mt-2 ">
-                    <li>Username: globaladmin</li>
-                    <li>
-                      Email:{' '}
-                      <a
-                        href="mailto:globaladmin@freeforcharity.org"
-                        className="text-[#0567B1] underline"
-                      >
-                        globaladmin@freeforcharity.org
-                      </a>
-                    </li>
-                    <li>Set a strong password</li>
-                    <li>Role: Administrator</li>
-                  </ul>
-                </li>
-                <li>Click “Add New User”</li>
-              </ol>
-            </div>
-
-            {/* Section 4: Footer Link */}
-            <div>
-              <h2 className="text-[22px] font-[500] text-[#333] mt-6 mb-3">
-                Adding InterServer Link to Footer
-              </h2>
-              <ol className="list-decimal list-outside  pl-5">
-                <li>In your WordPress dashboard, go to Appearance → Customize</li>
-                <li>Navigate to the footer section</li>
-                <li>Add the following text: “Powered by InterServer”</li>
-                <li>
-                  Make the text “InterServer” a hyperlink to{' '}
-                  <a
-                    href="https://www.interserver.net"
-                    className="text-[#0567B1] underline"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    https://www.interserver.net
-                  </a>
-                </li>
-                <li>Save and publish your changes</li>
-              </ol>
-            </div>
-
-            {/* Important Notes */}
-            <div>
-              <h2 className="text-[22px] font-[500] text-[#333] mt-6 mb-3">Important Notes:</h2>
-              <ul className="list-disc list-inside pl-1 font-[700]">
-                <li>
-                  You <strong>must</strong> add the “Powered by InterServer” link within{' '}
-                  <strong>30 days</strong>, or you’ll need to pay for the hosting package
-                </li>
-                <li>
-                  InterServer is a for-profit US company that provides free hosting. Free For
-                  Charity is a 501(c)(3) technology adoption charity; they are{' '}
-                  <em>separate entities</em>
-                </li>
+                <li>Connecting it to your Cloudflare-managed domain with HTTPS</li>
+                <li>Ongoing hosting, updates, and maintenance</li>
               </ul>
             </div>
 
-            {/* Contact */}
+            <div>
+              <h2 className="text-[22px] font-[500] text-[#333] mt-6 mb-3">
+                What We Need From You
+              </h2>
+              <p className="leading-relaxed">
+                Your launch timing is driven by content readiness. The sooner you provide your logo,
+                mission, program details, photos, and page copy, the sooner we can build and launch.
+                If you already have an existing website, share the URL and we will carry the
+                relevant content into your new FFC site.
+              </p>
+            </div>
+
             <p className="font-[700]">
               As always, if you run into problems, contact us anytime{' '}
               <a href="mailto:clarkemoyer@freeforcharity.org" className="text-[#0567B1] underline">

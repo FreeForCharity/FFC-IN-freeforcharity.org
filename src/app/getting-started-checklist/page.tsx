@@ -58,24 +58,28 @@ export default function GettingStartedChecklist() {
           </ul>
 
           <h2 className={h2}>During onboarding</h2>
+          <p className="print:text-[11px]">
+            FFC builds your website first — email comes after the site is live, because it needs a
+            working site to validate against.
+          </p>
           <ul className="space-y-2 list-none pl-0">
             <Item>
               Application submitted via <Link href="/help-for-charities/">Help for Charities</Link>.{' '}
               <Link href="/charity-onboarding-journey/">What happens next</Link>
             </Item>
             <Item>
-              Microsoft for Nonprofits registration started.{' '}
-              <Link href="/m365-email-guide/">M365 email guide</Link>
+              Logo, photos, mission text, and program descriptions sent for the site build.
             </Item>
-            <Item>DNS verification codes sent to FFC when Microsoft displays them.</Item>
+            <Item>Site draft reviewed and launch approved.</Item>
+            <Item>
+              Microsoft for Nonprofits or Google Workspace registration started (after the site is
+              live). <Link href="/m365-email-guide/">M365 email guide</Link>
+            </Item>
+            <Item>DNS verification codes sent to FFC when Microsoft or Google displays them.</Item>
             <Item>
               MFA turned on for every new mailbox.{' '}
               <Link href="/charity-security-guide/">Security guide</Link>
             </Item>
-            <Item>
-              Logo, photos, mission text, and program descriptions sent for the site build.
-            </Item>
-            <Item>Site draft reviewed and launch approved.</Item>
           </ul>
 
           <h2 className={h2}>After launch</h2>

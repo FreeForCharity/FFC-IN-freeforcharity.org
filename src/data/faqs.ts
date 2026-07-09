@@ -15,9 +15,9 @@ FFC is also employing a premium subscription to volunteer match to source additi
   },
   {
     question: "What are the organization's capabilities for doing this?",
-    answer: `We already have the accounts set up in eNOM to provide enterprise level domain procurement and by using WHMCS with coupon codes specifically for our 501c3 and pre 501c3 organizations we can provision full hosting and domain names automatically without staff input.
+    answer: `We already have accounts set up at Cloudflare Registrar to provide enterprise level domain procurement, and by using WHMCS specifically for our 501c3 and pre 501c3 organizations we can register domain names and stand up GitHub Pages static sites automatically without staff input.
 
-For our training programs we help charities navigate through the AB-900 (Microsoft 365 Copilot and Agent Administration Fundamentals) certification program while pursuing their "Microsoft 365 Grants". We further provide access to the Divi and WPMUDEV website design and maintenance product that each come with their own vendor provided training.`,
+For our training programs we help charities navigate through the AB-900 (Microsoft 365 Copilot and Agent Administration Fundamentals) certification program while pursuing their "Microsoft 365 Grants". We further build each charity a GitHub Pages static website from the Free For Charity template, assembled and refined by our AI agents, so your organization gets a fast, secure site without hosting overhead.`,
   },
   {
     question: "What have and haven't they accomplished so far?",
@@ -77,7 +77,7 @@ We also provide many physical services like nonprofit websites and hosting that 
   },
   {
     question: 'Where do you get your domain name packages?',
-    answer: `We are a registered reseller of eNom domain names. eNom has graciously provided us with a Platinum account to support other non profits providing the lowest cost domain names for a charity of our size. As we get more and more charities into the domain system we expect the costs to freeforcharity.org to drop even further.`,
+    answer: `Our supported charity domains are registered and managed directly at Cloudflare Registrar, which offers domains at cost so we can provide the lowest cost domain names for a charity of our size. As we get more and more charities into the domain system we expect the costs to freeforcharity.org to drop even further.`,
   },
   {
     question: 'Why do I not see hosting as an option?',
@@ -85,7 +85,7 @@ We also provide many physical services like nonprofit websites and hosting that 
 
 Ways to get in faster
 If you already have your 501(c)3 get your free domain from us (https://freeforcharity.org/domains/)
-If you can provide your own qualified WordPress webmaster you may be moved up in the list.`,
+If you arrive content-ready — with your logo, photos, mission statement, and program text prepared — you may be moved up in the list.`,
   },
   {
     question:

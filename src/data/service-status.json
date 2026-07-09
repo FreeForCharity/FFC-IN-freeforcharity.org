@@ -31,9 +31,9 @@
       "lastChecked": "2026-07-01"
     },
     {
-      "name": "Email guidance (Microsoft 365 tenants)",
+      "name": "Email guidance (Microsoft 365 or Google Workspace)",
       "status": "unknown",
-      "detail": "Charity mailboxes live in each organization's own Microsoft 365 tenant — Microsoft operates the service; FFC assists with configuration. Check Microsoft's service health for platform issues.",
+      "detail": "Charity mailboxes live in each organization's own Microsoft 365 or Google Workspace tenant — Microsoft or Google operates the service; FFC assists with configuration. Check the provider's service health for platform issues.",
       "checkedBy": "Not centrally monitored (tenant-owned)",
       "lastChecked": ""
     }

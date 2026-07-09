@@ -83,7 +83,7 @@
     "costPerCharityUsdPerYear": {
       "value": 16.5,
       "label": "Cost per charity per year",
-      "source": "eNom .org domain cost",
+      "source": "Cloudflare Registrar .org domain cost",
       "confidence": "medium"
     }
   }

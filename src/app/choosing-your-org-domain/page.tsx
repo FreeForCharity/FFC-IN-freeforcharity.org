@@ -101,8 +101,9 @@ export default function ChoosingYourOrgDomain() {
           <h2 className={h2}>Next step</h2>
           <p>
             Once your domain exists, set up{' '}
-            <Link href="/m365-email-guide/">free Microsoft 365 email</Link> at it — that&rsquo;s the
-            moment your charity starts looking as professional as the work you do.
+            <Link href="/m365-email-guide/">free Microsoft 365 or Google Workspace email</Link> at
+            it — that&rsquo;s the moment your charity starts looking as professional as the work you
+            do.
           </p>
         </div>
       </div>
