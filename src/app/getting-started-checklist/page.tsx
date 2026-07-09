@@ -59,8 +59,9 @@ export default function GettingStartedChecklist() {
 
           <h2 className={h2}>During onboarding</h2>
           <p className="print:text-[11px]">
-            FFC builds your website first — email comes after the site is live, because it needs a
-            working site to validate against.
+            FFC builds your website first — charity email comes after, because the nonprofit email
+            programs (Microsoft 365 / Google Workspace) expect your organization to have an
+            established web presence.
           </p>
           <ul className="space-y-2 list-none pl-0">
             <Item>

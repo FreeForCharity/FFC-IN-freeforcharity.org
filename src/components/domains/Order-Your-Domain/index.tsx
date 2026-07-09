@@ -16,8 +16,8 @@ const HowToOrderDomain = () => {
     {
       number: 2,
       title: 'Step 2',
-      description: 'Go to our domain management system page',
-      linkText: 'Open domain management',
+      description: 'Register your new .org domain (or open a ticket to transfer one you own)',
+      linkText: 'Register a domain',
       innerbg: 'bg-[#2A6F9E]',
       outerbg: 'bg-[#2A6F9E]',
       linkUrl: hubAddProduct(DOMAIN_PID.register),

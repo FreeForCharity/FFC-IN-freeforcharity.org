@@ -12,7 +12,7 @@ const Index = () => {
       label: 'FFC Hub by WHMCS (Domain Orders, Client Data, Support Tickets)',
     },
     { id: 'section2', label: 'Cloudflare (DNS Management & Email Connection)' },
-    { id: 'section3', label: 'Microsoft 365 (Email Hosting)' },
+    { id: 'section3', label: 'Microsoft 365 or Google Workspace (Email Hosting)' },
     { id: 'section4', label: 'InterServer Web Hosting with DirectAdmin (Legacy)' },
     { id: 'section5', label: 'DIVI WordPress Theme (Legacy)' },
     { id: 'section6', label: 'WPMUdev WordPress Plugins (Legacy)' },
@@ -108,7 +108,7 @@ const Index = () => {
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               <span className="font-[600] text-[#1c2a38]">DNS &amp; domains:</span> Cloudflare
               manages DNS for each charity domain and points it at the GitHub Pages site, while
-              Microsoft 365 continues to provide email hosting.
+              Microsoft 365 or Google Workspace provides email hosting.
             </li>
           </ul>
 
@@ -583,7 +583,7 @@ const Index = () => {
         <section id="section3" className="mb-6">
           <ol className="list-decimal list-inside" start={3}>
             <li className="text-[30px] md:text-[36px]  font-[700] text-[#005AA0] mt-16 mb-6 pb-3 border-b border-[#e1e5eb]">
-              Microsoft 365 (Email Hosting)
+              Microsoft 365 or Google Workspace (Email Hosting)
             </li>
           </ol>
 
