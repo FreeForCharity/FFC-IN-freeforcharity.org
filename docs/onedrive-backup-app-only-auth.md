@@ -3,86 +3,58 @@
 ## Why
 `cpanel-softaculous-backup-sync.yml` used to authenticate to OneDrive as a **user**
 (delegated device-code flow → refresh token in Key Vault). A Conditional Access
-**sign-in-frequency** policy invalidates that refresh token roughly monthly
-(`AADSTS50078`), silently breaking every daily backup until someone re-runs the
+**sign-in-frequency** policy invalidated that refresh token roughly monthly
+(`AADSTS50078`), silently breaking every daily backup until someone re-ran the
 device-code login by hand.
 
-This change switches the job to **app-only** Microsoft Graph auth, minted from the
-workflow's existing GitHub-OIDC Azure login. There is **no refresh token, no stored
-secret, and no interactive MFA** — nothing a CA policy can expire. The code is done;
-the steps below are the one-time **tenant-admin** setup (they require Application
-Administrator / Privileged Role Admin + the ability to consent Graph app permissions,
-which is why they aren't automated here).
+The job now uses **app-only** Microsoft Graph auth from a dedicated identity via
+GitHub OIDC. **No refresh token, no stored user credential, no interactive MFA** —
+nothing a Conditional Access policy can expire.
 
-## What the code now expects
-- The workflow mints the token with `az account get-access-token --resource https://graph.microsoft.com`
-  using the **`AZURE_DEPLOY_CLIENT_ID`** identity (the same OIDC SP it already uses for Key Vault).
-- The destination drive comes from a repo/environment **variable** `ONEDRIVE_DRIVE_BASE`
-  (app-only tokens have no `/me`). The run fails fast with a clear message if it's unset.
+## As-built configuration (done 2026-07-08)
+Two GitHub-OIDC identities, split by duty:
 
-## Pick a permission model
-| | Files.ReadWrite.All (drop-in) | **Sites.Selected (recommended)** |
+| Purpose | Identity | Grants |
 |---|---|---|
-| Scope | Tenant-wide read/write to all OneDrive + SharePoint | Write to **only** the one backup library |
-| Where backups live | Keep them in the current user's OneDrive → `ONEDRIVE_DRIVE_BASE=/users/<upn>/drive` | A SharePoint doc library → `ONEDRIVE_DRIVE_BASE=/sites/<site-id>/drive` |
-| Trade-off | No data move; broad grant needs admin comfort | Least privilege; requires the backups to live in SharePoint |
+| Key Vault (FTP creds) | `ffc-admin-kv-writer` (`AZURE_DEPLOY_CLIENT_ID`) | KV Secrets User — unchanged |
+| OneDrive Graph (app-only) | **`ffc-onedrive-backup`** (`0b7ead96-…`, env secret `AZURE_ONEDRIVE_CLIENT_ID`) | **Graph `Files.ReadWrite.All` (application) only** — no subscription, no KV |
 
-## Setup steps
+- **Federated credential** on `ffc-onedrive-backup`: subject
+  `repo:FreeForCharity/FFC-IN-freeforcharity.org:environment:cpanel-apim-deploy`,
+  issuer `https://token.actions.githubusercontent.com`, audience `api://AzureADTokenExchange`.
+- **App-role assignment** grants *only* `Files.ReadWrite.All` (role
+  `75359482-378d-4052-8f01-80520e7db3cd`) on the Microsoft Graph SP — a targeted
+  consent, not a blanket `admin-consent`.
+- **Why `Files.ReadWrite.All` (tenant-wide)?** The backups live in a *personal*
+  OneDrive for Business (`clarkemoyer@freeforcharity.org`), which cannot be scoped
+  with `Sites.Selected`. The broad grant is isolated to this single-purpose app.
+- **Destination pinned, folder unchanged:** repo variable
+  `ONEDRIVE_DRIVE_BASE=/drives/b!f5voUy582UuZMa0-sIt3vd2yDdTEHrVHh5f2iTzm1GJezyqVtgazR4VxjOqVqeiW`
+  — the exact drive used before, so the `/1-Backups/…` folders are untouched.
 
-### 0. Identify the OIDC service principal
-```bash
-# AZURE_DEPLOY_CLIENT_ID is the app (client) id used by the workflow's azure/login.
-# View it (get the value from the repo/environment secret), then:
-az ad sp show --id <AZURE_DEPLOY_CLIENT_ID> --query '{name:displayName, id:id, appId:appId}'
-```
+Validated 2026-07-08 by dispatching the workflow from its branch (dry-run + real
+run both green; lists/retention against the same folders).
 
-### 1a. Option Files.ReadWrite.All
-```bash
-GRAPH=00000003-0000-0000-c000-000000000000
-# Files.ReadWrite.All (application) role id = 75359482-378d-4052-8f01-80520e7db3cd
-az ad app permission add --id <AZURE_DEPLOY_CLIENT_ID> --api $GRAPH \
-  --api-permissions 75359482-378d-4052-8f01-80520e7db3cd=Role
-az ad app permission admin-consent --id <AZURE_DEPLOY_CLIENT_ID>
-# Find the OneDrive owner's user id/upn and set the variable (see step 2).
-```
+## Operating notes
+- **Rotate nothing routinely.** App-only via OIDC has no secret or token to expire.
+  (The FIC and app-role assignment don't lapse.)
+- **Re-verify / re-create** the setup with `az`:
+  ```bash
+  APP=0b7ead96-9c54-470a-be6c-c27db38e3972
+  # app-role assignments (expect Files.ReadWrite.All on Microsoft Graph):
+  sp=$(az ad sp show --id $APP --query id -o tsv)
+  az rest --method GET --url "https://graph.microsoft.com/v1.0/servicePrincipals/$sp/appRoleAssignments"
+  # federated credentials:
+  az ad app federated-credential list --id $APP --query "[].subject"
+  ```
+- **⚠️ Setting `ONEDRIVE_DRIVE_BASE` from Windows Git-Bash** mangles the leading
+  `/drives/...` into `C:/Program Files/Git/drives/...` (MSYS path conversion). Set it
+  with `MSYS_NO_PATHCONV=1 gh variable set …` or from a non-MSYS shell.
+- **Freshness** monitor (`cpanel-backup-freshness.yml`) remains the safety net.
 
-### 1b. Option Sites.Selected  ⭐
-```bash
-GRAPH=00000003-0000-0000-c000-000000000000
-# Sites.Selected (application) role id = 883ea226-0bf2-4a8f-9f9d-92c9162a727d
-az ad app permission add --id <AZURE_DEPLOY_CLIENT_ID> --api $GRAPH \
-  --api-permissions 883ea226-0bf2-4a8f-9f9d-92c9162a727d=Role
-az ad app permission admin-consent --id <AZURE_DEPLOY_CLIENT_ID>
-
-# Grant write to ONLY the backup site (needs a Graph token with Sites.FullControl.All,
-# e.g. run as an admin). site-id: GET /sites/<host>:/sites/<path>
-#   POST https://graph.microsoft.com/v1.0/sites/<site-id>/permissions
-#   { "roles": ["write"],
-#     "grantedToIdentities": [ { "application": { "id": "<AZURE_DEPLOY_CLIENT_ID>", "displayName": "ffc-cpanel-deploy" } } ] }
-```
-
-### 2. Set the destination variable
-```bash
-# Repo-level (or scope to the cpanel-apim-deploy environment):
-gh variable set ONEDRIVE_DRIVE_BASE --repo FreeForCharity/FFC-IN-freeforcharity.org \
-  --body "/users/<upn-or-id>/drive"        # Files.ReadWrite.All
-# or
-gh variable set ONEDRIVE_DRIVE_BASE --repo FreeForCharity/FFC-IN-freeforcharity.org \
-  --body "/sites/<site-id>/drive"          # Sites.Selected
-```
-Make sure the `DEST` folder paths in `scripts/onedrive_backup_sync.py` exist under that drive
-(they're the same `/1-Backups/...` paths used today — move/recreate them if you switch drives).
-
-### 3. Test, then cut over
-```bash
-# Dry run first (lists actions, no writes):
-gh workflow run cpanel-softaculous-backup-sync.yml --repo FreeForCharity/FFC-IN-freeforcharity.org -f dry_run=true
-# Then a real run; confirm it uploads and the freshness monitor stays green.
-gh workflow run cpanel-softaculous-backup-sync.yml --repo FreeForCharity/FFC-IN-freeforcharity.org
-```
-
-### 4. Clean up (after a successful real run)
-- Delete the now-unused Key Vault secret `wr-all-ffc-onedrive-backup-refresh-token`
-  (and optionally `read-all-ffc-onedrive-backup-{client-id,tenant-id}`).
-- Retire the delegated app registration `ffc-onedrive-backup` (`0b7ead96-…`).
-- No more monthly device-code re-auth. 🎉
+## Retiring the old delegated path (optional cleanup — now safe)
+The app-only path is live and validated, so the delegated fallback can go:
+- Delete Key Vault secret `wr-all-ffc-onedrive-backup-refresh-token` (and
+  `read-all-ffc-onedrive-backup-{client-id,tenant-id}` if unused elsewhere).
+- Remove the delegated Graph scopes from `ffc-onedrive-backup` (keep the app — it now
+  carries the application permission). No more monthly device-code re-auth. 🎉
