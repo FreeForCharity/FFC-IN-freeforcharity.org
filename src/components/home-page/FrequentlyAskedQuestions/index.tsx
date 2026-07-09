@@ -16,10 +16,10 @@ const index = () => {
             <p className="mb-[30px]">
               While in the technical process of setting up free charity hosting we discovered that
               many small or new organizations are stuck well below the need for full web hosting. As
-              an example, assistance with setting up a charity email address with Microsoft at the
-              charity&rsquo;s domain name is needed as a first step. FFC has refactored our charity
-              onboarding process to address email and other basic communication needs with free
-              guides and hosted on our project site freeforcharity.org
+              an example, many organizations get stuck early on the basics &mdash; a domain name and
+              a charity email address at that domain. FFC has refactored our charity onboarding
+              process to address the domain, website, and email communication needs with free guides
+              and hosted on our project site freeforcharity.org
             </p>
             <p>
               As a follow on need we identified that most charities and pre 501c3 non profits do not

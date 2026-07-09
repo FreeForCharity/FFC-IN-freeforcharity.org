@@ -16,7 +16,7 @@ const HowToOrderDomain = () => {
     {
       number: 2,
       title: 'Step 2',
-      description: 'Register your new .org domain (or open a ticket to transfer one you own)',
+      description: 'Register your new .org domain',
       linkText: 'Register a domain',
       innerbg: 'bg-[#2A6F9E]',
       outerbg: 'bg-[#2A6F9E]',
