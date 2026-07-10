@@ -26,10 +26,11 @@ describe('Supported-charities directory', () => {
     }
   })
 
-  it('domains are bare hosts — no scheme, trailing slash, or whitespace', () => {
+  it('domains are a host with an optional path — no scheme, trailing slash, or whitespace', () => {
     for (const c of charities) {
       // The page prepends `https://` and appends `/`, so a scheme or trailing
-      // slash here would produce a malformed link.
+      // slash here would produce a malformed link. A path segment is allowed
+      // (e.g. `wh1374403.ispot.cc/wp`) — some charities live under a subpath.
       expect(c.domain).not.toMatch(/^https?:\/\//i)
       expect(c.domain).not.toMatch(/\/$/)
       expect(c.domain).not.toMatch(/\s/)
