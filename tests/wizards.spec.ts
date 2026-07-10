@@ -6,15 +6,25 @@ import { test, expect } from '@playwright/test'
  */
 
 test.describe('Charity eligibility check', () => {
-  test('501c3 with no domain reaches the full-onboarding outcome', async ({ page }) => {
+  test('a 501c3 qualifies and lands directly on the application button', async ({ page }) => {
     await page.goto('/eligibility-check/')
     await page.getByRole('button', { name: /501\(c\)\(3\) nonprofit in good standing/ }).click()
-    await page.getByRole('button', { name: /No — we need one/ }).click()
-    await expect(page.getByText('You qualify for the full program')).toBeVisible()
-    await expect(page.getByRole('link', { name: /Apply via Help for Charities/ })).toHaveAttribute(
-      'href',
-      '/help-for-charities/'
-    )
+    // Single committed journey: no à la carte domain/website/email branches —
+    // an eligible org goes straight to the on-page apply button.
+    await expect(page.getByText(/You qualify — apply now/)).toBeVisible()
+    await expect(
+      page.getByRole('link', { name: /Apply as a 501\(c\)\(3\) charity/ })
+    ).toHaveAttribute('href', /cart\.php\?a=add&pid=33/)
+  })
+
+  test('a pre-501c3 with paperwork reaches the pre-501c3 application button', async ({ page }) => {
+    await page.goto('/eligibility-check/')
+    await page.getByRole('button', { name: /working toward 501\(c\)\(3\) determination/ }).click()
+    await page.getByRole('button', { name: /formation documents/ }).click()
+    await expect(page.getByText(/pre-501\(c\)3 onboarding — apply now/)).toBeVisible()
+    await expect(
+      page.getByRole('link', { name: /Apply as a pre-501\(c\)3 organization/ })
+    ).toHaveAttribute('href', /cart\.php\?a=add&pid=16/)
   })
 
   test('for-profit reaches the not-eligible outcome and can start over', async ({ page }) => {

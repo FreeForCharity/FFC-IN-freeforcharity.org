@@ -10,11 +10,24 @@ import Link from 'next/link'
  * (each answer is a native button; back/restart are buttons too).
  */
 
+export interface WizardAction {
+  label: string
+  href: string
+  /** Opens in a new tab (e.g. the WHMCS hub application forms). */
+  external?: boolean
+}
+
 export interface WizardOutcome {
   id: string
   title: string
   body: string
-  links: { label: string; href: string }[]
+  /**
+   * Prominent call-to-action buttons — the application buttons an eligible
+   * outcome converges on. Rendered as filled buttons above the secondary links.
+   */
+  actions?: WizardAction[]
+  /** Secondary, informational links rendered under the actions. */
+  links?: { label: string; href: string }[]
 }
 
 export interface WizardOption {
@@ -84,18 +97,50 @@ export default function DecisionWizard({ config }: { config: WizardConfig }) {
         <p className="font-[var(--font-lato)] text-[17px] leading-[27px] text-[#555] mb-4">
           {outcome.body}
         </p>
-        <ul className="space-y-2 mb-6">
-          {outcome.links.map((link) => (
-            <li key={link.href}>
-              <Link
-                href={link.href}
-                className="font-[var(--font-lato)] text-[17px] font-[600] text-[#0567B1] underline"
-              >
-                {link.label} →
-              </Link>
-            </li>
-          ))}
-        </ul>
+        {outcome.actions?.length ? (
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3 mb-6">
+            {outcome.actions.map((action) =>
+              action.external ? (
+                <a
+                  key={`${action.href}:${action.label}`}
+                  href={action.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center rounded-lg bg-[#0567B1] px-6 py-3
+                    font-[var(--font-lato)] text-[17px] font-[700] text-white
+                    transition-colors hover:bg-[#045a9b]"
+                >
+                  {action.label}
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              ) : (
+                <Link
+                  key={`${action.href}:${action.label}`}
+                  href={action.href}
+                  className="inline-flex items-center justify-center rounded-lg bg-[#0567B1] px-6 py-3
+                    font-[var(--font-lato)] text-[17px] font-[700] text-white
+                    transition-colors hover:bg-[#045a9b]"
+                >
+                  {action.label}
+                </Link>
+              )
+            )}
+          </div>
+        ) : null}
+        {outcome.links?.length ? (
+          <ul className="space-y-2 mb-6">
+            {outcome.links.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="font-[var(--font-lato)] text-[17px] font-[600] text-[#0567B1] underline"
+                >
+                  {link.label} →
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : null}
         <button
           type="button"
           onClick={restart}
