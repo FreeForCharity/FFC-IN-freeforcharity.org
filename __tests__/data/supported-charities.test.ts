@@ -34,7 +34,13 @@ describe('Supported-charities directory', () => {
       expect(c.domain).not.toMatch(/^https?:\/\//i)
       expect(c.domain).not.toMatch(/\/$/)
       expect(c.domain).not.toMatch(/\s/)
-      expect(c.domain).toMatch(/^[a-z0-9.-]+(\/[a-z0-9._~%/-]*)?$/i)
+      // Proper hostname: dot-separated labels that each start and end with an
+      // alphanumeric (hyphens allowed only in the middle), at least two labels,
+      // then an optional path. Rejects malformed hosts like `.example.com`,
+      // `-example.com`, `example..com`, or `example.com-`.
+      expect(c.domain).toMatch(
+        /^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+(\/[a-z0-9._~%/-]*)?$/i
+      )
     }
   })
 
