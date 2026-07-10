@@ -3,9 +3,7 @@ import React from 'react'
 import Hero from '@/components/domains/Hero'
 import DearProspective from '@/components/domains/Dear-Prospective'
 import OrderYourDomain from '@/components/domains/Order-Your-Domain'
-import CardsSection from '@/components/domains/Cards-Section'
 import VerifyYourDomain from '@/components/domains/Verify-Your-Domain'
-import Seperater from '@/components/domains/Seperater'
 import SetupEmailHosting from '@/components/domains/Setup-Email-Hosting'
 import CurvedBlueSection from '@/components/domains/Curved-Blue-Section'
 import CurvedBlackSection from '@/components/domains/Curved-Black-Section'
@@ -25,9 +23,7 @@ const index = () => {
         <Hero />
         <DearProspective />
         <OrderYourDomain />
-        <CardsSection />
         <VerifyYourDomain />
-        <Seperater />
         <SetupEmailHosting />
         <CurvedBlueSection />
         <CurvedBlackSection />

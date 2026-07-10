@@ -29,7 +29,7 @@ const index = () => {
             className="mt-[30px] font-[600] text-[27px] leading-[35px] text-center"
             data-font="raleway-font"
           >
-            So what do you need to do?
+            So what do you actually do? Just one thing: get admin access.
           </p>
         </div>
       </div>
@@ -58,8 +58,9 @@ const index = () => {
                 Step 1
               </h2>
               <p className="text-[23px] font-[500] leading-[30px]" data-font="raleway-font">
-                Nothing to verify. Free For Charity registers, manages, and renews your domain for
-                you in Cloudflare, so no action is required on your part.
+                Create a free personal Cloudflare account and send us the email address you used. We
+                add that email as a domain admin on your organization&apos;s domain — repeat for
+                anyone on your team who needs access.
               </p>
             </div>
           </div>
@@ -84,8 +85,8 @@ const index = () => {
         />
         <DomainCard
           imageSrc="/Images/3.webp"
-          imageAlt="Domain hub icon"
-          text="You can view your domain anytime from the Free For Charity hub using the account you created at checkout."
+          imageAlt="Team access icon"
+          text="Add as many teammates as you need — send us each person's Cloudflare account email and we grant them domain-admin access."
         />
       </div>
 
