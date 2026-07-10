@@ -102,7 +102,7 @@ export default function DecisionWizard({ config }: { config: WizardConfig }) {
             {outcome.actions.map((action) =>
               action.external ? (
                 <a
-                  key={action.href}
+                  key={`${action.href}:${action.label}`}
                   href={action.href}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -111,10 +111,11 @@ export default function DecisionWizard({ config }: { config: WizardConfig }) {
                     transition-colors hover:bg-[#045a9b]"
                 >
                   {action.label}
+                  <span className="sr-only"> (opens in a new tab)</span>
                 </a>
               ) : (
                 <Link
-                  key={action.href}
+                  key={`${action.href}:${action.label}`}
                   href={action.href}
                   className="inline-flex items-center justify-center rounded-lg bg-[#0567B1] px-6 py-3
                     font-[var(--font-lato)] text-[17px] font-[700] text-white
