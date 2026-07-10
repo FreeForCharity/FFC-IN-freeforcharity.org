@@ -19,9 +19,9 @@ const index = () => {
             className="mb-[13px] w-[85%] mx-auto font-[500] text-[20px] leading-[30px] text-center"
             data-font="raleway-font"
           >
-            Email hosting means that you can have email addresses at your domain name. e.g. Hosted
-            email is a 501(c)(3) benefit — eligible nonprofits get it free through Microsoft 365 or
-            Google Workspace.
+            Email hosting means you get email addresses at your own domain — like
+            board@yourcharity.org. It&apos;s a 501(c)(3) benefit: eligible nonprofits get it free
+            through Microsoft 365 or Google Workspace.
           </p>
         </div>
       </div>

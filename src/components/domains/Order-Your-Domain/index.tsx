@@ -1,23 +1,23 @@
 import React from 'react'
 import StepCard from '@/components/ui/StepCard'
-import { hubAddProduct, DOMAIN_PID } from '@/lib/config'
+import { hubAddProduct, DOMAIN_PID, ONBOARDING_PID } from '@/lib/config'
 
 const HowToOrderDomain = () => {
   const steps = [
     {
       number: 1,
       title: 'Step 1',
-      description: 'Set up your Cloudflare account',
-      linkText: 'Find more',
+      description: 'Complete FFC onboarding',
+      linkText: 'Start onboarding',
       innerbg: 'bg-[#8A6400]',
       outerbg: 'bg-[#fff]',
-      linkUrl: '/domains/#orderstep1',
+      linkUrl: hubAddProduct(ONBOARDING_PID.full501c3),
     },
     {
       number: 2,
       title: 'Step 2',
-      description: 'Register your new .org domain',
-      linkText: 'Register a domain',
+      description: 'We register or transfer your .org domain',
+      linkText: 'Request your domain',
       innerbg: 'bg-[#2A6F9E]',
       outerbg: 'bg-[#2A6F9E]',
       linkUrl: hubAddProduct(DOMAIN_PID.register),
@@ -25,25 +25,28 @@ const HowToOrderDomain = () => {
     {
       number: 3,
       title: 'Step 3',
-      description: 'Register a new .org domain or transfer a domain you already own',
-      linkText: 'Follow Steps',
+      description: 'Create a free personal Cloudflare account and send us the email you used',
+      linkText: 'Create a Cloudflare account',
       innerbg: 'bg-[#2A6F9E]',
       outerbg: 'bg-[#2A6F9E]',
-      linkUrl: '/domains/#orderstep3',
+      linkUrl: 'https://dash.cloudflare.com/sign-up',
     },
     {
       number: 4,
       title: 'Step 4',
-      description: 'Change your DNS to point to Cloudflare',
-      linkText: 'See DNS instructions',
+      description: 'We add you as a domain admin and manage DNS for you',
+      linkText: 'Contact us',
       innerbg: 'bg-[#8A6400]',
       outerbg: 'bg-[#fff]',
-      linkUrl: '/domains/#orderstep',
+      linkUrl: '/contact-us/',
     },
   ]
 
   return (
-    <section className="py-[40px] bg-[#f2f2f2] relative overflow-hidden">
+    <section
+      id="how-it-works"
+      className="py-[40px] bg-[#f2f2f2] relative overflow-hidden scroll-mt-[120px]"
+    >
       {/* Top Wave */}
       <div
         className="absolute top-0 w-full h-[100px] z-[1] scale-y-[-1] bg-no-repeat bg-top"
@@ -60,15 +63,16 @@ const HowToOrderDomain = () => {
             className="text-center mb-[16px] text-[30px] md:text-[35px] text-[#0567B1] font-[700] leading-[46px]"
             data-font="cantata-font"
           >
-            HOW TO ORDER YOUR DOMAIN NAME
+            HOW YOUR DOMAIN WORKS — IN FOUR STEPS
           </h2>
           <p
             className="md:w-[85%] mx-auto text-center text-[20px] font-medium leading-[30px]"
             style={{ fontFamily: 'Raleway, sans-serif' }}
           >
-            To order a free domain name with Free For Charity you must sign up for a Cloudflare
-            account and also sign up at our hosting project site FFC Hosting. Before signing up at
-            our site please read this full page to make sure you are ready to complete all steps.
+            Free For Charity holds and manages your domain in our Cloudflare account — you never
+            have to run a registrar or edit DNS yourself. You just complete onboarding, then create
+            a personal Cloudflare login so we can add you (and anyone else on your team) as a domain
+            admin.
           </p>
         </div>
 
@@ -85,10 +89,10 @@ const HowToOrderDomain = () => {
             className="md:w-[85%] mx-auto text-center text-[20px] font-medium leading-[30px]"
             style={{ fontFamily: 'Raleway, sans-serif' }}
           >
-            You have two supported options: register a brand new .org domain, or transfer a domain
-            you already own into Free For Charity&apos;s Cloudflare Registrar. Transferring a domain
-            you already own? You&apos;ll need your current registrar, the authorization (EPP) code,
-            and the domain unlocked with WHOIS privacy turned off before you start.
+            You have two supported options: have us register a brand new .org domain, or transfer a
+            domain you already own into Free For Charity&apos;s Cloudflare Registrar. Transferring a
+            domain you already own? You&apos;ll need your current registrar, the authorization (EPP)
+            code, and the domain unlocked with WHOIS privacy turned off before you start.
           </p>
           <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
