@@ -36,6 +36,10 @@ jobs:
           # retry-wait so transient external-host flakes (sdgs.un.org,
           # theleanstartup.com, etc.) stop failing CI on otherwise-healthy
           # PRs. Real 4xx/5xx still surface as non-zero exit.
+          # --user-agent: some hosts (e.g. avepoint.com) serve 404/403 to the
+          # default lychee UA while returning 200 to browsers; a normal browser
+          # UA removes that class of false positives. Genuinely broken links
+          # still fail. Matches the production watchdog (outbound-links-prod.yml).
           args: >-
             --verbose
             --no-progress
@@ -43,6 +47,7 @@ jobs:
             --timeout 60
             --max-retries 5
             --retry-wait-time 5
+            --user-agent 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
             --accept 200,206,301,302,307,308
             './src/**/*.tsx'
             './src/**/*.ts'

@@ -29,7 +29,15 @@ jobs:
 
       - name: Collect page URLs from the production sitemap
         run: |
-          curl -sSf https://www.freeforcharity.org/sitemap.xml \
+          # The apex sits behind Cloudflare/cPanel edge security that
+          # intermittently 403/415s automated requests from GitHub Actions IPs
+          # (same reason the lychee step below sends a browser UA). Send a normal
+          # browser UA and retry so this setup step doesn't flake and fail the
+          # whole watchdog before the crawl even runs.
+          curl -sSf \
+            --user-agent 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36' \
+            --retry 5 --retry-delay 5 --retry-all-errors \
+            https://www.freeforcharity.org/sitemap.xml \
             | grep -o '<loc>[^<]*</loc>' \
             | sed -e 's/<loc>//' -e 's#</loc>##' > sitemap-urls.txt
           wc -l sitemap-urls.txt
