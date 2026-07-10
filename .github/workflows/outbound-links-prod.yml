@@ -6,6 +6,14 @@ name: Production outbound links
 # destinations whose health changes independently of this repo. This crawl
 # fetches every page in the production sitemap and checks the external links
 # found there, filing/refreshing a single production-health issue on failures.
+#
+# Noise control (issue #444): crawling 600+ external charity origins, a rotating
+# handful always has a transient blip (Cloudflare 522 origin-unreachable, a
+# momentary 404/timeout) on any given run. To avoid filing the issue on those,
+# every URL lychee reports as broken is RE-VERIFIED a moment later with a normal
+# browser UA + retries; only URLs that still fail the re-check are treated as
+# real and reported. This filters transient flaps in-run (no cross-run state)
+# while still catching genuine link rot on the same run it appears.
 
 on:
   schedule:
@@ -17,6 +25,11 @@ on:
 permissions:
   contents: read
   issues: write
+
+env:
+  # One browser UA reused by the sitemap fetch, the lychee crawl, and the
+  # re-verify step so all three present identically to edge/WAF rules.
+  BROWSER_UA: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
 
 jobs:
   check-production-outbound-links:
@@ -35,7 +48,7 @@ jobs:
           # browser UA and retry so this setup step doesn't flake and fail the
           # whole watchdog before the crawl even runs.
           curl -sSf \
-            --user-agent 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36' \
+            --user-agent "$BROWSER_UA" \
             --retry 5 --retry-delay 5 --retry-all-errors \
             https://www.freeforcharity.org/sitemap.xml \
             | grep -o '<loc>[^<]*</loc>' \
@@ -66,35 +79,106 @@ jobs:
             --timeout 60
             --max-retries 5
             --retry-wait-time 5
-            --user-agent 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
+            --user-agent "${{ env.BROWSER_UA }}"
             --accept 200,201,202,203,204,206,301,302,303,307,308,429
             -- $(cat sitemap-urls.txt | tr '\n' ' ')
           fail: false
 
+      - name: Re-verify reported failures to filter transient blips
+        id: verify
+        run: |
+          # Find lychee's markdown report (default ./lychee/out.md).
+          REPORT=""
+          for p in ./lychee/out.md ./out.md lychee/out.md; do
+            [ -f "$p" ] && REPORT="$p" && break
+          done
+
+          : > confirmed-failures.txt
+          if [ -z "$REPORT" ]; then
+            echo "No lychee report found — nothing to re-verify."
+            echo "count=0" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Extract the failing destination URLs from lines like
+          #   * [522] <https://example.org/> | Rejected status code: ...
+          #   * [ERROR] <https://example.org/> | Network error: ...
+          grep -oE '\[[^]]+\] <[^>]+>' "$REPORT" \
+            | sed -E 's/.*<([^>]+)>.*/\1/' \
+            | sort -u > reported-failures.txt || true
+
+          COUNT_REPORTED=$(wc -l < reported-failures.txt | tr -d ' ')
+          echo "lychee reported $COUNT_REPORTED unique failing URL(s); re-verifying each…"
+
+          # Re-check each with a browser UA, following redirects, with retries.
+          # A 2xx/3xx or 429 on the second look means the first failure was a
+          # transient blip (Cloudflare 522, momentary 404/timeout) — drop it.
+          # Anything else (000/4xx/5xx) is confirmed and gets reported.
+          while IFS= read -r url; do
+            [ -z "$url" ] && continue
+            code=$(curl -s -o /dev/null -w '%{http_code}' \
+              --user-agent "$BROWSER_UA" \
+              -L --max-time 30 --retry 2 --retry-delay 3 --retry-all-errors \
+              "$url" 2>/dev/null)
+            # On a connection failure curl can emit "000" once per retry; keep
+            # only the final 3-digit code so the reported status stays clean.
+            code="${code: -3}"
+            [ -z "$code" ] && code="000"
+            case "$code" in
+              2??|3??|429) echo "  transient (recovered $code): $url" ;;
+              *)           echo "  CONFIRMED ($code): $url"; printf '%s\t%s\n' "$code" "$url" >> confirmed-failures.txt ;;
+            esac
+          done < reported-failures.txt
+
+          COUNT=$(wc -l < confirmed-failures.txt | tr -d ' ')
+          echo "confirmed $COUNT failure(s) after re-verification."
+          echo "count=$COUNT" >> "$GITHUB_OUTPUT"
+
       - name: Create or refresh the production-health issue
-        if: steps.lychee.outputs.exit_code != 0
+        if: steps.verify.outputs.count != '0'
         uses: actions/github-script@v9
         with:
           script: |
+            const fs = require('fs')
             const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`
             const marker = '<!-- outbound-links-prod-watchdog -->'
+
+            // Confirmed failures: lines of "<status>\t<url>".
+            const confirmed = fs
+              .readFileSync('confirmed-failures.txt', 'utf8')
+              .split('\n')
+              .map((l) => l.trim())
+              .filter(Boolean)
+              .map((l) => {
+                const [status, ...rest] = l.split('\t')
+                return { status, url: rest.join('\t') }
+              })
+
+            const list = confirmed.map((f) => `- [${f.status}] ${f.url}`).join('\n')
             const body = [
               marker,
               '## Broken outbound links on the production site',
               '',
-              'The weekly production crawl found external URLs that no longer resolve. These are',
-              'links our visitors (and the charities we host) actually click — review promptly.',
+              'The production crawl found external URLs that failed **twice** — once during the',
+              'sitemap crawl and again on an immediate re-check with a browser User-Agent — so',
+              'these are not transient blips. They are links our visitors (and the charities we',
+              'host) actually click; review promptly.',
               '',
-              `**Latest failing run:** ${runUrl}`,
+              '### Confirmed failing links',
+              list,
+              '',
+              `**Run:** ${runUrl}`,
               '',
               '## Next steps',
-              '1. Open the run output for the list of failing URLs and the pages that carry them',
-              '2. Charity destination down? Check whether the org moved or lapsed — update `src/data/supported-charities.json` (or contact the org) rather than silently dropping them',
-              '3. Third-party doc moved? Update the guide that links it',
-              '4. Persistent false positives (bot-blocking hosts) go in `.lycheeignore` with a comment',
+              '1. Charity destination down? Check whether the org moved or lapsed — update `src/data/supported-charities.json` (or contact the org) rather than silently dropping them',
+              '2. Third-party doc moved? Update the guide that links it',
+              '3. Persistent false positives (bot-blocking hosts) go in `.lycheeignore` with a comment',
               '',
-              '_Filed automatically by the production outbound-links watchdog; it updates this issue on each failing run and stays quiet when the crawl is clean._',
+              '_Filed automatically by the production outbound-links watchdog. Each reported URL',
+              'is re-verified before filing, so transient origin blips (Cloudflare 522, momentary',
+              '404/timeout) are filtered out and do not raise this issue._',
             ].join('\n')
+
             const existing = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
