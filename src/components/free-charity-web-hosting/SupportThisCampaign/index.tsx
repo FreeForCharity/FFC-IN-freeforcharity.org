@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import ZeffyPopupButton from '@/components/ui/ZeffyPopupButton'
 import { hostingCampaign, generalCampaign } from '@/data/donation-campaigns'
 
@@ -72,13 +73,13 @@ const SupportThisCampaign = () => {
               volunteer team and help more charities get online.
             </p>
             <div className="mt-auto">
-              <a
+              <Link
                 href="/volunteer/"
                 className="inline-flex items-center justify-center rounded-[10px] border-2 border-[#0567B1] px-[24px] py-[14px] text-[16px] font-[700] text-[#0567B1] transition-colors duration-200 hover:bg-[#0567B1]/5"
                 data-font="raleway-font"
               >
                 Become a volunteer
-              </a>
+              </Link>
             </div>
           </div>
         </div>

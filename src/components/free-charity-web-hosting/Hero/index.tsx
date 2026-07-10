@@ -1,5 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { assetPath } from '@/lib/assetPath'
 
 const Index = () => {
@@ -35,13 +36,13 @@ const Index = () => {
           </p>
 
           <div className="mt-[28px] flex flex-col sm:flex-row gap-[14px]">
-            <a
+            <Link
               href="/eligibility-check/"
               className="inline-flex items-center justify-center rounded-[10px] bg-[#0567B1] px-[26px] py-[14px] text-[17px] font-[700] text-white transition-transform duration-200 hover:scale-[1.03] hover:bg-[#045a9b]"
               data-font="raleway-font"
             >
               Check your eligibility
-            </a>
+            </Link>
             <a
               href="#whats-included"
               className="inline-flex items-center justify-center rounded-[10px] border-2 border-[#0567B1] px-[26px] py-[14px] text-[17px] font-[700] text-[#0567B1] transition-colors duration-200 hover:bg-[#0567B1]/5"
