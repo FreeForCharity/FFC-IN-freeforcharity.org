@@ -89,7 +89,7 @@ jobs:
         run: |
           # Find lychee's markdown report (default ./lychee/out.md).
           REPORT=""
-          for p in ./lychee/out.md ./out.md lychee/out.md; do
+          for p in ./lychee/out.md ./out.md; do
             [ -f "$p" ] && REPORT="$p" && break
           done
 
@@ -116,10 +116,14 @@ jobs:
           # Anything else (000/4xx/5xx) is confirmed and gets reported.
           while IFS= read -r url; do
             [ -z "$url" ] && continue
+            # `|| true`: steps run under `bash -eo pipefail`, so without it a
+            # curl exit (DNS/connect failure) would abort the whole step before
+            # we record the failure — defeating the re-verification. curl still
+            # writes a 3-digit code (000 on connect failure) to stdout.
             code=$(curl -s -o /dev/null -w '%{http_code}' \
               --user-agent "$BROWSER_UA" \
               -L --max-time 30 --retry 2 --retry-delay 3 --retry-all-errors \
-              "$url" 2>/dev/null)
+              "$url" 2>/dev/null || true)
             # On a connection failure curl can emit "000" once per retry; keep
             # only the final 3-digit code so the reported status stays clean.
             code="${code: -3}"
