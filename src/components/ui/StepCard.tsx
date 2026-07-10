@@ -66,8 +66,10 @@ const StepCard: React.FC<{ step: Step }> = ({ step }) => {
         </p>
 
         {step.linkUrl.startsWith('/') ? (
-          // Internal route: next/link so the basePath is applied on subpath
-          // (GitHub Pages preview) deploys. External/hash links stay plain <a>.
+          // Root-relative URLs (starting with "/", including "/path#hash") go
+          // through next/link so the basePath is applied on subpath (GitHub
+          // Pages preview) deploys. External URLs (http…) and bare "#hash"
+          // links fall through to a plain <a>.
           <Link
             href={step.linkUrl}
             className="text-[30px] font-bold text-white leading-[33px]"

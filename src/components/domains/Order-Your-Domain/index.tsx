@@ -7,8 +7,8 @@ const HowToOrderDomain = () => {
     {
       number: 1,
       title: 'Step 1',
-      description: 'Complete FFC onboarding',
-      linkText: 'Start here',
+      description: 'Check your eligibility, then start onboarding',
+      linkText: 'Check eligibility',
       innerbg: 'bg-[#8A6400]',
       outerbg: 'bg-[#fff]',
       linkUrl: '/eligibility-check/',
