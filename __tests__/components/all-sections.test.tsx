@@ -86,26 +86,26 @@ const sectionComponents: [string, string][] = [
     '../../src/components/free-charity-web-hosting/About-FFC-Hosting/index',
   ],
   [
-    'free-charity-web-hosting/BecomePartOfOurMission',
-    '../../src/components/free-charity-web-hosting/BecomePartOfOurMission/index',
-  ],
-  [
     'free-charity-web-hosting/ClientTestimonials',
     '../../src/components/free-charity-web-hosting/ClientTestimonials/index',
   ],
   ['free-charity-web-hosting/FAQs', '../../src/components/free-charity-web-hosting/FAQs/index'],
   ['free-charity-web-hosting/Hero', '../../src/components/free-charity-web-hosting/Hero/index'],
   [
+    'free-charity-web-hosting/HowToApply',
+    '../../src/components/free-charity-web-hosting/HowToApply/index',
+  ],
+  [
     'free-charity-web-hosting/ReadyToGetStarted',
     '../../src/components/free-charity-web-hosting/ReadyToGetStarted/index',
   ],
   [
-    'free-charity-web-hosting/ThreeCards',
-    '../../src/components/free-charity-web-hosting/ThreeCards/index',
+    'free-charity-web-hosting/SupportThisCampaign',
+    '../../src/components/free-charity-web-hosting/SupportThisCampaign/index',
   ],
   [
-    'free-charity-web-hosting/hosting',
-    '../../src/components/free-charity-web-hosting/hosting/index',
+    'free-charity-web-hosting/WhatsIncluded',
+    '../../src/components/free-charity-web-hosting/WhatsIncluded/index',
   ],
   [
     'free-for-charity-endowment-fund-components/Empower-Charities',

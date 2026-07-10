@@ -1,12 +1,12 @@
 import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import Hero from '@/components/free-charity-web-hosting/Hero'
-import Hosting from '@/components/free-charity-web-hosting/hosting'
+import WhatsIncluded from '@/components/free-charity-web-hosting/WhatsIncluded'
 import AboutFFCHosting from '@/components/free-charity-web-hosting/About-FFC-Hosting'
-import ThreeCards from '@/components/free-charity-web-hosting/ThreeCards'
-import BecomePartOfOurMission from '@/components/free-charity-web-hosting/BecomePartOfOurMission'
+import HowToApply from '@/components/free-charity-web-hosting/HowToApply'
 import ReadyToGetStarted from '@/components/free-charity-web-hosting/ReadyToGetStarted'
 import ClientTestimonials from '@/components/free-charity-web-hosting/ClientTestimonials'
+import SupportThisCampaign from '@/components/free-charity-web-hosting/SupportThisCampaign'
 import FAQs from '@/components/free-charity-web-hosting/FAQs'
 
 export const metadata = pageMetadata({
@@ -20,12 +20,11 @@ const index = () => {
   return (
     <div>
       <Hero />
-      <Hosting />
+      <WhatsIncluded />
       <AboutFFCHosting />
-      <ThreeCards />
-      <BecomePartOfOurMission />
-      <ReadyToGetStarted />
+      <HowToApply />
       <ClientTestimonials />
+      <SupportThisCampaign />
       <FAQs />
       <ReadyToGetStarted />
     </div>

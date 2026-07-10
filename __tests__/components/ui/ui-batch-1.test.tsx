@@ -5,7 +5,6 @@ import { axe } from '../../utils/axe'
 import Accordian from '@/components/ui/Accordian'
 import AccordianBold from '@/components/ui/AccordianBold'
 import AnimatedNumber from '@/components/ui/AnimatedNumber'
-import BecomePartOfOurMissionCard from '@/components/ui/BecomePartOfOurMissionCard'
 import BlogCard from '@/components/ui/BlogCard'
 import Bluebtn from '@/components/ui/Bluebtn'
 import CallToActionCard from '@/components/ui/CallToActionCard'
@@ -41,24 +40,6 @@ describe('AccordianBold', () => {
 describe('AnimatedNumber', () => {
   it('renders and has no a11y violations', async () => {
     const { container } = render(<AnimatedNumber value={1500} />)
-    expect(container).not.toBeEmptyDOMElement()
-    const results = await axe(container)
-    expect(results).toHaveNoViolations()
-  }, 30000)
-})
-
-describe('BecomePartOfOurMissionCard', () => {
-  it('renders and has no a11y violations', async () => {
-    const { container } = render(
-      <BecomePartOfOurMissionCard
-        bgImage="/images/mission-bg.jpg"
-        heading="Become Part Of Our Mission"
-        description1="Help us provide free websites to nonprofits."
-        description2="Join our community of volunteers today."
-        buttonText="Get Involved"
-        buttonLink="/get-involved"
-      />
-    )
     expect(container).not.toBeEmptyDOMElement()
     const results = await axe(container)
     expect(results).toHaveNoViolations()
