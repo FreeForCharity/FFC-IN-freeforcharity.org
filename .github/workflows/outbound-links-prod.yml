@@ -44,6 +44,12 @@ jobs:
           # the links found in the served HTML. Internal links are excluded —
           # the post-deploy smoke suite owns those; this watchdog is only for
           # external destinations (charity sites, Microsoft/Google/IRS docs).
+          # --user-agent: many charity origins sit behind Cloudflare/WAF rules
+          # that 401/403 the default lychee UA from GitHub Actions IPs while
+          # serving 200 to real browsers. Sending a normal browser UA removes
+          # that whole class of false positives; genuinely forbidden pages (403
+          # even to a browser UA) and dead origins (000/5xx) still fail, so real
+          # link rot is still caught.
           args: >-
             --verbose
             --no-progress
@@ -52,6 +58,7 @@ jobs:
             --timeout 60
             --max-retries 5
             --retry-wait-time 5
+            --user-agent 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36'
             --accept 200,201,202,203,204,206,301,302,303,307,308,429
             -- $(cat sitemap-urls.txt | tr '\n' ' ')
           fail: false
