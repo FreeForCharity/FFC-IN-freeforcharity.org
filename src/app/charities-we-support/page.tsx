@@ -32,7 +32,7 @@ export default function CharitiesWeSupport() {
           . This directory lists only currently-live public sites.)
         </p>
         <p className="font-[var(--font-lato)] text-[14px] leading-[22px] text-[#767672] mb-8">
-          Snapshot from our operational sites inventory ({snapshotDate}), outbound links verified{' '}
+          Snapshot from our operational sites inventory ({snapshotDate}), outbound links verified on{' '}
           {linksVerifiedDate} — the full inventory with health and migration detail is public on{' '}
           <a
             href="https://ffcadmin.org/sites-list/"

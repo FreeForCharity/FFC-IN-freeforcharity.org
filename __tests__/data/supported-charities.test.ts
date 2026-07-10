@@ -18,6 +18,16 @@ describe('Supported-charities directory', () => {
     expect(charities.length).toBeGreaterThan(0)
   })
 
+  it('carries well-formed snapshot + link-verification dates (both rendered on the page)', () => {
+    const meta = directory as unknown as { snapshotDate: string; linksVerifiedDate: string }
+    for (const d of [meta.snapshotDate, meta.linksVerifiedDate]) {
+      expect(typeof d).toBe('string')
+      expect(d).toMatch(/^\d{4}-\d{2}-\d{2}$/)
+    }
+    // Links can only be verified on or after the inventory snapshot they cover.
+    expect(meta.linksVerifiedDate >= meta.snapshotDate).toBe(true)
+  })
+
   it('every entry has a truthy domain string', () => {
     for (const c of charities) {
       expect(typeof c.domain).toBe('string')
