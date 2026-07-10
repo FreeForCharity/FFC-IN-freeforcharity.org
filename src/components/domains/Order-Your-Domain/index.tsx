@@ -1,6 +1,6 @@
 import React from 'react'
 import StepCard from '@/components/ui/StepCard'
-import { hubAddProduct, DOMAIN_PID, ONBOARDING_PID } from '@/lib/config'
+import { hubAddProduct, DOMAIN_PID } from '@/lib/config'
 
 const HowToOrderDomain = () => {
   const steps = [
@@ -8,19 +8,19 @@ const HowToOrderDomain = () => {
       number: 1,
       title: 'Step 1',
       description: 'Complete FFC onboarding',
-      linkText: 'Start onboarding',
+      linkText: 'Start here',
       innerbg: 'bg-[#8A6400]',
       outerbg: 'bg-[#fff]',
-      linkUrl: hubAddProduct(ONBOARDING_PID.full501c3),
+      linkUrl: '/eligibility-check/',
     },
     {
       number: 2,
       title: 'Step 2',
       description: 'We register or transfer your .org domain',
-      linkText: 'Request your domain',
+      linkText: 'See your options',
       innerbg: 'bg-[#2A6F9E]',
       outerbg: 'bg-[#2A6F9E]',
-      linkUrl: hubAddProduct(DOMAIN_PID.register),
+      linkUrl: '/domains/#domain-options',
     },
     {
       number: 3,
@@ -94,7 +94,10 @@ const HowToOrderDomain = () => {
             domain you already own? You&apos;ll need your current registrar, the authorization (EPP)
             code, and the domain unlocked with WHOIS privacy turned off before you start.
           </p>
-          <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div
+            id="domain-options"
+            className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4 scroll-mt-[120px]"
+          >
             <a
               href={hubAddProduct(DOMAIN_PID.register)}
               className="rounded border-2 border-[#0567B1] px-6 py-2.5 text-[18px] font-medium text-[#0567B1] transition-colors hover:bg-[#0567B1] hover:text-white"
