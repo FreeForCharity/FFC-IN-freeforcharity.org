@@ -20,7 +20,7 @@ const HowToOrderDomain = () => {
       linkText: 'See your options',
       innerbg: 'bg-[#2A6F9E]',
       outerbg: 'bg-[#2A6F9E]',
-      linkUrl: '/domains/#domain-options',
+      linkUrl: '#domain-options',
     },
     {
       number: 3,

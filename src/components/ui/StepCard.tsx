@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { assetPath } from '@/lib/assetPath'
 
 interface Step {
@@ -64,13 +65,25 @@ const StepCard: React.FC<{ step: Step }> = ({ step }) => {
           {step.description}
         </p>
 
-        <a
-          href={step.linkUrl}
-          className="text-[30px] font-bold text-white leading-[33px]"
-          data-font="raleway-font"
-        >
-          {step.linkText}
-        </a>
+        {step.linkUrl.startsWith('/') ? (
+          // Internal route: next/link so the basePath is applied on subpath
+          // (GitHub Pages preview) deploys. External/hash links stay plain <a>.
+          <Link
+            href={step.linkUrl}
+            className="text-[30px] font-bold text-white leading-[33px]"
+            data-font="raleway-font"
+          >
+            {step.linkText}
+          </Link>
+        ) : (
+          <a
+            href={step.linkUrl}
+            className="text-[30px] font-bold text-white leading-[33px]"
+            data-font="raleway-font"
+          >
+            {step.linkText}
+          </a>
+        )}
       </div>
     </div>
   )

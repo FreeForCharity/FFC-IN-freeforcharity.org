@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import Transparentbtn from '@/components/ui/Transparentbtn'
 import { hubAddProduct, ONBOARDING_PID } from '@/lib/config'
 
@@ -54,9 +55,9 @@ const FFCOnboardingNotice = () => {
 
         <p className="mt-[18px] text-[15px] font-[500] text-[#666]" data-font="raleway-font">
           Not sure you qualify?{' '}
-          <a href="/eligibility-check/" className="text-[#0567B1] font-[700] underline">
+          <Link href="/eligibility-check/" className="text-[#0567B1] font-[700] underline">
             Take the 2-minute eligibility check
-          </a>{' '}
+          </Link>{' '}
           first.
         </p>
       </div>
