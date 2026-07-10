@@ -30,6 +30,18 @@ https://nonprofit.linkedin.com/**
 https://www.facebook.com/**
 https://facebook.com/**
 
+# bringingpeople2people.org (charities-we-support) 301-redirects to the org's
+# Facebook page, so lychee follows it to facebook.com's login wall and reports
+# a 400 on the origin URL. Same bot-block class as facebook.com above (already
+# pinned); the redirect is the org's chosen web presence and works in browsers.
+https://bringingpeople2people.org/
+https://bringingpeople2people.org/**
+
+# W3C WAI resources (WCAG quickref, linked from /accessibility-statement/) return
+# 403 to automated clients from CI IPs — even with a browser UA — while serving
+# 200 in real browsers. Canonical, stable docs; pin the WAI subtree.
+https://www.w3.org/WAI/**
+
 # Twitter/X blocks crawlers
 https://twitter.com/**
 https://x.com/**
