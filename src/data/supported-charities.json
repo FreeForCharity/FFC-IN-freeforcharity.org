@@ -1,5 +1,5 @@
 {
-  "_comment": "Public directory snapshot for /charities-we-support/ (issue #377). Derived from the FFC sites-list (FFC-Cloudflare-Automation sites-list/sites_list.json, commit c18c5c5, 2026-06-08): domains with a working site (Live/Redirect health), excluding organizations that left FFC, staging domains, and FFC's own infrastructure domains. Org domains are public project data (sites-list precedent); no contact or personal data. OPT-OUT: any organization can be removed on request via the contact page - delete its row here and note the request in the PR.",
+  "_comment": "Public directory snapshot for /charities-we-support/ (issue #377). Derived from the FFC sites-list (FFC-Cloudflare-Automation sites-list/sites_list.json, commit c18c5c5, 2026-06-08): domains with a working site (Live/Redirect health), excluding organizations that left FFC, staging domains, and FFC's own infrastructure domains. Org domains are public project data (sites-list precedent); no contact or personal data. OPT-OUT: any organization can be removed on request via the contact page - delete its row here and note the request in the PR. LINK-ROT PRUNE (2026-07-09, issue #444): fixed bhakthinivedana.com (dropped stale /sandbox path, root serves 200) and removed foxtrotenterprises.com (522), ghcd.onlineimpacts.org (403; the umbrella org stays via its other working subdomains), kieranrunnelsdev.org (522), techforsecurity.com (dead; org still listed as tech4security.com), and wonderseed.org (dead; org still listed as wonderseedstudio.com / wonderseedstudios.org) - all failed the working-site criterion in a browser, not just CI.",
   "sourceCommit": "c18c5c5",
   "snapshotDate": "2026-06-08",
   "charities": [
@@ -46,7 +46,7 @@
       "domain": "bearupinternationalministries.org"
     },
     {
-      "domain": "bhakthinivedana.com/sandbox"
+      "domain": "bhakthinivedana.com"
     },
     {
       "domain": "bintobetter.org"
@@ -124,16 +124,10 @@
       "domain": "focus-on-free.com"
     },
     {
-      "domain": "foxtrotenterprises.com"
-    },
-    {
       "domain": "freedomrisingusa.org"
     },
     {
       "domain": "ftnfcog.org"
-    },
-    {
-      "domain": "ghcd.onlineimpacts.org"
     },
     {
       "domain": "graftonareahistory.org"
@@ -170,9 +164,6 @@
     },
     {
       "domain": "kainkaryasri.org"
-    },
-    {
-      "domain": "kieranrunnelsdev.org"
     },
     {
       "domain": "kierstensride.org"
@@ -292,9 +283,6 @@
       "domain": "tech4security.com"
     },
     {
-      "domain": "techforsecurity.com"
-    },
-    {
       "domain": "technologyadoptionbarriers.org"
     },
     {
@@ -359,9 +347,6 @@
     },
     {
       "domain": "wisdomfinancialministries.org"
-    },
-    {
-      "domain": "wonderseed.org"
     },
     {
       "domain": "wonderseedstudio.com"
