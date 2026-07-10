@@ -1,30 +1,42 @@
 import React from 'react'
 import Transparentbtn from '@/components/ui/Transparentbtn'
-import { hubCart, hubStore } from '@/lib/config'
+import { hubAddProduct, ONBOARDING_PID } from '@/lib/config'
 
 const index = () => {
   return (
-    <div className="py-[20px]">
-      <div className="w-[90%] md:w-[80%] mx-auto text-center">
-        <h1
-          className="text-[22px] sm:text-[24px] md:text-[26px] font-medium text-[#333] pb-[10px]"
+    <div className="py-[50px]">
+      <div className="w-[90%] md:w-[80%] max-w-[1000px] mx-auto text-center">
+        <h2
+          className="text-[24px] sm:text-[26px] md:text-[28px] font-[600] text-[#333] pb-[6px]"
           data-font="aria-font"
         >
-          Ready to Get Started Now?
-        </h1>
+          Ready to apply?
+        </h2>
+        <p
+          className="mb-[24px] text-[17px] font-[500] leading-[27px] text-[#555]"
+          data-font="raleway-font"
+        >
+          Pick the option that matches your organization and start your onboarding application.
+        </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-0 sm:gap-6">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
           <Transparentbtn
-            text="501(c)3 Charities Click Here To Get Started!"
-            href={hubStore(
-              'ffc-consulting/free-for-charity-501c3-onboarding-ffc-nonprofit-charity-onboarding'
-            )}
+            text="501(c)3 Charities — Apply Here"
+            href={hubAddProduct(ONBOARDING_PID.full501c3)}
           />
           <Transparentbtn
-            text="Pre-501(c)3 Charities Click Here to Get Started!"
-            href={hubCart(8)}
+            text="Pre-501(c)3 Charities — Apply Here"
+            href={hubAddProduct(ONBOARDING_PID.pre501c3)}
           />
         </div>
+
+        <p className="mt-[20px] text-[15px] font-[500] text-[#666]" data-font="raleway-font">
+          Not sure yet?{' '}
+          <a href="/eligibility-check/" className="text-[#0567B1] font-[700] underline">
+            Take the 5-question eligibility check
+          </a>{' '}
+          first.
+        </p>
       </div>
     </div>
   )

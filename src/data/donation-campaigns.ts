@@ -190,3 +190,15 @@ export const generalCampaign: DonationCampaign = primaries[0]
 export const freeDomainCampaign: DonationCampaign | undefined = campaigns.find(
   (c) => c.key === 'free-domain'
 )
+
+/**
+ * The "Free Charity Website Hosting and Maintenance" campaign — surfaced on the
+ * /free-charity-web-hosting page as the "help us fund this program" CTA (the
+ * page no longer sells an individual supporter package, so its support ask is a
+ * direct donation to this campaign). Exported directly so the hosting page's
+ * support section imports just this one entry. `undefined` if it's ever removed,
+ * in which case the section falls back to the general fund (fail-safe).
+ */
+export const hostingCampaign: DonationCampaign | undefined = campaigns.find(
+  (c) => c.key === 'website-hosting-maintenance'
+)
