@@ -16,8 +16,9 @@ $q = isset($_GET['q']) ? strtolower(trim($_GET['q'])) : '';
 $q = preg_replace('~^https?://~', '', $q);          // strip a pasted protocol
 $q = preg_replace('~^www\.~', '', $q);              // strip a www. subdomain
 $q = preg_replace('~[/?#].*$~', '', $q);            // strip a path, query string, or fragment
-$q = preg_replace('/\.(org|com|net)$/', '', $q);    // tolerate a typed TLD
-$q = preg_replace('/^.*\./', '', $q);               // keep only the final label (drop any subdomain)
+if (preg_match('/([a-z0-9-]+)\.(?:org|com|net)$/', $q, $m)) {
+    $q = $m[1];                                     // second-level label (drops any subdomain)
+}
 $q = preg_replace('/[^a-z0-9-]/', '', $q);          // DNS label chars only
 if ($q === '' || strlen($q) > 63 || $q[0] === '-' || substr($q, -1) === '-') {
     http_response_code(400);
@@ -30,6 +31,14 @@ if ($q === '' || strlen($q) > 63 || $q[0] === '-' || substr($q, -1) === '-') {
 // (each request otherwise makes 3 registry calls). Only DEFINITIVE results are
 // written below, so a cache hit is always safe to serve and cacheable downstream.
 $cacheFile = sys_get_temp_dir() . '/ffc-domcheck-' . md5($q) . '.json';
+// Occasionally prune expired entries so unique-label spam can't grow the temp dir unbounded.
+if (mt_rand(1, 50) === 1) {
+    foreach (glob(sys_get_temp_dir() . '/ffc-domcheck-*.json') ?: [] as $f) {
+        if (@filemtime($f) < time() - 3600) {
+            @unlink($f);
+        }
+    }
+}
 if (is_readable($cacheFile) && (time() - filemtime($cacheFile)) < 3600) {
     header('Cache-Control: public, max-age=3600');
     echo file_get_contents($cacheFile);

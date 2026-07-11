@@ -25,9 +25,15 @@ describe('toLabel', () => {
     expect(toLabel('example.org?ref=x#top')).toBe('example')
   })
 
-  it('keeps only the final label when a subdomain is included', () => {
+  it('takes the second-level label under a known TLD (drops subdomains)', () => {
     expect(toLabel('subdomain.example.org')).toBe('example')
     expect(toLabel('mail.hopepantry.com')).toBe('hopepantry')
+  })
+
+  it('does not mis-parse a non-.org/.com/.net input as its TLD', () => {
+    // no recognized TLD → keep the text (dots dropped), never "io"/"uk"
+    expect(toLabel('example.io')).toBe('exampleio')
+    expect(toLabel('example.co.uk')).toBe('examplecouk')
   })
 
   it('returns empty for junk', () => {

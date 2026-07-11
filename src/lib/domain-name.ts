@@ -11,15 +11,16 @@
  * DNS-label validity: max 63 chars, no leading/trailing hyphen).
  */
 export function toLabel(raw: string): string {
-  return raw
+  const s = raw
     .trim()
     .toLowerCase()
     .replace(/^https?:\/\//, '') // strip a pasted protocol
     .replace(/^www\./, '') // strip a www. subdomain
     .replace(/[/?#].*$/, '') // strip a path, query string, or fragment
-    .replace(/\.(org|com|net)$/, '') // strip a typed TLD
-    .replace(/^.*\./, '') // keep only the final label (drop any subdomain: sub.foo -> foo)
-    .replace(/[^a-z0-9-]/g, '') // DNS-label characters only
+  // If it ends in .org/.com/.net, take the second-level label — this drops any
+  // subdomain (sub.example.org -> example) without mis-parsing other TLDs.
+  const m = s.match(/([a-z0-9-]+)\.(?:org|com|net)$/)
+  return (m ? m[1] : s).replace(/[^a-z0-9-]/g, '') // DNS-label characters only
 }
 
 /** Instant, client-side naming-quality feedback (no server needed). */
