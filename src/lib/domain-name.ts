@@ -7,7 +7,8 @@
 /**
  * Normalize a typed value to a bare DNS label — tolerant of pasted URLs and
  * stray whitespace (e.g. "  https://HopePantry.org/ " -> "hopepantry").
- * The PHP endpoint mirrors these exact steps.
+ * The PHP endpoint mirrors this normalization (and additionally enforces
+ * DNS-label validity: max 63 chars, no leading/trailing hyphen).
  */
 export function toLabel(raw: string): string {
   return raw

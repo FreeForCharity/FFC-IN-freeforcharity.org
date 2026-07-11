@@ -11,7 +11,6 @@
  */
 
 header('Content-Type: application/json; charset=utf-8');
-header('Cache-Control: public, max-age=3600'); // matches the 1h server-side cache below
 
 $q = isset($_GET['q']) ? strtolower(trim($_GET['q'])) : '';
 $q = preg_replace('~^https?://~', '', $q);          // strip a pasted protocol
@@ -21,9 +20,13 @@ $q = preg_replace('/\.(org|com|net)$/', '', $q);    // tolerate a typed TLD
 $q = preg_replace('/[^a-z0-9-]/', '', $q);          // DNS label chars only
 if ($q === '' || strlen($q) > 63 || $q[0] === '-' || substr($q, -1) === '-') {
     http_response_code(400);
+    header('Cache-Control: no-store'); // don't let caches keep an invalid-input error
     echo json_encode(['error' => 'invalid', 'message' => 'Use letters, numbers, and hyphens (no spaces).']);
     exit;
 }
+
+// Only successful lookups are cacheable (matches the 1h server-side cache below).
+header('Cache-Control: public, max-age=3600');
 
 // Server-side cache: one entry per label, 1h. Limits outbound RDAP and abuse
 // (each request otherwise makes 3 registry calls); Cloudflare also caches via
