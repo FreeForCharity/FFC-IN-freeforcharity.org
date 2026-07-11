@@ -41,9 +41,10 @@ function rdap_status(string $base, string $fqdn): string {
     $ch = curl_init($base . $fqdn);
     curl_setopt_array($ch, [
         CURLOPT_TIMEOUT         => 8,
-        CURLOPT_FOLLOWLOCATION  => true,
+        // The direct registry RDAP URLs return 200/404 with no redirect, so we
+        // don't follow redirects at all — closes any SSRF-via-redirect path.
+        CURLOPT_FOLLOWLOCATION  => false,
         CURLOPT_PROTOCOLS       => CURLPROTO_HTTPS, // only fetch https
-        CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTPS, // and only follow https redirects (SSRF guard)
         CURLOPT_USERAGENT       => 'FreeForCharity-DomainCheck/1.0 (+https://freeforcharity.org)',
         CURLOPT_HTTPHEADER      => ['Accept: application/rdap+json'],
         // We only need the status code — discard the body instead of buffering it.
