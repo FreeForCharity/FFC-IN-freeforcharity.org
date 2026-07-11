@@ -81,7 +81,9 @@ async function main() {
 
   for (const path of targets) {
     const rel = path.startsWith('/') ? path : `/${path}`
-    const url = path.startsWith('http') ? path : `${BASE_URL}${rel}`
+    // Only a real scheme counts as absolute — otherwise a route like
+    // `http-status/` would be mistaken for a URL and crash `new URL()`.
+    const url = /^https?:\/\//.test(path) ? path : `${BASE_URL}${rel}`
     // Classify by the target's own origin, not BASE_URL — an absolute-URL
     // arg has its own origin, and BASE_URL wouldn't match it.
     const origin = new URL(url).origin
@@ -155,10 +157,11 @@ async function main() {
   process.stdout.write(
     `\n${failures ? FAIL : PASS} ${targets.length - failures}/${targets.length} routes clean\n`
   )
-  process.exit(failures ? 1 : 0)
+  // Set exitCode rather than process.exit() so stdout flushes fully first.
+  process.exitCode = failures ? 1 : 0
 }
 
 main().catch((e) => {
   console.error(e)
-  process.exit(1)
+  process.exitCode = 1
 })
