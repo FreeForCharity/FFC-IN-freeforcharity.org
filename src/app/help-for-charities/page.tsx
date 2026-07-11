@@ -3,7 +3,7 @@ import React from 'react'
 import HeroSection from '@/components/ui/HeroSection'
 import HelpForCharities from '@/components/ui/help-for-charity'
 import AccordionSection from '@/components/help-for-charities-components/AccordianSection'
-import ReadyToGetStarted from '@/components/help-for-charities-components/Ready-to-Get-Started-Now'
+import ApplyOptions from '@/components/ui/ApplyOptions'
 import CharityNonprofitDirectorFaq from '@/components/ui/Charity-Nonprofit-Director-Faq'
 import CallSection from '@/components/help-for-charities-components/call-section'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
@@ -12,7 +12,7 @@ import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 export const metadata = pageMetadata({
   title: 'Help for Charities',
   description:
-    'Resources and support for charity and nonprofit directors. Get instant access to free tools, domains, hosting, and technology services from Free For Charity.',
+    'Free For Charity gives verified nonprofits a complete online presence—a managed website, .org domain, and Microsoft 365 email—plus the tools, directories, and hands-on help to run leaner. Start even while pending 501(c)(3) status.',
   canonical: '/help-for-charities/',
 })
 
@@ -21,9 +21,27 @@ const index = () => {
     <div className="bg-[#FCFCFC]">
       <HeroSection
         heading="Help For Charities"
-        paragraph="If you are representing a charity or you currently work for a charity and want to improve your own skills start here to get help for your organization. You get instant access to many of our free tools and products right away!"
+        paragraph="Free For Charity gives verified nonprofits a complete online presence—a managed website, .org domain, and Microsoft 365 email—plus the tools, directories, and hands-on help to run leaner. You can start even while you're still pending 501(c)(3) status."
         heroImg="/Images/volunteer.webp"
       />
+
+      {/* On-page CTAs — no separate wizard page to bounce out to. */}
+      <div className="w-[90%] max-w-[860px] mx-auto mt-[36px] flex flex-col sm:flex-row items-center justify-center gap-[16px]">
+        <a
+          href="#apply"
+          className="inline-flex items-center justify-center rounded-[10px] bg-[#0567B1] px-[28px] py-[15px] text-[17px] font-[700] text-white transition-transform duration-200 hover:scale-[1.03] hover:bg-[#045a9b]"
+          data-font="lato-font"
+        >
+          How to apply
+        </a>
+        <a
+          href="#whats-included"
+          className="inline-flex items-center justify-center rounded-[10px] border-2 border-[#0567B1] px-[28px] py-[15px] text-[17px] font-[700] text-[#0567B1] transition-colors duration-200 hover:bg-[#0567B1]/5"
+          data-font="lato-font"
+        >
+          See what&apos;s included
+        </a>
+      </div>
 
       <div className="w-[90%] max-w-[720px] mx-auto mt-[32px]">
         <AdminGuideLink
@@ -32,7 +50,7 @@ const index = () => {
         />
       </div>
 
-      <div className="w-full h-[80px]" />
+      <div className="w-full h-[60px]" />
 
       <div className="flex w-full max-w-[90%] mx-auto">
         <HelpForCharities
@@ -42,7 +60,9 @@ const index = () => {
         />
       </div>
 
-      <AccordionSection />
+      <div id="whats-included" className="scroll-mt-[120px]">
+        <AccordionSection />
+      </div>
 
       <div className="w-[90%] max-w-[720px] mx-auto py-[20px] text-center">
         <p className="text-[18px] font-[500] leading-[28px] text-[#333]" data-font="lato-font">
@@ -57,9 +77,9 @@ const index = () => {
         </p>
       </div>
 
-      <ReadyToGetStarted />
       <CharityNonprofitDirectorFaq />
-      <ReadyToGetStarted />
+
+      <ApplyOptions />
       <CallSection />
     </div>
   )

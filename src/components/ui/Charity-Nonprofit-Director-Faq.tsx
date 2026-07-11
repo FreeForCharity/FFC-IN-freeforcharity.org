@@ -232,9 +232,14 @@ const CharityFAQ: React.FC = () => {
 
           <AccordionItem number="8" title="What do I need to get started?">
             All you need to do to get Free For Charity to provide help for your charity’s mission
-            today is to contact us with some basic information about your charity. We need to know
-            what type of projects you would like us to look at or undertake. Please fill out the
-            form below and we will be in touch shortly.
+            today is to apply with a little information about your organization. Use the apply
+            options just below — 501(c)(3) or pre-501(c)(3) — and if you’re not sure which fits, the
+            “Help me choose” guide there will point you to the right one. Prefer to talk it through
+            first? Reach out by phone or through our{' '}
+            <Link href="/contact-us/" className="text-[#0567B1]">
+              contact page
+            </Link>
+            .
           </AccordionItem>
         </div>
       </div>
