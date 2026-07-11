@@ -138,10 +138,6 @@ const sectionComponents: [string, string][] = [
     '../../src/components/free-for-charity-endowment-fund-components/Voices-of-Gratitude/index',
   ],
   [
-    'free-for-charity-ffc-service-delivery-stages-components/Hero',
-    '../../src/components/free-for-charity-ffc-service-delivery-stages-components/Hero/index',
-  ],
-  [
     'free-for-charity-ffc-web-developer-training-guide-components/Hero',
     '../../src/components/free-for-charity-ffc-web-developer-training-guide-components/Hero/index',
   ],

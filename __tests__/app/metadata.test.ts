@@ -51,10 +51,6 @@ const pages = [
   },
   { path: 'free-for-charity-donation-policy/page', name: 'FFC Donation Policy' },
   {
-    path: 'free-for-charity-ffc-service-delivery-stages/page',
-    name: 'Service Delivery Stages',
-  },
-  {
     path: 'free-for-charity-ffc-web-developer-training-guide/page',
     name: 'Web Developer Training Guide',
   },

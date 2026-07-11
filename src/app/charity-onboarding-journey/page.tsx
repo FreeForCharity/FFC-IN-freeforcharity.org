@@ -40,7 +40,7 @@ const stages: Stage[] = [
     duration: '2–6 weeks, mostly depending on content readiness',
     links: [
       {
-        href: '/free-for-charity-ffc-service-delivery-stages/',
+        href: 'https://ffcadmin.org/sites-list/',
         label: 'How FFC delivers services',
       },
     ],
