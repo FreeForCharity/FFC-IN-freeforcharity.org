@@ -37,7 +37,7 @@ const templates: TemplateOption[] = [
       'GDPR cookie consent and analytics',
       'Team section and SEO infrastructure',
     ],
-    repoUrl: 'https://github.com/FreeForCharity/FFC-IN-Footer-Only-Template',
+    repoUrl: 'https://github.com/FreeForCharity/FFC-IN-Footer_Only_Template',
     repoLabel: 'View the Footer-Only template on GitHub',
   },
 ]
