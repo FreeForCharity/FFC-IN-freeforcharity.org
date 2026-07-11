@@ -11,11 +11,12 @@
  */
 
 header('Content-Type: application/json; charset=utf-8');
-header('Cache-Control: public, max-age=1800'); // availability changes slowly; cache 30 min
+header('Cache-Control: public, max-age=3600'); // matches the 1h server-side cache below
 
 $q = isset($_GET['q']) ? strtolower(trim($_GET['q'])) : '';
-$q = preg_replace('#^https?://#', '', $q);          // strip a pasted protocol
-$q = preg_replace('#/.*$#', '', $q);                // strip a path / trailing slash
+$q = preg_replace('~^https?://~', '', $q);          // strip a pasted protocol
+$q = preg_replace('~^www\.~', '', $q);              // strip a www. subdomain
+$q = preg_replace('~[/?#].*$~', '', $q);            // strip a path, query string, or fragment
 $q = preg_replace('/\.(org|com|net)$/', '', $q);    // tolerate a typed TLD
 $q = preg_replace('/[^a-z0-9-]/', '', $q);          // DNS label chars only
 if ($q === '' || strlen($q) > 63 || $q[0] === '-' || substr($q, -1) === '-') {

@@ -14,7 +14,8 @@ export function toLabel(raw: string): string {
     .trim()
     .toLowerCase()
     .replace(/^https?:\/\//, '') // strip a pasted protocol
-    .replace(/\/.*$/, '') // strip a path / trailing slash
+    .replace(/^www\./, '') // strip a www. subdomain
+    .replace(/[/?#].*$/, '') // strip a path, query string, or fragment
     .replace(/\.(org|com|net)$/, '') // strip a typed TLD
     .replace(/[^a-z0-9-]/g, '') // DNS-label characters only
 }

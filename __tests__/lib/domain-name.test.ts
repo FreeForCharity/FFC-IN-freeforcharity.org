@@ -19,6 +19,12 @@ describe('toLabel', () => {
     expect(toLabel('http://Hope-Pantry.com/about')).toBe('hope-pantry')
   })
 
+  it('strips www. subdomains and query strings / fragments', () => {
+    expect(toLabel('www.example.org')).toBe('example')
+    expect(toLabel('https://www.hopepantry.org/?utm=1')).toBe('hopepantry')
+    expect(toLabel('example.org?ref=x#top')).toBe('example')
+  })
+
   it('returns empty for junk', () => {
     expect(toLabel('   ')).toBe('')
     expect(toLabel('...')).toBe('')
