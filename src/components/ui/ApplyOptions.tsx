@@ -116,7 +116,6 @@ interface ApplyOptionsProps {
 }
 
 const ApplyOptions: React.FC<ApplyOptionsProps> = ({ heading = 'Ready to apply?' }) => {
-  const [helpOpen, setHelpOpen] = useState(false)
   const [choice, setChoice] = useState<number | null>(null)
 
   return (
@@ -164,64 +163,57 @@ const ApplyOptions: React.FC<ApplyOptionsProps> = ({ heading = 'Ready to apply?'
           </div>
         </div>
 
-        {/* Help me choose — inline, no navigation */}
-        <div className="mt-[28px]">
-          <button
-            type="button"
-            onClick={() => setHelpOpen((v) => !v)}
-            aria-expanded={helpOpen}
-            aria-controls={helpOpen ? 'help-me-choose-panel' : undefined}
-            className="inline-flex items-center gap-[8px] rounded-[10px] border-2 border-[#0567B1] px-[24px] py-[12px] text-[16px] font-[700] text-[#0567B1] transition-colors hover:bg-[#0567B1]/5 cursor-pointer"
-            data-font="lato-font"
-          >
-            <span>Help me choose</span>
-            <span aria-hidden="true">{helpOpen ? '▲' : '▼'}</span>
-          </button>
+        {/* Help me choose — a native <details> disclosure with native radios,
+            so the toggle and single-choice keyboard/screen-reader semantics are
+            correct by default (no ARIA to hand-maintain). */}
+        <details className="mt-[28px] text-left max-w-[720px] mx-auto">
+          <summary className="inline-flex items-center gap-[8px] rounded-[10px] border-2 border-[#0567B1] px-[24px] py-[12px] text-[16px] font-[700] text-[#0567B1] transition-colors hover:bg-[#0567B1]/5 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            <span data-font="lato-font">Help me choose</span>
+          </summary>
 
-          {helpOpen ? (
-            <div
-              id="help-me-choose-panel"
-              className="mt-[20px] max-w-[720px] mx-auto text-left bg-[#F5F8FB] rounded-[12px] border border-[#e6edf3] p-[24px]"
-            >
-              <p
-                id="help-me-choose-q"
+          <div className="mt-[20px] bg-[#F5F8FB] rounded-[12px] border border-[#e6edf3] p-[24px]">
+            <fieldset>
+              <legend
                 className="text-[17px] font-[700] text-[#1a2e35] mb-[14px]"
                 data-font="lato-font"
               >
                 Which best describes your organization?
-              </p>
-              <div role="radiogroup" aria-labelledby="help-me-choose-q" className="space-y-[10px]">
+              </legend>
+              <div className="space-y-[10px]">
                 {choices.map((c, i) => (
-                  <button
+                  <label
                     key={c.label}
-                    type="button"
-                    role="radio"
-                    aria-checked={choice === i}
-                    onClick={() => setChoice(i)}
-                    className={`block w-full text-left rounded-[8px] border px-[16px] py-[12px] text-[16px] transition-colors cursor-pointer ${
+                    className={`block w-full rounded-[8px] border px-[16px] py-[12px] text-[16px] cursor-pointer transition-colors focus-within:ring-2 focus-within:ring-[#0567B1] focus-within:ring-offset-1 ${
                       choice === i
                         ? 'border-[#0567B1] bg-white text-[#0567B1] font-[700]'
                         : 'border-[#d7e0e8] bg-white text-[#333] hover:border-[#0567B1]'
                     }`}
                     data-font="lato-font"
                   >
+                    <input
+                      type="radio"
+                      name="apply-choice"
+                      className="sr-only"
+                      checked={choice === i}
+                      onChange={() => setChoice(i)}
+                    />
                     {c.label}
-                  </button>
+                  </label>
                 ))}
               </div>
+            </fieldset>
 
-              {choice !== null ? (
-                <div
-                  className="mt-[18px] rounded-[10px] bg-white border border-[#cfe0ee] p-[20px] text-[16px] leading-[25px] text-[#333]"
-                  data-font="lato-font"
-                  aria-live="polite"
-                >
-                  {choices[choice].result}
-                </div>
-              ) : null}
-            </div>
-          ) : null}
-        </div>
+            {choice !== null ? (
+              <div
+                className="mt-[18px] rounded-[10px] bg-white border border-[#cfe0ee] p-[20px] text-[16px] leading-[25px] text-[#333]"
+                data-font="lato-font"
+                aria-live="polite"
+              >
+                {choices[choice].result}
+              </div>
+            ) : null}
+          </div>
+        </details>
       </div>
     </section>
   )

@@ -235,7 +235,11 @@ const CharityFAQ: React.FC = () => {
             today is to apply with a little information about your organization. Use the apply
             options just below — 501(c)(3) or pre-501(c)(3) — and if you’re not sure which fits, the
             “Help me choose” guide there will point you to the right one. Prefer to talk it through
-            first? Give us a call using the number below.
+            first? Reach out by phone or through our{' '}
+            <Link href="/contact-us/" className="text-[#0567B1]">
+              contact page
+            </Link>
+            .
           </AccordionItem>
         </div>
       </div>

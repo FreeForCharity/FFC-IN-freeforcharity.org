@@ -18,23 +18,24 @@ describe('ApplyOptions', () => {
     for (const h of hrefs) expect(h).not.toContain('confproduct')
   })
 
-  it('opens the "Help me choose" panel and reveals a recommendation inline', () => {
+  it('offers the "Help me choose" guide and reveals a recommendation on choice', () => {
     render(<ApplyOptions />)
-    // Panel is collapsed until requested.
-    expect(screen.queryByText(/Which best describes your organization/i)).not.toBeInTheDocument()
+    // The native <details> disclosure and its single-choice question exist.
+    expect(
+      screen.getByRole('group', { name: /Which best describes your organization/i })
+    ).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: /Help me choose/i }))
-    expect(screen.getByText(/Which best describes your organization/i)).toBeInTheDocument()
+    // No recommendation until an answer is chosen.
+    expect(screen.queryByText(/use this application/i)).not.toBeInTheDocument()
 
     // Picking the determination-letter answer recommends the 501(c)(3) path.
     fireEvent.click(screen.getByRole('radio', { name: /determination letter/i }))
     expect(screen.getByText(/use this application/i)).toBeInTheDocument()
   })
 
-  it('has no axe violations, collapsed and expanded', async () => {
+  it('has no axe violations before and after choosing', async () => {
     const { container } = render(<ApplyOptions />)
     expect(await axe(container)).toHaveNoViolations()
-    fireEvent.click(screen.getByRole('button', { name: /Help me choose/i }))
     fireEvent.click(screen.getByRole('radio', { name: /determination letter/i }))
     expect(await axe(container)).toHaveNoViolations()
   }, 30000)
