@@ -13,6 +13,12 @@ describe('toLabel', () => {
     expect(toLabel('a-b-c')).toBe('a-b-c')
   })
 
+  it('trims whitespace and tolerates a pasted URL / trailing slash', () => {
+    expect(toLabel('  HopePantry.org ')).toBe('hopepantry')
+    expect(toLabel('https://example.org/')).toBe('example')
+    expect(toLabel('http://Hope-Pantry.com/about')).toBe('hope-pantry')
+  })
+
   it('returns empty for junk', () => {
     expect(toLabel('   ')).toBe('')
     expect(toLabel('...')).toBe('')

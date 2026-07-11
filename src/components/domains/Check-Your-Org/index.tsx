@@ -36,6 +36,11 @@ const CheckYourOrg = () => {
     setLoading(true)
     try {
       const r = await fetch(`/api/domain-check.php?q=${encodeURIComponent(label)}`)
+      if (r.status === 400) {
+        const j = (await r.json().catch(() => ({}))) as { message?: string }
+        setError(j.message || 'Please check the name and try again.')
+        return
+      }
       if (!r.ok) throw new Error('lookup failed')
       setResult((await r.json()) as CheckResult)
     } catch {
@@ -48,7 +53,7 @@ const CheckYourOrg = () => {
   }
 
   return (
-    <section id="check-your-domain" className="py-[50px] bg-white">
+    <section id="check-your-domain" className="py-[50px] bg-white scroll-mt-[100px]">
       <div className="w-[80%] max-w-4xl mx-auto">
         <h2
           className="text-center text-[30px] md:text-[35px] text-[#0567B1] font-[700] leading-[46px] mb-3"
@@ -79,7 +84,8 @@ const CheckYourOrg = () => {
               autoCapitalize="none"
               autoCorrect="off"
               spellCheck={false}
-              className="flex-1 px-4 py-3 text-[18px] outline-none"
+              disabled={loading}
+              className="flex-1 px-4 py-3 text-[18px] outline-none disabled:bg-[#f7f7f7]"
             />
             <span className="px-3 py-3 text-[18px] font-medium text-[#2A6F9E] bg-[#f2f2f2]">
               .org
@@ -124,9 +130,14 @@ const CheckYourOrg = () => {
                       ))}
                     </ul>
                   </div>
-                ) : (
+                ) : result.com === 'available' && result.net === 'available' ? (
                   <p className="mt-2 text-[15px] text-[#1a7a3c]">
                     No conflicting .com or .net — this is a clean, distinctive name.
+                  </p>
+                ) : (
+                  <p className="mt-2 text-[15px] text-[#555]">
+                    The .org is available. We couldn’t fully confirm the matching .com/.net just now
+                    — we’ll double-check when we register it for you.
                   </p>
                 )}
                 {notes.length > 0 && (

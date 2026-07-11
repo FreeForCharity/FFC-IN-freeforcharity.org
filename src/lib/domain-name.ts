@@ -4,12 +4,19 @@
  * (which mirrors `toLabel`) — and the unit tests — agree on the rules.
  */
 
-/** Normalize a typed value to a bare DNS label: strip a TLD, keep [a-z0-9-]. */
+/**
+ * Normalize a typed value to a bare DNS label — tolerant of pasted URLs and
+ * stray whitespace (e.g. "  https://HopePantry.org/ " -> "hopepantry").
+ * The PHP endpoint mirrors these exact steps.
+ */
 export function toLabel(raw: string): string {
   return raw
+    .trim()
     .toLowerCase()
-    .replace(/\.(org|com|net)$/, '')
-    .replace(/[^a-z0-9-]/g, '')
+    .replace(/^https?:\/\//, '') // strip a pasted protocol
+    .replace(/\/.*$/, '') // strip a path / trailing slash
+    .replace(/\.(org|com|net)$/, '') // strip a typed TLD
+    .replace(/[^a-z0-9-]/g, '') // DNS-label characters only
 }
 
 /** Instant, client-side naming-quality feedback (no server needed). */
