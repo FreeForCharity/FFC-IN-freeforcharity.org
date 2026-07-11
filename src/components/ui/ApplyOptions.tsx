@@ -169,6 +169,7 @@ const ApplyOptions: React.FC<ApplyOptionsProps> = ({ heading = 'Ready to apply?'
             type="button"
             onClick={() => setHelpOpen((v) => !v)}
             aria-expanded={helpOpen}
+            aria-controls={helpOpen ? 'help-me-choose-panel' : undefined}
             className="inline-flex items-center gap-[8px] rounded-[10px] border-2 border-[#0567B1] px-[24px] py-[12px] text-[16px] font-[700] text-[#0567B1] transition-colors hover:bg-[#0567B1]/5 cursor-pointer"
             data-font="lato-font"
           >
@@ -177,29 +178,36 @@ const ApplyOptions: React.FC<ApplyOptionsProps> = ({ heading = 'Ready to apply?'
           </button>
 
           {helpOpen ? (
-            <div className="mt-[20px] max-w-[720px] mx-auto text-left bg-[#F5F8FB] rounded-[12px] border border-[#e6edf3] p-[24px]">
-              <p className="text-[17px] font-[700] text-[#1a2e35] mb-[14px]" data-font="lato-font">
+            <div
+              id="help-me-choose-panel"
+              className="mt-[20px] max-w-[720px] mx-auto text-left bg-[#F5F8FB] rounded-[12px] border border-[#e6edf3] p-[24px]"
+            >
+              <p
+                id="help-me-choose-q"
+                className="text-[17px] font-[700] text-[#1a2e35] mb-[14px]"
+                data-font="lato-font"
+              >
                 Which best describes your organization?
               </p>
-              <ul className="space-y-[10px]">
+              <div role="radiogroup" aria-labelledby="help-me-choose-q" className="space-y-[10px]">
                 {choices.map((c, i) => (
-                  <li key={c.label}>
-                    <button
-                      type="button"
-                      onClick={() => setChoice(i)}
-                      aria-pressed={choice === i}
-                      className={`block w-full text-left rounded-[8px] border px-[16px] py-[12px] text-[16px] transition-colors cursor-pointer ${
-                        choice === i
-                          ? 'border-[#0567B1] bg-white text-[#0567B1] font-[700]'
-                          : 'border-[#d7e0e8] bg-white text-[#333] hover:border-[#0567B1]'
-                      }`}
-                      data-font="lato-font"
-                    >
-                      {c.label}
-                    </button>
-                  </li>
+                  <button
+                    key={c.label}
+                    type="button"
+                    role="radio"
+                    aria-checked={choice === i}
+                    onClick={() => setChoice(i)}
+                    className={`block w-full text-left rounded-[8px] border px-[16px] py-[12px] text-[16px] transition-colors cursor-pointer ${
+                      choice === i
+                        ? 'border-[#0567B1] bg-white text-[#0567B1] font-[700]'
+                        : 'border-[#d7e0e8] bg-white text-[#333] hover:border-[#0567B1]'
+                    }`}
+                    data-font="lato-font"
+                  >
+                    {c.label}
+                  </button>
                 ))}
-              </ul>
+              </div>
 
               {choice !== null ? (
                 <div

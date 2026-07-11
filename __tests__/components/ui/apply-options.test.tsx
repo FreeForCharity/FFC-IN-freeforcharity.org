@@ -27,7 +27,7 @@ describe('ApplyOptions', () => {
     expect(screen.getByText(/Which best describes your organization/i)).toBeInTheDocument()
 
     // Picking the determination-letter answer recommends the 501(c)(3) path.
-    fireEvent.click(screen.getByRole('button', { name: /determination letter/i }))
+    fireEvent.click(screen.getByRole('radio', { name: /determination letter/i }))
     expect(screen.getByText(/use this application/i)).toBeInTheDocument()
   })
 
@@ -35,7 +35,7 @@ describe('ApplyOptions', () => {
     const { container } = render(<ApplyOptions />)
     expect(await axe(container)).toHaveNoViolations()
     fireEvent.click(screen.getByRole('button', { name: /Help me choose/i }))
-    fireEvent.click(screen.getByRole('button', { name: /determination letter/i }))
+    fireEvent.click(screen.getByRole('radio', { name: /determination letter/i }))
     expect(await axe(container)).toHaveNoViolations()
   }, 30000)
 })
