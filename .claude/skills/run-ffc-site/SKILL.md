@@ -56,11 +56,11 @@ kill $(cat /tmp/serve.pid)
 Expected output — every route green, third-party embeds noted as blocked:
 
 ```
-✓ / (2 third-party blocked) -> screenshots/home.png
-✓ /about-us/ (2 third-party blocked) -> screenshots/about-us.png
-✓ /501c3/ (2 third-party blocked) -> screenshots/501c3.png
-✓ /privacy-policy/ (2 third-party blocked) -> screenshots/privacy-policy.png
-✓ /search/ (2 third-party blocked) -> screenshots/search.png
+✓ / (2 third-party blocked) -> .claude/skills/run-ffc-site/screenshots/home.png
+✓ /about-us/ (2 third-party blocked) -> .claude/skills/run-ffc-site/screenshots/about-us.png
+✓ /501c3/ (2 third-party blocked) -> .claude/skills/run-ffc-site/screenshots/501c3.png
+✓ /privacy-policy/ (2 third-party blocked) -> .claude/skills/run-ffc-site/screenshots/privacy-policy.png
+✓ /search/ (2 third-party blocked) -> .claude/skills/run-ffc-site/screenshots/search.png
 
 ✓ 5/5 routes clean
 ```
@@ -121,13 +121,14 @@ npm run test:e2e   # playwright e2e — needs the pinned browser; see gotcha bel
 
 ## Gotchas
 
-- **Two "console errors" per page are not bugs.** The Zeffy donation embed
-  (`zeffy-scripts.s3.ca-central-1.amazonaws.com`) and the GuideStar seal
-  (`widgets.guidestar.org`) are third-party hosts the sandbox proxy blocks
-  with `ERR_CONNECTION_RESET`. The driver reports these as
-  "N third-party blocked" and does **not** fail on them — it only fails on
-  same-origin problems. The donation iframe and seal render blank in
-  screenshots as a result; that's expected here, not a regression.
+- **Two failed third-party requests per page are not bugs.** The Zeffy donation
+  embed (`zeffy-scripts.s3.ca-central-1.amazonaws.com`) and the GuideStar seal
+  (`widgets.guidestar.org`) are third-party hosts the sandbox proxy blocks with
+  `ERR_CONNECTION_RESET`. The driver counts these (as `requestfailed` events off
+  the target's origin) and reports them as "N third-party blocked" — it does
+  **not** fail on them; it only fails on same-origin problems. The donation
+  iframe and seal render blank in screenshots as a result; that's expected here,
+  not a regression.
 - **`localhost` requests in a raw `requestfailed` listener are prefetches.**
   Next.js `<Link>` prefetches the RSC payload and aborts them on navigate
   (`ERR_ABORTED`). The driver filters those out; don't treat them as failures.

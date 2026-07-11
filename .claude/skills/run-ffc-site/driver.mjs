@@ -24,7 +24,7 @@
 import { chromium } from 'playwright'
 import { mkdir } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
-import { dirname, resolve } from 'node:path'
+import { dirname, resolve, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 // The repo's Playwright pins a browser build that may not match the one
@@ -64,6 +64,16 @@ async function main() {
 
   for (const path of targets) {
     const url = path.startsWith('http') ? path : `${BASE_URL}${path}`
+    // Classify by the target's own origin, not BASE_URL — an absolute-URL
+    // arg has its own origin, and BASE_URL wouldn't match it.
+    const origin = new URL(url).origin
+    const sameOrigin = (u) => {
+      try {
+        return new URL(u).origin === origin
+      } catch {
+        return false
+      }
+    }
     const page = await context.newPage()
     const pageErrors = []
     const localFails = [] // same-origin resource failures — real bugs
@@ -72,18 +82,23 @@ async function main() {
     page.on('requestfailed', (r) => {
       const err = r.failure()?.errorText || ''
       if (err.includes('ERR_ABORTED')) return // aborted <Link> prefetches are normal
-      if (r.url().startsWith(BASE_URL)) localFails.push(`${r.url()} (${err})`)
+      if (sameOrigin(r.url())) localFails.push(`${r.url()} (${err})`)
       else extBlocks.push(r.url())
     })
     page.on('response', (r) => {
-      if (r.url().startsWith(BASE_URL) && r.status() >= 400)
+      if (sameOrigin(r.url()) && r.status() >= 400)
         localFails.push(`${r.url()} (HTTP ${r.status()})`)
     })
 
+    const shot = resolve(shotDir, `${slug(path)}.png`)
+    const shotRel = relative(process.cwd(), shot)
     let ok = true
     let detail = ''
     try {
-      const res = await page.goto(url, { waitUntil: 'networkidle', timeout: 30000 })
+      const res = await page.goto(url, { waitUntil: 'load', timeout: 30000 })
+      // Best-effort quiet-network wait: blocked third-party embeds can keep
+      // the network busy indefinitely, so cap it instead of failing on it.
+      await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {})
       const status = res?.status() ?? 0
       if (status >= 400) {
         ok = false
@@ -93,7 +108,6 @@ async function main() {
         ok = false
         detail = `${detail} missing text "${EXPECT}"`.trim()
       }
-      const shot = resolve(shotDir, `${slug(path)}.png`)
       await page.screenshot({ path: shot, fullPage: true })
       if (pageErrors.length) {
         ok = false
@@ -111,7 +125,7 @@ async function main() {
     if (!ok) failures++
     const note = extBlocks.length ? ` (${extBlocks.length} third-party blocked)` : ''
     process.stdout.write(
-      `${ok ? PASS : FAIL} ${path}${detail ? ` — ${detail}` : ''}${note} -> screenshots/${slug(path)}.png\n`
+      `${ok ? PASS : FAIL} ${path}${detail ? ` — ${detail}` : ''}${note} -> ${shotRel}\n`
     )
     await page.close()
   }
