@@ -23,7 +23,7 @@ $q = preg_replace('/[^a-z0-9-]/', '', $q);          // DNS label chars only
 if ($q === '' || strlen($q) > 63 || $q[0] === '-' || substr($q, -1) === '-') {
     http_response_code(400);
     header('Cache-Control: no-store'); // don't let caches keep an invalid-input error
-    echo json_encode(['error' => 'invalid', 'message' => 'Use letters, numbers, and hyphens (no spaces).']);
+    echo json_encode(['error' => 'invalid', 'message' => 'Enter 1–63 letters, numbers, or hyphens — not starting or ending with a hyphen.']);
     exit;
 }
 

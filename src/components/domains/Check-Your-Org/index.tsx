@@ -44,6 +44,11 @@ const CheckYourOrg = () => {
         return
       }
       if (!r.ok) throw new Error('lookup failed')
+      // Guard: in dev / static previews the .php isn't executed (served as a file),
+      // so the 200 body isn't JSON — fall through to the friendly error below.
+      if (!(r.headers.get('content-type') || '').includes('application/json')) {
+        throw new Error('non-json response')
+      }
       setResult((await r.json()) as CheckResult)
     } catch {
       setError(
