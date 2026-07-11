@@ -34,12 +34,10 @@ import Domains from '../../src/app/domains/page'
 import Donate from '../../src/app/donate/page'
 import DonationPolicy from '../../src/app/donation-policy/page'
 import VolunteerProvingGround from '../../src/app/ffc-volunteer-proving-ground-core-competencies/page'
-import FfcAdminBackupSop from '../../src/app/ffcadmin-free-for-charity-cpanel-backup-sop/page'
 import FfcAdmin from '../../src/app/ffcadmin/page'
 import FreeCharityWebHosting from '../../src/app/free-charity-web-hosting/page'
 import FfcDonationPolicy from '../../src/app/free-for-charity-donation-policy/page'
 import EndowmentFund from '../../src/app/free-for-charity-endowment-fund/page'
-import ServiceDeliveryStages from '../../src/app/free-for-charity-ffc-service-delivery-stages/page'
 import WebDeveloperTrainingGuide from '../../src/app/free-for-charity-ffc-web-developer-training-guide/page'
 import ToolsForSuccess from '../../src/app/free-for-charitys-tools-for-success/page'
 import FreeTrainingPrograms from '../../src/app/free-training-programs/page'
@@ -71,12 +69,10 @@ const pages: [string, React.ComponentType][] = [
   ['Donate', Donate],
   ['Donation Policy', DonationPolicy],
   ['Volunteer Proving Ground', VolunteerProvingGround],
-  ['FFC Admin Backup SOP', FfcAdminBackupSop],
   ['FFC Admin', FfcAdmin],
   ['Free Charity Web Hosting', FreeCharityWebHosting],
   ['FFC Donation Policy', FfcDonationPolicy],
   ['Endowment Fund', EndowmentFund],
-  ['Service Delivery Stages', ServiceDeliveryStages],
   ['Web Developer Training Guide', WebDeveloperTrainingGuide],
   ['Tools for Success', ToolsForSuccess],
   ['Free Training Programs', FreeTrainingPrograms],

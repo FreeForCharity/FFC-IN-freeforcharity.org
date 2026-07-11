@@ -41,10 +41,6 @@ export const siteRoutes = [
   { route: '/guidestar-guide', name: 'GuideStar Guide' },
   { route: '/free-for-charitys-tools-for-success', name: 'Tools for Success' },
   {
-    route: '/free-for-charity-ffc-service-delivery-stages',
-    name: 'Service Delivery Stages',
-  },
-  {
     route: '/free-for-charity-ffc-web-developer-training-guide',
     name: 'Web Developer Training Guide',
   },

@@ -101,17 +101,7 @@ const menuItems: MenuItem[] = [
   {
     label: 'FFCAdmin',
     path: '/ffcadmin',
-    hasDropdown: true,
-    dropdownItems: [
-      {
-        label: 'Free For Charity (FFC) Service Delivery Stages',
-        path: '/free-for-charity-ffc-service-delivery-stages',
-      },
-      {
-        label: 'FFC Admin cPanel Backup',
-        path: '/ffcadmin-free-for-charity-cpanel-backup-sop',
-      },
-    ],
+    hasDropdown: false,
   },
 ]
 

@@ -77,15 +77,14 @@ test.describe('Desktop Dropdown Menus', () => {
     await expect(links).toHaveCount(3)
   })
 
-  test('should show FFCAdmin dropdown on hover with 2 sub-items', async ({ page }) => {
+  test('FFCAdmin is a direct link with no dropdown', async ({ page }) => {
     const menuItem = page.locator('header nav li').filter({ hasText: 'FFCAdmin' })
     await menuItem.hover()
 
-    const dropdown = menuItem.locator('div.absolute')
-    await expect(dropdown).toBeVisible()
-
-    const links = dropdown.locator('a')
-    await expect(links).toHaveCount(2)
+    // The two former sub-pages were consolidated onto ffcadmin.org, so
+    // FFCAdmin is now a plain link to /ffcadmin — no dropdown appears.
+    await expect(menuItem.locator('div.absolute')).toHaveCount(0)
+    await expect(menuItem.locator('a[href="/ffcadmin"]')).toBeVisible()
   })
 
   test('should navigate to sub-page when clicking dropdown item', async ({ page }) => {

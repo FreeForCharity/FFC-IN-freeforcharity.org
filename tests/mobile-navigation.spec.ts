@@ -127,11 +127,12 @@ test.describe('Mobile Navigation', () => {
     await expect(mobileMenu.getByText('Free Charity Web Hosting')).toBeVisible()
   })
 
-  test('should display FFCAdmin dropdown sub-items', async ({ page }) => {
+  test('should display the FFCAdmin link in the mobile menu', async ({ page }) => {
     await page.locator('button[aria-label="Open menu"]').click()
 
+    // FFCAdmin is now a direct link (its former sub-pages moved to ffcadmin.org).
     const mobileMenu = page.locator('header .lg\\:hidden.absolute')
-    await expect(mobileMenu.getByText('FFC Admin cPanel Backup')).toBeVisible()
+    await expect(mobileMenu.locator('a[href="/ffcadmin"]')).toBeVisible()
   })
 
   test('should navigate to a sub-page from mobile menu', async ({ page }) => {

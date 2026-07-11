@@ -164,12 +164,6 @@
       "type": "page"
     },
     {
-      "title": "Service Delivery Stages",
-      "description": "How Free For Charity delivers a free nonprofit website—a fast, secure GitHub Pages static site built with AI—through our charity validation, onboarding, and launch stages, with the legacy WordPress build retained as an option.",
-      "href": "/free-for-charity-ffc-service-delivery-stages/",
-      "type": "page"
-    },
-    {
       "title": "Web Developer Training Guide",
       "description": "FFC web developer training for the modern stack—building GitHub Pages static sites with AI development agents (Claude and GitHub Copilot), Next.js, Cloudflare, and Microsoft 365—with the legacy WordPress workflow retained for existing sites.",
       "href": "/free-for-charity-ffc-web-developer-training-guide/",

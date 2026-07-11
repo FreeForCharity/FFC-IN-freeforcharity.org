@@ -46,6 +46,12 @@ RewriteRule ^our-organization-earned-a-2021-platinum-seal-of-transparency/?$ /bl
 RewriteRule ^we-just-updated-for-the-2022-guidestar-platinum-seal/?$ /blog/ [R=301,L]
 RewriteRule ^using-a-registered-agent-service-northwest-registered-agent/?$ /blog/ [R=301,L]
 
+# FFC Admin sub-pages consolidated onto the FFC Admin portal (ffcadmin.org).
+# The full technical/automation docs live on ffcadmin.org; these stub pages
+# were removed and 301 to their canonical FFC Admin equivalents.
+RewriteRule ^free-for-charity-ffc-service-delivery-stages/?$ https://ffcadmin.org/sites-list/ [R=301,L]
+RewriteRule ^ffcadmin-free-for-charity-cpanel-backup-sop/?$ https://ffcadmin.org/legacy-wordpress-administration/wordpress-cpanel-backup-sop/ [R=301,L]
+
 # Content consolidation
 RewriteRule ^podio-sponsorship-program/?$ /help-for-charities/ [R=301,L]
 RewriteRule ^what-is-the-cost/?$ /help-for-charities/ [R=301,L]
