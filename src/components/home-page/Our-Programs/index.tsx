@@ -224,11 +224,11 @@ const index = () => {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-[20px]">
             <Link
-              href="/eligibility-check/"
+              href="/help-for-charities/"
               className="inline-flex items-center justify-center rounded-[16px] bg-[#2A6682] px-[32px] py-[18px] text-[22px] font-[400] text-white transition-colors hover:bg-[#1f4f63]"
               data-font="lato-font"
             >
-              Check your charity&apos;s eligibility
+              Get your charity started
             </Link>
             <Link
               href="/donate/"

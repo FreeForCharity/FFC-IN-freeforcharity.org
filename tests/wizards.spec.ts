@@ -1,38 +1,30 @@
 import { test, expect } from '@playwright/test'
 
 /**
- * Decision wizards (issues #367, #397): eligibility check and volunteer quiz.
- * Covers two outcome paths per wizard plus back/restart behavior.
+ * Decision wizard (issue #397): the volunteer skills quiz.
+ *
+ * The charity eligibility check is no longer a standalone wizard page — it now
+ * happens on-page via the "Help me choose" guide on the funnel pages, covered
+ * by the on-page apply test below and the ApplyOptions unit test.
  */
 
-test.describe('Charity eligibility check', () => {
-  test('a 501c3 qualifies and lands directly on the application button', async ({ page }) => {
-    await page.goto('/eligibility-check/')
-    await page.getByRole('button', { name: /501\(c\)\(3\) nonprofit in good standing/ }).click()
-    // Single committed journey: no à la carte domain/website/email branches —
-    // an eligible org goes straight to the on-page apply button.
-    await expect(page.getByText(/You qualify — apply now/)).toBeVisible()
+test.describe('On-page "Help me choose" apply guide', () => {
+  test('help-for-charities: choosing 501(c)(3) reveals the pid 33 application link', async ({
+    page,
+  }) => {
+    await page.goto('/help-for-charities/')
+
+    const guide = page.locator('details').filter({ hasText: 'Help me choose' }).first()
+    await guide.locator('summary').click()
+    await guide.getByText('We have our IRS 501(c)(3) determination letter').click()
+
+    // The recommendation appears in place (no navigation) with the 501(c)(3)
+    // application link deep-linked to the stable WHMCS product id.
+    const result = guide.locator('[aria-live="polite"]')
+    await expect(result.getByText(/use this application/i)).toBeVisible()
     await expect(
-      page.getByRole('link', { name: /Apply as a 501\(c\)\(3\) charity/ })
+      result.getByRole('link', { name: /Apply as a 501\(c\)\(3\) charity/ })
     ).toHaveAttribute('href', /cart\.php\?a=add&pid=33/)
-  })
-
-  test('a pre-501c3 with paperwork reaches the pre-501c3 application button', async ({ page }) => {
-    await page.goto('/eligibility-check/')
-    await page.getByRole('button', { name: /working toward 501\(c\)\(3\) determination/ }).click()
-    await page.getByRole('button', { name: /formation documents/ }).click()
-    await expect(page.getByText(/pre-501\(c\)3 onboarding — apply now/)).toBeVisible()
-    await expect(
-      page.getByRole('link', { name: /Apply as a pre-501\(c\)3 organization/ })
-    ).toHaveAttribute('href', /cart\.php\?a=add&pid=16/)
-  })
-
-  test('for-profit reaches the not-eligible outcome and can start over', async ({ page }) => {
-    await page.goto('/eligibility-check/')
-    await page.getByRole('button', { name: /for-profit business or individual/ }).click()
-    await expect(page.getByText(/free programs are for nonprofits/)).toBeVisible()
-    await page.getByRole('button', { name: 'Start over' }).click()
-    await expect(page.getByText('What best describes your organization?')).toBeVisible()
   })
 })
 

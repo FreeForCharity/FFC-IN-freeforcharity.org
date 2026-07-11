@@ -67,8 +67,8 @@ export default function CharitiesWeSupport() {
         <div className="prose max-w-none font-[var(--font-lato)] text-[18px] leading-[28px] mt-10">
           <p>
             Want your nonprofit on this list — with the free domain, email, and website that come
-            with it? Take the <Link href="/eligibility-check/">two-minute eligibility check</Link>.
-            Want to keep these organizations online? Each one costs about $16.50/year —{' '}
+            with it? See <Link href="/help-for-charities/">how to apply</Link>. Want to keep these
+            organizations online? Each one costs about $16.50/year —{' '}
             <Link href="/donate/">fund a few</Link>.
           </p>
         </div>

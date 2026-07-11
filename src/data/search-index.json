@@ -134,12 +134,6 @@
       "type": "page"
     },
     {
-      "title": "Charity Eligibility Check",
-      "description": "Answer a couple of quick questions to confirm your nonprofit qualifies for the Free For Charity program — one all-in package: a managed .org domain, Microsoft 365 email, and a professionally built website — then apply right here.",
-      "href": "/eligibility-check/",
-      "type": "page"
-    },
-    {
       "title": "Volunteer Proving Ground: Core Competencies",
       "description": "Mandatory first step for FFC volunteers. Learn foundational tools for security and effective collaboration in nonprofit technology services—and the path into our AI-driven static-site development workflow.",
       "href": "/ffc-volunteer-proving-ground-core-competencies/",

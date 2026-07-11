@@ -81,13 +81,13 @@ const HowToApply = () => {
         </ol>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-[16px]">
-          <Link
-            href="/eligibility-check/"
+          <a
+            href="#apply"
             className="inline-flex items-center justify-center rounded-[10px] bg-[#0567B1] px-[28px] py-[15px] text-[17px] font-[700] text-white transition-transform duration-200 hover:scale-[1.03] hover:bg-[#045a9b]"
             data-font="raleway-font"
           >
-            Start with the eligibility check
-          </Link>
+            Start your application
+          </a>
           <Link
             href="/charity-onboarding-journey/"
             className="inline-flex items-center justify-center rounded-[10px] border-2 border-[#0567B1] px-[28px] py-[15px] text-[17px] font-[700] text-[#0567B1] transition-colors duration-200 hover:bg-[#0567B1]/5"

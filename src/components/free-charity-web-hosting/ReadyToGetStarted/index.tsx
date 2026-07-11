@@ -1,11 +1,11 @@
 import React from 'react'
-import Link from 'next/link'
 import Transparentbtn from '@/components/ui/Transparentbtn'
+import HelpMeChoose from '@/components/ui/HelpMeChoose'
 import { hubAddProduct, ONBOARDING_PID } from '@/lib/config'
 
 const index = () => {
   return (
-    <div className="py-[50px]">
+    <div id="apply" className="py-[50px] scroll-mt-[120px]">
       <div className="w-[90%] md:w-[80%] max-w-[1000px] mx-auto text-center">
         <h2
           className="text-[24px] sm:text-[26px] md:text-[28px] font-[600] text-[#333] pb-[6px]"
@@ -31,13 +31,9 @@ const index = () => {
           />
         </div>
 
-        <p className="mt-[20px] text-[15px] font-[500] text-[#666]" data-font="raleway-font">
-          Not sure yet?{' '}
-          <Link href="/eligibility-check/" className="text-[#0567B1] font-[700] underline">
-            Take the 5-question eligibility check
-          </Link>{' '}
-          first.
-        </p>
+        <div className="mt-[24px] flex justify-center">
+          <HelpMeChoose />
+        </div>
       </div>
     </div>
   )

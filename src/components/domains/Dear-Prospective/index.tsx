@@ -1,11 +1,11 @@
 import React from 'react'
-import Link from 'next/link'
 import Transparentbtn from '@/components/ui/Transparentbtn'
+import HelpMeChoose from '@/components/ui/HelpMeChoose'
 import { hubAddProduct, ONBOARDING_PID } from '@/lib/config'
 
 const FFCOnboardingNotice = () => {
   return (
-    <section className="pt-[20px] pb-[40px] bg-white">
+    <section id="apply" className="pt-[20px] pb-[40px] bg-white scroll-mt-[120px]">
       <div className="py-[20px] w-[90%] md:w-[80%] mx-auto max-w-[1080px] text-center">
         {/* Main Heading */}
         <h2
@@ -53,13 +53,9 @@ const FFCOnboardingNotice = () => {
           />
         </div>
 
-        <p className="mt-[18px] text-[15px] font-[500] text-[#666]" data-font="raleway-font">
-          Not sure you qualify?{' '}
-          <Link href="/eligibility-check/" className="text-[#0567B1] font-[700] underline">
-            Take the 2-minute eligibility check
-          </Link>{' '}
-          first.
-        </p>
+        <div className="mt-[24px] flex justify-center">
+          <HelpMeChoose />
+        </div>
       </div>
     </section>
   )
