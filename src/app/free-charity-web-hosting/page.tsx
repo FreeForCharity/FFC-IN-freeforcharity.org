@@ -4,6 +4,7 @@ import Hero from '@/components/free-charity-web-hosting/Hero'
 import WhatsIncluded from '@/components/free-charity-web-hosting/WhatsIncluded'
 import AboutFFCHosting from '@/components/free-charity-web-hosting/About-FFC-Hosting'
 import HowToApply from '@/components/free-charity-web-hosting/HowToApply'
+import ChooseYourTemplate from '@/components/free-charity-web-hosting/ChooseYourTemplate'
 import ReadyToGetStarted from '@/components/free-charity-web-hosting/ReadyToGetStarted'
 import ClientTestimonials from '@/components/free-charity-web-hosting/ClientTestimonials'
 import SupportThisCampaign from '@/components/free-charity-web-hosting/SupportThisCampaign'
@@ -23,6 +24,7 @@ const index = () => {
       <WhatsIncluded />
       <AboutFFCHosting />
       <HowToApply />
+      <ChooseYourTemplate />
       <ClientTestimonials />
       <SupportThisCampaign />
       <FAQs />
