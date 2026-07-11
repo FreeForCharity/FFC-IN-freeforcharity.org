@@ -21,22 +21,15 @@ interface Stage {
 const stages: Stage[] = [
   {
     name: '1. Application & validation',
-    you: 'Submit the onboarding form with your EIN, legal name, and what you need. Have your IRS determination letter handy (pre-501c3 orgs: your formation documents).',
-    ffc: 'We validate your organization (IRS status, Candid profile) and confirm program fit.',
+    you: 'Submit the onboarding form with your EIN, legal name, charity Facebook and LinkedIn pages, and what you need. Have your IRS determination letter handy (pre-501c3 orgs: your formation documents).',
+    ffc: 'We validate your organization (IRS status, Candid profile) and confirm program fit. Every later stage requires this approval first.',
     duration: 'A few days',
     links: [{ href: '/help-for-charities/', label: 'Start here: Help for Charities' }],
   },
   {
-    name: '2. Domain',
-    you: 'Send us your top three .org name choices — or the details of a domain you already own.',
-    ffc: 'We register (and pay for) the best available name, or take over management of your existing domain, and set up DNS and security.',
-    duration: 'Same week',
-    links: [{ href: '/domains/#check-your-domain', label: 'Guide: choosing your .org domain' }],
-  },
-  {
-    name: '3. Website',
-    you: 'Send your logo, photos, mission text, and program descriptions. A one-page outline is enough — we help with the rest.',
-    ffc: 'A volunteer builds your site from the FFC template (fast, secure static hosting), reviews it with you, and launches it at your domain.',
+    name: '2. Website — built and proven first',
+    you: 'Submit the website application (it requires your approved onboarding), then send your logo, photos, mission text, and program descriptions. A one-page outline is enough — we help with the rest.',
+    ffc: 'A volunteer builds your site from the FFC template (fast, secure static hosting), with the full FFC footer generated from your validated application data. Your site goes live on its free GitHub Pages address — no custom domain yet — and we validate it end to end with you.',
     duration: '2–6 weeks, mostly depending on content readiness',
     links: [
       {
@@ -44,6 +37,13 @@ const stages: Stage[] = [
         label: 'How FFC delivers services',
       },
     ],
+  },
+  {
+    name: '3. Domain — only after your site is proven',
+    you: 'Send us your top three .org name choices — or the details of a domain you already own — along with your live GitHub Pages address. You can check name availability any time; we buy once your site is validated.',
+    ffc: 'Once your website is validated, we spend the funds: we register (and pay for) the best available name, or take over management of your existing domain, set up DNS and security, and point it at your live site.',
+    duration: 'Same week (after website validation)',
+    links: [{ href: '/domains/#check-your-domain', label: 'Guide: choosing your .org domain' }],
   },
   {
     name: '4. Email',
@@ -75,9 +75,11 @@ export default function CharityOnboardingJourney() {
         <div className="prose max-w-none font-[var(--font-lato)] text-[18px] leading-[28px]">
           <p>
             Here&rsquo;s exactly what happens after your charity applies — the five stages, who does
-            what at each one, and honest durations. Volunteers do this work, so timelines are
-            typical rather than guaranteed; content readiness on your side is the biggest factor in
-            how fast a site launches.
+            what at each one, and honest durations. The order matters: your website is built and
+            validated on free GitHub Pages hosting <em>first</em>, and we only spend money on your
+            domain once your site is proven. Volunteers do this work, so timelines are typical
+            rather than guaranteed; content readiness on your side is the biggest factor in how fast
+            a site launches.
           </p>
         </div>
 

@@ -8,24 +8,29 @@ describe('Charity Onboarding Journey page', () => {
     expect(container).not.toBeEmptyDOMElement()
   })
 
-  it('orders the Website stage before the Email stage', () => {
+  it('orders the Website stage before the Domain stage (the funding gate)', () => {
     const { container } = render(<CharityOnboardingJourney />)
     const text = container.textContent || ''
-    const websiteIndex = text.indexOf('3. Website')
+    const websiteIndex = text.indexOf('2. Website')
+    const domainIndex = text.indexOf('3. Domain')
     const emailIndex = text.indexOf('4. Email')
 
+    // The gated journey: the site is built and validated on GitHub Pages
+    // before FFC spends money on a domain, and email comes after the domain.
     expect(websiteIndex).toBeGreaterThan(-1)
+    expect(domainIndex).toBeGreaterThan(-1)
     expect(emailIndex).toBeGreaterThan(-1)
-    expect(websiteIndex).toBeLessThan(emailIndex)
+    expect(websiteIndex).toBeLessThan(domainIndex)
+    expect(domainIndex).toBeLessThan(emailIndex)
   })
 
-  it('numbers the stages 1 through 5 in the corrected order', () => {
+  it('numbers the stages 1 through 5 in the gated order', () => {
     const { container } = render(<CharityOnboardingJourney />)
     const text = container.textContent || ''
 
     expect(text).toContain('1. Application & validation')
-    expect(text).toContain('2. Domain')
-    expect(text).toContain('3. Website')
+    expect(text).toContain('2. Website — built and proven first')
+    expect(text).toContain('3. Domain — only after your site is proven')
     expect(text).toContain('4. Email')
     expect(text).toContain('5. Handoff & ongoing support')
   })

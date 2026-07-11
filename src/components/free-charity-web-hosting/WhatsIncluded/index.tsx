@@ -18,7 +18,7 @@ const features: Feature[] = [
     icon: <Globe className="w-9 h-9" aria-hidden="true" />,
     title: 'Free .org domain name',
     description:
-      'We register (and pay for) your .org domain through Cloudflare at wholesale cost, or take over managing one you already own.',
+      'Once your site is live and validated, we register (and pay for) your .org domain through Cloudflare at wholesale cost, or take over managing one you already own.',
   },
   {
     icon: <Mail className="w-9 h-9" aria-hidden="true" />,
