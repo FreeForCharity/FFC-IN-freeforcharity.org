@@ -18,6 +18,7 @@ export function toLabel(raw: string): string {
     .replace(/^www\./, '') // strip a www. subdomain
     .replace(/[/?#].*$/, '') // strip a path, query string, or fragment
     .replace(/\.(org|com|net)$/, '') // strip a typed TLD
+    .replace(/^.*\./, '') // keep only the final label (drop any subdomain: sub.foo -> foo)
     .replace(/[^a-z0-9-]/g, '') // DNS-label characters only
 }
 

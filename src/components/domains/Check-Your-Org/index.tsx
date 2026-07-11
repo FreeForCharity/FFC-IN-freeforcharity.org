@@ -1,7 +1,9 @@
 'use client'
 
 import React, { useState } from 'react'
+import Link from 'next/link'
 import { hubAddProduct, DOMAIN_PID } from '@/lib/config'
+import { assetPath } from '@/lib/assetPath'
 import { toLabel, nameNotes } from '@/lib/domain-name'
 
 type Status = 'available' | 'registered' | 'unknown'
@@ -35,7 +37,7 @@ const CheckYourOrg = () => {
     }
     setLoading(true)
     try {
-      const r = await fetch(`/api/domain-check.php?q=${encodeURIComponent(label)}`)
+      const r = await fetch(`${assetPath('/api/domain-check.php')}?q=${encodeURIComponent(label)}`)
       if (r.status === 400) {
         const j = (await r.json().catch(() => ({}))) as { message?: string }
         setError(j.message || 'Please check the name and try again.')
@@ -173,9 +175,9 @@ const CheckYourOrg = () => {
             ) : (
               <p className="text-[16px] text-[#555]">
                 We couldn’t confirm {result.name}.org right now. Make a shortlist of three names and{' '}
-                <a href="/contact-us/" className="text-[#0567B1] underline">
+                <Link href="/contact-us/" className="text-[#0567B1] underline">
                   send it to us
-                </a>{' '}
+                </Link>{' '}
                 — we’ll check and register the best available one.
               </p>
             )}

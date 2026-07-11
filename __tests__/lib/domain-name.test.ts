@@ -25,6 +25,11 @@ describe('toLabel', () => {
     expect(toLabel('example.org?ref=x#top')).toBe('example')
   })
 
+  it('keeps only the final label when a subdomain is included', () => {
+    expect(toLabel('subdomain.example.org')).toBe('example')
+    expect(toLabel('mail.hopepantry.com')).toBe('hopepantry')
+  })
+
   it('returns empty for junk', () => {
     expect(toLabel('   ')).toBe('')
     expect(toLabel('...')).toBe('')

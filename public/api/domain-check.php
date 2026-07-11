@@ -17,6 +17,7 @@ $q = preg_replace('~^https?://~', '', $q);          // strip a pasted protocol
 $q = preg_replace('~^www\.~', '', $q);              // strip a www. subdomain
 $q = preg_replace('~[/?#].*$~', '', $q);            // strip a path, query string, or fragment
 $q = preg_replace('/\.(org|com|net)$/', '', $q);    // tolerate a typed TLD
+$q = preg_replace('/^.*\./', '', $q);               // keep only the final label (drop any subdomain)
 $q = preg_replace('/[^a-z0-9-]/', '', $q);          // DNS label chars only
 if ($q === '' || strlen($q) > 63 || $q[0] === '-' || substr($q, -1) === '-') {
     http_response_code(400);
@@ -25,14 +26,12 @@ if ($q === '' || strlen($q) > 63 || $q[0] === '-' || substr($q, -1) === '-') {
     exit;
 }
 
-// Only successful lookups are cacheable (matches the 1h server-side cache below).
-header('Cache-Control: public, max-age=3600');
-
 // Server-side cache: one entry per label, 1h. Limits outbound RDAP and abuse
-// (each request otherwise makes 3 registry calls); Cloudflare also caches via
-// the Cache-Control header above.
+// (each request otherwise makes 3 registry calls). Only DEFINITIVE results are
+// written below, so a cache hit is always safe to serve and cacheable downstream.
 $cacheFile = sys_get_temp_dir() . '/ffc-domcheck-' . md5($q) . '.json';
 if (is_readable($cacheFile) && (time() - filemtime($cacheFile)) < 3600) {
+    header('Cache-Control: public, max-age=3600');
     echo file_get_contents($cacheFile);
     exit;
 }
@@ -47,11 +46,13 @@ $rdap = [
 function rdap_status(string $base, string $fqdn): string {
     $ch = curl_init($base . $fqdn);
     curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 8,
-        CURLOPT_FOLLOWLOCATION => true,
-        CURLOPT_USERAGENT      => 'FreeForCharity-DomainCheck/1.0 (+https://freeforcharity.org)',
-        CURLOPT_HTTPHEADER     => ['Accept: application/rdap+json'],
+        CURLOPT_RETURNTRANSFER  => true,
+        CURLOPT_TIMEOUT         => 8,
+        CURLOPT_FOLLOWLOCATION  => true,
+        CURLOPT_PROTOCOLS       => CURLPROTO_HTTPS, // only fetch https
+        CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTPS, // and only follow https redirects (SSRF guard)
+        CURLOPT_USERAGENT       => 'FreeForCharity-DomainCheck/1.0 (+https://freeforcharity.org)',
+        CURLOPT_HTTPHEADER      => ['Accept: application/rdap+json'],
     ]);
     curl_exec($ch);
     $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -79,5 +80,10 @@ $out = json_encode([
     'warnings'     => $warnings,
 ], JSON_UNESCAPED_SLASHES);
 
-@file_put_contents($cacheFile, $out);
+if ($org !== 'unknown' && $com !== 'unknown' && $net !== 'unknown') {
+    header('Cache-Control: public, max-age=3600'); // matches the 1h server-side cache
+    @file_put_contents($cacheFile, $out);
+} else {
+    header('Cache-Control: no-store'); // transient RDAP failure — don't pin it for an hour
+}
 echo $out;
