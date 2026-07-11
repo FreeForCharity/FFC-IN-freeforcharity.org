@@ -89,7 +89,7 @@ export default function CharitySecurityGuide() {
             permanently. FFC&rsquo;s model removes this class of risk for supported charities: we
             keep registrations renewed, DNS locked down in Cloudflare, and sites on static hosting
             with no server to hack (see{' '}
-            <Link href="/choosing-your-org-domain/">who controls the domain</Link>). If your domain
+            <Link href="/domains/#check-your-domain">who controls the domain</Link>). If your domain
             is <em>not</em> with us yet and renewals depend on one person&rsquo;s memory and credit
             card, fix that this week.
           </p>

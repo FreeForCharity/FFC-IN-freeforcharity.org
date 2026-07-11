@@ -68,7 +68,6 @@ export const siteRoutes = [
   { route: '/charity-onboarding-journey', name: 'Charity Onboarding Journey' },
   { route: '/getting-started-checklist', name: 'Getting Started Checklist' },
   { route: '/m365-email-guide', name: 'M365 Email Guide' },
-  { route: '/choosing-your-org-domain', name: 'Choosing Your .org Domain' },
   { route: '/google-for-nonprofits-guide', name: 'Google for Nonprofits Guide' },
   { route: '/zeffy-donations-guide', name: 'Zeffy Donations Guide' },
   { route: '/irs-990n-filing-guide', name: 'IRS 990-N Filing Guide' },

@@ -33,7 +33,7 @@ const faqs: { question: string; answer: React.ReactNode }[] = [
         Your organization&rsquo;s right to the name is yours; FFC holds the registration and DNS so
         renewals never lapse and security stays configured. If you ever leave the program, we help
         you transfer the domain out — no lock-in. Details in{' '}
-        <Link href="/choosing-your-org-domain/" className="text-[#0567B1] underline">
+        <Link href="/domains/#check-your-domain" className="text-[#0567B1] underline">
           the domain guide
         </Link>
         .

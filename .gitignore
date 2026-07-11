@@ -62,3 +62,6 @@ next-env.d.ts
 # Python bytecode (scripts/)
 __pycache__/
 *.pyc
+
+# Playwright MCP session artifacts (page snapshots, console logs)
+.playwright-mcp/

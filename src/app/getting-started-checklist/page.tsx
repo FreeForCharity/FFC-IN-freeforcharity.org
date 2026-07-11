@@ -51,7 +51,7 @@ export default function GettingStartedChecklist() {
             </Item>
             <Item>
               Three .org name ideas, in order of preference.{' '}
-              <Link href="/choosing-your-org-domain/">Domain guide</Link>
+              <Link href="/domains/#check-your-domain">Domain guide</Link>
             </Item>
             <Item>Board aware and one person named as FFC point of contact.</Item>
             <Item>Details of any existing domain, website, or email accounts written down.</Item>

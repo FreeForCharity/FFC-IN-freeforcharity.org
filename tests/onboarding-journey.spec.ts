@@ -110,10 +110,15 @@ test.describe('Round 2 — stale-model cleanup on the rest of the site (#455/#45
     expect(body.toLowerCase()).toContain('github pages')
   })
 
-  test('choosing-your-org-domain offers both email providers', async ({ page }) => {
-    await page.goto('/choosing-your-org-domain')
-    const body = await page.locator('body').innerText()
-    expect(body).toContain('Google Workspace')
+  test('domains page has the "Check your .org" tool + merged naming guidance', async ({ page }) => {
+    await page.goto('/domains')
+    // the domain-check section (former choosing-your-org-domain guide, now merged here)
+    const section = page.locator('#check-your-domain')
+    await expect(section).toHaveCount(1)
+    await expect(section.locator('input[aria-label="Domain name to check"]')).toHaveCount(1)
+    const body = await section.innerText()
+    expect(body).toMatch(/Rules for a name that works/i)
+    expect(body).toMatch(/Why \.org/i)
   })
 
   test('domains CTAs deep-link by product id, not the archived bundle or index links', async ({

@@ -57,6 +57,8 @@ RewriteRule ^podio-sponsorship-program/?$ /help-for-charities/ [R=301,L]
 RewriteRule ^what-is-the-cost/?$ /help-for-charities/ [R=301,L]
 RewriteRule ^donor-dashboard/?$ /donate/ [R=301,L]
 RewriteRule ^submit-information/?$ /contact-us/ [R=301,L]
+# choosing-your-org-domain guide merged into the /domains "Check your .org" section
+RewriteRule ^choosing-your-org-domain/?$ /domains/ [R=301,L]
 
 # Testimonials inlined on homepage
 RewriteRule ^testimonial/american-legion-ahwatukee-post-64/?$ /#testimonials [R=301,L]

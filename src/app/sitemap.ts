@@ -88,7 +88,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/charity-onboarding-journey', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/getting-started-checklist', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/m365-email-guide', priority: 0.7, changeFrequency: 'monthly' as const },
-    { path: '/choosing-your-org-domain', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/google-for-nonprofits-guide', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/zeffy-donations-guide', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/irs-990n-filing-guide', priority: 0.7, changeFrequency: 'monthly' as const },
