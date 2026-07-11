@@ -59,19 +59,28 @@ export default function GettingStartedChecklist() {
 
           <h2 className={h2}>During onboarding</h2>
           <p className="print:text-[11px]">
-            FFC builds your website first — charity email comes after, because the nonprofit email
-            programs (Microsoft 365 / Google Workspace) expect your organization to have an
-            established web presence.
+            FFC builds your website first, live and validated on its free GitHub Pages address —
+            your domain is purchased only after your site is proven, and charity email comes after
+            that, because the nonprofit email programs (Microsoft 365 / Google Workspace) expect
+            your organization to have an established web presence.
           </p>
           <ul className="space-y-2 list-none pl-0">
             <Item>
-              Application submitted via <Link href="/help-for-charities/">Help for Charities</Link>.{' '}
-              <Link href="/charity-onboarding-journey/">What happens next</Link>
+              Application submitted via <Link href="/help-for-charities/">Help for Charities</Link>{' '}
+              and approved. <Link href="/charity-onboarding-journey/">What happens next</Link>
             </Item>
             <Item>
-              Logo, photos, mission text, and program descriptions sent for the site build.
+              Website application submitted (requires your approved onboarding); logo, photos,
+              mission text, and program descriptions sent for the site build.
             </Item>
-            <Item>Site draft reviewed and launch approved.</Item>
+            <Item>
+              Site draft reviewed and validated live on its GitHub Pages address — this unlocks the
+              domain purchase.
+            </Item>
+            <Item>
+              Domain registered (or transferred) by FFC and pointed at your validated site.{' '}
+              <Link href="/domains/#check-your-domain">Domain guide</Link>
+            </Item>
             <Item>
               Microsoft for Nonprofits or Google Workspace registration started (after the site is
               live). <Link href="/m365-email-guide/">M365 email guide</Link>

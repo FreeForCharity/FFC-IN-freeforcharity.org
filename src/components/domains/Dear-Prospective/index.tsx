@@ -29,8 +29,9 @@ const FFCOnboardingNotice = () => {
           className="font-[600] text-[20px] md:text-[24px] leading-[34px] w-[85%] mx-auto mt-[24px]"
           data-font="raleway-font"
         >
-          The first step is always the same: complete FFC onboarding. Everything else — domain,
-          email, and website — follows from there.
+          The first step is always the same: complete FFC onboarding. Then your website is built and
+          validated on free GitHub Pages hosting — and only after your site is proven do we buy your
+          domain and set up email.
         </p>
       </div>
 

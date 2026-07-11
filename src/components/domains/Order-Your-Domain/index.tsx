@@ -16,29 +16,30 @@ const HowToOrderDomain = () => {
     {
       number: 2,
       title: 'Step 2',
-      description: 'We register or transfer your .org domain',
+      description: 'Your website goes live and is validated on its free GitHub Pages address',
+      linkText: 'How your website works',
+      innerbg: 'bg-[#2A6F9E]',
+      outerbg: 'bg-[#2A6F9E]',
+      linkUrl: '/free-charity-web-hosting/',
+    },
+    {
+      number: 3,
+      title: 'Step 3',
+      description: 'We register or transfer your .org domain and point it at your validated site',
       linkText: 'See your options',
       innerbg: 'bg-[#2A6F9E]',
       outerbg: 'bg-[#2A6F9E]',
       linkUrl: '#domain-options',
     },
     {
-      number: 3,
-      title: 'Step 3',
-      description: 'Create a free personal Cloudflare account and send us the email you used',
-      linkText: 'Create a Cloudflare account',
-      innerbg: 'bg-[#2A6F9E]',
-      outerbg: 'bg-[#2A6F9E]',
-      linkUrl: 'https://dash.cloudflare.com/sign-up',
-    },
-    {
       number: 4,
       title: 'Step 4',
-      description: 'We add you as a domain admin and manage DNS for you',
-      linkText: 'Contact us',
+      description:
+        'Create a free personal Cloudflare account — we add you as a domain admin and manage DNS for you',
+      linkText: 'Create a Cloudflare account',
       innerbg: 'bg-[#8A6400]',
       outerbg: 'bg-[#fff]',
-      linkUrl: '/contact-us/',
+      linkUrl: 'https://dash.cloudflare.com/sign-up',
     },
   ]
 
@@ -70,9 +71,10 @@ const HowToOrderDomain = () => {
             style={{ fontFamily: 'Raleway, sans-serif' }}
           >
             Free For Charity holds and manages your domain in our Cloudflare account — you never
-            have to run a registrar or edit DNS yourself. You just complete onboarding, then create
-            a personal Cloudflare login so we can add you (and anyone else on your team) as a domain
-            admin.
+            have to run a registrar or edit DNS yourself. Domains come <b>after</b> your website: we
+            only spend money on a domain once your site is live and validated on its free GitHub
+            Pages address. Then you create a personal Cloudflare login so we can add you (and anyone
+            else on your team) as a domain admin.
           </p>
         </div>
 
@@ -90,9 +92,11 @@ const HowToOrderDomain = () => {
             style={{ fontFamily: 'Raleway, sans-serif' }}
           >
             You have two supported options: have us register a brand new .org domain, or transfer a
-            domain you already own into Free For Charity&apos;s Cloudflare Registrar. Transferring a
-            domain you already own? You&apos;ll need your current registrar, the authorization (EPP)
-            code, and the domain unlocked with WHOIS privacy turned off before you start.
+            domain you already own into Free For Charity&apos;s Cloudflare Registrar. Both order
+            forms ask for the live GitHub Pages address of your validated website — that&apos;s the
+            gate that unlocks the purchase. Transferring a domain you already own? You&apos;ll also
+            need your current registrar, the authorization (EPP) code, and the domain unlocked with
+            WHOIS privacy turned off before you start.
           </p>
           <div
             id="domain-options"

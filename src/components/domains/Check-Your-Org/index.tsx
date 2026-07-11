@@ -74,7 +74,8 @@ const CheckYourOrg = () => {
         >
           See if your charity’s <strong>.org</strong> is available, and we’ll flag near-matches (a{' '}
           <em>.com</em> or <em>.net</em> someone else owns) that could confuse donors or hurt your
-          SEO. When it’s clear, we register it for you — free.
+          SEO. Check names as early as you like — we register your .org for you, free, once your
+          website is live and validated on its GitHub Pages address.
         </p>
 
         <form
