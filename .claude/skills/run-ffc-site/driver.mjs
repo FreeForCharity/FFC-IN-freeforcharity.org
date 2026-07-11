@@ -31,9 +31,20 @@ import { fileURLToPath } from 'node:url'
 // The repo's Playwright pins a browser build that may not match the one
 // pre-installed in the container. Prefer the container's stable chromium
 // symlink so we never need `npx playwright install`. Override with
-// CHROME_PATH if needed.
-const CHROME =
-  process.env.CHROME_PATH || ['/opt/pw-browsers/chromium'].find((p) => existsSync(p)) || undefined
+// CHROME_PATH if needed — validated up front so a bad path fails loudly
+// here instead of as an opaque Playwright launch error later.
+function resolveChrome() {
+  const override = process.env.CHROME_PATH
+  if (override) {
+    if (!existsSync(override)) {
+      console.error(`CHROME_PATH="${override}" does not exist.`)
+      process.exit(1)
+    }
+    return override
+  }
+  return ['/opt/pw-browsers/chromium'].find((p) => existsSync(p)) || undefined
+}
+const CHROME = resolveChrome()
 
 const here = dirname(fileURLToPath(import.meta.url))
 const shotDir = resolve(here, 'screenshots')
@@ -64,7 +75,8 @@ async function main() {
   let failures = 0
 
   for (const path of targets) {
-    const url = path.startsWith('http') ? path : `${BASE_URL}${path}`
+    const rel = path.startsWith('/') ? path : `/${path}`
+    const url = path.startsWith('http') ? path : `${BASE_URL}${rel}`
     // Classify by the target's own origin, not BASE_URL — an absolute-URL
     // arg has its own origin, and BASE_URL wouldn't match it.
     const origin = new URL(url).origin
