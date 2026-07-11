@@ -27,8 +27,10 @@ const ApplyOptions: React.FC<ApplyOptionsProps> = ({ heading = 'Ready to apply?'
           className="text-[17px] font-[500] leading-[27px] text-[#555] max-w-[720px] mx-auto mb-[30px]"
           data-font="lato-font"
         >
-          Pick the option that matches your organization — the application itself walks you through
-          what we need. Not sure which fits? Use <b>Help me choose</b>.
+          Free For Charity serves <b>US-based</b> nonprofits (US territories included) with annual
+          revenue under $1&nbsp;million. Pick the option that matches your organization — the
+          application itself walks you through what we need. Not sure which fits? Use{' '}
+          <b>Help me choose</b>.
         </p>
 
         {/* The two clear apply options */}
