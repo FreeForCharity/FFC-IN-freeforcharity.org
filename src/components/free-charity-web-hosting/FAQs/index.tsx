@@ -186,7 +186,7 @@ const AccordionLayout = () => {
                   <li>
                     Complete onboarding and pick your .org name early — check availability at{' '}
                     <a href="/domains/" className="text-[#0567B1]">
-                      (https://freeforcharity.org/domains)
+                      freeforcharity.org/domains
                     </a>{' '}
                     — we purchase it once your site is validated
                   </li>

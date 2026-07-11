@@ -56,6 +56,10 @@ const bannedPhrases: BannedPhrase[] = [
     pattern: /registers your domain, sets up Microsoft 365, and builds your site/i,
     reason: 'Old journey order — build & validate the site first, then domain, then email.',
   },
+  {
+    pattern: /once your domain (name )?is set up/i,
+    reason: 'Old journey order — nothing waits on the domain except email; the site comes first.',
+  },
 ]
 
 function collectSourceFiles(dir: string): string[] {
@@ -83,18 +87,23 @@ describe('banned old-journey-order phrases', () => {
     (_source, phrase) => {
       const violations: string[] = []
       for (const file of sourceFiles) {
-        const lines = fs.readFileSync(file, 'utf8').split(/\r?\n/)
-        lines.forEach((line, index) => {
-          if ((phrase as BannedPhrase).pattern.test(line)) {
-            violations.push(`${path.relative(SRC_DIR, file)}:${index + 1}: ${line.trim()}`)
-          }
-        })
+        // Prettier wraps long JSX prose across lines (with {' '} joiners), so a
+        // per-line scan misses multi-word phrases. Match against a
+        // whitespace-normalized view of the whole file instead.
+        const normalized = fs
+          .readFileSync(file, 'utf8')
+          .replace(/\{['"]\s['"]\}/g, ' ') // JSX explicit-space joiners
+          .replace(/\s+/g, ' ')
+        const match = normalized.match((phrase as BannedPhrase).pattern)
+        if (match) {
+          violations.push(`${path.relative(SRC_DIR, file)}: “…${match[0]}…”`)
+        }
       }
       if (violations.length > 0) {
         throw new Error(
           `Banned phrase /${(phrase as BannedPhrase).pattern.source}/ found.\n` +
             `Why banned: ${(phrase as BannedPhrase).reason}\n` +
-            `Locations (relative to src/):\n  ${violations.join('\n  ')}`
+            `Files (relative to src/):\n  ${violations.join('\n  ')}`
         )
       }
       expect(violations).toEqual([])

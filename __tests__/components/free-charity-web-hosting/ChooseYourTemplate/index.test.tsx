@@ -52,7 +52,7 @@ describe('ChooseYourTemplate Component', () => {
     })
     expect(footerOnlyLink).toHaveAttribute(
       'href',
-      'https://github.com/FreeForCharity/FFC-IN-Footer-Only-Template'
+      'https://github.com/FreeForCharity/FFC-IN-Footer_Only_Template'
     )
     ;[singlePageLink, footerOnlyLink].forEach((link) => {
       expect(link).toHaveAttribute('target', '_blank')
