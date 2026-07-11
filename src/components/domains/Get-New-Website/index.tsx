@@ -18,11 +18,11 @@ const index = () => {
               className="mb-[13px] w-[85%] mx-auto font-[500] text-[20px] leading-[30px] text-center"
               data-font="raleway-font"
             >
-              Your domain and email come with a website. Free For Charity builds each charity a
-              fast, secure static website on GitHub Pages from the FFC template, and a volunteer
-              sets it up and launches it on your Cloudflare-managed domain. New builds run on a
-              backlog — we aim to support 100 charities a year — and how quickly your site goes live
-              depends mainly on how ready your content is.
+              Your website comes first — the domain and email follow it. Free For Charity builds
+              each charity a fast, secure static website on GitHub Pages from the FFC template,
+              validates it live on its free GitHub Pages address, and then registers your .org and
+              points it there. New builds run on a backlog — we aim to support 100 charities a year
+              — and how quickly your site goes live depends mainly on how ready your content is.
             </p>
           </div>
         </div>

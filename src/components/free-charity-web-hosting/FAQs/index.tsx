@@ -184,15 +184,17 @@ const AccordionLayout = () => {
                 Ways to get in faster:
                 <ul className="list-disc list-inside mt-1">
                   <li>
-                    If you already have your 501(c)3 get your free domain from us{' '}
+                    Complete onboarding and pick your .org name early — check availability at{' '}
                     <a href="/domains/" className="text-[#0567B1]">
                       (https://freeforcharity.org/domains)
-                    </a>
+                    </a>{' '}
+                    — we purchase it once your site is validated
                   </li>
                   <li>
                     If you arrive with your content ready to go — logo, photos, mission text, and
-                    program descriptions — your GitHub Pages site can be built and launched much
-                    faster, which may move you up in the list.
+                    program descriptions — your GitHub Pages site can be built and validated much
+                    faster, which unlocks your domain and email sooner and may move you up in the
+                    list.
                   </li>
                 </ul>
               </AccordionItem>

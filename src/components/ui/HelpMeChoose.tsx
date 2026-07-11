@@ -3,6 +3,7 @@
 import React, { useId, useState } from 'react'
 import Link from 'next/link'
 import { ApplyButton } from '@/components/ui/apply-buttons'
+import { ffcAdminUrl, adminLinks } from '@/data/admin-links'
 
 /**
  * Inline "Help me choose" guide — a native <details> disclosure with native
@@ -81,19 +82,46 @@ const choices: ChoiceOutcome[] = [
           sponsor&apos;s 501(c)(3) — without it we can&apos;t set up your charity email later.
         </p>
         <p className="mb-[16px]">
-          Send your sponsor to this application (and if you&apos;re also pursuing your own
-          501(c)(3), apply as a pre-501(c)(3) too):
+          <b>Your sponsor</b> uses this application (send them this link):
         </p>
         <ApplyButton kind="full501c3" />
+        <p className="mt-[16px] mb-[16px]">
+          Pursuing your own 501(c)(3) as well? Then <b>your project</b> also applies here:
+        </p>
+        <ApplyButton kind="pre501c3" />
         <p className="mt-[16px]">
+          Sponsored by a corporate fiscal sponsor (Tides, Open Collective, Players Philanthropy
+          Fund)? Talk with us first — those arrangements score differently.{' '}
           <a
-            href="https://ffcadmin.org/intake-help/fiscal-sponsorship/"
+            href={ffcAdminUrl(adminLinks['fiscal-sponsorship'].newModel)}
             className="text-[#0567B1] font-[600] underline"
           >
             How we evaluate fiscal sponsorship
           </a>
         </p>
       </div>
+    ),
+  },
+  {
+    label: 'Our annual revenue is $1 million or more',
+    result: (
+      <p>
+        Free For Charity&apos;s free program is reserved for charities with annual revenue under{' '}
+        <b>$1&nbsp;million</b> — it&apos;s a hard gate, so we focus our volunteers where the need is
+        greatest. Organizations your size typically fund commercial web services directly, and{' '}
+        <a href="https://www.techsoup.org/" className="text-[#0567B1] font-[600] underline">
+          TechSoup
+        </a>{' '}
+        offers deeply discounted software. If you&apos;d like to help smaller charities, you can{' '}
+        <Link href="/volunteer/" className="text-[#0567B1] font-[600] underline">
+          volunteer
+        </Link>{' '}
+        or{' '}
+        <Link href="/donate/" className="text-[#0567B1] font-[600] underline">
+          support the mission
+        </Link>
+        .
+      </p>
     ),
   },
   {

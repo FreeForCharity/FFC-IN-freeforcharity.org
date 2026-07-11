@@ -24,13 +24,13 @@ const steps: Step[] = [
     number: '3',
     title: 'We build your site',
     description:
-      'Send your logo, photos, and mission text. A volunteer registers your domain, sets up Microsoft 365, and builds your site, reviewing it with you along the way.',
+      'Send your logo, photos, and mission text. A volunteer builds your site from the FFC template, reviewing it with you along the way, and it goes live on its free GitHub Pages address.',
   },
   {
     number: '4',
-    title: 'Launch & stay supported',
+    title: 'Domain, email & ongoing support',
     description:
-      'Your site goes live on your .org domain. We keep it hosted and maintained so it stays fast, secure, and online — free, going forward.',
+      'Once your site is validated, we register your .org domain, point it at your site, and set up Microsoft 365. We keep it all hosted and maintained — free, going forward.',
   },
 ]
 
