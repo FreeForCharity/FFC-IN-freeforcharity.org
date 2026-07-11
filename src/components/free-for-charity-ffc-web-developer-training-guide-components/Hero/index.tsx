@@ -210,11 +210,13 @@ const Index = () => {
 
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               <span className="font-[600] text-[#1c2a38]">Domain Purchase & Configuration:</span>{' '}
-              Guide the charity through purchasing a{' '}
+              After the charity&apos;s website is live and validated on its GitHub Pages address,
+              guide them through ordering their{' '}
               <code className="bg-[#f1f3f5] text-[#B82B5A] py-[0.3em] px-[0.5em] rounded-[6px] text-[0.9em]">
                 .org
               </code>{' '}
-              domain via WHMCS and confirm coupon codes from onboarding emails.
+              domain via WHMCS (the order form requires the live GitHub Pages URL) and confirm the
+              coupon code from their onboarding emails.
             </li>
           </ul>
 

@@ -18,44 +18,14 @@ const index = () => {
           />
         </div>
 
-        <AccordionItem
-          number="3"
-          title=" Free For Charity Domain Name and Microsoft 365 Email Hosting Request"
-        >
-          <p className="text-[18px] font-[500] text-[#4a4a4a] mb-[1em]" data-font="lato-font">
-            Free For Charity Provides free .org domain names to US 501c3 organizations. Once your
-            onboarding forms are accepted you will receive an email from the system with the
-            discount code to request a new domain name or to transfer your current domain name to us
-            so we can start managing it and paying the annual fees.
-          </p>
-
-          <p className="text-[18px] font-[700] text-[#4a4a4a] mb-[1em]">
-            Visit{' '}
-            <a href="/domains/" className="text-[#0567B1]">
-              https://freeforcharity.org/domains
-            </a>{' '}
-            and follow all steps
-          </p>
-          <p className="text-[18px] font-[500] text-[#4a4a4a] mb-[1em]">
-            Once we have the domain name under management we can then set up your professional email
-            addresses e.g. board@yourcharityname.org
-          </p>
-          <p className="text-[18px] font-[700] text-[#4a4a4a]">
-            As always if you run into problems contact us at anytime{' '}
-            <a href="mailto:clarkemoyer@freeforcharity.org" className="text-[#0567B1]">
-              clarkemoyer@freeforcharity.org
-            </a>{' '}
-            520-222-8104
-          </p>
-        </AccordionItem>
-
-        <AccordionItem number="4" title=" Your Website (GitHub Pages)">
+        <AccordionItem number="3" title=" Your Website (GitHub Pages) — built and proven first">
           <div className="space-y-6 font-[500] text-[#666]">
             <p className="pb-4 leading-relaxed">
-              Free For Charity builds your website for you. We start from our tested FFC template
-              and publish a fast, secure GitHub Pages static site, then launch it on the
-              Cloudflare-managed domain we set up in the previous step. There is nothing for you to
-              install, host, or maintain — no servers, control panels, or plugins to manage.
+              Free For Charity builds your website for you. Once your onboarding application is
+              approved, we start from our tested FFC template and publish a fast, secure GitHub
+              Pages static site. Your site goes live on its free GitHub Pages address first — no
+              custom domain yet — and we validate it with you end to end. There is nothing for you
+              to install, host, or maintain — no servers, control panels, or plugins to manage.
             </p>
 
             <div>
@@ -65,7 +35,10 @@ const index = () => {
                 <li>
                   Publishing it as a GitHub Pages static site (fast, secure, and free to host)
                 </li>
-                <li>Connecting it to your Cloudflare-managed domain with HTTPS</li>
+                <li>
+                  Validating it live on its GitHub Pages address, then connecting it to your
+                  Cloudflare-managed domain with HTTPS once we register it
+                </li>
                 <li>Ongoing hosting, updates, and maintenance</li>
               </ul>
             </div>
@@ -90,6 +63,38 @@ const index = () => {
               520-222-8104
             </p>
           </div>
+        </AccordionItem>
+
+        <AccordionItem
+          number="4"
+          title=" Free For Charity Domain Name and Microsoft 365 Email Hosting Request"
+        >
+          <p className="text-[18px] font-[500] text-[#4a4a4a] mb-[1em]" data-font="lato-font">
+            Free For Charity provides free .org domain names to US 501c3 organizations. Once your
+            website is live and validated on its GitHub Pages address, request your domain — we
+            register a new .org (or transfer your current domain name to us), point it at your
+            validated site, and manage it while paying the annual fees. We only purchase domains for
+            websites that are already working and validated.
+          </p>
+
+          <p className="text-[18px] font-[700] text-[#4a4a4a] mb-[1em]">
+            Visit{' '}
+            <a href="/domains/" className="text-[#0567B1]">
+              https://freeforcharity.org/domains
+            </a>{' '}
+            and follow all steps
+          </p>
+          <p className="text-[18px] font-[500] text-[#4a4a4a] mb-[1em]">
+            Once we have the domain name under management we can then set up your professional email
+            addresses e.g. board@yourcharityname.org
+          </p>
+          <p className="text-[18px] font-[700] text-[#4a4a4a]">
+            As always if you run into problems contact us at anytime{' '}
+            <a href="mailto:clarkemoyer@freeforcharity.org" className="text-[#0567B1]">
+              clarkemoyer@freeforcharity.org
+            </a>{' '}
+            520-222-8104
+          </p>
         </AccordionItem>
       </div>
     </div>

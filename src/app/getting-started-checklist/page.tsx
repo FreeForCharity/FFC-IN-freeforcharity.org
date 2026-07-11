@@ -39,8 +39,8 @@ export default function GettingStartedChecklist() {
         <div className="prose max-w-none font-[var(--font-lato)] text-[18px] leading-[28px] print:text-[13px] print:leading-[19px]">
           <p className="print:hidden">
             One page, three phases — everything a new charity gathers and does on the way to a free
-            domain, email, and website. Print it (this page is print-formatted) or work through it
-            on screen; each item links to the guide that explains it.
+            website, domain, and email (in that order). Print it (this page is print-formatted) or
+            work through it on screen; each item links to the guide that explains it.
           </p>
 
           <h2 className={h2}>Before you apply</h2>
