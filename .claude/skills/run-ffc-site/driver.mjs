@@ -5,9 +5,10 @@
  * `chromium-cli` isn't available in this container, so this drives
  * Playwright's bundled Chromium directly (the same `playwright` import
  * the repo's visual-regression script uses). It navigates one or more
- * routes against a running server, screenshots each, and reports any
- * console errors / failed requests / uncaught page errors. A page that
- * throws or 404s makes the run exit non-zero.
+ * routes against a running server, screenshots each, and reports
+ * same-origin request failures, bad HTTP responses (>=400), and uncaught
+ * page errors. A page that throws or 404s makes the run exit non-zero;
+ * blocked third-party requests are counted but never fail the run.
  *
  * Prereqs: `npm run build` then a server on BASE_URL (see SKILL.md).
  *
