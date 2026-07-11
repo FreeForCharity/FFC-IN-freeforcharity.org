@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
+import Link from 'next/link'
 import { hubAddProduct, ONBOARDING_PID } from '@/lib/config'
 
 /**
@@ -83,9 +84,9 @@ const choices: ChoiceOutcome[] = [
       <p>
         Form your nonprofit first — you&apos;ll need articles of incorporation and an EIN. Once you
         have those, come back and apply as a pre-501(c)(3) organization. Our{' '}
-        <a href="/consulting/" className="text-[#0567B1] font-[600] underline">
+        <Link href="/consulting/" className="text-[#0567B1] font-[600] underline">
           consulting resources
-        </a>{' '}
+        </Link>{' '}
         can point you to help with formation.
       </p>
     ),
@@ -96,13 +97,13 @@ const choices: ChoiceOutcome[] = [
       <p>
         Free For Charity&apos;s free programs are for 501(c)(3) and pre-501(c)(3) nonprofits. If
         you&apos;d like to help, you can{' '}
-        <a href="/volunteer/" className="text-[#0567B1] font-[600] underline">
+        <Link href="/volunteer/" className="text-[#0567B1] font-[600] underline">
           volunteer
-        </a>{' '}
+        </Link>{' '}
         or{' '}
-        <a href="/donate/" className="text-[#0567B1] font-[600] underline">
+        <Link href="/donate/" className="text-[#0567B1] font-[600] underline">
           support the mission
-        </a>
+        </Link>
         .
       </p>
     ),
