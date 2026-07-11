@@ -3,8 +3,10 @@
  * driver.mjs — headless-Chromium harness for the FFC static site.
  *
  * `chromium-cli` isn't available in this container, so this drives
- * Playwright's bundled Chromium directly (the same `playwright` import
- * the repo's visual-regression script uses). It navigates one or more
+ * Chromium through Playwright's API (the same `playwright` import the
+ * repo's visual-regression script uses) — pointed at the container's
+ * pre-installed browser via executablePath, not a Playwright-bundled
+ * download. It navigates one or more
  * routes against a running server, screenshots each, and reports
  * same-origin request failures, bad HTTP responses (>=400), and uncaught
  * page errors. A page that throws or 404s makes the run exit non-zero;
@@ -133,6 +135,9 @@ async function main() {
     } catch (e) {
       ok = false
       detail = String(e).split('\n')[0]
+      // Best-effort artifact even when navigation failed, so the printed
+      // screenshot path points at something on a failing route.
+      await page.screenshot({ path: shot, fullPage: true }).catch(() => {})
     }
 
     if (!ok) failures++

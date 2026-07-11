@@ -16,10 +16,12 @@ All paths below are relative to the repo root.
 
 No `apt-get` needed in the Claude Code web container: Node and a Chromium
 build are already present. The driver launches the pre-installed browser at
-`/opt/pw-browsers/chromium` (override with `CHROME_PATH=...`), so you do **not**
-run `npx playwright install` — the repo's pinned Playwright may want a
-different browser build than the container ships, and pointing at the existing
-one avoids the mismatch.
+`/opt/pw-browsers/chromium` (override with `CHROME_PATH=...`). **In that
+container** you do **not** run `npx playwright install` — the repo's pinned
+Playwright may want a different browser build than the container ships, and
+pointing at the existing one avoids the mismatch. On a local machine or CI
+without a pre-installed browser, run `npx playwright install chromium` once, or
+set `CHROME_PATH` to a system Chrome/Chromium.
 
 Built and verified on Node v22.22.2 (README targets Node 24.x; the static
 export builds fine on 22).
