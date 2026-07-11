@@ -107,8 +107,9 @@ EOF
 npm run dev        # → http://localhost:3000 with Turbopack HMR. Ctrl-C to stop.
 ```
 
-Useless headless on its own (no window); use it as a `BASE_URL` target for the
-driver when iterating on a component, since it rebuilds on save.
+On its own this is useless in a headless container, since there is no window to
+view. Point the driver at it with `BASE_URL=http://localhost:3000` when
+iterating on a component, because it rebuilds on save.
 
 ## Test
 
