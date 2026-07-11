@@ -1,9 +1,32 @@
 import { test, expect } from '@playwright/test'
 
 /**
- * Decision wizards (issues #367, #397): eligibility check and volunteer quiz.
- * Covers two outcome paths per wizard plus back/restart behavior.
+ * Decision wizard (issue #397): the volunteer skills quiz.
+ *
+ * The charity eligibility check is no longer a standalone wizard page — it now
+ * happens on-page via the "Help me choose" guide on the funnel pages, covered
+ * by the on-page apply test below and the ApplyOptions unit test.
  */
+
+test.describe('On-page "Help me choose" apply guide', () => {
+  test('help-for-charities: choosing 501(c)(3) reveals the pid 33 application link', async ({
+    page,
+  }) => {
+    await page.goto('/help-for-charities/')
+
+    const guide = page.locator('details').filter({ hasText: 'Help me choose' }).first()
+    await guide.locator('summary').click()
+    await guide.getByText('We have our IRS 501(c)(3) determination letter').click()
+
+    // The recommendation appears in place (no navigation) with the 501(c)(3)
+    // application link deep-linked to the stable WHMCS product id.
+    const result = guide.locator('[aria-live="polite"]')
+    await expect(result.getByText(/use this application/i)).toBeVisible()
+    await expect(
+      result.getByRole('link', { name: /Apply as a 501\(c\)\(3\) charity/ })
+    ).toHaveAttribute('href', /cart\.php\?a=add&pid=33/)
+  })
+})
 
 test.describe('Volunteer skills quiz', () => {
   test('tech + websites reaches the webmaster outcome', async ({ page }) => {

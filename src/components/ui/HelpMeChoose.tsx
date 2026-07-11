@@ -2,7 +2,7 @@
 
 import React, { useId, useState } from 'react'
 import Link from 'next/link'
-import { hubAddProduct, ONBOARDING_PID } from '@/lib/config'
+import { ApplyButton } from '@/components/ui/apply-buttons'
 
 /**
  * Inline "Help me choose" guide — a native <details> disclosure with native
@@ -12,29 +12,6 @@ import { hubAddProduct, ONBOARDING_PID } from '@/lib/config'
  * apply buttons on any charity funnel page; the radio group name is scoped with
  * useId so multiple instances never collide.
  */
-
-type ApplyKind = 'full501c3' | 'pre501c3'
-
-const APPLY = {
-  full501c3: {
-    label: 'Apply as a 501(c)(3) charity',
-    href: hubAddProduct(ONBOARDING_PID.full501c3),
-  },
-  pre501c3: {
-    label: 'Apply as a pre-501(c)(3) organization',
-    href: hubAddProduct(ONBOARDING_PID.pre501c3),
-  },
-} as const
-
-export const ApplyButton = ({ kind, className = '' }: { kind: ApplyKind; className?: string }) => (
-  <a
-    href={APPLY[kind].href}
-    className={`inline-flex items-center justify-center rounded-[10px] bg-[#0567B1] px-[26px] py-[14px] text-[17px] font-[700] text-white transition-transform duration-200 hover:scale-[1.03] hover:bg-[#045a9b] ${className}`}
-    data-font="lato-font"
-  >
-    {APPLY[kind].label}
-  </a>
-)
 
 interface ChoiceOutcome {
   /** Plain-language answer shown as the option label. */

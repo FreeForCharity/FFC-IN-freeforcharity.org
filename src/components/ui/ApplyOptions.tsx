@@ -1,5 +1,6 @@
 import React from 'react'
-import HelpMeChoose, { ApplyButton } from '@/components/ui/HelpMeChoose'
+import HelpMeChoose from '@/components/ui/HelpMeChoose'
+import { ApplyButton } from '@/components/ui/apply-buttons'
 
 /**
  * On-page apply block: the two clear application options for people who already
