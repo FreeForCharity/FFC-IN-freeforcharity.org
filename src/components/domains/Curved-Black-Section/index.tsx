@@ -63,9 +63,10 @@ const Index = () => {
             data-font="aria-font"
           >
             DOMAIN NAME COUPON CODE Thank you for choosing us to help with your domain name and
-            email setup. To get the code please complete the onboarding form for either 501c3 or
-            pre-501c3 and you will see the code in the email confirmation that comes after you
-            finish. If you run into any questions, contact Clarke Moyer (520) 222-8104.
+            email setup. Complete the onboarding form for either 501c3 or pre-501c3 and the code
+            arrives in the email confirmation that comes after you finish — hold onto it. The domain
+            order itself unlocks later, once your website is live and validated on its free GitHub
+            Pages address. If you run into any questions, contact Clarke Moyer (520) 222-8104.
           </p>
         </div>
       </div>

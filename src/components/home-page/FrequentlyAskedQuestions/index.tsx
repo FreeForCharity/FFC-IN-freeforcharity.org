@@ -266,13 +266,15 @@ const index = () => {
             <p>
               <strong>Ways to get in faster:</strong>
               <br />
-              1. If you already have your 501(c)3 get your free domain from us{' '}
+              1. Complete onboarding and pick your .org name early — check availability at{' '}
               <a href="/domains/" className="text-[#1c6e92] underline">
                 freeforcharity.org/domains
-              </a>
+              </a>{' '}
+              (we purchase it once your site is validated).
               <br />
               2. If you arrive content-ready — with your logo, photos, mission statement, and
-              program text prepared — you may be moved up in the list.
+              program text prepared — your site gets built and validated sooner, which unlocks your
+              domain and email sooner.
             </p>
           </FrequentlyAskedQuestions>
 

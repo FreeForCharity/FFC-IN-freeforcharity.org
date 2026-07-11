@@ -41,8 +41,8 @@ test.describe('Domains page — Cloudflare model, dual email (#447/#448/#449)', 
 })
 
 test.describe('Onboarding journey page — Website before Email (#450)', () => {
-  // The strict numbered stage ordering (3. Website before 4. Email) is
-  // asserted in the unit test __tests__/app/charity-onboarding-journey.test.tsx,
+  // The strict numbered stage ordering (2. Website before 3. Domain before
+  // 4. Email) is asserted in the unit test __tests__/app/charity-onboarding-journey.test.tsx,
   // which parses the headings directly. Here we assert the customer-visible
   // outcome: the email stage states the live-website prerequisite and both
   // providers are offered.

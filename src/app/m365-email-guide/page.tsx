@@ -35,14 +35,16 @@ export default function M365EmailGuide() {
           <p>
             Microsoft&rsquo;s nonprofit grant covers 501(c)(3) organizations (and equivalents).
             You&rsquo;ll need your EIN and legal organization details. If you&rsquo;re pre-501c3,
-            start with our <Link href="/pre501c3/">Pre-501c3 onboarding</Link> — you can still get a
-            domain and prepare everything else while your determination is pending.
+            start with our <Link href="/pre501c3/">Pre-501c3 onboarding</Link> — you can get your
+            website built and prepare everything else while your determination is pending.
           </p>
 
           <h2 className={h2}>Step 2 — Have a domain ready</h2>
           <p>
-            Your email lives at your domain, so the domain comes first. FFC buys and manages .org
-            domains for supported charities at no cost — see{' '}
+            Your email lives at your domain, so you need the domain before email. In the FFC journey
+            the domain arrives right after your website is validated on its free GitHub Pages
+            address — so by the time you start this guide, it&rsquo;s usually already in place. FFC
+            buys and manages .org domains for supported charities at no cost — see{' '}
             <Link href="/domains/#check-your-domain">choosing your .org domain</Link> if you
             don&rsquo;t have one yet.
           </p>

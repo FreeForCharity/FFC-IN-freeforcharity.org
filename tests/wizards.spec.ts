@@ -32,7 +32,7 @@ test.describe('On-page "Help me choose" apply guide', () => {
 
     const guide = page.locator('details').filter({ hasText: 'Help me choose' }).first()
     await guide.locator('summary').click()
-    await guide.getByText('We’re based outside the United States').click()
+    await guide.getByText(/based outside the United States/).click()
 
     const result = guide.locator('[aria-live="polite"]')
     await expect(result.getByRole('link', { name: 'TechSoup' })).toHaveAttribute(
@@ -46,7 +46,7 @@ test.describe('On-page "Help me choose" apply guide', () => {
 
     const guide = page.locator('details').filter({ hasText: 'Help me choose' }).first()
     await guide.locator('summary').click()
-    await guide.getByText('We’re a project under a fiscal sponsor').click()
+    await guide.getByText(/a project under a fiscal sponsor/).click()
 
     const result = guide.locator('[aria-live="polite"]')
     await expect(result.getByText(/must apply and approve your project/i)).toBeVisible()

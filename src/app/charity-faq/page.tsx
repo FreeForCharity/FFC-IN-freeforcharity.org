@@ -57,9 +57,10 @@ const faqs: { question: string; answer: React.ReactNode }[] = [
     question: 'How long does onboarding take, and what happens when?',
     answer: (
       <>
-        Domain and email typically land within the first week or two; the website takes 2–6 weeks
-        depending mostly on how quickly content (logo, photos, text) is ready. The full picture is
-        in{' '}
+        Your website comes first: it takes 2–6 weeks depending mostly on how quickly content (logo,
+        photos, text) is ready, and goes live on its free GitHub Pages address. Once it&rsquo;s
+        validated, your domain lands the same week, and email a few days after that. The full
+        picture is in{' '}
         <Link href="/charity-onboarding-journey/" className="text-[#0567B1] underline">
           your onboarding journey
         </Link>

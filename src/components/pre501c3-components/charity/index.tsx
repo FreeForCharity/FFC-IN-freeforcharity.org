@@ -24,7 +24,7 @@ const index = () => {
           />
           <HelpForCharities
             title="–What Happens Next–"
-            description="Ready to get your website live? Once you’re accepted, you’ll order your free domain name and GitHub Pages website services. At checkout you’ll see a small $1 verification charge — it simply confirms that each request comes from a real charity — and a discount code that brings your total down to $0 arrives in your onboarding acceptance email (we never post the code publicly). Charity email through Microsoft 365 or Google Workspace becomes available once your 501(c)(3) status is approved."
+            description="Ready to get your website live? Once you’re accepted, you’ll order your GitHub Pages website service and we’ll build your site — it goes live and is validated on its free GitHub Pages address first. After your site is validated, you’ll order your free domain name and we’ll point it at your proven site. At checkout you’ll see a small $1 verification charge — it simply confirms that each request comes from a real charity — and a discount code that brings your total down to $0 arrives in your onboarding acceptance email (we never post the code publicly). Charity email through Microsoft 365 or Google Workspace becomes available once your 501(c)(3) status is approved."
             descriptionAlign="left"
           />
         </div>

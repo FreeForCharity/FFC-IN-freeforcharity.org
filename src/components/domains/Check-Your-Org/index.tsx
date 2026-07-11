@@ -165,6 +165,15 @@ const CheckYourOrg = () => {
                 >
                   Get {result.name}.org free &raquo;
                 </a>
+                <p className="mt-3 text-[14px] text-[#555]">
+                  Heads up: the order form asks for the live GitHub Pages address of your validated
+                  website — we purchase domains only after your site is proven. No site yet? Note
+                  the name and start with{' '}
+                  <Link href="/help-for-charities/" className="text-[#0567B1] underline">
+                    onboarding
+                  </Link>
+                  .
+                </p>
               </>
             ) : result.org === 'registered' ? (
               <>
@@ -181,6 +190,10 @@ const CheckYourOrg = () => {
                 >
                   It’s mine — transfer it to FFC &raquo;
                 </a>
+                <p className="mt-3 text-[14px] text-[#555]">
+                  Transfers are processed once your FFC website is live and validated on its GitHub
+                  Pages address — the order form asks for that URL.
+                </p>
               </>
             ) : (
               <p className="text-[16px] text-[#555]">

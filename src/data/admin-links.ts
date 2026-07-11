@@ -65,6 +65,9 @@ export const adminLinks = {
   'contributor-ladder': {
     newModel: '/contributor-ladder/',
   },
+  'fiscal-sponsorship': {
+    newModel: '/intake-help/fiscal-sponsorship/',
+  },
   'workforce-development': {
     newModel: '/training/',
   },
