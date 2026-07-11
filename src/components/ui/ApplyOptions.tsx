@@ -19,7 +19,7 @@ const APPLY = {
     href: hubAddProduct(ONBOARDING_PID.full501c3),
   },
   pre501c3: {
-    label: 'Apply as a pre-501(c)3 organization',
+    label: 'Apply as a pre-501(c)(3) organization',
     href: hubAddProduct(ONBOARDING_PID.pre501c3),
   },
 } as const
@@ -58,7 +58,7 @@ const choices: ChoiceOutcome[] = [
     result: (
       <div>
         <p className="mb-[16px]">
-          You&apos;re a <b>pre-501(c)3</b> organization — start here, and we&apos;ll guide you to
+          You&apos;re a <b>pre-501(c)(3)</b> organization — start here, and we&apos;ll guide you to
           full status.
         </p>
         <ApplyButton kind="pre501c3" />
@@ -70,7 +70,7 @@ const choices: ChoiceOutcome[] = [
     result: (
       <div>
         <p className="mb-[16px]">
-          You&apos;re a <b>pre-501(c)3</b> organization — start here, and we&apos;ll guide you to
+          You&apos;re a <b>pre-501(c)(3)</b> organization — start here, and we&apos;ll guide you to
           full status.
         </p>
         <ApplyButton kind="pre501c3" />
@@ -82,7 +82,7 @@ const choices: ChoiceOutcome[] = [
     result: (
       <p>
         Form your nonprofit first — you&apos;ll need articles of incorporation and an EIN. Once you
-        have those, come back and apply as a pre-501(c)3 organization. Our{' '}
+        have those, come back and apply as a pre-501(c)(3) organization. Our{' '}
         <a href="/consulting/" className="text-[#0567B1] font-[600] underline">
           consulting resources
         </a>{' '}
@@ -94,7 +94,7 @@ const choices: ChoiceOutcome[] = [
     label: 'We’re a for-profit business or individual',
     result: (
       <p>
-        Free For Charity&apos;s free programs are for 501(c)(3) and pre-501(c)3 nonprofits. If
+        Free For Charity&apos;s free programs are for 501(c)(3) and pre-501(c)(3) nonprofits. If
         you&apos;d like to help, you can{' '}
         <a href="/volunteer/" className="text-[#0567B1] font-[600] underline">
           volunteer
@@ -151,7 +151,7 @@ const ApplyOptions: React.FC<ApplyOptionsProps> = ({ heading = 'Ready to apply?'
 
           <div className="bg-white rounded-[12px] border border-[#e6edf3] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.1)] p-[28px] flex flex-col">
             <h3 className="text-[20px] font-[700] text-[#1a2e35] mb-[8px]" data-font="lato-font">
-              Pre-501(c)3 organizations
+              Pre-501(c)(3) organizations
             </h3>
             <p className="text-[16px] leading-[25px] text-[#555] mb-[22px]" data-font="lato-font">
               You&apos;re formed (articles of incorporation + EIN) and still working toward IRS
