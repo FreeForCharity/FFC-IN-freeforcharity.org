@@ -83,8 +83,9 @@ test.describe('Desktop Dropdown Menus', () => {
 
     // The two former sub-pages were consolidated onto ffcadmin.org, so
     // FFCAdmin is now a plain link to /ffcadmin — no dropdown appears.
+    // href prefix match tolerates the trailingSlash canonicalization (/ffcadmin/).
     await expect(menuItem.locator('div.absolute')).toHaveCount(0)
-    await expect(menuItem.locator('a[href="/ffcadmin"]')).toBeVisible()
+    await expect(menuItem.locator('a[href^="/ffcadmin"]')).toBeVisible()
   })
 
   test('should navigate to sub-page when clicking dropdown item', async ({ page }) => {

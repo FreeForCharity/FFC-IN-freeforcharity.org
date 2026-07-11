@@ -131,8 +131,9 @@ test.describe('Mobile Navigation', () => {
     await page.locator('button[aria-label="Open menu"]').click()
 
     // FFCAdmin is now a direct link (its former sub-pages moved to ffcadmin.org).
+    // href prefix match tolerates the trailingSlash canonicalization (/ffcadmin/).
     const mobileMenu = page.locator('header .lg\\:hidden.absolute')
-    await expect(mobileMenu.locator('a[href="/ffcadmin"]')).toBeVisible()
+    await expect(mobileMenu.locator('a[href^="/ffcadmin"]')).toBeVisible()
   })
 
   test('should navigate to a sub-page from mobile menu', async ({ page }) => {
