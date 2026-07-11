@@ -187,6 +187,7 @@ const ApplyOptions: React.FC<ApplyOptionsProps> = ({ heading = 'Ready to apply?'
                     <button
                       type="button"
                       onClick={() => setChoice(i)}
+                      aria-pressed={choice === i}
                       className={`block w-full text-left rounded-[8px] border px-[16px] py-[12px] text-[16px] transition-colors cursor-pointer ${
                         choice === i
                           ? 'border-[#0567B1] bg-white text-[#0567B1] font-[700]'
