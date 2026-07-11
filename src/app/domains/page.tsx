@@ -2,6 +2,7 @@ import { pageMetadata } from '@/lib/page-metadata'
 import React from 'react'
 import Hero from '@/components/domains/Hero'
 import DearProspective from '@/components/domains/Dear-Prospective'
+import CheckYourOrg from '@/components/domains/Check-Your-Org'
 import OrderYourDomain from '@/components/domains/Order-Your-Domain'
 import VerifyYourDomain from '@/components/domains/Verify-Your-Domain'
 import SetupEmailHosting from '@/components/domains/Setup-Email-Hosting'
@@ -22,6 +23,7 @@ const index = () => {
       <div className="pt-[80px]">
         <Hero />
         <DearProspective />
+        <CheckYourOrg />
         <OrderYourDomain />
         <VerifyYourDomain />
         <SetupEmailHosting />

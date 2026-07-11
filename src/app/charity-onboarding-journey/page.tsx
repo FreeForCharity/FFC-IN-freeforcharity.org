@@ -31,7 +31,7 @@ const stages: Stage[] = [
     you: 'Send us your top three .org name choices — or the details of a domain you already own.',
     ffc: 'We register (and pay for) the best available name, or take over management of your existing domain, and set up DNS and security.',
     duration: 'Same week',
-    links: [{ href: '/choosing-your-org-domain/', label: 'Guide: choosing your .org domain' }],
+    links: [{ href: '/domains/#check-your-domain', label: 'Guide: choosing your .org domain' }],
   },
   {
     name: '3. Website',

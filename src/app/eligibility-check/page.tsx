@@ -66,7 +66,7 @@ const config: WizardConfig = {
       ],
       links: [
         { label: 'See the onboarding journey', href: '/charity-onboarding-journey/' },
-        { label: 'Choosing your .org domain', href: '/choosing-your-org-domain/' },
+        { label: 'Choosing your .org domain', href: '/domains/#check-your-domain' },
       ],
     },
     {

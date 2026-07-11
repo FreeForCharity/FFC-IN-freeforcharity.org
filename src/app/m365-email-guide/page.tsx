@@ -43,7 +43,7 @@ export default function M365EmailGuide() {
           <p>
             Your email lives at your domain, so the domain comes first. FFC buys and manages .org
             domains for supported charities at no cost — see{' '}
-            <Link href="/choosing-your-org-domain/">choosing your .org domain</Link> if you
+            <Link href="/domains/#check-your-domain">choosing your .org domain</Link> if you
             don&rsquo;t have one yet.
           </p>
 
