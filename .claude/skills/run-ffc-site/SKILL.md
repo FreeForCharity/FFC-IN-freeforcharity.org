@@ -132,9 +132,10 @@ npm run test:e2e   # playwright e2e — needs the pinned browser; see gotcha bel
   **not** fail on them; it only fails on same-origin problems. The donation
   iframe and seal render blank in screenshots as a result; that's expected here,
   not a regression.
-- **`localhost` requests in a raw `requestfailed` listener are prefetches.**
-  Next.js `<Link>` prefetches the RSC payload and aborts them on navigate
-  (`ERR_ABORTED`). The driver filters those out; don't treat them as failures.
+- **`ERR_ABORTED` request failures are prefetches, not bugs.** Next.js `<Link>`
+  prefetches the RSC payload and aborts those requests on navigate. The driver
+  drops any `requestfailed` whose error text contains `ERR_ABORTED` (regardless
+  of host), so they never count against a route.
 - **Trailing slashes matter.** The export writes `out/about-us/index.html`, so
   hit `/about-us/`, not `/about-us`. `serve` will 200 either way, but keep the
   slash to match the deployed cPanel paths.
@@ -152,7 +153,9 @@ npm run test:e2e   # playwright e2e — needs the pinned browser; see gotcha bel
   pidfile (`kill $(cat /tmp/serve.pid)`) or port (`fuser -k 4173/tcp`). Avoid
   `pkill -f 'serve out'` — that substring also matches the shell running it and
   kills your own command.
-- **Driver hangs on `networkidle`**: usually a blocked third-party request never
-  settling — it resolves after the 30s nav timeout and the page still
-  screenshots. If it persists, target `BASE_URL` at the built export (`:4173`),
-  which has no live data fetches.
+- **A route is slow to settle**: navigation (`page.goto`, `waitUntil:'load'`) is
+  capped at 30s, and the post-load `networkidle` wait is capped at 5s and
+  ignored on timeout — so a blocked third-party request delays a route by at
+  most ~5s rather than hanging it. A route that exceeds the 30s nav cap fails
+  with a timeout; target `BASE_URL` at the built export (`:4173`), which has no
+  live data fetches.
