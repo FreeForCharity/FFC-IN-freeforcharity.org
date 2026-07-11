@@ -80,7 +80,11 @@ const CheckYourOrg = () => {
             <input
               type="text"
               value={q}
-              onChange={(e) => setQ(e.target.value)}
+              onChange={(e) => {
+                setQ(e.target.value)
+                setResult(null) // don't keep a stale verdict once the name changes
+                setError('')
+              }}
               placeholder="yourcharityname"
               aria-label="Domain name to check"
               autoCapitalize="none"

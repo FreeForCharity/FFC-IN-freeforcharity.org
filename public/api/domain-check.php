@@ -27,24 +27,9 @@ if ($q === '' || strlen($q) > 63 || $q[0] === '-' || substr($q, -1) === '-') {
     exit;
 }
 
-// Server-side cache: one entry per label, 1h. Limits outbound RDAP and abuse
-// (each request otherwise makes 3 registry calls). Only DEFINITIVE results are
-// written below, so a cache hit is always safe to serve and cacheable downstream.
-$cacheFile = sys_get_temp_dir() . '/ffc-domcheck-' . md5($q) . '.json';
-// Occasionally prune expired entries so unique-label spam can't grow the temp dir unbounded.
-if (mt_rand(1, 50) === 1) {
-    foreach (glob(sys_get_temp_dir() . '/ffc-domcheck-*.json') ?: [] as $f) {
-        if (@filemtime($f) < time() - 3600) {
-            @unlink($f);
-        }
-    }
-}
-if (is_readable($cacheFile) && (time() - filemtime($cacheFile)) < 3600) {
-    header('Cache-Control: public, max-age=3600');
-    echo file_get_contents($cacheFile);
-    exit;
-}
-
+// Caching is handled at the edge: a definitive result sends Cache-Control below,
+// so Cloudflare serves repeat queries without hitting this origin (or its 3 RDAP
+// calls). No server-side file cache — nothing to prune, lock, or leak on shared hosting.
 $rdap = [
     'org' => 'https://rdap.publicinterestregistry.org/rdap/domain/',
     'com' => 'https://rdap.verisign.com/com/v1/domain/',
@@ -55,13 +40,16 @@ $rdap = [
 function rdap_status(string $base, string $fqdn): string {
     $ch = curl_init($base . $fqdn);
     curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER  => true,
         CURLOPT_TIMEOUT         => 8,
         CURLOPT_FOLLOWLOCATION  => true,
         CURLOPT_PROTOCOLS       => CURLPROTO_HTTPS, // only fetch https
         CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTPS, // and only follow https redirects (SSRF guard)
         CURLOPT_USERAGENT       => 'FreeForCharity-DomainCheck/1.0 (+https://freeforcharity.org)',
         CURLOPT_HTTPHEADER      => ['Accept: application/rdap+json'],
+        // We only need the status code — discard the body instead of buffering it.
+        CURLOPT_WRITEFUNCTION   => function ($ch, $data) {
+            return strlen($data);
+        },
     ]);
     curl_exec($ch);
     $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -90,9 +78,8 @@ $out = json_encode([
 ], JSON_UNESCAPED_SLASHES);
 
 if ($org !== 'unknown' && $com !== 'unknown' && $net !== 'unknown') {
-    header('Cache-Control: public, max-age=3600'); // matches the 1h server-side cache
-    @file_put_contents($cacheFile, $out);
+    header('Cache-Control: public, max-age=3600'); // edge-cacheable (Cloudflare)
 } else {
-    header('Cache-Control: no-store'); // transient RDAP failure — don't pin it for an hour
+    header('Cache-Control: no-store'); // transient RDAP failure — don't pin it
 }
 echo $out;
