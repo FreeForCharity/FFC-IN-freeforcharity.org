@@ -87,13 +87,6 @@
       "minutes": 120
     },
     {
-      "href": "/eligibility-check/",
-      "title": "Does your charity qualify? (2-minute check)",
-      "promise": "A couple of questions, no forms — confirm you qualify for the all-in FFC program, then apply.",
-      "group": "Getting started",
-      "minutes": 2
-    },
-    {
       "href": "/volunteer-quiz/",
       "title": "Which volunteer role fits you? (1-minute quiz)",
       "promise": "Match your skills and available time to the FFC role you'll actually enjoy.",

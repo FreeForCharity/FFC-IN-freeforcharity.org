@@ -99,7 +99,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/volunteer-roles', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/volunteer-onboarding-guide', priority: 0.6, changeFrequency: 'monthly' as const },
     { path: '/contribute', priority: 0.7, changeFrequency: 'monthly' as const },
-    { path: '/eligibility-check', priority: 0.8, changeFrequency: 'monthly' as const },
     { path: '/volunteer-quiz', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/matching-gifts', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/badge', priority: 0.5, changeFrequency: 'yearly' as const },

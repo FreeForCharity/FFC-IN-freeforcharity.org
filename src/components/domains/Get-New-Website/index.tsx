@@ -1,5 +1,4 @@
 import React from 'react'
-import Link from 'next/link'
 import Transparentbtn from '@/components/ui/Transparentbtn'
 import { hubAddProduct, ONBOARDING_PID } from '@/lib/config'
 
@@ -46,14 +45,6 @@ const index = () => {
               href={hubAddProduct(ONBOARDING_PID.pre501c3)}
             />
           </div>
-
-          <p className="mt-[18px] text-[15px] font-[500] text-[#666]" data-font="raleway-font">
-            Not sure you qualify?{' '}
-            <Link href="/eligibility-check/" className="text-[#0567B1] font-[700] underline">
-              Take the 2-minute eligibility check
-            </Link>{' '}
-            first.
-          </p>
         </div>
       </div>
     </div>

@@ -59,6 +59,9 @@ RewriteRule ^donor-dashboard/?$ /donate/ [R=301,L]
 RewriteRule ^submit-information/?$ /contact-us/ [R=301,L]
 # choosing-your-org-domain guide merged into the /domains "Check your .org" section
 RewriteRule ^choosing-your-org-domain/?$ /domains/ [R=301,L]
+# Standalone eligibility wizard retired: eligibility now happens on-page via the
+# "Help me choose" guide on the funnel pages; apply lives on Help for Charities.
+RewriteRule ^eligibility-check/?$ /help-for-charities/ [R=301,L]
 
 # Testimonials inlined on homepage
 RewriteRule ^testimonial/american-legion-ahwatukee-post-64/?$ /#testimonials [R=301,L]

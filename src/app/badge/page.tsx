@@ -82,9 +82,8 @@ export default function BadgePage() {
               provide.
             </li>
             <li>
-              Not supported by us yet?{' '}
-              <Link href="/eligibility-check/">Check your eligibility</Link> — the badge comes with
-              the program.
+              Not supported by us yet? <Link href="/help-for-charities/">See how to apply</Link> —
+              the badge comes with the program.
             </li>
           </ul>
         </div>
