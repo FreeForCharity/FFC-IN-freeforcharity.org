@@ -6,7 +6,7 @@
 
 /**
  * Normalize a typed value to a bare DNS label — tolerant of pasted URLs and
- * stray whitespace (e.g. "  https://HopePantry.org/ " -> "hopepantry").
+ * stray whitespace (e.g. "  https://Example.com/ " -> "example").
  * The PHP endpoint mirrors this normalization (and additionally enforces
  * DNS-label validity: max 63 chars, no leading/trailing hyphen).
  */
