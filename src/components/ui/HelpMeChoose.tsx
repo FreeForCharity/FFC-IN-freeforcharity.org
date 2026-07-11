@@ -57,6 +57,61 @@ const choices: ChoiceOutcome[] = [
     ),
   },
   {
+    label: 'We’re a veterans post or another 501(c) type — like a 501(c)(19) or 501(c)(9)',
+    result: (
+      <div>
+        <p className="mb-[16px]">
+          US veterans organizations and other 501(c) types are welcome — veterans missions are one
+          of our priority categories. Use the <b>501(c)(3) application</b> and pick the organization
+          type that matches on the form (for example <i>US State Recognized Nonprofit</i>,{' '}
+          <i>US Not-For-Profit</i>, or <i>Other Charitable Organization</i>).
+        </p>
+        <ApplyButton kind="full501c3" />
+      </div>
+    ),
+  },
+  {
+    label: 'We’re a project under a fiscal sponsor (another organization’s 501(c)(3))',
+    result: (
+      <div>
+        <p className="mb-[16px]">
+          Fiscally sponsored projects join through their sponsor: the <b>sponsoring 501(c)(3)</b>{' '}
+          must apply and approve your project as officially one of theirs. That step is required
+          because the Microsoft 365 and Google Workspace nonprofit email grants attach to the
+          sponsor&apos;s 501(c)(3) — without it we can&apos;t set up your charity email later.
+        </p>
+        <p className="mb-[16px]">
+          Send your sponsor to this application (and if you&apos;re also pursuing your own
+          501(c)(3), apply as a pre-501(c)(3) too):
+        </p>
+        <ApplyButton kind="full501c3" />
+        <p className="mt-[16px]">
+          <a
+            href="https://ffcadmin.org/intake-help/fiscal-sponsorship/"
+            className="text-[#0567B1] font-[600] underline"
+          >
+            How we evaluate fiscal sponsorship
+          </a>
+        </p>
+      </div>
+    ),
+  },
+  {
+    label: 'We’re based outside the United States',
+    result: (
+      <p>
+        Free For Charity supports nonprofits registered in the <b>United States</b> (US territories
+        such as Puerto Rico, the US Virgin Islands, and Guam count). If your organization is
+        registered elsewhere, the best next step is{' '}
+        <a href="https://www.techsoup.org/" className="text-[#0567B1] font-[600] underline">
+          TechSoup
+        </a>
+        , which supports nonprofits internationally through its global partner network — wishing you
+        and your team all the best with your mission.
+      </p>
+    ),
+  },
+  {
     label: 'We haven’t formed an organization yet',
     result: (
       <p>
