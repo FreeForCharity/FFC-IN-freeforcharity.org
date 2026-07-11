@@ -26,7 +26,7 @@
 
 import { chromium } from 'playwright'
 import { mkdir } from 'node:fs/promises'
-import { existsSync } from 'node:fs'
+import { existsSync, statSync, accessSync, constants } from 'node:fs'
 import { dirname, resolve, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -38,8 +38,11 @@ import { fileURLToPath } from 'node:url'
 function resolveChrome() {
   const override = process.env.CHROME_PATH
   if (override) {
-    if (!existsSync(override)) {
-      console.error(`CHROME_PATH="${override}" does not exist.`)
+    try {
+      if (!statSync(override).isFile()) throw new Error('not a file')
+      accessSync(override, constants.X_OK)
+    } catch {
+      console.error(`CHROME_PATH="${override}" is not an executable file.`)
       process.exit(1)
     }
     return override
