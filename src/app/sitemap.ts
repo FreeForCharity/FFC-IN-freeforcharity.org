@@ -86,6 +86,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/publicity-consent-policy', priority: 0.3, changeFrequency: 'yearly' as const },
     { path: '/guides', priority: 0.8, changeFrequency: 'weekly' as const },
     { path: '/charity-onboarding-journey', priority: 0.7, changeFrequency: 'monthly' as const },
+    { path: '/why-website-first', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/getting-started-checklist', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/m365-email-guide', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/google-for-nonprofits-guide', priority: 0.7, changeFrequency: 'monthly' as const },

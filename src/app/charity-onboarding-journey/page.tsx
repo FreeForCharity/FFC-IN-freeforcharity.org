@@ -1,5 +1,6 @@
 import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
+import JourneyDiagram from '@/components/journey/JourneyDiagram'
 
 export const metadata = pageMetadata({
   title: 'Your Onboarding Journey',
@@ -79,8 +80,16 @@ export default function CharityOnboardingJourney() {
             validated on free GitHub Pages hosting <em>first</em>, and we only spend money on your
             domain once your site is proven. Volunteers do this work, so timelines are typical
             rather than guaranteed; content readiness on your side is the biggest factor in how fast
-            a site launches.
+            a site launches. Curious about the reasoning behind this order?{' '}
+            <Link href="/why-website-first/">
+              Read why we build your website before buying your domain
+            </Link>
+            .
           </p>
+        </div>
+
+        <div className="mt-8">
+          <JourneyDiagram />
         </div>
 
         <ol className="mt-8 space-y-6">
