@@ -41,6 +41,31 @@ describe('Why Website First page', () => {
     expect(text).toContain('Footer-Only Template')
   })
 
+  it('explains the two-templates-one-standard model converging at Gate 3', () => {
+    const { container } = render(<WhyWebsiteFirst />)
+    const text = container.textContent || ''
+
+    expect(text).toContain('Two templates, one standard')
+    expect(text).toMatch(/converge at Gate 3/i)
+  })
+
+  it('links the template chooser and both template repositories', () => {
+    const { container } = render(<WhyWebsiteFirst />)
+    const hrefs = Array.from(container.querySelectorAll('a')).map(
+      (a) => a.getAttribute('href') ?? ''
+    )
+
+    // Next.js <Link> normalizes away the pre-hash trailing slash when rendering.
+    expect(
+      hrefs.some(
+        (h) => h.includes('/free-charity-web-hosting') && h.includes('#choose-your-template')
+      )
+    ).toBe(true)
+    expect(hrefs).toContain('https://github.com/FreeForCharity/FFC-IN-FFC_Single_Page_Template')
+    // Footer repo name uses underscores — a hyphenated URL would 404.
+    expect(hrefs).toContain('https://github.com/FreeForCharity/FFC-IN-Footer_Only_Template')
+  })
+
   it('renders the journey diagram', () => {
     const { getByRole } = render(<WhyWebsiteFirst />)
     const diagram = getByRole('img', {
