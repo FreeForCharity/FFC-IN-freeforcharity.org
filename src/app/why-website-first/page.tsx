@@ -8,6 +8,14 @@ export const metadata = pageMetadata({
   description:
     'The gated FFC onboarding journey explained: donor trust, no sunk costs, and the four gates that make sure money is only spent on charities whose sites are already proven live.',
   canonical: '/why-website-first/',
+  // 1200x630 social-card render of the journey diagram (source:
+  // public/Images/journey-og.svg, rendered by scripts/render-og-image.mjs).
+  image: {
+    path: '/Images/journey-og.png',
+    width: 1200,
+    height: 630,
+    alt: 'The five-stage Free For Charity onboarding journey, with the funding gate between the Website and Domain stages',
+  },
 })
 
 const h2 = 'font-[var(--font-faustina)] text-[32px] leading-[40px] mt-8 mb-4'

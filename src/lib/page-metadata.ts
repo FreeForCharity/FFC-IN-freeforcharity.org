@@ -14,13 +14,25 @@ const OG_IMAGE = {
   alt: 'Free For Charity',
 }
 
+/** Per-page social-card override; `path` is the asset path under public/. */
+export interface PageOgImage {
+  path: string
+  width: number
+  height: number
+  alt: string
+}
+
 export function pageMetadata(input: {
   title: string
   description: string
   canonical: string
   noindex?: boolean
+  image?: PageOgImage
 }): Metadata {
-  const { title, description, canonical, noindex } = input
+  const { title, description, canonical, noindex, image } = input
+  const ogImage = image
+    ? { url: `${basePath}${image.path}`, width: image.width, height: image.height, alt: image.alt }
+    : OG_IMAGE
   return {
     title,
     description,
@@ -32,14 +44,14 @@ export function pageMetadata(input: {
       url: canonical,
       title,
       description,
-      images: [OG_IMAGE],
+      images: [ogImage],
     },
     twitter: {
       card: 'summary_large_image',
       site: '@freeforcharity',
       title,
       description,
-      images: [OG_IMAGE.url],
+      images: [ogImage.url],
     },
   }
 }
