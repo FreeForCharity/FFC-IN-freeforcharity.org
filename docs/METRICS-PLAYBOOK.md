@@ -34,7 +34,7 @@ two gaps that keep the real numbers from being knowable today.
 | 7   | "**100** new charities annually"        | 100           | `…/Empowering-Charities/index.tsx:40`                | aspirational target |
 | 8   | Progress bars (95% / 85% / 75%)         | 95/85/75      | `…/Empowering-Charities/index.tsx:44-46`             | decorative          |
 | 9   | "$**1,000,000** endowment goal"         | $1M           | endowment components (3 files)                       | goal, not progress  |
-| 10  | "~$**16.50** per charity per year"      | $16.50        | `src/data/faqs.ts:12` + home FAQ                     | verify vs. actual   |
+| 10  | "~$**16.50** per charity per year"      | $16.50        | home FAQ + `/charity-faq/` copy                      | verify vs. actual   |
 | 11  | "IRS designation **since 2014**"        | 2014          | `src/data/faqs/are-you-really-a-charity.json`        | static fact (OK)    |
 
 ### 1.2 Out of scope (policy/legal constants)

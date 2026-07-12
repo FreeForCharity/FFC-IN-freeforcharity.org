@@ -1,6 +1,7 @@
 'use client'
 import React, { useState, useRef } from 'react'
 import { FaPlus, FaMinus } from 'react-icons/fa'
+import { domainDonationTaxFaq, hostingBacklogFaq } from '@/data/faqs'
 
 /* ---------------------------------------------------
    Reusable AccordionItem Component (Styled)
@@ -174,28 +175,25 @@ const AccordionLayout = () => {
               </AccordionItem>
 
               <AccordionItem
-                title="Why do I not see hosting as an option?"
+                title={hostingBacklogFaq.question}
                 isOpen={openRight === 'right2'}
                 onToggle={() => toggleRight('right2')}
               >
-                We have a large backlog for new sites and support. We try to process at least 1 new
-                charity into the full hosting system per week.
+                {hostingBacklogFaq.backlog}
                 <br />
-                Ways to get in faster:
+                {hostingBacklogFaq.waysHeading}
                 <ul className="list-disc list-inside mt-1">
-                  <li>
-                    Complete onboarding and pick your .org name early — check availability at{' '}
-                    <a href="/domains/" className="text-[#0567B1]">
-                      freeforcharity.org/domains
-                    </a>{' '}
-                    — we purchase it once your site is validated
-                  </li>
-                  <li>
-                    If you arrive with your content ready to go — logo, photos, mission text, and
-                    program descriptions — your GitHub Pages site can be built and validated much
-                    faster, which unlocks your domain and email sooner and may move you up in the
-                    list.
-                  </li>
+                  {hostingBacklogFaq.ways.map((way) => (
+                    <li key={way.before}>
+                      {way.before}
+                      {way.link && (
+                        <a href={way.link.href} className="text-[#0567B1]">
+                          {way.link.label}
+                        </a>
+                      )}
+                      {way.after}
+                    </li>
+                  ))}
                 </ul>
               </AccordionItem>
             </div>
@@ -204,17 +202,12 @@ const AccordionLayout = () => {
           {/* Bottom Independent Accordion */}
           <div className="w-full max-w-md mx-auto">
             <AccordionItem
-              title="If I am an individual or business and donate money for a domain package to Free For Charity is this tax-deductible?"
+              title={domainDonationTaxFaq.question}
               isOpen={bottomOpen}
               onToggle={() => setBottomOpen(!bottomOpen)}
               small
             >
-              While any official tax guidance should come from your accountant or other tax advisor
-              Free For Charity is a registered 501(c)(3) organization and donations are
-              tax-deductible. Our IRS designation number (EIN) is 46-2471893. Upon checkout you will
-              receive a receipt to provide to your accountant. Specifically, if you represent a
-              business you can elect to deduct this as an expense versus as a donation depending on
-              the guidance of your tax advisor.
+              {domainDonationTaxFaq.answer}
             </AccordionItem>
           </div>
         </div>

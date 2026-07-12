@@ -7,7 +7,7 @@
 
 import { team } from '@/data/team'
 import { testimonials } from '@/data/testimonials'
-import { faqs } from '@/data/faqs'
+import { domainDonationTaxFaq, hostingBacklogFaq } from '@/data/faqs'
 
 describe('Team Data', () => {
   it('exports an array of team members', () => {
@@ -51,16 +51,32 @@ describe('Testimonials Data', () => {
   })
 })
 
-describe('FAQs Data', () => {
-  it('exports an array of FAQs', () => {
-    expect(Array.isArray(faqs)).toBe(true)
-    expect(faqs.length).toBeGreaterThan(0)
+describe('Shared FAQ Data (single-sourced copy)', () => {
+  it('hosting backlog FAQ has question, backlog answer, and ways to get in faster', () => {
+    expect(hostingBacklogFaq.question).toBeTruthy()
+    expect(hostingBacklogFaq.backlog).toBeTruthy()
+    expect(hostingBacklogFaq.waysHeading).toBeTruthy()
+    expect(hostingBacklogFaq.ways.length).toBeGreaterThan(0)
+    for (const way of hostingBacklogFaq.ways) {
+      expect(way.before).toBeTruthy()
+      if (way.link) {
+        expect(way.link.href).toBeTruthy()
+        expect(way.link.label).toBeTruthy()
+      }
+    }
   })
 
-  it('each FAQ has question and answer', () => {
-    for (const faq of faqs) {
-      expect(faq.question).toBeTruthy()
-      expect(faq.answer).toBeTruthy()
-    }
+  it('reflects the gated journey (domain purchased after site validation)', () => {
+    const allText = [
+      hostingBacklogFaq.backlog,
+      ...hostingBacklogFaq.ways.flatMap((w) => [w.before, w.after ?? '']),
+    ].join(' ')
+    expect(allText).toMatch(/once your site is validated/i)
+    expect(allText).not.toMatch(/eNom/i)
+  })
+
+  it('tax-deduction FAQ has question and answer with the EIN', () => {
+    expect(domainDonationTaxFaq.question).toBeTruthy()
+    expect(domainDonationTaxFaq.answer).toContain('46-2471893')
   })
 })
