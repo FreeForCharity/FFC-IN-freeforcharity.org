@@ -64,11 +64,84 @@ const Index = () => {
             FFC now builds every new charity website as a fast, secure{' '}
             <span className="font-[600] text-[#1c2a38]">static site hosted on GitHub Pages</span>.
             Sites are developed with AI development agents (Claude and GitHub Copilot), built as a
-            Next.js static export, and deployed automatically through GitHub Actions, with domains
-            managed in Cloudflare. This is the workflow you should follow for all new charity sites.
-            The InterServer / DirectAdmin / WordPress workflow in the later sections is retained
-            only as a legacy reference for sites that have not yet migrated.
+            Next.js static export from one of two FFC templates, and deployed automatically through
+            GitHub Actions, with domains managed in Cloudflare. This is the workflow you should
+            follow for all new charity sites. The InterServer / DirectAdmin / WordPress workflow in
+            the later sections is retained only as a legacy reference for sites that have not yet
+            migrated.
           </p>
+
+          <h3 className="text-[24px] leading-[31px] font-[700] text-[#0066B8] mt-10 mb-4">
+            The gated journey you are building inside
+          </h3>
+
+          <p className="text-[14px] font-[500] leading-[25px] text-[#333d47]">
+            Every charity site you build sits inside FFC&rsquo;s gated onboarding journey. The
+            website comes <span className="font-[600] text-[#1c2a38]">before</span> the domain and
+            email — money is only spent once the site is proven. As the volunteer developer, your
+            work follows this order:
+          </p>
+
+          <ol className="list-decimal pl-[2rem] pt-[0.75rem] pb-[23px] space-y-[0.75rem]">
+            <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
+              <span className="font-[600] text-[#1c2a38]">Charity approved:</span> the charity
+              completes onboarding and FFC validates the organization (IRS status, Candid profile).
+              Nothing is built before this approval.
+            </li>
+            <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
+              <span className="font-[600] text-[#1c2a38]">Website application:</span> the charity
+              submits the website application (it requires the approved onboarding) and sends
+              content — logo, photos, mission text, program descriptions.
+            </li>
+            <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
+              <span className="font-[600] text-[#1c2a38]">Build from one of two templates:</span>{' '}
+              start from the{' '}
+              <a
+                href="https://github.com/FreeForCharity/FFC-IN-FFC_Single_Page_Template"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#0066B8] underline"
+              >
+                Single Page Site Template
+              </a>{' '}
+              for a charity without a site, or the{' '}
+              <a
+                href="https://github.com/FreeForCharity/FFC-IN-Footer_Only_Template"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#0066B8] underline"
+              >
+                Footer-Only Template
+              </a>{' '}
+              to add the FFC footer and compliance layer to a site the charity already has. Both
+              must meet the same standard.
+            </li>
+            <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
+              <span className="font-[600] text-[#1c2a38]">Validate on GitHub Pages:</span> the site
+              goes live on its free GitHub Pages address and is validated end to end — including the
+              FFC footer standard (generated from the charity&rsquo;s validated application data)
+              and a Lighthouse accessibility pass. Work through the{' '}
+              <a
+                href="https://ffcadmin.org/guides/adopt-ffc-footer-on-existing-site/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#0066B8] underline"
+              >
+                adoption checklist on FFC Admin
+              </a>{' '}
+              before calling a site done.
+            </li>
+            <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
+              <span className="font-[600] text-[#1c2a38]">Domain via WHMCS:</span> only after the
+              site is validated live does the charity order their free .org domain through the FFC
+              Hub — the order form requires the live GitHub Pages URL (that is the funding gate).
+            </li>
+            <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
+              <span className="font-[600] text-[#1c2a38]">Email last:</span> Microsoft 365 or Google
+              Workspace nonprofit email is set up after the domain — both programs require a live
+              website before approving a nonprofit.
+            </li>
+          </ol>
 
           <h3 className="text-[24px] leading-[31px] font-[700] text-[#0066B8] mt-10 mb-4">
             How each charity site is structured
@@ -86,6 +159,19 @@ const Index = () => {
                 FFC-EX-examplecharity.org
               </code>
               ). All content and configuration are version-controlled in that repo.
+            </li>
+            <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
+              <span className="font-[600] text-[#1c2a38]">One of two templates:</span> New sites
+              start from the{' '}
+              <code className="bg-[#f1f3f5] text-[#B82B5A] py-[0.3em] px-[0.5em] rounded-[6px] text-[0.9em]">
+                FFC-IN-FFC_Single_Page_Template
+              </code>{' '}
+              repository; charities that already have a designed site get the FFC footer and
+              compliance layer from{' '}
+              <code className="bg-[#f1f3f5] text-[#B82B5A] py-[0.3em] px-[0.5em] rounded-[6px] text-[0.9em]">
+                FFC-IN-Footer_Only_Template
+              </code>
+              . Both converge at the same validation standard.
             </li>
             <li className="leading-[26px] pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
               <span className="font-[600] text-[#1c2a38]">Framework:</span> Sites are built with{' '}
@@ -117,6 +203,24 @@ const Index = () => {
           </h3>
 
           <ul className="p-[0_0_23px_1.5rem] list-disc">
+            <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px]">
+              <a
+                href="https://ffcadmin.org/guides/build-charity-site-from-template/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                FFC Admin Guide: Build a Charity Site from the Template
+              </a>
+            </li>
+            <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px]">
+              <a
+                href="https://ffcadmin.org/guides/adopt-ffc-footer-on-existing-site/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                FFC Admin Guide: Adopt the FFC Footer on an Existing Site (adoption checklist)
+              </a>
+            </li>
             <li className="underline pl-[0.5rem] mb-[0.75rem] text-[14px] text-[#0066B8] leading-[26px]">
               <a href="https://docs.github.com/en/pages" target="_blank" rel="noopener noreferrer">
                 GitHub Pages Documentation
@@ -591,7 +695,10 @@ const Index = () => {
 
           <p className="text-[14px] font-[500] leading-[25px] text-[#333d47]">
             Microsoft 365 provides the email hosting solution for charity accounts, ensuring
-            seamless communication and collaboration.
+            seamless communication and collaboration. Email is the final stage of the gated journey:
+            both Microsoft and Google require a live website before approving a nonprofit for free
+            email, which is why the site is built and validated first and the domain connected
+            before you start this section.
           </p>
 
           <h3 className="text-[24px] leading-[31px] font-[700] text-[#0066B8] mt-10 mb-4">
@@ -1268,8 +1375,9 @@ const Index = () => {
 
           <ul className="mt-[20px] pl-[1.5rem] p-[0_0_23px_1em] list-disc">
             <li className="pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">
-              You will be able to efficiently set up new charity accounts, configure domain
-              management, secure email hosting, and create a robust web presence using the tools FFC
+              You will be able to efficiently support a charity through the gated journey: build and
+              validate their website from one of the two FFC templates, then configure domain
+              management, and finally secure email hosting — in that order, using the tools FFC
               supports.
             </li>
             <li className="pl-[0.5rem] mb-[0.75rem] text-[14px] font-[500] text-[#333d47]">

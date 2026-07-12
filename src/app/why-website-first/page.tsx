@@ -104,17 +104,41 @@ export default function WhyWebsiteFirst() {
         </ol>
 
         <div className="prose max-w-none font-[var(--font-lato)] text-[18px] leading-[28px] mt-10">
-          <h2 className={h2}>Two templates, one destination</h2>
+          <h2 className={h2}>Two templates, one standard</h2>
           <p>
             Every FFC build starts from one of two open-source templates. The{' '}
-            <strong>Single Page Site Template</strong> is for charities starting fresh: a complete,
-            professionally structured one-page site with every section a charity needs — mission,
-            programs, team, donate, contact — plus the full FFC footer. The{' '}
-            <strong>Footer-Only Template</strong> is for charities that already love their website:
-            it adds the FFC footer, legal pages, cookie consent, and analytics to your existing
-            design instead of replacing it. Both paths end the same way — your site validated live
-            on GitHub Pages, which unlocks your free .org domain. Compare them on the{' '}
-            <Link href="/free-charity-web-hosting/">free charity web hosting page</Link>.
+            <strong>Single Page Site Template</strong> is the starting point for charities without a
+            site: a complete, professionally structured one-page site with every section a charity
+            needs — mission, programs, team, donate, contact — plus the full FFC footer. The{' '}
+            <strong>Footer-Only Template</strong> is the FFC footer and compliance layer for
+            charities whose site is already designed: it adds the FFC footer, legal pages, cookie
+            consent, and analytics to your existing design instead of replacing it.
+          </p>
+          <p>
+            Whichever template a site starts from, it must meet the same standard — the FFC footer
+            with your validated organization details, the legal pages, and an accessible build — and
+            both paths converge at Gate 3: your site validated live on GitHub Pages, which unlocks
+            your free .org domain. Compare the two side by side in the{' '}
+            <Link href="/free-charity-web-hosting/#choose-your-template">
+              template chooser on the free charity web hosting page
+            </Link>
+            , or inspect the templates themselves on GitHub:{' '}
+            <a
+              href="https://github.com/FreeForCharity/FFC-IN-FFC_Single_Page_Template"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Single Page Site Template
+            </a>{' '}
+            and{' '}
+            <a
+              href="https://github.com/FreeForCharity/FFC-IN-Footer_Only_Template"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Footer-Only Template
+            </a>
+            .
           </p>
 
           <h2 className={h2}>Ready to start?</h2>
