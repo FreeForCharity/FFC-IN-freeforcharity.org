@@ -10,9 +10,9 @@ interface Step {
 const steps: Step[] = [
   {
     number: '1',
-    title: 'Check your eligibility',
+    title: 'Confirm you qualify',
     description:
-      'Answer five quick questions to confirm your nonprofit qualifies and see which free programs fit — domain, email, website, or a migration.',
+      'Free For Charity is one all-in program for 501(c)(3) and pre-501(c)(3) nonprofits — a managed .org domain, Microsoft 365 email, and a built-and-hosted website. Not sure you’re a fit? Use “Help me choose” when you apply below.',
   },
   {
     number: '2',
