@@ -14,13 +14,31 @@
  *   FTP_HOST=... FTP_USER=... FTP_PASS=... node scripts/funnel-report.mjs
  *
  * Environment variables:
- *   FTP_HOST  FTPS server hostname (required)
- *   FTP_USER  FTPS username        (required)
- *   FTP_PASS  FTPS password        (required)
- *   FTP_PORT  control port         (optional, default 21 — explicit AUTH TLS)
+ *   FTP_HOST         FTPS server hostname (required)
+ *   FTP_USER         FTPS username        (required)
+ *   FTP_PASS         FTPS password        (required)
+ *   FTP_PORT         control port         (optional, default 21 — explicit AUTH TLS)
+ *   FTP_VERIFY_CERT  set to 1 to enforce TLS certificate verification.
+ *                    Default is OFF: the cPanel host presents a self-signed
+ *                    certificate (the deploy workflow sets
+ *                    `ssl:verify-certificate no` for the same host in
+ *                    .github/workflows/deploy-cpanel.yml). The channel is
+ *                    still encrypted either way.
  *
  * Offline mode (render a previously downloaded counts file, no FTP):
  *   node scripts/funnel-report.mjs --file /path/to/ffc_funnel_counts.json
+ *
+ * TLS notes (Pure-FTPd/cPanel):
+ *   - The server requires the data connection to REUSE the control
+ *     connection's TLS session. On TLS 1.3 `getSession()` does not return a
+ *     resumable session (tickets arrive after the handshake via the
+ *     'session' event), so we capture tickets from that event and hand the
+ *     latest one to the data connection. If the data handshake still fails,
+ *     we retry the whole download once forcing `maxVersion: 'TLSv1.2'` on
+ *     BOTH connections, where synchronous session reuse works reliably.
+ *   - If a PASV reply advertises a private/loopback address that differs
+ *     from the control host (NAT misconfiguration), we connect to the
+ *     control host instead — the same fix-up curl and lftp apply.
  *
  * Node stdlib only — no dependencies. See docs/funnel-beacon.md.
  */
@@ -45,6 +63,13 @@ const PID_LABELS = {
   999: 'Contract-test pid (ignore)',
   all: '(no pid — legacy/complete)',
 }
+
+/**
+ * Synthetic/test product ids excluded from the funnel totals (they would
+ * pollute views/completes and any filter-rate math). They are still shown,
+ * but only on a separate "synthetic/test traffic" line.
+ */
+export const IGNORED_PIDS = ['999']
 
 /* ------------------------------------------------------------------ */
 /* Minimal explicit-FTPS (AUTH TLS) client — control + one RETR.       */
@@ -103,14 +128,47 @@ function connectPlain(host, port) {
   })
 }
 
-function upgradeToTls(socket, host, session) {
+function upgradeToTls(socket, host, { session, rejectUnauthorized = true, maxVersion } = {}) {
   return new Promise((resolve, reject) => {
     const secure = tls.connect(
-      { socket, servername: host, session, rejectUnauthorized: true },
+      {
+        socket,
+        servername: host,
+        session,
+        rejectUnauthorized,
+        ...(maxVersion ? { maxVersion } : {}),
+      },
       () => resolve(secure)
     )
     secure.once('error', reject)
   })
+}
+
+/**
+ * Picks the TLS session for the data connection. TLS 1.3 delivers resumable
+ * session tickets AFTER the handshake via the socket's 'session' event —
+ * `getSession()` there returns a non-resumable stub — so prefer the latest
+ * captured ticket and fall back to `getSession()` (valid for TLS 1.2).
+ */
+export function selectDataSession(capturedSessions, controlSession) {
+  if (capturedSessions.length > 0) return capturedSessions[capturedSessions.length - 1]
+  return controlSession ?? undefined
+}
+
+/** RFC1918 / loopback / link-local IPv4. */
+export function isPrivateIPv4(host) {
+  return /^(10\.|127\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.)\d/.test(host)
+}
+
+/**
+ * PASV fix-up (matches curl/lftp behavior): if the 227 reply advertises a
+ * private/loopback address different from the control host, the server is
+ * behind NAT and advertising its internal address — connect to the control
+ * host instead.
+ */
+export function choosePasvHost(pasvHost, controlHost) {
+  if (pasvHost !== controlHost && isPrivateIPv4(pasvHost)) return controlHost
+  return pasvHost
 }
 
 /** Parses "227 Entering Passive Mode (h1,h2,h3,h4,p1,p2)." */
@@ -128,10 +186,12 @@ function parseEpsv(text) {
 }
 
 /**
- * Downloads `filePath` over explicit FTPS. Returns the file contents as a
+ * One download attempt over explicit FTPS. Returns the file contents as a
  * string, or null if the server says the file does not exist (550).
+ * `maxVersion` (optional) caps the TLS version on BOTH connections.
  */
-async function ftpsDownload({ host, port, user, pass }, filePath) {
+async function ftpsDownloadAttempt({ host, port, user, pass, verifyCert }, filePath, maxVersion) {
+  const tlsOpts = { rejectUnauthorized: verifyCert, maxVersion }
   const raw = await connectPlain(host, port)
   let reader = makeReplyReader(raw)
   await expectReply(reader, [220], 'greeting')
@@ -140,7 +200,12 @@ async function ftpsDownload({ host, port, user, pass }, filePath) {
   await expectReply(reader, [234], 'AUTH TLS')
   reader.detach()
 
-  const control = await upgradeToTls(raw, host)
+  const control = await upgradeToTls(raw, host, tlsOpts)
+  // TLS 1.3 session tickets arrive after the handshake — capture them all
+  // so the data connection can resume with the latest one (Pure-FTPd
+  // requires data-connection session reuse under PROT P).
+  const capturedSessions = []
+  control.on('session', (session) => capturedSessions.push(session))
   reader = makeReplyReader(control)
 
   control.write(`USER ${user}\r\n`)
@@ -166,7 +231,7 @@ async function ftpsDownload({ host, port, user, pass }, filePath) {
     control.write('PASV\r\n')
     const pasv = await expectReply(reader, [227], 'PASV')
     const parsed = parsePasv(pasv.text)
-    dataHost = parsed.host
+    dataHost = choosePasvHost(parsed.host, host)
     dataPort = parsed.port
   }
 
@@ -184,9 +249,21 @@ async function ftpsDownload({ host, port, user, pass }, filePath) {
     throw new Error(`FTPS RETR: unexpected reply ${retr.text}`)
   }
 
-  // Data connection is TLS too (PROT P); most servers require reusing the
-  // control connection's TLS session.
-  const data = await upgradeToTls(dataRaw, host, control.getSession())
+  // Data connection is TLS too (PROT P); the server requires reusing the
+  // control connection's TLS session — see selectDataSession().
+  let data
+  try {
+    data = await upgradeToTls(dataRaw, host, {
+      ...tlsOpts,
+      session: selectDataSession(capturedSessions, control.getSession()),
+    })
+  } catch (err) {
+    // Mark data-connection handshake failures so the caller can retry once
+    // on TLS 1.2, where synchronous session reuse works.
+    err.ftpsDataHandshake = true
+    control.destroy()
+    throw err
+  }
   const chunks = []
   await new Promise((resolve, reject) => {
     data.on('data', (c) => chunks.push(c))
@@ -199,13 +276,35 @@ async function ftpsDownload({ host, port, user, pass }, filePath) {
   return Buffer.concat(chunks).toString('utf8')
 }
 
+/**
+ * Downloads `filePath` over explicit FTPS, retrying once on TLS 1.2 if the
+ * data-connection handshake fails (TLS 1.3 session-ticket reuse is not
+ * guaranteed to satisfy Pure-FTPd's reuse requirement; on TLS 1.2 the
+ * session from the control handshake resumes reliably).
+ */
+async function ftpsDownload(config, filePath) {
+  try {
+    return await ftpsDownloadAttempt(config, filePath, undefined)
+  } catch (err) {
+    if (!err?.ftpsDataHandshake) throw err
+    console.error(
+      `note: data-connection TLS handshake failed (${err.message}); ` +
+        'retrying once with maxVersion TLSv1.2 on both connections ' +
+        '(TLS 1.3 session reuse is not reliable for FTPS data connections).'
+    )
+    return await ftpsDownloadAttempt(config, filePath, 'TLSv1.2')
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /* Markdown rendering                                                  */
 /* ------------------------------------------------------------------ */
 
 /**
  * counts shape (from funnel-beacon.php): { "YYYY-MM-DD": { "<pid>": { "view": n, "complete": n } } }
- * Renders a per-pid totals table plus a per-day breakdown.
+ * Renders a per-pid totals table plus a per-day breakdown. Pids in
+ * IGNORED_PIDS (synthetic/contract-test traffic) are excluded from the
+ * funnel table and totals, and reported on a separate line instead.
  */
 export function renderMarkdown(counts) {
   const perPid = new Map()
@@ -232,16 +331,27 @@ export function renderMarkdown(counts) {
   lines.push('')
   lines.push('| PID | Product | Views | Completes |')
   lines.push('| --- | ------- | ----: | --------: |')
-  const pids = [...perPid.keys()].sort((a, b) => {
-    const na = Number(a)
-    const nb = Number(b)
-    if (Number.isNaN(na)) return 1
-    if (Number.isNaN(nb)) return -1
-    return na - nb
-  })
+  const sortPids = (keys) =>
+    keys.sort((a, b) => {
+      const na = Number(a)
+      const nb = Number(b)
+      if (Number.isNaN(na)) return 1
+      if (Number.isNaN(nb)) return -1
+      return na - nb
+    })
+  const pids = sortPids([...perPid.keys()].filter((pid) => !IGNORED_PIDS.includes(pid)))
+  const ignored = sortPids([...perPid.keys()].filter((pid) => IGNORED_PIDS.includes(pid)))
   for (const pid of pids) {
     const { view, complete } = perPid.get(pid)
     lines.push(`| ${pid} | ${PID_LABELS[pid] ?? '—'} | ${view} | ${complete} |`)
+  }
+  if (ignored.length > 0) {
+    lines.push('')
+    const parts = ignored.map((pid) => {
+      const { view, complete } = perPid.get(pid)
+      return `pid ${pid} (${PID_LABELS[pid] ?? '—'}) — ${view} view(s), ${complete} complete(s)`
+    })
+    lines.push(`_Synthetic/test traffic (excluded from the funnel above): ${parts.join('; ')}._`)
   }
   lines.push('')
   lines.push('> **Caveat:** WHMCS order reports are authoritative for submissions — the')
@@ -266,7 +376,7 @@ async function main() {
     }
     raw = readFileSync(path, 'utf8')
   } else {
-    const { FTP_HOST, FTP_USER, FTP_PASS, FTP_PORT } = process.env
+    const { FTP_HOST, FTP_USER, FTP_PASS, FTP_PORT, FTP_VERIFY_CERT } = process.env
     if (!FTP_HOST || !FTP_USER || !FTP_PASS) {
       console.error(
         'Missing credentials. Set FTP_HOST, FTP_USER and FTP_PASS in the environment\n' +
@@ -275,8 +385,22 @@ async function main() {
       )
       process.exit(2)
     }
+    const verifyCert = FTP_VERIFY_CERT === '1'
+    if (!verifyCert) {
+      console.error(
+        'note: channel encrypted; cert not verified — the cPanel host presents a ' +
+          "self-signed certificate (matches deploy workflow behavior: deploy-cpanel.yml's " +
+          '`ssl:verify-certificate no`). Set FTP_VERIFY_CERT=1 to enforce verification.'
+      )
+    }
     raw = await ftpsDownload(
-      { host: FTP_HOST, port: Number(FTP_PORT ?? 21), user: FTP_USER, pass: FTP_PASS },
+      {
+        host: FTP_HOST,
+        port: Number(FTP_PORT ?? 21),
+        user: FTP_USER,
+        pass: FTP_PASS,
+        verifyCert,
+      },
       COUNTS_PATH
     )
     if (raw === null) {

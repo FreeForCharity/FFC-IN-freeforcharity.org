@@ -1,6 +1,7 @@
 import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 import JourneyDiagram from '@/components/journey/JourneyDiagram'
+import { journeyStages, type JourneyStage } from '@/data/journey'
 
 export const metadata = pageMetadata({
   title: 'Why We Build Your Website Before Buying Your Domain',
@@ -11,33 +12,57 @@ export const metadata = pageMetadata({
 
 const h2 = 'font-[var(--font-faustina)] text-[32px] leading-[40px] mt-8 mb-4'
 
-interface Gate {
+/**
+ * The four gates derive from the shared journey module (src/data/journey.ts)
+ * so the stage/gate FACTS — which stage each gate belongs to, its name, and
+ * its gateNote — cannot drift from the journey page. Only the page-specific
+ * prose (gate label + plain-language explanation) lives here, keyed by the
+ * canonical stage id.
+ */
+interface GateProse {
+  stageId: string
   name: string
   plain: string
 }
 
-const gates: Gate[] = [
+const gateProse: GateProse[] = [
   {
+    stageId: 'application',
     name: 'Gate 1 — Validation',
     plain:
       'Before anything is built, we verify your organization: IRS status, Candid profile, and program fit. Every later stage requires this approval, so nobody invests effort in an organization that cannot qualify.',
   },
   {
+    stageId: 'website',
     name: 'Gate 2 — Website',
     plain:
       'The website application only opens after validation. A volunteer builds your site from an FFC template and you prove the partnership works by getting us your content. The site goes live on its free GitHub Pages address — which costs nothing.',
   },
   {
+    stageId: 'domain',
     name: 'Gate 3 — Funding',
     plain:
       'This is the money gate. We only spend funds on your free .org domain once your website is validated live. The domain order form literally asks for your live GitHub Pages address — that is what unlocks the purchase.',
   },
   {
+    stageId: 'email',
     name: 'Gate 4 — Email',
     plain:
       'Microsoft and Google both require a live website before they approve a nonprofit for free email. Because your site is already proven and your domain is live, your free Microsoft 365 or Google Workspace mailboxes sail through.',
   },
 ]
+
+interface Gate extends GateProse {
+  stage: JourneyStage
+}
+
+const gates: Gate[] = gateProse.map((gate) => {
+  const stage = journeyStages.find((s) => s.id === gate.stageId)
+  if (!stage) {
+    throw new Error(`why-website-first: no journey stage with id "${gate.stageId}"`)
+  }
+  return { ...gate, stage }
+})
 
 export default function WhyWebsiteFirst() {
   return (
@@ -95,9 +120,14 @@ export default function WhyWebsiteFirst() {
         <ol className="mt-4 space-y-6">
           {gates.map((gate) => (
             <li key={gate.name} className="border border-gray-200 rounded-lg p-6">
-              <h3 className="font-[var(--font-faustina)] text-[26px] leading-[34px] mb-3">
+              <h3 className="font-[var(--font-faustina)] text-[26px] leading-[34px] mb-2">
                 {gate.name}
               </h3>
+              {/* Stage name + gate fact from the shared journey module —
+                  #A85400 on white is 5.34:1 (WCAG AA). */}
+              <p className="font-[var(--font-lato)] text-[15px] leading-[23px] font-[700] text-[#A85400] mb-3">
+                {gate.stage.name}: {gate.stage.gateNote}
+              </p>
               <p className="font-[var(--font-lato)] text-[17px] leading-[27px]">{gate.plain}</p>
             </li>
           ))}

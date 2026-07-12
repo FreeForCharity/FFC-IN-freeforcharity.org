@@ -1,6 +1,7 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import CharityOnboardingJourney from '@/app/charity-onboarding-journey/page'
+import { journeyStages } from '@/data/journey'
 
 describe('Charity Onboarding Journey page', () => {
   it('renders without crashing', () => {
@@ -33,6 +34,17 @@ describe('Charity Onboarding Journey page', () => {
     expect(text).toContain('3. Domain — only after your site is proven')
     expect(text).toContain('4. Email')
     expect(text).toContain('5. Handoff & ongoing support')
+  })
+
+  it('renders every stage gateNote from the shared journey module', () => {
+    const { container } = render(<CharityOnboardingJourney />)
+    const text = container.textContent || ''
+
+    // The gate relationship of each stage (src/data/journey.ts gateNote) is
+    // shown as an emphasized line in the stage cards — it must not be dead data.
+    for (const stage of journeyStages) {
+      expect(text).toContain(stage.gateNote)
+    }
   })
 
   it('offers both Microsoft 365 and Google Workspace as email options', () => {
