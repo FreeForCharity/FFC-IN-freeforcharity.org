@@ -1,5 +1,6 @@
 import React from 'react'
 import FrequentlyAskedQuestions from '@/components/ui/Frequently-Asked-Questions'
+import { domainDonationTaxFaq, hostingBacklogFaq } from '@/data/faqs'
 
 const index = () => {
   return (
@@ -258,35 +259,27 @@ const index = () => {
             </p>
           </FrequentlyAskedQuestions>
 
-          <FrequentlyAskedQuestions title="Why do I not see hosting as an option?">
-            <p className="mb-[20px]">
-              We have a large backlog for new sites and support. We try to process at least 1 new
-              charity into the full hosting system per week.
-            </p>
+          <FrequentlyAskedQuestions title={hostingBacklogFaq.question}>
+            <p className="mb-[20px]">{hostingBacklogFaq.backlog}</p>
             <p>
-              <strong>Ways to get in faster:</strong>
-              <br />
-              1. Complete onboarding and pick your .org name early — check availability at{' '}
-              <a href="/domains/" className="text-[#1c6e92] underline">
-                freeforcharity.org/domains
-              </a>{' '}
-              (we purchase it once your site is validated).
-              <br />
-              2. If you arrive content-ready — with your logo, photos, mission statement, and
-              program text prepared — your site gets built and validated sooner, which unlocks your
-              domain and email sooner.
+              <strong>{hostingBacklogFaq.waysHeading}</strong>
+              {hostingBacklogFaq.ways.map((way, index) => (
+                <React.Fragment key={way.before}>
+                  <br />
+                  {index + 1}. {way.before}
+                  {way.link && (
+                    <a href={way.link.href} className="text-[#1c6e92] underline">
+                      {way.link.label}
+                    </a>
+                  )}
+                  {way.after}
+                </React.Fragment>
+              ))}
             </p>
           </FrequentlyAskedQuestions>
 
-          <FrequentlyAskedQuestions title="If I am an individual or business and donate money for a domain package to Free For Charity, is this tax-deductible?">
-            <p>
-              While any official tax guidance should come from your accountant or other tax advisor
-              Free For Charity is a registered 501(c)(3) organization and donations are
-              tax-deductible. Our IRS designation number (EIN) is 46-2471893.  Upon checkout you
-              will receive a receipt to provide to your accountant. Specifically, if you represent a
-              business you can elect to deduct this as an expense versus as a donation depending on
-              the guidance of your tax advisor.
-            </p>
+          <FrequentlyAskedQuestions title={domainDonationTaxFaq.question}>
+            <p>{domainDonationTaxFaq.answer}</p>
           </FrequentlyAskedQuestions>
         </div>
       </div>

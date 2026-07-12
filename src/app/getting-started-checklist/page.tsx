@@ -1,5 +1,6 @@
 import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
+import { GATE_SENTENCE } from '@/data/journey'
 
 export const metadata = pageMetadata({
   title: 'Getting Started Checklist',
@@ -59,10 +60,8 @@ export default function GettingStartedChecklist() {
 
           <h2 className={h2}>During onboarding</h2>
           <p className="print:text-[11px]">
-            FFC builds your website first, live and validated on its free GitHub Pages address —
-            your domain is purchased only after your site is proven, and charity email comes after
-            that, because the nonprofit email programs (Microsoft 365 / Google Workspace) expect
-            your organization to have an established web presence.
+            {GATE_SENTENCE} That order exists because the nonprofit email programs (Microsoft 365 /
+            Google Workspace) expect your organization to have an established web presence.
           </p>
           <ul className="space-y-2 list-none pl-0">
             <Item>
