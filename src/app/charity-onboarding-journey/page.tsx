@@ -41,9 +41,14 @@ export default function CharityOnboardingJourney() {
         <ol className="mt-8 space-y-6">
           {journeyStages.map((stage) => (
             <li key={stage.id} className="border border-gray-200 rounded-lg p-6">
-              <h2 className="font-[var(--font-faustina)] text-[26px] leading-[34px] mb-3">
+              <h2 className="font-[var(--font-faustina)] text-[26px] leading-[34px] mb-2">
                 {stage.name}
               </h2>
+              {/* The gate relationship, from the shared journey module —
+                  #A85400 on white is 5.34:1 (WCAG AA). */}
+              <p className="font-[var(--font-lato)] text-[15px] leading-[23px] font-[700] text-[#A85400] mb-3">
+                {stage.gateNote}
+              </p>
               <dl className="font-[var(--font-lato)] text-[17px] leading-[27px] space-y-2">
                 <div>
                   <dt className="font-[700] inline">You: </dt>

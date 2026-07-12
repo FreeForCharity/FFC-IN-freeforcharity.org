@@ -2,6 +2,7 @@ import React from 'react'
 import { render } from '@testing-library/react'
 import { axe } from '../utils/axe'
 import WhyWebsiteFirst from '@/app/why-website-first/page'
+import { journeyStages } from '@/data/journey'
 
 describe('Why Website First page', () => {
   it('renders without crashing', () => {
@@ -66,12 +67,24 @@ describe('Why Website First page', () => {
     expect(hrefs).toContain('https://github.com/FreeForCharity/FFC-IN-Footer_Only_Template')
   })
 
-  it('renders the journey diagram', () => {
-    const { getByRole } = render(<WhyWebsiteFirst />)
-    const diagram = getByRole('img', {
+  it('renders the journey diagram (responsive horizontal + vertical variants)', () => {
+    const { getAllByRole } = render(<WhyWebsiteFirst />)
+    const diagrams = getAllByRole('img', {
       name: /five-stage Free For Charity onboarding journey/i,
     })
-    expect(diagram).toBeInTheDocument()
+    expect(diagrams).toHaveLength(2)
+  })
+
+  it('derives each gate card from the shared journey module (stage name + gateNote)', () => {
+    const { container } = render(<WhyWebsiteFirst />)
+    const text = container.textContent || ''
+
+    // Stage names and gate facts come from src/data/journey.ts, so the gate
+    // cards cannot drift from the journey page.
+    for (const stage of journeyStages.filter((s) => s.id !== 'handoff')) {
+      expect(text).toContain(stage.name)
+      expect(text).toContain(stage.gateNote)
+    }
   })
 
   it('links the CTA to /help-for-charities/ and cross-links the journey page', () => {
