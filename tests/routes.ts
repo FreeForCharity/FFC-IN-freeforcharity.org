@@ -66,6 +66,7 @@ export const siteRoutes = [
   { route: '/publicity-consent-policy', name: 'Publicity & Story Consent Policy' },
   { route: '/guides', name: 'Guides Hub' },
   { route: '/charity-onboarding-journey', name: 'Charity Onboarding Journey' },
+  { route: '/why-website-first', name: 'Why Website First' },
   { route: '/getting-started-checklist', name: 'Getting Started Checklist' },
   { route: '/m365-email-guide', name: 'M365 Email Guide' },
   { route: '/google-for-nonprofits-guide', name: 'Google for Nonprofits Guide' },

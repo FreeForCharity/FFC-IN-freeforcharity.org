@@ -338,6 +338,12 @@
       "type": "post"
     },
     {
+      "title": "Why We Build Your Website Before Buying Your Domain",
+      "description": "The gated FFC onboarding journey explained: donor trust, no sunk costs, and the four gates that make sure money is only spent on charities whose sites are already proven live.",
+      "href": "/why-website-first/",
+      "type": "page"
+    },
+    {
       "title": "Workforce Development",
       "description": "Free workforce development and training in modern web development—building GitHub Pages static sites with AI development agents (Claude and GitHub Copilot)—and programming. Build your skills while helping charities.",
       "href": "/workforce-development/",
