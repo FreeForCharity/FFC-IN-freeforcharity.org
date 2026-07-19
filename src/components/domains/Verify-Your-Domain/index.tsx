@@ -5,6 +5,8 @@ import { IoCall } from 'react-icons/io5'
 import { IoMdMail } from 'react-icons/io'
 import { hubUrl } from '@/lib/config'
 import { assetPath } from '@/lib/assetPath'
+import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
 const index = () => {
   return (
@@ -64,6 +66,14 @@ const index = () => {
               </p>
             </div>
           </div>
+        </div>
+
+        <div className="mb-[13px] max-w-[610px] mx-auto">
+          <AdminGuideLink
+            href={ffcAdminUrl(adminLinks['cloudflare-account'].newModel)}
+            label="Cloudflare account setup guide on FFC Admin"
+            description="New to Cloudflare? Our step-by-step guide walks you through creating your free personal account with two-factor authentication so it's ready for our invite. One important rule: don't add your domain to your personal account — we manage it for you in the FFC Cloudflare account."
+          />
         </div>
 
         {/* Bottom note */}
