@@ -47,6 +47,9 @@ export const adminLinks = {
     newModel: '/guides/microsoft-365-email/',
     legacy: '/legacy-wordpress-administration/wordpress-domains/',
   },
+  'cloudflare-account': {
+    newModel: '/guides/cloudflare-account/',
+  },
   'web-developer-training': {
     newModel: '/training/web-developer/',
     legacy: '/legacy-wordpress-administration/wordpress-web-developer-training/',
