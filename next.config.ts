@@ -1,4 +1,5 @@
 import type { NextConfig } from 'next'
+import { withSentryConfig } from '@sentry/nextjs'
 
 const nextConfig: NextConfig = {
   output: 'export',
@@ -33,8 +34,20 @@ const nextConfig: NextConfig = {
 // config file without ERR_MODULE_NOT_FOUND because the import only
 // runs when ANALYZE is set, and ANALYZE is never set during a
 // production build.
+// Sentry build-time wrapper: injects release info and uploads source maps
+// when SENTRY_AUTH_TOKEN is present (CI); without the token it no-ops the
+// upload and the build proceeds normally, so local/dev builds are unaffected.
+const withSentry = (config: NextConfig) =>
+  withSentryConfig(config, {
+    org: 'free-for-charity',
+    project: 'javascript-nextjs',
+    silent: !process.env.CI,
+    widenClientFileUpload: true,
+    disableLogger: true,
+  })
+
 export default (async () => {
-  if (process.env.ANALYZE !== 'true') return nextConfig
+  if (process.env.ANALYZE !== 'true') return withSentry(nextConfig)
   const { default: bundleAnalyzer } = await import('@next/bundle-analyzer')
-  return bundleAnalyzer({ enabled: true })(nextConfig)
+  return withSentry(bundleAnalyzer({ enabled: true })(nextConfig))
 })()

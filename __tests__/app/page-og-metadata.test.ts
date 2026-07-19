@@ -14,7 +14,9 @@ const appDir = join(__dirname, '..', '..', 'src', 'app')
 // Pages intentionally relying on the root layout's own OG block:
 // - '' (homepage): the root layout defines its canonical OG metadata
 // - free-for-charity-donation-policy: uses a `title: { absolute }` override
-const EXEMPT = new Set(['', 'free-for-charity-donation-policy'])
+// - sentry-example-page: internal noindex tooling page (Sentry verification),
+//   deliberately without social cards
+const EXEMPT = new Set(['', 'free-for-charity-donation-policy', 'sentry-example-page'])
 
 const routeDirs = [
   '',
