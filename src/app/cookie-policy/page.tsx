@@ -8,7 +8,7 @@ export const metadata = pageMetadata({
 })
 
 // Update this date when the policy changes
-const LAST_UPDATED = 'November 26, 2025'
+const LAST_UPDATED = 'July 25, 2026'
 
 export default function CookiePolicy() {
   return (
@@ -54,10 +54,11 @@ export default function CookiePolicy() {
               Remember your cookie consent preferences
             </li>
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-              Understand how you use our website (with your consent)
+              Understand how you use our website (see section 3.2 for when your permission is
+              required)
             </li>
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-              Analyze website traffic and user behavior (with your consent)
+              Analyze website traffic and user behavior (see section 3.2)
             </li>
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
               Improve our website and user experience
@@ -103,13 +104,36 @@ export default function CookiePolicy() {
 
           {/* 3.2 Analytics Cookies */}
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500] mt-[1em]">
-            <strong>3.2 Analytics Cookies (Requires Consent)</strong>
+            <strong>3.2 Analytics Cookies</strong>
           </p>
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
             These cookies help us understand how visitors interact with our website by collecting
             and reporting information anonymously. We use this information to improve our website
             and user experience.
           </p>
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-4">
+            <p className="text-sm text-[#333] mb-2">
+              <strong>When we ask permission first</strong>
+            </p>
+            <p className="text-sm text-[#666] mb-2">
+              If you are in the European Economic Area, the United Kingdom, or Switzerland, Google
+              Analytics sets <strong>no cookies and collects no identifiers</strong> until you
+              accept. It still counts your visit in an aggregate, cookie-free way so we know how
+              many people used the site — that measurement cannot be tied back to you or to your
+              next visit.
+            </p>
+            <p className="text-sm text-[#666] mb-2">
+              Everywhere else, Google Analytics cookies are set from your first visit. You can turn
+              them off at any time using the cookie settings link in our footer, and we will delete
+              the cookies listed below when you do.
+            </p>
+            <p className="text-sm text-[#666]">
+              <strong>Microsoft Clarity is different.</strong> It records how visitors move through
+              pages, so it runs <strong>only if you explicitly accept</strong> analytics cookies —
+              everywhere in the world, not just in Europe. Declining, or simply not answering the
+              banner, keeps it off.
+            </p>
+          </div>
 
           {/* Google Analytics */}
           <div className="bg-gray-50 p-4 rounded-lg mb-4">
@@ -256,6 +280,64 @@ export default function CookiePolicy() {
             </p>
           </div>
 
+          {/* 3.4 Functional Cookies */}
+          <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500] mt-[1em]">
+            <strong>3.4 Functional Cookies</strong>
+          </p>
+          <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
+            These support features you actively use. They are not used to build a profile of you or
+            for advertising, and because removing them would break the feature itself, they are not
+            covered by the analytics and marketing choices above.
+          </p>
+
+          {/* Tawk.to */}
+          <div className="bg-gray-50 p-4 rounded-lg mb-4">
+            <h4 className="font-semibold mb-2 text-[#333]">Tawk.to (Live Chat)</h4>
+            <p className="text-sm mb-2 text-[#666]">
+              Powers the chat widget. Its cookies keep a conversation attached to you as you move
+              between pages, so you do not lose your place mid-conversation.
+            </p>
+            <p className="text-xs mt-2 text-gray-600">
+              Privacy Policy:{' '}
+              <a
+                href="https://www.tawk.to/privacy-policy/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline"
+              >
+                https://www.tawk.to/privacy-policy/
+              </a>
+            </p>
+          </div>
+
+          {/* Zeffy */}
+          <div className="bg-gray-50 p-4 rounded-lg mb-4">
+            <h4 className="font-semibold mb-2 text-[#333]">Zeffy (Donation Forms)</h4>
+            <p className="text-sm mb-2 text-[#666]">
+              Every donation form on this site is operated by Zeffy, either embedded in the page or
+              opened on their website. Zeffy sets its own cookies when a form loads; these are
+              required for a donation to complete. What you enter into a donation form goes to
+              Zeffy, and their privacy policy governs it.
+            </p>
+            <p className="text-sm mb-2 text-[#666]">
+              We ask Zeffy to count donation-form page views in our own Google Analytics, so we can
+              see how many people reach a form and where they came from. That measurement covers
+              page views and referral sources only — we do not receive donation amounts, payment
+              details, or donor identities through analytics.
+            </p>
+            <p className="text-xs mt-2 text-gray-600">
+              Privacy Policy:{' '}
+              <a
+                href="https://www.zeffy.com/en-US/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline"
+              >
+                https://www.zeffy.com/en-US/privacy-policy
+              </a>
+            </p>
+          </div>
+
           {/* Section 4 */}
           <ol className="list-decimal list-inside pb-[1em]" start={4}>
             <li>
@@ -280,12 +362,20 @@ export default function CookiePolicy() {
               <strong>Accept All:</strong> Allow all cookies including analytics and marketing
             </li>
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-              <strong>Decline All:</strong> Only essential cookies will be used
+              <strong>Decline All:</strong> We delete the analytics and marketing cookies listed
+              above, stop Microsoft Clarity, and set no further ones. Google Analytics keeps
+              counting your visit in an aggregate, cookie-free way that cannot identify you or
+              recognize you on a return visit — see section 3.2.
             </li>
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
               <strong>Customize:</strong> Choose which types of cookies you want to allow
             </li>
           </ul>
+          <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
+            You do not have to answer the banner. If you ignore it, the rules in section 3.2 apply:
+            in Europe and the UK nothing is stored until you say yes, and Microsoft Clarity stays
+            off wherever you are.
+          </p>
 
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500] mt-[1em]">
             <strong>4.2 Browser Settings</strong>
