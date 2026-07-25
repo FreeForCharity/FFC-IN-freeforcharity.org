@@ -57,9 +57,22 @@ export const TAWK_TO_PROPERTY =
 //     endpoint only governs tags fired through a GTM container, which
 //     this property's tag is not. The UI step is still required.
 //
+// Both apex and `www.` hosts are listed explicitly. Every campaign link
+// this site renders is built from ZEFFY_BASE, which is
+// `https://www.zeffy.com` — so listing only the apex would rely on the
+// linker's host matching being suffix-based, and a mismatch fails
+// silently: links go undecorated, sessions split on the hop, and nothing
+// in the UI or the logs says so. Naming the exact hosts we link to costs
+// nothing and removes the assumption.
+//
 // ffcadmin.org is deliberately absent: it reports to a separate GA4
 // property, and cross-domain linking only joins sessions within one.
-export const CROSS_DOMAIN_DOMAINS = ['freeforcharity.org', 'zeffy.com']
+export const CROSS_DOMAIN_DOMAINS = [
+  'freeforcharity.org',
+  'www.freeforcharity.org',
+  'zeffy.com',
+  'www.zeffy.com',
+]
 
 // No Meta Pixel configured yet — stays empty until an operator sets the
 // env var (or adds a default here once a real ID exists). Empty = the

@@ -259,11 +259,26 @@ export default function CookieConsent() {
   }, [])
 
   const expireCookies = useCallback((names: string[]) => {
+    // A cookie can only be deleted by a request whose domain attribute
+    // MATCHES the one it was set with. GA4 scopes `_ga` to the
+    // registrable domain (`.freeforcharity.org`) so it is readable across
+    // subdomains — so on `www.freeforcharity.org`, expiring it with
+    // `domain=www.freeforcharity.org` silently does nothing and the
+    // visitor keeps the identifier they just asked us to drop.
+    //
+    // Try every scope the cookie could plausibly hold: host-only, the
+    // exact hostname, and the apex with and without a leading dot.
+    const hostname = window.location.hostname
+    const apex = hostname.replace(/^www\./, '')
+    const domains = Array.from(new Set([hostname, `.${hostname}`, apex, `.${apex}`]))
+
     names.forEach((name) => {
-      // Delete for current domain
-      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
-      // Also try to delete with domain specification
-      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`
+      const expiry = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+      // Host-only (no domain attribute).
+      document.cookie = expiry
+      domains.forEach((domain) => {
+        document.cookie = `${expiry} domain=${domain};`
+      })
     })
   }, [])
 
