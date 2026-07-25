@@ -1,0 +1,175 @@
+# Conversion tracking
+
+How freeforcharity.org measures its three primary conversions, and the consent
+model that decides what reaches Google.
+
+Tracking issue:
+[#505](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/505).
+GA4 Admin side:
+[FFC-Cloudflare-Automation#869](https://github.com/FreeForCharity/FFC-Cloudflare-Automation/issues/869).
+
+## The three conversions
+
+| Event                       | Fires when                                              | Where                                         |
+| --------------------------- | ------------------------------------------------------- | --------------------------------------------- |
+| `donate_open`               | A Zeffy campaign form is opened (pop-up button or link) | `ZeffyPopupButton`, any `zeffy.com` link      |
+| `volunteer_apply`           | A volunteer role application link is followed off-site  | Idealist postings, `ffcadmin.org/volunteer/*` |
+| `service_application_start` | A WHMCS product order form is opened                    | Every `/hub/cart.php` apply/order link        |
+
+Plus one supporting funnel step:
+
+| Event              | Fires when                                       |
+| ------------------ | ------------------------------------------------ |
+| `donate_form_view` | An embedded Zeffy form actually mounts on screen |
+
+**All three primary events must be marked as Key Events in GA4 Admin.** Emitting
+an event is not enough — an event that isn't a Key Event contributes nothing to
+`keyEvents` and shows up nowhere in conversion reporting.
+
+Done on property `386764754` on 2026-07-25, `ONCE_PER_SESSION` for all three
+(a visitor who clicks three campaign buttons is one donation intent, not three):
+
+| Key event                   | id            |
+| --------------------------- | ------------- |
+| `donate_open`               | `15324200900` |
+| `volunteer_apply`           | `15324276068` |
+| `service_application_start` | `15324231572` |
+
+Worth knowing why the property read `keyEvents: 0` for its entire history: the
+only key event configured was **`purchase`**, auto-created 2023-06-17, and this
+site has never sent a `purchase` event. The single configured conversion was one
+that could not fire.
+
+Reproducing this on other FFC properties is FFC-Cloudflare-Automation#869
+(workflow 506) — the container-per-charity model means every new GA4 property
+starts in exactly the same state.
+
+### Why these events and not "donations"
+
+Every one of the three funnels leaves this site before it completes:
+
+- **Donations** finish inside Zeffy — a cross-origin iframe on `/donate`, or
+  `zeffy.com` in a new tab. The site cannot observe the submit.
+- **Volunteering** finishes on Idealist or `ffcadmin.org`, which is a separate
+  GA4 property with no cross-domain linking configured.
+- **Service applications** finish in WHMCS at `/hub/cart.php?a=complete` — same
+  hostname, different application, no Google tag on it.
+
+So the site measures the last thing it genuinely observes: the visitor
+committing to the handoff. These are **intent** conversions, and they should be
+read that way — `donate_open` is not a donation. Completion-side tracking (a
+Zeffy thank-you redirect, a tag on the WHMCS complete page) is follow-up work.
+
+For service applications there is already an independent completion counter: the
+WHMCS-side funnel beacon in [`funnel-beacon.md`](./funnel-beacon.md) records
+`view` and `complete` per product id. Expect `service_application_start` to run
+**lower** than the beacon's `view` count — the beacon fires server-side for
+everyone, while GA4 needs consent-mode measurement and loses ad-blocked traffic.
+A large divergence means something is broken; a modest one is normal.
+
+## How events get emitted
+
+`src/lib/analytics-events.ts` is the contract. `trackConversion()` emits each
+event **twice**, on purpose:
+
+1. `gtag('event', …)` → straight into GA4, with no GTM tag to configure. Without
+   this, nothing lands in GA4 until someone hand-builds a tag in the container —
+   which is exactly the gap that left `keyEvents` at 0 for the life of the
+   property.
+2. `dataLayer.push({event: …})` → the same conversion, available as a GTM
+   trigger for Google Ads conversions, Meta, or anything wired up later.
+
+> **Do not build a GTM tag that sends these events to the same GA4 property.**
+> That double-counts. Use the dataLayer copy for other destinations only.
+
+### Tagging a CTA
+
+Most CTAs need nothing. `classifyConversionHref()` recognises the destination —
+any `zeffy.com` link, any `idealist.org` link, any `ffcadmin.org/volunteer/*`
+link, any `/hub/cart.php` order link — so new apply and donate buttons are
+tracked the moment they ship. This is deliberate: the site reaches these
+destinations from ~20 components, and hand-tagging each one guarantees the next
+new CTA is silently untracked.
+
+Add explicit attributes only when the component knows something the URL does
+not, such as a campaign name:
+
+```tsx
+import { conversionAttrs, CONVERSION_EVENTS } from '@/lib/analytics-events'
+
+<a href={…} {...conversionAttrs(CONVERSION_EVENTS.DONATE_OPEN, {
+  conversion_label: 'Website Design and Development',
+  conversion_id: 'web-design',
+})}>
+```
+
+Explicit attributes win over classification. Both paths run through one
+delegated listener (`src/components/analytics/ConversionTracking.tsx`) in the
+capture phase, so tracked buttons stay **server components** and Zeffy's own
+click handler can't swallow the event.
+
+### Parameters
+
+`conversion_label`, `conversion_id`, `conversion_source` (the page path), and
+`conversion_destination` (the destination host). Nothing identifying: what was
+clicked and where from, never who clicked it.
+
+To report on these in GA4 they must be registered as **custom dimensions**
+(Admin → Custom definitions), event-scoped, matching the parameter names above —
+otherwise they are collected but not queryable. All four were registered on
+property `386764754` on 2026-07-25, alongside the pre-existing `event_category`
+and `event_label`.
+
+## Consent model
+
+Policy: **the most permissive configuration Google allows.**
+
+Google's EU User Consent Policy binds FFC as a Google Analytics/Ads customer and
+requires opt-in consent before setting cookies or reading identifiers for
+visitors in the EEA, the UK, and Switzerland. No equivalent Google-imposed gate
+exists elsewhere. So `src/lib/consent-mode.ts` sets **Consent Mode v2** defaults:
+
+| Visitor location     | Default storage state | What GA4 does before a choice           |
+| -------------------- | --------------------- | --------------------------------------- |
+| EEA, UK, Switzerland | denied                | cookieless pings (modelled, no cookies) |
+| Everywhere else      | granted               | full cookie-based measurement           |
+
+`wait_for_update: 500` holds tags briefly so a returning visitor's stored choice
+applies before the first hit. `url_passthrough` and `ads_data_redaction` keep
+click ids usable and ad identifiers stripped while storage is denied.
+
+### What changed, and why it collects more
+
+Previously the GA4, GTM, and Clarity **scripts did not load at all** until a
+visitor clicked "Accept All" (`analytics` defaulted to `false`). Every visitor
+who ignored the banner was invisible — worldwide, not just in the EEA. That was
+strictly more restrictive than Google requires.
+
+Now the tags load on every pageview and consent controls _storage_ rather than
+_loading_:
+
+- Ignoring the banner outside the EEA/UK/CH → fully measured.
+- Ignoring it inside the EEA/UK/CH → measured cookielessly.
+- **Declining** anywhere → still measured cookielessly, rather than vanishing.
+
+The Meta Pixel remains fully gated on marketing consent: no Consent Mode
+equivalent is wired up for it, so there is no cookieless fallback and loading it
+unconsented would be a real disclosure rather than a modelled one.
+
+The bootstrap is an inline `<head>` script in `src/app/layout.tsx`, not a
+`next/script` — the consent state must already be in the dataLayer when the
+Google tags initialise, and nothing else guarantees that ordering.
+
+## Verifying
+
+- `tests/analytics-loading.spec.ts` — tags load for an undecided visitor,
+  consent defaults are present before any Google tag, declining flips storage to
+  denied.
+- `tests/conversion-events.spec.ts` — each CTA pushes the right event with the
+  right parameters.
+- GA4 **Realtime → Event count by Event name** shows the events within minutes
+  of a click on production.
+- `keyEvents` in the daily workflow 502 report
+  (`FFC-IN-ffcadmin.org/public/data/google-analytics/freeforcharity.org.json`)
+  goes non-zero once the events are marked as Key Events — that file is the
+  scoreboard for whether this actually worked.

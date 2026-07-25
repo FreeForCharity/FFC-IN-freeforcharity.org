@@ -1,5 +1,6 @@
 import React from 'react'
 import { zeffyHostedUrl } from '@/data/donation-campaigns'
+import { conversionAttrs, CONVERSION_EVENTS } from '@/lib/analytics-events'
 
 interface ZeffyPopupButtonProps {
   /** Zeffy pop-up embed link, e.g. https://www.zeffy.com/embed/<type>/<slug>?modal=true */
@@ -9,6 +10,15 @@ interface ZeffyPopupButtonProps {
   /** 'primary' = filled brand button; 'secondary' = outlined. */
   variant?: 'primary' | 'secondary'
   className?: string
+  /**
+   * Campaign name recorded on the `donate_open` conversion. Defaults to
+   * the button label, which is right for the general-fund CTAs; campaign
+   * cards pass the campaign title so GA4 can break donations down by
+   * appeal rather than by button text.
+   */
+  campaignName?: string
+  /** Stable campaign key (DonationCampaign.key) for the conversion id. */
+  campaignKey?: string
 }
 
 /**
@@ -26,6 +36,8 @@ const ZeffyPopupButton: React.FC<ZeffyPopupButtonProps> = ({
   label,
   variant = 'primary',
   className = '',
+  campaignName,
+  campaignKey,
 }) => {
   const styles =
     variant === 'primary'
@@ -37,6 +49,10 @@ const ZeffyPopupButton: React.FC<ZeffyPopupButtonProps> = ({
       target="_blank"
       rel="noopener noreferrer"
       {...{ 'zeffy-form-link': formLink }}
+      {...conversionAttrs(CONVERSION_EVENTS.DONATE_OPEN, {
+        conversion_label: campaignName ?? label,
+        conversion_id: campaignKey,
+      })}
       className={`inline-block cursor-pointer rounded-[10px] text-center font-[600] text-[16px] px-[24px] py-[14px] ${styles} ${className}`}
       data-font="lato-font"
     >

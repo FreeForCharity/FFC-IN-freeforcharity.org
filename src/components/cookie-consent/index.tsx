@@ -9,27 +9,12 @@ import {
   GTM_CONTAINER_ID,
   TAWK_TO_PROPERTY,
 } from '@/lib/analytics-config'
+import { updateGoogleConsent, type ConsentPreferences } from '@/lib/consent-mode'
 
-// Define type for GTM dataLayer events
-interface DataLayerEvent {
-  event: string
-  [key: string]: string | number | boolean | undefined
-}
+// The Window globals (dataLayer, gtag, openCookiePreferences) are declared
+// once in @/lib/analytics-events so every caller shares one typed queue.
 
-// Extend Window interface to include dataLayer and openCookiePreferences
-declare global {
-  interface Window {
-    dataLayer: DataLayerEvent[]
-    openCookiePreferences?: () => void
-  }
-}
-
-interface CookiePreferences {
-  necessary: boolean
-  functional: boolean
-  analytics: boolean
-  marketing: boolean
-}
+type CookiePreferences = ConsentPreferences
 
 export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false)
@@ -160,6 +145,28 @@ export default function CookieConsent() {
     }
   }, [])
 
+  /**
+   * Load the measurement tags that run for every visitor.
+   *
+   * Under Consent Mode v2 the tags themselves are not the thing consent
+   * gates — storage is. GA4, GTM, and Clarity therefore load on every
+   * pageview, and the consent state (set as a default before these ever
+   * run, then updated on any banner choice) decides whether they may use
+   * cookies. An EEA visitor who never touches the banner is measured via
+   * cookieless pings; a visitor who declines is measured the same way.
+   *
+   * Only the Meta Pixel stays fully gated: it has no Consent Mode
+   * equivalent wired up here, so there is no cookieless mode to fall back
+   * to and loading it without marketing consent would be a real
+   * disclosure, not a modelled one.
+   */
+  const loadDefaultTags = useCallback(() => {
+    loadGoogleTagManager()
+    loadGoogleAnalytics()
+    loadMicrosoftClarity()
+    loadTawkTo()
+  }, [loadGoogleTagManager, loadGoogleAnalytics, loadMicrosoftClarity, loadTawkTo])
+
   const deleteAnalyticsCookies = useCallback(() => {
     // List of static cookie names to delete
     const cookiesToDelete = ['_ga', '_gid', '_fbp', 'fr', '_clck', '_clsk']
@@ -216,50 +223,49 @@ export default function CookieConsent() {
         })
       }
 
-      // Load scripts based on consent independently. GTM rides alongside
-      // GA4 — if the operator has wired GA4 inside GTM via a tag, they
-      // should unset NEXT_PUBLIC_GA_MEASUREMENT_ID to avoid double-firing.
-      // The dataLayer consent_update event above fires regardless so any
-      // GTM-managed tags can read the current consent state.
-      if (prefs.analytics) {
-        loadGoogleTagManager()
-        loadGoogleAnalytics()
-        loadMicrosoftClarity()
-      }
+      // Tell the Google tags what the visitor actually chose. This must
+      // happen before (or alongside) loading them: for an EEA/UK/CH
+      // visitor it is what lifts the regional denied-by-default state,
+      // and for a declining visitor anywhere it is what drops storage to
+      // denied. Tags that are already loaded pick it up immediately.
+      updateGoogleConsent(prefs)
+
+      // GTM rides alongside GA4 — if the operator wires GA4 inside GTM
+      // via a tag, they should unset NEXT_PUBLIC_GA_MEASUREMENT_ID to
+      // avoid double-firing.
+      loadDefaultTags()
+
       if (prefs.marketing) {
         loadMetaPixel()
       }
-      // Tawk.to live-chat sits under functional consent (visitor-support
-      // tool, not analytics). Functional is always-on per cookie banner,
-      // so this loads unconditionally when a property is configured.
-      if (prefs.functional) {
-        loadTawkTo()
-      }
     },
-    [
-      deleteAnalyticsCookies,
-      loadGoogleAnalytics,
-      loadGoogleTagManager,
-      loadMetaPixel,
-      loadMicrosoftClarity,
-      loadTawkTo,
-    ]
+    [deleteAnalyticsCookies, loadDefaultTags, loadMetaPixel]
   )
 
   // Helper to load preferences from localStorage and update state
   const loadPreferencesFromLocalStorage = useCallback(
     (showBannerIfMissing = true) => {
+      // No stored choice (or an unreadable one): show the banner AND load
+      // the tags. The Consent Mode defaults already in the dataLayer
+      // decide what those tags may store — granted outside the EEA/UK/CH,
+      // cookieless pings inside it — so an ignored banner still produces
+      // measurement instead of silence.
+      const fallBackToDefaults = () => {
+        if (showBannerIfMissing) setShowBanner(true)
+        loadDefaultTags()
+      }
+
       try {
         const consent = localStorage.getItem('cookie-consent')
         if (!consent) {
-          if (showBannerIfMissing) setShowBanner(true)
+          fallBackToDefaults()
           return
         }
         let savedPreferences: CookiePreferences
         try {
           savedPreferences = JSON.parse(consent)
         } catch {
-          if (showBannerIfMissing) setShowBanner(true)
+          fallBackToDefaults()
           return
         }
 
@@ -282,14 +288,14 @@ export default function CookieConsent() {
           applyConsent(updatedPreferences)
         } else {
           // Invalid data, show banner again
-          if (showBannerIfMissing) setShowBanner(true)
+          fallBackToDefaults()
         }
       } catch {
         // If localStorage is unavailable or data is corrupted, show banner
-        if (showBannerIfMissing) setShowBanner(true)
+        fallBackToDefaults()
       }
     },
-    [applyConsent]
+    [applyConsent, loadDefaultTags]
   )
 
   const handleCancelPreferences = useCallback(() => {

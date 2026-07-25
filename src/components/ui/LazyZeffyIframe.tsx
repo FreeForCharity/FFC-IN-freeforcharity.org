@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState, IframeHTMLAttributes } from 'react'
 import { zeffyHostedUrl } from '@/data/donation-campaigns'
+import { CONVERSION_EVENTS, trackConversion } from '@/lib/analytics-events'
 
 export interface ZeffyIframeProps extends IframeHTMLAttributes<HTMLIFrameElement> {
   allowpaymentrequest?: string
@@ -56,6 +57,25 @@ const LazyZeffyIframe = (props: ZeffyIframeProps) => {
     observer.observe(el)
     return () => observer.disconnect()
   }, [])
+
+  /**
+   * The embedded form is the one donation surface with no click to
+   * observe — the visitor scrolls to it and fills it in inside a
+   * cross-origin frame. Mounting is the last thing this site can see, so
+   * it is recorded as the funnel step it is: the form was actually put in
+   * front of someone. Fires once (mounted only ever flips false → true).
+   *
+   * Deliberately NOT a `donate_open`: that event means an explicit act of
+   * intent, and conflating the two would inflate the donation funnel with
+   * everyone who scrolled past the homepage form.
+   */
+  useEffect(() => {
+    if (!mounted) return
+    trackConversion(CONVERSION_EVENTS.DONATE_FORM_VIEW, {
+      conversion_id: typeof props.src === 'string' ? props.src.split('/').pop() : undefined,
+      conversion_label: props.title,
+    })
+  }, [mounted, props.src, props.title])
 
   // Before mount the reserved box simply stays empty — the same thing
   // visitors saw while the Zeffy app booted when the iframe was eager.
