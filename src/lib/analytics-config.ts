@@ -34,6 +34,33 @@ export const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID ?? 
 export const TAWK_TO_PROPERTY =
   process.env.NEXT_PUBLIC_TAWK_TO_PROPERTY ?? '65bf15eb0ff6374032c915d9/1hlp6r8hc'
 
+// Domains that share a measurement session with this site.
+//
+// Zeffy hosts every donation form, and once Zeffy fires this property's
+// measurement ID on their pages (requested via their Google Analytics
+// set-up form), an undecorated hop from here to there starts a NEW
+// session attributed to freeforcharity.org as a referral — double-counting
+// sessions and detaching donations from the campaign that drove them.
+//
+// The gtag `linker` below decorates outbound ANCHOR clicks with `_gl`,
+// which covers the pop-up buttons and hosted-form links. Two caveats,
+// deliberately recorded rather than papered over:
+//
+//  1. It does NOT cover the embedded iframe on /donate — a linker
+//     decorates links, not iframe `src` attributes. Continuity for the
+//     embed would need `_gl` appended to the src explicitly.
+//  2. For GA4, the authoritative cross-domain setting lives in the Admin
+//     UI (Data Streams -> Configure tag settings -> Configure your
+//     domains). It is exposed by NO API: verified against the
+//     analyticsadmin v1beta and v1alpha discovery documents (no
+//     domain/tag-settings resource), and the Tag Manager `gtag_config`
+//     endpoint only governs tags fired through a GTM container, which
+//     this property's tag is not. The UI step is still required.
+//
+// ffcadmin.org is deliberately absent: it reports to a separate GA4
+// property, and cross-domain linking only joins sessions within one.
+export const CROSS_DOMAIN_DOMAINS = ['freeforcharity.org', 'zeffy.com']
+
 // No Meta Pixel configured yet — stays empty until an operator sets the
 // env var (or adds a default here once a real ID exists). Empty = the
 // corresponding loader is a no-op.

@@ -84,9 +84,26 @@ const LazyZeffyIframe = (props: ZeffyIframeProps) => {
     // segment for a trailing slash — both of which fragment the
     // conversion_id dimension and break aggregation by campaign.
     const classified = typeof props.src === 'string' ? classifyConversionHref(props.src) : null
+
+    // conversion_source/destination are set on every click-tracked
+    // conversion, and they are registered as GA4 custom dimensions — so
+    // omitting them here would leave this event unbreakable by page or
+    // destination, and make it the odd one out in every report that
+    // segments the others.
+    let destination: string | undefined
+    if (typeof props.src === 'string') {
+      try {
+        destination = new URL(props.src, window.location.href).host
+      } catch {
+        destination = undefined
+      }
+    }
+
     trackConversion(CONVERSION_EVENTS.DONATE_FORM_VIEW, {
       conversion_id: classified?.params.conversion_id,
       conversion_label: props.title,
+      conversion_source: window.location.pathname,
+      conversion_destination: destination,
     })
   }, [mounted, props.src, props.title])
 

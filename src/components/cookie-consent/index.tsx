@@ -8,6 +8,7 @@ import {
   CLARITY_PROJECT_ID,
   GTM_CONTAINER_ID,
   TAWK_TO_PROPERTY,
+  CROSS_DOMAIN_DOMAINS,
 } from '@/lib/analytics-config'
 import { updateGoogleConsent, type ConsentPreferences } from '@/lib/consent-mode'
 
@@ -15,6 +16,38 @@ import { updateGoogleConsent, type ConsentPreferences } from '@/lib/consent-mode
 // once in @/lib/analytics-events so every caller shares one typed queue.
 
 type CookiePreferences = ConsentPreferences
+
+const CONSENT_KEY = 'cookie-consent'
+
+/**
+ * Read the stored consent choice, preferring localStorage and falling
+ * back to the `cookie-consent` cookie.
+ *
+ * Both are written on every choice, but only localStorage was ever read.
+ * Where localStorage is unavailable — Safari private mode, storage
+ * disabled, quota exhausted — the write silently no-ops (the callers
+ * catch and carry on, noting the cookie is "the source of truth"), so on
+ * the next page load the visitor looked undecided and the banner
+ * reappeared. Their choice was sitting in the cookie the whole time,
+ * unread. Reading it back makes the fallback real rather than aspirational.
+ */
+function readStoredConsent(): string | null {
+  try {
+    const stored = localStorage.getItem(CONSENT_KEY)
+    if (stored) return stored
+  } catch {
+    // localStorage unavailable — fall through to the cookie.
+  }
+
+  if (typeof document === 'undefined') return null
+  const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${CONSENT_KEY}=([^;]*)`))
+  if (!match) return null
+  try {
+    return decodeURIComponent(match[1])
+  } catch {
+    return null
+  }
+}
 
 export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false)
@@ -50,7 +83,8 @@ export default function CookieConsent() {
         gtag('js', new Date());
         gtag('config', '${GA_MEASUREMENT_ID}', {
           'anonymize_ip': true,
-          'cookie_flags': 'SameSite=Lax${secureFlag}'
+          'cookie_flags': 'SameSite=Lax${secureFlag}',
+          'linker': { 'domains': ${JSON.stringify(CROSS_DOMAIN_DOMAINS)} }
         });
       `
       document.head.appendChild(gaConfigScript)
@@ -322,7 +356,7 @@ export default function CookieConsent() {
       }
 
       try {
-        const consent = localStorage.getItem('cookie-consent')
+        const consent = readStoredConsent()
         if (!consent) {
           fallBackToDefaults()
           return
