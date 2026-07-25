@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, IframeHTMLAttributes } from 'react'
 import { zeffyHostedUrl } from '@/data/donation-campaigns'
-import { CONVERSION_EVENTS, trackConversion } from '@/lib/analytics-events'
+import { CONVERSION_EVENTS, classifyConversionHref, trackConversion } from '@/lib/analytics-events'
 
 export interface ZeffyIframeProps extends IframeHTMLAttributes<HTMLIFrameElement> {
   allowpaymentrequest?: string
@@ -71,8 +71,14 @@ const LazyZeffyIframe = (props: ZeffyIframeProps) => {
    */
   useEffect(() => {
     if (!mounted) return
+    // Derive the campaign id the same way tracked LINKS to Zeffy do, so
+    // the two agree in GA4. Splitting the raw src on '/' would keep the
+    // query string (embed URLs carry `?modal=true`) and yield an empty
+    // segment for a trailing slash — both of which fragment the
+    // conversion_id dimension and break aggregation by campaign.
+    const classified = typeof props.src === 'string' ? classifyConversionHref(props.src) : null
     trackConversion(CONVERSION_EVENTS.DONATE_FORM_VIEW, {
-      conversion_id: typeof props.src === 'string' ? props.src.split('/').pop() : undefined,
+      conversion_id: classified?.params.conversion_id,
       conversion_label: props.title,
     })
   }, [mounted, props.src, props.title])

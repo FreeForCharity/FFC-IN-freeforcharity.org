@@ -72,7 +72,12 @@ interface DataLayerEvent {
 
 declare global {
   interface Window {
-    dataLayer: DataLayerEvent[]
+    // Two shapes share this queue: plain objects pushed directly (the
+    // `{event: …}` records GTM triggers on) and the `arguments` objects
+    // gtag pushes for its own commands. Typing it as DataLayerEvent[]
+    // alone would let a reader assume every entry has an `event` field,
+    // which is false for every consent/config call.
+    dataLayer: (DataLayerEvent | IArguments)[]
     // gtag's real signature is variadic and untyped by design (it proxies
     // straight into dataLayer as an arguments object).
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

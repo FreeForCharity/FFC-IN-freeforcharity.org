@@ -98,16 +98,27 @@ test.describe('Analytics + widget loading', () => {
     expect(global!.ad_storage).toBe('granted')
     expect(global!.ad_personalization).toBe('granted')
 
-    // The bootstrap must run before the tag, or the first hit goes out
-    // with no consent state at all.
-    const bootstrapRanFirst = await page.evaluate(() => {
-      const scripts = Array.from(document.querySelectorAll('script'))
-      const bootstrap = scripts.findIndex((s) =>
-        s.textContent?.includes("gtag('consent', 'default'")
-      )
-      return bootstrap !== -1
+    // Ordering is the whole point: a consent default that lands AFTER
+    // gtag('js')/gtag('config') is too late — the first hit has already
+    // gone out with no consent state. Assert the actual queue order
+    // rather than mere presence, so moving the bootstrap below the tag
+    // injection fails this test.
+    const order = await page.evaluate(() => {
+      const dl = (window as unknown as { dataLayer?: unknown[] }).dataLayer ?? []
+      const commands = dl.map((entry) => {
+        const args = Array.from(entry as ArrayLike<unknown>)
+        return `${args[0]}:${args[1]}`
+      })
+      return {
+        firstDefault: commands.findIndex((c) => c === 'consent:default'),
+        firstTagCommand: commands.findIndex((c) => c.startsWith('js:') || c.startsWith('config:')),
+      }
     })
-    expect(bootstrapRanFirst).toBe(true)
+
+    expect(order.firstDefault).toBeGreaterThanOrEqual(0)
+    if (order.firstTagCommand !== -1) {
+      expect(order.firstDefault).toBeLessThan(order.firstTagCommand)
+    }
   })
 
   test('analytics tags load for a visitor who never touches the banner', async ({ page }) => {
@@ -162,6 +173,28 @@ test.describe('Analytics + widget loading', () => {
     // The Meta Pixel is the one tag with no cookieless fallback, so it
     // must stay off entirely without marketing consent.
     expect(await scriptCount(page, 'fbevents.js')).toBe(0)
+  })
+
+  test('a stored analytics decline keeps Clarity off on subsequent loads', async ({ page }) => {
+    await clearConsent(page)
+    await page.getByRole('button', { name: 'Decline All' }).click()
+
+    // Clarity is not a Google tag, so Consent Mode does nothing for it and
+    // there is no cookieless mode to fall back to — a decline has to keep
+    // the session recorder off outright. On THIS load it was already
+    // injected under the permissive default (and is stopped via its own
+    // API), so the durable behaviour is what the next load does.
+    // domcontentloaded, not the default 'load': tags now load on every
+    // pageview, so waiting on third-party subresources hangs the reload.
+    await page.reload({ waitUntil: 'domcontentloaded' })
+    await page.waitForFunction(() => Array.isArray((window as { dataLayer?: unknown[] }).dataLayer))
+    await expect
+      .poll(() => scriptCount(page, `gtag/js?id=${GA_MEASUREMENT_ID}`), { timeout: 8000 })
+      .toBeGreaterThan(0)
+
+    // GA4 still loads (cookieless); Clarity must not.
+    expect(await scriptCount(page, 'clarity.ms')).toBe(0)
+    expect(await scriptCount(page, CLARITY_PROJECT_ID)).toBe(0)
   })
 
   test('Tawk.to live chat loads on functional consent (any dismissal)', async ({ page }) => {

@@ -148,24 +148,53 @@ export default function CookieConsent() {
   /**
    * Load the measurement tags that run for every visitor.
    *
-   * Under Consent Mode v2 the tags themselves are not the thing consent
-   * gates — storage is. GA4, GTM, and Clarity therefore load on every
-   * pageview, and the consent state (set as a default before these ever
-   * run, then updated on any banner choice) decides whether they may use
-   * cookies. An EEA visitor who never touches the banner is measured via
-   * cookieless pings; a visitor who declines is measured the same way.
+   * Under Consent Mode v2 the GOOGLE tags are not the thing consent gates
+   * — storage is. GA4 and GTM therefore load on every pageview, and the
+   * consent state (set as a default before they ever run, then updated on
+   * any banner choice) decides whether they may use cookies. An EEA
+   * visitor who never touches the banner is measured via cookieless
+   * pings; a visitor who declines is measured the same way.
    *
-   * Only the Meta Pixel stays fully gated: it has no Consent Mode
-   * equivalent wired up here, so there is no cookieless mode to fall back
-   * to and loading it without marketing consent would be a real
-   * disclosure, not a modelled one.
+   * Two tags do NOT get that treatment, because Consent Mode is a Google
+   * protocol and neither of them speaks it:
+   *
+   *   - Microsoft Clarity records session replays and sets _clck/_clsk.
+   *     There is no cookieless mode to degrade to, so an explicit decline
+   *     must actually stop it. It still loads for undecided visitors,
+   *     matching the permissive default, but `analytics: false` keeps it
+   *     off entirely.
+   *   - The Meta Pixel stays gated on marketing consent for the same
+   *     reason — loading it unconsented is a real disclosure, not a
+   *     modelled one.
+   *
+   * @param includeClarity false once a visitor has actively declined
+   *        analytics; true while undecided or accepted.
    */
-  const loadDefaultTags = useCallback(() => {
-    loadGoogleTagManager()
-    loadGoogleAnalytics()
-    loadMicrosoftClarity()
-    loadTawkTo()
-  }, [loadGoogleTagManager, loadGoogleAnalytics, loadMicrosoftClarity, loadTawkTo])
+  const loadDefaultTags = useCallback(
+    (includeClarity: boolean) => {
+      loadGoogleTagManager()
+      loadGoogleAnalytics()
+      if (includeClarity) loadMicrosoftClarity()
+      loadTawkTo()
+    },
+    [loadGoogleTagManager, loadGoogleAnalytics, loadMicrosoftClarity, loadTawkTo]
+  )
+
+  /**
+   * Halt Clarity mid-session. Tags now load before the first banner
+   * interaction, so a visitor can be part-way through a recorded session
+   * when they decline — deleting the cookies is not enough on its own,
+   * the recorder has to be told to stop.
+   */
+  const stopClarity = useCallback(() => {
+    if (typeof window === 'undefined') return
+    const w = window as Window & { clarity?: (...args: unknown[]) => void }
+    try {
+      w.clarity?.('stop')
+    } catch {
+      // Clarity not loaded, or already stopped — nothing to do.
+    }
+  }, [])
 
   const deleteAnalyticsCookies = useCallback(() => {
     // List of static cookie names to delete
@@ -195,21 +224,30 @@ export default function CookieConsent() {
   }, [])
 
   const applyConsent = useCallback(
-    (prefs: CookiePreferences, previousPrefs?: CookiePreferences) => {
+    (prefs: CookiePreferences) => {
       // Set a cookie to indicate consent status with Secure flag (only on HTTPS)
       const cookieValue = JSON.stringify(prefs)
       const secureFlag =
         typeof window !== 'undefined' && window.location.protocol === 'https:' ? '; Secure' : ''
       document.cookie = `cookie-consent=${encodeURIComponent(cookieValue)}; path=/; max-age=31536000; SameSite=Lax${secureFlag}`
 
-      // Check if consent was withdrawn and delete cookies if needed
-      if (previousPrefs) {
-        if (
-          (previousPrefs.analytics && !prefs.analytics) ||
-          (previousPrefs.marketing && !prefs.marketing)
-        ) {
-          deleteAnalyticsCookies()
-        }
+      // Clear third-party cookies whenever the resulting state denies a
+      // category — NOT only when it differs from a previous choice.
+      //
+      // This used to be gated on `previousPrefs`, which was safe while
+      // nothing loaded before an explicit opt-in: with no tags, there
+      // were no cookies to clear. Now that tags load on the first
+      // pageview, a first-time visitor can already hold _ga/_clck cookies
+      // when they open preferences and switch analytics off, and that
+      // path passes a `previousPrefs` whose analytics is already false —
+      // so the old condition found "no withdrawal" and left the cookies
+      // in place. The parameter is gone entirely — the resulting state
+      // is the only thing that matters.
+      if (!prefs.analytics || !prefs.marketing) {
+        deleteAnalyticsCookies()
+      }
+      if (!prefs.analytics) {
+        stopClarity()
       }
 
       // Push consent update to GTM dataLayer
@@ -233,13 +271,13 @@ export default function CookieConsent() {
       // GTM rides alongside GA4 — if the operator wires GA4 inside GTM
       // via a tag, they should unset NEXT_PUBLIC_GA_MEASUREMENT_ID to
       // avoid double-firing.
-      loadDefaultTags()
+      loadDefaultTags(prefs.analytics)
 
       if (prefs.marketing) {
         loadMetaPixel()
       }
     },
-    [deleteAnalyticsCookies, loadDefaultTags, loadMetaPixel]
+    [deleteAnalyticsCookies, loadDefaultTags, loadMetaPixel, stopClarity]
   )
 
   // Helper to load preferences from localStorage and update state
@@ -252,7 +290,8 @@ export default function CookieConsent() {
       // measurement instead of silence.
       const fallBackToDefaults = () => {
         if (showBannerIfMissing) setShowBanner(true)
-        loadDefaultTags()
+        // Undecided: permissive default, Clarity included.
+        loadDefaultTags(true)
       }
 
       try {
@@ -369,7 +408,7 @@ export default function CookieConsent() {
       // exceeded, disabled storage), continue anyway — the consent
       // cookie set by applyConsent() is the source of truth.
     }
-    applyConsent(allAccepted, savedPreferencesBackup)
+    applyConsent(allAccepted)
     setSavedPreferencesBackup(allAccepted)
     setShowBanner(false)
   }
@@ -393,7 +432,7 @@ export default function CookieConsent() {
     // Delete third-party cookies when consent is withdrawn
     deleteAnalyticsCookies()
 
-    applyConsent(onlyNecessary, savedPreferencesBackup)
+    applyConsent(onlyNecessary)
     setSavedPreferencesBackup(onlyNecessary)
     setShowBanner(false)
   }
@@ -406,7 +445,7 @@ export default function CookieConsent() {
       // exceeded, disabled storage), continue anyway — the consent
       // cookie set by applyConsent() is the source of truth.
     }
-    applyConsent(preferences, savedPreferencesBackup)
+    applyConsent(preferences)
     setSavedPreferencesBackup(preferences)
     setShowBanner(false)
     setShowPreferences(false)
