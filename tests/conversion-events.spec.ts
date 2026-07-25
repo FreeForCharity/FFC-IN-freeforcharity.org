@@ -56,9 +56,12 @@ async function suppressNavigation(page: Page) {
 
 async function ready(page: Page, path: string) {
   await page.goto(path)
-  // The delegated listener attaches on mount; wait for hydration to have
-  // produced a dataLayer before interacting.
-  await page.waitForFunction(() => Array.isArray((window as { dataLayer?: unknown[] }).dataLayer))
+  // Wait for the delegated listener itself, which sets this attribute
+  // when it attaches. Waiting on `window.dataLayer` instead would prove
+  // nothing: the Consent Mode bootstrap creates it in <head>, so it
+  // exists before hydration and a click could land before the listener
+  // was registered — making these tests pass or fail on timing.
+  await page.waitForSelector('html[data-ffc-conversion-tracking="ready"]', { state: 'attached' })
   await suppressNavigation(page)
 }
 
@@ -116,6 +119,23 @@ test.describe('Primary conversion events', () => {
     await expect
       .poll(async () => (await conversionEvents(page)).map((e) => e.event), { timeout: 8000 })
       .toContain('volunteer_apply')
+  })
+
+  test('a non-campaign zeffy.com link does not fire donate_open', async ({ page }) => {
+    // /cookie-policy/ links to Zeffy's own privacy policy. Classification
+    // is destination-based, so a host-only match would count that click
+    // as donation intent and file it under conversion_id
+    // "privacy-policy" — inflating the donation funnel with people
+    // reading a policy page.
+    await ready(page, '/cookie-policy/')
+
+    const zeffyPolicyLink = page.locator('a[href*="zeffy.com"]').first()
+    await expect(zeffyPolicyLink).toBeAttached()
+    expect(await zeffyPolicyLink.getAttribute('href')).not.toContain('donation-form')
+    await zeffyPolicyLink.click({ force: true })
+
+    const events = (await conversionEvents(page)).map((e) => e.event)
+    expect(events).not.toContain('donate_open')
   })
 
   test('ordinary links do not fire conversions', async ({ page }) => {

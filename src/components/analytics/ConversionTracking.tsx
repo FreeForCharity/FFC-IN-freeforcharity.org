@@ -94,9 +94,19 @@ export default function ConversionTracking() {
 
     document.addEventListener('click', handler, true)
     document.addEventListener('auxclick', handler, true)
+
+    // Signal that the listener is live. Tests need a way to know clicks
+    // will be recorded, and the obvious proxies are wrong: `dataLayer`
+    // is created by the Consent Mode bootstrap in <head>, so it exists
+    // long before hydration and before this effect runs. Waiting on it
+    // would let a test click land before the listener attached and pass
+    // or fail on timing alone.
+    document.documentElement.setAttribute('data-ffc-conversion-tracking', 'ready')
+
     return () => {
       document.removeEventListener('click', handler, true)
       document.removeEventListener('auxclick', handler, true)
+      document.documentElement.removeAttribute('data-ffc-conversion-tracking')
     }
   }, [])
 

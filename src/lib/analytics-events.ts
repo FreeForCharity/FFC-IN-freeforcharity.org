@@ -124,6 +124,14 @@ function isHost(host: string, domain: string): boolean {
 }
 
 /**
+ * Zeffy campaign path types. Mirrors the `<type>` segment of the links in
+ * src/data/donation-campaigns.ts — note the type does NOT track the
+ * campaign's category (the "Website Design and Development" appeal is a
+ * `ticketing` URL), so this list is about URL shape, not semantics.
+ */
+const ZEFFY_CAMPAIGN_TYPES = new Set(['donation-form', 'ticketing', 'membership', 'shop'])
+
+/**
  * Registrable host of the configured site origin, `www.` stripped so both
  * apex and `www.` links match. WHMCS is deployed as a sibling directory
  * of the export on this same host.
@@ -167,14 +175,37 @@ export function classifyConversionHref(
   const host = url.host.toLowerCase()
   const path = url.pathname.toLowerCase()
 
-  // Donations: any Zeffy campaign, hosted page or embed link.
+  // Donations: Zeffy CAMPAIGN links only.
+  //
+  // Not every zeffy.com link is a donation. The site also links to
+  // Zeffy's own marketing pages — `zeffy.com/` from the donations guide,
+  // and their privacy policy from our cookie policy. Matching the host
+  // alone counted those as donation intent and handed GA4 a
+  // conversion_id of "privacy-policy".
+  //
+  // Campaign URLs are `/<type>/<slug>`, optionally prefixed with a
+  // locale and/or `embed` (the pop-up form of the same link):
+  //   /embed/donation-form/<uuid>?modal=true
+  //   /ticketing/free-for-charity-annual-gala
+  //   /en-US/donation-form/<uuid>
   if (isHost(host, 'zeffy.com')) {
-    // .../embed/donation-form/<slug> or .../donation-form/<slug>
-    const slug = url.pathname.split('/').filter(Boolean).pop()
-    return {
-      event: CONVERSION_EVENTS.DONATE_OPEN,
-      params: { conversion_id: slug },
+    const segments = url.pathname.split('/').filter(Boolean)
+    let i = 0
+    // Optional locale segment, e.g. `en-US`. No campaign type is two
+    // letters, so this cannot swallow one.
+    if (segments[i] && /^[a-z]{2}(-[a-zA-Z]{2})?$/.test(segments[i])) i++
+    if (segments[i] === 'embed') i++
+
+    const type = segments[i]
+    const slug = segments[i + 1]
+    if (type && ZEFFY_CAMPAIGN_TYPES.has(type) && slug) {
+      return {
+        event: CONVERSION_EVENTS.DONATE_OPEN,
+        params: { conversion_id: slug },
+      }
     }
+    // A Zeffy link that isn't a campaign is not a conversion.
+    return null
   }
 
   // Volunteering: Idealist postings and the ffcadmin role pages, which
