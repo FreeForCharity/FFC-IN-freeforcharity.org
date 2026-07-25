@@ -27,6 +27,8 @@
 // property — that double-counts. Use the dataLayer copy for other
 // destinations only.
 
+import { SITE_ORIGIN } from '@/lib/config'
+
 /** The three primary conversions, plus the supporting funnel steps. */
 export const CONVERSION_EVENTS = {
   /** Donor opened a Zeffy campaign form (pop-up button or hosted link). */
@@ -105,6 +107,31 @@ export function trackConversion(event: ConversionEvent, params: ConversionParams
 }
 
 /**
+ * True when `host` is exactly `domain` or a subdomain of it.
+ *
+ * A bare `host.endsWith('zeffy.com')` also matches `evilzeffy.com` and
+ * `notzeffy.com`, which would let an unrelated (or hostile) link be
+ * counted as a donation. The leading dot is what makes it a real
+ * subdomain check rather than a substring one.
+ */
+function isHost(host: string, domain: string): boolean {
+  return host === domain || host.endsWith(`.${domain}`)
+}
+
+/**
+ * Registrable host of the configured site origin, `www.` stripped so both
+ * apex and `www.` links match. WHMCS is deployed as a sibling directory
+ * of the export on this same host.
+ */
+const HUB_HOST = (() => {
+  try {
+    return new URL(SITE_ORIGIN).host.toLowerCase().replace(/^www\./, '')
+  } catch {
+    return 'freeforcharity.org'
+  }
+})()
+
+/**
  * Classify a link by where it GOES, so conversions are tracked without
  * every call site having to remember to tag itself.
  *
@@ -127,7 +154,7 @@ export function classifyConversionHref(
 ): { event: ConversionEvent; params: ConversionParams } | null {
   let url: URL
   try {
-    url = new URL(href, base ?? 'https://www.freeforcharity.org')
+    url = new URL(href, base ?? SITE_ORIGIN)
   } catch {
     return null
   }
@@ -136,7 +163,7 @@ export function classifyConversionHref(
   const path = url.pathname.toLowerCase()
 
   // Donations: any Zeffy campaign, hosted page or embed link.
-  if (host.endsWith('zeffy.com')) {
+  if (isHost(host, 'zeffy.com')) {
     // .../embed/donation-form/<slug> or .../donation-form/<slug>
     const slug = url.pathname.split('/').filter(Boolean).pop()
     return {
@@ -147,10 +174,10 @@ export function classifyConversionHref(
 
   // Volunteering: Idealist postings and the ffcadmin role pages, which
   // are where an application is actually started.
-  if (host.endsWith('idealist.org')) {
+  if (isHost(host, 'idealist.org')) {
     return { event: CONVERSION_EVENTS.VOLUNTEER_APPLY, params: {} }
   }
-  if (host.endsWith('ffcadmin.org') && path.startsWith('/volunteer/')) {
+  if (isHost(host, 'ffcadmin.org') && path.startsWith('/volunteer/')) {
     const role = path.split('/').filter(Boolean)[1]
     return {
       event: CONVERSION_EVENTS.VOLUNTEER_APPLY,
@@ -161,7 +188,15 @@ export function classifyConversionHref(
   // Service applications: any WHMCS product order form. Both link shapes
   // are in use — `a=add&pid=N` (preferred, stable product id) and the
   // older `a=confproduct&i=N` cart-index form.
-  if (path.endsWith('/hub/cart.php')) {
+  //
+  // Constrained to our own origin: WHMCS is deployed as a sibling
+  // directory of the export on the same host, so an off-site
+  // `/hub/cart.php` is somebody else's cart, not an FFC application.
+  // Checked against SITE_ORIGIN — the origin these links are generated
+  // from — rather than the page host, so it stays correct both on staging
+  // and in local/CI builds where the page is served from localhost but
+  // the hub links still point at the configured origin.
+  if (isHost(host, HUB_HOST) && path.endsWith('/hub/cart.php')) {
     const pid = url.searchParams.get('pid') ?? url.searchParams.get('i')
     if (pid) {
       return {
