@@ -144,7 +144,26 @@ export default function CookieConsent() {
 
   const loadMicrosoftClarity = useCallback(() => {
     if (!CLARITY_PROJECT_ID) return
-    if (typeof window !== 'undefined' && !document.querySelector('script[src*="clarity.ms"]')) {
+    if (typeof window === 'undefined') return
+
+    // Already present? Re-injecting is a no-op, so an explicit restart is
+    // the only thing that revives it. A visitor can decline analytics
+    // (which calls clarity('stop')) and then change their mind in the
+    // same session — without this, the recorder would stay stopped until
+    // a full page reload, so the preferences dialog would show analytics
+    // ON while nothing was recording.
+    const w = window as Window & { clarity?: (...args: unknown[]) => void }
+    if (document.querySelector('script[src*="clarity.ms"]') || w.clarity) {
+      try {
+        w.clarity?.('start')
+      } catch {
+        // Clarity present but not ready to take commands — the next
+        // page load injects cleanly.
+      }
+      return
+    }
+
+    {
       const clarityScript = document.createElement('script')
       clarityScript.textContent = `
         (function(c,l,a,r,i,t,y){
