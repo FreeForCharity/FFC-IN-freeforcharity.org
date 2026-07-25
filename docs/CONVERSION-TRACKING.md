@@ -152,9 +152,18 @@ _loading_:
 - Ignoring it inside the EEA/UK/CH → measured cookielessly.
 - **Declining** anywhere → still measured cookielessly, rather than vanishing.
 
-The Meta Pixel remains fully gated on marketing consent: no Consent Mode
-equivalent is wired up for it, so there is no cookieless fallback and loading it
-unconsented would be a real disclosure rather than a modelled one.
+Two tags are excluded from that permissive default, because Consent Mode is a
+Google protocol and neither speaks it:
+
+- **Microsoft Clarity** requires explicit analytics consent, not merely the
+  absence of a decline. It records session replays and has no cookieless mode to
+  degrade to, so an undecided EEA visitor would be fully recorded rather than
+  modelled — and the preferences dialog, which shows analytics unchecked until
+  opt-in, would be misrepresenting what is running. The cost is nil against what
+  this site needs to measure: Clarity is a heatmap/replay tool and contributes
+  nothing to the three conversion events.
+- **The Meta Pixel** stays gated on marketing consent for the same reason —
+  loading it unconsented is a real disclosure rather than a modelled one.
 
 The bootstrap is an inline `<head>` script in `src/app/layout.tsx`, not a
 `next/script` — the consent state must already be in the dataLayer when the

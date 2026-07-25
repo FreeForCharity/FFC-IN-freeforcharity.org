@@ -28,8 +28,18 @@ import {
 export default function ConversionTracking() {
   useEffect(() => {
     const handler = (rawEvent: Event) => {
-      const target = rawEvent.target
-      if (!(target instanceof Element)) return
+      // Normalise to an Element before walking up. In practice mouse
+      // events target elements, not text nodes, but composedPath() also
+      // gets us the real target when a click originates inside a shadow
+      // root — where `target` is retargeted to the host and `closest()`
+      // would start from the wrong node.
+      const path = typeof rawEvent.composedPath === 'function' ? rawEvent.composedPath() : []
+      const fromPath = path.find((node): node is Element => node instanceof Element)
+      const raw = rawEvent.target
+      const target =
+        fromPath ??
+        (raw instanceof Element ? raw : raw instanceof Node ? (raw.parentElement ?? null) : null)
+      if (!target) return
 
       // A middle-click that isn't a navigation (e.g. autoscroll) is noise.
       if (rawEvent instanceof MouseEvent && rawEvent.type === 'auxclick' && rawEvent.button !== 1) {

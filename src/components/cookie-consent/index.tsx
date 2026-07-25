@@ -159,16 +159,25 @@ export default function CookieConsent() {
    * protocol and neither of them speaks it:
    *
    *   - Microsoft Clarity records session replays and sets _clck/_clsk.
-   *     There is no cookieless mode to degrade to, so an explicit decline
-   *     must actually stop it. It still loads for undecided visitors,
-   *     matching the permissive default, but `analytics: false` keeps it
-   *     off entirely.
+   *     It requires EXPLICIT analytics consent — not merely the absence
+   *     of a decline.
    *   - The Meta Pixel stays gated on marketing consent for the same
    *     reason — loading it unconsented is a real disclosure, not a
    *     modelled one.
    *
-   * @param includeClarity false once a visitor has actively declined
-   *        analytics; true while undecided or accepted.
+   * The permissive default is scoped to what Google's own rules sanction,
+   * and Clarity is not Google's: Consent Mode gives it no cookieless
+   * fallback, so an undecided EEA visitor would be fully session-recorded
+   * rather than modelled. It would also make the UI dishonest — the
+   * preferences dialog shows analytics unchecked until a visitor opts in,
+   * while the recorder ran regardless.
+   *
+   * The cost is nil against what this site actually needs to measure:
+   * Clarity is a heatmap/replay tool and contributes nothing to the three
+   * conversion events. GA4 and GTM, which do, stay permissive.
+   *
+   * @param includeClarity true only once the visitor has explicitly
+   *        granted analytics consent.
    */
   const loadDefaultTags = useCallback(
     (includeClarity: boolean) => {
@@ -307,8 +316,9 @@ export default function CookieConsent() {
       // measurement instead of silence.
       const fallBackToDefaults = () => {
         if (showBannerIfMissing) setShowBanner(true)
-        // Undecided: permissive default, Clarity included.
-        loadDefaultTags(true)
+        // Undecided: Google tags load (Consent Mode governs their
+        // storage), Clarity does not. See loadDefaultTags.
+        loadDefaultTags(false)
       }
 
       try {

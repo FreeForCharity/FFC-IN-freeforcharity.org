@@ -132,9 +132,14 @@ test.describe('Analytics + widget loading', () => {
     await expect
       .poll(() => scriptCount(page, GTM_CONTAINER_ID), { timeout: 8000 })
       .toBeGreaterThan(0)
-    await expect
-      .poll(() => scriptCount(page, CLARITY_PROJECT_ID), { timeout: 8000 })
-      .toBeGreaterThan(0)
+
+    // Clarity is NOT part of the permissive default. It is a session
+    // recorder with no Consent Mode fallback, so it waits for explicit
+    // analytics consent — otherwise an undecided EEA visitor would be
+    // fully recorded, and the preferences dialog (which shows analytics
+    // unchecked) would be lying about it.
+    expect(await scriptCount(page, 'clarity.ms')).toBe(0)
+    expect(await scriptCount(page, CLARITY_PROJECT_ID)).toBe(0)
   })
 
   test('Accept All injects GA4, GTM, and Clarity with the right IDs', async ({ page }) => {
