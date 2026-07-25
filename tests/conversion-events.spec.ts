@@ -46,8 +46,12 @@ async function suppressNavigation(page: Page) {
     document.addEventListener(
       'click',
       (e) => {
-        const anchor = (e.target as Element | null)?.closest('a')
-        if (anchor) e.preventDefault()
+        // Optional chaining guards null, not a missing method — a
+        // non-Element target would throw on .closest(). Normalise the
+        // same way the app's listener does.
+        const raw = e.target
+        const node = raw instanceof Element ? raw : raw instanceof Node ? raw.parentElement : null
+        if (node?.closest('a')) e.preventDefault()
       },
       true
     )
@@ -122,11 +126,11 @@ test.describe('Primary conversion events', () => {
   })
 
   test('a non-campaign zeffy.com link does not fire donate_open', async ({ page }) => {
-    // /cookie-policy/ links to Zeffy's own privacy policy. Classification
-    // is destination-based, so a host-only match would count that click
-    // as donation intent and file it under conversion_id
-    // "privacy-policy" — inflating the donation funnel with people
-    // reading a policy page.
+    // /cookie-policy/ links to Zeffy's own legal & privacy page.
+    // Classification is destination-based, so a host-only match would
+    // count that click as donation intent and file it under a
+    // conversion_id taken from the policy URL's last path segment —
+    // inflating the donation funnel with people reading a policy page.
     await ready(page, '/cookie-policy/')
 
     const zeffyPolicyLink = page.locator('a[href*="zeffy.com"]').first()

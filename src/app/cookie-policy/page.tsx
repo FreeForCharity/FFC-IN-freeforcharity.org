@@ -326,14 +326,14 @@ export default function CookiePolicy() {
               details, or donor identities through analytics.
             </p>
             <p className="text-xs mt-2 text-gray-600">
-              Privacy Policy:{' '}
+              Legal &amp; Privacy:{' '}
               <a
-                href="https://www.zeffy.com/en-US/privacy-policy"
+                href="https://support.zeffy.com/legal-data-privacy-security"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 underline"
               >
-                https://www.zeffy.com/en-US/privacy-policy
+                https://support.zeffy.com/legal-data-privacy-security
               </a>
             </p>
           </div>
