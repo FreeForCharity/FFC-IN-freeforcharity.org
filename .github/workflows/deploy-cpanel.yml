@@ -319,6 +319,23 @@ jobs:
             exit 1
           fi
 
+          # SECURITY.TXT GUARD (pre-mirror): the mirror below excludes
+          # '.well-known/' (cPanel system dir — see the exclude list), so
+          # out/.well-known/security.txt does NOT ship to production. The root
+          # copy out/security.txt is the one that lands. Refuse to deploy if it
+          # is missing, otherwise RFC 9116 discovery silently regresses to 404.
+          if [ ! -f out/security.txt ]; then
+            echo "::error::out/security.txt is missing — refusing to deploy (RFC 9116 discovery would 404 on the live apex)."
+            exit 1
+          fi
+          # Keep the two copies from drifting apart (payload below the comments).
+          if ! diff <(grep -v '^#' out/.well-known/security.txt) \
+                    <(grep -v '^#' out/security.txt) > /dev/null; then
+            echo "::error::security.txt payloads differ between out/.well-known/ and out/ — refusing to deploy."
+            exit 1
+          fi
+          echo "security.txt guard passed (root copy present, payloads match)."
+
           # ~/public_html IS the live apex docroot. The apex cutover
           # (cpanel-apex-cutover.yml) mirrored the static export straight into
           # ~/public_html — the docroot was NOT swapped to a sibling dir — so
