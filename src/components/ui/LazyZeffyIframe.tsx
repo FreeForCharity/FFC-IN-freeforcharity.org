@@ -30,6 +30,7 @@ const PRELOAD_MARGIN_PX = 800
 
 const LazyZeffyIframe = (props: ZeffyIframeProps) => {
   const hostRef = useRef<HTMLDivElement>(null)
+  const hasTrackedViewRef = useRef(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -63,14 +64,20 @@ const LazyZeffyIframe = (props: ZeffyIframeProps) => {
    * observe — the visitor scrolls to it and fills it in inside a
    * cross-origin frame. Mounting is the last thing this site can see, so
    * it is recorded as the funnel step it is: the form was actually put in
-   * front of someone. Fires once (mounted only ever flips false → true).
+   * front of someone.
+   *
+   * Fires at most once per mounted iframe, enforced by a ref rather than
+   * left to the dependency list: `mounted` only ever flips false → true,
+   * but a change to `src` or `title` after mount would otherwise re-run
+   * the effect and emit a second conversion for the same form.
    *
    * Deliberately NOT a `donate_open`: that event means an explicit act of
    * intent, and conflating the two would inflate the donation funnel with
    * everyone who scrolled past the homepage form.
    */
   useEffect(() => {
-    if (!mounted) return
+    if (!mounted || hasTrackedViewRef.current) return
+    hasTrackedViewRef.current = true
     // Derive the campaign id the same way tracked LINKS to Zeffy do, so
     // the two agree in GA4. Splitting the raw src on '/' would keep the
     // query string (embed URLs carry `?modal=true`) and yield an empty

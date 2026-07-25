@@ -196,32 +196,47 @@ export default function CookieConsent() {
     }
   }, [])
 
-  const deleteAnalyticsCookies = useCallback(() => {
-    // List of static cookie names to delete
-    const cookiesToDelete = ['_ga', '_gid', '_fbp', 'fr', '_clck', '_clsk']
-
-    // Delete static cookies
-    cookiesToDelete.forEach((name) => {
+  const expireCookies = useCallback((names: string[]) => {
+    names.forEach((name) => {
       // Delete for current domain
       document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
       // Also try to delete with domain specification
       document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`
     })
+  }, [])
+
+  /**
+   * Analytics cookies only — GA4 (`_ga`, `_gid`, `_ga_<stream>`) and
+   * Clarity (`_clck`, `_clsk`).
+   *
+   * Kept strictly separate from the marketing set. These used to be one
+   * list, which was harmless when deletion only ran on an actual
+   * withdrawal, but this component now re-applies stored consent on EVERY
+   * page load: a visitor who accepts analytics and declines marketing
+   * would have had their `_ga` client id wiped on every pageview,
+   * resetting visitor identity continuously and inflating new-user counts
+   * — the precise opposite of what their choice asked for.
+   */
+  const deleteAnalyticsCookies = useCallback(() => {
+    expireCookies(['_ga', '_gid', '_clck', '_clsk'])
 
     // Dynamically delete all cookies matching _ga_* (e.g., _ga_G-XXXXXXXXXX)
     if (typeof document !== 'undefined') {
       const regex = /(?:^|;\s*)(_ga_[^=;\s]*)/g
       let match: RegExpExecArray | null
       const cookieStr = document.cookie
+      const found: string[] = []
       while ((match = regex.exec(cookieStr)) !== null) {
-        const cookieName = match[1]
-        // Delete for current domain
-        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
-        // Also try to delete with domain specification
-        document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname};`
+        found.push(match[1])
       }
+      expireCookies(found)
     }
-  }, [])
+  }, [expireCookies])
+
+  /** Meta Pixel cookies only. */
+  const deleteMarketingCookies = useCallback(() => {
+    expireCookies(['_fbp', 'fr'])
+  }, [expireCookies])
 
   const applyConsent = useCallback(
     (prefs: CookiePreferences) => {
@@ -232,22 +247,24 @@ export default function CookieConsent() {
       document.cookie = `cookie-consent=${encodeURIComponent(cookieValue)}; path=/; max-age=31536000; SameSite=Lax${secureFlag}`
 
       // Clear third-party cookies whenever the resulting state denies a
-      // category — NOT only when it differs from a previous choice.
+      // category — NOT only when it differs from a previous choice, and
+      // strictly per category.
       //
-      // This used to be gated on `previousPrefs`, which was safe while
-      // nothing loaded before an explicit opt-in: with no tags, there
-      // were no cookies to clear. Now that tags load on the first
-      // pageview, a first-time visitor can already hold _ga/_clck cookies
-      // when they open preferences and switch analytics off, and that
-      // path passes a `previousPrefs` whose analytics is already false —
-      // so the old condition found "no withdrawal" and left the cookies
-      // in place. The parameter is gone entirely — the resulting state
-      // is the only thing that matters.
-      if (!prefs.analytics || !prefs.marketing) {
-        deleteAnalyticsCookies()
-      }
+      // This used to be gated on a `previousPrefs` argument, which was
+      // safe while nothing loaded before an explicit opt-in: with no
+      // tags, there were no cookies to clear. Now that tags load on the
+      // first pageview, a first-time visitor can already hold _ga/_clck
+      // cookies when they open preferences and switch analytics off, and
+      // that path passed a previousPrefs whose analytics was already
+      // false — so the old condition found "no withdrawal" and left the
+      // cookies in place. The resulting state is the only thing that
+      // matters now.
       if (!prefs.analytics) {
+        deleteAnalyticsCookies()
         stopClarity()
+      }
+      if (!prefs.marketing) {
+        deleteMarketingCookies()
       }
 
       // Push consent update to GTM dataLayer
@@ -277,7 +294,7 @@ export default function CookieConsent() {
         loadMetaPixel()
       }
     },
-    [deleteAnalyticsCookies, loadDefaultTags, loadMetaPixel, stopClarity]
+    [deleteAnalyticsCookies, deleteMarketingCookies, loadDefaultTags, loadMetaPixel, stopClarity]
   )
 
   // Helper to load preferences from localStorage and update state
@@ -429,9 +446,10 @@ export default function CookieConsent() {
       // cookie set by applyConsent() is the source of truth.
     }
 
-    // Delete third-party cookies when consent is withdrawn
-    deleteAnalyticsCookies()
-
+    // Cookie clearing lives in applyConsent, which now handles BOTH
+    // categories from the resulting state. Calling it here as well would
+    // only have covered analytics, leaving the marketing cookies a
+    // "Decline All" is most obviously meant to remove.
     applyConsent(onlyNecessary)
     setSavedPreferencesBackup(onlyNecessary)
     setShowBanner(false)
