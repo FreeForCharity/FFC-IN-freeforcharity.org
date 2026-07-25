@@ -19,6 +19,7 @@
     "test:e2e:headed": "playwright test --headed",
     "visual-regression": "node scripts/visual-regression/capture.mjs",
     "smoke-test": "node scripts/smoke-test.mjs",
+    "audit:high": "npm audit --omit=dev --audit-level=high",
     "prepare": "husky"
   },
   "dependencies": {
