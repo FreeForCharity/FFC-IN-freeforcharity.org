@@ -374,7 +374,11 @@ export default function CookieConsent() {
     [deleteAnalyticsCookies, deleteMarketingCookies, loadDefaultTags, loadMetaPixel, stopClarity]
   )
 
-  // Helper to load preferences from localStorage and update state
+  // Apply the visitor's stored choice, or the permissive default if they
+  // have not made one. Reads via readStoredConsent(), which prefers
+  // localStorage and falls back to the cookie-consent cookie — the name
+  // below is kept for call-site stability, but storage is not the only
+  // source.
   const loadPreferencesFromLocalStorage = useCallback(
     (showBannerIfMissing = true) => {
       // No stored choice (or an unreadable one): show the banner AND load

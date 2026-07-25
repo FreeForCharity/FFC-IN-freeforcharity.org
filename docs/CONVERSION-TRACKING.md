@@ -10,11 +10,11 @@ GA4 Admin side:
 
 ## The three conversions
 
-| Event                       | Fires when                                              | Where                                         |
-| --------------------------- | ------------------------------------------------------- | --------------------------------------------- |
-| `donate_open`               | A Zeffy campaign form is opened (pop-up button or link) | `ZeffyPopupButton`, any `zeffy.com` link      |
-| `volunteer_apply`           | A volunteer role application link is followed off-site  | Idealist postings, `ffcadmin.org/volunteer/*` |
-| `service_application_start` | A WHMCS product order form is opened                    | Every `/hub/cart.php` apply/order link        |
+| Event                       | Fires when                                              | Where                                          |
+| --------------------------- | ------------------------------------------------------- | ---------------------------------------------- |
+| `donate_open`               | A Zeffy campaign form is opened (pop-up button or link) | `ZeffyPopupButton`, any Zeffy **campaign** URL |
+| `volunteer_apply`           | A volunteer role application link is followed off-site  | Idealist postings, `ffcadmin.org/volunteer/*`  |
+| `service_application_start` | A WHMCS product order form is opened                    | Any `/hub/cart.php` product link on our origin |
 
 Plus one supporting funnel step:
 
@@ -84,12 +84,26 @@ event **twice**, on purpose:
 
 ### Tagging a CTA
 
-Most CTAs need nothing. `classifyConversionHref()` recognises the destination —
-any `zeffy.com` link, any `idealist.org` link, any `ffcadmin.org/volunteer/*`
-link, any `/hub/cart.php` order link — so new apply and donate buttons are
-tracked the moment they ship. This is deliberate: the site reaches these
-destinations from ~20 components, and hand-tagging each one guarantees the next
-new CTA is silently untracked.
+Most CTAs need nothing. `classifyConversionHref()` recognises the destination, so
+new apply and donate buttons are tracked the moment they ship. This is
+deliberate: the site reaches these destinations from ~20 components, and
+hand-tagging each one guarantees the next new CTA is silently untracked.
+
+What it matches, precisely:
+
+| Destination  | Matches                                                                                                                                                        | Does NOT match                                                                    |
+| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Zeffy        | **campaign URLs only** — `/<type>/<slug>`, optionally prefixed by a locale and/or `embed`, where type is `donation-form`, `ticketing`, `membership`, or `shop` | Zeffy's own marketing, support, and legal pages, which this site links to as well |
+| Idealist     | any `idealist.org` link                                                                                                                                        | —                                                                                 |
+| ffcadmin.org | `/volunteer/*` only                                                                                                                                            | every other ffcadmin page                                                         |
+| WHMCS        | `/hub/cart.php` with a `pid` or `i` product, **on our own origin**                                                                                             | the hub root, a cart with no product, an off-site `cart.php`                      |
+
+The Zeffy narrowing is not incidental. Matching the host alone counted the link
+to Zeffy's legal page — which [`/cookie-policy/`](../src/app/cookie-policy/page.tsx)
+renders — as donation intent, filed under a `conversion_id` taken from the policy
+URL. Host matching is exact-or-subdomain throughout, so a lookalike domain cannot
+mint conversions either. `__tests__/lib/analytics-events.test.ts` pins both
+directions.
 
 Add explicit attributes only when the component knows something the URL does
 not, such as a campaign name:

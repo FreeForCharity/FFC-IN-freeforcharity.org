@@ -21,15 +21,18 @@ import {
  * hard-coded value the app no longer uses.
  *
  * Consent model (Consent Mode v2 — see docs/CONVERSION-TRACKING.md):
- * consent gates STORAGE, not script loading. GA4, GTM, and Clarity load
- * on every pageview; the consent state decides whether they may use
- * cookies. Storage defaults to granted worldwide and denied only in the
- * EEA/UK/CH, where Google's EU User Consent Policy requires opt-in — so
- * a visitor who ignores or declines the banner is still measured, via
- * cookieless pings, instead of disappearing entirely.
+ * for the GOOGLE tags, consent gates STORAGE rather than script loading.
+ * GA4 and GTM load on every pageview; the consent state decides whether
+ * they may use cookies. Storage defaults to granted worldwide and denied
+ * only in the EEA/UK/CH, where Google's EU User Consent Policy requires
+ * opt-in — so a visitor who ignores or declines the banner is still
+ * measured, via cookieless pings, instead of disappearing entirely.
  *
- * The Meta Pixel is the exception: no Consent Mode equivalent is wired
- * up for it, so it stays fully gated on marketing consent.
+ * Two tags are NOT loaded on that basis, because Consent Mode is a
+ * Google protocol and neither speaks it:
+ *   - Microsoft Clarity (session recording) needs EXPLICIT analytics
+ *     consent — there is no cookieless mode to degrade to.
+ *   - The Meta Pixel stays fully gated on marketing consent.
  */
 
 // Count <script> elements whose src OR inline text references a marker.
