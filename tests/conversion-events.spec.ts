@@ -77,6 +77,13 @@ test.describe('Primary conversion events', () => {
     const donate = (await conversionEvents(page)).find((e) => e.event === 'donate_open')
     expect(donate?.conversion_destination).toContain('zeffy.com')
     expect(donate?.conversion_source).toBe('/donate/')
+
+    // The campaign identifier must survive. ZeffyPopupButton tags every
+    // donate CTA explicitly but call sites rarely pass a campaignKey, so
+    // an explicit tag that replaced the classifier wholesale would leave
+    // conversion_id empty on nearly every donation — making the GA4
+    // dimension useless for telling campaigns apart.
+    expect(donate?.conversion_id).toBeTruthy()
   })
 
   test('an apply button fires service_application_start with the WHMCS product id', async ({

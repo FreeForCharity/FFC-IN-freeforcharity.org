@@ -585,6 +585,19 @@ export default function CookieConsent() {
                 collecting and reporting information anonymously. We use Google Analytics and
                 Microsoft Clarity.
               </p>
+              {/* The toggle alone would misrepresent the starting state: until
+                  a visitor chooses, Google Analytics already uses cookies
+                  outside the EEA/UK/Switzerland, while Clarity is off
+                  everywhere. Region can't be detected here — Consent Mode
+                  applies it inside Google's tag — so the honest thing is to
+                  state both rules plainly rather than pre-tick a box that
+                  would be wrong for one group or the other. */}
+              <p className="text-sm text-gray-600 mb-2">
+                <strong>Before you choose:</strong> Google Analytics is already running. In the EEA,
+                the UK, and Switzerland it sets no cookies and cannot identify you until you switch
+                this on. Elsewhere it uses cookies until you switch it off. Microsoft Clarity, which
+                records screen activity, stays off everywhere until you switch this on.
+              </p>
               <p className="text-xs text-gray-500">Services: Google Analytics, Microsoft Clarity</p>
             </div>
 
@@ -647,6 +660,13 @@ export default function CookieConsent() {
               certain features. By clicking &quot;Accept All&quot;, you consent to our use of
               cookies for analytics and marketing purposes. You can manage your preferences or
               decline non-essential cookies.
+            </p>
+            {/* Says plainly what happens if the visitor does nothing, rather
+                than implying nothing runs until they click. */}
+            <p className="text-sm text-gray-600 mb-3">
+              If you make no choice, basic analytics still measures this visit — without cookies and
+              without identifying you in the EEA, the UK, and Switzerland. Screen-activity recording
+              and marketing cookies stay off until you turn them on.
             </p>
             <div className="flex items-center gap-4 text-xs text-gray-500">
               <Link href="/privacy-policy/" className="text-blue-600 underline">

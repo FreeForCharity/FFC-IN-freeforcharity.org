@@ -184,11 +184,10 @@ test.describe('Analytics + widget loading', () => {
     await clearConsent(page)
     await page.getByRole('button', { name: 'Decline All' }).click()
 
-    // Clarity is not a Google tag, so Consent Mode does nothing for it and
-    // there is no cookieless mode to fall back to — a decline has to keep
-    // the session recorder off outright. On THIS load it was already
-    // injected under the permissive default (and is stopped via its own
-    // API), so the durable behaviour is what the next load does.
+    // Clarity requires explicit analytics consent, so it was never
+    // injected on this load either. Reloading proves the stored decline
+    // keeps it off on every subsequent visit — not just that it happened
+    // to be absent before any choice was made.
     // domcontentloaded, not the default 'load': tags now load on every
     // pageview, so waiting on third-party subresources hangs the reload.
     await page.reload({ waitUntil: 'domcontentloaded' })

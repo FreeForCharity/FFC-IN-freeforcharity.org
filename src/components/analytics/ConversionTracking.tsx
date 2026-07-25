@@ -5,7 +5,6 @@ import {
   classifyConversionHref,
   isConversionEvent,
   trackConversion,
-  type ConversionEvent,
   type ConversionParams,
 } from '@/lib/analytics-events'
 
@@ -49,32 +48,33 @@ export default function ConversionTracking() {
       const tagged = target.closest<HTMLElement>('[data-ffc-conversion]')
       const anchor = target.closest<HTMLAnchorElement>('a[href]')
 
-      // An explicit tag wins; otherwise fall back to classifying the
-      // destination, which is what covers the untagged apply/donate links.
-      let event: ConversionEvent | undefined
-      let params: ConversionParams = {}
+      // Classification runs for every conversion link, tagged or not.
+      // Explicit attributes then override it FIELD BY FIELD rather than
+      // wholesale: ZeffyPopupButton always tags `donate_open` but most
+      // call sites pass no campaignKey, and a wholesale override would
+      // replace a perfectly good URL-derived campaign slug with
+      // undefined — silently emptying conversion_id for nearly every
+      // donate CTA.
+      const classified = anchor ? classifyConversionHref(anchor.href, window.location.href) : null
 
       const taggedEvent = tagged?.dataset.ffcConversion
-      if (taggedEvent && isConversionEvent(taggedEvent)) {
-        event = taggedEvent
-        params = {
-          conversion_label: tagged?.dataset.ffcConversionLabel,
-          conversion_id: tagged?.dataset.ffcConversionId,
-        }
-      } else if (anchor) {
-        const classified = classifyConversionHref(anchor.href, window.location.href)
-        if (classified) {
-          event = classified.event
-          params = {
-            // The link text is the most honest label available when the
-            // component didn't supply one.
-            conversion_label: anchor.textContent?.trim().slice(0, 100) || undefined,
-            ...classified.params,
-          }
-        }
-      }
+      const explicitEvent = taggedEvent && isConversionEvent(taggedEvent) ? taggedEvent : undefined
 
+      const event = explicitEvent ?? classified?.event
       if (!event) return
+
+      const params: ConversionParams = {
+        // The link text is the most honest label available when neither
+        // the component nor the URL supplies one.
+        conversion_label: anchor?.textContent?.trim().slice(0, 100) || undefined,
+        ...classified?.params,
+      }
+      if (tagged?.dataset.ffcConversionLabel) {
+        params.conversion_label = tagged.dataset.ffcConversionLabel
+      }
+      if (tagged?.dataset.ffcConversionId) {
+        params.conversion_id = tagged.dataset.ffcConversionId
+      }
 
       let destination: string | undefined
       if (anchor?.href) {
