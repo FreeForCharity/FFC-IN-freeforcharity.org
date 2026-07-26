@@ -60,11 +60,13 @@ Collection still happens, but every report shows production only. Zero
 risk of accidentally dropping real production data.
 
 1. GA4 → **Reports** → any report → **Add comparison / Edit comparisons**
-2. Build a comparison: **Dimension = `Hostname`**, **Match type = exactly matches**, **Value = `freeforcharity.org`**
+2. Build a comparison: **Dimension = `Hostname`**, **Match type = matches regex**, **Value = `^(www\.)?freeforcharity\.org$`**
 3. Apply. For ad-hoc analysis, do the same in **Explore** → add a filter on the `Hostname` dimension.
 
-You can also add `www.freeforcharity.org` with an "OR" condition if the
-www host ever serves pages directly.
+**Include `www.`** — it is not hypothetical. The hostname table above
+shows `www.freeforcharity.org` carrying most real sessions and the bare
+apex carrying a handful, so an apex-only comparison hides nearly all of
+your genuine traffic while looking like it worked.
 
 ### Option B — Stop collection entirely (superseded — see [GTM](#gtm))
 
@@ -124,11 +126,26 @@ hostnames:
 
 1. GTM → **Triggers** → New → _Page View_ (or _Custom Event_ matching
    `.*` with regex, to cover the conversion events too)
-2. Condition: built-in **Page Hostname** → **does not equal**
-   `freeforcharity.org` — this is the blocking trigger
+2. Condition: built-in **Page Hostname** → **does not match RegEx** →
+   `^(www\.)?freeforcharity\.org$` — this is the blocking trigger
 3. Add it as an **Exception** on the Google tag and on each of the four
    conversion event tags
 4. Publish a new container version
+
+**Match both apex and `www.`, and anchor the pattern.** The hostname
+table above is the reason: most real sessions arrive on
+`www.freeforcharity.org`, so a condition that allows only the bare apex
+would block the majority of legitimate production traffic — the exact
+opposite of the intent, and silent, since a tag that never fires looks
+identical to a site with no visitors. The `^…$` anchors matter too: an
+unanchored `freeforcharity.org` would also allow
+`freeforcharity.org.example.com`.
+
+Verify before publishing: GTM **Preview** on both `https://freeforcharity.org/`
+and `https://www.freeforcharity.org/` should show the GA4 tags _fired_,
+and on `http://localhost:3000/` show them _blocked by exception_. All
+three checks are needed — the www case is the one this step originally
+got wrong.
 
 This supersedes GA4 Option B, which is now obsolete as written: under
 GTM delivery the GA4 config call is GTM's, not this site's, so
