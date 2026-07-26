@@ -138,7 +138,8 @@ export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID ?? ''
 
 /**
  * Escape hatch so the Playwright suite can still exercise tag loading.
- * Set via `page.addInitScript` before any app code runs.
+ * Set via `context.addInitScript` in the suite's `beforeEach`, so it
+ * applies to every page in the context before any app code runs.
  */
 declare global {
   interface Window {
