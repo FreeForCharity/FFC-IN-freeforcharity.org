@@ -21,18 +21,6 @@ type CookiePreferences = ConsentPreferences
 const CONSENT_KEY = 'cookie-consent'
 
 /**
- * Read the stored consent choice, preferring localStorage and falling
- * back to the `cookie-consent` cookie.
- *
- * Both are written on every choice, but only localStorage was ever read.
- * Where localStorage is unavailable — Safari private mode, storage
- * disabled, quota exhausted — the write silently no-ops (the callers
- * catch and carry on, noting the cookie is "the source of truth"), so on
- * the next page load the visitor looked undecided and the banner
- * reappeared. Their choice was sitting in the cookie the whole time,
- * unread. Reading it back makes the fallback real rather than aspirational.
- */
-/**
  * `; domain=.<apex>` for the consent cookie, or '' where that would be
  * invalid.
  *
@@ -55,6 +43,22 @@ function consentCookieDomain(): string {
   return `; domain=.${host.replace(/^www\./, '')}`
 }
 
+/**
+ * Read the stored consent choice, preferring localStorage and falling
+ * back to the `cookie-consent` cookie.
+ *
+ * Both are written on every choice, but only localStorage was ever read.
+ * Where localStorage is unavailable — Safari private mode, storage
+ * disabled, quota exhausted — the write silently no-ops (the callers
+ * catch and carry on, noting the cookie is "the source of truth"), so on
+ * the next page load the visitor looked undecided and the banner
+ * reappeared. Their choice was sitting in the cookie the whole time,
+ * unread.
+ *
+ * The cookie is also the only path that carries a choice between
+ * `freeforcharity.org` and `www.freeforcharity.org`, since localStorage
+ * is origin-scoped and both hosts serve this site.
+ */
 function readStoredConsent(): string | null {
   try {
     const stored = localStorage.getItem(CONSENT_KEY)

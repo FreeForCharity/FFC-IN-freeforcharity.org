@@ -72,10 +72,10 @@ A large divergence means something is broken; a modest one is normal.
 `src/lib/analytics-events.ts` is the contract, and how an event reaches GA4
 depends on **`GA_DELIVERY`** in `src/lib/analytics-config.ts`:
 
-| Mode            | What `trackConversion()` does               | Where GA4 is configured                     |
-| --------------- | ------------------------------------------- | ------------------------------------------- |
-| `gtm` (default) | `dataLayer.push` **only**                   | GTM's Google tag in container `GTM-NJ4DXH9` |
-| `direct`        | `gtag('event', …)` **and** `dataLayer.push` | this site's own `gtag('config', …)`         |
+| Mode               | What `trackConversion()` does               | Where GA4 is configured                     |
+| ------------------ | ------------------------------------------- | ------------------------------------------- |
+| `direct` (default) | `gtag('event', …)` **and** `dataLayer.push` | this site's own `gtag('config', …)`         |
+| `gtm`              | `dataLayer.push` **only**                   | GTM's Google tag in container `GTM-NJ4DXH9` |
 
 Under `gtm`, GTM's GA4 Event tags listen for these event names on the dataLayer
 and forward them, so calling `gtag` as well would send each conversion twice.
@@ -94,16 +94,27 @@ cutover can be reverted without a code change if GTM misbehaves in production.
 
 ### Cutover order (issue #510)
 
-GTM publishes are instant and decoupled from the site deploy, so order matters:
+`direct` is the default on purpose. Under `gtm` this site emits no GA4 at all,
+so if that were the default, merging and deploying would stop measurement dead
+until somebody published the GTM container — and a forgotten publish means zero
+data, which is exactly the state this work exists to fix.
 
-1. Deploy the site with `GA_DELIVERY = 'gtm'`. **A brief measurement gap starts
-   here** — the site no longer fires GA4 and GTM has no live tag yet.
+GTM publishes are also instant and decoupled from the site deploy. So the
+cutover is an explicit, ordered act:
+
+1. Build with `NEXT_PUBLIC_GA_DELIVERY=gtm` (or flip the default in a one-line
+   PR) and deploy. **A brief measurement gap starts here** — the site no longer
+   fires GA4 and GTM has no live tag yet.
 2. Publish GTM container version 2. Measurement resumes; the gap closes.
 3. Verify in GA4 Realtime that pageviews and all four events arrive, and that
    counts are not doubled.
+4. Verify in Tag Assistant that a donate link carries `_gl`. Under `gtm`,
+   cross-domain comes from the `linker_domains` entry on the Google tag, which
+   is stored but unverified.
 
 Reversing 1 and 2 means both paths fire GA4 until the deploy lands, which
-double-counts every pageview for consenting visitors.
+double-counts every pageview for consenting visitors. To roll back, rebuild
+without the env var — unpublishing GTM alone would leave no GA4 at all.
 
 ### Tagging a CTA
 

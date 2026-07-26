@@ -47,15 +47,24 @@ export const GTM_CONTAINER_ID = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID ?? 'GTM
  * and double-counted pageviews look entirely plausible in GA4 — there is
  * no error, no warning, and no way to separate them afterwards.
  *
- * Overridable at build time via NEXT_PUBLIC_GA_DELIVERY so the cutover
- * can be reverted without a code change if GTM misbehaves in production.
+ * DEFAULT IS 'direct', and deliberately so. Under 'gtm' this site emits
+ * no GA4 at all — measurement depends entirely on GTM container version 2
+ * being published. If that default applied on merge, deploying this
+ * change would stop GA4 dead until somebody remembered to publish, and a
+ * forgotten publish means zero measurement: precisely the condition this
+ * work exists to fix, reintroduced silently.
  *
- * CUTOVER ORDER (see issue #510): deploy this set to 'gtm' FIRST, then
- * publish GTM container version 2. Publishing first means the site and
- * GTM both fire GA4 until the deploy lands.
+ * So the cutover is an explicit act, not a side effect of merging. Set
+ * NEXT_PUBLIC_GA_DELIVERY=gtm at build time (or flip this default in a
+ * one-line PR), deploy, and THEN publish GTM version 2 — see issue #510.
+ * Publishing before the deploy lands means both paths fire GA4 at once.
+ *
+ * Any unrecognised value resolves to 'direct' for the same reason: the
+ * failure mode of guessing wrong should be "measured twice and noticed",
+ * never "measured not at all and unnoticed".
  */
 export const GA_DELIVERY: 'gtm' | 'direct' =
-  process.env.NEXT_PUBLIC_GA_DELIVERY === 'direct' ? 'direct' : 'gtm'
+  process.env.NEXT_PUBLIC_GA_DELIVERY === 'gtm' ? 'gtm' : 'direct'
 
 export const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID ?? 'nzldyj4h3k'
 

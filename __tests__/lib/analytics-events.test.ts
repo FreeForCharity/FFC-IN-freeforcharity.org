@@ -46,8 +46,8 @@ describe('classifyConversionHref', () => {
     // These are all links the site actually renders.
     it.each([
       [
-        "Zeffy's privacy policy (linked from /cookie-policy/)",
-        'https://www.zeffy.com/en-US/privacy-policy',
+        "Zeffy's legal page on their support subdomain (linked from /cookie-policy/)",
+        'https://support.zeffy.com/legal-data-privacy-security',
       ],
       ['the Zeffy homepage with a trailing slash', 'https://www.zeffy.com/'],
       ['the Zeffy homepage without one', 'https://www.zeffy.com'],

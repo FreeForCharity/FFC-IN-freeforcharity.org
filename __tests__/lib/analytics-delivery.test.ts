@@ -68,15 +68,18 @@ describe('GA4 delivery mode', () => {
     expect(dataLayerEvents()).toHaveLength(1)
   })
 
-  it("defaults to 'gtm' when the env var is unset", () => {
+  // The default must be the mode that MEASURES. Under 'gtm' this site
+  // emits no GA4 itself, so defaulting there would mean a deploy that
+  // preceded the GTM publish silently measured nothing at all.
+  it("defaults to 'direct' when the env var is unset", () => {
     const { track, events, gtag } = loadWith(undefined)
     track(events.VOLUNTEER_APPLY)
-    expect(gtag).not.toHaveBeenCalled()
+    expect(gtag).toHaveBeenCalledTimes(1)
   })
 
-  it('treats any unrecognised value as gtm rather than guessing', () => {
+  it("treats any unrecognised value as 'direct' rather than guessing", () => {
     const { track, events, gtag } = loadWith('GTM')
     track(events.VOLUNTEER_APPLY)
-    expect(gtag).not.toHaveBeenCalled()
+    expect(gtag).toHaveBeenCalledTimes(1)
   })
 })
