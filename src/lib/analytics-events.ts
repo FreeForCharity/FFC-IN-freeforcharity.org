@@ -14,20 +14,21 @@
 // funnels visible at all, and they are what get marked as Key Events in
 // GA4 Admin.
 //
-// Events are emitted TWICE, deliberately:
-//   1. `gtag('event', …)` — reaches GA4 directly, with no GTM tag to
-//      configure. Without this, nothing lands in GA4 until someone builds
-//      a tag by hand in the container, which is precisely the gap that
-//      left keyEvents at 0.
-//   2. `dataLayer.push({event: …})` — makes the same conversion available
-//      as a GTM trigger for Google Ads conversions, Meta, or anything else
-//      wired up later.
+// How an event reaches GA4 depends on GA_DELIVERY (see analytics-config):
 //
-// DO NOT also build a GTM tag that sends these same events to the SAME GA4
-// property — that double-counts. Use the dataLayer copy for other
-// destinations only.
+//   'gtm'    — ONLY `dataLayer.push({event: …})`. GTM's GA4 Event tags
+//              listen for these event names and forward them, so calling
+//              gtag as well would send each conversion twice.
+//   'direct' — `gtag('event', …)` reaches GA4 with no GTM tag to build,
+//              AND the dataLayer push still happens so GTM can drive
+//              Google Ads, Meta, or anything else off the same event.
+//
+// Exactly one path may reach a given GA4 property. Both are individually
+// valid hits, so a double-count produces no error anywhere — it just
+// quietly doubles the numbers the charity makes decisions on.
 
 import { SITE_ORIGIN } from '@/lib/config'
+import { GA_DELIVERY } from '@/lib/analytics-config'
 
 /** The three primary conversions, plus the supporting funnel steps. */
 export const CONVERSION_EVENTS = {
@@ -105,7 +106,17 @@ export function trackConversion(event: ConversionEvent, params: ConversionParams
     if (typeof value === 'string' && value.length > 0) clean[key] = value
   }
 
-  window.gtag?.('event', event, clean)
+  // Direct delivery only. Under 'gtm', GTM's GA4 Event tags fire from the
+  // dataLayer push below, so calling gtag as well sends the same
+  // conversion to the same property twice.
+  //
+  // This is gated on the declared mode rather than on `window.gtag` being
+  // undefined, because GTM's Google tag also defines `window.gtag` — an
+  // optional-chaining guard would look like protection while quietly
+  // doubling every conversion.
+  if (GA_DELIVERY === 'direct') {
+    window.gtag?.('event', event, clean)
+  }
 
   window.dataLayer = window.dataLayer || []
   window.dataLayer.push({ event, ...clean })

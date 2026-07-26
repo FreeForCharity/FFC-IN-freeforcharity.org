@@ -69,18 +69,41 @@ A large divergence means something is broken; a modest one is normal.
 
 ## How events get emitted
 
-`src/lib/analytics-events.ts` is the contract. `trackConversion()` emits each
-event **twice**, on purpose:
+`src/lib/analytics-events.ts` is the contract, and how an event reaches GA4
+depends on **`GA_DELIVERY`** in `src/lib/analytics-config.ts`:
 
-1. `gtag('event', …)` → straight into GA4, with no GTM tag to configure. Without
-   this, nothing lands in GA4 until someone hand-builds a tag in the container —
-   which is exactly the gap that left `keyEvents` at 0 for the life of the
-   property.
-2. `dataLayer.push({event: …})` → the same conversion, available as a GTM
-   trigger for Google Ads conversions, Meta, or anything wired up later.
+| Mode            | What `trackConversion()` does               | Where GA4 is configured                     |
+| --------------- | ------------------------------------------- | ------------------------------------------- |
+| `gtm` (default) | `dataLayer.push` **only**                   | GTM's Google tag in container `GTM-NJ4DXH9` |
+| `direct`        | `gtag('event', …)` **and** `dataLayer.push` | this site's own `gtag('config', …)`         |
 
-> **Do not build a GTM tag that sends these events to the same GA4 property.**
-> That double-counts. Use the dataLayer copy for other destinations only.
+Under `gtm`, GTM's GA4 Event tags listen for these event names on the dataLayer
+and forward them, so calling `gtag` as well would send each conversion twice.
+Under `direct`, the dataLayer copy is still pushed so GTM can drive Google Ads,
+Meta, or anything else off the same event.
+
+> **Exactly one path may reach a given GA4 property.** Both are individually
+> valid hits, so a double-count raises no error anywhere — it silently doubles
+> the numbers the charity makes decisions on.
+> `__tests__/lib/analytics-delivery.test.ts` asserts the gating in both modes,
+> and `assertGaDeliveryIsExclusive()` in `tests/analytics-loading.spec.ts`
+> asserts it end to end.
+
+The mode is overridable at build time with `NEXT_PUBLIC_GA_DELIVERY`, so the
+cutover can be reverted without a code change if GTM misbehaves in production.
+
+### Cutover order (issue #510)
+
+GTM publishes are instant and decoupled from the site deploy, so order matters:
+
+1. Deploy the site with `GA_DELIVERY = 'gtm'`. **A brief measurement gap starts
+   here** — the site no longer fires GA4 and GTM has no live tag yet.
+2. Publish GTM container version 2. Measurement resumes; the gap closes.
+3. Verify in GA4 Realtime that pageviews and all four events arrive, and that
+   counts are not doubled.
+
+Reversing 1 and 2 means both paths fire GA4 until the deploy lands, which
+double-counts every pageview for consenting visitors.
 
 ### Tagging a CTA
 

@@ -4,6 +4,7 @@ import {
   GTM_CONTAINER_ID,
   CLARITY_PROJECT_ID,
   TAWK_TO_PROPERTY,
+  GA_DELIVERY,
 } from '../src/lib/analytics-config'
 
 /**
@@ -61,6 +62,24 @@ async function consentCalls(
       .filter((args) => args[0] === 'consent' && args[1] === k)
       .map((args) => args[2] as Record<string, unknown>)
   }, kind)
+}
+
+/**
+ * GA4 must be delivered by EXACTLY ONE path.
+ *
+ * Under GA_DELIVERY='gtm' the site must not inject gtag.js itself — GTM's
+ * Google tag does it — and under 'direct' it must. Both at once configures
+ * the same measurement ID twice and doubles every pageview, which produces
+ * no error and looks entirely plausible in GA4, so it needs asserting
+ * rather than eyeballing.
+ */
+async function assertGaDeliveryIsExclusive(page: Page) {
+  const selfInjected = await scriptCount(page, `gtag/js?id=${GA_MEASUREMENT_ID}`)
+  if (GA_DELIVERY === 'direct') {
+    expect(selfInjected).toBeGreaterThan(0)
+  } else {
+    expect(selfInjected).toBe(0)
+  }
 }
 
 async function clearConsent(page: Page) {
@@ -130,11 +149,9 @@ test.describe('Analytics + widget loading', () => {
     // the tags still load — consent gates STORAGE, not loading — so an
     // ignored banner produces measurement instead of silence.
     await expect
-      .poll(() => scriptCount(page, `gtag/js?id=${GA_MEASUREMENT_ID}`), { timeout: 8000 })
-      .toBeGreaterThan(0)
-    await expect
       .poll(() => scriptCount(page, GTM_CONTAINER_ID), { timeout: 8000 })
       .toBeGreaterThan(0)
+    await assertGaDeliveryIsExclusive(page)
 
     // Clarity is NOT part of the permissive default. It is a session
     // recorder with no Consent Mode fallback, so it waits for explicit
@@ -145,19 +162,16 @@ test.describe('Analytics + widget loading', () => {
     expect(await scriptCount(page, CLARITY_PROJECT_ID)).toBe(0)
   })
 
-  test('Accept All injects GA4, GTM, and Clarity with the right IDs', async ({ page }) => {
+  test('Accept All injects the analytics tags with the right IDs', async ({ page }) => {
     await clearConsent(page)
     await page.getByRole('button', { name: 'Accept All' }).click()
-
-    // GA4 direct gtag loader
-    await expect
-      .poll(() => scriptCount(page, `gtag/js?id=${GA_MEASUREMENT_ID}`), { timeout: 8000 })
-      .toBeGreaterThan(0)
 
     // GTM container loader (inline snippet references the container ID)
     await expect
       .poll(() => scriptCount(page, GTM_CONTAINER_ID), { timeout: 8000 })
       .toBeGreaterThan(0)
+
+    await assertGaDeliveryIsExclusive(page)
 
     // Microsoft Clarity (inline snippet references the project ID)
     await expect
@@ -196,10 +210,12 @@ test.describe('Analytics + widget loading', () => {
     await page.reload({ waitUntil: 'domcontentloaded' })
     await page.waitForFunction(() => Array.isArray((window as { dataLayer?: unknown[] }).dataLayer))
     await expect
-      .poll(() => scriptCount(page, `gtag/js?id=${GA_MEASUREMENT_ID}`), { timeout: 8000 })
+      .poll(() => scriptCount(page, GTM_CONTAINER_ID), { timeout: 8000 })
       .toBeGreaterThan(0)
 
-    // GA4 still loads (cookieless); Clarity must not.
+    // GA4 still measures (cookieless, via whichever delivery path is
+    // configured); Clarity must not run at all.
+    await assertGaDeliveryIsExclusive(page)
     expect(await scriptCount(page, 'clarity.ms')).toBe(0)
     expect(await scriptCount(page, CLARITY_PROJECT_ID)).toBe(0)
   })

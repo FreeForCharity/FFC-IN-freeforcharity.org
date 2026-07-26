@@ -29,6 +29,34 @@ export const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID ?? 'G
 
 export const GTM_CONTAINER_ID = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID ?? 'GTM-NJ4DXH9'
 
+/**
+ * How GA4 is delivered. This is the cutover switch, and getting it wrong
+ * in either direction is silent, so it is a single named value rather
+ * than an inference from what happens to be on `window`.
+ *
+ *   'gtm'    — GTM's Google tag loads gtag.js and configures GA4, and the
+ *              conversion events reach GA4 through GTM tags listening on
+ *              the dataLayer. This site must NOT load gtag.js itself and
+ *              must NOT call gtag('event', …): the GTM event tags fire
+ *              from the same dataLayer push, so doing both double-counts
+ *              every conversion.
+ *   'direct' — this site loads gtag.js and calls gtag('event', …) itself.
+ *              GTM may still load, but carries no GA4 tag.
+ *
+ * The two modes must never overlap. Both send to the same measurement ID,
+ * and double-counted pageviews look entirely plausible in GA4 — there is
+ * no error, no warning, and no way to separate them afterwards.
+ *
+ * Overridable at build time via NEXT_PUBLIC_GA_DELIVERY so the cutover
+ * can be reverted without a code change if GTM misbehaves in production.
+ *
+ * CUTOVER ORDER (see issue #510): deploy this set to 'gtm' FIRST, then
+ * publish GTM container version 2. Publishing first means the site and
+ * GTM both fire GA4 until the deploy lands.
+ */
+export const GA_DELIVERY: 'gtm' | 'direct' =
+  process.env.NEXT_PUBLIC_GA_DELIVERY === 'direct' ? 'direct' : 'gtm'
+
 export const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID ?? 'nzldyj4h3k'
 
 export const TAWK_TO_PROPERTY =
@@ -56,6 +84,16 @@ export const TAWK_TO_PROPERTY =
 //     domain/tag-settings resource), and the Tag Manager `gtag_config`
 //     endpoint only governs tags fired through a GTM container, which
 //     this property's tag is not. The UI step is still required.
+//
+// APPLIES ONLY IN 'direct' DELIVERY. The linker rides on the gtag config
+// this site emits, and under GA_DELIVERY = 'gtm' that config is GTM's,
+// not ours — cross-domain then comes from the `linker_domains` entry on
+// the Google tag in container version 2. That entry is stored but
+// UNVERIFIED (the Tag Manager API accepts arbitrary config keys, which
+// proves storage and nothing else), so confirm decoration with Tag
+// Assistant at cutover: click a donate link and check the Zeffy URL
+// carries a `_gl` parameter. If it does not, cross-domain is silently
+// off and donations detach from the campaign that drove them.
 //
 // Both apex and `www.` hosts are listed explicitly. Every campaign link
 // this site renders is built from ZEFFY_BASE, which is

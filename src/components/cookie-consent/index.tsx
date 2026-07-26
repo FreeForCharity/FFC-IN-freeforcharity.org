@@ -9,6 +9,7 @@ import {
   GTM_CONTAINER_ID,
   TAWK_TO_PROPERTY,
   CROSS_DOMAIN_DOMAINS,
+  GA_DELIVERY,
 } from '@/lib/analytics-config'
 import { updateGoogleConsent, type ConsentPreferences } from '@/lib/consent-mode'
 
@@ -65,6 +66,11 @@ export default function CookieConsent() {
 
   const loadGoogleAnalytics = useCallback(() => {
     if (!GA_MEASUREMENT_ID) return
+    // Under 'gtm' delivery, GTM's Google tag loads gtag.js and configures
+    // GA4. Loading it here as well would configure the same measurement
+    // ID twice and double-count every pageview — invisibly, since both
+    // hits are individually valid. See GA_DELIVERY.
+    if (GA_DELIVERY !== 'direct') return
     if (
       typeof window !== 'undefined' &&
       !document.querySelector('script[src*="googletagmanager.com/gtag"]')
