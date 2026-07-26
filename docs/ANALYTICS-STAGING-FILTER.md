@@ -129,16 +129,36 @@ That is no longer true:** GA4 delivery moved into GTM at the issue #510
 cutover (`GA_DELIVERY = 'gtm'`, container version 2 published), so the
 GTM path below is now live and is the strongest available fix.
 
-Add a **trigger exception** so the GA4 tags only fire on production
-hostnames:
+Add **trigger exceptions** so the GA4 tags only fire on production
+hostnames. You need **two** blocking triggers, not one — see the warning
+below.
 
-1. GTM → **Triggers** → New → _Page View_ (or _Custom Event_ matching
-   `.*` with regex, to cover the conversion events too)
-2. Condition: built-in **Page Hostname** → **does not match RegEx** →
-   `^(www\.)?freeforcharity\.org$` — this is the blocking trigger
-3. Add it as an **Exception** on the Google tag and on each of the four
-   conversion event tags
-4. Publish a new container version
+Both use the same condition: built-in **Page Hostname** → **does not
+match RegEx** → `^(www\.)?freeforcharity\.org$`.
+
+1. GTM → **Triggers** → New → _Initialization_ → add the condition.
+   Name it something like `Block — non-production hostname (init)`.
+2. GTM → **Triggers** → New → _Custom Event_ → **Event name** `.*` with
+   **use regex matching** checked → add the same condition. Name it
+   `Block — non-production hostname (custom event)`.
+3. On the **Google tag**, add the _Initialization_ blocker as an
+   **Exception**. That tag fires on the built-in **Initialization – All
+   Pages** trigger (`2147479553`), so the exception has to be an
+   Initialization trigger to match.
+4. On each of the **four conversion event tags** (`donate_open`,
+   `donate_form_view`, `volunteer_apply`, `service_application_start`),
+   add the _Custom Event_ blocker as an Exception.
+5. Publish a new container version.
+
+> **One blocking trigger will not cover both.** GTM evaluates an
+> exception only on the event type its own trigger listens for. A Page
+> View or Initialization blocker is never evaluated when a tag fires on a
+> Custom Event, and vice versa — so a single exception silently protects
+> only half the tags while appearing to be applied everywhere. This step
+> originally described picking _Page View_ **or** _Custom Event_ as
+> though they were interchangeable; they are not, and the Page View
+> option was doubly wrong because the Google tag fires on Initialization,
+> which a Page View blocker also misses.
 
 **Match both apex and `www.`, and anchor the pattern.** The hostname
 table above is the reason: real traffic is split ~70/30 between `www.`
@@ -148,11 +168,19 @@ silent, since a tag that never fires looks identical to a site with no
 visitors. The `^…$` anchors matter too: an unanchored
 `freeforcharity.org` would also allow `freeforcharity.org.example.com`.
 
-Verify before publishing: GTM **Preview** on both `https://freeforcharity.org/`
-and `https://www.freeforcharity.org/` should show the GA4 tags _fired_,
-and on `http://localhost:3000/` show them _blocked by exception_. All
-three checks are needed — the www case is the one this step originally
-got wrong.
+Verify before publishing, in GTM **Preview**. Both failure modes this
+step has already been written wrong for are invisible without it, so
+check all four cells:
+
+| Preview on                        | Google tag | Conversion event tags               |
+| --------------------------------- | ---------- | ----------------------------------- |
+| `https://freeforcharity.org/`     | fired      | fired (click a donate / apply link) |
+| `https://www.freeforcharity.org/` | fired      | fired                               |
+| `http://localhost:3000/`          | not fired  | not fired                           |
+
+On localhost both rows must show the tags under **Blocked** with the
+exception named. Checking only the Google tag is how you ship a container
+that still records every synthetic conversion event.
 
 This supersedes GA4 Option B, which is now obsolete as written: under
 GTM delivery the GA4 config call is GTM's, not this site's, so
