@@ -1,0 +1,34 @@
+# RFC 9116 security.txt for freeforcharity.org — canonical well-known path.
+#
+# This file and public/security.txt MUST carry the same payload.
+# The deploy guard enforces that by comparing both files with comment
+# lines ('#') stripped — so the FIELDS must match exactly, while these
+# header comments may differ. Do not read this as byte-for-byte identity
+# of the whole file; CI does not check that, and assuming a stronger
+# guarantee than the one enforced is how drift gets in.
+#
+# DEPLOY NOTE (freeforcharity.org is NOT a plain GitHub Pages site):
+# Production is the InterServer cPanel docroot (~/public_html), mirrored by
+# .github/workflows/deploy-cpanel.yml. That mirror deliberately EXCLUDES
+# '.well-known/' from the lftp --delete mirror, because the directory is a
+# cPanel system dir holding ACME/AutoSSL challenge files — a --delete mirror
+# without that exclusion would wipe them and break certificate renewal.
+#
+# Consequence: this file does NOT ship to production. It is the source of
+# truth for the payload, and it is what the GitHub Pages staging deploy
+# serves. On production the sibling /security.txt is the copy that lands,
+# and the /.well-known/ path is answered by a Cloudflare edge-managed
+# security.txt configured outside this repo — keep that Cloudflare entry in
+# sync with the payload below.
+#
+# RFC 9116 §2.5.2 allows multiple Canonical lines to advertise both URLs.
+# Expires MUST be a future RFC 3339 datetime. Bump it on a regular cadence.
+
+Contact: mailto:clarkemoyer@freeforcharity.org
+Expires: 2027-12-31T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://freeforcharity.org/.well-known/security.txt
+Canonical: https://freeforcharity.org/security.txt
+Policy: https://freeforcharity.org/vulnerability-disclosure-policy/
+Acknowledgments: https://freeforcharity.org/security-acknowledgements/
+Hiring: https://freeforcharity.org/volunteer/

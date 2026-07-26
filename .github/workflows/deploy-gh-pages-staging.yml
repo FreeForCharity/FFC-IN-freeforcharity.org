@@ -61,6 +61,10 @@ jobs:
         uses: actions/upload-pages-artifact@v5
         with:
           path: ./out
+          # Without this, upload-pages-artifact drops dot-entries such as
+          # .well-known/, so /.well-known/security.txt would silently never
+          # reach the staging site. Refs #788.
+          include-hidden-files: true
 
   deploy:
     name: Deploy to GitHub Pages
