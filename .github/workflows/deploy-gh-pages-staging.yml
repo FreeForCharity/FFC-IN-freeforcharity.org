@@ -36,8 +36,21 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
-        with:
-          static_site_generator: next
+        # `static_site_generator: next` is deliberately NOT set. It only understands
+        # next.config.js/.mjs; this repo uses next.config.ts, so the action logged
+        # "Using default blank configuration" and WROTE ITS OWN next.config.js with
+        # only {output, basePath, images.unoptimized}. Next prefers .js over .ts, so
+        # staging built with this repo's real config discarded — including
+        # `trailingSlash: true` AND the entire withSentryConfig wrapper, meaning
+        # staging had no Sentry instrumentation at all despite the config asking for it.
+        #
+        # Proven inside this repo. Same source, two pipelines:
+        #   staging (configure-pages)  /privacy-policy/ 404, /privacy-policy.html 200
+        #   production (cPanel mirror) /privacy-policy/ 200
+        # Only the pipeline that ran this action lost the setting. Reproduced
+        # independently on Footer_Only_Template. See FFC-Cloudflare-Automation#880.
+        #
+        # Safe to remove: basePath is set explicitly via NEXT_PUBLIC_BASE_PATH below.
 
       - name: Restore Next.js cache
         uses: actions/cache@v6
