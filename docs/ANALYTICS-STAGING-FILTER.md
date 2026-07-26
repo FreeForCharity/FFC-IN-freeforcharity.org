@@ -10,9 +10,41 @@ That's intentional (it lets you validate analytics on staging before the
 flip), but it means production reporting will include staging + dev hits
 unless you filter them out. This doc is the operator runbook for that.
 
-The volume is usually tiny (staging validation is a short window, dev
-hits require a developer to accept the cookie banner on localhost), so
-this is data-hygiene, not an emergency.
+**This was originally filed as data-hygiene rather than an emergency, on
+the reasoning that "the volume is usually tiny — dev hits require a
+developer to accept the cookie banner on localhost." That reasoning was
+wrong on both halves, and measured production data now contradicts it.**
+
+Consent Mode removed the banner gate (tags load on the first pageview,
+storage is what consent governs), so nothing has to be clicked for a
+localhost hit to be recorded. And automated runs are not one-at-a-time:
+each Playwright pass over the ~58-page sitemap produces a session per
+page with a fresh client id. Hostname breakdown from the GA4 Data API:
+
+| Date     | Hostname                 | Sessions  | Pageviews |
+| -------- | ------------------------ | --------- | --------- |
+| 20260723 | `www.freeforcharity.org` | 19        | 21        |
+| 20260724 | `www.freeforcharity.org` | 9         | 8         |
+| 20260724 | `localhost`              | 4         | 4         |
+| 20260725 | `localhost`              | **1,019** | **1,318** |
+| 20260725 | `www.freeforcharity.org` | 13        | 17        |
+| 20260726 | `freeforcharity.org`     | 2         | 2         |
+
+Real traffic runs ~10–20 sessions a day. A single day of local test runs
+produced **1,019** — roughly half the property's entire 28-day session
+count, and about 50× that day's real traffic. Nothing in GA4 marks it as
+synthetic: the pages are real and the events are well-formed, so it
+reads as a traffic surge.
+
+Two things follow. First, the code-level guard is the actual fix and it
+has landed: `isAutomatedBrowser()` in `src/lib/analytics-config.ts`
+(PR #512) skips all tag loading when `navigator.webdriver` is set, which
+covers Playwright, Puppeteer, and Lighthouse — i.e. every automated
+source this repo runs. Second, the filters below are still needed, both
+to exclude the ~1,000 sessions already collected (nothing here is
+retroactive at the collection layer — only report filters can hide
+history) and to catch hits from a hand-driven `npm run dev` browser,
+which sets no `webdriver` flag and is therefore invisible to the guard.
 
 ---
 
@@ -34,19 +66,23 @@ risk of accidentally dropping real production data.
 You can also add `www.freeforcharity.org` with an "OR" condition if the
 www host ever serves pages directly.
 
-### Option B — Stop collection entirely (stronger, more setup)
+### Option B — Stop collection entirely (superseded — see [GTM](#gtm))
 
-If you'd rather staging hits never reach GA4 at all, use the
-`traffic_type` parameter + Internal Traffic data filter:
+The original plan here was for **this site** to send
+`traffic_type: 'internal'` on its GA4 config call whenever
+`location.hostname !== 'freeforcharity.org'`, paired with the built-in
+_Internal Traffic_ data filter set to **Exclude**.
 
-1. The site would need to send `traffic_type: 'internal'` on the GA4
-   config call when `location.hostname !== 'freeforcharity.org'`. That's
-   a small code change — **ask and we'll add it**; it's deliberately not
-   in the build today because you chose the report-filter approach.
-2. GA4 → Admin → Data Settings → **Data Filters** → the built-in
-   _Internal Traffic_ filter is set to **Exclude** `traffic_type = internal`.
+That is no longer the right place for it. Since the issue #510 cutover
+this site emits no GA4 config of its own (`GA_DELIVERY = 'gtm'`) — the
+config belongs to GTM's Google tag, so the equivalent change is a GTM
+field or, better, the hostname **trigger exception** in the GTM section
+below. Don't add `traffic_type` to this codebase; it would have nothing
+to attach to.
 
-Until that code change lands, Option A is the working path.
+The data-filter half still applies if you go the GTM-field route: GA4 →
+Admin → Data Settings → **Data Filters** → _Internal Traffic_ →
+**Exclude** `traffic_type = internal`.
 
 ### Option C — IP-based Internal Traffic filter
 
@@ -77,12 +113,34 @@ Clarity has no hostname data-filter either. Options, in order of effort:
 
 ## GTM
 
-GTM itself doesn't "collect" — it just fires tags. If you later move GA4
-_into_ GTM (instead of the current direct gtag), add a **trigger
-exception** so the GA4 tag only fires when the built-in `Page Hostname`
-variable equals `freeforcharity.org`. That's the cleanest "never collect
-from staging" option and supersedes GA4 Option B. (Today GA4 fires
-directly, not via GTM, so this doesn't apply yet.)
+GTM itself doesn't "collect" — it just fires tags. **This section used to
+say "today GA4 fires directly, not via GTM, so this doesn't apply yet."
+That is no longer true:** GA4 delivery moved into GTM at the issue #510
+cutover (`GA_DELIVERY = 'gtm'`, container version 2 published), so the
+GTM path below is now live and is the strongest available fix.
+
+Add a **trigger exception** so the GA4 tags only fire on production
+hostnames:
+
+1. GTM → **Triggers** → New → _Page View_ (or _Custom Event_ matching
+   `.*` with regex, to cover the conversion events too)
+2. Condition: built-in **Page Hostname** → **does not equal**
+   `freeforcharity.org` — this is the blocking trigger
+3. Add it as an **Exception** on the Google tag and on each of the four
+   conversion event tags
+4. Publish a new container version
+
+This supersedes GA4 Option B, which is now obsolete as written: under
+GTM delivery the GA4 config call is GTM's, not this site's, so
+`traffic_type` would be a field on the GTM Google tag rather than a code
+change here.
+
+Unlike the code-level `navigator.webdriver` guard, a hostname exception
+catches _every_ non-production hit — including a developer clicking
+around a hand-run `npm run dev` server, which the guard cannot see. The
+two are complementary, not redundant: the guard stops the hits before
+they leave the browser (so they never cost anything), and the exception
+is the catch-all for whatever the guard misses.
 
 ---
 
@@ -90,5 +148,12 @@ directly, not via GTM, so this doesn't apply yet.)
 
 Once WordPress is retired and only `freeforcharity.org` serves the
 Next.js export, staging stops existing and the only non-prod hits are
-occasional localhost dev sessions. The Option A report filter keeps
-those out indefinitely with no maintenance.
+localhost dev sessions.
+
+Do not read that as "so this stops mattering" — the 2026-07-25 figures
+above are localhost dev/test hits **after** staging had already stopped
+being the concern, and they were the largest single source of traffic in
+the property. The `navigator.webdriver` guard plus the Option A report
+comparison keep them out with no ongoing maintenance; the GTM hostname
+exception closes the remaining hand-driven-`npm run dev` gap if you want
+collection stopped rather than filtered.
