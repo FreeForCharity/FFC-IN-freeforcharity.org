@@ -19,7 +19,13 @@ Consent Mode removed the banner gate (tags load on the first pageview,
 storage is what consent governs), so nothing has to be clicked for a
 localhost hit to be recorded. And automated runs are not one-at-a-time:
 each Playwright pass over the ~58-page sitemap produces a session per
-page with a fresh client id. Hostname breakdown from the GA4 Data API:
+page with a fresh client id.
+
+**Sessions** by hostname, from the GA4 Data API (`sessions` metric,
+`hostName` dimension). Every figure below is a session count, not
+pageviews or events — the same unit the "sessions a day" comparisons
+after the table use. `—` means the host reported no sessions that day at
+all, i.e. the row is absent from the API response rather than zero-valued.
 
 | Date     | `www.freeforcharity.org` | `freeforcharity.org` | `localhost` |
 | -------- | ------------------------ | -------------------- | ----------- |
@@ -87,7 +93,7 @@ The original plan here was for **this site** to send
 _Internal Traffic_ data filter set to **Exclude**.
 
 That is no longer the right place for it **while `GA_DELIVERY = 'gtm'`**,
-which is the default and what production runs since the issue #510
+which is the default and what production has run since the issue #510
 cutover. Under that mode the site emits no GA4 config of its own — the
 config belongs to GTM's Google tag — so the equivalent change is a GTM
 field or, better, the hostname **trigger exception** in the GTM section
