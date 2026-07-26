@@ -1,7 +1,11 @@
 # RFC 9116 security.txt — root-path copy.
 #
-# This file MUST stay byte-for-byte identical to
-# public/.well-known/security.txt below the header block.
+# This file and public/.well-known/security.txt MUST carry the same payload.
+# The deploy guard enforces that by comparing both files with comment
+# lines ('#') stripped — so the FIELDS must match exactly, while these
+# header comments may differ. Do not read this as byte-for-byte identity
+# of the whole file; CI does not check that, and assuming a stronger
+# guarantee than the one enforced is how drift gets in.
 #
 # DEPLOY NOTE (freeforcharity.org is NOT a plain GitHub Pages site):
 # Production is the InterServer cPanel docroot (~/public_html), mirrored by
