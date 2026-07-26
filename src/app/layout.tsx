@@ -14,8 +14,10 @@ import './globals.css'
 import Header from '@/components/header'
 import Footer from '@/components/footer'
 import CookieConsent from '@/components/cookie-consent'
+import ConversionTracking from '@/components/analytics/ConversionTracking'
 import ZeffyEmbedScript from '@/components/ui/ZeffyEmbedScript'
 import { organizationJsonLd, webSiteJsonLd } from '@/lib/structured-data'
+import { CONSENT_MODE_BOOTSTRAP } from '@/lib/consent-mode'
 
 /* Fonts are self-hosted via next/font: downloaded at build time and served
    same-origin from /_next/static/media, so the browser never opens the
@@ -227,6 +229,13 @@ export default function RootLayout({
               '(function(){function at(n){n=Math.trunc(n)||0;if(n<0)n+=this.length;return n<0||n>=this.length?undefined:this[n]}var protos=[Array.prototype,String.prototype];if(typeof Int8Array==="function"){var t=Object.getPrototypeOf(Int8Array.prototype);if(t)protos.push(t)}protos.forEach(function(p){if(!p.at)Object.defineProperty(p,"at",{writable:true,configurable:true,value:at})})})()',
           }}
         />
+        {/* Google Consent Mode v2 defaults. MUST execute before any Google
+            tag loads, which is why it is an inline <head> script rather
+            than a next/script: the consent state has to already be in the
+            dataLayer when GA4/GTM initialise. Granted worldwide, denied
+            (cookieless pings) only where Google's EU User Consent Policy
+            requires opt-in. See src/lib/consent-mode.ts. */}
+        <script dangerouslySetInnerHTML={{ __html: CONSENT_MODE_BOOTSTRAP }} />
       </head>
       <body className={`antialiased`} suppressHydrationWarning={true}>
         {/* Schema.org identity for search engines (NonprofitOrganization + WebSite). */}
@@ -250,6 +259,9 @@ export default function RootLayout({
         <main id="main-content">{children}</main>
         <Footer />
         <CookieConsent />
+        {/* One delegated listener records every `data-ffc-conversion` CTA
+            click, so the tracked buttons stay server components. */}
+        <ConversionTracking />
         {/* Global Zeffy pop-up engine: wires every `zeffy-form-link` element
             (incl. the footer donate button) to open its campaign in a modal,
             site-wide. Next.js dedupes the <Script>, so pages that also use

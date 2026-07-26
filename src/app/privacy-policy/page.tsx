@@ -17,7 +17,7 @@ export default function PrivacyPolicy() {
             <strong>Privacy Policy</strong>
           </h1>
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-            <em>Effective Date: 11-20-2024</em>
+            <em>Effective Date: 07-25-2026</em>
           </p>
 
           {/* Section 1 */}
@@ -57,92 +57,92 @@ export default function PrivacyPolicy() {
           </ol>
 
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-            <strong>3.1. Comments</strong>
+            <strong>3.1. Information You Send Us Directly</strong>
           </p>
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-            When visitors leave comments on the site, we collect:
+            This website has no comment system, no user accounts, and no way to upload files, so
+            there is nothing here that collects your information as you browse. We receive personal
+            information only when you deliberately send it:
           </p>
           <ul className="list-disc list-inside space-y-[4px] pb-[1em]">
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-              <strong>Data from the comments form:</strong> This includes your name, email address,
-              website, and the comment itself.
+              <strong>Email:</strong> When you write to us using an address published on this site,
+              we receive whatever you choose to include in that message.
             </li>
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-              <strong>IP Address and Browser User Agent String:</strong> To assist with spam
-              detection and enhance security.
+              <strong>Applications for our services:</strong> Applying as a charity takes you to our
+              client portal, where you provide your organization&apos;s details so we can verify
+              eligibility and set up services.
             </li>
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-              <strong>Gravatar Service:</strong> An anonymized string created from your email
-              address (also called a hash) may be provided to the Gravatar service to see if you are
-              using it. After approval of your comment, your profile picture (if available) is
-              visible to the public in the context of your comment. The Gravatar service privacy
-              policy is available here: Gravatar Privacy Policy
+              <strong>Donations:</strong> Donation forms are operated by Zeffy. What you enter goes
+              to Zeffy, who pass us the donation record.
             </li>
           </ul>
 
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500] mt-[1em]">
-            <strong>3.2. Media</strong>
+            <strong>3.2. Forms Hosted by Third Parties</strong>
           </p>
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-            If you upload images to the website:
+            A few tasks — submitting a testimonial, reporting volunteer hours — use forms hosted by
+            Microsoft rather than built into this website. Opening one takes you to Microsoft&apos;s
+            service, and what you submit there is governed by their privacy terms as well as ours.
+            Volunteer hour reports are used to produce aggregate totals; we do not publish
+            individual submissions without asking you first.
           </p>
-          <ul className="list-inside list-disc space-y-[4px] pb-[1em]">
-            <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-              <strong>Embedded Location Data:</strong> Please avoid uploading images with embedded
-              location data (EXIF GPS) included. Visitors can download and extract any location data
-              from images on the website.
-            </li>
-          </ul>
 
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500] mt-[1em]">
             <strong>3.3. Cookies</strong>
           </p>
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-            Our website uses cookies to enhance your browsing experience:
+            This website is a static site. There are no user accounts, no login, and no comment
+            system, so we set no login, comment, or authoring cookies. The cookies you may encounter
+            are:
           </p>
           <ul className="list-inside list-disc space-y-[4px] pb-[1em]">
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-              <strong>Comments Cookies:</strong> When you leave a comment, you may opt-in to saving
-              your name, email address, and website in cookies. These are for your convenience for
-              future comments and last for one year.
+              <strong>Your cookie choice:</strong> A single cookie recording the preferences you set
+              in our cookie banner, so we do not ask again on every page. Set regardless of what you
+              choose, because it is what remembers the choice.
             </li>
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-              <strong>Login Cookies:</strong> When you log in, we set up cookies to save your login
-              information and screen display choices.
-              <ul className="list-disc list-inside ml-[1rem] mt-[4px] pb-[1em] space-y-[2px]">
-                <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-                  Login cookies last for two days.
-                </li>
-                <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-                  Screen options cookies last for one year.
-                </li>
-                <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-                  Selecting “Remember Me” extends login retention to two weeks.
-                </li>
-                <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-                  Logging out removes login cookies.
-                </li>
-              </ul>
+              <strong>Analytics:</strong> Google Analytics measures how the site is used. Where the
+              law requires your prior permission — the EEA, the UK, and Switzerland — it sets no
+              cookies and collects no identifiers until you accept; it still counts the visit in an
+              aggregate, cookie-free way. Elsewhere it uses cookies from your first visit, and you
+              can turn it off at any time.
             </li>
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-              <strong>Temporary Cookies:</strong> Visiting our login page sets a temporary cookie to
-              determine if your browser accepts cookies. It contains no personal data and is
-              discarded when you close your browser.
+              <strong>Session recording:</strong> Microsoft Clarity records how visitors move
+              through pages, and runs only if you explicitly accept analytics cookies. It is off
+              until then, everywhere in the world.
             </li>
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-              <strong>Editing or Publishing Articles:</strong> This sets an additional cookie in
-              your browser, indicating the post ID of the article you just edited. It expires after
-              one day.
+              <strong>Live chat:</strong> Tawk.to powers the chat widget and sets cookies so a
+              conversation survives moving between pages.
+            </li>
+            <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
+              <strong>Donation forms:</strong> Our donation forms are operated by Zeffy and set
+              their own cookies when you open one. These are needed for the donation to work.
             </li>
           </ul>
+          <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
+            Our{' '}
+            <a href="/cookie-policy/" className="text-blue-600 underline">
+              Cookie Policy
+            </a>{' '}
+            lists each cookie by name, purpose, and how long it lasts, and you can change your
+            choice at any time from the cookie settings link in our footer.
+          </p>
 
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500] mt-[1em]">
             <strong>3.4. Embedded Content from Other Websites</strong>
           </p>
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-            Articles on this site may include embedded content (e.g., videos, images, articles).
-            Embedded content from other websites behaves as if you have visited the other website
-            directly. These websites may:
+            Some pages embed content operated by other organizations — most notably our donation
+            forms, which are provided by Zeffy, and charity verification badges from Candid
+            (GuideStar). Embedded content behaves as if you had visited that other website directly.
+            Those websites may:
           </p>
           <ul className="list-inside list-disc space-y-[4px] pb-[1em]">
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
@@ -157,6 +157,13 @@ export default function PrivacyPolicy() {
               interaction if you have an account and are logged in to that website.
             </li>
           </ul>
+          <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
+            When you open a donation form, we ask Zeffy to count that page view in our own Google
+            Analytics so we can see how many people reach a donation form and where they came from.
+            We do not receive donation amounts, payment details, or donor identities through
+            analytics; what you enter into a donation form goes to Zeffy, and their privacy policy
+            governs it. Your donation record reaches us from Zeffy directly, not from analytics.
+          </p>
 
           {/* Section 4 */}
           <ol className="list-decimal list-inside pb-[1em]" start={4}>

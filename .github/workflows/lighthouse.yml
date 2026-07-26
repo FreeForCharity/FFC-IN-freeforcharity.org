@@ -49,9 +49,19 @@ jobs:
       # GuideStar, GTM) is mirrored in the public/.htaccess CSP. If an
       # embed host is added or rotated anywhere, update this line too,
       # or the audit silently re-inflates with third-party bytes.
+      #
+      # Clarity and Tawk.to joined this list when the site moved to
+      # Consent Mode v2. Previously Lighthouse never dismissed the cookie
+      # banner, so NO third-party tag ever loaded during an audit; now the
+      # tags load on every pageview and consent gates storage instead.
+      # Tawk in particular injects a visible chat widget whose contrast
+      # and ARIA issues are audited as if they were first-party markup.
+      # Blocking them keeps this a first-party audit, as the step name
+      # says — it does not make the widget's own accessibility problems go
+      # away, which is tracked separately.
       - name: Block third-party embed hosts (first-party-only audit)
         run: |
-          sudo sh -c 'echo "127.0.0.1 www.zeffy.com zeffy.com zeffy-scripts.s3.ca-central-1.amazonaws.com widgets.guidestar.org www.googletagmanager.com" >> /etc/hosts'
+          sudo sh -c 'echo "127.0.0.1 www.zeffy.com zeffy.com zeffy-scripts.s3.ca-central-1.amazonaws.com widgets.guidestar.org www.googletagmanager.com www.google-analytics.com www.clarity.ms c.clarity.ms embed.tawk.to va.tawk.to vsa.tawk.to cdn.tawk.to" >> /etc/hosts'
 
       - name: Run Lighthouse CI
         run: |

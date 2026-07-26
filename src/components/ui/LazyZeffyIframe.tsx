@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState, IframeHTMLAttributes } from 'react'
 import { zeffyHostedUrl } from '@/data/donation-campaigns'
+import { CONVERSION_EVENTS, classifyConversionHref, trackConversion } from '@/lib/analytics-events'
 
 export interface ZeffyIframeProps extends IframeHTMLAttributes<HTMLIFrameElement> {
   allowpaymentrequest?: string
@@ -29,6 +30,7 @@ const PRELOAD_MARGIN_PX = 800
 
 const LazyZeffyIframe = (props: ZeffyIframeProps) => {
   const hostRef = useRef<HTMLDivElement>(null)
+  const hasTrackedViewRef = useRef(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -56,6 +58,54 @@ const LazyZeffyIframe = (props: ZeffyIframeProps) => {
     observer.observe(el)
     return () => observer.disconnect()
   }, [])
+
+  /**
+   * The embedded form is the one donation surface with no click to
+   * observe — the visitor scrolls to it and fills it in inside a
+   * cross-origin frame. Mounting is the last thing this site can see, so
+   * it is recorded as the funnel step it is: the form was actually put in
+   * front of someone.
+   *
+   * Fires at most once per mounted iframe, enforced by a ref rather than
+   * left to the dependency list: `mounted` only ever flips false → true,
+   * but a change to `src` or `title` after mount would otherwise re-run
+   * the effect and emit a second conversion for the same form.
+   *
+   * Deliberately NOT a `donate_open`: that event means an explicit act of
+   * intent, and conflating the two would inflate the donation funnel with
+   * everyone who scrolled past the homepage form.
+   */
+  useEffect(() => {
+    if (!mounted || hasTrackedViewRef.current) return
+    hasTrackedViewRef.current = true
+    // Derive the campaign id the same way tracked LINKS to Zeffy do, so
+    // the two agree in GA4. Splitting the raw src on '/' would keep the
+    // query string (embed URLs carry `?modal=true`) and yield an empty
+    // segment for a trailing slash — both of which fragment the
+    // conversion_id dimension and break aggregation by campaign.
+    const classified = typeof props.src === 'string' ? classifyConversionHref(props.src) : null
+
+    // conversion_source/destination are set on every click-tracked
+    // conversion, and they are registered as GA4 custom dimensions — so
+    // omitting them here would leave this event unbreakable by page or
+    // destination, and make it the odd one out in every report that
+    // segments the others.
+    let destination: string | undefined
+    if (typeof props.src === 'string') {
+      try {
+        destination = new URL(props.src, window.location.href).host
+      } catch {
+        destination = undefined
+      }
+    }
+
+    trackConversion(CONVERSION_EVENTS.DONATE_FORM_VIEW, {
+      conversion_id: classified?.params.conversion_id,
+      conversion_label: props.title,
+      conversion_source: window.location.pathname,
+      conversion_destination: destination,
+    })
+  }, [mounted, props.src, props.title])
 
   // Before mount the reserved box simply stays empty — the same thing
   // visitors saw while the Zeffy app booted when the iframe was eager.
