@@ -135,3 +135,40 @@ export const CROSS_DOMAIN_DOMAINS = [
 // env var (or adds a default here once a real ID exists). Empty = the
 // corresponding loader is a no-op.
 export const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID ?? ''
+
+/**
+ * Escape hatch so the Playwright suite can still exercise tag loading.
+ * Set via `page.addInitScript` before any app code runs.
+ */
+declare global {
+  interface Window {
+    __ffcAllowAutomatedAnalytics?: boolean
+  }
+}
+
+/**
+ * True for browsers being driven by automation.
+ *
+ * Analytics used to be invisible to crawlers by accident: nothing loaded
+ * until a visitor clicked "Accept All", and an automated browser never
+ * clicks. Consent Mode removed that gate — tags now load on the first
+ * pageview — which handed every headless run a full set of pageviews.
+ *
+ * The damage is out of proportion to the traffic. This site averages
+ * roughly 950 sessions a MONTH, while one crawl of the ~58-page sitemap
+ * produces ~100 sessions with a fresh client id per page. A few runs a
+ * day would outnumber real visitors several times over, and it would read
+ * as growth rather than as noise: the pages are real, the events are
+ * well-formed, and nothing in GA4 marks them as synthetic.
+ *
+ * `navigator.webdriver` is set by Playwright, Puppeteer, and Lighthouse,
+ * which covers this repo's own visual-regression capture and prod-smoke
+ * workflows. It is not a general bot defence — a determined scraper can
+ * unset it — but it is exactly targeted at the automation we run
+ * ourselves, which is the source that matters here.
+ */
+export function isAutomatedBrowser(): boolean {
+  if (typeof navigator === 'undefined') return false
+  if (typeof window !== 'undefined' && window.__ffcAllowAutomatedAnalytics) return false
+  return navigator.webdriver === true
+}

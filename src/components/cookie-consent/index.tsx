@@ -10,6 +10,7 @@ import {
   TAWK_TO_PROPERTY,
   CROSS_DOMAIN_DOMAINS,
   GA_DELIVERY,
+  isAutomatedBrowser,
 } from '@/lib/analytics-config'
 import { updateGoogleConsent, type ConsentPreferences } from '@/lib/consent-mode'
 
@@ -303,6 +304,13 @@ export default function CookieConsent() {
    */
   const loadDefaultTags = useCallback(
     (includeClarity: boolean) => {
+      // Load nothing for automated browsers. See isAutomatedBrowser —
+      // one crawl of the sitemap otherwise produces ~100 sessions against
+      // a site that sees ~950 a month, and it looks like real growth.
+      // Placed here rather than in each loader so a future tag cannot be
+      // added past the guard by accident.
+      if (isAutomatedBrowser()) return
+
       loadGoogleTagManager()
       loadGoogleAnalytics()
       if (includeClarity) loadMicrosoftClarity()
@@ -452,7 +460,7 @@ export default function CookieConsent() {
       // with nothing configured to receive them.
       loadDefaultTags(prefs.analytics)
 
-      if (prefs.marketing) {
+      if (prefs.marketing && !isAutomatedBrowser()) {
         loadMetaPixel()
       }
     },
