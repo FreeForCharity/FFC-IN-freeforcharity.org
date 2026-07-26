@@ -112,7 +112,13 @@ test.describe('Analytics + widget loading', () => {
     await clearConsent(page)
 
     const defaults = await consentCalls(page, 'default')
-    expect(defaults.length).toBe(2)
+    // At least the regional denial and the global grant. Not an exact
+    // count: adding a further region-scoped override (a jurisdiction
+    // beyond the EEA/UK/CH adopting the same rule) would be correct and
+    // should not fail this test. What matters is asserted below — that
+    // both the regional and global defaults exist and say the right
+    // things, and that they precede the first tag command.
+    expect(defaults.length).toBeGreaterThanOrEqual(2)
 
     // Region-scoped denial for the EEA/UK/CH, per Google's EU User
     // Consent Policy — the only place opt-in is actually required.

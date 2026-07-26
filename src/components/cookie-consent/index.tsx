@@ -417,9 +417,10 @@ export default function CookieConsent() {
       // denied. Tags that are already loaded pick it up immediately.
       updateGoogleConsent(prefs)
 
-      // GTM rides alongside GA4 — if the operator wires GA4 inside GTM
-      // via a tag, they should unset NEXT_PUBLIC_GA_MEASUREMENT_ID to
-      // avoid double-firing.
+      // GTM rides alongside GA4. Which of the two actually configures
+      // GA4 is decided by GA_DELIVERY — never by blanking a measurement
+      // ID, which would leave trackConversion() still emitting events
+      // with nothing configured to receive them.
       loadDefaultTags(prefs.analytics)
 
       if (prefs.marketing) {
