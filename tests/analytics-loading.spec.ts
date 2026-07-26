@@ -106,6 +106,16 @@ async function clearConsent(page: Page) {
 test.describe('Analytics + widget loading', () => {
   test.beforeEach(async ({ context }) => {
     await context.clearCookies()
+    // Playwright sets navigator.webdriver, and the site now skips all tag
+    // loading for automated browsers so crawls stop polluting GA4 (see
+    // isAutomatedBrowser). This suite exists precisely to exercise tag
+    // loading, so it opts back in explicitly — which also means the guard
+    // itself is covered by its own unit test rather than by omission here.
+    await context.addInitScript(() => {
+      ;(
+        window as unknown as { __ffcAllowAutomatedAnalytics?: boolean }
+      ).__ffcAllowAutomatedAnalytics = true
+    })
   })
 
   test('consent defaults are set before any Google tag loads', async ({ page }) => {

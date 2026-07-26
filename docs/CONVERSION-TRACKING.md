@@ -123,6 +123,32 @@ That restores the self-contained gtag path, including the verified `linker`.
 Unpublishing the GTM version alone would leave no GA4 at all, since under `gtm`
 the site emits none itself.
 
+### Automated browsers are excluded
+
+`isAutomatedBrowser()` (in `analytics-config.ts`) skips **all** tag loading when
+`navigator.webdriver` is set — Playwright, Puppeteer, and Lighthouse.
+
+This is not general bot defence; it targets our own automation. Before Consent
+Mode, crawlers were invisible to analytics _by accident_: nothing loaded until a
+visitor clicked "Accept All", and automation never clicks. Removing that gate
+handed every headless run a full set of pageviews. One crawl of the ~58-page
+sitemap produces roughly **100 sessions with a fresh client id per page**, against
+a site that sees about **950 sessions a month** — so a few runs a day would
+outnumber real visitors, and it would read as growth rather than noise. The pages
+are real, the events are well-formed, and nothing in GA4 marks them synthetic.
+
+This repo's own `scripts/visual-regression/capture.mjs` drives real Chromium at
+production, and the scheduled prod-smoke and outbound-link workflows touch it too.
+
+The Playwright suite opts back in via `window.__ffcAllowAutomatedAnalytics`, set
+in `addInitScript` — it exists to exercise tag loading. The guard therefore has
+its own unit coverage in `__tests__/lib/automated-browser.test.ts`, since the e2e
+tests deliberately bypass it.
+
+Note this does **not** suppress `dataLayer` pushes from `trackConversion()`. Those
+are harmless with no tags loaded — nothing forwards them — and keeping them means
+the conversion e2e tests stay meaningful without the opt-in.
+
 ### Tagging a CTA
 
 Most CTAs need nothing. `classifyConversionHref()` recognises the destination, so
