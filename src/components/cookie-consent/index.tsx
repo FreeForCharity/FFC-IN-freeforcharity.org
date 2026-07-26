@@ -32,6 +32,29 @@ const CONSENT_KEY = 'cookie-consent'
  * reappeared. Their choice was sitting in the cookie the whole time,
  * unread. Reading it back makes the fallback real rather than aspirational.
  */
+/**
+ * `; domain=.<apex>` for the consent cookie, or '' where that would be
+ * invalid.
+ *
+ * A domain attribute is rejected outright for `localhost` and bare IP
+ * hosts — which is exactly what the dev server and the Playwright suite
+ * run on, so getting this wrong would silently stop consent persisting
+ * anywhere except production. Returning '' there keeps the cookie
+ * host-only, which is correct when there are no sibling hosts to share
+ * it with.
+ */
+function consentCookieDomain(): string {
+  if (typeof window === 'undefined') return ''
+  const host = window.location.hostname
+
+  // IPv6 arrives bracketed or colon-separated; IPv4 is four dotted octets.
+  if (host.includes(':') || /^\d{1,3}(\.\d{1,3}){3}$/.test(host)) return ''
+  // Single-label hosts (localhost, a container name) cannot take a domain.
+  if (!host.includes('.')) return ''
+
+  return `; domain=.${host.replace(/^www\./, '')}`
+}
+
 function readStoredConsent(): string | null {
   try {
     const stored = localStorage.getItem(CONSENT_KEY)
@@ -327,7 +350,22 @@ export default function CookieConsent() {
       const cookieValue = JSON.stringify(prefs)
       const secureFlag =
         typeof window !== 'undefined' && window.location.protocol === 'https:' ? '; Secure' : ''
-      document.cookie = `cookie-consent=${encodeURIComponent(cookieValue)}; path=/; max-age=31536000; SameSite=Lax${secureFlag}`
+      // Scope the choice to the registrable domain so it is shared across
+      // hosts. Both `freeforcharity.org` and `www.freeforcharity.org`
+      // serve the site (verified: each returns 200 with no redirect), and
+      // a host-only cookie is not visible to the other one. That is not
+      // just a repeated banner — a visitor who DECLINED on www would be
+      // treated as undecided on the apex, and analytics would run again
+      // against their stated choice. localStorage cannot fix this: it is
+      // origin-scoped, so the shared cookie is the only mechanism, which
+      // is what readStoredConsent() falls back to on the other host.
+      const domainAttr = consentCookieDomain()
+      if (domainAttr) {
+        // Drop any pre-existing host-only copy first, or it shadows the
+        // shared one and keeps serving a stale choice.
+        document.cookie = `${CONSENT_KEY}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+      }
+      document.cookie = `${CONSENT_KEY}=${encodeURIComponent(cookieValue)}; path=/; max-age=31536000; SameSite=Lax${secureFlag}${domainAttr}`
 
       // Clear third-party cookies whenever the resulting state denies a
       // category — NOT only when it differs from a previous choice, and
