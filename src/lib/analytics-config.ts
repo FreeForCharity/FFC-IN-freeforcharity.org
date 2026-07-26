@@ -47,12 +47,17 @@ export const GTM_CONTAINER_ID = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID ?? 'GTM
  * and double-counted pageviews look entirely plausible in GA4 — there is
  * no error, no warning, and no way to separate them afterwards.
  *
- * DEFAULT IS 'gtm' as of the cutover (2026-07-26, issue #510). This value
- * briefly defaulted to 'direct' so that merging could not silently
- * disable GA4 before anyone had decided to switch — an accidental cutover
- * is the dangerous one, because a forgotten GTM publish leaves zero
- * measurement. That decision has now been made deliberately, so the
- * default reflects production.
+ * DEFAULT IS 'gtm' as of the cutover (issue #510) — which means THIS REPO
+ * ALONE DOES NOT DELIVER GA4. Under 'gtm' the site emits nothing itself;
+ * measurement exists only while GTM container version 2 is published, a
+ * state nothing here can assert. A green build is not evidence that
+ * anything is being measured.
+ *
+ * This value briefly defaulted to 'direct' so that merging could not
+ * silently disable GA4 before anyone had decided to switch — an
+ * accidental cutover is the dangerous one, because a forgotten GTM
+ * publish leaves zero measurement. That decision has since been made
+ * deliberately, so the default reflects the intended production setup.
  *
  * It is set here rather than as a deploy-only env var on purpose: the
  * tests assert behaviour against this constant, so a build-time override

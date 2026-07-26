@@ -59,19 +59,48 @@ function consentCookieDomain(): string {
  * `freeforcharity.org` and `www.freeforcharity.org`, since localStorage
  * is origin-scoped and both hosts serve this site.
  */
-function readStoredConsent(): string | null {
-  try {
-    const stored = localStorage.getItem(CONSENT_KEY)
-    if (stored) return stored
-  } catch {
-    // localStorage unavailable — fall through to the cookie.
-  }
-
+function readConsentCookie(): string | null {
   if (typeof document === 'undefined') return null
-  const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${CONSENT_KEY}=([^;]*)`))
-  if (!match) return null
+
+  // There can legitimately be more than one cookie of this name in
+  // flight — a host-only copy left by a build that predates domain
+  // scoping, alongside the shared one. Take the first that actually
+  // parses, rather than assuming position implies freshness.
+  const pattern = new RegExp(`(?:^|;\\s*)${CONSENT_KEY}=([^;]*)`, 'g')
+  const jar = document.cookie
+  let match: RegExpExecArray | null
+  while ((match = pattern.exec(jar)) !== null) {
+    try {
+      const value = decodeURIComponent(match[1])
+      JSON.parse(value)
+      return value
+    } catch {
+      // Malformed or truncated copy — try the next one.
+    }
+  }
+  return null
+}
+
+function readStoredConsent(): string | null {
+  // COOKIE FIRST, localStorage only as a fallback.
+  //
+  // localStorage is per-ORIGIN, so `freeforcharity.org` and
+  // `www.freeforcharity.org` keep separate copies that never sync. If it
+  // were preferred, this would happen: accept on the apex, later decline
+  // on www (cookie updated, shared), then return to the apex — whose
+  // localStorage still says accepted, and wins. The site would run
+  // analytics against a decline the visitor had already made, on a host
+  // they had already made it on.
+  //
+  // The cookie is the only copy both hosts share and the only one that
+  // reflects the most recent choice wherever it was made, so it is
+  // authoritative. localStorage remains a fallback for the case the
+  // cookie cannot be read at all.
+  const fromCookie = readConsentCookie()
+  if (fromCookie) return fromCookie
+
   try {
-    return decodeURIComponent(match[1])
+    return localStorage.getItem(CONSENT_KEY)
   } catch {
     return null
   }

@@ -94,12 +94,17 @@ cutover can be reverted without a code change if GTM misbehaves in production.
 
 ### Cutover order (issue #510)
 
-The cutover was performed on 2026-07-26; `gtm` is the live default. It was
-briefly defaulted to `direct` beforehand so that merging could not silently
-disable GA4 before anyone had decided to switch — an _accidental_ cutover is the
-dangerous one, since a forgotten publish leaves zero measurement.
+**`gtm` is the committed default, which means this repo alone cannot deliver
+GA4.** Under `gtm` the site emits nothing itself, so measurement is live only
+once GTM container version 2 has been **published** — a step that happens in Tag
+Manager, not here, and that no test or build in this repo can verify. Deploying
+and assuming measurement resumed is the mistake to avoid.
 
-GTM publishes are instant and decoupled from the site deploy, so the order was:
+It was briefly defaulted to `direct` before the cutover so that merging could not
+silently disable GA4 before anyone had decided to switch — an _accidental_
+cutover is the dangerous one, since a forgotten publish leaves zero measurement.
+
+GTM publishes are instant and decoupled from the site deploy, so the order is:
 
 1. Deploy with `GA_DELIVERY = 'gtm'`. **A brief measurement gap starts here** —
    the site no longer fires GA4 and GTM has no live tag yet.
