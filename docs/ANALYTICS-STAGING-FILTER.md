@@ -45,10 +45,13 @@ not a rounding error, and on 20260726 it actually outran `www.`. Any
 filter or trigger condition that names only one host is wrong.
 
 Two things follow. First, the code-level guard is the actual fix and it
-has landed: `isAutomatedBrowser()` in `src/lib/analytics-config.ts`
-(PR #512) skips all tag loading when `navigator.webdriver` is set, which
-covers Playwright, Puppeteer, and Lighthouse — i.e. every automated
-source this repo runs. Second, the filters below are still needed, both
+has landed (PR #512): `isAutomatedBrowser()` in
+`src/lib/analytics-config.ts` is the predicate — it reports whether
+`navigator.webdriver` is set — and the early return that acts on it lives
+in `loadDefaultTags()` in `src/components/cookie-consent/index.tsx`,
+which returns before injecting anything. Between them that covers
+Playwright, Puppeteer, and Lighthouse — i.e. every automated source this
+repo runs. Second, the filters below are still needed, both
 to exclude the ~1,000 sessions already collected (nothing here is
 retroactive at the collection layer — only report filters can hide
 history) and to catch hits from a hand-driven `npm run dev` browser,
@@ -83,12 +86,21 @@ The original plan here was for **this site** to send
 `location.hostname !== 'freeforcharity.org'`, paired with the built-in
 _Internal Traffic_ data filter set to **Exclude**.
 
-That is no longer the right place for it. Since the issue #510 cutover
-this site emits no GA4 config of its own (`GA_DELIVERY = 'gtm'`) — the
-config belongs to GTM's Google tag, so the equivalent change is a GTM
+That is no longer the right place for it **while `GA_DELIVERY = 'gtm'`**,
+which is the default and what production runs since the issue #510
+cutover. Under that mode the site emits no GA4 config of its own — the
+config belongs to GTM's Google tag — so the equivalent change is a GTM
 field or, better, the hostname **trigger exception** in the GTM section
-below. Don't add `traffic_type` to this codebase; it would have nothing
-to attach to.
+below. Adding `traffic_type` to this codebase would have nothing to
+attach to.
+
+The qualifier is deliberate: `NEXT_PUBLIC_GA_DELIVERY=direct` restores
+the self-contained gtag path (the documented rollback, and what a local
+`direct` build exercises), and in _that_ mode this site does emit its own
+config and a `traffic_type` field there would work. So if you are reading
+this during a rollback, Option B is live again and the GTM section below
+is the part that does not apply. Check which mode the build under
+investigation actually used before trusting either.
 
 The data-filter half still applies if you go the GTM-field route: GA4 →
 Admin → Data Settings → **Data Filters** → _Internal Traffic_ →
