@@ -21,20 +21,28 @@ localhost hit to be recorded. And automated runs are not one-at-a-time:
 each Playwright pass over the ~58-page sitemap produces a session per
 page with a fresh client id. Hostname breakdown from the GA4 Data API:
 
-| Date     | Hostname                 | Sessions  | Pageviews |
-| -------- | ------------------------ | --------- | --------- |
-| 20260723 | `www.freeforcharity.org` | 19        | 21        |
-| 20260724 | `www.freeforcharity.org` | 9         | 8         |
-| 20260724 | `localhost`              | 4         | 4         |
-| 20260725 | `localhost`              | **1,019** | **1,318** |
-| 20260725 | `www.freeforcharity.org` | 13        | 17        |
-| 20260726 | `freeforcharity.org`     | 2         | 2         |
+| Date     | `www.freeforcharity.org` | `freeforcharity.org` | `localhost` |
+| -------- | ------------------------ | -------------------- | ----------- |
+| 20260720 | 17                       | 7                    | 2           |
+| 20260721 | 12                       | 5                    | —           |
+| 20260722 | 22                       | 5                    | —           |
+| 20260723 | 19                       | 5                    | —           |
+| 20260724 | 9                        | 5                    | 4           |
+| 20260725 | 13                       | 9                    | **1,019**   |
+| 20260726 | 1                        | 2                    | —           |
+| **Sum**  | **93**                   | **38**               | **1,025**   |
 
-Real traffic runs ~10–20 sessions a day. A single day of local test runs
-produced **1,019** — roughly half the property's entire 28-day session
-count, and about 50× that day's real traffic. Nothing in GA4 marks it as
-synthetic: the pages are real and the events are well-formed, so it
-reads as a traffic surge.
+Real traffic runs ~15–25 sessions a day across both production hosts. A
+single day of local test runs produced **1,019** — roughly half the
+property's entire 28-day session count, and about 45× that day's real
+traffic. Nothing in GA4 marks it as synthetic: the pages are real and
+the events are well-formed, so it reads as a traffic surge.
+
+Note the split between the two production hosts, because the filters
+below depend on it: `www.` carries about 70% of real sessions and the
+apex about 30%. **Both are ordinary production traffic** — the apex is
+not a rounding error, and on 20260726 it actually outran `www.`. Any
+filter or trigger condition that names only one host is wrong.
 
 Two things follow. First, the code-level guard is the actual fix and it
 has landed: `isAutomatedBrowser()` in `src/lib/analytics-config.ts`
@@ -63,10 +71,10 @@ risk of accidentally dropping real production data.
 2. Build a comparison: **Dimension = `Hostname`**, **Match type = matches regex**, **Value = `^(www\.)?freeforcharity\.org$`**
 3. Apply. For ad-hoc analysis, do the same in **Explore** → add a filter on the `Hostname` dimension.
 
-**Include `www.`** — it is not hypothetical. The hostname table above
-shows `www.freeforcharity.org` carrying most real sessions and the bare
-apex carrying a handful, so an apex-only comparison hides nearly all of
-your genuine traffic while looking like it worked.
+**Match both hosts.** The hostname table above shows `www.` at ~70% of
+real sessions and the apex at ~30%, so a comparison naming either one
+alone silently discards a large slice of genuine traffic while looking
+like it worked.
 
 ### Option B — Stop collection entirely (superseded — see [GTM](#gtm))
 
@@ -133,13 +141,12 @@ hostnames:
 4. Publish a new container version
 
 **Match both apex and `www.`, and anchor the pattern.** The hostname
-table above is the reason: most real sessions arrive on
-`www.freeforcharity.org`, so a condition that allows only the bare apex
-would block the majority of legitimate production traffic — the exact
-opposite of the intent, and silent, since a tag that never fires looks
-identical to a site with no visitors. The `^…$` anchors matter too: an
-unanchored `freeforcharity.org` would also allow
-`freeforcharity.org.example.com`.
+table above is the reason: real traffic is split ~70/30 between `www.`
+and the apex, so a condition allowing only one host blocks a large share
+of legitimate production traffic — the exact opposite of the intent, and
+silent, since a tag that never fires looks identical to a site with no
+visitors. The `^…$` anchors matter too: an unanchored
+`freeforcharity.org` would also allow `freeforcharity.org.example.com`.
 
 Verify before publishing: GTM **Preview** on both `https://freeforcharity.org/`
 and `https://www.freeforcharity.org/` should show the GA4 tags _fired_,
