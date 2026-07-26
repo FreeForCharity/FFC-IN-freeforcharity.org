@@ -160,9 +160,16 @@ export default function CookieConsent() {
       !document.querySelector(`script[src*="googletagmanager.com/gtm.js"]`)
     ) {
       // Standard GTM snippet, escaped for textContent. Loads the GTM
-      // container which can itself fire GA4, Meta Pixel, Clarity, etc.
-      // via tag configuration in the GTM dashboard — avoids hard-coding
-      // those IDs in this file once an operator wires them up in GTM.
+      // container, which can itself fire GA4, Meta Pixel, Clarity, etc.
+      // via tag configuration in the GTM dashboard.
+      //
+      // Whether GA4 comes from GTM or from this file is decided by
+      // GA_DELIVERY — NOT by blanking NEXT_PUBLIC_GA_MEASUREMENT_ID, as
+      // an earlier version of this comment suggested. Clearing the ID
+      // would stop the loader here while leaving trackConversion() still
+      // calling gtag('event', …) under 'direct', queueing conversions
+      // into a dataLayer with no GA4 configured to receive them. Set
+      // GA_DELIVERY to match where GA4 is actually configured.
       const gtmScript = document.createElement('script')
       gtmScript.textContent = `
         (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

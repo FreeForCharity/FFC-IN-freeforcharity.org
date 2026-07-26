@@ -1,6 +1,5 @@
 import { test, expect, type Page } from '@playwright/test'
 import {
-  GA_MEASUREMENT_ID,
   GTM_CONTAINER_ID,
   CLARITY_PROJECT_ID,
   TAWK_TO_PROPERTY,
@@ -74,11 +73,24 @@ async function consentCalls(
  * rather than eyeballing.
  */
 async function assertGaDeliveryIsExclusive(page: Page) {
-  const selfInjected = await scriptCount(page, `gtag/js?id=${GA_MEASUREMENT_ID}`)
+  // Detect the site's OWN inline gtag config, not the presence of
+  // gtag.js.
+  //
+  // Under 'gtm', GTM's Google tag injects gtag.js itself once the
+  // container is published — so counting that script would flip this
+  // assertion from passing to failing the moment the container went
+  // live, while the site was behaving exactly as designed. The failure
+  // would look like a regression in the site and would in fact be a
+  // regression in the test.
+  //
+  // `anonymize_ip` appears only in the config snippet this component
+  // builds, so it is present in 'direct' and absent in 'gtm' regardless
+  // of what GTM does.
+  const selfConfigured = await scriptCount(page, 'anonymize_ip')
   if (GA_DELIVERY === 'direct') {
-    expect(selfInjected).toBeGreaterThan(0)
+    expect(selfConfigured).toBeGreaterThan(0)
   } else {
-    expect(selfInjected).toBe(0)
+    expect(selfConfigured).toBe(0)
   }
 }
 
