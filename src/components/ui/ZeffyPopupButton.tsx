@@ -11,10 +11,16 @@ interface ZeffyPopupButtonProps {
   variant?: 'primary' | 'secondary'
   className?: string
   /**
-   * Campaign name recorded on the `donate_open` conversion. Defaults to
-   * the button label, which is right for the general-fund CTAs; campaign
-   * cards pass the campaign title so GA4 can break donations down by
-   * appeal rather than by button text.
+   * Optional overrides for the `donate_open` conversion. Nothing passes
+   * them today: the campaign slug is derived from the Zeffy URL and the
+   * label falls back to the button text, which is accurate for every
+   * current CTA.
+   *
+   * They exist for the case where a component knows something the URL
+   * does not — e.g. surfacing a readable appeal name against a campaign
+   * whose Zeffy slug is an opaque UUID (several are; see
+   * src/data/donation-campaigns.ts). Passing only one is fine: the
+   * conversion merges these over the URL-derived values field by field.
    */
   campaignName?: string
   /** Stable campaign key (DonationCampaign.key) for the conversion id. */

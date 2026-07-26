@@ -47,24 +47,29 @@ export const GTM_CONTAINER_ID = process.env.NEXT_PUBLIC_GTM_CONTAINER_ID ?? 'GTM
  * and double-counted pageviews look entirely plausible in GA4 — there is
  * no error, no warning, and no way to separate them afterwards.
  *
- * DEFAULT IS 'direct', and deliberately so. Under 'gtm' this site emits
- * no GA4 at all — measurement depends entirely on GTM container version 2
- * being published. If that default applied on merge, deploying this
- * change would stop GA4 dead until somebody remembered to publish, and a
- * forgotten publish means zero measurement: precisely the condition this
- * work exists to fix, reintroduced silently.
+ * DEFAULT IS 'gtm' as of the cutover (2026-07-26, issue #510). This value
+ * briefly defaulted to 'direct' so that merging could not silently
+ * disable GA4 before anyone had decided to switch — an accidental cutover
+ * is the dangerous one, because a forgotten GTM publish leaves zero
+ * measurement. That decision has now been made deliberately, so the
+ * default reflects production.
  *
- * So the cutover is an explicit act, not a side effect of merging. Set
- * NEXT_PUBLIC_GA_DELIVERY=gtm at build time (or flip this default in a
- * one-line PR), deploy, and THEN publish GTM version 2 — see issue #510.
- * Publishing before the deploy lands means both paths fire GA4 at once.
+ * It is set here rather than as a deploy-only env var on purpose: the
+ * tests assert behaviour against this constant, so a build-time override
+ * in production alone would leave every test exercising the mode
+ * production does NOT run. Keeping them identical is the point.
  *
- * Any unrecognised value resolves to 'direct' for the same reason: the
- * failure mode of guessing wrong should be "measured twice and noticed",
- * never "measured not at all and unnoticed".
+ * Under 'gtm' this site emits no GA4 itself — measurement depends
+ * entirely on GTM container version 2 being published. Order of
+ * operations, once more: deploy this, THEN publish. Publishing first
+ * means both paths fire GA4 until the deploy lands.
+ *
+ * ROLLBACK: build with NEXT_PUBLIC_GA_DELIVERY=direct and redeploy, which
+ * restores the self-contained gtag path including the verified `linker`.
+ * Unpublishing the GTM version alone would leave no GA4 at all.
  */
 export const GA_DELIVERY: 'gtm' | 'direct' =
-  process.env.NEXT_PUBLIC_GA_DELIVERY === 'gtm' ? 'gtm' : 'direct'
+  process.env.NEXT_PUBLIC_GA_DELIVERY === 'direct' ? 'direct' : 'gtm'
 
 export const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID ?? 'nzldyj4h3k'
 

@@ -783,10 +783,15 @@ export default function CookieConsent() {
             </p>
             {/* Says plainly what happens if the visitor does nothing, rather
                 than implying nothing runs until they click. */}
+            {/* Says what is actually true before a choice. Avoid claiming
+                marketing "cookies" are off: outside the EEA/UK/CH the
+                Consent Mode default GRANTS ad storage. What is true is
+                that no advertising or screen-recording tag runs at all
+                until the visitor turns it on. */}
             <p className="text-sm text-gray-600 mb-3">
               If you make no choice, basic analytics still measures this visit — without cookies and
-              without identifying you in the EEA, the UK, and Switzerland. Screen-activity recording
-              and marketing cookies stay off until you turn them on.
+              without identifying you in the EEA, the UK, and Switzerland. No screen-recording or
+              advertising tools run at all until you turn them on.
             </p>
             <div className="flex items-center gap-4 text-xs text-gray-500">
               <Link href="/privacy-policy/" className="text-blue-600 underline">
