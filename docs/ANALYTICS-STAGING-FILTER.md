@@ -154,29 +154,40 @@ below.
 Both use the same condition: built-in **Page Hostname** → **does not
 match RegEx** → `^(www\.)?freeforcharity\.org$`.
 
-1. GTM → **Triggers** → New → _Initialization_ → add the condition.
-   Name it something like `Block — non-production hostname (init)`.
-2. GTM → **Triggers** → New → _Custom Event_ → **Event name** `.*` with
+1. **Read the Google tag's own trigger first.** GTM → **Tags** → the
+   Google tag → note what is listed under _Triggering_. It is one of the
+   built-ins — _All Pages_, _Initialization – All Pages_, or _Consent
+   Initialization – All Pages_ — and **you must match it**, because an
+   exception of a different type is never evaluated (see the warning).
+   Don't assume: the two FFC containers genuinely differ here.
+   `GTM-NJ4DXH9` (freeforcharity.org) fires its Google tag on built-in
+   trigger `2147479553`, while `GTM-WMZH965Q` (ffcadmin.org) uses
+   `2147479573`. The Tag Manager API returns only these numeric ids and
+   does not expose their names, so the UI is the authority — go look.
+2. GTM → **Triggers** → New → the **same type** you just read → add the
+   condition. Name it `Block — non-production hostname (page)`.
+3. GTM → **Triggers** → New → _Custom Event_ → **Event name** `.*` with
    **use regex matching** checked → add the same condition. Name it
    `Block — non-production hostname (custom event)`.
-3. On the **Google tag**, add the _Initialization_ blocker as an
-   **Exception**. That tag fires on the built-in **Initialization – All
-   Pages** trigger (`2147479553`), so the exception has to be an
-   Initialization trigger to match.
-4. On each of the **four conversion event tags** (`donate_open`,
+4. On the **Google tag**, add the blocker from step 2 as an **Exception**.
+5. On each of the **four conversion event tags** (`donate_open`,
    `donate_form_view`, `volunteer_apply`, `service_application_start`),
    add the _Custom Event_ blocker as an Exception.
-5. Publish a new container version.
+6. Publish a new container version.
 
 > **One blocking trigger will not cover both.** GTM evaluates an
-> exception only on the event type its own trigger listens for. A Page
-> View or Initialization blocker is never evaluated when a tag fires on a
-> Custom Event, and vice versa — so a single exception silently protects
-> only half the tags while appearing to be applied everywhere. This step
-> originally described picking _Page View_ **or** _Custom Event_ as
-> though they were interchangeable; they are not, and the Page View
-> option was doubly wrong because the Google tag fires on Initialization,
-> which a Page View blocker also misses.
+> exception only on the event type its own trigger listens for. A page-
+> level blocker (_All Pages_ / _Initialization_) is never evaluated when a
+> tag fires on a Custom Event, and vice versa — so a single exception
+> silently protects only half the tags while appearing to be applied
+> everywhere. This step originally described picking _Page View_ **or**
+> _Custom Event_ as though they were interchangeable; they are not.
+>
+> It then went too far the other way and asserted the Google tag fires on
+> _Initialization – All Pages_, naming trigger `2147479553` as that
+> trigger. That mapping is unverified — the API exposes the id but not its
+> name — so the instruction is now "read the tag's actual trigger and
+> match it" rather than a guess dressed as a fact. Step 1 is the check.
 
 **Match both apex and `www.`, and anchor the pattern.** The hostname
 table above is the reason: real traffic is split ~70/30 between `www.`
