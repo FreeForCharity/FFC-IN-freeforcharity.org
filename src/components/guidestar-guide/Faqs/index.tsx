@@ -298,15 +298,12 @@ const index = () => {
               each year you earn a new seal.
             </li>
           </ul>
-          {/* TODO: recapture against app.candid.org — this is still the retired guidestar.org
-              "Step 3: Benefits" screen, so the alt text below describes that older screen rather
-              than the four benefits listed above. Swap the asset and the alt together. */}
           <Image
-            src={assetPath('/Images/preparing-to-share.webp')}
-            alt="The retired guidestar.org Update Nonprofit Profile screen, on Step 3: Benefits, with 'Share your Seal on your website' and 'Share your full profile' outlined in red"
-            width={780}
-            height={100}
-            className="w-[780px] h-auto object-cover"
+            src={assetPath('/Images/candid-seal-benefits.webp')}
+            alt="The Benefits of Candid Seals of Transparency page for Free For Charity, listing donations with Apple Pay, the sharable full organization profile link, the outreach toolkit, and the dynamic Seal web widget, each with its own button"
+            width={1148}
+            height={1952}
+            className="w-full max-w-[780px] h-auto"
           />
         </div>
 

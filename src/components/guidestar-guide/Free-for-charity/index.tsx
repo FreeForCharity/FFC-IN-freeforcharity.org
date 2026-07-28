@@ -29,8 +29,7 @@ const Index = () => {
           <strong>
             To be supported by Free For Charity, we require organizations to be at least Gold
           </strong>{' '}
-          and to upload info for your board and IRS Designation Documents. See the highlighted areas
-          below.
+          and to upload info for your board and IRS Designation Documents.
         </p>
 
         {/* Seals expire — Candid's own best-practice guidance */}
@@ -62,17 +61,15 @@ const Index = () => {
           seal. Work the panel top to bottom and you cannot miss a requirement.
         </p>
 
-        {/* Responsive Image with Proper Dimensions */}
-        {/* TODO: recapture against app.candid.org — this predates the current editor, so it
-            shows a 2024 seal and the old field grouping rather than the checklist panel
-            described above. Swap the asset and the alt together. */}
+        {/* Intrinsic size given so Next.js reserves the right aspect ratio; max-w rather than a
+            fixed w so the screenshot cannot overflow narrow viewports. */}
         <div className="relative w-full h-auto">
           <Image
-            src={assetPath('/Images/free-for-charity.webp')}
-            alt="Free For Charity's Candid seal checklist, with Bronze, Silver, Gold and Platinum each 100% complete and the fields Free For Charity requires outlined in red"
-            width={780}
-            height={100}
-            className="w-[780px] h-auto object-cover"
+            src={assetPath('/Images/candid-seal-checklist.webp')}
+            alt="Free For Charity's profile in the Candid editor, with the 'Fields required to earn a 2026 Seal of Transparency' panel open on the right showing Bronze, Silver, Gold and Platinum each 100% complete and every required field green-checked"
+            width={1560}
+            height={1655}
+            className="w-full max-w-[780px] h-auto"
           />
         </div>
       </div>
