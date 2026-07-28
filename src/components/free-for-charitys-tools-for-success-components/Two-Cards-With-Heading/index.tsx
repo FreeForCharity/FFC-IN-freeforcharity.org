@@ -18,20 +18,24 @@ const index = () => {
 
           <SlidingCard
             direction="left"
-            subtitle="Guidestar (free with paid options)"
+            subtitle="Candid, formerly GuideStar (free with paid options)"
             description={
               <>
                 This charity provides profiles of nearly every charity in the world. It also
                 provides an API that lets others check on the nonprofit status of any charity by
                 name, EIN, or other metrics. Many of the charity for charity sites as well as
-                indirect sites that provide discounts to nonprofits require a completed profile on
-                Guide Star before giving free or discounted items to your organization. Create your
+                indirect sites that provide discounts to nonprofits require a completed Candid
+                profile before giving free or discounted items to your organization. Claim your
                 profile and have it validated at the highest level possible here before seeking the
-                other services.
+                other services — our{' '}
+                <a href="/guidestar-guide/" className="underline">
+                  Candid guide
+                </a>{' '}
+                walks you through it.
               </>
             }
             buttonText="Available Here"
-            buttonLink="https://www.guidestar.org/"
+            buttonLink="https://candid.org/claim-nonprofit-profile/"
             imageSrc="/Images/guidestar.webp" // 👈 image passed as prop
           />
           <SlidingCard

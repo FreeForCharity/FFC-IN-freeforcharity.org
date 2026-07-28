@@ -29,14 +29,21 @@ test.describe('External Link Targets', () => {
     }
   })
 
-  test('footer GuideStar link should have target="_blank"', async ({ page }) => {
+  test('footer Candid profile links should open in a new tab', async ({ page }) => {
     await page.goto('/')
 
+    // Both the seal and the "Direct Candid Profile Link" button point at
+    // app.candid.org — guidestar.org now only survives as the widget host on
+    // the seal's <img src>, which is not a link.
     const footer = page.locator('footer')
-    const guidestarLink = footer.locator('a[href*="guidestar.org"]').first()
-    await expect(guidestarLink).toBeVisible()
-    // GuideStar seal link uses <a> not <Link>, may or may not have target
-    // The profile link uses Next.js Link component
+    const candidLinks = footer.locator('a[href*="app.candid.org"]')
+    await expect(candidLinks).not.toHaveCount(0)
+
+    for (const link of await candidLinks.all()) {
+      await expect(link).toHaveAttribute('target', '_blank')
+      await expect(link).toHaveAttribute('rel', /noopener/)
+      await expect(link).toHaveAttribute('rel', /noreferrer/)
+    }
   })
 
   test('footer Supported Charity Login link should have target="_blank"', async ({ page }) => {

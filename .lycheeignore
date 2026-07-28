@@ -118,6 +118,14 @@ http://www.fiverr.com/**
 # GuideStar/Candid returns 403 to bots — pages still reachable in a browser.
 # app.candid.org (the profile app, now behind Cloudflare) and learning.candid.org
 # (help.candid.org's 301 target) do the same.
+#
+# Quirk worth knowing before assuming a guidestar.org URL is dead: their
+# Cloudflare rule keys on the exact path, so the SAME profile answers 403
+# ("Just a moment...") without a trailing slash and 200 with one —
+#   /profile/46-2471893   -> 403 challenge
+#   /profile/46-2471893/  -> 200, full profile page
+# A genuinely unknown id (/profile/0000000000) 302s to /Error/HttpError404
+# instead, so a 403 here means the route is live, not retired.
 https://www.guidestar.org/**
 https://help.candid.org/**
 https://app.candid.org/**

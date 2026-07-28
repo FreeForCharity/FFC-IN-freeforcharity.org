@@ -51,7 +51,7 @@ const Footer: React.FC = () => {
               />
             </a>
             <Link
-              href="https://www.guidestar.org/profile/shared/bbbe173a-87b9-4af9-a8a2-cae255a95742"
+              href="https://app.candid.org/profile/9326392/free-for-charity/?pkId=7232730a-03b5-467f-a82c-443dcd2122ed&isActive=true"
               target="_blank"
               rel="noopener noreferrer"
               className="group relative my-4 flex w-full max-w-[230px] items-center justify-between
@@ -60,7 +60,7 @@ const Footer: React.FC = () => {
               data-font="aria-font"
             >
               <span className="text-[17px] font-medium leading-tight sm:text-[18px] md:text-[20px] transition-transform duration-300 group-hover:-translate-x-1">
-                Direct GuideStar Profile Link
+                Direct Candid Profile Link
               </span>
 
               <ArrowRight

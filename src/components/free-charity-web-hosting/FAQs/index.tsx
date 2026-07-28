@@ -148,9 +148,12 @@ const AccordionLayout = () => {
                 Yes, We have had IRS designation since 2014 and have been building our systems and
                 testing or support for several years. While charities for charities are rare they do
                 exist and in fact fill an important need in reducing overhead expenses for other
-                nonprofits. Our IRS designation number (EIN) is 46-2471893. You can see our
-                guidestar profile{' '}
-                <a href="https://www.guidestar.org/profile/46-2471893" className="text-[#0567B1]">
+                nonprofits. Our IRS designation number (EIN) is 46-2471893. You can see our Candid
+                (GuideStar) profile{' '}
+                <a
+                  href="https://app.candid.org/profile/9326392/free-for-charity-46-2471893"
+                  className="text-[#0567B1]"
+                >
                   here.
                 </a>{' '}
                 We are proud to also recommend other charities for charities that inspired us to{' '}
