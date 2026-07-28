@@ -26,7 +26,7 @@ describe('Free-for-charity component', () => {
   it('renders the image with the correct alt text', () => {
     render(<FreeForCharity />)
     const image = screen.getByAltText(
-      'Free For Charity Candid profile seal checklist with the fields FFC requires highlighted'
+      "Free For Charity's Candid seal checklist, with Bronze, Silver, Gold and Platinum each 100% complete and the fields Free For Charity requires outlined in red"
     )
     expect(image).toBeInTheDocument()
     expect(image.tagName).toBe('IMG')

@@ -51,7 +51,7 @@ const index = () => {
               </li>
             </ul>
             <p>
-              NOTE: If your nonprofit is already claimed, then current management has to “Add
+              NOTE: If your nonprofit is already claimed, then the current management has to “Add
               Managers” to allow your email to update the profile.
             </p>
           </AccordianBold>
@@ -298,9 +298,12 @@ const index = () => {
               each year you earn a new seal.
             </li>
           </ul>
+          {/* TODO: recapture against app.candid.org — this is still the retired guidestar.org
+              "Step 3: Benefits" screen, so the alt text below describes that older screen rather
+              than the four benefits listed above. Swap the asset and the alt together. */}
           <Image
             src={assetPath('/Images/preparing-to-share.webp')}
-            alt="The Benefits page in app.candid.org listing Apple Pay donations, the sharable full profile link, the outreach toolkit, and the dynamic Seal web widget"
+            alt="The retired guidestar.org Update Nonprofit Profile screen, on Step 3: Benefits, with 'Share your Seal on your website' and 'Share your full profile' outlined in red"
             width={780}
             height={100}
             className="w-[780px] h-auto object-cover"

@@ -13,12 +13,13 @@ const Index = () => {
         <p
           className="text-[14px] text-[#666] font-semibold leading-relaxed mb-8"
           data-font="aria-font"
-          aria-describedby="A Candid profile is required for onboarding verification"
         >
           Your Candid nonprofit profile — the service most people still know as GuideStar — is the
           main tool for helping you gather the information to complete our onboarding form. Profiles
           are now claimed and edited at{' '}
-          <a href="https://app.candid.org/" className="text-[#0567B1]">
+          {/* underline required: #0567B1 on #666 body text is only 1.02:1, so color alone
+              cannot distinguish the link (WCAG 1.4.1, axe link-in-text-block). */}
+          <a href="https://app.candid.org/" className="text-[#0567B1] underline">
             app.candid.org
           </a>
           , not on guidestar.org. Your goal should be to reach the highest level of completion
@@ -62,10 +63,13 @@ const Index = () => {
         </p>
 
         {/* Responsive Image with Proper Dimensions */}
+        {/* TODO: recapture against app.candid.org — this predates the current editor, so it
+            shows a 2024 seal and the old field grouping rather than the checklist panel
+            described above. Swap the asset and the alt together. */}
         <div className="relative w-full h-auto">
           <Image
             src={assetPath('/Images/free-for-charity.webp')}
-            alt="Free For Charity Candid profile seal checklist with the fields FFC requires highlighted"
+            alt="Free For Charity's Candid seal checklist, with Bronze, Silver, Gold and Platinum each 100% complete and the fields Free For Charity requires outlined in red"
             width={780}
             height={100}
             className="w-[780px] h-auto object-cover"
