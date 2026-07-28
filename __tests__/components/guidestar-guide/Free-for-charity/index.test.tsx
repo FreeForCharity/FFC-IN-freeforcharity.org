@@ -12,7 +12,7 @@ describe('Free-for-charity component', () => {
   it('displays the instructional text correctly', () => {
     render(<FreeForCharity />)
     const instructionText = screen.getByText(
-      /GuideStar is the main tool for helping you gather the information/i
+      /is the main tool for helping you gather the information/i
     )
     expect(instructionText).toBeInTheDocument()
 
@@ -26,7 +26,7 @@ describe('Free-for-charity component', () => {
   it('renders the image with the correct alt text', () => {
     render(<FreeForCharity />)
     const image = screen.getByAltText(
-      'Free For Charity GuideStar onboarding requirements and highlighted fields'
+      'Free For Charity Candid profile seal checklist with the fields FFC requires highlighted'
     )
     expect(image).toBeInTheDocument()
     expect(image.tagName).toBe('IMG')

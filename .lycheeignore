@@ -115,9 +115,13 @@ https://fiverr.com/**
 http://fiverr.com/**
 http://www.fiverr.com/**
 
-# GuideStar/Candid returns 403 to bots — pages still reachable in a browser
+# GuideStar/Candid returns 403 to bots — pages still reachable in a browser.
+# app.candid.org (the profile app, now behind Cloudflare) and learning.candid.org
+# (help.candid.org's 301 target) do the same.
 https://www.guidestar.org/**
 https://help.candid.org/**
+https://app.candid.org/**
+https://learning.candid.org/**
 
 # Zeffy donation-form/thermometer embeds return 403 to CI crawlers — the
 # embeds render fine in browsers (used on the endowment fund + homepage).
@@ -170,10 +174,6 @@ https://embed\.tawk\.to/\$
 # (UnknownIssuer). Fine in browsers; sibling usertraining.lastpass.com is
 # already pinned above for the same reason.
 https://support.lastpass.com/**
-
-# Documentation placeholder in the GuideStar guide's copyable seal-embed
-# snippet — not a real URL (charities substitute their own nonprofit id).
-YOUR_NONPROFIT_ID
 
 
 # Sentry ingest DSN (client identifier in instrumentation-client.ts) -
