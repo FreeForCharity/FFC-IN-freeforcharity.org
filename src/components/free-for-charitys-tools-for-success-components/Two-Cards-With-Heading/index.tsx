@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import SlidingCard from '@/components/ui/SlidingCard'
 
 const index = () => {
@@ -28,9 +29,12 @@ const index = () => {
                 profile before giving free or discounted items to your organization. Claim your
                 profile and have it validated at the highest level possible here before seeking the
                 other services — our{' '}
-                <a href="/guidestar-guide/" className="underline">
+                {/* next/link, not a raw <a>: the GitHub Pages staging deploy builds with
+                    NEXT_PUBLIC_BASE_PATH=/FFC-IN-freeforcharity.org, and only Link applies
+                    that prefix. A root-absolute href would 404 there. */}
+                <Link href="/guidestar-guide/" className="underline">
                   Candid guide
-                </a>{' '}
+                </Link>{' '}
                 walks you through it.
               </>
             }

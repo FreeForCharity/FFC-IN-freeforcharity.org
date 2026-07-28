@@ -152,6 +152,8 @@ const AccordionLayout = () => {
                 (GuideStar) profile{' '}
                 <a
                   href="https://app.candid.org/profile/9326392/free-for-charity-46-2471893"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-[#0567B1]"
                 >
                   here.
