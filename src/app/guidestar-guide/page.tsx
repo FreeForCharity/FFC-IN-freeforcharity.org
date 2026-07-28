@@ -8,7 +8,7 @@ import CallSection from '@/components/help-for-charities-components/call-section
 export const metadata = pageMetadata({
   title: 'GuideStar Guide',
   description:
-    "Guide for achieving GuideStar/Candid Platinum Seal of Transparency. Enhance your charity's credibility and visibility for donors.",
+    "Guide for achieving the Candid (GuideStar) Platinum Seal of Transparency at app.candid.org. Enhance your charity's credibility and visibility for donors.",
   canonical: '/guidestar-guide/',
 })
 
@@ -17,7 +17,7 @@ const index = () => {
     <div>
       <HeroSection
         heading="Guidestar Guide"
-        paragraph="Achieving validation through GuideStar enhances your charity’s credibility and visibility. It reassures donors and stakeholders of its legal compliance and ethical standing, potentially increasing funding opportunities. This guide will help you make the most of your GuideStar profile."
+        paragraph="Achieving validation through Candid — the service formerly known as GuideStar — enhances your charity’s credibility and visibility. It reassures donors and stakeholders of its legal compliance and ethical standing, potentially increasing funding opportunities. This guide walks the current app.candid.org profile, section by section, so you can make the most of it."
         heroImg="/Images/volunteer.webp"
       />
       <FreeForCharity />

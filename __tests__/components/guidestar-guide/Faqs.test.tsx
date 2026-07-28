@@ -4,7 +4,7 @@ import '@testing-library/jest-dom'
 import Faqs from '../../../src/components/guidestar-guide/Faqs/index'
 
 describe('guidestar-guide/Faqs', () => {
-  it('renders the GuideStar transparency seal as a real anchor + image (no dangerouslySetInnerHTML)', () => {
+  it('renders the Candid transparency seal as a real anchor + image (no dangerouslySetInnerHTML)', () => {
     const { container } = render(<Faqs />)
 
     const sealImg = screen.getByAltText('Candid Seal of Transparency') as HTMLImageElement
@@ -16,8 +16,10 @@ describe('guidestar-guide/Faqs', () => {
 
     const wrapAnchor = sealImg.closest('a') as HTMLAnchorElement | null
     expect(wrapAnchor).not.toBeNull()
+    // Candid retired the guidestar.org/profile/shared/<uuid> format; current links are
+    // issued on app.candid.org and the pkId param is what makes them work without a login.
     expect(wrapAnchor!.getAttribute('href')).toBe(
-      'https://www.guidestar.org/profile/shared/bbbe173a-87b9-4af9-a8a2-cae255a95742'
+      'https://app.candid.org/profile/9326392/free-for-charity-46-2471893/?pkId=7232730a-03b5-467f-a82c-443dcd2122ed'
     )
     expect(wrapAnchor!.getAttribute('target')).toBe('_blank')
     expect(wrapAnchor!.getAttribute('rel')).toBe('noopener noreferrer')
