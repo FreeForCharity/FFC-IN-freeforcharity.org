@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import Image from 'next/image'
 import { assetPath } from '@/lib/assetPath'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
@@ -124,13 +125,13 @@ const index = () => {
           <p className="text-[18px] leading-[32px] font-[500] pb-[1em]" data-font="raleway-font">
             Follow the following simple steps to set up your Microsoft 365 Business Premium Account
           </p>
-          <a
+          <Link
             href="/domains/#setupstep2"
             className="text-[25px] leading-[32px] font-[600] text-[#0460C0]"
             data-font="raleway-font"
           >
             See the Microsoft 365 setup steps
-          </a>
+          </Link>
         </div>
 
         <div className="p-[20px] text-center bg-white rounded-[10px] overflow-hidden pt-[30px] pr-[20px] pb-[30px] pl-[20px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.3)]">
@@ -163,13 +164,13 @@ const index = () => {
             Prefer Google? Follow these simple steps to set up your Google Workspace for Nonprofits
             account
           </p>
-          <a
+          <Link
             href="/google-for-nonprofits-guide/"
             className="text-[25px] leading-[32px] font-[600] text-[#0460C0]"
             data-font="raleway-font"
           >
             See the Google Workspace setup steps
-          </a>
+          </Link>
         </div>
       </div>
 

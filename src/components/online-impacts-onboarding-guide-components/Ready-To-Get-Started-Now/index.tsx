@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import TransparentBtn from '@/components/ui/Transparentbtn'
 import AccordionItem from '@/components/ui/Accordian'
 import { hubAddProduct, ONBOARDING_PID } from '@/lib/config'
@@ -79,9 +80,9 @@ const index = () => {
 
           <p className="text-[18px] font-[700] text-[#4a4a4a] mb-[1em]">
             Visit{' '}
-            <a href="/domains/" className="text-[#0567B1]">
+            <Link href="/domains/" className="text-[#0567B1]">
               https://freeforcharity.org/domains
-            </a>{' '}
+            </Link>{' '}
             and follow all steps
           </p>
           <p className="text-[18px] font-[500] text-[#4a4a4a] mb-[1em]">

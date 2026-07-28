@@ -1,5 +1,6 @@
 'use client'
 import React, { useState, useRef } from 'react'
+import SmartLink from '@/components/ui/SmartLink'
 import { FaPlus, FaMinus } from 'react-icons/fa'
 import { domainDonationTaxFaq, hostingBacklogFaq } from '@/data/faqs'
 
@@ -192,9 +193,9 @@ const AccordionLayout = () => {
                     <li key={way.before}>
                       {way.before}
                       {way.link && (
-                        <a href={way.link.href} className="text-[#0567B1]">
+                        <SmartLink href={way.link.href} className="text-[#0567B1]">
                           {way.link.label}
-                        </a>
+                        </SmartLink>
                       )}
                       {way.after}
                     </li>

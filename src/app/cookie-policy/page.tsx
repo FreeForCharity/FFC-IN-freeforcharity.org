@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/page-metadata'
+import Link from 'next/link'
 
 export const metadata = pageMetadata({
   title: 'Cookie Policy',
@@ -505,9 +506,9 @@ export default function CookiePolicy() {
           </ol>
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
             For more information about how we handle your personal data, please see our{' '}
-            <a href="/privacy-policy/" className="text-blue-600 underline">
+            <Link href="/privacy-policy/" className="text-blue-600 underline">
               Privacy Policy
-            </a>
+            </Link>
             .
           </p>
         </div>

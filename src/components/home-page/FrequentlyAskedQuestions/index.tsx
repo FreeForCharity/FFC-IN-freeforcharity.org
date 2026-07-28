@@ -1,4 +1,5 @@
 import React from 'react'
+import SmartLink from '@/components/ui/SmartLink'
 import FrequentlyAskedQuestions from '@/components/ui/Frequently-Asked-Questions'
 import { domainDonationTaxFaq, hostingBacklogFaq } from '@/data/faqs'
 
@@ -268,9 +269,9 @@ const index = () => {
                   <br />
                   {index + 1}. {way.before}
                   {way.link && (
-                    <a href={way.link.href} className="text-[#1c6e92] underline">
+                    <SmartLink href={way.link.href} className="text-[#1c6e92] underline">
                       {way.link.label}
-                    </a>
+                    </SmartLink>
                   )}
                   {way.after}
                 </React.Fragment>

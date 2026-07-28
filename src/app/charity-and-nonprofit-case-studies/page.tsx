@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/page-metadata'
+import Link from 'next/link'
 import React from 'react'
 import HeroSection from '@/components/ui/HeroSection'
 import SuccessStories from '@/components/case-studies/SuccessStories'
@@ -136,13 +137,13 @@ const CaseStudiesPage = () => {
             Contact us if you have a particular case study request or want to be featured in a case
             study.
           </p>
-          <a
+          <Link
             href="/contact-us/"
             className="inline-block px-[30px] py-[10px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
             data-font="montserrat-font"
           >
             Contact Us
-          </a>
+          </Link>
         </div>
       </section>
 

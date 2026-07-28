@@ -96,14 +96,14 @@ const index = () => {
               <ol className="list-decimal list-outside ml-8 mt-1 space-y-1 text-[#666]">
                 <li>
                   (Please read our{' '}
-                  <a
+                  <Link
                     href="/guidestar-guide/"
                     className="text-[#0567B1] underline font-medium"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     GuideStar Guide
-                  </a>
+                  </Link>
                   , we require charities to have at least Gold Seal of Transparency to receive our
                   services.)
                 </li>

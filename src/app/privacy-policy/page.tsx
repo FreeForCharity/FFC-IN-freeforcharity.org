@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/page-metadata'
+import Link from 'next/link'
 
 export const metadata = pageMetadata({
   title: 'Privacy Policy',
@@ -128,9 +129,9 @@ export default function PrivacyPolicy() {
           </ul>
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
             Our{' '}
-            <a href="/cookie-policy/" className="text-blue-600 underline">
+            <Link href="/cookie-policy/" className="text-blue-600 underline">
               Cookie Policy
-            </a>{' '}
+            </Link>{' '}
             lists each cookie by name, purpose, and how long it lasts, and you can change your
             choice at any time from the cookie settings link in our footer.
           </p>

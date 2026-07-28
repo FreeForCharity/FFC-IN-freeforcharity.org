@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/page-metadata'
+import Link from 'next/link'
 import React from 'react'
 import HeroSection from '@/components/ui/HeroSection'
 import FaqSection from '@/components/free-training-programs-components/faq-section'
@@ -141,13 +142,13 @@ const FreeTrainingProgramsPage = () => {
                     Average salary: {program.salary}
                   </p>
                 </div>
-                <a
+                <Link
                   href="/volunteer/"
                   className="inline-block mt-6 px-[24px] py-[8px] text-white border border-[#b35000] rounded-[10px] text-[16px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
                   data-font="montserrat-font"
                 >
                   Sign Up Now
-                </a>
+                </Link>
               </div>
             ))}
           </div>

@@ -1,7 +1,13 @@
 import React from 'react'
+import SmartLink from '@/components/ui/SmartLink'
 
 interface AdminGuideLinkProps {
-  /** Absolute ffcadmin.org URL — build with `ffcAdminUrl()` from src/data/admin-links. */
+  /**
+   * Usually an absolute ffcadmin.org URL — build with `ffcAdminUrl()` from
+   * src/data/admin-links. A root-relative path is also accepted for the cases
+   * where the canonical guide lives on this site instead (e.g. the Google
+   * Workspace guide); those route through next/link and stay in the same tab.
+   */
   href: string
   /** Link text. Defaults depend on variant. */
   label?: string
@@ -28,6 +34,9 @@ const AdminGuideLink: React.FC<AdminGuideLinkProps> = ({
   const text =
     label ??
     (isLegacy ? 'Legacy WordPress guide on FFC Admin' : 'Full step-by-step guide on FFC Admin')
+  // A root-relative href is a guide on this site, so it neither opens a new tab
+  // nor goes to FFC Admin — announcing that it does would be wrong.
+  const isExternal = !href.startsWith('/') || href.startsWith('//')
 
   return (
     <div
@@ -38,10 +47,10 @@ const AdminGuideLink: React.FC<AdminGuideLinkProps> = ({
       {description ? (
         <p className="mb-[8px] text-[14px] leading-[22px] text-[#555]">{description}</p>
       ) : null}
-      <a
+      <SmartLink
         href={href}
-        target="_blank"
-        rel="noopener noreferrer"
+        target={isExternal ? '_blank' : undefined}
+        rel={isExternal ? 'noopener noreferrer' : undefined}
         className={`inline-flex items-center gap-[8px] text-[16px] font-[600] underline-offset-4 hover:underline ${
           // #9a3412 (deep brand orange) clears WCAG AA contrast on the pale
           // #fff7f0 callout (~7:1); the lighter #f47c20 is only 2.55:1 as text.
@@ -50,8 +59,8 @@ const AdminGuideLink: React.FC<AdminGuideLinkProps> = ({
       >
         <span>{text}</span>
         <span aria-hidden="true">&rarr;</span>
-        <span className="sr-only">(opens FFC Admin in a new tab)</span>
-      </a>
+        {isExternal ? <span className="sr-only">(opens FFC Admin in a new tab)</span> : null}
+      </SmartLink>
     </div>
   )
 }
