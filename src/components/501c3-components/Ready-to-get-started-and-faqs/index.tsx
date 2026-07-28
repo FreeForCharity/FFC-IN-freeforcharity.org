@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import ReadyToGetStarted from '@/components/help-for-charities-components/Ready-to-Get-Started-Now'
 import AccordionItem from '@/components/ui/Accordian'
 const index = () => {
@@ -56,9 +57,9 @@ const index = () => {
           </p>
           <h1 className="pb-[1em] font-[700]">
             Visit{' '}
-            <a href="/domains/" className="text-[#0567B1]">
+            <Link href="/domains/" className="text-[#0567B1]">
               https://freeforcharity.org/domains
-            </a>{' '}
+            </Link>{' '}
             and follow all steps
           </h1>
           <p className="pb-[1em]">

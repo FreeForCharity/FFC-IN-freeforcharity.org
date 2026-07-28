@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
+import SmartLink from '@/components/ui/SmartLink'
 
 interface IconTextCardProps {
   icon: React.ReactNode
@@ -34,7 +35,7 @@ const IconTextCard: React.FC<IconTextCardProps> = ({ icon, iconLabel = 'icon', t
   }, [])
 
   return (
-    <a
+    <SmartLink
       href={href || '#'}
       rel="noopener noreferrer"
       className="
@@ -70,7 +71,7 @@ const IconTextCard: React.FC<IconTextCardProps> = ({ icon, iconLabel = 'icon', t
       >
         {text}
       </h2>
-    </a>
+    </SmartLink>
   )
 }
 

@@ -62,7 +62,7 @@ export default function OtherWaysToGive() {
                 <dt className="font-[700] inline">Verification: </dt>
                 <dd className="inline">
                   <a
-                    href="https://www.guidestar.org/profile/46-2471893"
+                    href="https://app.candid.org/profile/9326392/free-for-charity-46-2471893"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-[#0567B1] underline"

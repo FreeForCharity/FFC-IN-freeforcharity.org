@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import SlidingCard from '@/components/ui/SlidingCard'
 
 const index = () => {
@@ -18,20 +19,27 @@ const index = () => {
 
           <SlidingCard
             direction="left"
-            subtitle="Guidestar (free with paid options)"
+            subtitle="Candid, formerly GuideStar (free with paid options)"
             description={
               <>
                 This charity provides profiles of nearly every charity in the world. It also
                 provides an API that lets others check on the nonprofit status of any charity by
                 name, EIN, or other metrics. Many of the charity for charity sites as well as
-                indirect sites that provide discounts to nonprofits require a completed profile on
-                Guide Star before giving free or discounted items to your organization. Create your
+                indirect sites that provide discounts to nonprofits require a completed Candid
+                profile before giving free or discounted items to your organization. Claim your
                 profile and have it validated at the highest level possible here before seeking the
-                other services.
+                other services — our{' '}
+                {/* next/link, not a raw <a>: the GitHub Pages staging deploy builds with
+                    NEXT_PUBLIC_BASE_PATH=/FFC-IN-freeforcharity.org, and only Link applies
+                    that prefix. A root-absolute href would 404 there. */}
+                <Link href="/guidestar-guide/" className="underline">
+                  Candid guide
+                </Link>{' '}
+                walks you through it.
               </>
             }
             buttonText="Available Here"
-            buttonLink="https://www.guidestar.org/"
+            buttonLink="https://candid.org/claim-nonprofit-profile/"
             imageSrc="/Images/guidestar.webp" // 👈 image passed as prop
           />
           <SlidingCard

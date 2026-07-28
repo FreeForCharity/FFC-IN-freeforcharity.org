@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/page-metadata'
+import Link from 'next/link'
 import React from 'react'
 import HeroSection from '@/components/ui/HeroSection'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
@@ -135,13 +136,13 @@ const WorkforceDevelopmentPage = () => {
               (520) 222-8104
             </a>
           </p>
-          <a
+          <Link
             href="/volunteer/"
             className="inline-block px-[30px] py-[10px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] font-[600] shadow-md hover:shadow-[0px_12px_18px_-6px_#b35000] transition-all duration-300"
             data-font="montserrat-font"
           >
             Volunteer Now
-          </a>
+          </Link>
         </div>
       </section>
     </div>

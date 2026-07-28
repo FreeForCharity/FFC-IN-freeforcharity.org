@@ -30,9 +30,9 @@ test.describe('Footer - Column 1: Endorsements', () => {
     await expect(sealImg).toBeVisible()
   })
 
-  test('should display Direct GuideStar Profile Link button', async ({ page }) => {
+  test('should display Direct Candid Profile Link button', async ({ page }) => {
     const footer = page.locator('footer')
-    await expect(footer.getByText('Direct GuideStar Profile Link')).toBeVisible()
+    await expect(footer.getByText('Direct Candid Profile Link')).toBeVisible()
   })
 
   test('should display EIN number', async ({ page }) => {

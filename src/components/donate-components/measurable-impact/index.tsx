@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import ZeffyPopupButton from '@/components/ui/ZeffyPopupButton'
 import { generalCampaign } from '@/data/donation-campaigns'
 
@@ -36,9 +37,9 @@ const Index = () => {
             <p className="text-[18px] font-[500] leading-[27px] mb-[5.82%]" data-font="lato-font">
               In addition to financial support, Free For Charity also needs community support
               through{' '}
-              <a href="/volunteer/" className="text-[#0567B1]">
+              <Link href="/volunteer/" className="text-[#0567B1]">
                 skilled volunteers
-              </a>{' '}
+              </Link>{' '}
               and gifts in kind (such as services or products sold by your business). Take a look at
               the volunteer opportunities today.
             </p>

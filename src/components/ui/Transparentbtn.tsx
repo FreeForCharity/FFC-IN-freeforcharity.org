@@ -1,4 +1,5 @@
 import React from 'react'
+import SmartLink from '@/components/ui/SmartLink'
 import { IoIosArrowForward } from 'react-icons/io'
 
 interface TransparentbtnProps {
@@ -10,7 +11,7 @@ interface TransparentbtnProps {
 const Transparentbtn: React.FC<TransparentbtnProps> = ({ text, href, color = '#0567B1' }) => {
   return (
     <div>
-      <a
+      <SmartLink
         href={href || '#'}
         target={href ? '_blank' : undefined}
         rel={href ? 'noopener noreferrer' : undefined}
@@ -31,7 +32,7 @@ const Transparentbtn: React.FC<TransparentbtnProps> = ({ text, href, color = '#0
           strokeWidth={2}
           style={{ color }}
         />
-      </a>
+      </SmartLink>
     </div>
   )
 }

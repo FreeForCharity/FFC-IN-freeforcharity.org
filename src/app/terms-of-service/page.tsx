@@ -1,4 +1,5 @@
 import { pageMetadata } from '@/lib/page-metadata'
+import Link from 'next/link'
 
 export const metadata = pageMetadata({
   title: 'Terms of Service',
@@ -221,42 +222,42 @@ export default function TermsOfService() {
           </p>
           <ul className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500] list-disc list-inside">
             <li>
-              <a href="/privacy-policy/" className="text-[#0567B1] underline">
+              <Link href="/privacy-policy/" className="text-[#0567B1] underline">
                 Privacy Policy
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/cookie-policy/" className="text-[#0567B1] underline">
+              <Link href="/cookie-policy/" className="text-[#0567B1] underline">
                 Cookie Policy
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/donation-policy/" className="text-[#0567B1] underline">
+              <Link href="/donation-policy/" className="text-[#0567B1] underline">
                 Donation Policy
-              </a>{' '}
+              </Link>{' '}
               and the{' '}
-              <a href="/free-for-charity-donation-policy/" className="text-[#0567B1] underline">
+              <Link href="/free-for-charity-donation-policy/" className="text-[#0567B1] underline">
                 Free For Charity Donation Policy
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/publicity-consent-policy/" className="text-[#0567B1] underline">
+              <Link href="/publicity-consent-policy/" className="text-[#0567B1] underline">
                 Publicity &amp; Story Consent Policy
-              </a>{' '}
+              </Link>{' '}
               — permits FFC to feature your organization (name, logo, site link, mission blurb, and
               a factual account of the free services provided) in case studies, testimonials, the
               charity spotlight, and directory listings. You can withdraw this consent at any time
               with no effect on your services.
             </li>
             <li>
-              <a href="/vulnerability-disclosure-policy/" className="text-[#0567B1] underline">
+              <Link href="/vulnerability-disclosure-policy/" className="text-[#0567B1] underline">
                 Vulnerability Disclosure Policy
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/accessibility-statement/" className="text-[#0567B1] underline">
+              <Link href="/accessibility-statement/" className="text-[#0567B1] underline">
                 Accessibility Statement
-              </a>
+              </Link>
             </li>
           </ul>
 

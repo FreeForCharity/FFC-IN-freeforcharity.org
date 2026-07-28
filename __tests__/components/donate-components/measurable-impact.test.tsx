@@ -20,7 +20,11 @@ describe('MeasurableImpact Component', () => {
     render(<MeasurableImpact />)
     const volunteerLink = screen.getByRole('link', { name: /skilled volunteers/i })
     expect(volunteerLink).toBeInTheDocument()
-    expect(volunteerLink).toHaveAttribute('href', '/volunteer/')
+    // Trailing slash is optional here on purpose. This is a next/link, and Jest
+    // does not load next.config.ts, so `trailingSlash: true` is not in effect —
+    // jsdom renders "/volunteer" while the real static export emits
+    // "/volunteer/". Assert the route, not the build-time normalization.
+    expect(volunteerLink.getAttribute('href')).toMatch(/^\/volunteer\/?$/)
   })
 
   it('renders a Zeffy CTA (no PayPal), gated on the general fund being confirmed', () => {
