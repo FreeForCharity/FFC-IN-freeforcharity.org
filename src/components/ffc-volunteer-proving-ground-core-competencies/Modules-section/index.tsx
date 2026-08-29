@@ -147,9 +147,11 @@ const index = () => {
             </a>
           </li>
           <li>
-            Mobile Apps (Google Play Store):{' '}
+            Mobile Apps:{' '}
+            {/* Copilot's Play Store listing began 404ing (link rot, 2026-08);
+                Microsoft's official page carries the app download links. */}
             <a
-              href="https://play.google.com/store/apps/details?id=com.microsoft.copilot"
+              href="https://www.microsoft.com/en-us/microsoft-copilot/for-individuals"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-600 underline"

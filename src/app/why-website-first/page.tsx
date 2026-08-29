@@ -156,7 +156,12 @@ export default function WhyWebsiteFirst() {
             Whichever template a site starts from, it must meet the same standard — the FFC footer
             with your validated organization details, the legal pages, and an accessible build — and
             both paths converge at Gate 3: your site validated live on GitHub Pages, which unlocks
-            your free .org domain. Compare the two side by side in the{' '}
+            your free .org domain. For the full story of what each template ships and why every
+            footer item exists, see{' '}
+            <Link href="/website-templates/">
+              website templates &amp; the FFC footer, explained
+            </Link>
+            . Compare the two side by side in the{' '}
             <Link href="/free-charity-web-hosting/#choose-your-template">
               template chooser on the free charity web hosting page
             </Link>
