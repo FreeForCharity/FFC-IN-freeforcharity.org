@@ -60,7 +60,7 @@ Playwright, Puppeteer, and Lighthouse — i.e. every automated source this
 repo runs. Second, the filters below are still needed, both
 to exclude the ~1,000 sessions already collected (nothing here is
 retroactive at the collection layer — only report filters can hide
-history) and to catch hits from a hand-driven `npm run dev` browser,
+history) and to catch hits from a hand-driven `pnpm run dev` browser,
 which sets no `webdriver` flag and is therefore invisible to the guard.
 
 ---
@@ -218,7 +218,7 @@ change here.
 
 Unlike the code-level `navigator.webdriver` guard, a hostname exception
 catches _every_ non-production hit — including a developer clicking
-around a hand-run `npm run dev` server, which the guard cannot see. The
+around a hand-run `pnpm run dev` server, which the guard cannot see. The
 two are complementary, not redundant: the guard stops the hits before
 they leave the browser (so they never cost anything), and the exception
 is the catch-all for whatever the guard misses.
@@ -236,5 +236,5 @@ above are localhost dev/test hits **after** staging had already stopped
 being the concern, and they were the largest single source of traffic in
 the property. The `navigator.webdriver` guard plus the Option A report
 comparison keep them out with no ongoing maintenance; the GTM hostname
-exception closes the remaining hand-driven-`npm run dev` gap if you want
+exception closes the remaining hand-driven-`pnpm run dev` gap if you want
 collection stopped rather than filtered.

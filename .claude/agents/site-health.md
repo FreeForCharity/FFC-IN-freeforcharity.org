@@ -7,13 +7,13 @@ Run a health check on the built site to verify core functionality.
 1. Build the site:
 
    ```bash
-   npm run build
+   pnpm run build
    ```
 
 2. Start the preview server:
 
    ```bash
-   npm run preview &
+   pnpm run preview &
    ```
 
 3. Wait for the server to be ready, then check:
@@ -27,7 +27,7 @@ Run a health check on the built site to verify core functionality.
 4. Run the existing Playwright tests:
 
    ```bash
-   npm run test
+   pnpm run test
    ```
 
 5. Report results as a checklist:

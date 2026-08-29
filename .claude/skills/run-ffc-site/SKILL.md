@@ -17,10 +17,10 @@ All paths below are relative to the repo root.
 No `apt-get` needed in the Claude Code web container: Node and a Chromium
 build are already present. The driver launches the pre-installed browser at
 `/opt/pw-browsers/chromium` (override with `CHROME_PATH=...`). **In that
-container** you do **not** run `npx playwright install` — the repo's pinned
+container** you do **not** run `pnpm exec playwright install` — the repo's pinned
 Playwright may want a different browser build than the container ships, and
 pointing at the existing one avoids the mismatch. On a local machine or CI
-without a pre-installed browser, run `npx playwright install chromium` once, or
+without a pre-installed browser, run `pnpm exec playwright install chromium` once, or
 set `CHROME_PATH` to a system Chrome/Chromium.
 
 Built and verified on Node v22.22.2 (README targets Node 24.x; the static
@@ -29,13 +29,13 @@ export builds fine on 22).
 ## Setup
 
 ```bash
-npm install        # ~40s; runs husky prepare
+pnpm install        # ~40s; runs husky prepare
 ```
 
 ## Build
 
 ```bash
-npm run build      # static export → out/ (~35 routes, 60+ html files). Do not cancel.
+pnpm run build      # static export → out/ (~35 routes, 60+ html files). Do not cancel.
 ```
 
 ## Run (agent path)
@@ -43,8 +43,8 @@ npm run build      # static export → out/ (~35 routes, 60+ html files). Do not
 Serve the export in the background, wait for the port, then drive it:
 
 ```bash
-# 1. Serve out/ on :4173 (this is `npm run preview`)
-nohup npx serve out -l 4173 >/tmp/serve.log 2>&1 &
+# 1. Serve out/ on :4173 (this is `pnpm run preview`)
+nohup pnpm exec serve out -l 4173 >/tmp/serve.log 2>&1 &
 echo $! > /tmp/serve.pid
 timeout 30 bash -c 'until curl -sf http://localhost:4173 >/dev/null; do sleep 1; done'
 
@@ -78,7 +78,7 @@ run only means nothing threw; look at the image to confirm the page rendered.
 | `node .../driver.mjs`                                  | Smoke the default route set (home, about, 501c3, privacy, search) |
 | `node .../driver.mjs / /donate/ /volunteer/`           | Screenshot specific routes                                        |
 | `EXPECT="Free For Charity" node .../driver.mjs /`      | Also assert the text is present in the HTML                       |
-| `BASE_URL=http://localhost:3000 node .../driver.mjs /` | Drive `npm run dev` instead of the export                         |
+| `BASE_URL=http://localhost:3000 node .../driver.mjs /` | Drive `pnpm run dev` instead of the export                        |
 | `CHROME_PATH=/path/to/chrome node .../driver.mjs`      | Use a different Chromium binary                                   |
 
 Exit code is 0 only when every route is clean, so it works in a script.
@@ -106,7 +106,7 @@ EOF
 ## Run (human path)
 
 ```bash
-npm run dev        # → http://localhost:3000 with Turbopack HMR. Ctrl-C to stop.
+pnpm run dev        # → http://localhost:3000 with Turbopack HMR. Ctrl-C to stop.
 ```
 
 On its own this is useless in a headless container, since there is no window to
@@ -116,10 +116,10 @@ iterating on a component, because it rebuilds on save.
 ## Test
 
 ```bash
-npm run lint       # eslint
-npm run build      # verify the static export
-npm run test       # jest unit/component/a11y (jsdom) — not the browser
-npm run test:e2e   # playwright e2e — needs the pinned browser; see gotcha below
+pnpm run lint       # eslint
+pnpm run build      # verify the static export
+pnpm run test       # jest unit/component/a11y (jsdom) — not the browser
+pnpm run test:e2e   # playwright e2e — needs the pinned browser; see gotcha below
 ```
 
 ## Gotchas
@@ -139,9 +139,9 @@ npm run test:e2e   # playwright e2e — needs the pinned browser; see gotcha bel
 - **Trailing slashes matter.** The export writes `out/about-us/index.html`, so
   hit `/about-us/`, not `/about-us`. `serve` will 200 either way, but keep the
   slash to match the deployed cPanel paths.
-- **The repo's Playwright browser build ≠ the container's.** `npm run test:e2e`
+- **The repo's Playwright browser build ≠ the container's.** `pnpm run test:e2e`
   and any bare `chromium.launch()` try build 1228 and error with "Executable
-  doesn't exist … run npx playwright install". Do not install; pass
+  doesn't exist … run pnpm exec playwright install". Do not install; pass
   `executablePath: '/opt/pw-browsers/chromium'` (the driver already does).
 
 ## Troubleshooting

@@ -23,22 +23,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: '24'
-          cache: npm
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Check confirmed Zeffy campaign links
         env:
           ZEFFY_LIVE: '1'
-        run: npx playwright test --config playwright.zeffy-links.config.ts
+        run: pnpm exec playwright test --config playwright.zeffy-links.config.ts
 
       - name: Upload report on failure
         if: failure()

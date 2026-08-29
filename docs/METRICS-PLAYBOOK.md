@@ -391,7 +391,7 @@ Design rules (enforced, not aspirational):
   stamps (no wall clock), and `__tests__/scripts/candid-update.test.ts` runs
   `--check` plus a cross-check that the sheet's hour figures equal the
   `impact.ts` derivation — so a data change without a regenerated sheet, or a
-  drift between the script and the loader, fails `npm test`.
+  drift between the script and the loader, fails `pnpm test`.
 - The file is in `.prettierignore` (byte-exact staleness comparison).
 
 Annual procedure: regenerate → open the sheet → paste into the Candid Platinum

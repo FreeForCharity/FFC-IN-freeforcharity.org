@@ -1,6 +1,6 @@
 name: Security Audit
 
-# Runs `npm audit` against production dependencies on a daily cadence and on
+# Runs `pnpm audit` against production dependencies on a daily cadence and on
 # pull requests that touch package files. Fails on `high` or `critical`, so a
 # dependency change that introduces a known-exploitable library is caught in
 # review, and an advisory published after merge is caught by the next daily
@@ -34,20 +34,23 @@ concurrency:
 
 jobs:
   audit:
-    name: npm audit (production)
+    name: pnpm audit (production)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: '24'
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install (no scripts)
-        run: npm ci --ignore-scripts
+        run: pnpm install --frozen-lockfile
 
       - name: Audit high-severity production deps
-        run: npm run audit:high
+        run: pnpm run audit:high

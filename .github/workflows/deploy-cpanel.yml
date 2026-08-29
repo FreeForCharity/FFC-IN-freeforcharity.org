@@ -165,18 +165,21 @@ jobs:
             exit 1
           fi
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: '24'
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build with Next.js (production basePath -- root)
         if: ${{ steps.freshness.outputs.superseded != 'true' }}
-        run: npm run build
+        run: pnpm run build
         env:
           # Apex domain, no subpath -- same as deploy-cpanel-staging.yml.
           NEXT_PUBLIC_BASE_PATH: ''
@@ -573,7 +576,7 @@ jobs:
           done
           case "$code" in
             2??|3??)
-              npm run smoke-test
+              pnpm run smoke-test
               ;;
             403|415|429)
               echo "::warning::Post-deploy reachability probe got HTTP ${code} from the runner — a Cloudflare bot-challenge / WAF block of the GitHub-runner IP (real users are typically unaffected). Skipping the smoke suite (it can't run from behind a challenge); the upload + parity check already verified the mirror. Verify manually if unsure: curl -sSIL ${URL}"
@@ -633,7 +636,7 @@ jobs:
       # see — cPanel/Cloudflare drift, an FTP/credential fault, or a live
       # third-party widget regression.
       # Gated on `superseded != 'true'` so a stale/superseded run that fails
-      # in a non-gated early step (CI lookup, npm ci) can't open a false
+      # in a non-gated early step (CI lookup, pnpm install --frozen-lockfile) can't open a false
       # production incident — no upload happened on a superseded run. If the
       # freshness step itself failed/skipped, `superseded` is empty (!= 'true'),
       # so a genuine early failure still alerts.
@@ -707,7 +710,7 @@ jobs:
                 '  partially mirrored. Re-running the deploy re-mirrors cleanly.',
                 '- **Smoke suite** — the site deployed but a live check failed (broken',
                 '  URL, missing asset, /hub down, PayPal/Zeffy regression, redirect',
-                '  drift). Reproduce: `BASE_URL=https://freeforcharity.org npm run smoke-test`.',
+                '  drift). Reproduce: `BASE_URL=https://freeforcharity.org pnpm run smoke-test`.',
                 '',
                 '## Next steps',
                 '1. Read the failed step\'s logs in the run above.',

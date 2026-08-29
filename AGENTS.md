@@ -23,14 +23,14 @@
 
 ## Core Commands
 
-| Command           | What It Does               | Typical Duration |
-| ----------------- | -------------------------- | ---------------- |
-| `npm install`     | Install dependencies       | ~17s             |
-| `npm run dev`     | Start dev server (Turbo)   | ~1s startup      |
-| `npm run lint`    | Run ESLint                 | ~2s              |
-| `npm run build`   | Production static build    | ~30s             |
-| `npm run test`    | Run Playwright E2E tests   | ~15s             |
-| `npm run preview` | Serve built output locally | immediate        |
+| Command            | What It Does               | Typical Duration |
+| ------------------ | -------------------------- | ---------------- |
+| `pnpm install`     | Install dependencies       | ~17s             |
+| `pnpm run dev`     | Start dev server (Turbo)   | ~1s startup      |
+| `pnpm run lint`    | Run ESLint                 | ~2s              |
+| `pnpm run build`   | Production static build    | ~30s             |
+| `pnpm run test`    | Run Playwright E2E tests   | ~15s             |
+| `pnpm run preview` | Serve built output locally | immediate        |
 
 **NEVER CANCEL long-running commands.** Builds and E2E tests take time. Set your timeout to 180+ seconds and let them finish.
 
@@ -44,9 +44,9 @@ All changes follow this process:
 2. **Branch** -- Create a feature branch from `main`
 3. **Develop** -- Make changes, commit frequently
 4. **Pre-commit checklist** (run in this order):
-   1. `npm run lint` -- Catch code quality issues
-   2. `npm run build` -- Verify the static export succeeds
-   3. `npm run test` -- Run Playwright E2E tests
+   1. `pnpm run lint` -- Catch code quality issues
+   2. `pnpm run build` -- Verify the static export succeeds
+   3. `pnpm run test` -- Run Playwright E2E tests
 5. **PR** -- Open a Pull Request, link to the issue with `Fixes #NNN`
 6. **Merge** -- Merge via PR review (no direct commits to `main`)
 7. **Deploy** -- Every merge to `main` runs CI (`.github/workflows/ci.yml`). On green, `.github/workflows/deploy-cpanel.yml` auto-deploys to production by `lftp`-mirroring `out/` into `~/public_html` (the live apex docroot) over FTPS, excluding WHMCS at `~/public_html/hub` and cPanel keepers.

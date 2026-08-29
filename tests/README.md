@@ -270,41 +270,41 @@ Tests the footer copyright notice and organizational information.
 1. **Build the application:**
 
    ```bash
-   npm run build
+   pnpm run build
    ```
 
 2. **Install Playwright browsers (first time only):**
    ```bash
-   npx playwright install chromium
+   pnpm exec playwright install chromium
    ```
 
 ### Test Commands
 
 ```bash
 # Run all tests in headless mode (default)
-npm test
+pnpm test
 
 # Run tests with browser visible (useful for debugging)
-npm run test:headed
+pnpm run test:headed
 
 # Run tests with Playwright UI (interactive mode)
-npm run test:ui
+pnpm run test:ui
 ```
 
 ### Running Individual Tests
 
 ```bash
 # Run only logo tests
-npx playwright test logo.spec.ts
+pnpm exec playwright test logo.spec.ts
 
 # Run only the post-deploy smoke tests
-npx playwright test post-deploy-smoke.spec.ts
+pnpm exec playwright test post-deploy-smoke.spec.ts
 
 # Run a specific test by name
-npx playwright test -g "should display logo in top left corner"
+pnpm exec playwright test -g "should display logo in top left corner"
 
 # Run in debug mode
-npx playwright test --debug
+pnpm exec playwright test --debug
 ```
 
 ## Test Configuration
@@ -315,14 +315,14 @@ Tests are configured in `playwright.config.ts` at the project root.
 
 - **Base URL**: `http://localhost:3000`
 - **Browser**: Chromium (uses system browser when available)
-- **Web Server**: Auto-starts `npm run preview` before tests
+- **Web Server**: Auto-starts `pnpm run preview` before tests
 - **Server Timeout**: 120 seconds
 - **Parallel Execution**: Enabled locally, disabled in CI
 - **Retries**:
   - CI: 2 times
   - Local: 0 times
 - **Trace Collection**: On first retry (for debugging)
-- **Reporter**: HTML (view with `npx playwright show-report`)
+- **Reporter**: HTML (view with `pnpm exec playwright show-report`)
 
 **Special Features**:
 
@@ -341,7 +341,7 @@ Tests run automatically in GitHub Actions on every push / PR to the `main` branc
 
 1. ✅ Checkout repository
 2. ✅ Setup Node.js 24.x
-3. ✅ Install dependencies (`npm ci`)
+3. ✅ Install dependencies (`pnpm install --frozen-lockfile`)
 4. ✅ Format check and lint
 5. ✅ Run Jest unit/component/a11y tests (jest-axe, jsdom)
 6. ✅ Build the production site (root path, `NEXT_PUBLIC_BASE_PATH=''`)
@@ -351,7 +351,7 @@ Tests run automatically in GitHub Actions on every push / PR to the `main` branc
 
 On green, the production deploy (`.github/workflows/deploy-cpanel.yml`) mirrors `out/` into `~/public_html` on InterServer cPanel (the live apex docroot for `freeforcharity.org`), excluding the WHMCS hub at `~/public_html/hub`. GitHub Pages is now a manual staging/preview surface only (`deploy-gh-pages-staging.yml`) at the `/FFC-IN-freeforcharity.org` subpath, where `basePath` + `assetPath()` apply. The old GitHub Pages production workflows (`deploy.yml` / `nextjs.yml`) have been removed.
 
-After deploy, `npm run smoke-test` (`scripts/smoke-test.mjs`, also run on a schedule via `scheduled-prod-smoke.yml`) verifies the live apex, the WHMCS `/hub`, and key redirects.
+After deploy, `pnpm run smoke-test` (`scripts/smoke-test.mjs`, also run on a schedule via `scheduled-prod-smoke.yml`) verifies the live apex, the WHMCS `/hub`, and key redirects.
 
 **Test Failure Handling**:
 
@@ -393,7 +393,7 @@ To add new tests:
 
 4. **Run your tests**:
    ```bash
-   npm test
+   pnpm test
    ```
 
 ### Best Practices
@@ -442,16 +442,16 @@ page.on('response', (response) => {
 
 ```bash
 # Run tests in headed mode to see browser
-npm run test:headed
+pnpm run test:headed
 
 # Run in debug mode with Playwright Inspector
-npx playwright test --debug
+pnpm exec playwright test --debug
 
 # Run with trace collection
-npx playwright test --trace on
+pnpm exec playwright test --trace on
 
 # View trace file
-npx playwright show-trace trace.zip
+pnpm exec playwright show-trace trace.zip
 ```
 
 ### CI Debugging
@@ -460,7 +460,7 @@ When tests fail in CI:
 
 1. Check the GitHub Actions workflow run logs
 2. Download test artifacts (screenshots, traces)
-3. View HTML report: `npx playwright show-report`
+3. View HTML report: `pnpm exec playwright show-report`
 4. Compare local vs CI results
 
 ### Common Issues

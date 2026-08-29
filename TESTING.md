@@ -7,23 +7,23 @@ This guide provides comprehensive documentation for testing the Free For Charity
 ### Prerequisites
 
 - Node.js 24.x installed
-- Dependencies installed (`npm install`)
-- Built application (`npm run build`)
+- Dependencies installed (`pnpm install`)
+- Built application (`pnpm run build`)
 
 ### Run Tests
 
 ```bash
 # Jest unit / component / a11y tests (jsdom — no build required)
-npm test              # Run the Jest suite once
-npm run test:watch    # Jest in watch mode
-npm run test:coverage # Jest with coverage report
+pnpm test              # Run the Jest suite once
+pnpm run test:watch    # Jest in watch mode
+pnpm run test:coverage # Jest with coverage report
 
 # Playwright E2E tests (require a production build first)
-npm run build                       # Build the static site
-npx playwright install chromium     # Install browsers (first time only)
-npm run test:e2e          # Headless mode (default)
-npm run test:e2e:headed   # With visible browser
-npm run test:e2e:ui       # Interactive Playwright UI
+pnpm run build                       # Build the static site
+pnpm exec playwright install chromium     # Install browsers (first time only)
+pnpm run test:e2e          # Headless mode (default)
+pnpm run test:e2e:headed   # With visible browser
+pnpm run test:e2e:ui       # Interactive Playwright UI
 ```
 
 ## Quick Test Checklist
@@ -32,38 +32,38 @@ npm run test:e2e:ui       # Interactive Playwright UI
 
 ```bash
 node --version        # Should be v24.x
-npm --version         # Should be 10.x
+pnpm --version        # Should be 10.x (corepack enable; pinned via packageManager field)
 ```
 
 ### 2. Install Dependencies
 
 ```bash
-npm install           # Takes ~10-15 seconds
+pnpm install           # Takes ~10-15 seconds
 ```
 
 ### 3. Run Linter
 
 ```bash
-npm run lint          # Passes clean: 0 errors
+pnpm run lint          # Passes clean: 0 errors
 ```
 
 ### 4. Build Application
 
 ```bash
-npm run build         # Takes ~15-20 seconds
+pnpm run build         # Takes ~15-20 seconds
 ```
 
 ### 5. Preview Build
 
 ```bash
-npm run preview       # Visit http://localhost:3000
+pnpm run preview       # Visit http://localhost:3000
 ```
 
 ### 6. Run Automated Tests
 
 ```bash
-npm test              # Jest unit/component/a11y tests (no build required)
-npm run test:e2e      # Playwright E2E tests (requires build first)
+pnpm test              # Jest unit/component/a11y tests (no build required)
+pnpm run test:e2e      # Playwright E2E tests (requires build first)
 ```
 
 ## Code Quality & Linting
@@ -73,7 +73,7 @@ npm run test:e2e      # Playwright E2E tests (requires build first)
 **Configuration**: `eslint.config.mjs`
 
 ```bash
-npm run lint
+pnpm run lint
 ```
 
 **Current Output**: Passes clean — **0 errors**.
@@ -107,7 +107,7 @@ The source tree lints without errors. (A trivial "Unused eslint-disable directiv
 **Check Types**:
 
 ```bash
-npm run build  # Type checking is part of build process
+pnpm run build  # Type checking is part of build process
 ```
 
 **Current Status**: ✅ No type errors
@@ -120,8 +120,8 @@ The project uses **Playwright** for end-to-end (E2E) testing and **Jest + React 
 
 The suite is organized in two layers:
 
-- **Jest unit / component / a11y layer** — **20 test files** under `__tests__/`. Uses Jest + React Testing Library + jest-axe in a jsdom environment to render components and pages and assert on markup, behavior, data integrity, and accessibility (axe). Runs with `npm test` (no build required).
-- **Playwright E2E layer** — **18 spec files** in `tests/` (`*.spec.ts`). Drives a real browser against the built site to verify end-to-end behavior, navigation, and rendering. Runs with `npm run test:e2e` (requires `npm run build` first).
+- **Jest unit / component / a11y layer** — **20 test files** under `__tests__/`. Uses Jest + React Testing Library + jest-axe in a jsdom environment to render components and pages and assert on markup, behavior, data integrity, and accessibility (axe). Runs with `pnpm test` (no build required).
+- **Playwright E2E layer** — **18 spec files** in `tests/` (`*.spec.ts`). Drives a real browser against the built site to verify end-to-end behavior, navigation, and rendering. Runs with `pnpm run test:e2e` (requires `pnpm run build` first).
 
 **E2E Test Framework**: Playwright (Chromium — uses system browser to avoid network restrictions)  
 **Unit/Component Framework**: Jest + React Testing Library + jest-axe (jsdom)
@@ -132,16 +132,16 @@ The suite is organized in two layers:
 
 ```bash
 # Jest unit/component/a11y tests (no build required)
-npm test              # Run once
-npm run test:watch    # Watch mode
-npm run test:coverage # With coverage
+pnpm test              # Run once
+pnpm run test:watch    # Watch mode
+pnpm run test:coverage # With coverage
 
 # Playwright E2E tests
-npm run build                       # Build the site first (required)
-npx playwright install chromium     # Install browsers (first time only)
-npm run test:e2e          # Headless mode (default)
-npm run test:e2e:headed   # With browser visible
-npm run test:e2e:ui       # Interactive Playwright UI
+pnpm run build                       # Build the site first (required)
+pnpm exec playwright install chromium     # Install browsers (first time only)
+pnpm run test:e2e          # Headless mode (default)
+pnpm run test:e2e:headed   # With browser visible
+pnpm run test:e2e:ui       # Interactive Playwright UI
 ```
 
 #### Individual Test Execution
@@ -151,15 +151,15 @@ npm run test:e2e:ui       # Interactive Playwright UI
 npx jest __tests__/components/header/index.test.tsx
 
 # Run a specific Playwright spec file
-npx playwright test logo.spec.ts
-npx playwright test image-loading.spec.ts
-npx playwright test animated-numbers.spec.ts
+pnpm exec playwright test logo.spec.ts
+pnpm exec playwright test image-loading.spec.ts
+pnpm exec playwright test animated-numbers.spec.ts
 
 # Run a specific Playwright test by name
-npx playwright test -g "should display logo"
+pnpm exec playwright test -g "should display logo"
 
 # Debug mode
-npx playwright test --debug
+pnpm exec playwright test --debug
 ```
 
 #### CI/CD Environment
@@ -169,7 +169,7 @@ Tests run automatically in GitHub Actions (`ci.yml`):
 - **Trigger**: Every push / pull request to the `main` branch
 - **Environment**: Ubuntu latest with Node.js 24.x
 - **Pipeline**: Format check, lint, Jest unit/component tests, build, internal link check, then Playwright E2E
-- **Browser Setup**: `npx playwright install --with-deps chromium`
+- **Browser Setup**: `pnpm exec playwright install --with-deps chromium`
 - **Production build**: Built at root path with `NEXT_PUBLIC_BASE_PATH=''` (the cPanel apex docroot). The GitHub Pages staging build uses `NEXT_PUBLIC_BASE_PATH=/FFC-IN-freeforcharity.org`.
 - **Retry Logic**: Failed E2E tests retry 2 times
 - **Failure Handling**: The production deploy (`deploy-cpanel.yml`) only runs after CI is green
@@ -248,10 +248,10 @@ Key settings:
 - **Base URL**: `http://localhost:3000`
 - **Parallel Execution**: Enabled locally, disabled in CI for stability
 - **Retries**: 2 in CI, 0 locally
-- **Web Server**: Auto-starts `npm run preview` before tests (120s timeout)
+- **Web Server**: Auto-starts `pnpm run preview` before tests (120s timeout)
 - **Browser**: System Chromium (fallback to Playwright's if unavailable)
 - **Trace Collection**: On first retry for debugging
-- **Reporter**: HTML report (view with `npx playwright show-report`)
+- **Reporter**: HTML report (view with `pnpm exec playwright show-report`)
 
 **Special Features**:
 
@@ -268,7 +268,7 @@ Key settings:
 
 1. ✅ Checkout repository
 2. ✅ Setup Node.js 24.x with caching
-3. ✅ Install dependencies (`npm ci`)
+3. ✅ Install dependencies (`pnpm install --frozen-lockfile`)
 4. ✅ Format check and lint
 5. ✅ Run Jest unit/component/a11y tests (jest-axe, jsdom)
 6. ✅ Build the site
@@ -295,7 +295,7 @@ Key settings:
 After a production deploy, run the smoke harness against the live site:
 
 ```bash
-npm run smoke-test    # runs scripts/smoke-test.mjs
+pnpm run smoke-test    # runs scripts/smoke-test.mjs
 ```
 
 It hits the live apex (`freeforcharity.org`), the WHMCS hub at `/hub`, and verifies key redirects. The `scheduled-prod-smoke.yml` workflow runs these checks on a schedule.
@@ -311,19 +311,19 @@ It hits the live apex (`freeforcharity.org`), the WHMCS hub at `/hub`, and verif
 
 ## Security Testing
 
-### npm audit
+### pnpm audit
 
 Check for security vulnerabilities in dependencies:
 
 ```bash
-npm audit
+pnpm audit
 ```
 
 **Current Status**: ✅ 0 vulnerabilities (as of build)
 
 **Best Practices**:
 
-- Run `npm audit` regularly
+- Run `pnpm audit` regularly
 - Update dependencies promptly when vulnerabilities are discovered
 - Enable Dependabot for automated security updates
 - Review and test updates before deploying
@@ -332,7 +332,7 @@ npm audit
 
 1. **GitHub Dependabot**: Enable automated dependency updates
 2. **CodeQL**: Add GitHub CodeQL for code security scanning
-3. **npm audit CI**: Add automated audit checks to CI pipeline
+3. **pnpm audit CI**: Add automated audit checks to CI pipeline
 4. **SAST Tools**: Consider static application security testing tools
 
 ## Manual Testing Checklist
@@ -418,7 +418,7 @@ npm audit
 # Kill process on port 3000
 npx kill-port 3000
 # Or specify different port
-npm run dev -- -p 3001
+pnpm run dev -- -p 3001
 ```
 
 **Issue: Changes not reflecting**
@@ -426,7 +426,7 @@ npm run dev -- -p 3001
 ```bash
 # Clear Next.js cache
 rm -rf .next
-npm run dev
+pnpm run dev
 ```
 
 ### Test Issues
@@ -435,7 +435,7 @@ npm run dev
 
 ```bash
 # Install browsers with system dependencies
-npx playwright install chromium --with-deps
+pnpm exec playwright install chromium --with-deps
 ```
 
 **Issue: Tests timeout**
@@ -443,7 +443,7 @@ npx playwright install chromium --with-deps
 - **Cause**: Web server didn't start in time
 - **Solution**: Timeout is set to 120s in `playwright.config.ts`
 - **Check**: Ensure build completed successfully
-- **Verify**: Run `npm run preview` manually to test
+- **Verify**: Run `pnpm run preview` manually to test
 
 **Issue: Tests pass locally but fail in CI**
 
@@ -589,7 +589,7 @@ freeforcharity-web/
     - Include preview URL in PR comment
 
 13. **Caching Optimization**
-    - Cache npm dependencies between runs
+    - Cache pnpm dependencies between runs
     - Cache Playwright browsers
     - Cache Next.js build cache
 
