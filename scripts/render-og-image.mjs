@@ -24,6 +24,12 @@ const WIDTH = 1200
 const HEIGHT = 630
 
 const name = process.argv[2] || 'journey-og'
+// The name becomes a path segment under public/Images — reject anything that
+// could traverse out of it.
+if (!/^[a-z0-9-]+$/i.test(name)) {
+  console.error(`Invalid card name "${name}" — use letters, numbers, and dashes only.`)
+  process.exit(1)
+}
 const repoRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), '..')
 const svgPath = path.join(repoRoot, 'public', 'Images', `${name}.svg`)
 const pngPath = path.join(repoRoot, 'public', 'Images', `${name}.png`)
