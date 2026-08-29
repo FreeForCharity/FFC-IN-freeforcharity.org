@@ -186,6 +186,20 @@ const Footer: React.FC = () => {
                   </Link>
                 </li>
               ))}
+              <li>
+                {/* Persistent consent re-entry point (withdrawing consent must
+                    stay as easy as giving it): reopens the preferences modal
+                    the cookie-consent banner registers on window. This is the
+                    "cookie settings link in our footer" the privacy policy
+                    describes. */}
+                <button
+                  type="button"
+                  onClick={() => window.openCookiePreferences?.()}
+                  className="hover:text-[#b35000] hover:tracking-widest transition-all text-[16px] font-[500]"
+                >
+                  Cookie Preferences
+                </button>
+              </li>
             </ul>
           </div>
         </div>

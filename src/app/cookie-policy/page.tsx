@@ -9,7 +9,7 @@ export const metadata = pageMetadata({
 })
 
 // Update this date when the policy changes
-const LAST_UPDATED = 'July 25, 2026'
+const LAST_UPDATED = 'August 29, 2026'
 
 export default function CookiePolicy() {
   return (
@@ -452,8 +452,9 @@ export default function CookiePolicy() {
             react to those signals to honor their intent: analytics and marketing cookies are off
             for every visitor until you opt in through the consent banner, and we do not sell or
             share personal information as defined by the CCPA/CPRA. Declining consent — or
-            withdrawing it later, which also deletes the tracking cookies — keeps you in the
-            untracked state those signals ask for.
+            withdrawing it later, which removes the cookies those scripts set on this site and stops
+            them loading from your next page view — keeps you in the untracked state those signals
+            ask for.
           </p>
 
           {/* Section 6 */}
