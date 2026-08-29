@@ -56,7 +56,7 @@ For a complete list, see the [Site Map](#site-map) section below.
 ### Prerequisites
 
 - Node.js 24.x (tested with v24.15.0)
-- npm (comes with Node.js)
+- pnpm 10 (via corepack: `corepack enable` — the version is pinned by the `packageManager` field)
 
 ### Setup
 
@@ -70,7 +70,7 @@ cd FFC-IN-freeforcharity.org
 2. **Install dependencies**
 
 ```bash
-npm install
+pnpm install
 ```
 
 _Takes approximately 10-15 seconds_
@@ -78,7 +78,7 @@ _Takes approximately 10-15 seconds_
 3. **Start development server**
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 _Server starts in ~1 second with Turbopack. Visit http://localhost:3000_
@@ -86,13 +86,14 @@ _Server starts in ~1 second with Turbopack. Visit http://localhost:3000_
 ### Available Commands
 
 ```bash
-npm run dev          # Start development server (with Turbopack)
-npm run build        # Build for production (~15-20 seconds)
-npm run preview      # Preview production build (requires build first)
-npm run lint         # Run ESLint (expect 0 errors)
-npm test             # Run Playwright tests (requires build first)
-npm run test:headed  # Run tests with visible browser
-npm run test:ui      # Run tests in interactive UI mode
+pnpm run dev          # Start development server (with Turbopack)
+pnpm run build        # Build for production (~15-20 seconds)
+pnpm run preview      # Preview production build (requires build first)
+pnpm run lint         # Run ESLint (expect 0 errors)
+pnpm test                 # Run Jest unit/a11y tests
+pnpm run test:e2e         # Run Playwright E2E tests (requires build first)
+pnpm run test:e2e:headed  # Run E2E tests with visible browser
+pnpm run test:e2e:ui      # Run E2E tests in interactive UI mode
 ```
 
 ## Testing
@@ -103,15 +104,15 @@ This project uses **Playwright** for end-to-end testing and **Jest + React Testi
 
 ```bash
 # 1. Build the site
-npm run build
+pnpm run build
 
 # 2. Install Playwright browsers (first time only)
-npx playwright install chromium
+pnpm exec playwright install chromium
 
 # 3. Run tests
-npm test              # Headless mode
-npm run test:headed   # With browser visible
-npm run test:ui       # Interactive UI mode
+pnpm run test:e2e         # Headless mode
+pnpm run test:e2e:headed  # With browser visible
+pnpm run test:e2e:ui      # Interactive UI mode
 ```
 
 ### Test Coverage
@@ -139,7 +140,7 @@ The Playwright E2E suites include:
 **Test Configuration** (`playwright.config.ts`)
 
 - Uses system Chromium to avoid network restrictions
-- Runs against the production build (`npm run preview`)
+- Runs against the production build (`pnpm run preview`)
 - Retries failed tests 2x in CI, 0x locally
 - Collects traces on first retry for debugging
 
@@ -153,7 +154,7 @@ Both layers run automatically on every push/PR to `main` via the
 **ESLint**
 
 ```bash
-npm run lint
+pnpm run lint
 ```
 
 Currently passes with **0 errors**. ESLint runs clean in CI (the
@@ -396,7 +397,7 @@ These are secondary, non-production surfaces:
 
 1. Checkout repository
 2. Setup Node.js 24
-3. Install dependencies with `npm ci`
+3. Install dependencies with `pnpm install --frozen-lockfile`
 4. Install Playwright browsers
 5. Build the static export
 6. Run Playwright tests
@@ -412,17 +413,17 @@ On a green run against `main`, `deploy-cpanel.yml` then mirrors `out/` into `~/p
 **Build for production / root path** (default — matches cPanel):
 
 ```bash
-npm run build
-npm run preview
-# Visit http://localhost:3000
+pnpm run build
+pnpm run preview
+# Visit http://localhost:4173
 ```
 
 **Build for GitHub Pages staging** (with basePath subpath):
 
 ```bash
-NEXT_PUBLIC_BASE_PATH=/FFC-IN-freeforcharity.org npm run build
-npm run preview
-# Visit http://localhost:3000
+NEXT_PUBLIC_BASE_PATH=/FFC-IN-freeforcharity.org pnpm run build
+pnpm run preview
+# Visit http://localhost:4173
 ```
 
 ### Build Configuration
@@ -516,7 +517,7 @@ The website consists of 35 page routes organized as follows:
 # Kill process on port 3000
 npx kill-port 3000
 # Or use a different port
-npm run dev -- -p 3001
+pnpm run dev -- -p 3001
 ```
 
 **Issue: Build cache issues**
@@ -524,22 +525,22 @@ npm run dev -- -p 3001
 ```bash
 # Clear Next.js cache
 rm -rf .next
-npm run build
+pnpm run build
 ```
 
 **Issue: Dependencies out of sync**
 
 ```bash
 # Clean install
-rm -rf node_modules package-lock.json
-npm install
+rm -rf node_modules pnpm-lock.yaml
+pnpm install
 ```
 
 **Issue: Playwright browsers not found**
 
 ```bash
 # Install Playwright browsers
-npx playwright install chromium --with-deps
+pnpm exec playwright install chromium --with-deps
 ```
 
 **Issue: Tests fail in CI but pass locally**
@@ -554,8 +555,8 @@ npx playwright install chromium --with-deps
 Contributions are welcome! Please follow these guidelines:
 
 1. **Fork the repository** and create a feature branch
-2. **Follow the code style**: Run `npm run lint` before committing
-3. **Test your changes**: Run `npm test` to ensure tests pass
+2. **Follow the code style**: Run `pnpm run lint` before committing
+3. **Test your changes**: Run `pnpm test` to ensure tests pass
 4. **Write descriptive commit messages**
 5. **Submit a pull request** with a clear description
 

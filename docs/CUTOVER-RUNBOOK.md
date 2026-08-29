@@ -60,7 +60,7 @@ Deep-dive docs:
 - [ ] Confirm `/hub/` renders WHMCS on staging ([#157])
 - [ ] Run the smoke suite against staging:
   ```bash
-  BASE_URL=https://staging.freeforcharity.org npm run smoke-test
+  BASE_URL=https://staging.freeforcharity.org pnpm run smoke-test
   ```
 
 ## Step 3 — THE FLIP
@@ -71,7 +71,7 @@ Deep-dive docs:
 - [ ] Cloudflare → Caching → **Purge Everything**
 - [ ] Smoke the live origin immediately:
   ```bash
-  BASE_URL=https://freeforcharity.org npm run smoke-test
+  BASE_URL=https://freeforcharity.org pnpm run smoke-test
   ```
   Expect: every sitemap URL 200, WP→Next 301s firing, `/hub/` serving
   WHMCS, unknown URL 404.

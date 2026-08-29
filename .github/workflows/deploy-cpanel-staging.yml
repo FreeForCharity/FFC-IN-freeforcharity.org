@@ -47,14 +47,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
           node-version: '24'
-          cache: npm
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build Next.js static export
         env:
@@ -62,7 +65,7 @@ jobs:
           # same as the sibling deploy-cpanel.yml that targets ~/public_html_next/.
           NEXT_PUBLIC_BASE_PATH: ''
         run: |
-          npm run build
+          pnpm run build
           if [ ! -d ./out ]; then
             echo "::error::Expected ./out directory after 'next build' but it was not created."
             exit 1

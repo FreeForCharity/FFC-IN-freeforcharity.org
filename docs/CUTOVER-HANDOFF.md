@@ -71,14 +71,14 @@ document-root swap, the nonprofit-tier cPanel hosting is already paid for.
 
 - **`deploy-cpanel.yml`** — production. Builds with empty basePath and `lftp`-uploads `out/` to `~/public_html_next/` on the InterServer cPanel host **over explicit FTPS (AUTH TLS)** — `ftp:ssl-force yes` aborts rather than fall back to plaintext, and `ftp:ssl-protect-data yes` encrypts the data channel, so the credential never crosses the wire in the clear. Manual-trigger only. Uses the same **Azure OIDC → Key Vault** credential model as `deploy-cpanel-staging.yml` (no raw `FTP_*` repo secrets), reusing the **`cpanel-staging` GitHub Environment** and the **main cPanel FTP account** (`wr-all-cbm-cpanel-ffc-interserver-ftp-user` / `-ftp-password` in KV) — because `deploy-prod` is jailed to the live `public_html/` and can't reach the `public_html_next/` parking dir (see "FTP accounts" below). Upload and post-cutover smoke are split: a default dispatch only writes to `public_html_next/` (zero live impact); pass `run_smoke=true` after the docroot swap to verify the live apex. Preserves the `~/public_html_next/hub` symlink (WHMCS) via an lftp exclude.
 - **`verify-cpanel-ftp.yml`** — reusable, read-only "Verify cPanel FTP credential" check. Logs in **over the same explicit FTPS** as a chosen account (`deploy-prod` / `deploy-staging` / `main`) and reports its jail/home and which dirs it can reach. Run it before wiring any credential into a deploy. (Used 2026-06-20 to confirm the host negotiates FTPS — `Pure-FTPd [TLS]` → `230 OK` — and that `main` is homed at the account root.)
-- **`deploy-gh-pages-staging.yml`** — optional. Manual-trigger only. Useful for hosting a no-DNS preview at the GH Pages URL if needed (e.g., to re-run `npm run visual-regression`).
+- **`deploy-gh-pages-staging.yml`** — optional. Manual-trigger only. Useful for hosting a no-DNS preview at the GH Pages URL if needed (e.g., to re-run `pnpm run visual-regression`).
 
 ### Pre-cutover artifacts in this repo
 
 - [`public/.htaccess`](../public/.htaccess) — Apache config that ships with the static export. Handles trailing-slash stripping, `.html` resolution, WP→Next 301/302 redirects (incl. PayPal callbacks), `/hub/` pass-through, WP-legacy path blocking, cache + compression, security headers.
 - [`docs/cutover-redirects.csv`](cutover-redirects.csv) — same 30-row redirect set as a Cloudflare Bulk Redirects import (optional; `.htaccess` already covers it, but Cloudflare can preempt before hitting origin).
 - [`docs/CUTOVER-REDIRECTS.md`](CUTOVER-REDIRECTS.md) — operator runbook.
-- [`docs/visual-regression/README.md`](visual-regression/README.md) + `scripts/visual-regression/capture.mjs` — `npm run visual-regression` to compare every non-homepage page against the live WordPress origin (homepage excluded because it's a Figma redesign).
+- [`docs/visual-regression/README.md`](visual-regression/README.md) + `scripts/visual-regression/capture.mjs` — `pnpm run visual-regression` to compare every non-homepage page against the live WordPress origin (homepage excluded because it's a Figma redesign).
 - [`docs/STAGING-CHECKLIST.md`](STAGING-CHECKLIST.md) — manual verification checklist.
 - [`docs/ROLLBACK.md`](ROLLBACK.md) — emergency rollback procedure (document-root swap).
 
@@ -145,7 +145,7 @@ because it lives in a sibling directory.
    - `NEXT_PUBLIC_CLARITY_PROJECT_ID` — Microsoft Clarity Project ID
    - `NEXT_PUBLIC_META_PIXEL_ID` — Meta Pixel ID (if running Meta ads)
 
-   The deploy workflow (`.github/workflows/deploy-cpanel.yml`) already maps these secrets into the `npm run build` step's `env:` block. Once the secret is populated in repo settings, the next deploy bakes the value into the static export (no further workflow edit needed). Without the secret, the corresponding analytics script never loads (no placeholder fallbacks).
+   The deploy workflow (`.github/workflows/deploy-cpanel.yml`) already maps these secrets into the `pnpm run build` step's `env:` block. Once the secret is populated in repo settings, the next deploy bakes the value into the static export (no further workflow edit needed). Without the secret, the corresponding analytics script never loads (no placeholder fallbacks).
 
 5. **DNS TTL — leave on "Auto"** ([#136](https://github.com/FreeForCharity/FFC-IN-freeforcharity.org/issues/136)). For this cutover, DNS doesn't change — the swap happens at the cPanel document-root level on the same origin. Cloudflare's "Auto" TTL already serves proxied records at 300s, so manually lowering buys nothing and forgetting to restore it after costs subsequent-deploy propagation time. **Skip this step unless you're also planning a DNS change** (and you aren't).
 

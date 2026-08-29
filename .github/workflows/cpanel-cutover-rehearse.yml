@@ -84,21 +84,24 @@ jobs:
 
       - uses: actions/checkout@v7
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
           node-version: '24'
-          cache: npm
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build Next.js static export
         env:
           NEXT_PUBLIC_BASE_PATH: ''
         run: |
           set -euo pipefail
-          npm run build
+          pnpm run build
           test -f ./out/index.html || { echo "::error::out/index.html missing"; exit 1; }
           test -f ./out/.htaccess || { echo "::error::out/.htaccess missing (routing + /hub handoff live here)"; exit 1; }
           test -f ./out/about-us/index.html || { echo "::error::out/about-us/index.html missing (trailingSlash export)"; exit 1; }

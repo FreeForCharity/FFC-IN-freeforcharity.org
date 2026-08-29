@@ -79,7 +79,7 @@ export default defineConfig({
 
   // Run local dev server before starting the tests
   webServer: {
-    command: 'npx serve out -l 4173',
+    command: 'pnpm exec serve out -l 4173',
     url: 'http://localhost:4173',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,

@@ -29,15 +29,16 @@ The site is **fully static**. No server-side rendering, no API routes, no middle
 ## Commands You Will Use
 
 ```bash
-npm install          # Install dependencies (~17s)
-npm run dev          # Start local dev server (~1s startup, Turbopack)
-npm run lint         # Run ESLint checks
-npm run build        # Build static export (~30s)
-npm run test         # Run Playwright E2E tests
-npm run preview      # Serve built output locally
+pnpm install          # Install dependencies (~17s)
+pnpm run dev          # Start local dev server (~1s startup, Turbopack)
+pnpm run lint         # Run ESLint checks
+pnpm run build        # Build static export (~30s)
+pnpm test             # Run Jest unit tests
+pnpm run test:e2e     # Run Playwright E2E tests
+pnpm run preview      # Serve built output locally
 ```
 
-**Important:** `npm run build` can take 30+ seconds. Do not interrupt it.
+**Important:** `pnpm run build` can take 30+ seconds. Do not interrupt it.
 
 ---
 
@@ -80,7 +81,7 @@ tests/            --> Playwright E2E tests
    import { assetPath } from '@/lib/assetPath'
    ;<img src={assetPath('/Images/volunteers.jpg')} alt="Volunteers" />
    ```
-4. Run the pre-commit checklist: `npm run lint && npm run build && npm run test`
+4. Run the pre-commit checklist: `pnpm run lint && pnpm run build && pnpm test && pnpm run test:e2e`
 
 ### Updating Site Content
 
@@ -88,16 +89,16 @@ Most text content lives in `src/data/` as `.ts` modules or `.json` files in subd
 
 1. Find the relevant file in `src/data/`
 2. Edit the text values (keep the data structure intact)
-3. Run `npm run build` to verify nothing breaks
+3. Run `pnpm run build` to verify nothing breaks
 
 ### Fixing Lint Errors
 
-1. Run `npm run lint` to see the errors
+1. Run `pnpm run lint` to see the errors
 2. Most common fixes:
    - Missing `alt` attributes on images
    - Unused imports (remove them)
    - `any` types (add proper TypeScript types)
-3. Re-run `npm run lint` to confirm all errors are resolved
+3. Re-run `pnpm run lint` to confirm all errors are resolved
 
 ### Creating a Pull Request
 
@@ -151,7 +152,7 @@ Google Fonts require network access. On restricted networks, the site falls back
 
 If you changed text in `src/data/`, some text-matching tests may need updating. Check the test failure output and update expected values to match your changes.
 
-### `npm run build` hangs or times out
+### `pnpm run build` hangs or times out
 
 The build genuinely takes 30+ seconds. Do not kill it. If it exceeds 2 minutes, check for infinite loops in your code or recursive component rendering.
 

@@ -27,9 +27,10 @@ Review a pull request for this Next.js static site project.
 5. Verify the build still works:
 
    ```bash
-   npm run lint
-   npm run build
-   npm run test
+   pnpm run lint
+   pnpm run build
+   pnpm test
+   pnpm run test:e2e
    ```
 
 6. Provide a summary:

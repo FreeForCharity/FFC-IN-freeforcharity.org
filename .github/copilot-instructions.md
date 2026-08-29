@@ -10,9 +10,9 @@ On merge to `main`, CI (`.github/workflows/ci.yml`, "CI - Build and Test") runs;
 
 ## Pre-Push Checks (in order)
 
-1. `npm run lint`
-2. `npm run build`
-3. `npm run test`
+1. `pnpm run lint`
+2. `pnpm run build`
+3. `pnpm run test`
 
 ## Architecture
 

@@ -46,10 +46,10 @@ before proceeding to the manual checks below.
 | E2E tests         | `ci.yml`                      | Playwright: navigation, images, cookie consent, copyright, contact page, footer, team, mobile nav, dropdowns, external links                                 |
 | Lighthouse        | `lighthouse.yml`              | Performance / a11y / SEO / best practices thresholds on multiple URLs                                                                                        |
 | CodeQL            | `codeql.yml`                  | Static analysis for JS/TS and Actions                                                                                                                        |
-| Linkinator        | manual                        | Optional: run `npm run check-links` on `./out` for additional coverage                                                                                       |
-| Visual regression | manual                        | Run `npm run visual-regression` to compare each non-homepage page against the live WordPress origin (see `docs/visual-regression/README.md`)                 |
+| Linkinator        | manual                        | Optional: run `pnpm run check-links` on `./out` for additional coverage                                                                                      |
+| Visual regression | manual                        | Run `pnpm run visual-regression` to compare each non-homepage page against the live WordPress origin (see `docs/visual-regression/README.md`)                |
 | Deploy            | `deploy-cpanel.yml`           | Manual-trigger FTPS mirror of `out/` into `~/public_html` on InterServer cPanel (production, mirror-in-place — excludes `hub/` and the other cPanel keepers) |
-| Staging preview   | `deploy-gh-pages-staging.yml` | Manual-trigger GitHub Pages preview build (optional; useful for `npm run visual-regression`)                                                                 |
+| Staging preview   | `deploy-gh-pages-staging.yml` | Manual-trigger GitHub Pages preview build (optional; useful for `pnpm run visual-regression`)                                                                |
 
 ---
 
@@ -120,7 +120,7 @@ root via a symlink `hub -> ../public_html/hub`. Verify before flipping:
 - [ ] No visible broken image icons anywhere on critical pages
 - [ ] Run post-deploy smoke test:
   ```bash
-  npx playwright test tests/post-deploy-smoke.spec.ts --project=chromium
+  pnpm exec playwright test tests/post-deploy-smoke.spec.ts --project=chromium
   ```
 
 ---
@@ -158,7 +158,7 @@ document.querySelector('link[rel="canonical"]').href
 ```
 
 - [ ] Homepage title: `Free For Charity | Reduce Costs, Increase Impact`
-- [ ] Each page has a unique `<title>` tag (use `npm run build` output to verify)
+- [ ] Each page has a unique `<title>` tag (use `pnpm run build` output to verify)
 - [ ] Canonical URLs point to `https://www.freeforcharity.org/[path]`
 - [ ] On staging: `robots.txt` accessible at `https://freeforcharity.github.io/FFC-IN-freeforcharity.org/robots.txt`; on production: `https://www.freeforcharity.org/robots.txt` — both allow Googlebot
 - [ ] `.htaccess` is in place at `~/public_html_next/.htaccess` after first cPanel deploy (check via cPanel File Manager → "Show Hidden Files")
@@ -190,7 +190,7 @@ All items below must be confirmed before flipping the document root:
 - [ ] Symlink `~/public_html_next/hub -> ~/public_html/hub` is in place
 - [ ] All critical pages load correctly in incognito on the cPanel preview (sections 2a + 2d above)
 - [ ] Images all load (section 3 above)
-- [ ] Visual regression run (`npm run visual-regression`) reviewed — no
+- [ ] Visual regression run (`pnpm run visual-regression`) reviewed — no
       missing content on non-homepage pages (see
       [`docs/visual-regression/`](visual-regression/))
 - [ ] (Optional) Cloudflare Bulk Redirects rule staged but **not** enabled

@@ -89,7 +89,7 @@ jobs:
                 '## Next steps',
                 '',
                 '1. Open the workflow run above and read the smoke-test output',
-                '2. Reproduce locally if needed: `BASE_URL=https://freeforcharity.org npm run smoke-test`',
+                '2. Reproduce locally if needed: `BASE_URL=https://freeforcharity.org pnpm run smoke-test`',
                 '3. Fix the underlying issue (most likely operator-side: Cloudflare / cPanel dashboard)',
                 '4. Re-run the workflow to confirm green; the issue auto-closes if you keep this label and resolve it',
                 '',

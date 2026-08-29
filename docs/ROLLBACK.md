@@ -128,7 +128,7 @@ curl -I https://freeforcharity.org/
 curl -sS https://freeforcharity.org/hub/ | grep -iE 'whmcs|clientarea|cart\.php'
 # Expect: a WHMCS marker — billing still works (it never moved)
 
-BASE_URL=https://freeforcharity.org npm run smoke-test
+BASE_URL=https://freeforcharity.org pnpm run smoke-test
 # Full live suite: every sitemap URL, the WP->Next redirects, /hub, assets.
 ```
 

@@ -54,7 +54,7 @@ FTP_HOST=<host> FTP_USER=<user> FTP_PASS=<pass> node scripts/funnel-report.mjs
 production endpoint's contract (204 on valid **and** invalid params — the
 storefront must never see an error — and no `Set-Cookie`, the consent-free
 guarantee). Like the Zeffy link check it is gated off normal CI; run it with
-`FUNNEL_LIVE=1 npx playwright test tests/funnel-beacon.spec.ts`. It uses the
+`FUNNEL_LIVE=1 pnpm exec playwright test tests/funnel-beacon.spec.ts`. It uses the
 unused test pid `999` so real counters are not polluted.
 
 ## Notes

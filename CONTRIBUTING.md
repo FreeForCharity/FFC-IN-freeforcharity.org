@@ -45,11 +45,11 @@ Free For Charity is committed to providing a welcoming and inclusive environment
    ```
 4. **Install dependencies**:
    ```bash
-   npm install
+   pnpm install
    ```
 5. **Start development server**:
    ```bash
-   npm run dev
+   pnpm run dev
    ```
    Visit http://localhost:3000 to see the site
 
@@ -71,9 +71,9 @@ git checkout -b feature/your-feature-name
 1. **Make your changes** in small, logical commits
 2. **Test your changes** frequently:
    ```bash
-   npm run lint        # Check code quality
-   npm run build       # Test production build
-   npm test           # Run automated tests
+   pnpm run lint        # Check code quality
+   pnpm run build       # Test production build
+   pnpm test           # Run automated tests
    ```
 3. **Commit with descriptive messages**:
    ```bash
@@ -168,17 +168,17 @@ Always run these commands before submitting a pull request:
 
 ```bash
 # 1. Run linter (expect 11 warnings - documented)
-npm run lint
+pnpm run lint
 
 # 2. Build the project
-npm run build
+pnpm run build
 
 # 3. Run automated tests
-npm test
+pnpm test
 
 # 4. Manual testing
-npm run preview
-# Test in browser at http://localhost:3000
+pnpm run preview
+# Test in browser at http://localhost:4173 (the preview port)
 ```
 
 ### Manual Testing Checklist
@@ -213,8 +213,8 @@ test.describe('My Feature', () => {
 Run your tests:
 
 ```bash
-npm test                 # All tests
-npx playwright test my-feature.spec.ts  # Specific test
+pnpm test                 # All tests
+pnpm exec playwright test my-feature.spec.ts  # Specific test
 ```
 
 ## Submitting Changes

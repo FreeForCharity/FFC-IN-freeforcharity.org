@@ -29,7 +29,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/) format: `<type>
 
 ## Build Commands
 
-- NEVER CANCEL long-running commands (`npm install`, `npm run build`, `npm run test`)
+- NEVER CANCEL long-running commands (`pnpm install`, `pnpm run build`, `pnpm run test`)
 - Set timeout to 180+ seconds for builds
 - Wait for commands to complete before proceeding
 

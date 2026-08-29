@@ -13,7 +13,7 @@ diffs there are intentional product direction, not regressions.
 ## Run
 
 ```sh
-npm run visual-regression
+pnpm run visual-regression
 ```
 
 That runs [`scripts/visual-regression/capture.mjs`](../../scripts/visual-regression/capture.mjs),
