@@ -15,7 +15,7 @@ test.describe('Desktop Dropdown Menus', () => {
     await page.goto('/')
   })
 
-  test('should show Help for Charities dropdown on hover with 7 sub-items', async ({ page }) => {
+  test('should show Help for Charities dropdown on hover with 8 sub-items', async ({ page }) => {
     const menuItem = page.locator('header nav li').filter({ hasText: 'Help for Charities' })
     await menuItem.hover()
 
@@ -23,7 +23,7 @@ test.describe('Desktop Dropdown Menus', () => {
     await expect(dropdown).toBeVisible()
 
     const links = dropdown.locator('a')
-    await expect(links).toHaveCount(7)
+    await expect(links).toHaveCount(8)
   })
 
   test('should show Volunteer dropdown on hover with 3 sub-items', async ({ page }) => {

@@ -30,6 +30,7 @@ const menuItems: MenuItem[] = [
     hasDropdown: true,
     dropdownItems: [
       { label: 'Help for Charities', path: '/help-for-charities' },
+      { label: 'Website Templates & the FFC Footer', path: '/website-templates' },
       { label: '501c3 Onboarding Guide', path: '/501c3' },
       { label: 'Pre501c3 Onboarding Guide', path: '/pre501c3' },
       {
