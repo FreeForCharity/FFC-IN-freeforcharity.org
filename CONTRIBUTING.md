@@ -178,7 +178,7 @@ pnpm test
 
 # 4. Manual testing
 pnpm run preview
-# Test in browser at http://localhost:3000
+# Test in browser at http://localhost:4173 (the preview port)
 ```
 
 ### Manual Testing Checklist

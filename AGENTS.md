@@ -23,14 +23,15 @@
 
 ## Core Commands
 
-| Command            | What It Does               | Typical Duration |
-| ------------------ | -------------------------- | ---------------- |
-| `pnpm install`     | Install dependencies       | ~17s             |
-| `pnpm run dev`     | Start dev server (Turbo)   | ~1s startup      |
-| `pnpm run lint`    | Run ESLint                 | ~2s              |
-| `pnpm run build`   | Production static build    | ~30s             |
-| `pnpm run test`    | Run Playwright E2E tests   | ~15s             |
-| `pnpm run preview` | Serve built output locally | immediate        |
+| Command             | What It Does               | Typical Duration |
+| ------------------- | -------------------------- | ---------------- |
+| `pnpm install`      | Install dependencies       | ~17s             |
+| `pnpm run dev`      | Start dev server (Turbo)   | ~1s startup      |
+| `pnpm run lint`     | Run ESLint                 | ~2s              |
+| `pnpm run build`    | Production static build    | ~30s             |
+| `pnpm test`         | Run Jest unit tests        | ~10s             |
+| `pnpm run test:e2e` | Run Playwright E2E tests   | ~15s             |
+| `pnpm run preview`  | Serve built output locally | immediate        |
 
 **NEVER CANCEL long-running commands.** Builds and E2E tests take time. Set your timeout to 180+ seconds and let them finish.
 
@@ -46,7 +47,8 @@ All changes follow this process:
 4. **Pre-commit checklist** (run in this order):
    1. `pnpm run lint` -- Catch code quality issues
    2. `pnpm run build` -- Verify the static export succeeds
-   3. `pnpm run test` -- Run Playwright E2E tests
+   3. `pnpm test` -- Run Jest unit tests
+   4. `pnpm run test:e2e` -- Run Playwright E2E tests
 5. **PR** -- Open a Pull Request, link to the issue with `Fixes #NNN`
 6. **Merge** -- Merge via PR review (no direct commits to `main`)
 7. **Deploy** -- Every merge to `main` runs CI (`.github/workflows/ci.yml`). On green, `.github/workflows/deploy-cpanel.yml` auto-deploys to production by `lftp`-mirroring `out/` into `~/public_html` (the live apex docroot) over FTPS, excluding WHMCS at `~/public_html/hub` and cPanel keepers.

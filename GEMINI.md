@@ -33,7 +33,8 @@ pnpm install          # Install dependencies (~17s)
 pnpm run dev          # Start local dev server (~1s startup, Turbopack)
 pnpm run lint         # Run ESLint checks
 pnpm run build        # Build static export (~30s)
-pnpm run test         # Run Playwright E2E tests
+pnpm test             # Run Jest unit tests
+pnpm run test:e2e     # Run Playwright E2E tests
 pnpm run preview      # Serve built output locally
 ```
 
@@ -80,7 +81,7 @@ tests/            --> Playwright E2E tests
    import { assetPath } from '@/lib/assetPath'
    ;<img src={assetPath('/Images/volunteers.jpg')} alt="Volunteers" />
    ```
-4. Run the pre-commit checklist: `pnpm run lint && pnpm run build && pnpm run test`
+4. Run the pre-commit checklist: `pnpm run lint && pnpm run build && pnpm test && pnpm run test:e2e`
 
 ### Updating Site Content
 

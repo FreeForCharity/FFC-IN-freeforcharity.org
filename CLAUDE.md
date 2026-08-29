@@ -22,11 +22,11 @@ You have full terminal access via the Bash tool. Use it for all CLI operations.
 
 **Set timeout to 180+ seconds** for these commands:
 
-| Command          | Why                                                |
-| ---------------- | -------------------------------------------------- |
-| `pnpm run build` | Static export can take 30-60s; do not cancel early |
-| `pnpm run test`  | Playwright launches browsers; needs time           |
-| `pnpm install`   | Network-dependent; can be slow on first run        |
+| Command             | Why                                                |
+| ------------------- | -------------------------------------------------- |
+| `pnpm run build`    | Static export can take 30-60s; do not cancel early |
+| `pnpm run test:e2e` | Playwright launches browsers; needs time           |
+| `pnpm install`      | Network-dependent; can be slow on first run        |
 
 **NEVER CANCEL a running build, test, or install command.** Let it finish. If it fails, read the error output.
 
@@ -39,7 +39,8 @@ Run these in order before committing:
 ```bash
 pnpm run lint      # Check for lint errors
 pnpm run build     # Verify static export
-pnpm run test      # Run Playwright tests
+pnpm test          # Run Jest unit tests
+pnpm run test:e2e  # Run Playwright E2E tests
 ```
 
 If any step fails, fix the issue and re-run from that step forward.

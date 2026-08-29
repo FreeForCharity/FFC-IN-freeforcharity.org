@@ -17,7 +17,7 @@ Run a health check on the built site to verify core functionality.
    ```
 
 3. Wait for the server to be ready, then check:
-   - Homepage loads (HTTP 200 at http://localhost:3000)
+   - Homepage loads (HTTP 200 at http://localhost:4173 — the preview port)
    - All navigation links return valid responses
    - No broken images (check `<img>` src attributes resolve)
    - Footer renders with all 6 mandatory policy links
@@ -27,7 +27,7 @@ Run a health check on the built site to verify core functionality.
 4. Run the existing Playwright tests:
 
    ```bash
-   pnpm run test
+   pnpm run test:e2e
    ```
 
 5. Report results as a checklist:

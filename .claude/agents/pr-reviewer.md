@@ -29,7 +29,8 @@ Review a pull request for this Next.js static site project.
    ```bash
    pnpm run lint
    pnpm run build
-   pnpm run test
+   pnpm test
+   pnpm run test:e2e
    ```
 
 6. Provide a summary:
