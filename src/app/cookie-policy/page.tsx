@@ -442,15 +442,18 @@ export default function CookiePolicy() {
           <ol className="list-decimal list-inside pb-[1em]" start={5}>
             <li>
               <h2 className="text-[26px] leading-[26px] font-[700] text-[#333] mb-[10px]">
-                <strong>Do Not Track Signals</strong>
+                <strong>Do Not Track and Global Privacy Control Signals</strong>
               </h2>
             </li>
           </ol>
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-            Some browsers have a &quot;Do Not Track&quot; feature that lets you tell websites that
-            you do not want to have your online activities tracked. At this time, we do not respond
-            to browser &quot;Do Not Track&quot; signals. However, you can control cookies through
-            our cookie consent banner.
+            Some browsers send a &quot;Do Not Track&quot; or Global Privacy Control signal telling
+            websites you do not want your online activities tracked. This site does not need to
+            react to those signals to honor their intent: analytics and marketing cookies are off
+            for every visitor until you opt in through the consent banner, and we do not sell or
+            share personal information as defined by the CCPA/CPRA. Declining consent — or
+            withdrawing it later, which also deletes the tracking cookies — keeps you in the
+            untracked state those signals ask for.
           </p>
 
           {/* Section 6 */}

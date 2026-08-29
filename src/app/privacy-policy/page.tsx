@@ -18,7 +18,7 @@ export default function PrivacyPolicy() {
             <strong>Privacy Policy</strong>
           </h1>
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-            <em>Effective Date: 07-25-2026</em>
+            <em>Effective Date: 08-29-2026</em>
           </p>
 
           {/* Section 1 */}
@@ -297,8 +297,89 @@ export default function PrivacyPolicy() {
             </li>
           </ul>
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
-            To exercise these rights, please contact us at 520-222-8104.
+            To exercise these rights, please contact us at{' '}
+            <a href="mailto:clarkemoyer@freeforcharity.org" className="text-[#0056B3] underline">
+              clarkemoyer@freeforcharity.org
+            </a>{' '}
+            or 520-222-8104.
           </p>
+
+          <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500] mt-[1em]">
+            <strong>7.1. Your Rights in the European Union, United Kingdom, and EEA (GDPR)</strong>
+          </p>
+          <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
+            If you visit from the European Union, the United Kingdom, or the wider European Economic
+            Area, the EU General Data Protection Regulation (GDPR) or the UK GDPR applies to our
+            handling of your personal data, and this subsection supplements the rights listed above.
+            We process personal data only on these legal bases:
+          </p>
+          <ul className="list-inside list-disc space-y-[4px] pb-[1em]">
+            <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
+              <strong>Consent:</strong> Analytics and marketing cookies are off until you opt in
+              through the cookie consent banner. You can withdraw consent at any time via Cookie
+              Preferences, and withdrawal deletes the associated tracking cookies from your browser.
+            </li>
+            <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
+              <strong>Legitimate interests:</strong> Operating, securing, and improving this website
+              — for example essential cookies and server logs — balanced against your rights.
+            </li>
+            <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
+              <strong>Legal obligation:</strong> Where processing is required to comply with
+              applicable law.
+            </li>
+          </ul>
+          <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
+            In addition to the rights above, you have the right to receive your data in a portable
+            format, to object to processing based on legitimate interests, and to withdraw any
+            consent at any time without affecting the lawfulness of processing before withdrawal. We
+            will respond to requests within the time limits the GDPR sets. You also have the right
+            to lodge a complaint with your national data protection supervisory authority (in the
+            UK, the Information Commissioner&apos;s Office).
+          </p>
+
+          <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500] mt-[1em]">
+            <strong>7.2. Your California Privacy Rights (CCPA/CPRA)</strong>
+          </p>
+          <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
+            If you are a California resident, the California Consumer Privacy Act, as amended by the
+            California Privacy Rights Act (CCPA/CPRA), gives you specific rights, and this
+            subsection supplements the rest of this policy.
+          </p>
+          <ul className="list-inside list-disc space-y-[4px] pb-[1em]">
+            <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
+              <strong>We do not sell or share your personal information:</strong> Free For Charity
+              does not sell personal information, and does not share it for cross-context behavioral
+              advertising, as those terms are defined by California law — and has not done so in the
+              preceding 12 months. We do not knowingly collect or sell the personal information of
+              anyone under 16, and we do not collect sensitive personal information beyond what is
+              necessary to provide this website and our services, nor use it to infer
+              characteristics about you.
+            </li>
+            <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
+              <strong>Your rights:</strong> To know what personal information we collect, use, and
+              disclose, and to access it; to delete personal information we collected from you; to
+              correct inaccurate personal information; to opt out of any sale or sharing (not
+              applicable, since we do neither); to limit the use of sensitive personal information;
+              and to not be discriminated against for exercising any of these rights.
+            </li>
+            <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
+              <strong>Opt-out preference signals (Global Privacy Control / Do Not Track):</strong>{' '}
+              Tracking on this site is opt-in for every visitor, everywhere: analytics and marketing
+              cookies stay off until you accept them, and declining or withdrawing consent keeps you
+              — or returns you — to that untracked state. Because we also do not sell or share
+              personal information, every visitor already receives at least the protection a Global
+              Privacy Control or Do Not Track signal would request.
+            </li>
+            <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
+              <strong>Exercising your rights:</strong> Submit a request to{' '}
+              <a href="mailto:clarkemoyer@freeforcharity.org" className="text-[#0056B3] underline">
+                clarkemoyer@freeforcharity.org
+              </a>
+              . We will verify your request using information associated with your interactions with
+              us, you may use an authorized agent to submit a request on your behalf, and we will
+              respond within the timeframes California law requires.
+            </li>
+          </ul>
 
           {/* Section 8 */}
           <ol className="list-decimal list-inside pb-[1em]" start={8}>

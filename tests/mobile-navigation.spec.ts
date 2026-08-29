@@ -84,6 +84,7 @@ test.describe('Mobile Navigation', () => {
 
     const mobileMenu = page.locator('header .lg\\:hidden.absolute')
     const subItems = [
+      'Website Templates & the FFC Footer',
       '501c3 Onboarding Guide',
       'Pre501c3 Onboarding Guide',
       'Online Impacts Onboarding Guide',

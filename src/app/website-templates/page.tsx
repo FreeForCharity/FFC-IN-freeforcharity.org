@@ -7,6 +7,14 @@ export const metadata = pageMetadata({
   description:
     'Which of the two open-source FFC templates fits your charity, every feature they ship, and why each item in the FFC footer exists — from the Candid profile link grant seekers rely on to the donation pathway, policy pages, and consent banner.',
   canonical: '/website-templates/',
+  // 1200x630 social-card render (source: public/Images/website-templates-og.svg,
+  // rendered by scripts/render-og-image.mjs website-templates-og).
+  image: {
+    path: '/Images/website-templates-og.png',
+    width: 1200,
+    height: 630,
+    alt: 'Two FFC website templates, Single Page and Footer-Only, converging on the FFC footer standard with its Candid profile, EIN, donate, policy, consent, and Supported by Free For Charity items',
+  },
 })
 
 const h2 = 'font-[var(--font-faustina)] text-[32px] leading-[40px] mt-8 mb-4'

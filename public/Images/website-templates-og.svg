@@ -1,0 +1,64 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="wt-og-title" aria-describedby="wt-og-desc" font-family="Arial, Helvetica, sans-serif">
+  <title id="wt-og-title">Two templates, one FFC footer standard</title>
+  <desc id="wt-og-desc">Two boxes, the Single Page Site Template for charities without a website and the Footer-Only Template for charities that already have a design, both pointing down into a black footer bar carrying the FFC footer standard items: Candid profile, EIN, donate, seven policy pages, consent, and the Supported by Free For Charity attribution.</desc>
+
+  <!--
+    1200x630 social card for /website-templates/. Palette matches
+    journey-og.svg's AA-verified contrast table:
+      BLUE   #0567B1   ORANGE #A85400   INK #1a2e35
+    Solid colors only (no gradients) so the PNG render stays under the
+    400KB budget in __tests__/assets/image-weight.test.ts. Rendered to
+    website-templates-og.png by scripts/render-og-image.mjs.
+  -->
+
+  <defs>
+    <marker id="wt-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+      <path d="M0 0 L8 4 L0 8 Z" fill="#0567B1" />
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="630" fill="#ffffff" />
+
+  <!-- Headline -->
+  <text x="60" y="86" font-size="50" font-weight="700" fill="#1a2e35">Two templates. One footer standard.</text>
+  <text x="60" y="130" font-size="23" fill="#1a2e35">Why every item in the FFC footer earns its place &#8212; on every free charity website we build.</text>
+
+  <!-- Template boxes -->
+  <g>
+    <rect x="90" y="180" width="460" height="150" rx="14" fill="#ffffff" stroke="#0567B1" stroke-width="3" />
+    <text x="120" y="222" font-size="17" font-weight="700" fill="#0567B1" letter-spacing="0.08em">STARTING FRESH?</text>
+    <text x="120" y="258" font-size="27" font-weight="700" fill="#1a2e35">Single Page Site Template</text>
+    <text x="120" y="292" font-size="19" fill="#1a2e35">No website yet &#8212; a volunteer builds a</text>
+    <text x="120" y="316" font-size="19" fill="#1a2e35">complete site from your content.</text>
+  </g>
+  <g>
+    <rect x="650" y="180" width="460" height="150" rx="14" fill="#ffffff" stroke="#0567B1" stroke-width="3" />
+    <text x="680" y="222" font-size="17" font-weight="700" fill="#0567B1" letter-spacing="0.08em">ALREADY LOVE YOUR SITE?</text>
+    <text x="680" y="258" font-size="27" font-weight="700" fill="#1a2e35">Footer-Only Template</text>
+    <text x="680" y="292" font-size="19" fill="#1a2e35">Keep your design &#8212; adopt the compliance</text>
+    <text x="680" y="316" font-size="19" fill="#1a2e35">and trust layer on top of it.</text>
+  </g>
+
+  <!-- Convergence arrows into the footer bar -->
+  <line x1="320" y1="336" x2="320" y2="398" stroke="#0567B1" stroke-width="3" marker-end="url(#wt-arrow)" />
+  <line x1="880" y1="336" x2="880" y2="398" stroke="#0567B1" stroke-width="3" marker-end="url(#wt-arrow)" />
+  <text x="600" y="386" text-anchor="middle" font-size="21" font-weight="700" fill="#A85400" letter-spacing="0.06em">BOTH CONVERGE ON</text>
+
+  <!-- The footer bar (black, like the real FFC footer) -->
+  <g>
+    <rect x="60" y="412" width="1080" height="150" rx="14" fill="#1a1a1a" />
+    <text x="98" y="456" font-size="24" font-weight="700" fill="#ffffff">The FFC footer &#8212; a compliance and trust layer on every page</text>
+    <!-- Item chips, row 1 -->
+    <text x="98" y="500" font-size="20" fill="#7fc4f2">&#10003; Candid / GuideStar profile</text>
+    <text x="404" y="500" font-size="20" fill="#7fc4f2">&#10003; EIN anyone can verify</text>
+    <text x="676" y="500" font-size="20" fill="#7fc4f2">&#10003; Donate on every page</text>
+    <text x="948" y="500" font-size="20" fill="#7fc4f2">&#10003; Consent</text>
+    <!-- Item chips, row 2 -->
+    <text x="98" y="536" font-size="20" fill="#7fc4f2">&#10003; 7 policy pages (EU + California ready)</text>
+    <text x="530" y="536" font-size="20" fill="#7fc4f2">&#10003; Security disclosure</text>
+    <text x="790" y="536" font-size="20" fill="#ffffff" font-weight="700">Supported by Free For Charity</text>
+  </g>
+
+  <!-- Footer line -->
+  <text x="60" y="606" font-size="20" fill="#1a2e35">freeforcharity.org/website-templates &#8212; free for verified 501(c)(3)s, and pre-501(c)(3)s start at Level 1</text>
+</svg>

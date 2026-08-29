@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 import { FileText, PanelBottom, ExternalLink } from 'lucide-react'
 import { templateOptions, type TemplateOption } from '@/data/templates'
 
@@ -109,7 +110,12 @@ const ChooseYourTemplate = () => {
           data-font="raleway-font"
         >
           Not sure which to pick? Choose the Single Page Site Template — it&rsquo;s the fastest path
-          to a validated site.
+          to a validated site. For the full story of what each template ships and why every footer
+          item exists, read{' '}
+          <Link href="/website-templates/" className="font-[700] text-[#0567B1] hover:underline">
+            website templates &amp; the FFC footer, explained
+          </Link>
+          .
         </p>
       </div>
     </section>
