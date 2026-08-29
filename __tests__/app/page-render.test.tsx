@@ -51,6 +51,7 @@ import Techstack from '../../src/app/techstack/page'
 import TermsOfService from '../../src/app/terms-of-service/page'
 import Volunteer from '../../src/app/volunteer/page'
 import VulnerabilityDisclosurePolicy from '../../src/app/vulnerability-disclosure-policy/page'
+import WebsiteTemplates from '../../src/app/website-templates/page'
 import WorkforceDevelopment from '../../src/app/workforce-development/page'
 
 const pages: [string, React.ComponentType][] = [
@@ -86,6 +87,7 @@ const pages: [string, React.ComponentType][] = [
   ['Terms of Service', TermsOfService],
   ['Volunteer', Volunteer],
   ['Vulnerability Disclosure Policy', VulnerabilityDisclosurePolicy],
+  ['Website Templates', WebsiteTemplates],
   ['Workforce Development', WorkforceDevelopment],
 ]
 

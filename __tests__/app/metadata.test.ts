@@ -56,6 +56,7 @@ const pages = [
   },
   { path: 'free-for-charitys-tools-for-success/page', name: 'Tools for Success' },
   { path: 'online-impacts-onboarding-guide/page', name: 'Online Impacts Onboarding' },
+  { path: 'website-templates/page', name: 'Website Templates' },
 ]
 
 describe('Page Metadata Exports', () => {

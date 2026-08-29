@@ -332,6 +332,12 @@
       "type": "post"
     },
     {
+      "title": "Website Templates & the FFC Footer, Explained",
+      "description": "Which of the two open-source FFC templates fits your charity, every feature they ship, and why each item in the FFC footer exists — from the Candid profile link grant seekers rely on to the donation pathway, policy pages, and consent banner.",
+      "href": "/website-templates/",
+      "type": "page"
+    },
+    {
       "title": "What is the cost?",
       "description": "You would be amazed at how frequently we get asked this question about our costs. For our consulting engagements we are actually 100% free. While there are many companies and other nonprofits that charge for these services, we provide them for free!",
       "href": "/what-is-the-cost/",

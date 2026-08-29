@@ -1,46 +1,19 @@
 import React from 'react'
 import { FileText, PanelBottom, ExternalLink } from 'lucide-react'
+import { templateOptions, type TemplateOption } from '@/data/templates'
 
-interface TemplateOption {
-  icon: React.ReactNode
-  eyebrow: string
-  title: string
-  description: string
-  features: string[]
-  repoUrl: string
-  repoLabel: string
+// Template facts (names, descriptions, repos) come from the shared data
+// module so this chooser and /website-templates/ cannot drift apart; only
+// the icons are chosen here.
+const templateIcons: Record<TemplateOption['id'], React.ReactNode> = {
+  'single-page': <FileText className="w-9 h-9" aria-hidden="true" />,
+  'footer-only': <PanelBottom className="w-9 h-9" aria-hidden="true" />,
 }
 
-const templates: TemplateOption[] = [
-  {
-    icon: <FileText className="w-9 h-9" aria-hidden="true" />,
-    eyebrow: 'Starting fresh?',
-    title: 'Single Page Site Template',
-    description:
-      'For charities without a website — most pre-501(c)(3)s start here. A complete, professionally structured single-page site built from our tested template. We design and build it from your content.',
-    features: [
-      'Every section a charity needs: mission, programs, team, donate, contact',
-      'Fast static hosting on GitHub Pages',
-      'Full FFC footer with legal pages, cookie consent, and analytics built in',
-    ],
-    repoUrl: 'https://github.com/FreeForCharity/FFC-IN-FFC_Single_Page_Template',
-    repoLabel: 'View the Single Page template on GitHub',
-  },
-  {
-    icon: <PanelBottom className="w-9 h-9" aria-hidden="true" />,
-    eyebrow: 'Already love your website?',
-    title: 'Footer-Only Template',
-    description:
-      'For charities that already have a designed site and need the validation and formality of the FFC standard — added to your existing design instead of replacing it.',
-    features: [
-      'The FFC footer and seven legal/policy pages',
-      'GDPR cookie consent and analytics',
-      'Team section and SEO infrastructure',
-    ],
-    repoUrl: 'https://github.com/FreeForCharity/FFC-IN-Footer_Only_Template',
-    repoLabel: 'View the Footer-Only template on GitHub',
-  },
-]
+const templates = templateOptions.map((template) => ({
+  ...template,
+  icon: templateIcons[template.id],
+}))
 
 const ChooseYourTemplate = () => {
   return (
