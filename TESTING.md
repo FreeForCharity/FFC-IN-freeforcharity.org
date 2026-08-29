@@ -418,7 +418,7 @@ pnpm audit
 # Kill process on port 3000
 npx kill-port 3000
 # Or specify different port
-pnpm run dev -- -p 3001
+pnpm run dev -p 3001
 ```
 
 **Issue: Changes not reflecting**
