@@ -90,9 +90,10 @@ pnpm run dev          # Start development server (with Turbopack)
 pnpm run build        # Build for production (~15-20 seconds)
 pnpm run preview      # Preview production build (requires build first)
 pnpm run lint         # Run ESLint (expect 0 errors)
-pnpm test             # Run Playwright tests (requires build first)
-pnpm run test:headed  # Run tests with visible browser
-pnpm run test:ui      # Run tests in interactive UI mode
+pnpm test                 # Run Jest unit/a11y tests
+pnpm run test:e2e         # Run Playwright E2E tests (requires build first)
+pnpm run test:e2e:headed  # Run E2E tests with visible browser
+pnpm run test:e2e:ui      # Run E2E tests in interactive UI mode
 ```
 
 ## Testing
@@ -109,9 +110,9 @@ pnpm run build
 pnpm exec playwright install chromium
 
 # 3. Run tests
-pnpm test              # Headless mode
-pnpm run test:headed   # With browser visible
-pnpm run test:ui       # Interactive UI mode
+pnpm run test:e2e         # Headless mode
+pnpm run test:e2e:headed  # With browser visible
+pnpm run test:e2e:ui      # Interactive UI mode
 ```
 
 ### Test Coverage
@@ -414,7 +415,7 @@ On a green run against `main`, `deploy-cpanel.yml` then mirrors `out/` into `~/p
 ```bash
 pnpm run build
 pnpm run preview
-# Visit http://localhost:3000
+# Visit http://localhost:4173
 ```
 
 **Build for GitHub Pages staging** (with basePath subpath):
@@ -422,7 +423,7 @@ pnpm run preview
 ```bash
 NEXT_PUBLIC_BASE_PATH=/FFC-IN-freeforcharity.org pnpm run build
 pnpm run preview
-# Visit http://localhost:3000
+# Visit http://localhost:4173
 ```
 
 ### Build Configuration

@@ -56,7 +56,7 @@ pnpm run build         # Takes ~15-20 seconds
 ### 5. Preview Build
 
 ```bash
-pnpm run preview       # Visit http://localhost:3000
+pnpm run preview       # Visit http://localhost:4173
 ```
 
 ### 6. Run Automated Tests
@@ -245,7 +245,7 @@ Many component and page tests include jest-axe assertions for accessibility; a s
 Key settings:
 
 - **Test Directory**: `./tests`
-- **Base URL**: `http://localhost:3000`
+- **Base URL**: `http://localhost:4173`
 - **Parallel Execution**: Enabled locally, disabled in CI for stability
 - **Retries**: 2 in CI, 0 locally
 - **Web Server**: Auto-starts `pnpm run preview` before tests (120s timeout)

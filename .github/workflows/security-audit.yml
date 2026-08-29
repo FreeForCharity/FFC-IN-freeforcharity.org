@@ -22,7 +22,8 @@ on:
     branches: ['main']
     paths:
       - 'package.json'
-      - 'package-lock.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
   workflow_dispatch:
 
 permissions:
@@ -50,7 +51,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install (no scripts)
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Audit high-severity production deps
         run: pnpm run audit:high

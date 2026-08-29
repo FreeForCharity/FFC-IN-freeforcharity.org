@@ -281,14 +281,14 @@ Tests the footer copyright notice and organizational information.
 ### Test Commands
 
 ```bash
-# Run all tests in headless mode (default)
-pnpm test
+# Run all E2E tests in headless mode (default)
+pnpm run test:e2e
 
-# Run tests with browser visible (useful for debugging)
-pnpm run test:headed
+# Run E2E tests with browser visible (useful for debugging)
+pnpm run test:e2e:headed
 
-# Run tests with Playwright UI (interactive mode)
-pnpm run test:ui
+# Run E2E tests with Playwright UI (interactive mode)
+pnpm run test:e2e:ui
 ```
 
 ### Running Individual Tests
@@ -313,7 +313,7 @@ Tests are configured in `playwright.config.ts` at the project root.
 
 **Key Configuration:**
 
-- **Base URL**: `http://localhost:3000`
+- **Base URL**: `http://localhost:4173`
 - **Browser**: Chromium (uses system browser when available)
 - **Web Server**: Auto-starts `pnpm run preview` before tests
 - **Server Timeout**: 120 seconds
@@ -393,7 +393,7 @@ To add new tests:
 
 4. **Run your tests**:
    ```bash
-   pnpm test
+   pnpm run test:e2e
    ```
 
 ### Best Practices
@@ -442,7 +442,7 @@ page.on('response', (response) => {
 
 ```bash
 # Run tests in headed mode to see browser
-pnpm run test:headed
+pnpm run test:e2e:headed
 
 # Run in debug mode with Playwright Inspector
 pnpm exec playwright test --debug
