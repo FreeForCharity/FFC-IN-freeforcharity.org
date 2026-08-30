@@ -9,7 +9,7 @@ export const metadata = pageMetadata({
 })
 
 // Update this date when the policy changes
-const LAST_UPDATED = 'August 29, 2026'
+const LAST_UPDATED = 'August 30, 2026'
 
 export default function CookiePolicy() {
   return (
@@ -127,6 +127,10 @@ export default function CookiePolicy() {
               Everywhere else, Google Analytics cookies are set from your first visit. You can turn
               them off at any time using the cookie settings link in our footer, and we will delete
               the cookies listed below when you do.
+            </p>
+            <p className="text-sm text-[#666] mb-2">
+              Which of these rules applies to your visit is determined by Google from your IP
+              address at the time of your visit; IP geolocation is approximate.
             </p>
             <p className="text-sm text-[#666]">
               <strong>Microsoft Clarity is different.</strong> It records how visitors move through
@@ -448,13 +452,14 @@ export default function CookiePolicy() {
           </ol>
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500]">
             Some browsers send a &quot;Do Not Track&quot; or Global Privacy Control signal telling
-            websites you do not want your online activities tracked. This site does not need to
-            react to those signals to honor their intent: analytics and marketing cookies are off
-            for every visitor until you opt in through the consent banner, and we do not sell or
-            share personal information as defined by the CCPA/CPRA. Declining consent — or
-            withdrawing it later, which removes the cookies those scripts set on this site and stops
-            them loading from your next page view — keeps you in the untracked state those signals
-            ask for.
+            websites you do not want your online activities tracked. This site does not read those
+            signals. We do not sell or share personal information as defined by the CCPA/CPRA, so
+            there is no sale or sharing for such a signal to opt you out of. Analytics cookies are
+            set automatically outside the European Economic Area, the United Kingdom, and
+            Switzerland (see section 3.2); wherever you are, you can turn them off at any time using
+            the cookie settings link in our footer, and we delete the cookies those tools set when
+            you do. Microsoft Clarity and the Meta Pixel never run without your explicit opt-in,
+            anywhere in the world.
           </p>
 
           {/* Section 6 */}
