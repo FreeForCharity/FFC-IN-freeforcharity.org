@@ -310,9 +310,10 @@ export default function PrivacyPolicy() {
             IP address at the time of your visit; IP geolocation is approximate. In the EEA, the UK,
             and Switzerland, analytics runs cookie-free until you accept. (Switzerland is included
             because Google&apos;s consent defaults cover it; Swiss visitors&apos; data is protected
-            by the Swiss FADP rather than the GDPR.) Everywhere else, including the United States,
-            analytics cookies are set from your first pageview, and you can turn them off at any
-            time via the Cookie Preferences link in the footer. Our{' '}
+            by Switzerland&apos;s Federal Act on Data Protection (FADP) rather than the GDPR.)
+            Everywhere else, including the United States, analytics cookies are set from your first
+            pageview, and you can turn them off at any time via the Cookie Preferences link in the
+            footer. Our{' '}
             <Link href="/cookie-policy/" className="text-blue-600 underline">
               Cookie Policy
             </Link>{' '}
