@@ -436,6 +436,19 @@ export default function CookieConsent() {
         deleteMarketingCookies()
       }
 
+      // Tell the Google tags what the visitor actually chose. This must
+      // happen before (or alongside) loading them: for an EEA/UK/CH
+      // visitor it is what lifts the regional denied-by-default state,
+      // and for a declining visitor anywhere it is what drops storage to
+      // denied. Tags that are already loaded pick it up immediately.
+      //
+      // Queued BEFORE the custom `consent_update` event pushed below: both
+      // writes land in the same dataLayer queue and GTM processes it in order,
+      // so a container trigger keyed on that event would otherwise evaluate
+      // consent state before this choice had been applied. No test covers this
+      // ordering — keep the two in this order by hand.
+      updateGoogleConsent(prefs)
+
       // Push consent update to GTM dataLayer
       if (typeof window !== 'undefined') {
         window.dataLayer = window.dataLayer || []
@@ -446,13 +459,6 @@ export default function CookieConsent() {
           marketing_consent: prefs.marketing ? 'granted' : 'denied',
         })
       }
-
-      // Tell the Google tags what the visitor actually chose. This must
-      // happen before (or alongside) loading them: for an EEA/UK/CH
-      // visitor it is what lifts the regional denied-by-default state,
-      // and for a declining visitor anywhere it is what drops storage to
-      // denied. Tags that are already loaded pick it up immediately.
-      updateGoogleConsent(prefs)
 
       // GTM rides alongside GA4. Which of the two actually configures
       // GA4 is decided by GA_DELIVERY — never by blanking a measurement
