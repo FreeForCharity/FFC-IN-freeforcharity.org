@@ -119,8 +119,10 @@ function readStoredConsent(): string | null {
  *
  * The IDs these wrap are build-time values set by a maintainer, not by a
  * visitor, so this is defence in depth rather than a live hole. It matters
- * because `isConfigured()` only rejects placeholder values — it does not
- * validate shape, so nothing else checks what reaches the script body.
+ * because the only guard in front of these loaders is a non-empty check
+ * (`if (!GA_MEASUREMENT_ID) return`): an unset ID is rejected, but a set one
+ * is used as-is, with neither a placeholder nor a shape check. So nothing
+ * examines what actually reaches the script body.
  */
 export function scriptString(value: string): string {
   return JSON.stringify(value)

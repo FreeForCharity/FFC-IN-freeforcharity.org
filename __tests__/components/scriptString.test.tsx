@@ -5,9 +5,9 @@
 /**
  * `scriptString` serialises a tracking ID for embedding in an inline
  * `<script>` body. The three analytics loaders interpolate IDs into script
- * text, and nothing else validates them: `isConfigured()` rejects placeholder
- * values but not malformed ones, so this helper is the only thing between a
- * bad ID and the script body.
+ * text, and nothing else validates them: each loader guards only on the ID
+ * being non-empty, so this helper is the only thing between a bad ID and the
+ * script body.
  *
  * The IDs are build-time values a maintainer sets, not visitor input, so this
  * is defence in depth rather than a live hole.
