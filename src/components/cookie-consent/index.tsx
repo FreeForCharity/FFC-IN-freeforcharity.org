@@ -460,11 +460,11 @@ export default function CookieConsent() {
         deleteMarketingCookies()
       }
 
-      // Tell the Google tags what the visitor actually chose. This must
-      // happen before (or alongside) loading them: for an EEA/UK/CH
-      // visitor it is what lifts the regional denied-by-default state,
-      // and for a declining visitor anywhere it is what drops storage to
-      // denied. Tags that are already loaded pick it up immediately.
+      // Tell the Google tags what the visitor actually chose. This must happen
+      // before (or alongside) loading them: for a visitor who accepts it is
+      // what lifts the denied-by-default state, and for one who declines it is
+      // what pins storage to denied. Tags that are already loaded pick it up
+      // immediately.
       //
       // Queued BEFORE the custom `consent_update` event pushed below: both
       // writes land in the same dataLayer queue and GTM processes it in order,
@@ -505,11 +505,11 @@ export default function CookieConsent() {
   // source.
   const loadPreferencesFromLocalStorage = useCallback(
     (showBannerIfMissing = true) => {
-      // No stored choice (or an unreadable one): show the banner AND load
-      // the tags. The Consent Mode defaults already in the dataLayer
-      // decide what those tags may store — granted outside the EEA/UK/CH,
-      // cookieless pings inside it — so an ignored banner still produces
-      // measurement instead of silence.
+      // No stored choice (or an unreadable one): show the banner AND load the
+      // tags. The Consent Mode defaults already in the dataLayer decide what
+      // those tags may store — nothing, anywhere, until the visitor accepts —
+      // so an ignored banner still produces cookieless measurement instead of
+      // silence.
       const fallBackToDefaults = () => {
         if (showBannerIfMissing) setShowBanner(true)
         // Undecided: Google tags load (Consent Mode governs their
