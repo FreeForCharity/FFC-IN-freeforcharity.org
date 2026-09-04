@@ -107,11 +107,12 @@ export default function PrivacyPolicy() {
               choose, because it is what remembers the choice.
             </li>
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
-              <strong>Analytics:</strong> Google Analytics measures how the site is used. Where the
-              law requires your prior permission — the EEA, the UK, and Switzerland — it sets no
+              <strong>Analytics:</strong> Google Analytics measures how the site is used. It sets no
               analytics or advertising cookies and collects no identifiers from your device until
-              you accept; it still counts the visit in an aggregate, cookie-free way. Elsewhere it
-              uses cookies from your first visit, and you can turn it off at any time.
+              you accept — wherever in the world you are, not only where the law requires prior
+              permission. Until you accept it still counts the visit in an aggregate, cookie-free
+              way. There is no country in which it uses cookies before you choose, and you can turn
+              it off again at any time.
             </li>
             <li className="text-[14px] text-[#666] leading-[24px] font-[500]">
               <strong>Session recording:</strong> Microsoft Clarity records how visitors move
