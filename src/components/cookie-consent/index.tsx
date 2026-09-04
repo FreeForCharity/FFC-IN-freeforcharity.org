@@ -312,16 +312,20 @@ export default function CookieConsent() {
    *     reason — loading it unconsented is a real disclosure, not a
    *     modelled one.
    *
-   * The permissive default is scoped to what Google's own rules sanction,
-   * and Clarity is not Google's: Consent Mode gives it no cookieless
-   * fallback, so an undecided EEA visitor would be fully session-recorded
-   * rather than modelled. It would also make the UI dishonest — the
+   * Clarity is not Google's, and Consent Mode gives it no cookieless
+   * fallback, so an undecided visitor would be fully session-recorded
+   * rather than modelled. That was the argument when the default was
+   * permissive outside the EEA; the default is denied everywhere now, and
+   * the conclusion is unchanged — Consent Mode cannot gate a tag that does
+   * not speak it, so Clarity has to be gated here or not at all. It would also make the UI dishonest — the
    * preferences dialog shows analytics unchecked until a visitor opts in,
    * while the recorder ran regardless.
    *
    * The cost is nil against what this site actually needs to measure:
    * Clarity is a heatmap/replay tool and contributes nothing to the three
-   * conversion events. GA4 and GTM, which do, stay permissive.
+   * conversion events. GA4 and GTM, which do, keep sending cookieless
+   * pings while consent is denied, so those events are still counted in
+   * aggregate before anyone opts in.
    *
    * @param includeClarity true only once the visitor has explicitly
    *        granted analytics consent.
@@ -498,8 +502,8 @@ export default function CookieConsent() {
     [deleteAnalyticsCookies, deleteMarketingCookies, loadDefaultTags, loadMetaPixel, stopClarity]
   )
 
-  // Apply the visitor's stored choice, or the permissive default if they
-  // have not made one. Reads via readStoredConsent(), which prefers
+  // Apply the visitor's stored choice, or the denied-by-default state if
+  // they have not made one. Reads via readStoredConsent(), which prefers
   // localStorage and falls back to the cookie-consent cookie — the name
   // below is kept for call-site stability, but storage is not the only
   // source.
