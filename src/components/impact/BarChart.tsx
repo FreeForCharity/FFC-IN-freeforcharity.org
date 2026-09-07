@@ -39,7 +39,7 @@ function niceMax(maxValue: number): number {
 }
 
 export default function BarChart({ title, unit, data, color = '#0567B1', source }: BarChartProps) {
-  const yMax = niceMax(Math.max(...data.map((d) => d.value)))
+  const yMax = niceMax(data.reduce((max, d) => (d.value > max ? d.value : max), -Infinity))
   const innerW = CHART_W - PAD_LEFT - 8
   const innerH = CHART_H - PAD_TOP - PAD_BOTTOM
   const slot = innerW / data.length
