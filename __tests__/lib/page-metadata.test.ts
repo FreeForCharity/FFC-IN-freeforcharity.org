@@ -12,8 +12,8 @@ describe('pageMetadata', () => {
     process.env = originalEnv
   })
 
-  it('generates basic metadata correctly', () => {
-    const { pageMetadata } = require('@/lib/page-metadata')
+  it('generates basic metadata correctly', async () => {
+    const { pageMetadata } = await import('@/lib/page-metadata')
 
     const result: Metadata = pageMetadata({
       title: 'Test Title',
@@ -48,8 +48,8 @@ describe('pageMetadata', () => {
     expect(result.twitter?.card).toBe('summary_large_image')
   })
 
-  it('adds noindex when specified', () => {
-    const { pageMetadata } = require('@/lib/page-metadata')
+  it('adds noindex when specified', async () => {
+    const { pageMetadata } = await import('@/lib/page-metadata')
 
     const result: Metadata = pageMetadata({
       title: 'Hidden Page',
@@ -61,8 +61,8 @@ describe('pageMetadata', () => {
     expect(result.robots).toEqual({ index: false, follow: false })
   })
 
-  it('uses custom image when provided', () => {
-    const { pageMetadata } = require('@/lib/page-metadata')
+  it('uses custom image when provided', async () => {
+    const { pageMetadata } = await import('@/lib/page-metadata')
 
     const result: Metadata = pageMetadata({
       title: 'Image Page',
@@ -88,9 +88,9 @@ describe('pageMetadata', () => {
     expect(result.twitter?.images).toEqual(['/custom-image.png'])
   })
 
-  it('prepends NEXT_PUBLIC_BASE_PATH to default and custom images', () => {
+  it('prepends NEXT_PUBLIC_BASE_PATH to default and custom images', async () => {
     process.env.NEXT_PUBLIC_BASE_PATH = '/base'
-    const { pageMetadata } = require('@/lib/page-metadata')
+    const { pageMetadata } = await import('@/lib/page-metadata')
 
     const defaultResult: Metadata = pageMetadata({
       title: 'Title',
