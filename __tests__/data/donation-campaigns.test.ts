@@ -9,7 +9,8 @@ describe('donation-campaigns data', () => {
     })
 
     it('preserves other query parameters while removing modal', () => {
-      const input = 'https://www.zeffy.com/embed/donation-form/1234?modal=true&lang=en&utm_source=twitter'
+      const input =
+        'https://www.zeffy.com/embed/donation-form/1234?modal=true&lang=en&utm_source=twitter'
       const expected = 'https://www.zeffy.com/donation-form/1234?lang=en&utm_source=twitter'
       expect(zeffyHostedUrl(input)).toBe(expected)
     })
