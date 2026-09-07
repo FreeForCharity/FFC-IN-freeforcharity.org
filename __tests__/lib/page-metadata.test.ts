@@ -18,7 +18,7 @@ describe('pageMetadata', () => {
     const result: Metadata = pageMetadata({
       title: 'Test Title',
       description: 'Test Description',
-      canonical: 'https://example.com/test'
+      canonical: 'https://example.com/test',
     })
 
     expect(result.title).toBe('Test Title')
@@ -36,8 +36,8 @@ describe('pageMetadata', () => {
         url: '/web-app-manifest-512x512.png',
         width: 512,
         height: 512,
-        alt: 'Free For Charity'
-      }
+        alt: 'Free For Charity',
+      },
     ])
 
     // Check Twitter
@@ -55,7 +55,7 @@ describe('pageMetadata', () => {
       title: 'Hidden Page',
       description: 'Hidden Description',
       canonical: 'https://example.com/hidden',
-      noindex: true
+      noindex: true,
     })
 
     expect(result.robots).toEqual({ index: false, follow: false })
@@ -72,8 +72,8 @@ describe('pageMetadata', () => {
         path: '/custom-image.png',
         width: 800,
         height: 600,
-        alt: 'Custom Alt'
-      }
+        alt: 'Custom Alt',
+      },
     })
 
     expect(result.openGraph?.images).toEqual([
@@ -81,8 +81,8 @@ describe('pageMetadata', () => {
         url: '/custom-image.png',
         width: 800,
         height: 600,
-        alt: 'Custom Alt'
-      }
+        alt: 'Custom Alt',
+      },
     ])
 
     expect(result.twitter?.images).toEqual(['/custom-image.png'])
@@ -95,7 +95,7 @@ describe('pageMetadata', () => {
     const defaultResult: Metadata = pageMetadata({
       title: 'Title',
       description: 'Desc',
-      canonical: 'https://example.com/test'
+      canonical: 'https://example.com/test',
     })
 
     // @ts-expect-error type assertion
@@ -111,8 +111,8 @@ describe('pageMetadata', () => {
         path: '/custom.png',
         width: 100,
         height: 100,
-        alt: 'Alt'
-      }
+        alt: 'Alt',
+      },
     })
 
     // @ts-expect-error type assertion
