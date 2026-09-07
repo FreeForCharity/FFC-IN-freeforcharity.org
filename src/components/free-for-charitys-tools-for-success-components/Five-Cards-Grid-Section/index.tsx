@@ -19,7 +19,7 @@ const index = () => {
     {
       imageSrc: assetPath('/Images/upwork.webp'),
       title: 'ittybiz.com Great site for ultra small business info',
-      link: 'http://ittybiz.com/about/',
+      link: 'https://ittybiz.com/about/',
     },
     {
       imageSrc: assetPath('/Images/upwork.webp'),
@@ -42,7 +42,7 @@ const index = () => {
     {
       imageSrc: assetPath('/Images/upwork.webp'),
       title: 'theleanstartup.com The next step up book on starting a business',
-      link: 'http://theleanstartup.com/',
+      link: 'https://theleanstartup.com/',
     },
   ]
 
