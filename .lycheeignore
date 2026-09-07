@@ -187,3 +187,4 @@ https://support.lastpass.com/**
 # Sentry ingest DSN (client identifier in instrumentation-client.ts) -
 # not a browsable URL, envelope endpoint rejects GET
 ingest\.us\.sentry\.io
+https://clarity.microsoft.com/**

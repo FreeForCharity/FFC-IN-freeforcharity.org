@@ -11,7 +11,7 @@ interface BlueBtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 const BlueBtn: React.FC<BlueBtnProps> = ({ children = 'Learn More', href, ...props }) => {
   const handleClick = () => {
     if (href) {
-      window.open(href, '_blank') // opens link in new tab
+      window.open(href, '_blank', 'noopener,noreferrer') // opens link in new tab securely
     }
   }
 
