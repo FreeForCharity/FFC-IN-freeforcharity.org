@@ -36,7 +36,7 @@ describe('admin-links data', () => {
   it('every link path is root-relative so ffcAdminUrl composes cleanly', () => {
     for (const entry of Object.values(adminLinks)) {
       expect(entry.newModel.startsWith('/')).toBe(true)
-      if (entry.legacy) expect(entry.legacy.startsWith('/')).toBe(true)
+      if ('legacy' in entry && entry.legacy) expect(entry.legacy.startsWith('/')).toBe(true)
     }
   })
 })
