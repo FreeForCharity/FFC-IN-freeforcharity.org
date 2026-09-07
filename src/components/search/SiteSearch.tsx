@@ -18,7 +18,18 @@ interface Entry {
   type: 'page' | 'guide' | 'post'
 }
 
-const entries = (searchIndex as unknown as { entries: Entry[] }).entries
+type ProcessedEntry = Entry & {
+  _lowerTitle: string
+  _lowerDescription: string
+}
+
+const entries: ProcessedEntry[] = (searchIndex as unknown as { entries: Entry[] }).entries.map(
+  (entry) => ({
+    ...entry,
+    _lowerTitle: entry.title.toLowerCase(),
+    _lowerDescription: entry.description.toLowerCase(),
+  })
+)
 
 const TYPE_LABEL: Record<Entry['type'], string> = {
   page: 'Page',
@@ -26,9 +37,9 @@ const TYPE_LABEL: Record<Entry['type'], string> = {
   post: 'Blog post',
 }
 
-function score(entry: Entry, tokens: string[]): number {
-  const title = entry.title.toLowerCase()
-  const description = entry.description.toLowerCase()
+function score(entry: ProcessedEntry, tokens: string[]): number {
+  const title = entry._lowerTitle
+  const description = entry._lowerDescription
   let total = 0
   for (const token of tokens) {
     if (title.includes(token)) total += title.startsWith(token) ? 4 : 3
