@@ -58,6 +58,26 @@ const index = () => {
             buttonLink="https://www.techsoup.org/"
             imageSrc="/Images/TechSouplogo.webp" // 👈 image passed as prop
           />
+          <SlidingCard
+            direction="left"
+            subtitle="Goodstack, formerly Percent (free verification)"
+            description={
+              <>
+                The nonprofit-status validator that Google for Nonprofits relies on — including the
+                $10,000/month Google Ad Grant — and that Canva, Zoom, OpenAI and many other
+                technology companies use before granting nonprofit pricing. Register once with your
+                EIN and IRS determination letter, alongside Candid and TechSoup, and your charity is
+                already verified when those programs check — our{' '}
+                <Link href="/google-for-nonprofits-guide/" className="underline">
+                  Google for Nonprofits guide
+                </Link>{' '}
+                explains how it fits together.
+              </>
+            }
+            buttonText="Available Here"
+            buttonLink="https://goodstack.io/"
+            imageSrc="/Images/goodstack-logo.webp" // 👈 image passed as prop
+          />
 
           <div className="py-[6px] w-[80%] mx-auto">
             <div className="bg-[#E48B32] h-[3px] w-full"></div>

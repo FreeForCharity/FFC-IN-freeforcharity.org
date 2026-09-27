@@ -147,6 +147,15 @@ const index = () => {
               </ol>
             </li>
             <li>
+              A Goodstack (formerly Percent) verification
+              <ol className="list-decimal list-inside ml-8">
+                <li>
+                  The validator Google for Nonprofits uses to confirm your nonprofit status, and the
+                  one Canva, Zoom, OpenAI and many other tools use for nonprofit discounts
+                </li>
+              </ol>
+            </li>
+            <li>
               A PayPal account for nonprofits
               <ol className="list-decimal list-inside ml-8">
                 <li>Used to accept donations on your website and on Facebook</li>

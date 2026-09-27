@@ -55,6 +55,12 @@ export default function GettingStartedChecklist() {
               <Link href="/domains/#check-your-domain">Domain guide</Link>
             </Item>
             <Item>Board aware and one person named as FFC point of contact.</Item>
+            <Item>
+              501(c)(3) track: registered and verified with Goodstack (formerly Percent) using your
+              EIN and determination letter — the validator Google for Nonprofits, Canva, and many
+              other tools use to confirm nonprofit status.{' '}
+              <Link href="/google-for-nonprofits-guide/">Google for Nonprofits guide</Link>
+            </Item>
             <Item>Details of any existing domain, website, or email accounts written down.</Item>
           </ul>
 
