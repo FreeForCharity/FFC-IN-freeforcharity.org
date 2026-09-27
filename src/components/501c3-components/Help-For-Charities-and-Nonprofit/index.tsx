@@ -145,6 +145,33 @@ const index = () => {
             </li>
 
             <li>
+              A Goodstack (formerly Percent) verification
+              <ol className="list-decimal list-outside ml-8 mt-1 space-y-1 text-[#666]">
+                <li>
+                  The validator Google for Nonprofits uses to confirm your nonprofit status, and the
+                  one Canva, Zoom, OpenAI and many other tools use for nonprofit discounts. Register
+                  at{' '}
+                  <a
+                    href="https://goodstack.io/"
+                    className="text-[#0567B1] underline font-medium"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    goodstack.io
+                  </a>{' '}
+                  (see our{' '}
+                  <Link
+                    href="/google-for-nonprofits-guide/"
+                    className="text-[#0567B1] underline font-medium"
+                  >
+                    Google for Nonprofits guide
+                  </Link>
+                  ).
+                </li>
+              </ol>
+            </li>
+
+            <li>
               A PayPal account for nonprofits
               <ol className="list-decimal list-outside ml-8 mt-1 space-y-1 text-[#666]">
                 <li>Used to accept donations on your website and on Facebook</li>

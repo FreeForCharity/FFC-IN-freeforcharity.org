@@ -31,13 +31,29 @@ export default function GoogleForNonprofitsGuide() {
 
           <h2 className={h2}>Eligibility</h2>
           <ul>
-            <li>Registered 501(c)(3) in good standing (verified via Goodstack/Percent).</li>
+            <li>
+              Registered 501(c)(3) in good standing, <strong>verified by Goodstack</strong>{' '}
+              (formerly Percent) — Google&rsquo;s nonprofit validation partner.
+            </li>
             <li>
               Not a hospital/healthcare org, school, or government entity (those have separate
               programs).
             </li>
             <li>A working website that describes your mission — your FFC site.</li>
           </ul>
+
+          <h2 className={h2}>Before you start — get verified with Goodstack</h2>
+          <p>
+            Google does not check your nonprofit status itself: it relies on{' '}
+            <a href="https://goodstack.io/" target="_blank" rel="noopener noreferrer">
+              Goodstack
+            </a>{' '}
+            (formerly Percent). Registering with Goodstack <strong>before</strong> you apply — with
+            your EIN, legal name, and IRS determination letter — makes the Google step fast, and the
+            same verification unlocks nonprofit pricing at Canva, Zoom, OpenAI and many other tools.
+            That is why FFC recommends Goodstack alongside{' '}
+            <Link href="/guidestar-guide/">Candid</Link> and TechSoup as a standard prerequisite.
+          </p>
 
           <h2 className={h2}>Step 1 — Request the account</h2>
           <ol>
@@ -53,8 +69,9 @@ export default function GoogleForNonprofitsGuide() {
               and click <strong>Get started</strong>.
             </li>
             <li>
-              Verify your nonprofit through Google&rsquo;s validation partner (you&rsquo;ll need
-              your EIN and an email at your domain —{' '}
+              Verify your nonprofit through Google&rsquo;s validation partner,{' '}
+              <strong>Goodstack</strong> — if you registered there already, this is quick
+              (you&rsquo;ll need your EIN and an email at your domain —{' '}
               <Link href="/m365-email-guide/">set that up first</Link> if you haven&rsquo;t).
             </li>
             <li>Activation usually takes 2–5 business days.</li>

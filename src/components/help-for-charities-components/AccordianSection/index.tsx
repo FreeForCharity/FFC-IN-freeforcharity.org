@@ -77,7 +77,18 @@ const index = () => {
             </ul>
           </AccordionItem>
 
-          <AccordionItem number="7" title=" Zeffy">
+          <AccordionItem number="7" title=" Goodstack">
+            <ul className="list-disc list-inside space-y-1">
+              <li>
+                For You: The nonprofit verification Google for Nonprofits (including the
+                $10,000/month Ad Grant), Canva, and many other tools require before they grant free
+                or discounted access
+              </li>
+              <li>For Us: A third independent confirmation of your non-profit status</li>
+            </ul>
+          </AccordionItem>
+
+          <AccordionItem number="8" title=" Zeffy">
             <ul className="list-disc list-inside space-y-1">
               <li>For You: Easy, secure online donation processing with 0% platform fees</li>
               <li>For Us: Standardized financial transaction system for all partners</li>
