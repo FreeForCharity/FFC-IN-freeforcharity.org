@@ -8,7 +8,7 @@ const index = () => {
         <div className="">
           <SlidingCard
             direction="right"
-            subtitle="Linkedin (free with a paid premium version)"
+            subtitle="LinkedIn (free with a paid Premium version)"
             description={
               <>
                 Linkedin is a critical tool for managing contacts. Think of this as a proverbial
@@ -26,7 +26,7 @@ const index = () => {
           />
           <SlidingCard
             direction="right"
-            subtitle="Dragon Naturally Speaking ($200)"
+            subtitle="Dragon NaturallySpeaking (now Dragon Professional, about $700)"
             description={
               <>
                 This is the most expensive and most controversial recommendation on my list. I have

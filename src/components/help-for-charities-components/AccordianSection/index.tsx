@@ -56,7 +56,7 @@ const index = () => {
             </ul>
           </AccordionItem>
 
-          <AccordionItem number="4" title=" VolunteerMatch">
+          <AccordionItem number="4" title=" Idealist (formerly VolunteerMatch)">
             <ul className="list-disc list-inside space-y-1">
               <li>For You: Access to a large pool of potential volunteers</li>
               <li>For Us: Validation of your active community engagement</li>

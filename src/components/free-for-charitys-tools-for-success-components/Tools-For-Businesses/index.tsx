@@ -18,7 +18,7 @@ const index = () => {
 
           <SlidingCard
             direction="right"
-            subtitle="Wave Accounting (free: add supported)"
+            subtitle="Wave Accounting (free Starter plan, paid Pro plan)"
             description={
               <>
                 Wave is the basic accounting that you need as an ultra small business or a
@@ -33,13 +33,13 @@ const index = () => {
           />
           <SlidingCard
             direction="right"
-            subtitle="Shoeboxed (free with a paid premium version)"
+            subtitle="Shoeboxed (paid plans with a free trial)"
             description={
               <>
                 Shoeboxed is a North Carolina based document scanning company that takes basically
                 any paper you get for your business and scans it with OCR and human oversight to
-                ensure it is accurate. In the free version you have to upload the documents by
-                tracking a picture but in the paid versions you can just put them in pre-paid
+                ensure it is accurate. On the basic plan you have to upload the documents by
+                tracking a picture but on the higher plans you can just put them in pre-paid
                 envelopes and mail them in for processing. This is an amazing tool if you need more
                 things scanned than just receipts and invoices like what is now included in the free
                 wave accounting software. NOTE: I use the paid version of this for some of my
@@ -53,7 +53,7 @@ const index = () => {
 
           <SlidingCard
             direction="right"
-            subtitle="Google Apps ($5 a month)"
+            subtitle="Google Workspace, formerly Google Apps (free for eligible nonprofits, otherwise from $7 a month)"
             description={
               <>
                 This product I have used because I use Google for the personal side. This is the
@@ -64,7 +64,7 @@ const index = () => {
               </>
             }
             buttonText="Available Here"
-            buttonLink="https://www.google.com/enterprise/apps/business/"
+            buttonLink="https://workspace.google.com/"
             imageSrc="/Images/google.webp" // 👈 image passed as prop
           />
 
@@ -85,7 +85,7 @@ const index = () => {
 
           <SlidingCard
             direction="left"
-            subtitle="UpWork (Pay per job)"
+            subtitle="Upwork (pay per job)"
             description={
               <>
                 This is the full services solution to getting access to skills you don’t have.

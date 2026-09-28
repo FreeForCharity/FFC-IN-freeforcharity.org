@@ -23,12 +23,12 @@ const index = () => {
     },
     {
       imageSrc: assetPath('/Images/upwork.webp'),
-      title: 'earn1k.com Program for earning your for $1000 on the side by Ramit',
-      link: 'https://www.iwillteachyoutoberich.com/',
+      title: 'Earnable (formerly Earn1K) Program for earning your first $1000 on the side by Ramit',
+      link: 'https://www.iwillteachyoutoberich.com/get-earnable/',
     },
     {
       imageSrc: assetPath('/Images/upwork.webp'),
-      title: 'appsumo.com Another program for earning your first money online',
+      title: 'appsumo.com Discounted deals on software and online courses',
       link: 'https://appsumo.com/courses-learning/',
     },
   ]

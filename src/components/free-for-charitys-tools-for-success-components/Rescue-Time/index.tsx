@@ -45,14 +45,15 @@ const Index = () => {
             </div>
 
             <h3 className="text-[28px] font-[600] text-white leading-[36px] pb-[10px] tracking-[1px]">
-              Credit Karma (free add supported)
+              Credit Karma (free, ad supported)
             </h3>
 
             <div className="text-white text-[18px] leading-[24px] font-[500]" data-font="lato-font">
               Credit Karma actually gives you a FREE credit score and report from transunion. When I
               say free I mean it. At no time does it even ask you for a credit card so it is
-              impossible to charge you. It uses the same model as Mint.com for income and serves you
-              with information based on what it pulls. This is a great way to get your score and
+              impossible to charge you. It is free because it earns from offers it shows you based
+              on what it pulls — and since Intuit retired Mint in 2024, it has taken over
+              Mint&rsquo;s money-tracking features too. This is a great way to get your score and
               report alerts. You don’t really need all three reports this gets the job done.
             </div>
 
