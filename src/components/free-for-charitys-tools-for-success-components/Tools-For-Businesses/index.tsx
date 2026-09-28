@@ -38,12 +38,11 @@ const index = () => {
               <>
                 Shoeboxed is a North Carolina based document scanning company that takes basically
                 any paper you get for your business and scans it with OCR and human oversight to
-                ensure it is accurate. On the basic plan you have to upload the documents by
-                tracking a picture but on the higher plans you can just put them in pre-paid
-                envelopes and mail them in for processing. This is an amazing tool if you need more
-                things scanned than just receipts and invoices like what is now included in the free
-                wave accounting software. NOTE: I use the paid version of this for some of my
-                businesses
+                ensure it is accurate. On the basic plan you have to upload the documents by taking
+                a picture but on the higher plans you can just put them in pre-paid envelopes and
+                mail them in for processing. This is an amazing tool if you need more things scanned
+                than just receipts and invoices like what is now included in the free wave
+                accounting software. NOTE: I use the paid version of this for some of my businesses
               </>
             }
             buttonText="Available Here"
