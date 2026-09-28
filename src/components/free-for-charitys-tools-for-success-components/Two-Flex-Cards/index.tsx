@@ -39,6 +39,7 @@ const Index = () => {
               src={assetPath('/Images/idealist-logo.webp')}
               alt="Idealist, formerly VolunteerMatch"
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-contain"
             />
           </div>

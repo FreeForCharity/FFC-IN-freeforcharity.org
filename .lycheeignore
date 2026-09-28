@@ -192,4 +192,4 @@ ingest\.us\.sentry\.io
 # linked from the charity validation guide) returns 403 Forbidden to lychee's
 # runner. Bot-block, not a dead link: the IRS Activity Codes page is live and
 # indexed under its current title (checked via search 2026-09-28).
-https://nccs.urban.org/**
+https://nccs\.urban\.org/
