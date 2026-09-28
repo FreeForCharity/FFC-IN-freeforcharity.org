@@ -135,7 +135,7 @@ const index = () => {
               </ol>
             </li>
             <li>
-              A VolunteerMatch profile
+              An Idealist profile (formerly VolunteerMatch)
               <ol className="list-decimal list-inside ml-8">
                 <li>Used to gain board members and volunteers with a widget from your website</li>
               </ol>

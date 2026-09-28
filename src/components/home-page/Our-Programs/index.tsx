@@ -112,7 +112,7 @@ const projects: Project[] = [
           'We help charities meet legal requirements and train volunteers on formation and IRS filings.',
       },
       {
-        title: 'Idealist.org / VolunteerMatch.org',
+        title: 'Idealist.org (formerly VolunteerMatch)',
         forYou: 'Access to a large pool of potential volunteers.',
         forUs: 'Validation of your active community engagement.',
       },

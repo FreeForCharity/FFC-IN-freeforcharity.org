@@ -197,7 +197,7 @@ const index = () => {
             </p>
           </FrequentlyAskedQuestions>
 
-          <FrequentlyAskedQuestions title="Are you like volunteermatch.org or other matching agencies?">
+          <FrequentlyAskedQuestions title="Are you like Idealist (formerly VolunteerMatch) or other matching agencies?">
             <p className="mb-[30px]">
               Not exactly. That type of charity matches workers with charities but then leaves the
               management of the work to the individual nonprofit or charity group. Many small and

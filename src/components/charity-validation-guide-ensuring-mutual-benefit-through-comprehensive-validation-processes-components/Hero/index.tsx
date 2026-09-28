@@ -77,15 +77,14 @@ export default function CharityValidationGuide() {
 
             <li className="text-[14px] font-[500] text-[#666] leading-[24px]">
               <strong className="text-[#666] text-[14px] font-[700]">
-                VolunteerMatch Engagement for Validation (Only approves 501c3)
+                Idealist (formerly VolunteerMatch) Engagement for Validation (Only approves 501c3)
               </strong>
               <ol className="list-decimal list-inside ml-8 mt-2 space-y-1">
                 <li>
                   <strong className="text-[#666] text-[14px] font-[700]">Our Benefit:</strong>{' '}
-                  Involving VolunteerMatch in the validation process shows our organization’s
-                  dedication to community engagement and active volunteerism. This partnership
-                  broadens our scope beyond financial and legal metrics to include on-ground
-                  impacts.{' '}
+                  Involving Idealist in the validation process shows our organization’s dedication
+                  to community engagement and active volunteerism. This partnership broadens our
+                  scope beyond financial and legal metrics to include on-ground impacts.{' '}
                   <p className="font-[700] underline">
                     It also confirms they can source technical volunteers to help using FEC
                     services.
@@ -93,9 +92,9 @@ export default function CharityValidationGuide() {
                 </li>
                 <li>
                   <strong className="text-[#666] text-[14px] font-[700]">Charity’s Benefit:</strong>{' '}
-                  For charities, being validated through VolunteerMatch can enhance their reputation
-                  as active community participants. It can lead to an increase in volunteer
-                  engagement and a stronger connection with local communities.
+                  For charities, being validated through Idealist can enhance their reputation as
+                  active community participants. It can lead to an increase in volunteer engagement
+                  and a stronger connection with local communities.
                 </li>
               </ol>
             </li>

@@ -75,7 +75,7 @@ const index = () => {
               </>
             }
             buttonText="Available Here"
-            buttonLink="https://goodstack.io/"
+            buttonLink="https://goodstack.org/"
             imageSrc="/Images/goodstack-logo.webp" // 👈 image passed as prop
           />
 

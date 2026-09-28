@@ -20,21 +20,6 @@ export default function Page() {
           buttonLink="https://lastpass.com/friendwelcome.php?og=1&ref=47075402"
           imageSrc="/Images/LastPass-Logo-Color.webp"
         />
-        <SlidingCard
-          direction="left"
-          subtitle="Mint (free ad supported)"
-          description={
-            <>
-              Mint is a FREE tool that allows you to truly see how you earn and spend money. It runs
-              in the background of your life and gets better and better over time especially after 3
-              years. I have used mint for years and the insights that it provides helps in creating
-              conscious spending and catching bank problems before they get out of hand.
-            </>
-          }
-          buttonText="Available Here"
-          buttonLink="https://mint.com"
-          imageSrc="/Images/mint-logo.webp" // 👈 image passed as prop
-        />
       </div>
     </div>
   )
