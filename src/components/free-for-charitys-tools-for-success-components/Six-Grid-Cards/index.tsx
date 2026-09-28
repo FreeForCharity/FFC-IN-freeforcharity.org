@@ -46,7 +46,7 @@ export default function ToolsPage() {
     {
       logo: '/Images/mailchimpLogo.webp',
       title: 'Mailchimp (free plan; paid plans are 15% off for nonprofits)',
-      description: 'mailchimp is an always-on marketing platform for small businesses.',
+      description: 'Mailchimp is an always-on marketing platform for small businesses.',
       link: 'https://mailchimp.com/pricing/marketing/',
     },
   ]

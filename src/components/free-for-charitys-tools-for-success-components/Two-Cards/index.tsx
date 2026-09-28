@@ -11,9 +11,9 @@ const index = () => {
             subtitle="LinkedIn (free with a paid Premium version)"
             description={
               <>
-                Linkedin is a critical tool for managing contacts. Think of this as a proverbial
+                LinkedIn is a critical tool for managing contacts. Think of this as a proverbial
                 online rolodex that tracks people instead of emails and phone numbers. A person’s
-                data changes over time but if they are on Linkedin the connection remains. It also
+                data changes over time but if they are on LinkedIn the connection remains. It also
                 serves as an inspirational tool. You can look up the profiles of people in your
                 extended network and see what education, classes, skills, and positions led them to
                 that point. You can then start obtaining those things to get yourself on the same

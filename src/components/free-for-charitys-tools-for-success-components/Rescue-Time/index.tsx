@@ -49,7 +49,7 @@ const Index = () => {
             </h3>
 
             <div className="text-white text-[18px] leading-[24px] font-[500]" data-font="lato-font">
-              Credit Karma actually gives you a FREE credit score and report from transunion. When I
+              Credit Karma actually gives you a FREE credit score and report from TransUnion. When I
               say free I mean it. At no time does it even ask you for a credit card so it is
               impossible to charge you. It is free because it earns from offers it shows you based
               on what it pulls — and since Intuit retired Mint in 2024, it has taken over
