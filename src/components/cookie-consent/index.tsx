@@ -107,6 +107,30 @@ function readStoredConsent(): string | null {
   }
 }
 
+/**
+ * Serialises a value for embedding inside an inline `<script>` body.
+ *
+ * `JSON.stringify` supplies the surrounding quotes and escapes quotes and
+ * newlines, but it does NOT escape `<` — so a value containing `</script>`
+ * would still close the element early and let the remainder be parsed as
+ * markup. Escaping `<` closes that. U+2028/U+2029 are escaped too: they are
+ * legal inside a JSON string but were illegal in a JS string literal before
+ * ES2019.
+ *
+ * The IDs these wrap are build-time values set by a maintainer, not by a
+ * visitor, so this is defence in depth rather than a live hole. It matters
+ * because the only guard in front of these loaders is a non-empty check
+ * (`if (!GA_MEASUREMENT_ID) return`): an unset ID is rejected, but a set one
+ * is used as-is, with neither a placeholder nor a shape check. So nothing
+ * examines what actually reaches the script body.
+ */
+export function scriptString(value: string): string {
+  return JSON.stringify(value)
+    .replace(/</g, '\\u003c')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029')
+}
+
 export default function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false)
   const [showPreferences, setShowPreferences] = useState(false)
@@ -144,7 +168,7 @@ export default function CookieConsent() {
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', '${GA_MEASUREMENT_ID}', {
+        gtag('config', ${scriptString(GA_MEASUREMENT_ID)}, {
           'anonymize_ip': true,
           'cookie_flags': 'SameSite=Lax${secureFlag}',
           'linker': { 'domains': ${JSON.stringify(CROSS_DOMAIN_DOMAINS)} }
@@ -167,7 +191,7 @@ export default function CookieConsent() {
         t.src=v;s=b.getElementsByTagName(e)[0];
         s.parentNode.insertBefore(t,s)}(window, document,'script',
         'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '${META_PIXEL_ID}');
+        fbq('init', ${scriptString(META_PIXEL_ID)});
         fbq('track', 'PageView');
       `
       document.head.appendChild(fbScript)
@@ -206,7 +230,7 @@ export default function CookieConsent() {
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','${GTM_CONTAINER_ID}');
+        })(window,document,'script','dataLayer',${scriptString(GTM_CONTAINER_ID)});
       `
       document.head.appendChild(gtmScript)
     }
@@ -240,7 +264,7 @@ export default function CookieConsent() {
           c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
           t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
           y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "${CLARITY_PROJECT_ID}");
+        })(window, document, "clarity", "script", ${scriptString(CLARITY_PROJECT_ID)});
       `
       document.head.appendChild(clarityScript)
     }
@@ -288,16 +312,20 @@ export default function CookieConsent() {
    *     reason — loading it unconsented is a real disclosure, not a
    *     modelled one.
    *
-   * The permissive default is scoped to what Google's own rules sanction,
-   * and Clarity is not Google's: Consent Mode gives it no cookieless
-   * fallback, so an undecided EEA visitor would be fully session-recorded
-   * rather than modelled. It would also make the UI dishonest — the
+   * Clarity is not Google's, and Consent Mode gives it no cookieless
+   * fallback, so an undecided visitor would be fully session-recorded
+   * rather than modelled. That was the argument when the default was
+   * permissive outside the EEA; the default is denied everywhere now, and
+   * the conclusion is unchanged — Consent Mode cannot gate a tag that does
+   * not speak it, so Clarity has to be gated here or not at all. It would also make the UI dishonest — the
    * preferences dialog shows analytics unchecked until a visitor opts in,
    * while the recorder ran regardless.
    *
    * The cost is nil against what this site actually needs to measure:
    * Clarity is a heatmap/replay tool and contributes nothing to the three
-   * conversion events. GA4 and GTM, which do, stay permissive.
+   * conversion events. GA4 and GTM, which do, keep sending cookieless
+   * pings while consent is denied, so those events are still counted in
+   * aggregate before anyone opts in.
    *
    * @param includeClarity true only once the visitor has explicitly
    *        granted analytics consent.
@@ -436,6 +464,20 @@ export default function CookieConsent() {
         deleteMarketingCookies()
       }
 
+      // Tell the Google tags what the visitor actually chose. This must happen
+      // before (or alongside) loading them: for a visitor who accepts it is
+      // what lifts the denied-by-default state, and for one who declines it is
+      // what pins storage to denied. Tags that are already loaded pick it up
+      // immediately.
+      //
+      // Queued BEFORE the custom `consent_update` event pushed below: both
+      // writes land in the same dataLayer queue and GTM processes it in order,
+      // so a container trigger keyed on that event would otherwise evaluate
+      // consent state before this choice had been applied. Locked by
+      // __tests__/components/CookieConsent.consent-order.test.tsx — swapping
+      // these two lines fails that suite.
+      updateGoogleConsent(prefs)
+
       // Push consent update to GTM dataLayer
       if (typeof window !== 'undefined') {
         window.dataLayer = window.dataLayer || []
@@ -446,13 +488,6 @@ export default function CookieConsent() {
           marketing_consent: prefs.marketing ? 'granted' : 'denied',
         })
       }
-
-      // Tell the Google tags what the visitor actually chose. This must
-      // happen before (or alongside) loading them: for an EEA/UK/CH
-      // visitor it is what lifts the regional denied-by-default state,
-      // and for a declining visitor anywhere it is what drops storage to
-      // denied. Tags that are already loaded pick it up immediately.
-      updateGoogleConsent(prefs)
 
       // GTM rides alongside GA4. Which of the two actually configures
       // GA4 is decided by GA_DELIVERY — never by blanking a measurement
@@ -467,18 +502,18 @@ export default function CookieConsent() {
     [deleteAnalyticsCookies, deleteMarketingCookies, loadDefaultTags, loadMetaPixel, stopClarity]
   )
 
-  // Apply the visitor's stored choice, or the permissive default if they
-  // have not made one. Reads via readStoredConsent(), which prefers
+  // Apply the visitor's stored choice, or the denied-by-default state if
+  // they have not made one. Reads via readStoredConsent(), which prefers
   // localStorage and falls back to the cookie-consent cookie — the name
   // below is kept for call-site stability, but storage is not the only
   // source.
   const loadPreferencesFromLocalStorage = useCallback(
     (showBannerIfMissing = true) => {
-      // No stored choice (or an unreadable one): show the banner AND load
-      // the tags. The Consent Mode defaults already in the dataLayer
-      // decide what those tags may store — granted outside the EEA/UK/CH,
-      // cookieless pings inside it — so an ignored banner still produces
-      // measurement instead of silence.
+      // No stored choice (or an unreadable one): show the banner AND load the
+      // tags. The Consent Mode defaults already in the dataLayer decide what
+      // those tags may store — nothing, anywhere, until the visitor accepts —
+      // so an ignored banner still produces cookieless measurement instead of
+      // silence.
       const fallBackToDefaults = () => {
         if (showBannerIfMissing) setShowBanner(true)
         // Undecided: Google tags load (Consent Mode governs their

@@ -229,12 +229,13 @@ export default function RootLayout({
               '(function(){function at(n){n=Math.trunc(n)||0;if(n<0)n+=this.length;return n<0||n>=this.length?undefined:this[n]}var protos=[Array.prototype,String.prototype];if(typeof Int8Array==="function"){var t=Object.getPrototypeOf(Int8Array.prototype);if(t)protos.push(t)}protos.forEach(function(p){if(!p.at)Object.defineProperty(p,"at",{writable:true,configurable:true,value:at})})})()',
           }}
         />
-        {/* Google Consent Mode v2 defaults. MUST execute before any Google
-            tag loads, which is why it is an inline <head> script rather
-            than a next/script: the consent state has to already be in the
-            dataLayer when GA4/GTM initialise. Granted worldwide, denied
-            (cookieless pings) only where Google's EU User Consent Policy
-            requires opt-in. See src/lib/consent-mode.ts. */}
+        {/* Google Consent Mode v2 defaults. MUST execute before any Google tag
+            loads, which is why it is an inline <head> script rather than a
+            next/script: the consent state has to already be in the dataLayer
+            when GA4/GTM initialise. Denied worldwide: one unscoped default
+            withholds analytics and ad storage from every visitor until they opt
+            in, so there is no region left for Google to resolve from the
+            visitor's IP address. See src/lib/consent-mode.ts. */}
         <script dangerouslySetInnerHTML={{ __html: CONSENT_MODE_BOOTSTRAP }} />
       </head>
       <body className={`antialiased`} suppressHydrationWarning={true}>
