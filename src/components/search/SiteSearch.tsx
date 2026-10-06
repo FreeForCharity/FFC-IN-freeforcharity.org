@@ -45,8 +45,11 @@ export default function SiteSearch() {
     const tokens = query.toLowerCase().split(/\s+/).filter(Boolean)
     if (tokens.length === 0) return []
     return entries
-      .map((entry) => ({ entry, s: score(entry, tokens) }))
-      .filter((r) => r.s > 0)
+      .reduce<{ entry: Entry; s: number }[]>((acc, entry) => {
+        const s = score(entry, tokens)
+        if (s > 0) acc.push({ entry, s })
+        return acc
+      }, [])
       .sort((a, b) => b.s - a.s)
       .slice(0, 12)
       .map((r) => r.entry)
