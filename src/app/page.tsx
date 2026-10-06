@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import React from 'react'
-// import HomePage from './Home/page'
 import FigmaHomePage from '@/app/home-page'
 
 export const metadata: Metadata = {
@@ -13,7 +12,6 @@ export const metadata: Metadata = {
 const index = () => {
   return (
     <div>
-      {/* <HomePage /> */}
       <FigmaHomePage />
     </div>
   )
