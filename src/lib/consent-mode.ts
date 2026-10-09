@@ -8,15 +8,24 @@
 // analytics_storage, ad_storage, ad_user_data, ad_personalization and
 // personalization_storage all start denied. security_storage is granted and
 // stays granted. functionality_storage is granted BY DEFAULT — a site that
-// cannot remember a consent choice cannot honour one — and thereafter follows
-// the visitor's own functional toggle through updateGoogleConsent, so it is
-// not something that "stays" granted.
+// cannot remember a consent choice cannot honour one — and on this site it
+// STAYS granted, because the banner pins `functional: true` and renders its
+// checkbox disabled and labelled "Always Active" (the Zeffy donation forms
+// need it). `updateGoogleConsent` does pass the flag through, so the
+// mechanism would honour a denial; no path in this repo produces one.
 //
-// This summary has been wrong twice, in opposite directions. It first read
-// "storage is DENIED" flat, which over-claimed by ignoring the two granted
-// types; correcting that to "analytics and advertising" under-claimed by
-// dropping personalization_storage, and kept a "stays granted" the update
-// call contradicts. Summarising a list is a claim about every item in it.
+// This summary has been wrong three times, and the third correction is the
+// mirror of the second. It first read "storage is DENIED" flat, which
+// over-claimed by ignoring the two granted types. Correcting that to
+// "analytics and advertising" under-claimed by dropping
+// personalization_storage, and kept a "stays granted" the update call
+// appeared to contradict — so "stays granted" was removed from
+// functionality_storage and replaced with "follows the visitor's own
+// functional toggle". That was wrong in the other direction: this repo has
+// no such toggle. Reading the update call and not the component that feeds
+// it is what produced a comment describing a control the UI disables.
+// Summarising a list is a claim about every item in it, and a claim about
+// what a function CAN do is not a claim about what this site DOES.
 //
 // Google's EU User Consent Policy only *requires* opt-in for the EEA, the
 // UK and Switzerland, but applying that treatment selectively would mean
