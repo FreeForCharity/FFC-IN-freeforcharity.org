@@ -6,21 +6,22 @@ export default function ToolsPage() {
   const topRow = [
     {
       logo: '/Images/quickbooksLogo.webp',
-      title: 'QuickBooks Online ($75 per year with 5 users)',
+      title: 'QuickBooks Online ($80 per year with 5 users)',
       description:
         'If your accounting is not right a lot will suffer. Techsoup offers the discounts for QuickBooks the industry leader in accounting. Both online and offline versions are offered at the same price.',
       link: 'https://www.techsoup.org/products/quickbooks-online-plus-1-year-subscription-5-users-g-49616-',
     },
     {
       logo: '/Images/googleLogo.webp',
-      title: 'Google Workspace for non-profits (free with paid plans)',
+      title: 'Google Workspace for Nonprofits (free edition, discounted paid plans)',
       description:
         'apps including Gmail and grant options for free AdWords advertisements. If you do not like or have not used outlook choose this for Gmail and free storage space with google drive.',
       link: 'https://www.google.com/nonprofits/',
     },
     {
       logo: '/Images/officeLogo.webp',
-      title: 'Microsoft Office 365 enterprise for non-profits (free with paid packages)',
+      title:
+        'Microsoft 365 for nonprofits (Business Basic free for up to 300 users, discounted paid plans)',
       description:
         'NOTE: FFC Recomended — Incredible discounts for non profits at rates better than even students get for advanced enterprise features. This should be the first product you seek to get.',
       link: 'https://nonprofit.microsoft.com/en-us/getting-started',
@@ -30,7 +31,7 @@ export default function ToolsPage() {
   const bottomRow = [
     {
       logo: '/Images/upwork.webp',
-      title: 'Salesforce (free to nonprofits up to 10 seats per year)',
+      title: 'Salesforce Power of Us (10 free Agentforce Nonprofit licenses)',
       description:
         "World's best CRM available. NOTE: Microsoft's offer now includes CRM for an all-in-one solution.",
       link: 'https://www.salesforce.com/nonprofit/',
@@ -44,8 +45,8 @@ export default function ToolsPage() {
     },
     {
       logo: '/Images/mailchimpLogo.webp',
-      title: 'MailChimp(offers multiple packages paid ones are 15% off for non-profits)',
-      description: 'mailchimp is an always-on marketing platform for small businesses.',
+      title: 'Mailchimp (free plan; paid plans are 15% off for nonprofits)',
+      description: 'Mailchimp is an always-on marketing platform for small businesses.',
       link: 'https://mailchimp.com/pricing/marketing/',
     },
   ]

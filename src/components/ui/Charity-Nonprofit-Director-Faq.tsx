@@ -194,7 +194,7 @@ const CharityFAQ: React.FC = () => {
 
           <AccordionItem
             number="7"
-            title="Are you like volunteermatch.org or other matching agencies?"
+            title="Are you like Idealist (formerly VolunteerMatch) or other matching agencies?"
           >
             Not exactly. That type of charity matches workers with charities but then{' '}
             <strong>leaves the management of the work to the individual</strong> nonprofit or

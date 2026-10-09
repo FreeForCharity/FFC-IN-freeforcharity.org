@@ -36,10 +36,11 @@ const Index = () => {
           {/* Image */}
           <div className="relative w-full h-[260px] mb-[30px]">
             <Image
-              src={assetPath('/Images/Volunteer-Card.webp')}
-              alt="Placeholder Image"
+              src={assetPath('/Images/idealist-logo.webp')}
+              alt="Idealist, formerly VolunteerMatch"
               fill
-              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="object-contain"
             />
           </div>
 
@@ -50,21 +51,22 @@ const Index = () => {
             </div>
 
             <h3 className="text-[28px] text-[#333] font-[600] leading-[36px] pb-[10px]">
-              Volunteer Match (Free basic account paid upgrades)
+              Idealist, formerly VolunteerMatch (free volunteer listings, paid upgrades)
             </h3>
 
             <div
               className="text-[18px] leading-[24px] font-[500] text-[#666]"
               data-font="lato-font"
             >
-              The best volunteer sourcing tool. Links with linkedin.com, your website, and many
-              other sources creating a job board for your charities needs. Create a profile and post
-              offers for all your needs.
+              VolunteerMatch merged into Idealist in 2025, so its volunteer network now lives on
+              idealist.org. It is still the best volunteer sourcing tool: create your
+              organization&rsquo;s profile and post volunteer opportunities for free. Paid options
+              add job postings, promoted listings, and an annual membership.
             </div>
 
             {/* Button */}
             <a
-              href="https://www.volunteermatch.org/"
+              href="https://www.idealist.org/en/orgs/post-free-volunteer-listings"
               target="_blank"
               rel="noopener noreferrer"
               className="relative group inline-flex items-center justify-center gap-2 mt-[25px] px-[30px] py-[6px] text-white border border-[#b35000] rounded-[10px] text-[18px] bg-[#b35000] transition-all duration-300 ease-in-out shadow-md leading-[31px] font-[600] hover:shadow-[0px_12px_18px_-6px_#b35000]"

@@ -135,7 +135,7 @@ const index = () => {
               </ol>
             </li>
             <li>
-              A VolunteerMatch profile
+              An Idealist profile (formerly VolunteerMatch)
               <ol className="list-decimal list-inside ml-8">
                 <li>Used to gain board members and volunteers with a widget from your website</li>
               </ol>
@@ -144,6 +144,15 @@ const index = () => {
               A TechSoup account and validation
               <ol className="list-decimal list-inside ml-8">
                 <li>Used to gain many charity discounts including QuickBooks</li>
+              </ol>
+            </li>
+            <li>
+              A Goodstack (formerly Percent) verification
+              <ol className="list-decimal list-inside ml-8">
+                <li>
+                  The validator Google for Nonprofits uses to confirm your nonprofit status, and the
+                  one Canva, Zoom, OpenAI and many other tools use for nonprofit discounts
+                </li>
               </ol>
             </li>
             <li>
