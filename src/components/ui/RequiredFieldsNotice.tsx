@@ -1,14 +1,15 @@
 import React from 'react'
-import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
+import Link from 'next/link'
+import { TRACKS, type Track } from '@/data/application-fields'
 
 /**
  * Required-fields notice shown on both onboarding guides (/501c3/ and
  * /pre501c3/). Explains that, because the free service is in high demand,
  * every required field on the WHMCS application must be completed and we can't
- * make exceptions. Links to the field-by-field guide on FFC Admin, which
- * explains each field and links its free setup guide.
+ * make exceptions. Links to that form's application guide, which explains
+ * each field and links its free setup guide.
  */
-const RequiredFieldsNotice: React.FC = () => {
+const RequiredFieldsNotice: React.FC<{ track: Track }> = ({ track }) => {
   return (
     <section
       id="required-fields"
@@ -28,16 +29,13 @@ const RequiredFieldsNotice: React.FC = () => {
         exceptions. Everything we ask for is free to set up, and each field links to a step-by-step
         guide.
       </p>
-      <a
-        href={ffcAdminUrl(adminLinks['application-fields'].newModel)}
-        target="_blank"
-        rel="noopener noreferrer"
+      <Link
+        href={TRACKS[track].guidePath}
         className="inline-flex items-center gap-[8px] text-[16px] font-[600] text-[#9a3412] underline underline-offset-4"
       >
-        <span>Read the step-by-step guide to every application field</span>
+        <span>Read the {TRACKS[track].guideTitle}: every field, step by step</span>
         <span aria-hidden="true">&rarr;</span>
-        <span className="sr-only">(opens FFC Admin in a new tab)</span>
-      </a>
+      </Link>
     </section>
   )
 }

@@ -3,7 +3,6 @@
 import React, { useId, useState } from 'react'
 import Link from 'next/link'
 import { ApplyButton } from '@/components/ui/apply-buttons'
-import { ffcAdminUrl, adminLinks } from '@/data/admin-links'
 
 /**
  * Inline "Help me choose" guide — a native <details> disclosure with native
@@ -92,12 +91,12 @@ const choices: ChoiceOutcome[] = [
         <p className="mt-[16px]">
           Sponsored by a corporate fiscal sponsor (Tides, Open Collective, Players Philanthropy
           Fund)? Talk with us first — those arrangements score differently.{' '}
-          <a
-            href={ffcAdminUrl(adminLinks['fiscal-sponsorship'].newModel)}
+          <Link
+            href="/pre501c3/help/getting-501c3/#fiscal-sponsorship"
             className="text-[#0567B1] font-[600] underline"
           >
-            How we evaluate fiscal sponsorship
-          </a>
+            How we work with fiscal sponsorship
+          </Link>
         </p>
       </div>
     ),

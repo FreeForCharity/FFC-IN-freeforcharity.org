@@ -38,6 +38,13 @@
       "minutes": 3
     },
     {
+      "href": "/application-guide/",
+      "title": "Application field guides",
+      "promise": "Every field on the 501(c)(3) and pre-501(c)(3) applications: whether you need it, why we ask, and how to get it for free.",
+      "group": "Getting started",
+      "minutes": 15
+    },
+    {
       "href": "/m365-email-guide/",
       "title": "Free Microsoft 365 email at your domain",
       "promise": "Claim Microsoft's nonprofit grant and get you@yourcharity.org, step by step.",

@@ -49,7 +49,7 @@ export const journeyStages: JourneyStage[] = [
     links: [
       { href: '/help-for-charities/', label: 'Start here: Help for Charities' },
       {
-        href: 'https://ffcadmin.org/guides/application-fields/',
+        href: '/application-guide/',
         label: 'Guide: every application field, step by step',
       },
     ],

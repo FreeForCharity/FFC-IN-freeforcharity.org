@@ -52,7 +52,13 @@ const ApplicationChecklist = () => {
           <li>
             Your mission in one or two plain sentences, and the year you were founded or began
             operating (see the{' '}
-            <GuideLink href={guide('mission-statement')}>mission statement guide</GuideLink>)
+            <Link
+              href="/pre501c3/help/mission-statement/"
+              className="text-[#0567B1] underline font-medium"
+            >
+              mission statement guide
+            </Link>
+            )
           </li>
           <li>
             Your Candid (GuideStar) profile link (see our{' '}
@@ -111,7 +117,7 @@ const ApplicationChecklist = () => {
               Terms of Service
             </Link>
             , confirmation that you&rsquo;re a US organization, and two short questions about AI
-            tools (&ldquo;none&rdquo; is a fine answer)
+            tools (if you don&rsquo;t use AI tools yet, just say so)
           </li>
         </ol>
 

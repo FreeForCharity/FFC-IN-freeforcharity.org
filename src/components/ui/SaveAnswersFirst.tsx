@@ -1,14 +1,15 @@
 import React from 'react'
-import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
+import Link from 'next/link'
+import { TRACKS, type Track } from '@/data/application-fields'
 
 /**
  * "Before you apply" step shown on both onboarding guides (/501c3/ and
  * /pre501c3/): draft every answer in a local Word document or Google Doc, then
  * copy each one into the WHMCS application, so nothing is lost if the
- * application has to be fixed and resubmitted. Links to the worksheet on the
- * application field guide.
+ * application has to be fixed and resubmitted. Links to the worksheet on that
+ * form's application guide.
  */
-const SaveAnswersFirst: React.FC = () => {
+const SaveAnswersFirst: React.FC<{ track: Track }> = ({ track }) => {
   return (
     <section
       id="save-your-answers"
@@ -27,16 +28,13 @@ const SaveAnswersFirst: React.FC = () => {
         account, then copy each one into the application form. If something has to be fixed and you
         resubmit, nothing is lost.
       </p>
-      <a
-        href={`${ffcAdminUrl(adminLinks['application-fields'].newModel)}#worksheet`}
-        target="_blank"
-        rel="noopener noreferrer"
+      <Link
+        href={`${TRACKS[track].guidePath}#worksheet`}
         className="inline-flex items-center gap-[8px] text-[16px] font-[600] text-[#04508c] underline underline-offset-4"
       >
         <span>Use the application worksheet</span>
         <span aria-hidden="true">&rarr;</span>
-        <span className="sr-only">(opens FFC Admin in a new tab)</span>
-      </a>
+      </Link>
     </section>
   )
 }

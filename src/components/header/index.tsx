@@ -33,6 +33,8 @@ const menuItems: MenuItem[] = [
       { label: 'Website Templates & the FFC Footer', path: '/website-templates' },
       { label: '501c3 Onboarding Guide', path: '/501c3' },
       { label: 'Pre501c3 Onboarding Guide', path: '/pre501c3' },
+      { label: '501(c)(3) Application Guide', path: '/501c3/application-guide' },
+      { label: 'Pre-501(c)(3) Application Guide', path: '/pre501c3/application-guide' },
       {
         label: 'Online Impacts Onboarding Guide',
         path: '/online-impacts-onboarding-guide',

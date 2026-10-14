@@ -87,6 +87,8 @@ test.describe('Mobile Navigation', () => {
       'Website Templates & the FFC Footer',
       '501c3 Onboarding Guide',
       'Pre501c3 Onboarding Guide',
+      '501(c)(3) Application Guide',
+      'Pre-501(c)(3) Application Guide',
       'Online Impacts Onboarding Guide',
       'GuideStar Profile Setup Guide',
     ]

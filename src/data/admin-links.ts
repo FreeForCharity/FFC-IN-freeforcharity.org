@@ -68,9 +68,6 @@ export const adminLinks = {
   'contributor-ladder': {
     newModel: '/contributor-ladder/',
   },
-  'fiscal-sponsorship': {
-    newModel: '/intake-help/fiscal-sponsorship/',
-  },
   'workforce-development': {
     newModel: '/training/',
   },
@@ -94,18 +91,10 @@ export const adminLinks = {
     newModel: '/training/',
     legacy: '/legacy-wordpress-administration/wordpress-training-programs/',
   },
-  onboarding: {
-    newModel: '/charity-prerequisites/',
-  },
-  // Onboarding application field guides. `application-fields` is the
-  // field-by-field guide (one anchor per WHMCS application field, written
-  // 2026-10-14); the rest are the per-field step-by-step guides it links to.
-  'application-fields': {
-    newModel: '/guides/application-fields/',
-  },
-  'mission-statement': {
-    newModel: '/intake-help/mission-statement/',
-  },
+  // Per-field step-by-step setup guides linked from the onboarding pages.
+  // The application field guides themselves (and the former /intake-help/
+  // topics) live on this site: /501c3/application-guide/,
+  // /pre501c3/application-guide/ and /<track>/help/<slug>/.
   candid: {
     newModel: '/guides/candid/',
   },
@@ -117,9 +106,6 @@ export const adminLinks = {
   },
   'linkedin-profile': {
     newModel: '/guides/linkedin/',
-  },
-  'board-requirements': {
-    newModel: '/intake-help/board-requirements/',
   },
   'github-account': {
     newModel: '/guides/github-account/',

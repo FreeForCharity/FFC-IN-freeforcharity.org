@@ -11,53 +11,67 @@ jest.mock('@/lib/assetPath', () => ({
   assetPath: (path: string) => path,
 }))
 
-const GUIDE_URL = 'https://ffcadmin.org/guides/application-fields/'
+// next/link drops the trailing slash under Jest (the static export adds it
+// back via trailingSlash: true).
+const GUIDE = {
+  '501c3': '/501c3/application-guide',
+  pre501c3: '/pre501c3/application-guide',
+} as const
 
 describe('RequiredFieldsNotice', () => {
-  it('explains the high-demand reason and links the application field guide', async () => {
-    const { container } = render(<RequiredFieldsNotice />)
-    expect(
-      screen.getByRole('heading', { name: 'Why every required field is required' })
-    ).toBeInTheDocument()
-    expect(container.textContent).toMatch(/demand for them is very high/i)
-    expect(container.textContent).toMatch(/not able to make exceptions/i)
-    expect(container.textContent).toMatch(/free to set up/i)
-    const link = screen.getByRole('link')
-    expect(link).toHaveAttribute('href', GUIDE_URL)
-    expect(link).toHaveAttribute('target', '_blank')
-    expect(await axe(container)).toHaveNoViolations()
-  }, 30000)
+  it.each(['501c3', 'pre501c3'] as const)(
+    'explains the high-demand reason and links the %s application guide',
+    async (track) => {
+      const { container } = render(<RequiredFieldsNotice track={track} />)
+      expect(
+        screen.getByRole('heading', { name: 'Why every required field is required' })
+      ).toBeInTheDocument()
+      expect(container.textContent).toMatch(/demand for them is very high/i)
+      expect(container.textContent).toMatch(/not able to make exceptions/i)
+      expect(container.textContent).toMatch(/free to set up/i)
+      const link = screen.getByRole('link')
+      expect(link).toHaveAttribute('href', GUIDE[track])
+      // Same site now, so it no longer opens a new tab.
+      expect(link).not.toHaveAttribute('target')
+      expect(await axe(container)).toHaveNoViolations()
+    },
+    30000
+  )
 
   it('avoids blunt "no waivers" phrasing', () => {
-    const { container } = render(<RequiredFieldsNotice />)
+    const { container } = render(<RequiredFieldsNotice track="501c3" />)
     expect(container.textContent).not.toMatch(/waiver/i)
     expect(container.textContent).not.toMatch(/required means required/i)
   })
 
   it.each([
-    ['/501c3/', Page501c3],
-    ['/pre501c3/', PagePre501c3],
-  ])('is shown on %s', (_route, Page) => {
+    ['501c3', Page501c3],
+    ['pre501c3', PagePre501c3],
+  ] as const)('is shown on /%s/ and links that form’s guide', (track, Page) => {
     const { container } = render(<Page />)
     expect(container.querySelector('#required-fields')).not.toBeNull()
     const hrefs = Array.from(container.querySelectorAll('a')).map((a) => a.getAttribute('href'))
-    expect(hrefs).toContain(GUIDE_URL)
+    expect(hrefs).toContain(GUIDE[track])
   })
 })
 
 describe('SaveAnswersFirst', () => {
-  it('tells applicants to save answers in a Word document or Google Doc and links the worksheet', async () => {
-    const { container } = render(<SaveAnswersFirst />)
-    expect(
-      screen.getByRole('heading', {
-        name: /save every answer in a Word document or Google Doc first/i,
-      })
-    ).toBeInTheDocument()
-    expect(container.textContent).toMatch(/copy each one into the application form/i)
-    expect(container.textContent).toMatch(/nothing is lost/i)
-    expect(screen.getByRole('link')).toHaveAttribute('href', `${GUIDE_URL}#worksheet`)
-    expect(await axe(container)).toHaveNoViolations()
-  }, 30000)
+  it.each(['501c3', 'pre501c3'] as const)(
+    'tells applicants to save answers in a document and links the %s worksheet',
+    async (track) => {
+      const { container } = render(<SaveAnswersFirst track={track} />)
+      expect(
+        screen.getByRole('heading', {
+          name: /save every answer in a Word document or Google Doc first/i,
+        })
+      ).toBeInTheDocument()
+      expect(container.textContent).toMatch(/copy each one into the application form/i)
+      expect(container.textContent).toMatch(/nothing is lost/i)
+      expect(screen.getByRole('link')).toHaveAttribute('href', `${GUIDE[track]}#worksheet`)
+      expect(await axe(container)).toHaveNoViolations()
+    },
+    30000
+  )
 
   it.each([
     ['/501c3/', Page501c3],

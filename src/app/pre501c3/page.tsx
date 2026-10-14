@@ -8,7 +8,6 @@ import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import RequiredFieldsNotice from '@/components/ui/RequiredFieldsNotice'
 import SaveAnswersFirst from '@/components/ui/SaveAnswersFirst'
 import ApplicationChecklist from '@/components/pre501c3-components/application-checklist'
-import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 import Faqs from '@/components/pre501c3-components/Faqs'
 import Charity from '@/components/pre501c3-components/charity'
 
@@ -29,14 +28,15 @@ const index = () => {
       />
       <div className="w-[90%] max-w-[720px] mx-auto mt-[32px]">
         <AdminGuideLink
-          href={ffcAdminUrl(adminLinks.onboarding.newModel)}
-          description="Before you apply: review the charity prerequisites and the full step-by-step onboarding on the FFC Admin portal."
+          href="/pre501c3/application-guide/"
+          label="Read the Pre-501(c)(3) Application Guide"
+          description="Before you apply: every field on the Pre-501(c)(3) application, why we ask, and how to get it for free."
         />
         <div className="mt-[20px]">
-          <RequiredFieldsNotice />
+          <RequiredFieldsNotice track="pre501c3" />
         </div>
         <div className="mt-[20px]">
-          <SaveAnswersFirst />
+          <SaveAnswersFirst track="pre501c3" />
         </div>
       </div>
       <Charity />

@@ -61,7 +61,13 @@ const index = () => {
             <li>EIN (Employer Identification Number), in the format NN-NNNNNNN</li>
             <li>
               Your mission in one or two plain sentences, and the year you were founded (see the{' '}
-              <GuideLink href={guide('mission-statement')}>mission statement guide</GuideLink>)
+              <Link
+                href="/501c3/help/mission-statement/"
+                className="text-[#0567B1] underline font-medium"
+              >
+                mission statement guide
+              </Link>
+              )
             </li>
             <li>
               Your Candid (GuideStar) public profile link and full-profile link, with at least the
@@ -83,7 +89,13 @@ const index = () => {
               much public information, but it must exist and the link must open. Creating one is
               free (see the{' '}
               <GuideLink href={guide('linkedin-profile')}>LinkedIn profile guide</GuideLink> and the{' '}
-              <GuideLink href={guide('board-requirements')}>board requirements</GuideLink>).
+              <Link
+                href="/501c3/help/board-requirements/"
+                className="text-[#0567B1] underline font-medium"
+              >
+                board requirements
+              </Link>
+              ).
             </li>
             <li>
               The names of your Chair, Secretary and Treasurer as they should appear on your
@@ -128,7 +140,7 @@ const index = () => {
                 Terms of Service
               </Link>
               , confirmation that you&rsquo;re a US organization, and two short questions about AI
-              tools (&ldquo;none&rdquo; is a fine answer)
+              tools (if you don&rsquo;t use AI tools yet, just say so)
             </li>
           </ol>
 
@@ -376,7 +388,9 @@ const index = () => {
           </p>
           <p className="text-[18px] font-[500]">
             Not sure what a field means? The{' '}
-            <GuideLink href={guide('application-fields')}>application field guide</GuideLink>{' '}
+            <Link href="/501c3/application-guide/" className="text-[#0567B1] underline font-medium">
+              501(c)(3) Application Guide
+            </Link>{' '}
             explains every field and links to a free, step-by-step setup guide.
           </p>
         </AccordionItem>

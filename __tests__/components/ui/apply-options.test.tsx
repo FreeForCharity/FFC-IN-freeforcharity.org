@@ -74,8 +74,11 @@ describe('ApplyOptions', () => {
     // Corporate fiscal sponsors are steered to talk with FFC first.
     expect(panel.getByText(/talk with us first/i)).toBeInTheDocument()
     expect(
-      panel.getByRole('link', { name: /How we evaluate fiscal sponsorship/i })
-    ).toHaveAttribute('href', 'https://ffcadmin.org/intake-help/fiscal-sponsorship/')
+      panel.getByRole('link', { name: /How we work with fiscal sponsorship/i })
+    ).toHaveAttribute(
+      'href',
+      expect.stringMatching(/^\/pre501c3\/help\/getting-501c3\/?#fiscal-sponsorship$/)
+    )
   })
 
   it('gives over-$1M organizations the graceful out-path, not an application', () => {

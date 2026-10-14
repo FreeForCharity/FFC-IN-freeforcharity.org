@@ -26,6 +26,12 @@
       "type": "page"
     },
     {
+      "title": "Application Field Guide",
+      "description": "Which Free For Charity application is yours? Pick the 501(c)(3) or pre-501(c)(3) application guide for every field, why we ask, and how to get it for free.",
+      "href": "/application-guide/",
+      "type": "page"
+    },
+    {
       "title": "Powered by Free For Charity Badge",
       "description": "Show your supporters your site runs on donated infrastructure — copy the Powered by Free For Charity badge embed for your nonprofit website.",
       "href": "/badge/",

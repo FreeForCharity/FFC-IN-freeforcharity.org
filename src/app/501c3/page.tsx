@@ -4,7 +4,6 @@ import HelpForCharitiesandNonprofit from '@/components/501c3-components/Help-For
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import RequiredFieldsNotice from '@/components/ui/RequiredFieldsNotice'
 import SaveAnswersFirst from '@/components/ui/SaveAnswersFirst'
-import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 import ReadyToGetStartedAndFaq from '@/components/501c3-components/Ready-to-get-started-and-faqs'
 import CallSection from '@/components/help-for-charities-components/call-section'
 
@@ -25,14 +24,15 @@ const index = () => {
       />
       <div className="w-[90%] max-w-[720px] mx-auto mt-[32px]">
         <AdminGuideLink
-          href={ffcAdminUrl(adminLinks.onboarding.newModel)}
-          description="Before you apply: review the charity prerequisites and the full step-by-step onboarding on the FFC Admin portal."
+          href="/501c3/application-guide/"
+          label="Read the 501(c)(3) Application Guide"
+          description="Before you apply: every field on the 501(c)(3) application, why we ask, and how to get it for free."
         />
         <div className="mt-[20px]">
-          <RequiredFieldsNotice />
+          <RequiredFieldsNotice track="501c3" />
         </div>
         <div className="mt-[20px]">
-          <SaveAnswersFirst />
+          <SaveAnswersFirst track="501c3" />
         </div>
       </div>
       <HelpForCharitiesandNonprofit />

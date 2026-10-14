@@ -80,23 +80,12 @@ export default function CharityOnboardingJourney() {
         <div className="prose max-w-none font-[var(--font-lato)] text-[18px] leading-[28px] mt-10">
           <h2 className={h2}>Deep dives for every prerequisite</h2>
           <p>
-            Stuck on a specific intake item — mission statement, board requirements, public contact
-            info, the 501c3 application itself, or fiscal sponsorship? Each has a dedicated
-            walkthrough in the{' '}
-            <a href="https://ffcadmin.org/intake-help/" target="_blank" rel="noopener noreferrer">
-              intake help section on FFC Admin
-            </a>
-            , our operational portal. Every field on the application also has a step-by-step entry
-            in the{' '}
-            <a
-              href="https://ffcadmin.org/guides/application-fields/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              application field guide
-            </a>
-            . Demand for our free services is high, so we need every required field completed to
-            review applications fairly and quickly.
+            Stuck on a specific application item — mission statement, board requirements, public
+            contact info, getting to 501(c)(3), or fiscal sponsorship? Every field on each
+            application has a step-by-step entry, with in-depth help pages, in the{' '}
+            <Link href="/application-guide/">application field guide</Link> for your form. Demand
+            for our free services is high, so we need every required field completed to review
+            applications fairly and quickly.
           </p>
 
           <h2 className={h2}>How we communicate</h2>
