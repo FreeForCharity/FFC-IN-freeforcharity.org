@@ -192,7 +192,13 @@ describe('Application field guide data', () => {
       .map((f) => path.join(dir, f))
     // Page copy only: drop JSX attribute values (className="list-none", fill="none").
     const copy = [
-      ...files.map((f) => fs.readFileSync(f, 'utf-8').replace(/\w+="[^"]*"/g, '')),
+      ...files.map((f) =>
+        fs
+          .readFileSync(f, 'utf-8')
+          .replace(/\w+="[^"]*"/g, '')
+          // Tailwind tokens in class-name constants are not copy.
+          .replace(/\blist-none\b/g, '')
+      ),
       ...APPLICATION_FIELDS_POLICY.body,
       ...TRACK_KEYS.flatMap((track) =>
         sectionsForTrack(track).flatMap((s) => [s.title, s.why, s.how, s.optionalWhy ?? ''])
@@ -236,7 +242,9 @@ describe('Application field guide data', () => {
   })
 
   it('is registered on the guides hub', () => {
-    expect(guidesData.guides.map((g) => g.href)).toContain('/application-guide/')
+    const hrefs = guidesData.guides.map((g) => g.href)
+    expect(hrefs).toContain('/501c3/')
+    expect(hrefs).toContain('/pre501c3/')
   })
 })
 

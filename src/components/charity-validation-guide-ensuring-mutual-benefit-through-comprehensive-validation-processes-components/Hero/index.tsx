@@ -53,7 +53,8 @@ export default function CharityValidationGuide() {
 
             <li className="text-[14px] font-[500] text-[#666] leading-[24px]">
               <strong className="text-[#666] text-[14px] font-[700]">
-                TechSoup Validation for Legal Entity Confirmation (Approves both 501c3 and Global)
+                TechSoup Validation for Legal Entity Confirmation (Accepts 501(c)(3) and
+                pre-501(c)(3) organizations, US only)
               </strong>
               <ol className="list-decimal list-inside ml-8 mt-2 space-y-1">
                 <li>
@@ -101,7 +102,8 @@ export default function CharityValidationGuide() {
 
             <li className="text-[14px] font-[500] text-[#666] leading-[24px]">
               <strong className="text-[#666] text-[14px] font-[700]">
-                Verified Nonprofit Facebook Page (Approves both 501c3 and Global)
+                Verified Nonprofit Facebook Page (Accepts 501(c)(3) and pre-501(c)(3) organizations,
+                US only)
               </strong>
               <ol className="list-decimal list-inside ml-8 mt-2 space-y-1">
                 <li>
@@ -127,7 +129,8 @@ export default function CharityValidationGuide() {
 
             <li className="text-[14px] font-[500] text-[#666] leading-[24px]">
               <strong className="text-[#666] text-[14px] font-[700]">
-                Email Services Hosted by Microsoft (Approves both 501c3 and Global)
+                Email Services Hosted by Microsoft (US 501(c)(3) organizations; pre-501(c)(3) groups
+                once the IRS approves their 501(c)(3))
               </strong>
               <ol className="list-decimal list-inside ml-8 mt-2 space-y-1">
                 <li>
@@ -153,8 +156,8 @@ export default function CharityValidationGuide() {
 
             <li className="text-[14px] font-[500] text-[#666] leading-[24px]">
               <strong className="text-[#666] text-[14px] font-[700]">
-                Use of WHMCS System and PayPal for Further Validation (Approves both 501c3 and
-                Global)
+                Use of WHMCS System and PayPal for Further Validation (Accepts 501(c)(3) and
+                pre-501(c)(3) organizations, US only)
               </strong>
               <ol className="list-decimal list-inside ml-8 mt-2 space-y-1">
                 <li>

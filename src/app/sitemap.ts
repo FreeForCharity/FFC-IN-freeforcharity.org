@@ -41,9 +41,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     { path: '/501c3', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/pre501c3', priority: 0.7, changeFrequency: 'monthly' as const },
-    { path: '/application-guide', priority: 0.7, changeFrequency: 'monthly' as const },
-    { path: '/501c3/application-guide', priority: 0.7, changeFrequency: 'monthly' as const },
-    { path: '/pre501c3/application-guide', priority: 0.7, changeFrequency: 'monthly' as const },
     // Per-form application help pages (/501c3/help/<slug>/, /pre501c3/help/<slug>/).
     ...TRACK_KEYS.flatMap((track) =>
       helpTopicsForTrack(track).map((topic) => ({

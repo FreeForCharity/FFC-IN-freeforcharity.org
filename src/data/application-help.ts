@@ -98,7 +98,7 @@ export const FOLDED_HELP_TOPICS: Record<string, string> = {
   '501c3-application': '/pre501c3/help/getting-501c3/#form-1023',
   'fiscal-sponsorship': '/pre501c3/help/getting-501c3/#fiscal-sponsorship',
   'supporting-documents': '/<track>/help/public-contact-info/#public-and-private',
-  'policy-pages': '/<track>/application-guide/#template',
+  'policy-pages': '/<track>/#template',
 }
 
 export function getHelpTopic(slug: string): HelpTopic | undefined {

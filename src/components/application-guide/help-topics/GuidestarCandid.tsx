@@ -67,7 +67,7 @@ const GuidestarCandid: React.FC = () => (
     <p>
       Candid builds profiles from IRS 501(c)(3) records, so new groups usually can’t have one yet.
       That is one reason the Pre-501(c)(3) application exists; there, Candid is optional (see{' '}
-      <Link href="/pre501c3/application-guide/#candid">its Candid section</Link>).
+      <Link href="/pre501c3/#candid">its Candid section</Link>).
     </p>
   </>
 )

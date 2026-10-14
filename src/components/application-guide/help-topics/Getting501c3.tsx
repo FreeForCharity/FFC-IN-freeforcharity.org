@@ -90,10 +90,9 @@ const Getting501c3: React.FC = () => (
     <ul>
       <li>
         <strong>We work through the sponsor.</strong> The sponsoring 501(c)(3) applies on the{' '}
-        <Link href="/501c3/application-guide/">501(c)(3) application</Link> and confirms the project
-        is officially theirs. That isn’t a formality: the Microsoft 365 and Google Workspace
-        nonprofit grants attach to the sponsor’s 501(c)(3), so the sponsor has to be the applicant
-        of record.
+        <Link href="/501c3/">501(c)(3) application</Link> and confirms the project is officially
+        theirs. That isn’t a formality: the Microsoft 365 and Google Workspace nonprofit grants
+        attach to the sponsor’s 501(c)(3), so the sponsor has to be the applicant of record.
       </li>
       <li>
         <strong>Pursuing your own 501(c)(3) as well?</strong> Then your project applies on this

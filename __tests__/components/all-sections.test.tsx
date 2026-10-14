@@ -15,14 +15,17 @@ import { axe } from '../utils/axe'
  * (excluding src/components/ui) when components are added or removed.
  */
 const sectionComponents: [string, string][] = [
+  // Application-page sections that take no props (track-specific ones are
+  // covered by __tests__/app/application-pages.test.tsx).
+  ['application-guide/BeforeYouStart', '../../src/components/application-guide/BeforeYouStart'],
   [
-    '501c3-components/Help-For-Charities-and-Nonprofit',
-    '../../src/components/501c3-components/Help-For-Charities-and-Nonprofit/index',
+    'application-guide/CommitmentSummary',
+    '../../src/components/application-guide/CommitmentSummary',
   ],
-  [
-    '501c3-components/Ready-to-get-started-and-faqs',
-    '../../src/components/501c3-components/Ready-to-get-started-and-faqs/index',
-  ],
+  ['application-guide/HowItWorks', '../../src/components/application-guide/HowItWorks'],
+  ['application-guide/TrackCards', '../../src/components/application-guide/TrackCards'],
+  ['application-guide/TrackContact', '../../src/components/application-guide/TrackContact'],
+  ['application-guide/WhichApplication', '../../src/components/application-guide/WhichApplication'],
   [
     'about-us-components/CallToAction',
     '../../src/components/about-us-components/CallToAction/index',
@@ -196,10 +199,6 @@ const sectionComponents: [string, string][] = [
     '../../src/components/help-for-charities-components/Charity-Nonprofit-Director-Faq/index',
   ],
   [
-    'help-for-charities-components/Ready-to-Get-Started-Now',
-    '../../src/components/help-for-charities-components/Ready-to-Get-Started-Now/index',
-  ],
-  [
     'help-for-charities-components/call-section',
     '../../src/components/help-for-charities-components/call-section/index',
   ],
@@ -231,7 +230,6 @@ const sectionComponents: [string, string][] = [
     '../../src/components/online-impacts-onboarding-guide-components/charity-text/index',
   ],
   ['pre501c3-components/Faqs', '../../src/components/pre501c3-components/Faqs/index'],
-  ['pre501c3-components/charity', '../../src/components/pre501c3-components/charity/index'],
   ['techstack-components/Hero', '../../src/components/techstack-components/Hero/index'],
   ['volunteer/Free-For-Charity', '../../src/components/volunteer/Free-For-Charity/index'],
 ]

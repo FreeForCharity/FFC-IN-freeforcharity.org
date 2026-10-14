@@ -13,13 +13,15 @@ import { test, expect } from '@playwright/test'
 test.describe('Onboarding journey — CTA deep links (#452)', () => {
   test('501c3 page links Get Started to onboarding product pid 33', async ({ page }) => {
     await page.goto('/501c3')
-    expect(await page.locator('a[href*="a=add&pid=33"]').count()).toBeGreaterThan(0)
+    await expect(page.locator('a[href*="a=add&pid=33"]')).toHaveCount(1)
+    await expect(page.locator('a[href*="a=add&pid=16"]')).toHaveCount(0)
     await expect(page.locator('a[href*="confproduct"]')).toHaveCount(0)
   })
 
   test('pre501c3 page links Get Started to onboarding product pid 16', async ({ page }) => {
     await page.goto('/pre501c3')
-    expect(await page.locator('a[href*="a=add&pid=16"]').count()).toBeGreaterThan(0)
+    await expect(page.locator('a[href*="a=add&pid=16"]')).toHaveCount(1)
+    await expect(page.locator('a[href*="a=add&pid=33"]')).toHaveCount(0)
     await expect(page.locator('a[href*="confproduct"]')).toHaveCount(0)
   })
 })
@@ -55,6 +57,22 @@ test.describe('Onboarding journey page — Website before Email (#450)', () => {
     expect(main).toContain('Microsoft 365')
     expect(main).toMatch(/require a live website/i)
   })
+})
+
+test.describe('Funnel pages route to the application pages', () => {
+  for (const route of [
+    '/help-for-charities',
+    '/domains',
+    '/free-charity-web-hosting',
+    '/online-impacts-onboarding-guide',
+  ]) {
+    test(`${route} has no onboarding Apply (cart) links`, async ({ page }) => {
+      await page.goto(route)
+      await expect(page.locator('a[href*="a=add&pid=33"], a[href*="a=add&pid=16"]')).toHaveCount(0)
+      expect(await page.locator('a[href$="/501c3/"]').count()).toBeGreaterThan(0)
+      expect(await page.locator('a[href$="/pre501c3/"]').count()).toBeGreaterThan(0)
+    })
+  }
 })
 
 test.describe('Free charity web hosting — no legacy registrar (#447)', () => {

@@ -1,6 +1,7 @@
 import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
 import JourneyDiagram from '@/components/journey/JourneyDiagram'
+import HowItWorks from '@/components/application-guide/HowItWorks'
 import { GATE_SENTENCE, journeyStages } from '@/data/journey'
 
 export const metadata = pageMetadata({
@@ -37,6 +38,14 @@ export default function CharityOnboardingJourney() {
         <div className="mt-8">
           <JourneyDiagram />
         </div>
+
+        <div className="mt-10">
+          <HowItWorks heading="How it works, step by step" />
+        </div>
+
+        <h2 className="font-[var(--font-faustina)] text-[32px] leading-[40px] mt-12 mb-2">
+          The five stages in detail
+        </h2>
 
         <ol className="mt-8 space-y-6">
           {journeyStages.map((stage) => (
@@ -82,17 +91,18 @@ export default function CharityOnboardingJourney() {
           <p>
             Stuck on a specific application item — mission statement, board requirements, public
             contact info, getting to 501(c)(3), or fiscal sponsorship? Every field on each
-            application has a step-by-step entry, with in-depth help pages, in the{' '}
-            <Link href="/application-guide/">application field guide</Link> for your form. Demand
-            for our free services is high, so we need every required field completed to review
-            applications fairly and quickly.
+            application has a step-by-step entry, with in-depth help pages, on its application page:
+            the <Link href="/501c3/#field-guide">501(c)(3) application</Link> or the{' '}
+            <Link href="/pre501c3/#field-guide">pre-501(c)(3) application</Link>. Demand for our
+            free services is high, so we need every required field completed to review applications
+            fairly and quickly.
           </p>
 
           <h2 className={h2}>How we communicate</h2>
           <p>
-            Support happens over email and text with real volunteers. We aim to respond within a
-            couple of business days; a silent week means a message fell through — please nudge us
-            rather than wait. Everything you can prepare is on the{' '}
+            Support happens over email and text with real volunteers. We’re all volunteers, so there
+            is no guaranteed response time; if a message seems to have fallen through, please nudge
+            us rather than wait. Everything you can prepare is on the{' '}
             <Link href="/getting-started-checklist/">getting-started checklist</Link>.
           </p>
         </div>

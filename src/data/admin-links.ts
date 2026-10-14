@@ -93,8 +93,8 @@ export const adminLinks = {
   },
   // Per-field step-by-step setup guides linked from the onboarding pages.
   // The application field guides themselves (and the former /intake-help/
-  // topics) live on this site: /501c3/application-guide/,
-  // /pre501c3/application-guide/ and /<track>/help/<slug>/.
+  // topics) live on this site: the field guide inline on /501c3/ and
+  // /pre501c3/, and the help pages at /<track>/help/<slug>/.
   candid: {
     newModel: '/guides/candid/',
   },

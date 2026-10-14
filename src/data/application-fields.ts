@@ -1,13 +1,15 @@
 /**
- * Application field guides: one per WHMCS onboarding application.
+ * Application field guide data: one inline field guide per WHMCS onboarding
+ * application, shown on that application's page.
  *
- *   /501c3/application-guide/     the 501(c)(3) application (WHMCS pid 33)
- *   /pre501c3/application-guide/  the pre-501(c)(3) application (WHMCS pid 16)
+ *   /501c3/     the 501(c)(3) application (WHMCS pid 33)
+ *   /pre501c3/  the pre-501(c)(3) application (WHMCS pid 16)
  *
- * Both guides render from this one file, filtered by form. Every WHMCS
+ * Both pages render from this one file, filtered by form. Every WHMCS
  * application field maps to exactly one section, and the section ids are the
- * anchors WHMCS deep-links to (`/501c3/application-guide/#ein`), so keep them
- * stable. Sections and the worksheet follow the form's display order.
+ * anchors WHMCS deep-links to (`/501c3/#ein` opens and scrolls to that
+ * group), so keep them stable. Sections and the worksheet follow the form's
+ * display order.
  *
  * r33 / r16: 'R' = required, 'O' = optional, '-' = not on that form.
  * Written 2026-10-14 from the live WHMCS configuration (including the
@@ -67,10 +69,12 @@ export interface TrackInfo {
   pid: number
   /** Short name, e.g. "501(c)(3)". */
   name: string
-  /** Guide title, e.g. "501(c)(3) Application Guide". */
-  guideTitle: string
-  guidePath: string
-  onboardingPath: string
+  /** The application page's title, e.g. "501(c)(3) Application". */
+  pageTitle: string
+  /** The application page: the single page per application. */
+  pagePath: string
+  /** Who this application is for, in one line. */
+  forWhom: string
   other: Track
 }
 
@@ -80,9 +84,9 @@ export const TRACKS: Record<Track, TrackInfo> = {
     key: 'r33',
     pid: ONBOARDING_PID.full501c3,
     name: '501(c)(3)',
-    guideTitle: '501(c)(3) Application Guide',
-    guidePath: '/501c3/application-guide/',
-    onboardingPath: '/501c3/',
+    pageTitle: '501(c)(3) Application',
+    pagePath: '/501c3/',
+    forWhom: 'This is the application for IRS-recognized 501(c)(3) charities.',
     other: 'pre501c3',
   },
   pre501c3: {
@@ -90,9 +94,10 @@ export const TRACKS: Record<Track, TrackInfo> = {
     key: 'r16',
     pid: ONBOARDING_PID.pre501c3,
     name: 'Pre-501(c)(3)',
-    guideTitle: 'Pre-501(c)(3) Application Guide',
-    guidePath: '/pre501c3/application-guide/',
-    onboardingPath: '/pre501c3/',
+    pageTitle: 'Pre-501(c)(3) Application',
+    pagePath: '/pre501c3/',
+    forWhom:
+      'This is the application for nonprofit groups that are not yet IRS-recognized as a 501(c)(3).',
     other: '501c3',
   },
 }
@@ -438,7 +443,7 @@ export const APPLICATION_FIELD_SECTIONS: ApplicationFieldSection[] = [
     title: 'Website starting point',
     fields: [{ slug: 'template-choice', label: 'Template choice', r33: 'R', r16: 'R' }],
     why: 'Single Page builds your full site from our template; Footer-Only adds the FFC footer to a site you keep.',
-    how: "Pick one, or 'Not sure' and we recommend. Either way, your site gets the six policy pages the FFC footer links to (donation, privacy, cookie, terms of service, vulnerability disclosure and security acknowledgements), so you don't have to write them.",
+    how: "Pick one, or 'Not sure' and we recommend. Either way, six policy pages, prepared for you and branded to your organization (privacy, cookie, terms of service, your donation policy, vulnerability disclosure and security acknowledgements), go live with your public contact email and address; you accept them with a tickbox on the application.",
     links: ['/website-templates/', 'https://ffcadmin.org/guides/build-charity-site-from-template/'],
   },
   {

@@ -38,9 +38,16 @@
       "minutes": 3
     },
     {
-      "href": "/application-guide/",
-      "title": "Application field guides",
-      "promise": "Every field on the 501(c)(3) and pre-501(c)(3) applications: whether you need it, why we ask, and how to get it for free.",
+      "href": "/501c3/",
+      "title": "The 501(c)(3) application",
+      "promise": "Who qualifies, what you commit to, how it works, and every field on the 501(c)(3) application, with one Apply button.",
+      "group": "Getting started",
+      "minutes": 15
+    },
+    {
+      "href": "/pre501c3/",
+      "title": "The pre-501(c)(3) application",
+      "promise": "For groups not yet IRS-recognized: who qualifies, what you commit to, and every field on the pre-501(c)(3) application.",
       "group": "Getting started",
       "minutes": 15
     },

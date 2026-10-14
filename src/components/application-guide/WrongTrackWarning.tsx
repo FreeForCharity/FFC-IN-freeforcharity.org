@@ -2,8 +2,9 @@ import React from 'react'
 import Link from 'next/link'
 import { FiAlertOctagon } from 'react-icons/fi'
 import { TRACKS, type Track } from '@/data/application-fields'
+import { FFC_TEL_HREF, FFC_TEXT_NUMBER } from '@/data/charity-terms'
 
-/** The warning copy per form; the link always goes to the other form's guide. */
+/** The warning copy per form; the link always goes to the other form's page. */
 export const WRONG_TRACK_WARNING: Record<Track, { headline: string; stop: string }> = {
   '501c3': {
     headline: 'Only apply here if your organization is already IRS-recognized as a 501(c)(3).',
@@ -19,14 +20,25 @@ interface WrongTrackWarningProps {
   track: Track
   /** Keeps ids unique when the warning appears more than once on a page. */
   idSuffix: string
+  /** Extra content inside the box (the criteria and the picker, on application pages). */
+  children?: React.ReactNode
+  /** Optional heading above the headline, e.g. "Is this the right application?". */
+  heading?: string
 }
 
 /**
- * The unmissable "wrong application?" warning shown at the top of every
- * application guide and help page, and next to every Apply button. Applying on
- * the wrong form is the most common reason an application has to be redone.
+ * The unmissable "wrong application?" warning. On an application page it is
+ * the big red box at the top (with the criteria and the Help me choose picker
+ * inside) and it is repeated right above the Apply button; help pages show it
+ * at the top and above their Apply button. The only link is a text link to
+ * the other form's page, never the other form's Apply button.
  */
-const WrongTrackWarning: React.FC<WrongTrackWarningProps> = ({ track, idSuffix }) => {
+const WrongTrackWarning: React.FC<WrongTrackWarningProps> = ({
+  track,
+  idSuffix,
+  children,
+  heading,
+}) => {
   const copy = WRONG_TRACK_WARNING[track]
   const other = TRACKS[TRACKS[track].other]
   const id = `wrong-application-${idSuffix}`
@@ -42,9 +54,18 @@ const WrongTrackWarning: React.FC<WrongTrackWarningProps> = ({ track, idSuffix }
           aria-hidden="true"
           className="h-[40px] w-[40px] shrink-0 text-[#b91c1c] sm:h-[52px] sm:w-[52px]"
         />
-        <div>
+        <div className="min-w-0 flex-1">
+          {heading ? (
+            <h2
+              id={id}
+              className="mb-[6px] text-[26px] font-[800] leading-[34px] text-[#7f1d1d] sm:text-[30px] sm:leading-[38px]"
+              data-font="lato-font"
+            >
+              {heading}
+            </h2>
+          ) : null}
           <p
-            id={id}
+            id={heading ? undefined : id}
             className="text-[20px] font-[800] leading-[28px] text-[#7f1d1d] sm:text-[24px] sm:leading-[32px]"
             data-font="lato-font"
           >
@@ -56,13 +77,17 @@ const WrongTrackWarning: React.FC<WrongTrackWarningProps> = ({ track, idSuffix }
           >
             {copy.stop}
           </p>
-          <Link
-            href={other.guidePath}
-            className="mt-[12px] inline-flex items-center gap-[8px] text-[17px] font-[700] text-[#7f1d1d] underline underline-offset-4"
-          >
-            <span>Go to the {other.guideTitle}</span>
-            <span aria-hidden="true">→</span>
-          </Link>
+          <p className="mt-[10px] text-[17px] font-[700] leading-[26px] text-[#7f1d1d]">
+            <Link href={other.pagePath} className="underline underline-offset-4">
+              Go to the {other.pageTitle} page
+            </Link>{' '}
+            or text{' '}
+            <a href={FFC_TEL_HREF} className="underline underline-offset-4">
+              {FFC_TEXT_NUMBER}
+            </a>
+            .
+          </p>
+          {children}
         </div>
       </div>
     </div>

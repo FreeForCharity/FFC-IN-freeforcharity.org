@@ -24,7 +24,7 @@ const features: Feature[] = [
     icon: <Mail className="w-9 h-9" aria-hidden="true" />,
     title: 'Microsoft 365 email',
     description:
-      'Professional name@yourcharity.org mailboxes set up through Microsoft for Nonprofits, so your team looks the part.',
+      'Professional name@yourcharity.org mailboxes on free Microsoft 365 Business Basic through Microsoft for Nonprofits, once your organization is a recognized 501(c)(3).',
   },
   {
     icon: <ShieldCheck className="w-9 h-9" aria-hidden="true" />,

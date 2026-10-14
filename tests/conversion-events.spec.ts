@@ -96,7 +96,8 @@ test.describe('Primary conversion events', () => {
   test('an apply button fires service_application_start with the WHMCS product id', async ({
     page,
   }) => {
-    await ready(page, '/help-for-charities/')
+    // Apply buttons live only on the application pages (one each).
+    await ready(page, '/501c3/')
 
     const applyLink = page.locator('a[href*="/hub/cart.php"]').first()
     await expect(applyLink).toBeAttached()

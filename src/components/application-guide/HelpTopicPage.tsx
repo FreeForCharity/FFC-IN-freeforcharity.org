@@ -37,13 +37,15 @@ const HelpTopicPage: React.FC<{ track: Track; slug: HelpTopicSlug }> = ({ track,
   const Content = HELP_TOPIC_CONTENT[slug]
   const sections = sectionsForTrack(track).filter((s) => topic.sections.includes(s.id))
   const otherTopics = helpTopicsForTrack(track).filter((t) => t.slug !== slug)
+  // Back to the application page, opened at this topic's first field group.
+  const backHref = `${info.pagePath}#${sections[0]?.id ?? 'field-guide'}`
 
   return (
     <div className="ffc-container pt-[120px] pb-16">
       <div className="mx-auto max-w-4xl">
         <p className="mb-[8px] text-[15px]">
-          <Link href={info.guidePath} className={linkClass}>
-            ← {info.guideTitle}
+          <Link href={backHref} className={linkClass}>
+            ← Back to the {info.pageTitle} page
           </Link>
         </p>
         <h1 className="mb-[12px] font-[var(--font-faustina)] text-[36px] leading-[46px] sm:text-[44px] sm:leading-[56px]">
@@ -67,7 +69,7 @@ const HelpTopicPage: React.FC<{ track: Track; slug: HelpTopicSlug }> = ({ track,
           {sections.map((section) => (
             <div key={section.id} className="mb-[18px] last:mb-0">
               <h3 className="mb-[6px] text-[17px] font-[700]">
-                <Link href={`${info.guidePath}#${section.id}`} className={linkClass}>
+                <Link href={`${info.pagePath}#${section.id}`} className={linkClass}>
                   {section.title}
                 </Link>
               </h3>
@@ -97,8 +99,8 @@ const HelpTopicPage: React.FC<{ track: Track; slug: HelpTopicSlug }> = ({ track,
           </h2>
           <ul className="space-y-[6px] text-[16px]">
             <li>
-              <Link href={info.guidePath} className={`${linkClass} font-[700]`}>
-                Back to the {info.guideTitle}
+              <Link href={backHref} className={`${linkClass} font-[700]`}>
+                Back to the {info.pageTitle} page
               </Link>
             </li>
             {otherTopics.map((t) => (
