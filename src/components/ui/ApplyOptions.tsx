@@ -1,6 +1,7 @@
 import React from 'react'
 import HelpMeChoose from '@/components/ui/HelpMeChoose'
 import { ApplyButton } from '@/components/ui/apply-buttons'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 
 /**
  * On-page apply block: the two clear application options for people who already
@@ -24,13 +25,30 @@ const ApplyOptions: React.FC<ApplyOptionsProps> = ({ heading = 'Ready to apply?'
           </h2>
         ) : null}
         <p
-          className="text-[17px] font-[500] leading-[27px] text-[#555] max-w-[720px] mx-auto mb-[30px]"
+          className="text-[17px] font-[500] leading-[27px] text-[#555] max-w-[720px] mx-auto mb-[12px]"
           data-font="lato-font"
         >
           Free For Charity serves <b>US-based</b> nonprofits (US territories included) with annual
           revenue under $1&nbsp;million. Pick the option that matches your organization — the
           application itself walks you through what we need. Not sure which fits? Use{' '}
           <b>Help me choose</b>.
+        </p>
+        <p
+          className="text-[16px] font-[500] leading-[25px] text-[#555] max-w-[720px] mx-auto mb-[30px]"
+          data-font="lato-font"
+        >
+          Demand for our free services is high, so we need every required field completed to review
+          applications fairly. Gather everything first with the{' '}
+          <a
+            href={ffcAdminUrl(adminLinks['application-fields'].newModel)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#0567B1] underline font-[600]"
+          >
+            step-by-step application field guide
+            <span className="sr-only"> (opens FFC Admin in a new tab)</span>
+          </a>
+          .
         </p>
 
         {/* The two clear apply options */}

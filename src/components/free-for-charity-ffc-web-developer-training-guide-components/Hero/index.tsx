@@ -89,9 +89,11 @@ const Index = () => {
               Nothing is built before this approval.
             </li>
             <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
-              <span className="font-[600] text-[#1c2a38]">Website application:</span> the charity
-              submits the website application (it requires the approved onboarding) and sends
-              content — logo, photos, mission text, program descriptions.
+              <span className="font-[600] text-[#1c2a38]">Website content:</span> the
+              charity&rsquo;s onboarding application already includes the site content (template
+              choice, tagline, descriptions, programs, the officers shown on the site) and the
+              maintainer&rsquo;s GitHub username, so the build starts right after approval. There is
+              no separate website order.
             </li>
             <li className="leading-[26px] pl-[0.5rem] text-[14px] font-[500] text-[#333d47]">
               <span className="font-[600] text-[#1c2a38]">Build from one of two templates:</span>{' '}

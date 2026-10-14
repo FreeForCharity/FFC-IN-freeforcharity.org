@@ -20,12 +20,16 @@ describe('Web Developer Training Guide Hero (GitHub Pages current model + legacy
     expect(text).toMatch(/legacy/i)
   })
 
-  it('teaches the gated journey in order: approve → application → build → validate → domain → email', () => {
+  it('teaches the gated journey in order: approve → content → build → validate → domain → email', () => {
     const { container } = render(<Hero />)
     const text = container.textContent ?? ''
 
+    // Since 2026-10-14 the onboarding application collects the website
+    // content, so there is no separate website application step.
+    expect(text).not.toMatch(/submits the website application/i)
+
     const approved = text.indexOf('Charity approved')
-    const application = text.indexOf('Website application')
+    const application = text.indexOf('Website content')
     const build = text.indexOf('Build from one of two templates')
     const validate = text.indexOf('Validate on GitHub Pages')
     const domain = text.indexOf('Domain via WHMCS')

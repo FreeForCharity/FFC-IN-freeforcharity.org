@@ -5,6 +5,9 @@ import ReadyToGetStarted from '@/components/help-for-charities-components/Ready-
 import CharityNonprofitDirectorFaq from '@/components/help-for-charities-components/Charity-Nonprofit-Director-Faq'
 import CallSection from '@/components/help-for-charities-components/call-section'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
+import RequiredFieldsNotice from '@/components/ui/RequiredFieldsNotice'
+import SaveAnswersFirst from '@/components/ui/SaveAnswersFirst'
+import ApplicationChecklist from '@/components/pre501c3-components/application-checklist'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 import Faqs from '@/components/pre501c3-components/Faqs'
 import Charity from '@/components/pre501c3-components/charity'
@@ -29,8 +32,15 @@ const index = () => {
           href={ffcAdminUrl(adminLinks.onboarding.newModel)}
           description="Before you apply: review the charity prerequisites and the full step-by-step onboarding on the FFC Admin portal."
         />
+        <div className="mt-[20px]">
+          <RequiredFieldsNotice />
+        </div>
+        <div className="mt-[20px]">
+          <SaveAnswersFirst />
+        </div>
       </div>
       <Charity />
+      <ApplicationChecklist />
       <Faqs />
       <ReadyToGetStarted />
       <CharityNonprofitDirectorFaq />

@@ -44,7 +44,7 @@ const gateProse: GateProse[] = [
     stageId: 'website',
     name: 'Gate 2 — Website',
     plain:
-      'The website application only opens after validation. A volunteer builds your site from an FFC template and you prove the partnership works by getting us your content. The site goes live on its free GitHub Pages address — which costs nothing.',
+      'Nothing is built until you are approved. Your application already includes your website content, so right after approval a volunteer builds your site from an FFC template and emails you a preview link, and you prove the partnership works by reviewing and approving it. The site goes live on its free GitHub Pages address — which costs nothing.',
   },
   {
     stageId: 'domain',

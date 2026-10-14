@@ -1,6 +1,11 @@
 import React from 'react'
 import Link from 'next/link'
 import AccordionItem from '@/components/ui/Accordian'
+import GuideLink from '@/components/ui/GuideLink'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
+
+const guide = (key: keyof typeof adminLinks) => ffcAdminUrl(adminLinks[key].newModel)
+
 const index = () => {
   return (
     <div className="bg-[#fcfcfc] pt-[60px] pb-[25px] w-full max-w-[100%]">
@@ -34,40 +39,125 @@ const index = () => {
             Before You Begin Onboarding
           </h1>
           <h3
-            className="text-[14px] font-[700] underline text-center text-[#666]"
+            className="text-[14px] font-[700] underline text-center text-[#666] pb-[10px]"
             data-font="aria-font"
           >
-            Obtain the following information and materials ready to ensure you can complete the
-            onboarding steps
+            Have all of this ready before you start. Your application also collects your website
+            content, so we can build your site right after approval.
           </h3>
 
+          <h2 className="text-[16px] font-[700] text-[#333] mb-[8px]" data-font="aria-font">
+            Required on the 501(c)(3) application
+          </h2>
           <ol
             className="text-[14px] font-[500] text-[#666] list-decimal list-outside space-y-3 pl-5 mb-[1em]"
             data-font="aria-font"
           >
-            <li>501(c)(3) determination letter from the IRS</li>
-            <li>EIN (Employer Identification Number)</li>
             <li>
-              Board member information:
-              <ul className="list-disc list-inside ml-6 mt-1 space-y-1 text-[#666]">
-                <li>Names</li>
-                <li>Titles</li>
-                <li>Contact information (Including a LinkedIn Profile link)</li>
-                <li>Brief bios</li>
-              </ul>
+              Your organization&rsquo;s legal name and legal status, exactly as they appear on your
+              IRS 501(c)(3) determination letter. Enter the legal name in the Company Name box when
+              you create your account, too.
             </li>
-            <li>Mission statement</li>
-            <li>Most recent Form 990</li>
-            <li>Annual report (if available)</li>
-            <li>List of programs and services</li>
-            <li>Financial statements for the past two years</li>
-            <li>Current operating budget</li>
-            <li>Strategic plan (if available)</li>
-            <li>Existing website URL (if applicable)</li>
-            <li>Social media account links</li>
-            <li>Logo files (high-resolution)</li>
-            <li>Any existing brand guidelines</li>
+            <li>EIN (Employer Identification Number), in the format NN-NNNNNNN</li>
+            <li>
+              Your mission in one or two plain sentences, and the year you were founded (see the{' '}
+              <GuideLink href={guide('mission-statement')}>mission statement guide</GuideLink>)
+            </li>
+            <li>
+              Your Candid (GuideStar) public profile link and full-profile link, with at least the
+              Bronze Seal of Transparency (see our{' '}
+              <Link href="/guidestar-guide/" className="text-[#0567B1] underline font-medium">
+                GuideStar Guide
+              </Link>{' '}
+              and the <GuideLink href={guide('candid')}>Candid guide</GuideLink>)
+            </li>
+            <li>
+              Your charity&rsquo;s Facebook Page and LinkedIn Page (organization Pages, not personal
+              profiles; see the{' '}
+              <GuideLink href={guide('facebook-page')}>Facebook Page guide</GuideLink> and the{' '}
+              <GuideLink href={guide('linkedin-page')}>LinkedIn Page guide</GuideLink>)
+            </li>
+            <li>
+              Board officers: your Chair, Secretary and Treasurer, each with their own phone number,
+              individual email, and a working LinkedIn profile link. The profile doesn&rsquo;t need
+              much public information, but it must exist and the link must open. Creating one is
+              free (see the{' '}
+              <GuideLink href={guide('linkedin-profile')}>LinkedIn profile guide</GuideLink> and the{' '}
+              <GuideLink href={guide('board-requirements')}>board requirements</GuideLink>).
+            </li>
+            <li>
+              The names of your Chair, Secretary and Treasurer as they should appear on your
+              website, plus the consent tickbox. We can&rsquo;t accept your application unless all
+              three agree to appear.
+            </li>
+            <li>
+              Primary and technical contacts: a LinkedIn profile, phone number and individual email
+              for each, plus your time zone and best contact hours
+            </li>
+            <li>
+              Your website maintainer&rsquo;s GitHub username. We invite this account to your
+              site&rsquo;s repository so your maintainer can edit it (see the{' '}
+              <GuideLink href={guide('github-account')}>free GitHub account guide</GuideLink>).
+            </li>
+            <li>
+              A public phone number, email and city/state for your website footer. A free{' '}
+              <GuideLink href={guide('google-voice')}>Google Voice number</GuideLink> and a free
+              outlook.com address both work. City and state only, never a home address.
+            </li>
+            <li>
+              Your website domain (for example, yourcharity.org) and whether you already own it
+            </li>
+            <li>
+              Your website content: your template choice (or &ldquo;Not sure&rdquo; and we&rsquo;ll
+              recommend one), a tagline, a one- or two-sentence site description, a short
+              description under 200 characters, and your first program&rsquo;s title and description
+              (see the{' '}
+              <GuideLink href={guide('website-templates')}>website templates guide</GuideLink>)
+            </li>
+            <li>
+              Your Zeffy donation form link. Zeffy is free, so your charity keeps 100% of donations
+              (see the <GuideLink href={guide('zeffy')}>Zeffy guide</GuideLink>).
+            </li>
+            <li>
+              Your Idealist volunteer page link (see the{' '}
+              <GuideLink href={guide('idealist')}>Idealist guide</GuideLink>)
+            </li>
+            <li>
+              Agreement to our{' '}
+              <Link href="/terms-of-service/" className="text-[#0567B1] underline font-medium">
+                Terms of Service
+              </Link>
+              , confirmation that you&rsquo;re a US organization, and two short questions about AI
+              tools (&ldquo;none&rdquo; is a fine answer)
+            </li>
           </ol>
+
+          <h2
+            className="text-[16px] font-[700] text-[#333] mt-[20px] mb-[8px]"
+            data-font="aria-font"
+          >
+            Optional
+          </h2>
+          <ul
+            className="text-[14px] font-[500] text-[#666] list-disc list-outside space-y-2 pl-5"
+            data-font="aria-font"
+          >
+            <li>Other names or abbreviations your organization goes by</li>
+            <li>A Vice Chair and a Member-at-Large</li>
+            <li>A second and third program</li>
+            <li>Other leaders to show on your website (only with their agreement)</li>
+            <li>Instagram, X and YouTube links</li>
+            <li>
+              Your current website or page, including free sites without their own domain (such as
+              Canva, brand.page, Wix or Google Sites)
+            </li>
+            <li>Your domain registrar, if you already own your domain</li>
+            <li>SEO keywords and a brand color</li>
+            <li>
+              A link to your logo. No link? After your site is created, your maintainer gets a first
+              &ldquo;Add your logo&rdquo; issue on GitHub and uploads it there.
+            </li>
+          </ul>
         </div>
 
         <AccordionItem number="1" title=" External Validation Preparation">
@@ -92,7 +182,7 @@ const index = () => {
             </li>
 
             <li>
-              An up-to-date GuideStar profile
+              An up-to-date Candid (GuideStar) profile
               <ol className="list-decimal list-outside ml-8 mt-1 space-y-1 text-[#666]">
                 <li>
                   (Please read our{' '}
@@ -104,8 +194,8 @@ const index = () => {
                   >
                     GuideStar Guide
                   </Link>
-                  , we require charities to have at least Gold Seal of Transparency to receive our
-                  services.)
+                  , we require charities to have at least the Bronze Seal of Transparency to receive
+                  our services.)
                 </li>
               </ol>
             </li>
@@ -115,7 +205,8 @@ const index = () => {
               <ol className="list-decimal list-outside ml-8 mt-1 space-y-1 text-[#666]">
                 <li>
                   Used as an initial validation for your charity mission and used by other
-                  validators as proof of existence.
+                  validators as proof of existence (
+                  <GuideLink href={guide('facebook-page')}>Facebook Page guide</GuideLink>).
                 </li>
               </ol>
             </li>
@@ -125,7 +216,39 @@ const index = () => {
               <ol className="list-decimal list-outside ml-8 mt-1 space-y-1 text-[#666]">
                 <li>
                   Used as an initial validation for your charity Team Members and used by other
-                  validators as proof of existence.
+                  validators as proof of existence (
+                  <GuideLink href={guide('linkedin-page')}>LinkedIn Page guide</GuideLink>).
+                </li>
+              </ol>
+            </li>
+
+            <li>
+              A personal LinkedIn profile for your Chair, Secretary and Treasurer
+              <ol className="list-decimal list-outside ml-8 mt-1 space-y-1 text-[#666]">
+                <li>
+                  How we confirm your officers are real people. It doesn&rsquo;t need much public
+                  information, but it must exist and the link must open (
+                  <GuideLink href={guide('linkedin-profile')}>LinkedIn profile guide</GuideLink>).
+                </li>
+              </ol>
+            </li>
+
+            <li>
+              A GitHub account for your website maintainer
+              <ol className="list-decimal list-outside ml-8 mt-1 space-y-1 text-[#666]">
+                <li>
+                  Your site lives on GitHub; we invite this account so your maintainer can edit it (
+                  <GuideLink href={guide('github-account')}>GitHub account guide</GuideLink>).
+                </li>
+              </ol>
+            </li>
+
+            <li>
+              A Zeffy donation form
+              <ol className="list-decimal list-outside ml-8 mt-1 space-y-1 text-[#666]">
+                <li>
+                  Used to accept donations on your website. Zeffy is free, so your charity keeps
+                  100% (<GuideLink href={guide('zeffy')}>Zeffy guide</GuideLink>).
                 </li>
               </ol>
             </li>
@@ -133,7 +256,10 @@ const index = () => {
             <li>
               An Idealist profile (formerly VolunteerMatch)
               <ol className="list-decimal list-outside ml-8 mt-1 space-y-1 text-[#666]">
-                <li>Used to gain board members and volunteers with a widget from your website</li>
+                <li>
+                  Used to gain board members and volunteers with a widget from your website (
+                  <GuideLink href={guide('idealist')}>Idealist guide</GuideLink>).
+                </li>
               </ol>
             </li>
 
@@ -174,7 +300,7 @@ const index = () => {
             <li>
               A PayPal account for nonprofits
               <ol className="list-decimal list-outside ml-8 mt-1 space-y-1 text-[#666]">
-                <li>Used to accept donations on your website and on Facebook</li>
+                <li>Used to accept donations on Facebook</li>
               </ol>
             </li>
           </ol>
@@ -219,17 +345,39 @@ const index = () => {
           </h1>
           <p className="text-[18px] font-[500] mb-[1em]">
             We require full contact information for the three key roles on your charity’s board:
-            President / Chair, Secretary, and Treasurer. You may optionally provide information for
-            a Vice President / Vice Chair and/or an additional Member-At-Large, but the three key
-            roles are non-optional.
+            President / Chair, Secretary, and Treasurer. That includes each officer&rsquo;s own
+            phone, individual email, and a working LinkedIn profile link. You may optionally provide
+            information for a Vice President / Vice Chair and/or an additional Member-At-Large, but
+            the three key roles are non-optional.
+          </p>
+          <p className="text-[18px] font-[500] mb-[1em]">
+            Every FFC website shows the charity&rsquo;s Chair, Secretary and Treasurer by name and
+            role, so donors can see who leads it. Enter their names as they should appear and tick
+            the consent box. We can&rsquo;t accept an application unless all three agree to appear.
           </p>
           <h1 className="font-[700] text-[18px] text-[#4A4A44] pb-[1em]" data-font="lato-font">
             Step 3: Primary and Technical Contact Information
           </h1>
-          <p className="text-[18px] font-[500]">
+          <p className="text-[18px] font-[500] mb-[1em]">
             We require full contact information for your charity’s primary and technical contacts.
             Additionally please provide the time-zone and best contact hours for the primary
             contact. The primary and technical contacts should match those listed in GuideStar.
+          </p>
+          <h1 className="font-[700] text-[18px] text-[#4A4A44] pb-[1em]" data-font="lato-font">
+            Step 4: Your Website
+          </h1>
+          <p className="text-[18px] font-[500] mb-[1em]">
+            The application collects everything we need to build your site, so there&rsquo;s no
+            separate website application. Have ready: your website maintainer&rsquo;s GitHub
+            username, your domain and whether you already own it, your template choice, tagline,
+            site description, short description, first program, year founded, the public phone,
+            email and city/state for your footer, and your Zeffy donation form and Idealist
+            volunteer page links.
+          </p>
+          <p className="text-[18px] font-[500]">
+            Not sure what a field means? The{' '}
+            <GuideLink href={guide('application-fields')}>application field guide</GuideLink>{' '}
+            explains every field and links to a free, step-by-step setup guide.
           </p>
         </AccordionItem>
       </div>

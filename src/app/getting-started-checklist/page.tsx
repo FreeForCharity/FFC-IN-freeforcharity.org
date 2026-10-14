@@ -75,8 +75,8 @@ export default function GettingStartedChecklist() {
               and approved. <Link href="/charity-onboarding-journey/">What happens next</Link>
             </Item>
             <Item>
-              Website application submitted (requires your approved onboarding); logo, photos,
-              mission text, and program descriptions sent for the site build.
+              Website content included in your application (template, tagline, descriptions, first
+              program), so your site is built right after approval and you get a preview link.
             </Item>
             <Item>
               Site draft reviewed and validated live on its GitHub Pages address — this unlocks the

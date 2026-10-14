@@ -97,6 +97,51 @@ export const adminLinks = {
   onboarding: {
     newModel: '/charity-prerequisites/',
   },
+  // Onboarding application field guides. `application-fields` is the
+  // field-by-field guide (one anchor per WHMCS application field, written
+  // 2026-10-14); the rest are the per-field step-by-step guides it links to.
+  'application-fields': {
+    newModel: '/guides/application-fields/',
+  },
+  'mission-statement': {
+    newModel: '/intake-help/mission-statement/',
+  },
+  candid: {
+    newModel: '/guides/candid/',
+  },
+  'facebook-page': {
+    newModel: '/guides/facebook-organization/',
+  },
+  'linkedin-page': {
+    newModel: '/guides/linkedin-organization/',
+  },
+  'linkedin-profile': {
+    newModel: '/guides/linkedin/',
+  },
+  'board-requirements': {
+    newModel: '/intake-help/board-requirements/',
+  },
+  'github-account': {
+    newModel: '/guides/github-account/',
+  },
+  'accept-invitation': {
+    newModel: '/site-owner/accept-invitation/',
+  },
+  'google-voice': {
+    newModel: '/guides/google-voice/',
+  },
+  'website-templates': {
+    newModel: '/guides/website-templates-and-footer-standard/',
+  },
+  zeffy: {
+    newModel: '/guides/zeffy-organization/',
+  },
+  idealist: {
+    newModel: '/guides/idealist-organization/',
+  },
+  techsoup: {
+    newModel: '/guides/techsoup/',
+  },
   'site-owner': {
     newModel: '/site-owner/',
   },

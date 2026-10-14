@@ -60,6 +60,15 @@ const bannedPhrases: BannedPhrase[] = [
     pattern: /once your domain (name )?is set up/i,
     reason: 'Old journey order — nothing waits on the domain except email; the site comes first.',
   },
+  {
+    // Since 2026-10-14 the onboarding application collects the website
+    // content, so the site is built right after approval — there is no
+    // separate website application, order, or emailed code to submit one.
+    pattern:
+      /submit(s|ted)? (the |your )?website application|website application submitted|order your GitHub Pages website service/i,
+    reason:
+      'Retired step — the onboarding application now collects the website content; there is no separate website application or order.',
+  },
 ]
 
 function collectSourceFiles(dir: string): string[] {
