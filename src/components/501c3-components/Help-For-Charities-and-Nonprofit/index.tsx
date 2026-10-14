@@ -65,7 +65,7 @@ const index = () => {
             </li>
             <li>
               Your Candid (GuideStar) public profile link and full-profile link, with at least the
-              Bronze Seal of Transparency (see our{' '}
+              Gold Seal of Transparency (see our{' '}
               <Link href="/guidestar-guide/" className="text-[#0567B1] underline font-medium">
                 GuideStar Guide
               </Link>{' '}
@@ -194,7 +194,7 @@ const index = () => {
                   >
                     GuideStar Guide
                   </Link>
-                  , we require charities to have at least the Bronze Seal of Transparency to receive
+                  , we require charities to have at least the Gold Seal of Transparency to receive
                   our services.)
                 </li>
               </ol>
