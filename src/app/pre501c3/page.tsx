@@ -6,6 +6,7 @@ import CharityNonprofitDirectorFaq from '@/components/help-for-charities-compone
 import CallSection from '@/components/help-for-charities-components/call-section'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import RequiredFieldsNotice from '@/components/ui/RequiredFieldsNotice'
+import SaveAnswersFirst from '@/components/ui/SaveAnswersFirst'
 import ApplicationChecklist from '@/components/pre501c3-components/application-checklist'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 import Faqs from '@/components/pre501c3-components/Faqs'
@@ -33,6 +34,9 @@ const index = () => {
         />
         <div className="mt-[20px]">
           <RequiredFieldsNotice />
+        </div>
+        <div className="mt-[20px]">
+          <SaveAnswersFirst />
         </div>
       </div>
       <Charity />

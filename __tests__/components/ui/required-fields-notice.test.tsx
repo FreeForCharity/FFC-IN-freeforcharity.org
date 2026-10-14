@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { axe } from '../../utils/axe'
 import RequiredFieldsNotice from '@/components/ui/RequiredFieldsNotice'
+import SaveAnswersFirst from '@/components/ui/SaveAnswersFirst'
 import Page501c3 from '@/app/501c3/page'
 import PagePre501c3 from '@/app/pre501c3/page'
 
@@ -41,5 +42,35 @@ describe('RequiredFieldsNotice', () => {
     expect(container.querySelector('#required-fields')).not.toBeNull()
     const hrefs = Array.from(container.querySelectorAll('a')).map((a) => a.getAttribute('href'))
     expect(hrefs).toContain(GUIDE_URL)
+  })
+})
+
+describe('SaveAnswersFirst', () => {
+  it('tells applicants to save answers in a Word document or Google Doc and links the worksheet', async () => {
+    const { container } = render(<SaveAnswersFirst />)
+    expect(
+      screen.getByRole('heading', {
+        name: /save every answer in a Word document or Google Doc first/i,
+      })
+    ).toBeInTheDocument()
+    expect(container.textContent).toMatch(/copy each one into the application form/i)
+    expect(container.textContent).toMatch(/nothing is lost/i)
+    expect(screen.getByRole('link')).toHaveAttribute('href', `${GUIDE_URL}#worksheet`)
+    expect(await axe(container)).toHaveNoViolations()
+  }, 30000)
+
+  it.each([
+    ['/501c3/', Page501c3],
+    ['/pre501c3/', PagePre501c3],
+  ])('appears on %s before the first apply button', (_route, Page) => {
+    const { container } = render(<Page />)
+    const step = container.querySelector('#save-your-answers')
+    expect(step).not.toBeNull()
+    const firstApply = container.querySelector('a[href*="a=add&pid="]')
+    expect(firstApply).not.toBeNull()
+    // DOCUMENT_POSITION_FOLLOWING: the apply link comes after the step.
+    expect(step!.compareDocumentPosition(firstApply!) & Node.DOCUMENT_POSITION_FOLLOWING).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING
+    )
   })
 })
