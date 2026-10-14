@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import ReadyToGetStarted from '@/components/help-for-charities-components/Ready-to-Get-Started-Now'
 import AccordionItem from '@/components/ui/Accordian'
+import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 const index = () => {
   return (
     <div className="w-full max-w-[100%]">
@@ -11,30 +12,53 @@ const index = () => {
           <div className="space-y-6 font-[500] text-[#666]">
             {/* Intro Paragraph */}
             <p className="pb-4 leading-relaxed">
-              Once your onboarding application is approved, you will receive an email from the
-              system with the code to submit your website application. A Free For Charity volunteer
-              then builds your website from the FFC template as a fast, secure GitHub Pages static
-              site. Your site goes live on its free GitHub Pages address first — no custom domain
-              yet — and we validate it with you end to end. There is no server to maintain and
-              nothing for you to install.
+              Your onboarding application already collects your website content, so there is no
+              separate website application. Right after your application is approved, a Free For
+              Charity volunteer builds your website from the FFC template as a fast, secure GitHub
+              Pages static site, using the tagline, descriptions, programs and leaders you gave us.
+              Your site goes live on its free GitHub Pages address first (no custom domain yet), and
+              we email you a preview link. There is no server to maintain and nothing for you to
+              install.
             </p>
 
-            {/* What we need from you */}
+            {/* What happens after approval */}
             <div>
               <h2 className="text-[22px] font-[500] text-[#333] mt-6 mb-3">
-                What we need from you
+                What happens after approval
               </h2>
-              <ul className="list-disc list-inside pl-1">
-                <li>Your logo</li>
-                <li>Photos of your organization and its work</li>
-                <li>Your mission text</li>
-                <li>Descriptions of your programs</li>
-              </ul>
+              <ol className="list-decimal list-inside pl-1 space-y-1">
+                <li>We approve your application.</li>
+                <li>A volunteer builds your site from the content in your application.</li>
+                <li>We email you a preview link on its free GitHub Pages address.</li>
+                <li>You review the preview and approve it, or tell us what to change.</li>
+                <li>
+                  You order your free .org domain with the coupon in your acceptance email (see step
+                  4 below).
+                </li>
+                <li>We set up your charity email.</li>
+              </ol>
             </div>
 
             <p className="leading-relaxed">
-              Having this content ready is the main factor in how quickly your site can launch. Once
-              we have it, our volunteers handle the build and go-live for you.
+              We also invite your maintainer&rsquo;s GitHub account to your site&rsquo;s repository
+              (see{' '}
+              <a
+                href={ffcAdminUrl(adminLinks['accept-invitation'].newModel)}
+                className="text-[#0567B1] underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                how to accept the invitation
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+              ). If you didn&rsquo;t include a logo link, your maintainer gets a first &ldquo;Add
+              your logo&rdquo; issue on GitHub and uploads it there.
+            </p>
+
+            <p className="leading-relaxed">
+              Because your content comes with the application, a complete application is the main
+              factor in how quickly your site can launch. Our volunteers handle the build and
+              go-live for you.
             </p>
 
             {/* Contact */}
@@ -49,11 +73,15 @@ const index = () => {
         </AccordionItem>
         <AccordionItem number="4" title="Free For Charity Domain Name and Email Hosting Request">
           <p className="pb-[1em]">
-            Free For Charity provides free .org domain names to US 501c3 organizations. Once your
-            website is live and validated on its GitHub Pages address, request your domain — we
-            register a new .org (or transfer your current domain name to us), point it at your
-            validated site, and manage it while paying the annual fees. We only purchase domains for
-            websites that are already working and validated.
+            Free For Charity provides free .org domain names to US 501c3 organizations. Once you
+            approve your website preview, order your domain: we register a new .org (or transfer
+            your current domain name to us), point it at your approved site, and manage it while
+            paying the annual fees. We only purchase domains for websites that are already working
+            and approved.
+          </p>
+          <p className="pb-[1em]">
+            Use the coupon in your onboarding acceptance email at checkout to bring the total to $0.
+            We never post the code publicly.
           </p>
           <h1 className="pb-[1em] font-[700]">
             Visit{' '}

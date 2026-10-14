@@ -24,9 +24,9 @@ export default function CharityOnboardingJourney() {
           <p>
             Here&rsquo;s exactly what happens after your charity applies — the five stages, who does
             what at each one, and honest durations. The order matters: {GATE_SENTENCE} Volunteers do
-            this work, so timelines are typical rather than guaranteed; content readiness on your
-            side is the biggest factor in how fast a site launches. Curious about the reasoning
-            behind this order?{' '}
+            this work, so timelines are typical rather than guaranteed. Your application includes
+            your website content, so a complete application is the biggest factor in how fast a site
+            launches. Curious about the reasoning behind this order?{' '}
             <Link href="/why-website-first/">
               Read why we build your website before buying your domain
             </Link>
@@ -86,7 +86,17 @@ export default function CharityOnboardingJourney() {
             <a href="https://ffcadmin.org/intake-help/" target="_blank" rel="noopener noreferrer">
               intake help section on FFC Admin
             </a>
-            , our operational portal.
+            , our operational portal. Every field on the application also has a step-by-step entry
+            in the{' '}
+            <a
+              href="https://ffcadmin.org/guides/application-fields/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              application field guide
+            </a>
+            . Demand for our free services is high, so we need every required field completed to
+            review applications fairly and quickly.
           </p>
 
           <h2 className={h2}>How we communicate</h2>

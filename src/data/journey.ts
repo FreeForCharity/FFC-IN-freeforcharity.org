@@ -42,11 +42,17 @@ export const journeyStages: JourneyStage[] = [
     name: '1. Application & validation',
     gateNote: 'Approval here is the gate for every later stage.',
     youDo:
-      'Submit the onboarding form with your EIN, legal name, charity Facebook and LinkedIn pages, and what you need. Have your IRS determination letter handy (pre-501c3 orgs: your formation documents).',
+      'Complete every required field on the onboarding application: your legal name, EIN, Candid profile, charity Facebook and LinkedIn Pages, your Chair, Secretary and Treasurer (each with a working LinkedIn profile, and all three agreeing to appear on your website), your website maintainer’s GitHub username, your domain, and your website content (template, tagline, descriptions and first program). Demand for this free service is high, so we need every required field completed to review applications fairly. Have your IRS determination letter handy (pre-501c3 orgs: your formation documents).',
     ffcDoes:
       'We validate your organization (IRS status, Candid profile) and confirm program fit. Every later stage requires this approval first.',
     duration: 'A few days',
-    links: [{ href: '/help-for-charities/', label: 'Start here: Help for Charities' }],
+    links: [
+      { href: '/help-for-charities/', label: 'Start here: Help for Charities' },
+      {
+        href: 'https://ffcadmin.org/guides/application-fields/',
+        label: 'Guide: every application field, step by step',
+      },
+    ],
   },
   {
     id: 'website',
@@ -54,9 +60,9 @@ export const journeyStages: JourneyStage[] = [
     gateNote:
       'Your validated live site is the funding gate: it unlocks the domain purchase in stage 3.',
     youDo:
-      'Submit the website application (it requires your approved onboarding), then send your logo, photos, mission text, and program descriptions. A one-page outline is enough — we help with the rest.',
+      'Nothing extra to submit: your application already included your website content. Review the preview link we email you and approve it (or tell us what to change). Your maintainer accepts the GitHub invitation and, if you didn’t include a logo link, uploads your logo through the first “Add your logo” issue.',
     ffcDoes:
-      'A volunteer builds your site from the FFC template (fast, secure static hosting), with the full FFC footer generated from your validated application data. Your site goes live on its free GitHub Pages address — no custom domain yet — and we validate it end to end with you.',
+      'Right after approval, a volunteer builds your site from the FFC template (fast, secure static hosting) using the content in your application, with the full FFC footer generated from your validated application data. Your site goes live on its free GitHub Pages address — no custom domain yet — and we email you a preview link.',
     duration: '2–6 weeks, mostly depending on content readiness',
     links: [
       {
@@ -70,7 +76,7 @@ export const journeyStages: JourneyStage[] = [
     name: '3. Domain — only after your site is proven',
     gateNote: 'Unlocked only after your website is validated live on GitHub Pages.',
     youDo:
-      'Send us your top three .org name choices — or the details of a domain you already own — along with your live GitHub Pages address. You can check name availability any time; we buy once your site is validated.',
+      'Once you approve your preview, order your free .org domain (the one you named on your application) using the coupon in your onboarding acceptance email — or, if you already own a domain, request a transfer instead. You can check name availability any time; we buy once your site is validated.',
     ffcDoes:
       'Once your website is validated, we spend the funds: we register (and pay for) the best available name, or take over management of your existing domain, set up DNS and security, and point it at your live site.',
     duration: 'Same week (after website validation)',
