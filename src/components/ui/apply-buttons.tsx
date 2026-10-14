@@ -4,8 +4,9 @@ import { conversionAttrs, CONVERSION_EVENTS } from '@/lib/analytics-events'
 
 /**
  * The two charity onboarding "Apply" buttons, kept in a plain (non-client)
- * module so they stay server-rendered wherever they're used — both the client
- * `HelpMeChoose` guide and the server `ApplyOptions` block import from here.
+ * module so they stay server-rendered. Only the `ApplyBlock` on each
+ * application page (/501c3/, /pre501c3/) and on its help pages renders one;
+ * funnel pages link to the application pages instead.
  */
 
 export type ApplyKind = 'full501c3' | 'pre501c3'

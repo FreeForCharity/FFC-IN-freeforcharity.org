@@ -1,6 +1,6 @@
 import React from 'react'
-import Transparentbtn from '@/components/ui/Transparentbtn'
-import { hubAddProduct, ONBOARDING_PID } from '@/lib/config'
+import TrackCards from '@/components/application-guide/TrackCards'
+import { NO_TIMELINE_STATEMENT } from '@/data/faqs'
 
 const index = () => {
   return (
@@ -21,8 +21,7 @@ const index = () => {
               Your website comes first — the domain and email follow it. Free For Charity builds
               each charity a fast, secure static website on GitHub Pages from the FFC template,
               validates it live on its free GitHub Pages address, and then registers your .org and
-              points it there. New builds run on a backlog — we aim to support 100 charities a year
-              — and how quickly your site goes live depends mainly on how ready your content is.
+              points it there. {NO_TIMELINE_STATEMENT}
             </p>
           </div>
         </div>
@@ -32,19 +31,10 @@ const index = () => {
             className="text-[22px] sm:text-[24px] md:text-[26px] font-medium text-[#333] pt-[22px] pb-[10px]"
             data-font="aria-font"
           >
-            Ready to apply?
+            Ready to apply? Go to your application page
           </h3>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
-            <Transparentbtn
-              text="501(c)3 Charities — Apply Here"
-              href={hubAddProduct(ONBOARDING_PID.full501c3)}
-            />
-            <Transparentbtn
-              text="Pre-501(c)3 Charities — Apply Here"
-              href={hubAddProduct(ONBOARDING_PID.pre501c3)}
-            />
-          </div>
+          <TrackCards withPicker={false} className="mt-[12px]" />
         </div>
       </div>
     </div>

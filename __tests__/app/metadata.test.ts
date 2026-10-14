@@ -55,7 +55,7 @@ const pages = [
     name: 'Web Developer Training Guide',
   },
   { path: 'free-for-charitys-tools-for-success/page', name: 'Tools for Success' },
-  { path: 'online-impacts-onboarding-guide/page', name: 'Online Impacts Onboarding' },
+  { path: 'online-impacts-onboarding-guide/page', name: 'Online Impacts Charities' },
   { path: 'website-templates/page', name: 'Website Templates' },
 ]
 

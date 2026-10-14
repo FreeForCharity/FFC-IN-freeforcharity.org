@@ -26,32 +26,16 @@ const Index = () => {
               data-font="raleway-font"
             >
               <li>
-                NOTE: Save the account name and password that you set up as well as the subdomain
-                e.g. yourcharity.onmicrosoft.com
-                <br />
-                1. We use lastpass.com for our charity password management
+                NOTE: Save your admin account name (e.g. yourcharity.onmicrosoft.com) in a password
+                manager, use a unique password, and turn on multi-factor authentication.
               </li>
               <li>
-                Link your new domain to the Microsoft 365 admin center
-                <br />
-                1. Follow all steps in the Microsoft Guide “Add a Domain to Microsoft 365”
-                <br />
-                2. (
-                <a
-                  href="https://docs.microsoft.com/en-us/microsoft-365/admin/setup/add-domain?view=o365-worldwide"
-                  target="_blank"
-                  rel="noopener"
-                  className="text-[#0066B8] underline"
-                >
-                  https://docs.microsoft.com/en-us/microsoft-365/admin/setup/add-domain?view=o365-worldwide
-                </a>
-                )
-                <br />
-                3. You will need your Cloudflare Username and Password from before but if you are
-                still logged in this will help
-                <br />
-                4. If you get stuck, you can put in a ticket with Microsoft and text Clarke Moyer at
-                520-222-8104
+                Add your domain in the Microsoft 365 admin center. When Microsoft shows the DNS
+                verification codes, send them to us: Free For Charity adds the DNS records for you.
+                You never edit DNS yourself.
+              </li>
+              <li>
+                Stuck? Open a ticket with Microsoft, or text Free For Charity at 520-222-8104.
               </li>
             </ul>
           </div>
@@ -62,11 +46,11 @@ const Index = () => {
             className="text-[14px] font-[500] leading-[24px] text-[#666] pt-[25px]"
             data-font="aria-font"
           >
-            DOMAIN NAME COUPON CODE Thank you for choosing us to help with your domain name and
-            email setup. Complete the onboarding form for either 501c3 or pre-501c3 and the code
-            arrives in the email confirmation that comes after you finish — hold onto it. The domain
-            order itself unlocks later, once your website is live and validated on its free GitHub
-            Pages address. If you run into any questions, contact Clarke Moyer (520) 222-8104.
+            DOMAIN NAME COUPON Thank you for choosing us to help with your domain name and email
+            setup. Apply on the 501(c)(3) or pre-501(c)(3) application page and the coupon arrives
+            in your acceptance email — hold onto it. The domain order itself unlocks later, once
+            your website is live and you have approved it. Checkout shows a $1 verification charge,
+            and the coupon brings it to $0. Questions? Text (520) 222-8104.
           </p>
         </div>
       </div>

@@ -31,24 +31,10 @@ const Index = () => {
               and register now or ‘login’
             </li>
             <li>Complete the Microsoft 365 forms and get your initial ‘approved’ status</li>
+            <li>Activate the free Microsoft 365 Business Basic nonprofit grant</li>
             <li>
-              ‘Buy’ the Microsoft 365 Business Premium package <br />
-              1. Currently, you get 10 free accounts
-            </li>
-            <li>
-              NOTE: If you are Pre-501c3 or not a nonprofit then you can buy the plan directly{' '}
-              <br />
-              1.{' '}
-              <a
-                href="https://www.microsoft.com/en-us/microsoft-365/business/compare-all-microsoft-365-business-products?&activetab=tab:primaryr2"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline text-white"
-              >
-                https://www.microsoft.com/en-us/microsoft-365/business/compare-all-microsoft-365-business-products
-              </a>
-              <br />
-              2. It’s worth the cost while you work to get 501(c)(3) Status
+              NOTE: Pre-501(c)(3)? Charity email waits until the IRS approves your 501(c)(3). Until
+              then, use a free yourcharityname@gmail.com or @outlook.com address.
             </li>
           </ul>
         </div>

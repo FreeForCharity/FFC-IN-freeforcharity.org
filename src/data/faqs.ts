@@ -28,11 +28,18 @@ export interface FaqWay {
   after?: string
 }
 
+/**
+ * The no-timeline statement: replaces every capacity number ("1 new charity
+ * per week", "100 charities a year"). We're all volunteers, so we never
+ * promise a timeline.
+ */
+export const NO_TIMELINE_STATEMENT =
+  "Our mission is to reduce costs and increase revenues for nonprofits, putting that money back into their charitable mission where it belongs. We're all volunteers and demand for this free service is very high, so we can't promise a timeline. Complete applications move through fastest."
+
 /** 'Why do I not see hosting as an option?' — the hosting backlog answer. */
 export const hostingBacklogFaq = {
   question: 'Why do I not see hosting as an option?',
-  backlog:
-    'We have a large backlog for new sites and support. We try to process at least 1 new charity into the full hosting system per week.',
+  backlog: NO_TIMELINE_STATEMENT,
   waysHeading: 'Ways to get in faster:',
   ways: [
     {
@@ -42,7 +49,7 @@ export const hostingBacklogFaq = {
     },
     {
       before:
-        'If you arrive content-ready — with your logo, photos, mission text, and program descriptions prepared — your GitHub Pages site is built and validated sooner, which unlocks your domain and email sooner and may move you up in the list.',
+        'Complete every required field on your application. It carries your website content, so a complete application means your GitHub Pages site is built and validated sooner, which unlocks your domain and email sooner.',
     },
   ] as FaqWay[],
 }

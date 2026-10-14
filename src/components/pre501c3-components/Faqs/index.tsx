@@ -86,48 +86,25 @@ const index = () => {
             impact. Start your journey with us today.
           </AccordionItem>
 
-          <AccordionItem
-            number="8"
-            title=" Free For Charity - Pre 501c3 General Technology Package"
-          >
+          <AccordionItem number="8" title=" Free For Charity - Pre-501(c)(3) Technology Package">
             <ul className="list-disc list-inside">
-              <li>Initial LastPass Password Management Account</li>
+              <li>A password manager for your organization’s accounts</li>
               <li>
-                Initial Microsoft{' '}
-                <a href="mailto:yourcharityname@outlook.com" className="text-[#0567B1]">
-                  yourcharityname@outlook.com
-                </a>{' '}
-                organizational email address
+                A free organization-owned email address, such as yourcharityname@gmail.com or
+                yourcharityname@outlook.com, to use until your 501(c)(3) is approved
               </li>
               <li>
-                Initial Google{' '}
-                <a href="mailto:yourcharityname@gmail.com" className="text-[#0567B1]">
-                  yourcharityname@gmail.com
-                </a>{' '}
-                organizational email address
-              </li>
-              <li>Free For Charity Domain Name Registration yourcharityname.org</li>
-              <li>
-                Initial Charity Email Routing{' '}
-                <a href="mailto:info@yourcharityname.org" className="text-[#0567B1]">
-                  info@yourcharityname.org
-                </a>
+                Your free .org domain (yourcharityname.org), registered once your website is
+                approved
               </li>
               <li>
-                Initial Charity GitHub Pages Website for IRS application (a fast, secure static
-                site)
+                Your charity website on GitHub Pages (a fast, secure static site), which also helps
+                with your IRS application
               </li>
-              <li>Initial Facebook Page for volunteers / location / region management</li>
-              <li>Initial LinkedIn Page for volunteers / location / region management</li>
+              <li>Help setting up your Facebook Page and LinkedIn Page</li>
               <li>
-                Optional ‘non 501c3’ Microsoft 365 Account Setup
-                <ul className="list-disc list-inside ml-6 mt-2">
-                  <li>
-                    Used if you are a sub chapter of a national charity or are not a ‘qualified
-                    organization’ for the main Microsoft Grant but are charitable in nature to
-                    receive ‘Free For Charity’ support
-                  </li>
-                </ul>
+                Charity email at your own domain (Microsoft 365 Business Basic or Google Workspace)
+                after the IRS approves your 501(c)(3)
               </li>
             </ul>
           </AccordionItem>

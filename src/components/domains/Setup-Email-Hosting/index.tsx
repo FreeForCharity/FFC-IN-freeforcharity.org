@@ -21,8 +21,10 @@ const index = () => {
             data-font="raleway-font"
           >
             Email hosting means you get email addresses at your own domain — like
-            board@yourcharity.org. It&apos;s a 501(c)(3) benefit: eligible nonprofits get it free
-            through Microsoft 365 or Google Workspace.
+            board@yourcharity.org. It’s a 501(c)(3) benefit: eligible nonprofits get it free through
+            Microsoft 365 Business Basic or Google Workspace. Pre-501(c)(3) groups get charity email
+            only after their 501(c)(3) is approved; until then, use a free yourcharityname@gmail.com
+            or @outlook.com address.
           </p>
         </div>
       </div>
@@ -118,12 +120,12 @@ const index = () => {
             className="text-[#333] text-[22px] font-[700] leading-[22px] text-center pb-[10px]"
             data-font="raleway-font"
           >
-            Set up a Microsoft 365 Business Premium account
+            Set up Microsoft 365 Business Basic
           </p>
 
           {/* Text Content */}
           <p className="text-[18px] leading-[32px] font-[500] pb-[1em]" data-font="raleway-font">
-            Follow the following simple steps to set up your Microsoft 365 Business Premium Account
+            Follow these simple steps to claim your free Microsoft 365 Business Basic grant
           </p>
           <Link
             href="/domains/#setupstep2"

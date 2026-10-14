@@ -15,7 +15,7 @@ test.describe('Desktop Dropdown Menus', () => {
     await page.goto('/')
   })
 
-  test('should show Help for Charities dropdown on hover with 8 sub-items', async ({ page }) => {
+  test('should show Help for Charities dropdown on hover with 7 sub-items', async ({ page }) => {
     const menuItem = page.locator('header nav li').filter({ hasText: 'Help for Charities' })
     await menuItem.hover()
 
@@ -23,7 +23,21 @@ test.describe('Desktop Dropdown Menus', () => {
     await expect(dropdown).toBeVisible()
 
     const links = dropdown.locator('a')
-    await expect(links).toHaveCount(8)
+    await expect(links).toHaveCount(7)
+    // The two application pages are the doors, side by side.
+    const labels = await links.allTextContents()
+    const i = labels.indexOf('501(c)(3) Application')
+    expect(labels.slice(i, i + 2)).toEqual(['501(c)(3) Application', 'Pre-501(c)(3) Application'])
+  })
+
+  test('the 501(c)(3) Application item opens the application page', async ({ page }) => {
+    const menuItem = page.locator('header nav li').filter({ hasText: 'Help for Charities' })
+    await menuItem.hover()
+    await menuItem.getByRole('link', { name: '501(c)(3) Application', exact: true }).click()
+    await expect(page).toHaveURL(/\/501c3\/?$/)
+    await expect(
+      page.getByRole('heading', { level: 1, name: '501(c)(3) Application' })
+    ).toBeVisible()
   })
 
   test('should show Volunteer dropdown on hover with 3 sub-items', async ({ page }) => {

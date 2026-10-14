@@ -1,8 +1,7 @@
 import React from 'react'
-import Transparentbtn from '@/components/ui/Transparentbtn'
-import HelpMeChoose from '@/components/ui/HelpMeChoose'
-import { hubAddProduct, ONBOARDING_PID } from '@/lib/config'
+import TrackCards from '@/components/application-guide/TrackCards'
 
+/** "Ready to apply?": go-to-your-application-page cards, no direct Apply buttons. */
 const index = () => {
   return (
     <div id="apply" className="py-[50px] scroll-mt-[120px]">
@@ -17,23 +16,10 @@ const index = () => {
           className="mb-[24px] text-[17px] font-[500] leading-[27px] text-[#555]"
           data-font="raleway-font"
         >
-          Pick the option that matches your organization and start your onboarding application.
+          Go to the application page that matches your organization. It explains who qualifies, what
+          you commit to and every field, with its Apply button at the end.
         </p>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
-          <Transparentbtn
-            text="501(c)3 Charities — Apply Here"
-            href={hubAddProduct(ONBOARDING_PID.full501c3)}
-          />
-          <Transparentbtn
-            text="Pre-501(c)3 Charities — Apply Here"
-            href={hubAddProduct(ONBOARDING_PID.pre501c3)}
-          />
-        </div>
-
-        <div className="mt-[24px] flex justify-center">
-          <HelpMeChoose />
-        </div>
+        <TrackCards />
       </div>
     </div>
   )

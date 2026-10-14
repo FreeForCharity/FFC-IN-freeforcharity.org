@@ -1,43 +1,24 @@
 import { pageMetadata } from '@/lib/page-metadata'
 import HeroSection from '@/components/ui/HeroSection'
-import HelpForCharitiesandNonprofit from '@/components/501c3-components/Help-For-Charities-and-Nonprofit'
-import AdminGuideLink from '@/components/ui/AdminGuideLink'
-import RequiredFieldsNotice from '@/components/ui/RequiredFieldsNotice'
-import SaveAnswersFirst from '@/components/ui/SaveAnswersFirst'
-import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
-import ReadyToGetStartedAndFaq from '@/components/501c3-components/Ready-to-get-started-and-faqs'
-import CallSection from '@/components/help-for-charities-components/call-section'
+import TrackPage from '@/components/application-guide/TrackPage'
 
 export const metadata = pageMetadata({
-  title: '501(c)(3) Onboarding Guide',
+  title: '501(c)(3) Application',
   description:
-    'Apply to get a free website for your 501(c)(3)—a fast, secure GitHub Pages site built with AI—plus free domains, Microsoft 365 email, and technology tools from Free For Charity.',
+    'Apply to Free For Charity as an IRS-recognized 501(c)(3): who qualifies, what you commit to, how it works, and every application field explained, with one Apply button.',
   canonical: '/501c3/',
 })
 
+/** The single page for the 501(c)(3) application (WHMCS pid 33). */
 const index = () => {
   return (
     <div>
       <HeroSection
-        heading="501(c)3 Onboarding Guide"
-        paragraph="Apply to get a free, professionally built website for your charity—a fast, secure GitHub Pages site built with AI—plus free .org domains, Microsoft 365 email, and technology tools. Start your application below; you get instant access to many of our free products right away."
+        heading="501(c)(3) Application"
+        paragraph="Apply to get a free, professionally built website for your charity (a fast, secure GitHub Pages site built with AI), plus a free .org domain and Microsoft 365 email. Everything you need to apply is on this one page."
         heroImg="/Images/volunteer.webp"
       />
-      <div className="w-[90%] max-w-[720px] mx-auto mt-[32px]">
-        <AdminGuideLink
-          href={ffcAdminUrl(adminLinks.onboarding.newModel)}
-          description="Before you apply: review the charity prerequisites and the full step-by-step onboarding on the FFC Admin portal."
-        />
-        <div className="mt-[20px]">
-          <RequiredFieldsNotice />
-        </div>
-        <div className="mt-[20px]">
-          <SaveAnswersFirst />
-        </div>
-      </div>
-      <HelpForCharitiesandNonprofit />
-      <ReadyToGetStartedAndFaq />
-      <CallSection />
+      <TrackPage track="501c3" />
     </div>
   )
 }

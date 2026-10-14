@@ -1,92 +1,30 @@
 import React from 'react'
 import Link from 'next/link'
+import HowItWorks from '@/components/application-guide/HowItWorks'
 
-interface Step {
-  number: string
-  title: string
-  description: string
-}
-
-const steps: Step[] = [
-  {
-    number: '1',
-    title: 'Confirm you qualify',
-    description:
-      'Free For Charity is one all-in program for 501(c)(3) and pre-501(c)(3) nonprofits — a managed .org domain, Microsoft 365 email, and a built-and-hosted website. Not sure you’re a fit? Use “Help me choose” when you apply below.',
-  },
-  {
-    number: '2',
-    title: 'Apply & get validated',
-    description:
-      'Submit the onboarding form with your EIN and legal name. We verify your IRS status and Candid profile, then confirm program fit — usually within a few days.',
-  },
-  {
-    number: '3',
-    title: 'We build your site',
-    description:
-      'Send your logo, photos, and mission text. A volunteer builds your site from the FFC template, reviewing it with you along the way, and it goes live on its free GitHub Pages address.',
-  },
-  {
-    number: '4',
-    title: 'Domain, email & ongoing support',
-    description:
-      'Once your site is validated, we register your .org domain, point it at your site, and set up Microsoft 365. We keep it all hosted and maintained — free, going forward.',
-  },
-]
-
+/**
+ * How to apply: the shared, canonical step list (src/data/journey.ts), so
+ * this page can never drift from the application pages.
+ */
 const HowToApply = () => {
   return (
     <section id="how-to-apply" className="py-[60px] bg-[#F5F8FB] scroll-mt-[120px]">
-      <div className="w-[90%] lg:w-[80%] max-w-[1200px] mx-auto">
-        <div className="text-center max-w-[720px] mx-auto mb-[48px]">
-          <h2
-            className="mb-[14px] text-[31px] font-[700] leading-[38px] text-[#0567B1]"
-            data-font="cantata-font"
-          >
-            How to apply — four simple steps
-          </h2>
-          <p className="text-[18px] font-[500] leading-[29px] text-[#333]" data-font="raleway-font">
-            The whole process is guided. You bring your mission and content; we handle the technical
-            work.
-          </p>
-        </div>
-
-        <ol className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-[28px] mb-[44px]">
-          {steps.map((step) => (
-            <li
-              key={step.number}
-              className="relative bg-white rounded-[10px] p-[28px] pt-[36px] shadow-[0px_2px_18px_0px_rgba(0,0,0,0.12)] border border-[#e6edf3]"
-            >
-              <span
-                className="absolute -top-[22px] left-[24px] flex items-center justify-center w-[44px] h-[44px] rounded-full bg-[#0567B1] text-white text-[20px] font-[700] shadow-[0px_2px_10px_0px_rgba(5,103,177,0.4)]"
-                data-font="cantata-font"
-                aria-hidden="true"
-              >
-                {step.number}
-              </span>
-              <h3
-                className="mb-[10px] text-[19px] font-[700] leading-[25px] text-[#1a2e35]"
-                data-font="cantata-font"
-              >
-                {step.title}
-              </h3>
-              <p
-                className="text-[16px] font-[500] leading-[25px] text-[#555]"
-                data-font="raleway-font"
-              >
-                {step.description}
-              </p>
-            </li>
-          ))}
-        </ol>
-
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-[16px]">
+      <div className="w-[90%] max-w-[880px] mx-auto">
+        <p
+          className="mb-[20px] text-[18px] font-[500] leading-[29px] text-[#333]"
+          data-font="raleway-font"
+        >
+          The whole process is guided. You bring your mission and content on the application; we
+          handle the technical work.
+        </p>
+        <HowItWorks heading="How to apply, step by step" id="how-to-apply-steps" />
+        <div className="mt-[28px] flex flex-col sm:flex-row items-center justify-center gap-[16px]">
           <a
             href="#apply"
             className="inline-flex items-center justify-center rounded-[10px] bg-[#0567B1] px-[28px] py-[15px] text-[17px] font-[700] text-white transition-transform duration-200 hover:scale-[1.03] hover:bg-[#045a9b]"
             data-font="raleway-font"
           >
-            Start your application
+            Find your application
           </a>
           <Link
             href="/charity-onboarding-journey/"

@@ -38,6 +38,20 @@
       "minutes": 3
     },
     {
+      "href": "/501c3/",
+      "title": "The 501(c)(3) application",
+      "promise": "Who qualifies, what you commit to, how it works, and every field on the 501(c)(3) application, with one Apply button.",
+      "group": "Getting started",
+      "minutes": 15
+    },
+    {
+      "href": "/pre501c3/",
+      "title": "The pre-501(c)(3) application",
+      "promise": "For groups not yet IRS-recognized: who qualifies, what you commit to, and every field on the pre-501(c)(3) application.",
+      "group": "Getting started",
+      "minutes": 15
+    },
+    {
       "href": "/m365-email-guide/",
       "title": "Free Microsoft 365 email at your domain",
       "promise": "Claim Microsoft's nonprofit grant and get you@yourcharity.org, step by step.",
@@ -81,8 +95,8 @@
     },
     {
       "href": "/online-impacts-onboarding-guide/",
-      "title": "Online Impacts onboarding guide",
-      "promise": "Onboarding steps for charities joining through our Online Impacts partnership.",
+      "title": "Online Impacts charities",
+      "promise": "Online Impacts has closed: how the charities it supported can continue with Free For Charity.",
       "group": "Getting started",
       "minutes": 6
     },

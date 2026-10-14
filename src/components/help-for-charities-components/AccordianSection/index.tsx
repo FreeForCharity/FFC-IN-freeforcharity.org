@@ -49,8 +49,8 @@ const index = () => {
           <AccordionItem number="3" title=" Microsoft 365 or Google Workspace">
             <ul className="list-disc list-inside space-y-1">
               <li>
-                For You: Professional email and collaboration tools — free Microsoft 365 or Google
-                Workspace for verified 501(c)(3) organizations
+                For You: Professional email and collaboration tools — free Microsoft 365 Business
+                Basic or Google Workspace, once your organization is a recognized 501(c)(3)
               </li>
               <li>For Us: Streamlined communication and support processes</li>
             </ul>

@@ -4,7 +4,7 @@ import React from 'react'
 import HeroSection from '@/components/ui/HeroSection'
 import HelpForCharities from '@/components/ui/help-for-charity'
 import AccordionSection from '@/components/help-for-charities-components/AccordianSection'
-import ApplyOptions from '@/components/ui/ApplyOptions'
+import WhichApplication from '@/components/application-guide/WhichApplication'
 import CharityNonprofitDirectorFaq from '@/components/ui/Charity-Nonprofit-Director-Faq'
 import CallSection from '@/components/help-for-charities-components/call-section'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
@@ -13,7 +13,7 @@ import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
 export const metadata = pageMetadata({
   title: 'Help for Charities',
   description:
-    'Free For Charity gives verified nonprofits a complete online presence—a managed website, .org domain, and Microsoft 365 email—plus the tools, directories, and hands-on help to run leaner. Start even while pending 501(c)(3) status.',
+    'Free For Charity gives verified nonprofits a complete online presence—a managed website, .org domain, and Microsoft 365 email—plus the tools, directories, and hands-on help to run leaner. Start even while pending 501(c)(3) status; charity email follows your 501(c)(3) approval.',
   canonical: '/help-for-charities/',
 })
 
@@ -22,14 +22,14 @@ const index = () => {
     <div className="bg-[#FCFCFC]">
       <HeroSection
         heading="Help For Charities"
-        paragraph="Free For Charity gives verified nonprofits a complete online presence—a managed website, .org domain, and Microsoft 365 email—plus the tools, directories, and hands-on help to run leaner. You can start even while you're still pending 501(c)(3) status."
+        paragraph="Free For Charity gives verified nonprofits a complete online presence—a managed website, .org domain, and Microsoft 365 email—plus the tools, directories, and hands-on help to run leaner. You can start even while you're still pending 501(c)(3) status; charity email follows once the IRS approves your 501(c)(3)."
         heroImg="/Images/volunteer.webp"
       />
 
       {/* On-page CTAs — no separate wizard page to bounce out to. */}
       <div className="w-[90%] max-w-[860px] mx-auto mt-[36px] flex flex-col sm:flex-row items-center justify-center gap-[16px]">
         <a
-          href="#apply"
+          href="#which-application"
           className="inline-flex items-center justify-center rounded-[10px] bg-[#0567B1] px-[28px] py-[15px] text-[17px] font-[700] text-white transition-transform duration-200 hover:scale-[1.03] hover:bg-[#045a9b]"
           data-font="lato-font"
         >
@@ -80,7 +80,7 @@ const index = () => {
 
       <CharityNonprofitDirectorFaq />
 
-      <ApplyOptions />
+      <WhichApplication />
       <CallSection />
     </div>
   )

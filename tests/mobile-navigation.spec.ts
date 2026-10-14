@@ -85,9 +85,8 @@ test.describe('Mobile Navigation', () => {
     const mobileMenu = page.locator('header .lg\\:hidden.absolute')
     const subItems = [
       'Website Templates & the FFC Footer',
-      '501c3 Onboarding Guide',
-      'Pre501c3 Onboarding Guide',
-      'Online Impacts Onboarding Guide',
+      '501(c)(3) Application',
+      'Pre-501(c)(3) Application',
       'GuideStar Profile Setup Guide',
     ]
 
@@ -141,7 +140,7 @@ test.describe('Mobile Navigation', () => {
     await page.locator('button[aria-label="Open menu"]').click()
 
     const mobileMenu = page.locator('header .lg\\:hidden.absolute')
-    await mobileMenu.getByText('501c3 Onboarding Guide', { exact: true }).click()
+    await mobileMenu.getByText('501(c)(3) Application', { exact: true }).click()
 
     await expect(page).toHaveURL(/501c3/)
   })

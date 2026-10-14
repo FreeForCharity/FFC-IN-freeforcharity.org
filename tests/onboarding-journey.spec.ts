@@ -13,13 +13,15 @@ import { test, expect } from '@playwright/test'
 test.describe('Onboarding journey — CTA deep links (#452)', () => {
   test('501c3 page links Get Started to onboarding product pid 33', async ({ page }) => {
     await page.goto('/501c3')
-    expect(await page.locator('a[href*="a=add&pid=33"]').count()).toBeGreaterThan(0)
+    await expect(page.locator('a[href*="a=add&pid=33"]')).toHaveCount(1)
+    await expect(page.locator('a[href*="a=add&pid=16"]')).toHaveCount(0)
     await expect(page.locator('a[href*="confproduct"]')).toHaveCount(0)
   })
 
   test('pre501c3 page links Get Started to onboarding product pid 16', async ({ page }) => {
     await page.goto('/pre501c3')
-    expect(await page.locator('a[href*="a=add&pid=16"]').count()).toBeGreaterThan(0)
+    await expect(page.locator('a[href*="a=add&pid=16"]')).toHaveCount(1)
+    await expect(page.locator('a[href*="a=add&pid=33"]')).toHaveCount(0)
     await expect(page.locator('a[href*="confproduct"]')).toHaveCount(0)
   })
 })
@@ -57,6 +59,22 @@ test.describe('Onboarding journey page — Website before Email (#450)', () => {
   })
 })
 
+test.describe('Funnel pages route to the application pages', () => {
+  for (const route of [
+    '/help-for-charities',
+    '/domains',
+    '/free-charity-web-hosting',
+    '/online-impacts-onboarding-guide',
+  ]) {
+    test(`${route} has no onboarding Apply (cart) links`, async ({ page }) => {
+      await page.goto(route)
+      await expect(page.locator('a[href*="a=add&pid=33"], a[href*="a=add&pid=16"]')).toHaveCount(0)
+      expect(await page.locator('a[href$="/501c3/"]').count()).toBeGreaterThan(0)
+      expect(await page.locator('a[href$="/pre501c3/"]').count()).toBeGreaterThan(0)
+    })
+  }
+})
+
 test.describe('Free charity web hosting — no legacy registrar (#447)', () => {
   test('drops eNom reseller language, keeps Cloudflare', async ({ page }) => {
     await page.goto('/free-charity-web-hosting')
@@ -88,15 +106,16 @@ test.describe('Round 2 — stale-model cleanup on the rest of the site (#455/#45
     expect(body).toContain('cloudflare')
   })
 
-  test('Online Impacts onboarding uses GitHub Pages, not InterServer/WordPress', async ({
+  test('Online Impacts page is a short closure notice that routes to the application pages', async ({
     page,
   }) => {
     await page.goto('/online-impacts-onboarding-guide')
-    const body = (await page.locator('body').innerText()).toLowerCase()
-    expect(body).not.toContain('interserver')
-    expect(body).not.toContain('softaculous')
-    expect(body).toContain('github pages')
+    const main = await page.locator('main').innerText()
+    expect(main).toMatch(/Online Impacts has closed/)
+    expect(main.toLowerCase()).not.toContain('interserver')
+    await expect(page.locator('main a[href^="mailto:clarkemoyer@"]')).toHaveCount(1)
     await expect(page.locator('a[href*="confproduct"]')).toHaveCount(0)
+    await expect(page.locator('a[href*="cart.php"]')).toHaveCount(0)
   })
 
   test('help-for-charities tech stack is GitHub Pages, not Divi/WPMU DEV', async ({ page }) => {

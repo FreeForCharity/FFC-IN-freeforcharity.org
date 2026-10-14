@@ -1,7 +1,5 @@
 import React from 'react'
-import Transparentbtn from '@/components/ui/Transparentbtn'
-import HelpMeChoose from '@/components/ui/HelpMeChoose'
-import { hubAddProduct, ONBOARDING_PID } from '@/lib/config'
+import TrackCards from '@/components/application-guide/TrackCards'
 
 const FFCOnboardingNotice = () => {
   return (
@@ -40,23 +38,10 @@ const FFCOnboardingNotice = () => {
           className="text-[22px] sm:text-[24px] md:text-[26px] font-medium text-[#333] pb-[10px]"
           data-font="aria-font"
         >
-          Ready to get started?
+          Ready to get started? Go to your application page
         </h3>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
-          <Transparentbtn
-            text="501(c)3 Charities — Apply Here"
-            href={hubAddProduct(ONBOARDING_PID.full501c3)}
-          />
-          <Transparentbtn
-            text="Pre-501(c)3 Charities — Apply Here"
-            href={hubAddProduct(ONBOARDING_PID.pre501c3)}
-          />
-        </div>
-
-        <div className="mt-[24px] flex justify-center">
-          <HelpMeChoose />
-        </div>
+        <TrackCards className="mt-[12px]" />
       </div>
     </section>
   )

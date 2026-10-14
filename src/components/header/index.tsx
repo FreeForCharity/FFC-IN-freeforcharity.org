@@ -31,15 +31,11 @@ const menuItems: MenuItem[] = [
     dropdownItems: [
       { label: 'Help for Charities', path: '/help-for-charities' },
       { label: 'Website Templates & the FFC Footer', path: '/website-templates' },
-      { label: '501c3 Onboarding Guide', path: '/501c3' },
-      { label: 'Pre501c3 Onboarding Guide', path: '/pre501c3' },
-      {
-        label: 'Online Impacts Onboarding Guide',
-        path: '/online-impacts-onboarding-guide',
-      },
+      { label: '501(c)(3) Application', path: '/501c3' },
+      { label: 'Pre-501(c)(3) Application', path: '/pre501c3' },
       { label: 'GuideStar Profile Setup Guide', path: '/guidestar-guide' },
       {
-        label: 'Understanding Your Free For Charity WordPress Website Hosting: A Layered Approach',
+        label: 'Tech Stack: How Your Free For Charity Website Is Built',
         path: '/techstack',
       },
       {
