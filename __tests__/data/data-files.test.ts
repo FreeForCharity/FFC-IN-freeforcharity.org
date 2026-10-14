@@ -7,7 +7,7 @@
 
 import { team } from '@/data/team'
 import { testimonials } from '@/data/testimonials'
-import { domainDonationTaxFaq, hostingBacklogFaq } from '@/data/faqs'
+import { NO_TIMELINE_STATEMENT, domainDonationTaxFaq, hostingBacklogFaq } from '@/data/faqs'
 
 describe('Team Data', () => {
   it('exports an array of team members', () => {
@@ -73,6 +73,18 @@ describe('Shared FAQ Data (single-sourced copy)', () => {
     ].join(' ')
     expect(allText).toMatch(/once your site is validated/i)
     expect(allText).not.toMatch(/eNom/i)
+  })
+
+  it('promises no capacity or timeline, only the no-timeline statement', () => {
+    expect(hostingBacklogFaq.backlog).toBe(NO_TIMELINE_STATEMENT)
+    expect(NO_TIMELINE_STATEMENT).toMatch(/can't promise a timeline/)
+    const allText = [
+      hostingBacklogFaq.backlog,
+      ...hostingBacklogFaq.ways.flatMap((w) => [w.before, w.after ?? '']),
+    ].join(' ')
+    expect(allText).not.toMatch(/per week|a year|charities a year|1 new charity/i)
+    // Site content comes on the application, not later.
+    expect(allText).not.toMatch(/logo, photos/i)
   })
 
   it('tax-deduction FAQ has question and answer with the EIN', () => {

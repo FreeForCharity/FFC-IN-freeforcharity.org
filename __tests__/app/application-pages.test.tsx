@@ -32,6 +32,8 @@ import {
 import { helpPath, helpTopicsForTrack } from '@/data/application-help'
 import { COMMITMENTS, POLICY_PAGES_SENTENCE } from '@/data/charity-terms'
 import { HOW_IT_WORKS_STEPS } from '@/data/journey'
+import { NO_TIMELINE_STATEMENT } from '@/data/faqs'
+import HomeFaqs from '@/components/home-page/FrequentlyAskedQuestions'
 
 jest.mock('next/navigation', () => ({
   usePathname: jest.fn(() => '/'),
@@ -359,6 +361,21 @@ describe('Clarke’s decisions, on every page touched', () => {
     expect(text).not.toMatch(/10 free accounts/)
   })
 
+  it.each([
+    ['/domains/', Domains],
+    ['/free-charity-web-hosting/', Hosting],
+    ['the homepage FAQ', HomeFaqs],
+  ] as [string, React.ComponentType][])(
+    '%s: no capacity numbers, just the no-timeline statement',
+    (_r, Page) => {
+      const { container } = render(<Page />)
+      // The hosting and homepage FAQs keep their answers collapsed; read the DOM text.
+      const text = container.textContent ?? ''
+      expect(text).toContain(NO_TIMELINE_STATEMENT)
+      expect(text).not.toMatch(/per week|charities a year|1 new charity/i)
+    }
+  )
+
   it('/domains/: FFC handles DNS and pre-501(c)(3) email waits for approval', () => {
     const text = render(<Domains />).container.textContent ?? ''
     expect(text).not.toMatch(/Cloudflare Username and Password/i)
@@ -373,10 +390,22 @@ describe('Clarke’s decisions, on every page touched', () => {
     expect(text).toMatch(/There is nothing else to send/)
   })
 
-  it('/online-impacts-onboarding-guide/: no stale "send your logo, photos" checklist', () => {
-    const text = render(<OnlineImpacts />).container.textContent ?? ''
-    expect(text).not.toMatch(/Logo files \(high-resolution\)/)
-    expect(text).not.toMatch(/photos, and page copy/)
+  it('/online-impacts-onboarding-guide/: short closure notice, contact, two application cards', () => {
+    const { container } = render(<OnlineImpacts />)
+    const text = container.textContent ?? ''
+    expect(text).toMatch(/Online Impacts has closed/)
+    expect(text).toMatch(/can continue\s+with Free For Charity/)
+    expect(text).toMatch(/Clarke Moyer/)
+    const hrefs = hrefsIn(container)
+    expect(hrefs).toContain('tel:+15202228104')
+    expect(hrefs).toContain('mailto:clarkemoyer@freeforcharity.org')
+    expect(container.querySelectorAll('[data-testid="track-card"]')).toHaveLength(2)
+    // Everything else is gone: old checklists, accordions, founders' contacts, step list.
+    expect(text).not.toMatch(/Before You Begin Onboarding/)
+    expect(text).not.toMatch(/External Validation Preparation/)
+    expect(text).not.toMatch(/onlineimpacts\.org|Pardhasaradhi/)
+    expect(container.querySelector('[data-testid="how-it-works-steps"]')).toBeNull()
+    expect(container.querySelector('[data-testid="help-me-choose"]')).toBeNull()
   })
 
   it('the validation guide is US only (no "Global")', () => {
@@ -457,10 +486,7 @@ describe('Navigation', () => {
     expect(i).toBeGreaterThan(-1)
     expect(labels[i + 1]).toBe('Pre-501(c)(3) Application')
     expect(
-      labels.some(
-        (l) =>
-          /Application Guide|Onboarding Guide$/.test(l ?? '') && !/Online Impacts/.test(l ?? '')
-      )
+      labels.some((l) => /Application Guide|Onboarding Guide$|Online Impacts/.test(l ?? ''))
     ).toBe(false)
     expect(labels.some((l) => /WordPress/.test(l ?? ''))).toBe(false)
     expect(within(scope).getByRole('link', { name: '501(c)(3) Application' })).toHaveAttribute(

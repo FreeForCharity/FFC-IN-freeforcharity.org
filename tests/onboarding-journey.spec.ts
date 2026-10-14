@@ -106,15 +106,16 @@ test.describe('Round 2 — stale-model cleanup on the rest of the site (#455/#45
     expect(body).toContain('cloudflare')
   })
 
-  test('Online Impacts onboarding uses GitHub Pages, not InterServer/WordPress', async ({
+  test('Online Impacts page is a short closure notice that routes to the application pages', async ({
     page,
   }) => {
     await page.goto('/online-impacts-onboarding-guide')
-    const body = (await page.locator('body').innerText()).toLowerCase()
-    expect(body).not.toContain('interserver')
-    expect(body).not.toContain('softaculous')
-    expect(body).toContain('github pages')
+    const main = await page.locator('main').innerText()
+    expect(main).toMatch(/Online Impacts has closed/)
+    expect(main.toLowerCase()).not.toContain('interserver')
+    await expect(page.locator('main a[href^="mailto:clarkemoyer@"]')).toHaveCount(1)
     await expect(page.locator('a[href*="confproduct"]')).toHaveCount(0)
+    await expect(page.locator('a[href*="cart.php"]')).toHaveCount(0)
   })
 
   test('help-for-charities tech stack is GitHub Pages, not Divi/WPMU DEV', async ({ page }) => {

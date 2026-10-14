@@ -221,14 +221,6 @@ const sectionComponents: [string, string][] = [
   ['home/Ourblogs', '../../src/components/home/Ourblogs/index'],
   ['home/SupportFreeforCharity', '../../src/components/home/SupportFreeforCharity/index'],
   ['home/Testimonials', '../../src/components/home/Testimonials/index'],
-  [
-    'online-impacts-onboarding-guide-components/Ready-To-Get-Started-Now',
-    '../../src/components/online-impacts-onboarding-guide-components/Ready-To-Get-Started-Now/index',
-  ],
-  [
-    'online-impacts-onboarding-guide-components/charity-text',
-    '../../src/components/online-impacts-onboarding-guide-components/charity-text/index',
-  ],
   ['pre501c3-components/Faqs', '../../src/components/pre501c3-components/Faqs/index'],
   ['techstack-components/Hero', '../../src/components/techstack-components/Hero/index'],
   ['volunteer/Free-For-Charity', '../../src/components/volunteer/Free-For-Charity/index'],

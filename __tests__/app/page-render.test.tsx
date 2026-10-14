@@ -79,7 +79,7 @@ const pages: [string, React.ComponentType][] = [
   ['Free Training Programs', FreeTrainingPrograms],
   ['GuideStar Guide', GuidestarGuide],
   ['Help for Charities', HelpForCharities],
-  ['Online Impacts Onboarding Guide', OnlineImpactsOnboarding],
+  ['Online Impacts Charities', OnlineImpactsOnboarding],
   ['Pre-501c3', Pre501c3],
   ['Privacy Policy', PrivacyPolicy],
   ['Security Acknowledgements', SecurityAcknowledgements],

@@ -65,7 +65,7 @@ export const siteRoutes = [
       '/charity-validation-guide-ensuring-mutual-benefit-through-comprehensive-validation-processes',
     name: 'Charity Validation Guide',
   },
-  { route: '/online-impacts-onboarding-guide', name: 'Online Impacts Onboarding Guide' },
+  { route: '/online-impacts-onboarding-guide', name: 'Online Impacts Charities' },
   { route: '/techstack', name: 'Tech Stack' },
   { route: '/donation-policy', name: 'Donation Policy' },
   { route: '/free-for-charity-donation-policy', name: 'FFC Donation Policy' },

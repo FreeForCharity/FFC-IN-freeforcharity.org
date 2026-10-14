@@ -1,5 +1,6 @@
 import React from 'react'
 import TrackCards from '@/components/application-guide/TrackCards'
+import { NO_TIMELINE_STATEMENT } from '@/data/faqs'
 
 const index = () => {
   return (
@@ -20,8 +21,7 @@ const index = () => {
               Your website comes first — the domain and email follow it. Free For Charity builds
               each charity a fast, secure static website on GitHub Pages from the FFC template,
               validates it live on its free GitHub Pages address, and then registers your .org and
-              points it there. New builds run on a backlog — we aim to support 100 charities a year
-              — and how quickly your site goes live depends mainly on how ready your content is.
+              points it there. {NO_TIMELINE_STATEMENT}
             </p>
           </div>
         </div>

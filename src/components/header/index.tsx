@@ -33,10 +33,6 @@ const menuItems: MenuItem[] = [
       { label: 'Website Templates & the FFC Footer', path: '/website-templates' },
       { label: '501(c)(3) Application', path: '/501c3' },
       { label: 'Pre-501(c)(3) Application', path: '/pre501c3' },
-      {
-        label: 'Online Impacts Onboarding Guide',
-        path: '/online-impacts-onboarding-guide',
-      },
       { label: 'GuideStar Profile Setup Guide', path: '/guidestar-guide' },
       {
         label: 'Tech Stack: How Your Free For Charity Website Is Built',
