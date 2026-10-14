@@ -45,7 +45,8 @@ const ApplicationChecklist = () => {
           </li>
           <li>
             Your EIN (Employer Identification Number). Don&rsquo;t have one yet? You can{' '}
-            <GuideLink href={IRS_EIN_URL}>get a free EIN from the IRS online</GuideLink>.
+            <GuideLink href={IRS_EIN_URL}>get a free EIN from the IRS online</GuideLink>, or enter
+            NONE on the application for now and we can help you get one.
           </li>
           <li>Your organization&rsquo;s legal status</li>
           <li>
