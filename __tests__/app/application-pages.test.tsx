@@ -443,8 +443,9 @@ describe('Help pages', () => {
       expect(warnings.length).toBeGreaterThanOrEqual(2)
       expect(warnings[0].textContent).toContain(WRONG_TRACK_WARNING[track].headline)
       expect(onboardingCartLinks(container)).toEqual([APPLY_URL[track]])
+      // Exact accessible name (no regex built from page text).
       const back = screen.getAllByRole('link', {
-        name: new RegExp(`Back to the ${TRACKS[track].pageTitle.replace(/[()]/g, '\\$&')} page`),
+        name: `Back to the ${TRACKS[track].pageTitle} page`,
       })[0]
       expect(norm(back.getAttribute('href') ?? '')).toMatch(new RegExp(`^/${track}#[a-z-]+$`))
     }
