@@ -117,20 +117,22 @@ export default function CookiePolicy() {
               <strong>When we ask permission first</strong>
             </p>
             <p className="text-sm text-[#666] mb-2">
-              If you are in the European Economic Area, the United Kingdom, or Switzerland, Google
-              Analytics sets <strong>no cookies and collects no identifiers</strong> until you
-              accept. It still counts your visit in an aggregate, cookie-free way so we know how
-              many people used the site — that measurement cannot be tied back to you or to your
-              next visit.
+              We apply the strictest setting to everyone: no matter where in the world you are,
+              Google Analytics sets{' '}
+              <strong>
+                no analytics or advertising cookies and collects no identifiers from your device
+              </strong>{' '}
+              until you accept. It still counts your visit in an aggregate, cookie-free way so we
+              know how many people used the site — that measurement cannot be tied back to you or to
+              your next visit.
             </p>
             <p className="text-sm text-[#666] mb-2">
-              Everywhere else, Google Analytics cookies are set from your first visit. You can turn
+              There is no country in which analytics cookies are set before you choose. You can turn
               them off at any time using the cookie settings link in our footer, and we will delete
               the cookies listed below when you do.
             </p>
             <p className="text-sm text-[#666] mb-2">
-              Which of these rules applies to your visit is determined by Google from your IP
-              address at the time of your visit; IP geolocation is approximate.
+              The same rule applies to every visitor, so nothing depends on where you are.
             </p>
             <p className="text-sm text-[#666]">
               <strong>Microsoft Clarity is different.</strong> It records how visitors move through
@@ -455,11 +457,10 @@ export default function CookiePolicy() {
             websites you do not want your online activities tracked. This site does not read those
             signals. We do not sell or share personal information as defined by the CCPA/CPRA, so
             there is no sale or sharing for such a signal to opt you out of. Analytics cookies are
-            set automatically outside the European Economic Area, the United Kingdom, and
-            Switzerland (see section 3.2); wherever you are, you can turn them off at any time using
-            the cookie settings link in our footer, and we delete the cookies those tools set when
-            you do. Microsoft Clarity and the Meta Pixel never run without your explicit opt-in,
-            anywhere in the world.
+            never set before you accept, anywhere in the world (see section 3.2); wherever you are,
+            you can turn them off at any time using the cookie settings link in our footer, and we
+            delete the cookies those tools set when you do. Microsoft Clarity and the Meta Pixel
+            never run without your explicit opt-in, anywhere in the world.
           </p>
 
           {/* Section 6 */}

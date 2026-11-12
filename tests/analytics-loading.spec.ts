@@ -23,10 +23,11 @@ import {
  * Consent model (Consent Mode v2 — see docs/CONVERSION-TRACKING.md):
  * for the GOOGLE tags, consent gates STORAGE rather than script loading.
  * GA4 and GTM load on every pageview; the consent state decides whether
- * they may use cookies. Storage defaults to granted worldwide and denied
- * only in the EEA/UK/CH, where Google's EU User Consent Policy requires
- * opt-in — so a visitor who ignores or declines the banner is still
- * measured, via cookieless pings, instead of disappearing entirely.
+ * they may use cookies. Storage defaults to DENIED for every visitor,
+ * worldwide — the treatment Google's EU User Consent Policy requires for
+ * the EEA/UK/CH, applied everywhere — so a visitor who ignores or declines
+ * the banner is still measured, via cookieless pings, instead of
+ * disappearing entirely.
  *
  * Two tags are NOT loaded on that basis, because Consent Mode is a
  * Google protocol and neither speaks it:
@@ -122,31 +123,25 @@ test.describe('Analytics + widget loading', () => {
     await clearConsent(page)
 
     const defaults = await consentCalls(page, 'default')
-    // At least the regional denial and the global grant. Not an exact
-    // count: adding a further region-scoped override (a jurisdiction
-    // beyond the EEA/UK/CH adopting the same rule) would be correct and
-    // should not fail this test. What matters is asserted below — that
-    // both the regional and global defaults exist and say the right
-    // things, and that they precede the first tag command.
-    expect(defaults.length).toBeGreaterThanOrEqual(2)
+    // Exactly one, and unscoped. The count IS the assertion here: a second
+    // default call, or a `region` on this one, is how a class of visitor
+    // gets measured before consenting, and it is a one-line edit that
+    // every value assertion below would still pass.
+    expect(defaults).toHaveLength(1)
+    expect(defaults[0].region).toBeUndefined()
 
-    // Region-scoped denial for the EEA/UK/CH, per Google's EU User
-    // Consent Policy — the only place opt-in is actually required.
-    const regional = defaults.find((c) => Array.isArray(c.region))
-    expect(regional).toBeDefined()
-    expect(regional!.region).toContain('DE')
-    expect(regional!.region).toContain('GB')
-    expect(regional!.region).toContain('CH')
-    expect(regional!.analytics_storage).toBe('denied')
-    expect(regional!.ad_user_data).toBe('denied')
-    expect(regional!.wait_for_update).toBe(500)
+    // Denied for everyone — the treatment Google's EU User Consent Policy
+    // requires for the EEA/UK/CH, applied worldwide.
+    expect(defaults[0].analytics_storage).toBe('denied')
+    expect(defaults[0].ad_storage).toBe('denied')
+    expect(defaults[0].ad_user_data).toBe('denied')
+    expect(defaults[0].ad_personalization).toBe('denied')
+    expect(defaults[0].wait_for_update).toBe(500)
 
-    // Granted everywhere else — the permissive default.
-    const global = defaults.find((c) => !Array.isArray(c.region))
-    expect(global).toBeDefined()
-    expect(global!.analytics_storage).toBe('granted')
-    expect(global!.ad_storage).toBe('granted')
-    expect(global!.ad_personalization).toBe('granted')
+    // functionality/security stay granted: they carry no tracking, and the
+    // banner needs functionality storage to remember a choice at all.
+    expect(defaults[0].functionality_storage).toBe('granted')
+    expect(defaults[0].security_storage).toBe('granted')
 
     // Ordering is the whole point: a consent default that lands AFTER
     // gtag('js')/gtag('config') is too late — the first hit has already
