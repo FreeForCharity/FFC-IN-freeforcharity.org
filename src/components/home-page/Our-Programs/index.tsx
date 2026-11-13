@@ -34,7 +34,7 @@ const projects: Project[] = [
     icon: '/Svgs/FFC-Domains.svg',
     name: 'FFC Domains',
     valueProp:
-      'Free .org domain names, Microsoft 365 email, and Teams for verified 501(c)(3) charities — registered and managed for you.',
+      'Free .org domain names for US charities, including groups still waiting on 501(c)(3), plus Microsoft 365 email and Teams for 501(c)(3) charities — registered and managed for you.',
     href: '/domains/',
     ctaLabel: 'Explore FFC Domains',
     items: [

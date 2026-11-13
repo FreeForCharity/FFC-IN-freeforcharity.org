@@ -13,7 +13,7 @@ import GetNewWebsite from '@/components/domains/Get-New-Website'
 export const metadata = pageMetadata({
   title: 'Free Domains for Nonprofits',
   description:
-    'Free For Charity provides free domain registration, DNS management, and email setup for verified 501(c)(3) nonprofit organizations.',
+    'Free For Charity provides free domain registration and DNS management for US charities, including groups still waiting on 501(c)(3), plus email setup for 501(c)(3) charities.',
   canonical: '/domains/',
 })
 

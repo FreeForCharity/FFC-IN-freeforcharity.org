@@ -9,6 +9,7 @@ import CharityNonprofitDirectorFaq from '@/components/ui/Charity-Nonprofit-Direc
 import CallSection from '@/components/help-for-charities-components/call-section'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
+import FocusStatement from '@/components/ui/FocusStatement'
 
 export const metadata = pageMetadata({
   title: 'Help for Charities',
@@ -22,7 +23,14 @@ const index = () => {
     <div className="bg-[#FCFCFC]">
       <HeroSection
         heading="Help For Charities"
-        paragraph="Free For Charity gives verified nonprofits a complete online presence—a managed website, .org domain, and Microsoft 365 email—plus the tools, directories, and hands-on help to run leaner. You can start even while you're still pending 501(c)(3) status; charity email follows once the IRS approves your 501(c)(3)."
+        paragraph={
+          <>
+            Free For Charity gives verified nonprofits a complete online presence—a managed website,
+            .org domain, and Microsoft 365 email—plus the tools, directories, and hands-on help to
+            run leaner. You can start even while you&apos;re still pending 501(c)(3) status; charity
+            email follows once the IRS approves your 501(c)(3). <FocusStatement variant="short" />
+          </>
+        }
         heroImg="/Images/volunteer.webp"
       />
 

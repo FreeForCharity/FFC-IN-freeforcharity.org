@@ -16,7 +16,7 @@ const Index = () => {
             className="inline-block mb-[18px] rounded-full bg-[#0567B1]/10 px-[16px] py-[6px] text-[14px] font-[700] uppercase tracking-[1px] text-[#0567B1]"
             data-font="raleway-font"
           >
-            Free for verified 501(c)(3) nonprofits
+            Free for US charities, including groups still waiting on 501(c)(3)
           </span>
           <h1
             className="mb-[20px] font-[700] text-[38px] md:text-[52px] leading-[46px] md:leading-[60px] text-[#1a2e35]"
@@ -30,8 +30,8 @@ const Index = () => {
           >
             Free For Charity Hosting is a US-based 501(c)(3) &ldquo;charity for charities.&rdquo; We
             build and host a fast, secure website for your nonprofit, register your <b>.org</b>{' '}
-            domain, and set up Microsoft&nbsp;365 email — completely free, so you can focus on your
-            mission.
+            domain, and set up Microsoft&nbsp;365 email once you hold 501(c)(3) status — completely
+            free, so you can focus on your mission.
           </p>
 
           <div className="mt-[28px] flex flex-col sm:flex-row gap-[14px]">

@@ -57,10 +57,10 @@ const faqs: { question: string; answer: React.ReactNode }[] = [
     question: 'How long does onboarding take, and what happens when?',
     answer: (
       <>
-        Your website comes first: it takes 2–6 weeks depending mostly on how quickly content (logo,
-        photos, text) is ready, and goes live on its free GitHub Pages address. Once it&rsquo;s
-        validated, your domain lands the same week, and email a few days after that. The full
-        picture is in{' '}
+        Your website comes first: it takes 2–6 weeks depending mostly on how complete your
+        application is (the application collects your site content), and goes live on its free
+        GitHub Pages address. Once it&rsquo;s validated, your domain lands the same week, and email
+        a few days after that. The full picture is in{' '}
         <Link href="/charity-onboarding-journey/" className="text-[#0567B1] underline">
           your onboarding journey
         </Link>
@@ -139,8 +139,9 @@ const faqs: { question: string; answer: React.ReactNode }[] = [
     question: "We're not a 501(c)(3) yet — can you still help us?",
     answer: (
       <>
-        Yes. Pre-501c3 organizations are a big part of who we serve: we help with the domain, email,
-        and the path to determination. Start with{' '}
+        Yes. Pre-501c3 organizations are a big part of who we serve: we help with your website,
+        domain and the path to determination. Charity email is for 501(c)(3) organizations, so
+        pre-501(c)(3) groups get it once the IRS approves their 501(c)(3). Start with{' '}
         <Link href="/pre501c3/" className="text-[#0567B1] underline">
           Pre-501c3 onboarding
         </Link>{' '}

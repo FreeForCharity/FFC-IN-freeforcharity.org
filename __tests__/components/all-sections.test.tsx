@@ -195,10 +195,6 @@ const sectionComponents: [string, string][] = [
     '../../src/components/help-for-charities-components/AccordianSection/index',
   ],
   [
-    'help-for-charities-components/Charity-Nonprofit-Director-Faq',
-    '../../src/components/help-for-charities-components/Charity-Nonprofit-Director-Faq/index',
-  ],
-  [
     'help-for-charities-components/call-section',
     '../../src/components/help-for-charities-components/call-section/index',
   ],

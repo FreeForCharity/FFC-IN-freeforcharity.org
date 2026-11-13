@@ -14,6 +14,8 @@
  * src/components/journey/JourneyDiagram.tsx and /why-website-first/.
  */
 
+import { ACCEPT_INVITATION_URL, GITHUB_INVITE_SENTENCE } from './charity-terms'
+
 export interface JourneyStageLink {
   href: string
   label: string
@@ -59,8 +61,7 @@ export const journeyStages: JourneyStage[] = [
     name: '2. Website — built and proven first',
     gateNote:
       'Your validated live site is the funding gate: it unlocks the domain purchase in stage 3.',
-    youDo:
-      'Nothing extra to submit: your application already included your website content. Review the preview link we email you and approve it (or tell us what to change). Your maintainer accepts the GitHub invitation and, if you didn’t include a logo link, uploads your logo through the first “Add your logo” issue.',
+    youDo: `Nothing extra to submit: your application already included your website content. Review the preview link we email you and approve it (or tell us what to change). Your maintainer accepts the GitHub invitation and, if you didn’t include a logo link, uploads your logo through the first “Add your logo” issue. ${GITHUB_INVITE_SENTENCE}`,
     ffcDoes:
       'Right after approval, a volunteer builds your site from the FFC template (fast, secure static hosting) using the content in your application, with the full FFC footer generated from your validated application data. Your site goes live on its free GitHub Pages address — no custom domain yet — and we email you a preview link.',
     duration: 'Typically 2–6 weeks, mostly depending on how complete your application is',
@@ -69,6 +70,7 @@ export const journeyStages: JourneyStage[] = [
         href: 'https://ffcadmin.org/sites-list/',
         label: 'How FFC delivers services',
       },
+      { href: ACCEPT_INVITATION_URL, label: 'How to accept the GitHub invitation' },
     ],
   },
   {
@@ -76,7 +78,7 @@ export const journeyStages: JourneyStage[] = [
     name: '3. Domain — only after your site is proven',
     gateNote: 'Unlocked only after your website is validated live on GitHub Pages.',
     youDo:
-      'Once you approve your preview, order your free .org domain (the one you named on your application) using the coupon in your onboarding acceptance email — or, if you already own a domain, request a transfer instead. Checkout shows a $1 verification charge, and the coupon brings it to $0. You can check name availability any time; we buy once your site is validated.',
+      'Once you approve your preview, order your free .org domain (the one you named on your application) using the coupon in your welcome email — or, if you already own a domain, request a transfer instead. Checkout shows a $1 verification charge, and the coupon brings it to $0. You can check name availability any time; we buy once your site is validated.',
     ffcDoes:
       'Once your website is validated, we spend the funds: we register (and pay for) the best available name, or take over management of your existing domain, set up DNS and security, and point it at your live site. We handle all DNS; you never need to edit it.',
     duration: 'Typically the same week your site is approved',
@@ -149,6 +151,12 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     time: 'Typically 2–6 weeks, mostly depending on how complete your application is',
   },
   {
+    title: 'Your maintainer accepts the GitHub invitation',
+    who: 'You',
+    detail: `We invite your maintainer's GitHub account to your site's repository. ${GITHUB_INVITE_SENTENCE}`,
+    time: 'Within 7 days of the invitation',
+  },
+  {
     title: 'You get a preview link',
     who: 'FFC',
     detail: 'We email you a link to your site, live on its free GitHub Pages address.',
@@ -164,7 +172,7 @@ export const HOW_IT_WORKS_STEPS: HowItWorksStep[] = [
     title: 'You order your domain',
     who: 'You',
     detail:
-      'Order your free .org (or a transfer) with the coupon from your acceptance email. Checkout shows a $1 verification charge, and the coupon brings it to $0. We register the domain, handle all DNS and point it at your site.',
+      'Order your free .org (or a transfer) with the coupon from your welcome email. Checkout shows a $1 verification charge, and the coupon brings it to $0. We register the domain, handle all DNS and point it at your site.',
     time: 'Typically the same week',
   },
   {

@@ -16,7 +16,7 @@ const PublicContactInfo: React.FC<{ track: Track }> = ({ track }) => (
     <p>
       Every FFC website shows how to reach the charity. A charity with no findable way to contact it
       looks abandoned, or worse. Both applications require a public phone number, a public email
-      address, and your city and state.
+      address, and your city and state, and let you add an optional public street address.
     </p>
 
     <h3>Email options, best to worst</h3>
@@ -85,10 +85,12 @@ const PublicContactInfo: React.FC<{ track: Track }> = ({ track }) => (
       </li>
     </ul>
 
-    <h3>Location: city and state only</h3>
+    <h3>Location: city and state, plus an optional street address</h3>
     <p>
-      Your footer shows a city and state, never a street address and never anyone’s home. If you
-      need a mailing address for donor checks or official mail, see{' '}
+      Your footer always shows your city and state. If you give a public street address on the
+      application, we add it too. Use an office, commercial mailbox or registered-agent address,
+      never a volunteer’s home. Many charities have no public office, so the street address is
+      optional. For help choosing one, see{' '}
       <Link href={`/${track}/help/mailing-address/`}>choosing a mailing address</Link>.
     </p>
 
@@ -116,9 +118,9 @@ const PublicContactInfo: React.FC<{ track: Track }> = ({ track }) => (
     <ul>
       <li>
         <strong>Public, on your website:</strong> your organization’s name, EIN (if you have one),
-        mission, tagline, descriptions and programs, the footer phone, email and city and state,
-        your Chair, Secretary and Treasurer by name and role (with their consent), and your social
-        media, Candid, donation and volunteer links.
+        mission, tagline, descriptions and programs, the footer phone, email and city and state (and
+        street address if you gave one), your Chair, Secretary and Treasurer by name and role (with
+        their consent), and your social media, Candid, donation and volunteer links.
       </li>
       <li>
         <strong>Private, used only to review and support your application:</strong> the phone

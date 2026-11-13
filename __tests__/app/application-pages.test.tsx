@@ -30,7 +30,12 @@ import {
   type Track,
 } from '@/data/application-fields'
 import { helpPath, helpTopicsForTrack } from '@/data/application-help'
-import { COMMITMENTS, POLICY_PAGES_SENTENCE } from '@/data/charity-terms'
+import {
+  COMMITMENTS,
+  POLICY_PAGES_SENTENCE,
+  SUPPORT_ESCALATION_SENTENCE,
+  SUPPORT_SENTENCE,
+} from '@/data/charity-terms'
 import { HOW_IT_WORKS_STEPS } from '@/data/journey'
 import { NO_TIMELINE_STATEMENT } from '@/data/faqs'
 import HomeFaqs from '@/components/home-page/FrequentlyAskedQuestions'
@@ -158,7 +163,7 @@ describe.each(PAGES)('/%s/: the single application page', (track, Page) => {
       expect(steps[i].textContent).toContain(`Typical time: ${step.time}`)
     })
     const text = container.querySelector('#how-it-works')!.textContent!
-    expect(text).toMatch(/coupon from your acceptance email/)
+    expect(text).toMatch(/coupon from your welcome email/)
     expect(text).toMatch(/\$1 verification charge, and the coupon brings it to \$0/)
   })
 
@@ -343,7 +348,13 @@ describe('Clarke’s decisions, on every page touched', () => {
   ]
 
   it.each(TOUCHED)('%s: no guaranteed response times', (_r, Page) => {
-    const text = render(<Page />).container.textContent ?? ''
+    // The approved support wording gives a typical reply time ("usually within
+    // 2 business days"), never a guarantee; it is the only one allowed.
+    const text = (render(<Page />).container.textContent ?? '')
+      .split(SUPPORT_SENTENCE)
+      .join('')
+      .split(SUPPORT_ESCALATION_SENTENCE)
+      .join('')
     expect(text).not.toMatch(/within a (day|couple of)/i)
     expect(text).not.toMatch(/\d+\s*(–|-|to)?\s*\d*\s*business days/i)
     expect(text).not.toMatch(/within 24 hours/i)
@@ -381,7 +392,7 @@ describe('Clarke’s decisions, on every page touched', () => {
     expect(text).not.toMatch(/Cloudflare Username and Password/i)
     expect(text).toMatch(/You never edit DNS yourself/)
     expect(text).toMatch(/Charity email waits until the IRS approves your 501\(c\)\(3\)/)
-    expect(text).toMatch(/coupon arrives\s+in your acceptance email/)
+    expect(text).toMatch(/coupon arrives\s+in your welcome email/)
   })
 
   it('/free-charity-web-hosting/: content comes on the application, not later', () => {

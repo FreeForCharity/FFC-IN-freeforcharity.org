@@ -1,5 +1,5 @@
 import React from 'react'
-import { TRACKS, type Track } from '@/data/application-fields'
+import { PUBLIC_LINK_SENTENCE, TRACKS, type Track } from '@/data/application-fields'
 import Ext from './Ext'
 
 const SocialMedia: React.FC<{ track: Track }> = ({ track }) => (
@@ -65,10 +65,10 @@ const SocialMedia: React.FC<{ track: Track }> = ({ track }) => (
 
     <h2>Copy the right link</h2>
     <p>
-      Open the Page (not your profile) and copy the address from the browser bar. A Facebook Page
-      link usually looks like <code>facebook.com/YourCharity</code>, and a LinkedIn Page link like{' '}
-      <code>linkedin.com/company/your-charity</code>. Paste each link into a private or incognito
-      browser window to check it opens for someone who isn’t logged in.
+      Open the Page (not your profile) as a visitor sees it, not in its admin view, then copy the
+      address from the browser bar. A Facebook Page link usually looks like{' '}
+      <code>facebook.com/YourCharity</code>, and a LinkedIn Page link like{' '}
+      <code>linkedin.com/company/your-charity</code>. {PUBLIC_LINK_SENTENCE}
     </p>
 
     <h2>Optional: Instagram, X and YouTube</h2>
