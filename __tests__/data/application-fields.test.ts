@@ -87,8 +87,8 @@ describe('Application field guide data', () => {
   it('offers the public street address as optional on both forms, after city and state', () => {
     const section = APPLICATION_FIELD_SECTIONS.find((s) => s.id === 'public-contact')!
     const slugs = section.fields.map((f) => f.slug)
-    expect(slugs.indexOf('public-street-address')).toBe(slugs.indexOf('footer-location') + 1)
-    expect(section.fields.find((f) => f.slug === 'public-street-address')).toEqual(
+    expect(slugs.indexOf('footer-street-address')).toBe(slugs.indexOf('footer-location') + 1)
+    expect(section.fields.find((f) => f.slug === 'footer-street-address')).toEqual(
       expect.objectContaining({ r33: 'O', r16: 'O' })
     )
     expect(textFor(section.how, '501c3')).toMatch(/never a volunteer’s home/)

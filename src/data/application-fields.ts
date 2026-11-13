@@ -391,7 +391,7 @@ export const APPLICATION_FIELD_SECTIONS: ApplicationFieldSection[] = [
       { slug: 'public-email', label: 'Public email (website footer)', r33: 'R', r16: 'R' },
       { slug: 'footer-location', label: 'Footer location (city and state)', r33: 'R', r16: 'R' },
       {
-        slug: 'public-street-address',
+        slug: 'footer-street-address',
         label: 'Public street address for your website footer',
         r33: 'O',
         r16: 'O',
@@ -697,7 +697,7 @@ export const APPLICATION_WORKSHEET: WorksheetGroup[] = [
       { label: 'Public phone', fields: ['public-phone'] },
       { label: 'Public email', fields: ['public-email'] },
       { label: 'City and state', fields: ['footer-location'] },
-      { label: 'Public street address (optional)', fields: ['public-street-address'] },
+      { label: 'Public street address (optional)', fields: ['footer-street-address'] },
     ],
   },
   {

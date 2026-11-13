@@ -15,7 +15,7 @@ export const FFC_TEL_HREF = 'tel:+15202228104'
  */
 export const SUPPORT_SENTENCE = `Already applied? Open a ticket in your client area at freeforcharity.org/hub. A volunteer replies by email, usually within 2 business days. Tickets are not watched around the clock, so if your site is down or something is urgent, text or call Clarke Moyer at ${FFC_TEXT_NUMBER}.`
 /** The short escalation form. */
-export const SUPPORT_ESCALATION_SENTENCE = `No reply after 2 business days, or something urgent? Text or call Clarke Moyer at ${FFC_TEXT_NUMBER}.`
+export const SUPPORT_ESCALATION_SENTENCE = `No reply after 3 days, or something urgent? Text or call Clarke Moyer at ${FFC_TEXT_NUMBER}.`
 
 /** Say this wherever a page mentions the maintainer's GitHub invitation. */
 export const GITHUB_INVITE_SENTENCE =
