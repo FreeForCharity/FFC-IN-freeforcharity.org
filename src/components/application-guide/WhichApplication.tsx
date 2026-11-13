@@ -1,5 +1,6 @@
 import React from 'react'
 import TrackCards from './TrackCards'
+import FocusStatement from '@/components/ui/FocusStatement'
 
 /**
  * "Which application is yours?" (the old /application-guide/ chooser, folded
@@ -28,12 +29,19 @@ const WhichApplication: React.FC = () => (
         it as a 501(c)(3), use the 501(c)(3) application; if not, use the pre-501(c)(3) application.
       </p>
       <p
-        className="text-[16px] font-[500] leading-[25px] text-[#555] max-w-[720px] mx-auto mb-[28px]"
+        className="text-[16px] font-[500] leading-[25px] text-[#555] max-w-[720px] mx-auto mb-[12px]"
         data-font="lato-font"
       >
         Free For Charity serves <b>US-based</b> nonprofits (US territories included) with annual
         revenue under $1 million. Each application page explains who qualifies, what you commit to,
         and every field, with its Apply button at the end.
+      </p>
+      <p
+        data-testid="focus-statement"
+        className="text-[16px] font-[500] leading-[25px] text-[#555] max-w-[720px] mx-auto mb-[28px]"
+        data-font="lato-font"
+      >
+        <FocusStatement />
       </p>
       <TrackCards />
     </div>

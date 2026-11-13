@@ -25,10 +25,10 @@ describe('pre-501c3 onboarding journey sync', () => {
     expect(text).not.toMatch(/info@yourcharityname\.org/)
   })
 
-  it('/pre501c3/ explains the $1 verification charge the acceptance-email coupon zeroes', () => {
+  it('/pre501c3/ explains the $1 verification charge the welcome-email coupon zeroes', () => {
     const { container } = render(<PagePre501c3 />)
     const text = container.textContent ?? ''
-    expect(text).toMatch(/coupon from your acceptance email/)
+    expect(text).toMatch(/coupon from your welcome email/)
     expect(text).toMatch(/\$1 verification charge, and the coupon brings it to \$0/)
   })
 

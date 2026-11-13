@@ -48,9 +48,9 @@ const Index = () => {
           >
             DOMAIN NAME COUPON Thank you for choosing us to help with your domain name and email
             setup. Apply on the 501(c)(3) or pre-501(c)(3) application page and the coupon arrives
-            in your acceptance email — hold onto it. The domain order itself unlocks later, once
-            your website is live and you have approved it. Checkout shows a $1 verification charge,
-            and the coupon brings it to $0. Questions? Text (520) 222-8104.
+            in your welcome email — hold onto it. The domain order itself unlocks later, once your
+            website is live and you have approved it. Checkout shows a $1 verification charge, and
+            the coupon brings it to $0. Questions? Text (520) 222-8104.
           </p>
         </div>
       </div>

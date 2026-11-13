@@ -6,7 +6,7 @@ import { assetPath } from '@/lib/assetPath'
 
 interface HeroSectionProps {
   heading: string
-  paragraph: string
+  paragraph: React.ReactNode
   heroImg: string
   fontSize?: number
   lineHeight?: number

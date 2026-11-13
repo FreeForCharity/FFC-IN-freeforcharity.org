@@ -22,6 +22,11 @@
  */
 import { ONBOARDING_PID } from '@/lib/config'
 import type { HelpTopicSlug } from './application-help'
+import { GITHUB_INVITE_SENTENCE } from './charity-terms'
+
+/** Said wherever the application asks for a link to a profile, Page or form. */
+export const PUBLIC_LINK_SENTENCE =
+  'Give the public link anyone can open, not an admin, editor or dashboard link. Test it in a private (incognito) window.'
 
 export type FieldRequirement = 'R' | 'O' | '-'
 
@@ -222,10 +227,8 @@ export const APPLICATION_FIELD_SECTIONS: ApplicationFieldSection[] = [
     ],
     why: 'Candid is how we verify a charity is real and well run, and your profile links from your website footer.',
     how: {
-      '501c3':
-        'Claim your free Candid profile and reach at least the Gold Seal of Transparency. Then give us both links: the public profile link and the full-profile (sharable) link.',
-      pre501c3:
-        'If your group already has a Candid profile, paste its links. Most pre-501(c)(3) groups do not have one yet; you can add it after the IRS recognizes you.',
+      '501c3': `Claim your free Candid profile and reach at least the Gold Seal of Transparency. Then give us both links: the public profile link and the full-profile (sharable) link. ${PUBLIC_LINK_SENTENCE}`,
+      pre501c3: `If your group already has a Candid profile, paste its links. Most pre-501(c)(3) groups do not have one yet; you can add it after the IRS recognizes you. ${PUBLIC_LINK_SENTENCE}`,
     },
     optionalWhy:
       'Pre-501(c)(3) groups usually cannot have a Candid profile yet (Candid builds them from IRS 501(c)(3) records), so it is optional on the pre-501(c)(3) form only.',
@@ -240,7 +243,7 @@ export const APPLICATION_FIELD_SECTIONS: ApplicationFieldSection[] = [
       { slug: 'linkedin-page', label: 'LinkedIn page', r33: 'R', r16: 'R' },
     ],
     why: 'Organization Pages show the charity is active and public, and they link from your website.',
-    how: 'These are organization Pages, not personal profiles. Both are free.',
+    how: `These are organization Pages, not personal profiles. Both are free. ${PUBLIC_LINK_SENTENCE}`,
     links: [
       'https://ffcadmin.org/guides/facebook-organization/',
       'https://ffcadmin.org/guides/linkedin-organization/',
@@ -256,7 +259,7 @@ export const APPLICATION_FIELD_SECTIONS: ApplicationFieldSection[] = [
       { slug: 'social-youtube', label: 'YouTube', r33: 'O', r16: 'O' },
     ],
     why: 'Linked from your website if you have them.',
-    how: 'Paste the full profile link.',
+    how: `Paste the full profile link. ${PUBLIC_LINK_SENTENCE}`,
     optionalWhy: 'Many charities do not use these channels.',
     links: ['https://ffcadmin.org/guides/instagram-organization/'],
     help: ['social-media'],
@@ -370,8 +373,8 @@ export const APPLICATION_FIELD_SECTIONS: ApplicationFieldSection[] = [
       { slug: 'technical-github', label: 'Maintainer GitHub username', r33: 'R', r16: 'R' },
       { slug: 'technical-role', label: 'Maintainer role', r33: 'O', r16: 'O' },
     ],
-    why: "Your site lives on GitHub. We invite this account to your site's repository so your maintainer can edit it, and send them their first task.",
-    how: 'Create a free GitHub account and enter just the username.',
+    why: `Your site lives on GitHub. We invite this account to your site's repository so your maintainer can edit it, and send them their first task. ${GITHUB_INVITE_SENTENCE}`,
+    how: 'Create a free GitHub account. Enter only the username, for example jane-doe: letters, numbers and single hyphens, up to 39 characters. Not a link and not an email address.',
     optionalWhy: 'The role only helps us tailor training; the username is what we need.',
     links: [
       'https://ffcadmin.org/guides/github-account/',
@@ -387,9 +390,16 @@ export const APPLICATION_FIELD_SECTIONS: ApplicationFieldSection[] = [
       { slug: 'public-phone', label: 'Public phone (website footer)', r33: 'R', r16: 'R' },
       { slug: 'public-email', label: 'Public email (website footer)', r33: 'R', r16: 'R' },
       { slug: 'footer-location', label: 'Footer location (city and state)', r33: 'R', r16: 'R' },
+      {
+        slug: 'footer-street-address',
+        label: 'Public street address for your website footer',
+        r33: 'O',
+        r16: 'O',
+      },
     ],
     why: 'Every FFC site shows how to reach the charity; donors expect it.',
-    how: 'Use a public line (a free Google Voice number works) and a charity email (a free outlook.com address works). City and state only, never a home address.',
+    how: 'Use a public line (a free Google Voice number works) and a charity email (a free outlook.com address works). Your footer always shows your city and state. If you give a public street address on the application, we add it too. Use an office, commercial mailbox or registered-agent address, never a volunteer’s home.',
+    optionalWhy: 'Many charities have no public office.',
     links: ['https://ffcadmin.org/guides/google-voice/'],
     help: ['public-contact-info', 'mailing-address'],
   },
@@ -443,7 +453,7 @@ export const APPLICATION_FIELD_SECTIONS: ApplicationFieldSection[] = [
     title: 'Website starting point',
     fields: [{ slug: 'template-choice', label: 'Template choice', r33: 'R', r16: 'R' }],
     why: 'Single Page builds your full site from our template; Footer-Only adds the FFC footer to a site you keep.',
-    how: "Pick one, or 'Not sure' and we recommend. Either way, six policy pages, prepared for you and branded to your organization (privacy, cookie, terms of service, your donation policy, vulnerability disclosure and security acknowledgements), go live with your public contact email and address; you accept them with a tickbox on the application.",
+    how: "Pick one, or 'Not sure' and we recommend. Either way, six policy pages, prepared for you and branded to your organization (privacy, cookie, terms of service, your donation policy, vulnerability disclosure and security acknowledgements), go live with your public contact email, city and state (and street address if you gave one); you accept them with a tickbox on the application.",
     links: ['/website-templates/', 'https://ffcadmin.org/guides/build-charity-site-from-template/'],
   },
   {
@@ -501,7 +511,7 @@ export const APPLICATION_FIELD_SECTIONS: ApplicationFieldSection[] = [
       { slug: 'idealist-url', label: 'Idealist page link', r33: 'R', r16: 'O' },
     ],
     why: 'Every 501(c)(3) site takes donations (Zeffy keeps 100% for the charity) and lists volunteer opportunities. Both are free.',
-    how: 'Create the Zeffy donation form and the Idealist page, then paste their links.',
+    how: `Create the Zeffy donation form and the Idealist page, then paste their links. ${PUBLIC_LINK_SENTENCE}`,
     optionalWhy:
       'Optional only for pre-501(c)(3) groups that cannot get them yet; required for 501(c)(3) charities.',
     links: [
@@ -687,6 +697,7 @@ export const APPLICATION_WORKSHEET: WorksheetGroup[] = [
       { label: 'Public phone', fields: ['public-phone'] },
       { label: 'Public email', fields: ['public-email'] },
       { label: 'City and state', fields: ['footer-location'] },
+      { label: 'Public street address (optional)', fields: ['footer-street-address'] },
     ],
   },
   {

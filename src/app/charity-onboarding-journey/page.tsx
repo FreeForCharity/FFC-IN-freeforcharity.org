@@ -3,6 +3,7 @@ import Link from 'next/link'
 import JourneyDiagram from '@/components/journey/JourneyDiagram'
 import HowItWorks from '@/components/application-guide/HowItWorks'
 import { GATE_SENTENCE, journeyStages } from '@/data/journey'
+import SupportStatement from '@/components/ui/SupportStatement'
 
 export const metadata = pageMetadata({
   title: 'Your Onboarding Journey',
@@ -102,7 +103,7 @@ export default function CharityOnboardingJourney() {
           <p>
             Support happens over email and text with real volunteers. We’re all volunteers, so there
             is no guaranteed response time; if a message seems to have fallen through, please nudge
-            us rather than wait. Everything you can prepare is on the{' '}
+            us rather than wait. <SupportStatement /> Everything you can prepare is on the{' '}
             <Link href="/getting-started-checklist/">getting-started checklist</Link>.
           </p>
         </div>

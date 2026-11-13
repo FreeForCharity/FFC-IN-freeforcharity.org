@@ -4,14 +4,15 @@ import Link from 'next/link'
 const MailingAddress: React.FC = () => (
   <>
     <p>
-      Your website footer shows only your city and state, never a street address. That protects
-      volunteers who would otherwise have to list their home, and it is all donors need to see that
-      you are a real, local organization.
+      Your footer always shows your city and state. If you give a public street address on the
+      application, we add it too. Use an office, commercial mailbox or registered-agent address,
+      never a volunteer’s home.
     </p>
     <p>
-      In the application’s footer location field, enter the city and state where your organization
-      is based. You may still want a mailing address for donor checks, state filings and official
-      mail. Here are the options, from least to most preferred.
+      The street address is optional: many charities have no public office, and city and state are
+      all donors need to see that you are a real, local organization. You may still want a mailing
+      address for donor checks, state filings and official mail. Here are the options, from least to
+      most preferred. Only the last three belong in your footer.
     </p>
 
     <h2>Mailing address options</h2>

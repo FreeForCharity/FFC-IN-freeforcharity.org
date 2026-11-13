@@ -103,10 +103,11 @@ const choices: ChoiceOutcome[] = [
     result: ({ currentTrack }) => (
       <div className="space-y-[12px]">
         <p>
-          US veterans organizations and other 501(c) types are welcome — veterans missions are one
-          of our priority categories. Use the <b>501(c)(3) application</b> and pick the organization
-          type that matches on the form (for example <i>US State Recognized Nonprofit</i>,{' '}
-          <i>US Not-For-Profit</i>, or <i>Other Charitable Organization</i>).
+          Veterans organizations are our next priority after food, water and shelter, and every
+          other kind of charity is welcome, including other 501(c) types. Use the{' '}
+          <b>501(c)(3) application</b> and pick the organization type that matches on the form (for
+          example <i>US State Recognized Nonprofit</i>, <i>US Not-For-Profit</i>, or{' '}
+          <i>Other Charitable Organization</i>).
         </p>
         <Verdict recommended="501c3" currentTrack={currentTrack} />
       </div>

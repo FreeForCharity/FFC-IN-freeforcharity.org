@@ -68,7 +68,7 @@ export const HELP_TOPICS: HelpTopic[] = [
     slug: 'mailing-address',
     title: 'Choosing a mailing address',
     summary:
-      'Why your footer shows only a city and state, and your options when you need a mailing address: PO box, commercial mailbox or registered agent.',
+      'Your footer always shows your city and state, and a public street address only if you give one. Your options for a mailing address: PO box, commercial mailbox, office or registered agent.',
     tracks: ['501c3', 'pre501c3'],
     sections: ['public-contact'],
   },

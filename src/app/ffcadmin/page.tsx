@@ -104,17 +104,6 @@ const sections: AdminSection[] = [
     ],
   },
   {
-    title: 'Intake help',
-    href: '/intake-help/',
-    blurb: 'What a charity needs to prepare during onboarding — the details we collect and why.',
-    links: [
-      { label: 'Getting 501(c)(3)', path: '/intake-help/getting-501c3/' },
-      { label: '501(c)(3) application', path: '/intake-help/501c3-application/' },
-      { label: 'Mission statement', path: '/intake-help/mission-statement/' },
-      { label: 'GuideStar / Candid', path: '/intake-help/guidestar-candid/' },
-    ],
-  },
-  {
     title: 'Legacy WordPress admin',
     href: '/legacy-wordpress-administration/',
     blurb: 'Runbooks for the legacy WordPress/cPanel stack still used by some existing sites.',

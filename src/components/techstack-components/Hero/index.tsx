@@ -2,6 +2,7 @@
 import React from 'react'
 import AdminGuideLink from '@/components/ui/AdminGuideLink'
 import { adminLinks, ffcAdminUrl } from '@/data/admin-links'
+import { SUPPORT_ESCALATION_SENTENCE } from '@/data/charity-terms'
 
 const UnderstandingHosting: React.FC = () => {
   return (
@@ -239,8 +240,7 @@ const UnderstandingHosting: React.FC = () => {
           that you have access to expert support at every level.
         </p>
         <p className="font-[400] text-[14px] text-[#666] leading-[26px] pb-[1em]">
-          NOTE: If your support ticket with Free For Charity has not been answered in 48 hours, text
-          the Founder Clarke Moyer directly at 520-222-8104
+          NOTE: {SUPPORT_ESCALATION_SENTENCE}
         </p>
       </div>
     </div>

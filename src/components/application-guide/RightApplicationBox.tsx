@@ -2,6 +2,7 @@ import React from 'react'
 import HelpMeChoose from '@/components/ui/HelpMeChoose'
 import { type Track } from '@/data/application-fields'
 import WrongTrackWarning from './WrongTrackWarning'
+import FocusStatement from '@/components/ui/FocusStatement'
 
 /** Who each application is for. The $1M revenue limit is a hard gate. */
 export const TRACK_CRITERIA: Record<Track, string[]> = {
@@ -37,6 +38,9 @@ const RightApplicationBox: React.FC<{ track: Track }> = ({ track }) => (
             <li key={c}>{c}</li>
           ))}
         </ul>
+        <p className="mb-[18px] text-[16px] leading-[25px] text-[#222]">
+          <FocusStatement variant={track === 'pre501c3' ? 'pre501c3' : 'full'} />
+        </p>
         <HelpMeChoose embedded currentTrack={track} />
       </div>
     </WrongTrackWarning>

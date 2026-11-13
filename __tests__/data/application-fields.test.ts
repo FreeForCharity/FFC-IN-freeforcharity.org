@@ -22,9 +22,9 @@ const allHrefs = APPLICATION_FIELD_SECTIONS.flatMap((s) =>
 const appDir = path.join(process.cwd(), 'src', 'app')
 
 describe('Application field guide data', () => {
-  it('covers all 95 WHMCS fields in 27 sections', () => {
+  it('covers all 96 WHMCS fields in 27 sections', () => {
     expect(APPLICATION_FIELD_SECTIONS).toHaveLength(27)
-    expect(allFields).toHaveLength(95)
+    expect(allFields).toHaveLength(96)
   })
 
   it('opens with the required read-help-page tickbox on both forms', () => {
@@ -82,6 +82,16 @@ describe('Application field guide data', () => {
       expect(['R', 'O', '-']).toContain(f.r16)
       expect(f.r33 === '-' && f.r16 === '-').toBe(false)
     }
+  })
+
+  it('offers the public street address as optional on both forms, after city and state', () => {
+    const section = APPLICATION_FIELD_SECTIONS.find((s) => s.id === 'public-contact')!
+    const slugs = section.fields.map((f) => f.slug)
+    expect(slugs.indexOf('footer-street-address')).toBe(slugs.indexOf('footer-location') + 1)
+    expect(section.fields.find((f) => f.slug === 'footer-street-address')).toEqual(
+      expect.objectContaining({ r33: 'O', r16: 'O' })
+    )
+    expect(textFor(section.how, '501c3')).toMatch(/never a volunteer’s home/)
   })
 
   it('keeps the officer LinkedIn anchor required on both forms', () => {

@@ -1,7 +1,11 @@
 import React from 'react'
 import Link from 'next/link'
 import { type Track } from '@/data/application-fields'
-import { POLICY_PAGES_SENTENCE } from '@/data/charity-terms'
+import {
+  ACCEPT_INVITATION_URL,
+  GITHUB_INVITE_SENTENCE,
+  POLICY_PAGES_SENTENCE,
+} from '@/data/charity-terms'
 import { linkClass, sectionH2 } from './styles'
 
 const cardClass = 'rounded-[10px] border border-[#e5e7eb] bg-white p-[16px]'
@@ -31,15 +35,25 @@ const AfterYouApply: React.FC<AfterYouApplyProps> = ({ track, children }) => (
           A volunteer builds your site from the content on your application; there is nothing else
           to send. Your maintainer accepts the GitHub invitation, and if you didn’t include a logo
           link, uploads your logo through the first “Add your logo” GitHub issue.{' '}
-          {POLICY_PAGES_SENTENCE}
+          {GITHUB_INVITE_SENTENCE}{' '}
+          <a
+            href={ACCEPT_INVITATION_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={linkClass}
+          >
+            How to accept the invitation
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>
+          . {POLICY_PAGES_SENTENCE}
         </p>
       </div>
       <div className={cardClass}>
         <h3 className={h3Class}>Your domain</h3>
         <p className={pClass}>
           Once you approve your preview, order your free .org (or a transfer) with the coupon from
-          your acceptance email. Checkout shows a $1 verification charge, and the coupon brings it
-          to $0. We register the domain, pay the renewals and handle all DNS: you never edit DNS.
+          your welcome email. Checkout shows a $1 verification charge, and the coupon brings it to
+          $0. We register the domain, pay the renewals and handle all DNS: you never edit DNS.
         </p>
       </div>
       <div className={cardClass}>
