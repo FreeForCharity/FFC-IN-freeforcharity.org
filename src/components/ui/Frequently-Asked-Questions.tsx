@@ -1,6 +1,4 @@
-'use client'
-
-import React, { useState, useRef } from 'react'
+import React from 'react'
 import Image from 'next/image'
 import { assetPath } from '@/lib/assetPath'
 
@@ -9,66 +7,49 @@ interface AccordionItemProps {
   children: React.ReactNode
 }
 
+// Built on native <details>/<summary> (Modern Web Guidance:
+// ui-components/accordion). The browser owns the open/closed state, exposes
+// it to assistive tech, handles the keyboard, and lets find-in-page and
+// #fragment links reach closed answers, so this needs no client JavaScript.
+// The open/close slide is CSS (.faq-details in globals.css).
 const FrequentlyAskedQuestions: React.FC<AccordionItemProps> = ({ title, children }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [height, setHeight] = useState('0px')
-  const contentRef = useRef<HTMLDivElement>(null)
-
-  const toggle = () => {
-    const next = !isOpen
-    setIsOpen(next)
-    if (contentRef.current) {
-      setHeight(next ? `${contentRef.current.scrollHeight}px` : '0px')
-    }
-  }
-
   return (
-    <div className="mb-5 overflow-hidden" data-font="lato-font">
-      {/* Header */}
-      <button
-        onClick={toggle}
-        className={`w-full px-4 py-3 flex items-center justify-between text-left cursor-pointer`}
-        aria-expanded={isOpen}
-      >
+    <details
+      className="faq-details group mb-5 border-b-[2px] border-[#B7B7B7]"
+      data-font="lato-font"
+    >
+      <summary className="w-full px-4 py-3 flex items-center justify-between text-left cursor-pointer list-none [&::-webkit-details-marker]:hidden">
         {/* Text takes remaining space */}
-        <span className={`font-[400] text-[20px] md:text-[32px] flex-1 pr-3`} data-font="lato-font">
+        <span className="font-[400] text-[20px] md:text-[32px] flex-1 pr-3" data-font="lato-font">
           {title}
         </span>
 
-        {/* Icon container with fixed width */}
-        <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
-          {isOpen ? (
-            <Image
-              src={assetPath('/Svgs/up-arrow.svg')}
-              alt="up arrow"
-              width={40}
-              height={13}
-            ></Image>
-          ) : (
-            <Image
-              src={assetPath('/Svgs/down-arrow.svg')}
-              alt="down arrow"
-              width={40}
-              height={16}
-            ></Image>
-          )}
+        {/* Decorative icon; the open state is announced from <details> itself */}
+        <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center" aria-hidden="true">
+          <Image
+            src={assetPath('/Svgs/down-arrow.svg')}
+            alt=""
+            width={40}
+            height={16}
+            className="group-open:hidden"
+          />
+          <Image
+            src={assetPath('/Svgs/up-arrow.svg')}
+            alt=""
+            width={40}
+            height={13}
+            className="hidden group-open:block"
+          />
         </span>
-      </button>
+      </summary>
 
-      {/* Content */}
       <div
-        className={`border-b-[2px] border-[#B7B7B7] overflow-hidden transition-all duration-800 ease-in-out`}
-        style={{ maxHeight: height }}
+        className="px-4 pb-4 pt-2 text-[#555555] text-[20px] md:text-[25px] font-[400]"
+        data-font="lato-font"
       >
-        <div
-          ref={contentRef}
-          className="px-4 pb-4 pt-2 transition-colors duration-300 text-[#555555] text-[20px] md:text-[25px] font-[400]"
-          data-font="lato-font"
-        >
-          {children}
-        </div>
+        {children}
       </div>
-    </div>
+    </details>
   )
 }
 

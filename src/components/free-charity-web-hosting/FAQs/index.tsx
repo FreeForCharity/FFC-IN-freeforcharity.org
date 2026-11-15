@@ -1,99 +1,64 @@
-'use client'
-import React, { useState, useRef } from 'react'
+import React from 'react'
 import SmartLink from '@/components/ui/SmartLink'
 import { FaPlus, FaMinus } from 'react-icons/fa'
 import { domainDonationTaxFaq, hostingBacklogFaq } from '@/data/faqs'
 
 /* ---------------------------------------------------
    Reusable AccordionItem Component (Styled)
+
+   Native <details>/<summary> (Modern Web Guidance: ui-components/accordion).
+   Items sharing a `name` form an exclusive group: opening one closes the
+   others, which the browser does without script (browsers that predate
+   <details name> simply allow several open at once). `defaultOpen` renders
+   the item open on first paint. No client JavaScript is needed.
 --------------------------------------------------- */
 interface AccordionItemProps {
   title: string
-  isOpen: boolean
-  onToggle: () => void
+  name?: string
+  defaultOpen?: boolean
   children: React.ReactNode
   small?: boolean // ✅ for bottom style
 }
 
 const AccordionItem: React.FC<AccordionItemProps> = ({
   title,
-  isOpen,
-  onToggle,
+  name,
+  defaultOpen = false,
   children,
   small = false,
 }) => {
-  const [height, setHeight] = useState('0px')
-  const [measured, setMeasured] = useState(false)
-  const contentRef = useRef<HTMLDivElement | null>(null)
-
-  // Ref callback measures the content the moment the node mounts so that
-  // items rendered open on first paint expand without a layout effect.
-  const measureRef = (node: HTMLDivElement | null) => {
-    contentRef.current = node
-    if (node && isOpen && !measured) {
-      setHeight(`${node.scrollHeight}px`)
-      setMeasured(true)
-    }
-  }
-
-  const handleToggle = () => {
-    const next = !isOpen
-    if (contentRef.current) {
-      setHeight(next ? `${contentRef.current.scrollHeight}px` : '0px')
-    }
-    onToggle()
-  }
-
   return (
-    <div className="mb-4 border-2 border-[#0567B1] rounded-[10px] overflow-hidden transition-all duration-300">
-      {/* Header */}
-      <button
-        onClick={handleToggle}
-        className={`w-full px-4 py-3 flex items-center justify-between text-left transition-all duration-300 cursor-pointer ${
-          isOpen ? 'bg-white/90' : 'bg-none'
-        }`}
-        aria-expanded={isOpen}
-      >
+    <details
+      name={name}
+      open={defaultOpen}
+      className="faq-details group mb-4 border-2 border-[#0567B1] rounded-[10px] overflow-hidden bg-white"
+    >
+      <summary className="w-full px-4 py-3 flex items-center justify-between text-left transition-all duration-300 cursor-pointer list-none [&::-webkit-details-marker]:hidden group-open:bg-white/90">
         <span
-          className={`flex-1 pr-3 font-[700] leading-[26px] transition-all duration-300 ease-in-out ${
-            small
-              ? `text-[18px] text-center ${isOpen ? 'text-[#0567B1]' : 'text-black'}`
-              : isOpen
-                ? 'text-[22px] text-[#0567B1]'
-                : 'text-[18px] text-black'
+          className={`flex-1 pr-3 font-[700] leading-[26px] transition-all duration-300 ease-in-out text-black group-open:text-[#0567B1] ${
+            small ? 'text-[18px] text-center' : 'text-[18px] group-open:text-[22px]'
           }`}
           data-font="cantata-font"
         >
           {title}
         </span>
 
-        <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
-          {isOpen ? (
-            <FaMinus className="w-5 h-5 text-white bg-[#1c6e92] p-1 rounded-full transition-transform duration-300" />
-          ) : (
-            <FaPlus className="w-5 h-5 text-white bg-[#1c6e92] p-1 rounded-full transition-transform duration-300" />
-          )}
+        {/* Decorative icon; the open state is announced from <details> itself */}
+        <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center" aria-hidden="true">
+          <FaPlus className="group-open:hidden w-5 h-5 text-white bg-[#1c6e92] p-1 rounded-full" />
+          <FaMinus className="hidden group-open:block w-5 h-5 text-white bg-[#1c6e92] p-1 rounded-full" />
         </span>
-      </button>
+      </summary>
 
-      {/* Content */}
       <div
-        className={`overflow-hidden transition-all duration-500 ease-in-out ${
-          isOpen ? 'bg-white/90' : 'bg-white'
+        className={`px-4 pb-4 pt-2 font-[500] ${
+          small ? 'text-[16px] leading-[26px]' : 'text-[18px] leading-[29px]'
         }`}
-        style={{ maxHeight: isOpen ? height : '0px' }}
+        data-font="raleway-font"
       >
-        <div
-          ref={measureRef}
-          className={`px-4 pb-4 pt-2 font-[500] transition-colors duration-300 ${
-            small ? 'text-[16px] leading-[26px]' : 'text-[18px] leading-[29px]'
-          }`}
-          data-font="raleway-font"
-        >
-          {children}
-        </div>
+        {children}
       </div>
-    </div>
+    </details>
   )
 }
 
@@ -101,18 +66,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
    Main Layout: Left, Right & Bottom Accordions
 --------------------------------------------------- */
 const AccordionLayout = () => {
-  const [openLeft, setOpenLeft] = useState<string | null>('left1')
-  const [openRight, setOpenRight] = useState<string | null>('right1')
-  const [bottomOpen, setBottomOpen] = useState(false)
-
-  const toggleLeft = (id: string) => {
-    setOpenLeft(openLeft === id ? null : id)
-  }
-
-  const toggleRight = (id: string) => {
-    setOpenRight(openRight === id ? null : id)
-  }
-
   return (
     <div className="py-[40px] flex flex-col items-center gap-6 px-[0px]">
       <div className="w-[90%] md:w-[80%] mx-auto max-w-[1080px]">
@@ -132,8 +85,8 @@ const AccordionLayout = () => {
             <div>
               <AccordionItem
                 title="How can you afford to give away free domain names?"
-                isOpen={openLeft === 'left1'}
-                onToggle={() => toggleLeft('left1')}
+                name="hosting-faq-left"
+                defaultOpen
               >
                 As a 501(c)3 charity ourselves we seek individual, business, and grant sources of
                 funding. At current, Free For Charity has not received a grant specifically for
@@ -141,11 +94,7 @@ const AccordionLayout = () => {
                 program.
               </AccordionItem>
 
-              <AccordionItem
-                title="Are you really a Charity?"
-                isOpen={openLeft === 'left2'}
-                onToggle={() => toggleLeft('left2')}
-              >
+              <AccordionItem title="Are you really a Charity?" name="hosting-faq-left">
                 Yes, We have had IRS designation since 2014 and have been building our systems and
                 testing or support for several years. While charities for charities are rare they do
                 exist and in fact fill an important need in reducing overhead expenses for other
@@ -170,8 +119,8 @@ const AccordionLayout = () => {
             <div>
               <AccordionItem
                 title="Where do you get your domain name packages?"
-                isOpen={openRight === 'right1'}
-                onToggle={() => toggleRight('right1')}
+                name="hosting-faq-right"
+                defaultOpen
               >
                 Domains are registered and managed directly at Cloudflare Registrar by Free For
                 Charity. Cloudflare offers domains at wholesale, at-cost pricing with no markup,
@@ -180,11 +129,7 @@ const AccordionLayout = () => {
                 domain out of the box.
               </AccordionItem>
 
-              <AccordionItem
-                title={hostingBacklogFaq.question}
-                isOpen={openRight === 'right2'}
-                onToggle={() => toggleRight('right2')}
-              >
+              <AccordionItem title={hostingBacklogFaq.question} name="hosting-faq-right">
                 {hostingBacklogFaq.backlog}
                 <br />
                 {hostingBacklogFaq.waysHeading}
@@ -207,12 +152,7 @@ const AccordionLayout = () => {
 
           {/* Bottom Independent Accordion */}
           <div className="w-full max-w-md mx-auto">
-            <AccordionItem
-              title={domainDonationTaxFaq.question}
-              isOpen={bottomOpen}
-              onToggle={() => setBottomOpen(!bottomOpen)}
-              small
-            >
+            <AccordionItem title={domainDonationTaxFaq.question} small>
               {domainDonationTaxFaq.answer}
             </AccordionItem>
           </div>
