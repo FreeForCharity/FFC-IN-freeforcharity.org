@@ -122,7 +122,7 @@ test.describe('Cookie Preferences Modal', () => {
     await page.getByRole('button', { name: 'Customize' }).click()
 
     // Modal should be visible
-    const modal = page.locator('[role="dialog"][aria-modal="true"]')
+    const modal = page.locator('dialog[open]')
     await expect(modal).toBeVisible()
 
     // Verify modal has the correct heading
@@ -144,7 +144,7 @@ test.describe('Cookie Preferences Modal', () => {
     // Open the preferences modal
     await page.getByRole('button', { name: 'Customize' }).click()
 
-    const modal = page.locator('[role="dialog"][aria-modal="true"]')
+    const modal = page.locator('dialog[open]')
     await expect(modal).toBeVisible()
 
     // Click Cancel
@@ -160,7 +160,7 @@ test.describe('Cookie Preferences Modal', () => {
     // Open the preferences modal
     await page.getByRole('button', { name: 'Customize' }).click()
 
-    const modal = page.locator('[role="dialog"][aria-modal="true"]')
+    const modal = page.locator('dialog[open]')
     await expect(modal).toBeVisible()
 
     // Press Escape
@@ -176,11 +176,11 @@ test.describe('Cookie Preferences Modal', () => {
     // Open the preferences modal
     await page.getByRole('button', { name: 'Customize' }).click()
 
-    const modal = page.locator('[role="dialog"][aria-modal="true"]')
+    const modal = page.locator('dialog[open]')
     await expect(modal).toBeVisible()
 
-    // Click on the overlay (outside the modal content)
-    await page.locator('[role="dialog"]').click({ position: { x: 10, y: 10 } })
+    // Click the backdrop, outside the dialog box (light dismiss)
+    await page.mouse.click(5, 5)
 
     // Modal should be hidden but banner should still be visible
     await expect(modal).not.toBeVisible()
@@ -194,7 +194,7 @@ test.describe('Cookie Preferences Modal', () => {
     // Open the preferences modal
     await page.getByRole('button', { name: 'Customize' }).click()
 
-    const modal = page.locator('[role="dialog"][aria-modal="true"]')
+    const modal = page.locator('dialog[open]')
     await expect(modal).toBeVisible()
 
     // Find disabled checkboxes by their section heading (more specific selector)
@@ -224,7 +224,7 @@ test.describe('Cookie Preferences Modal', () => {
     // Open the preferences modal
     await page.getByRole('button', { name: 'Customize' }).click()
 
-    const modal = page.locator('[role="dialog"][aria-modal="true"]')
+    const modal = page.locator('dialog[open]')
     await expect(modal).toBeVisible()
 
     // Find analytics toggle (the checkbox with aria-label)
@@ -248,7 +248,7 @@ test.describe('Cookie Preferences Modal', () => {
     // Open the preferences modal
     await page.getByRole('button', { name: 'Customize' }).click()
 
-    const modal = page.locator('[role="dialog"][aria-modal="true"]')
+    const modal = page.locator('dialog[open]')
     await expect(modal).toBeVisible()
 
     // Enable only analytics (not marketing) - use force: true because the toggle switch has an overlay div
@@ -291,9 +291,12 @@ test.describe('Cookie Consent Accessibility', () => {
     // Open the preferences modal
     await page.getByRole('button', { name: 'Customize' }).click()
 
-    const modal = page.locator('[role="dialog"]')
-    await expect(modal).toHaveAttribute('aria-modal', 'true')
+    // Native modal <dialog>: modality comes from showModal(), not attributes
+    const modal = page.locator('dialog[open]')
+    expect(await modal.evaluate((el) => el.matches(':modal'))).toBe(true)
+    await expect(modal).not.toHaveAttribute('aria-modal')
     await expect(modal).toHaveAttribute('aria-labelledby', 'cookie-preferences-title')
+    await expect(page.getByRole('dialog', { name: 'Cookie Preferences' })).toBeVisible()
   })
 
   test('banner should have proper ARIA attributes', async ({ page }) => {
