@@ -1,6 +1,4 @@
-'use client'
-
-import React, { useState, useRef } from 'react'
+import React from 'react'
 import { FaPlus, FaMinus } from 'react-icons/fa'
 
 interface AccordionItemProps {
@@ -9,65 +7,38 @@ interface AccordionItemProps {
   children: React.ReactNode
 }
 
+// Built on native <details>/<summary> (Modern Web Guidance:
+// ui-components/accordion). The browser owns the open/closed state, exposes
+// it to assistive tech, handles the keyboard, and keeps closed answers in the
+// HTML (Chromium also opens the matching answer for find-in-page), so this
+// needs no client JavaScript.
+// The open/close slide is CSS (.faq-details in globals.css).
 const AccordionItem: React.FC<AccordionItemProps> = ({ number, title, children }) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const [height, setHeight] = useState('0px')
-  const contentRef = useRef<HTMLDivElement>(null)
-
-  const toggle = () => {
-    const next = !isOpen
-    setIsOpen(next)
-    if (contentRef.current) {
-      setHeight(next ? `${contentRef.current.scrollHeight}px` : '0px')
-    }
-  }
-
   return (
-    <div className="mb-5 border-[6px] border-[#0C71C3] rounded-[25px] overflow-hidden">
-      {/* Header */}
-      <button
-        onClick={toggle}
-        className={`w-full px-4 py-3 flex items-center justify-between text-left transition-colors duration-300 cursor-pointer ${
-          isOpen ? 'bg-white/90' : 'bg-none'
-        }`}
-        aria-expanded={isOpen}
-      >
+    <details className="faq-details group mb-5 border-[6px] border-[#0C71C3] rounded-[25px] overflow-hidden">
+      <summary className="w-full px-4 py-3 flex items-center justify-between text-left transition-colors duration-300 cursor-pointer list-none [&::-webkit-details-marker]:hidden group-open:bg-white/90">
         {/* Text takes remaining space */}
         <span
-          className={`font-[500] text-[20px] md:text-[26px] flex-1 pr-3 transition-colors duration-300 ${
-            isOpen ? 'text-[#333]' : 'text-[#666]'
-          }`}
+          className="font-[500] text-[20px] md:text-[26px] flex-1 pr-3 transition-colors duration-300 text-[#666] group-open:text-[#333]"
           data-font="aria-font"
         >
           {number}.{title}
         </span>
 
-        {/* Icon container with fixed width */}
-        <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
-          {isOpen ? (
-            <FaMinus className="w-5 h-5 text-white bg-[#1c6e92] p-1 rounded-full transition-transform duration-300" />
-          ) : (
-            <FaPlus className="w-5 h-5 text-white bg-[#1c6e92] p-1 rounded-full transition-transform duration-300" />
-          )}
+        {/* Decorative icon; the open state is announced from <details> itself */}
+        <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center" aria-hidden="true">
+          <FaPlus className="group-open:hidden w-5 h-5 text-white bg-[#1c6e92] p-1 rounded-full" />
+          <FaMinus className="hidden group-open:block w-5 h-5 text-white bg-[#1c6e92] p-1 rounded-full" />
         </span>
-      </button>
+      </summary>
 
-      {/* Content */}
       <div
-        className={`overflow-hidden transition-all duration-800 ease-in-out ${
-          isOpen ? 'bg-white/90' : 'bg-white'
-        }`}
-        style={{ maxHeight: height }}
+        className="px-4 pb-4 pt-2 text-gray-700 text-[14px] font-[500] bg-white/90"
+        data-font="aria-font"
       >
-        <div
-          ref={contentRef}
-          className="px-4 pb-4 pt-2 text-gray-700 text-[14px] font-[500] transition-colors duration-300"
-          data-font="aria-font"
-        >
-          {children}
-        </div>
+        {children}
       </div>
-    </div>
+    </details>
   )
 }
 

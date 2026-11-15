@@ -16,7 +16,10 @@ test.describe('On-page "Help me choose" apply guide', () => {
   }) => {
     await page.goto('/help-for-charities/')
 
-    const guide = page.locator('details').filter({ hasText: 'Help me choose' }).first()
+    const guide = page
+      .locator('details')
+      .filter({ has: page.locator('summary', { hasText: 'Help me choose' }) })
+      .first()
     await guide.locator('summary').click()
     await guide.getByText('We have our IRS 501(c)(3) determination letter').click()
 
@@ -33,7 +36,10 @@ test.describe('On-page "Help me choose" apply guide', () => {
   test('non-US organizations get the TechSoup out-path in place', async ({ page }) => {
     await page.goto('/help-for-charities/')
 
-    const guide = page.locator('details').filter({ hasText: 'Help me choose' }).first()
+    const guide = page
+      .locator('details')
+      .filter({ has: page.locator('summary', { hasText: 'Help me choose' }) })
+      .first()
     await guide.locator('summary').click()
     await guide.getByText(/based outside the United States/).click()
 
@@ -47,7 +53,10 @@ test.describe('On-page "Help me choose" apply guide', () => {
   test('fiscally sponsored projects are told the sponsor must apply', async ({ page }) => {
     await page.goto('/help-for-charities/')
 
-    const guide = page.locator('details').filter({ hasText: 'Help me choose' }).first()
+    const guide = page
+      .locator('details')
+      .filter({ has: page.locator('summary', { hasText: 'Help me choose' }) })
+      .first()
     await guide.locator('summary').click()
     await guide.getByText(/a project under a fiscal sponsor/).click()
 
@@ -62,7 +71,10 @@ test.describe('On-page "Help me choose" apply guide', () => {
   test('veterans and other 501(c) types route into the 501(c)(3) application', async ({ page }) => {
     await page.goto('/help-for-charities/')
 
-    const guide = page.locator('details').filter({ hasText: 'Help me choose' }).first()
+    const guide = page
+      .locator('details')
+      .filter({ has: page.locator('summary', { hasText: 'Help me choose' }) })
+      .first()
     await guide.locator('summary').click()
     await guide.getByText(/veterans post or another 501\(c\) type/).click()
 
