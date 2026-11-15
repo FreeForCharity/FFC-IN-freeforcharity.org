@@ -188,6 +188,58 @@ test.describe('Cookie Preferences Modal', () => {
     await expect(banner).toBeVisible()
   })
 
+  for (const [how, close] of [
+    [
+      'Cancel',
+      async (page: import('@playwright/test').Page) =>
+        page.getByRole('button', { name: 'Cancel' }).click(),
+    ],
+    ['Escape', async (page: import('@playwright/test').Page) => page.keyboard.press('Escape')],
+    ['a backdrop click', async (page: import('@playwright/test').Page) => page.mouse.click(5, 5)],
+  ] as const) {
+    test(`closing with ${how} discards unsaved toggles`, async ({ page }) => {
+      await page.getByRole('button', { name: 'Customize' }).click()
+      const modal = page.locator('dialog[open]')
+      const analyticsToggle = modal.getByRole('checkbox', { name: 'Enable analytics cookies' })
+      await analyticsToggle.click({ force: true })
+      await expect(analyticsToggle).toBeChecked()
+
+      await close(page)
+      await expect(modal).not.toBeVisible()
+      expect(await page.evaluate(() => localStorage.getItem('cookie-consent'))).toBeNull()
+
+      await page.getByRole('button', { name: 'Customize' }).click()
+      await expect(
+        page.locator('dialog[open]').getByRole('checkbox', { name: 'Enable analytics cookies' })
+      ).not.toBeChecked()
+    })
+  }
+
+  test('closes on a full backdrop click through the script fallback when closedby is missing', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      delete (HTMLDialogElement.prototype as unknown as Record<string, unknown>).closedBy
+    })
+    await page.reload()
+    expect(await page.evaluate(() => 'closedBy' in HTMLDialogElement.prototype)).toBe(false)
+    await page.getByRole('button', { name: 'Customize' }).click()
+    const modal = page.locator('dialog[open]')
+    await expect(modal).toBeVisible()
+
+    // A drag that starts inside the dialog and ends on the backdrop keeps it open.
+    const box = await modal.boundingBox()
+    if (!box) throw new Error('dialog has no box')
+    await page.mouse.move(box.x + 20, box.y + 20)
+    await page.mouse.down()
+    await page.mouse.move(5, 5, { steps: 5 })
+    await page.mouse.up()
+    await expect(modal).toBeVisible()
+
+    await page.mouse.click(5, 5)
+    await expect(modal).not.toBeVisible()
+  })
+
   test('should have necessary and functional cookies always checked and disabled', async ({
     page,
   }) => {

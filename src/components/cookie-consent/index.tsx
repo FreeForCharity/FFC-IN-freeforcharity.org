@@ -13,6 +13,7 @@ import {
   isAutomatedBrowser,
 } from '@/lib/analytics-config'
 import { updateGoogleConsent, type ConsentPreferences } from '@/lib/consent-mode'
+import { useDialogLightDismiss } from '@/lib/useDialogLightDismiss'
 
 // The Window globals (dataLayer, gtag, openCookiePreferences) are declared
 // once in @/lib/analytics-events so every caller shares one typed queue.
@@ -565,26 +566,18 @@ export default function CookieConsent() {
 
   // Every close that is not "Save" (Escape, back gesture, backdrop click,
   // Cancel) discards unsaved toggles, exactly as Cancel always did.
-  const handleDialogClose = useCallback(() => {
-    const dialog = dialogRef.current
-    const saved = dialog?.returnValue === 'save'
-    if (dialog) dialog.returnValue = ''
-    if (!saved) handleCancelPreferences()
-  }, [handleCancelPreferences])
+  const handleDialogClose = useCallback(
+    (event: React.SyntheticEvent<HTMLDialogElement>) => {
+      const dialog = event.currentTarget
+      const saved = dialog.returnValue === 'save'
+      dialog.returnValue = ''
+      if (!saved) handleCancelPreferences()
+    },
+    [handleCancelPreferences]
+  )
 
-  // Light dismiss fallback for browsers without <dialog closedby="any">
-  // (Safari): close when the click lands on the backdrop, outside the box.
-  const handleDialogClick = (event: React.MouseEvent<HTMLDialogElement>) => {
-    const dialog = dialogRef.current
-    if (!dialog || event.target !== dialog) return
-    const rect = dialog.getBoundingClientRect()
-    const inside =
-      event.clientX >= rect.left &&
-      event.clientX <= rect.right &&
-      event.clientY >= rect.top &&
-      event.clientY <= rect.bottom
-    if (!inside) dialog.close()
-  }
+  // Backdrop-click fallback for browsers without <dialog closedby="any">.
+  const lightDismiss = useDialogLightDismiss(dialogRef)
 
   const handleAcceptAll = () => {
     const allAccepted: CookiePreferences = {
@@ -666,7 +659,7 @@ export default function CookieConsent() {
         {...{ closedby: 'any' }}
         aria-labelledby="cookie-preferences-title"
         onClose={handleDialogClose}
-        onClick={handleDialogClick}
+        {...lightDismiss}
         className="m-auto p-0 bg-white rounded-lg shadow-2xl max-w-2xl w-[calc(100%-2rem)] max-h-[90vh] overflow-y-auto"
       >
         <div>
