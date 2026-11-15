@@ -31,7 +31,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
     <details
       name={name}
       open={defaultOpen}
-      className="faq-details group mb-4 border-2 border-[#0567B1] rounded-[10px] overflow-hidden bg-white"
+      className="faq-details group mb-4 border-2 border-[#0567B1] rounded-[10px] overflow-hidden"
     >
       <summary className="w-full px-4 py-3 flex items-center justify-between text-left transition-all duration-300 cursor-pointer list-none [&::-webkit-details-marker]:hidden group-open:bg-white/90">
         <span
@@ -51,7 +51,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
       </summary>
 
       <div
-        className={`px-4 pb-4 pt-2 font-[500] ${
+        className={`px-4 pb-4 pt-2 font-[500] bg-white/90 ${
           small ? 'text-[16px] leading-[26px]' : 'text-[18px] leading-[29px]'
         }`}
         data-font="raleway-font"

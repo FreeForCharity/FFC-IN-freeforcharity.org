@@ -9,8 +9,9 @@ interface AccordionItemProps {
 
 // Built on native <details>/<summary> (Modern Web Guidance:
 // ui-components/accordion). The browser owns the open/closed state, exposes
-// it to assistive tech, handles the keyboard, and lets find-in-page and
-// #fragment links reach closed answers, so this needs no client JavaScript.
+// it to assistive tech, handles the keyboard, and keeps closed answers in the
+// HTML (Chromium also opens the matching answer for find-in-page), so this
+// needs no client JavaScript.
 // The open/close slide is CSS (.faq-details in globals.css).
 const FrequentlyAskedQuestions: React.FC<AccordionItemProps> = ({ title, children }) => {
   return (

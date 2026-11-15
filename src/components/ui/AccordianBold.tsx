@@ -9,12 +9,13 @@ interface AccordionItemProps {
 
 // Built on native <details>/<summary> (Modern Web Guidance:
 // ui-components/accordion). The browser owns the open/closed state, exposes
-// it to assistive tech, handles the keyboard, and lets find-in-page and
-// #fragment links reach closed answers, so this needs no client JavaScript.
+// it to assistive tech, handles the keyboard, and keeps closed answers in the
+// HTML (Chromium also opens the matching answer for find-in-page), so this
+// needs no client JavaScript.
 // The open/close slide is CSS (.faq-details in globals.css).
 const AccordionItem: React.FC<AccordionItemProps> = ({ number, title, children }) => {
   return (
-    <details className="faq-details group mb-5 border-[6px] border-[#0C71C3] rounded-[25px] overflow-hidden bg-white">
+    <details className="faq-details group mb-5 border-[6px] border-[#0C71C3] rounded-[25px] overflow-hidden">
       <summary className="w-full px-4 py-3 flex items-center justify-between text-left transition-colors duration-300 cursor-pointer list-none [&::-webkit-details-marker]:hidden group-open:bg-white/90">
         {/* Text takes remaining space */}
         <span
@@ -31,7 +32,10 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ number, title, children }
         </span>
       </summary>
 
-      <div className="px-4 pb-4 pt-2 text-gray-700 text-[14px] font-[500]" data-font="aria-font">
+      <div
+        className="px-4 pb-4 pt-2 text-gray-700 text-[14px] font-[500] bg-white/90"
+        data-font="aria-font"
+      >
         {children}
       </div>
     </details>
