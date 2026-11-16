@@ -31,10 +31,6 @@ const customJestConfig = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@sentry/nextjs$': '<rootDir>/__mocks__/sentry-nextjs.js',
     '\\.(svg|png|jpg|jpeg|gif|webp|ico)$': '<rootDir>/__mocks__/fileMock.js',
-    '^swiper/react$': '<rootDir>/__mocks__/swiper/react.js',
-    '^swiper/modules$': '<rootDir>/__mocks__/fileMock.js',
-    '^swiper/css.*$': '<rootDir>/__mocks__/fileMock.js',
-    '^swiper$': '<rootDir>/__mocks__/fileMock.js',
   },
 }
 
