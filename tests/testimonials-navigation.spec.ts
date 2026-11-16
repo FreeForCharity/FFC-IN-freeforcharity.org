@@ -102,13 +102,22 @@ async function waitForScrollToLand(page: Page) {
 }
 
 /**
- * Advance the fake clock by `ms`, half a second at a time, letting any smooth
- * scroll land before jumping the clock again. Half a second is well inside
- * the 1.5 s settle timer, so no jump can carry the clock past it mid-scroll.
+ * Advance the fake clock by `ms`, at most half a second at a time, letting any
+ * smooth scroll land before jumping the clock again. Half a second is well
+ * inside the 1.5 s settle timer, so no jump can carry the clock past it
+ * mid-scroll.
+ *
+ * The fake clock also runs at real speed between jumps, so the target is a
+ * fixed fake time read from the page, not a sum of jumps: otherwise the time
+ * spent waiting for scrolls would add up across ticks, and on a slow runner a
+ * tick would let the carousel rotate twice.
  */
 async function tick(page: Page, ms: number) {
-  for (let done = 0; done < ms; done += 500) {
-    await page.clock.runFor(Math.min(500, ms - done))
+  const end = (await page.evaluate(() => Date.now())) + ms
+  for (;;) {
+    const left = end - (await page.evaluate(() => Date.now()))
+    if (left <= 0) return
+    await page.clock.runFor(Math.min(500, left))
     await waitForScrollToLand(page)
   }
 }
