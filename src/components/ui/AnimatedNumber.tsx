@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 
 /**
  * Props for the AnimatedNumber component.
@@ -24,9 +25,10 @@ const DURATION_MS = 1500
  * library.
  *
  * The real value is what renders on the server and without JavaScript, so
- * search engines and a slow first load never see "0". Screen readers always
- * get the real value from a visually hidden copy; the counting digits are
- * hidden from them. The count-up only runs for a number that is still below
+ * search engines and a slow first load never see "0". While the digits are
+ * below or counting toward the value, screen readers get the real value from
+ * a visually hidden copy instead; once settled, there is one plain number, so
+ * copying or searching the page finds it once. The count-up only runs for a number that is still below
  * the fold when the page loads, and never for visitors who ask for reduced
  * motion. Printing shows the real value too.
  */
@@ -60,22 +62,34 @@ const AnimatedNumber: React.FC<AnimatedNumberProps> = ({ value, className = '', 
     frame = requestAnimationFrame(() => setDisplayValue(0))
     observer.observe(element)
     // A page printed before the number scrolled into view shows the value.
-    const showValue = () => {
+    const stop = () => {
       observer.disconnect()
       cancelAnimationFrame(frame)
-      setDisplayValue(value)
     }
-    window.addEventListener('beforeprint', showValue)
+    // Render synchronously: the browser lays out the printout right after
+    // this event returns.
+    const showValueForPrint = () => {
+      stop()
+      flushSync(() => setDisplayValue(value))
+    }
+    window.addEventListener('beforeprint', showValueForPrint)
     return () => {
-      window.removeEventListener('beforeprint', showValue)
-      showValue()
+      window.removeEventListener('beforeprint', showValueForPrint)
+      stop()
+      setDisplayValue(value)
     }
   }, [value])
 
   return (
     <span ref={ref} className={className} id={id}>
-      <span aria-hidden="true">{displayValue}</span>
-      <span className="sr-only">{value}</span>
+      {displayValue === value ? (
+        value
+      ) : (
+        <>
+          <span aria-hidden="true">{displayValue}</span>
+          <span className="sr-only">{value}</span>
+        </>
+      )}
     </span>
   )
 }
