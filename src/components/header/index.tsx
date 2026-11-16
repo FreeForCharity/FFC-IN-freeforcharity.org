@@ -109,9 +109,11 @@ const Header: React.FC = () => {
   const { sentinelRef, scrolledPast: isScrolled } = useScrolledPast(SHRINK_AFTER)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  // A dropdown shows while the mouse is over its item (hoveredDropdown) or
-  // after its submenu button was pressed (activeDropdown). Keeping the two
-  // apart means a click on the button never hides a menu the mouse just opened.
+  // A dropdown shows while a mouse pointer is over its item (hoveredDropdown)
+  // or after its submenu button was pressed (activeDropdown). Hover only
+  // counts for a real mouse: a touch tap also fires mouse-compatibility
+  // events, which would otherwise open the menu on touch and let the same
+  // tap's click close it again.
   const [activeDropdown, setActiveDropdown] = useState<number | null>(null)
   const [hoveredDropdown, setHoveredDropdown] = useState<number | null>(null)
   const pathname = usePathname()
@@ -199,8 +201,15 @@ const Header: React.FC = () => {
                           <li
                             key={index}
                             className="relative py-6"
-                            onMouseEnter={() => setHoveredDropdown(index)}
-                            onMouseLeave={() => {
+                            onPointerEnter={(event) => {
+                              if (event.pointerType !== 'mouse') return
+                              setHoveredDropdown(index)
+                              // Only one dropdown at a time: hovering another item
+                              // closes one opened from its button.
+                              setActiveDropdown((open) => (open === index ? open : null))
+                            }}
+                            onPointerLeave={(event) => {
+                              if (event.pointerType !== 'mouse') return
                               setHoveredDropdown(null)
                               setActiveDropdown((open) => (open === index ? null : open))
                             }}
@@ -208,19 +217,21 @@ const Header: React.FC = () => {
                             onKeyDown={item.hasDropdown ? closeOnEscape(index) : undefined}
                           >
                             <div className="flex items-center">
-                              <Link
-                                href={item.path}
-                                onClick={handleLinkClick}
-                                className={`flex items-center py-2 text-[14px] transition-colors duration-200 ${
-                                  item.hasDropdown ? 'pl-3' : 'px-3'
-                                } ${
-                                  item.isActive
-                                    ? 'text-blue-600'
-                                    : 'text-gray-600 hover:text-gray-500'
-                                }`}
-                              >
-                                {item.label}
-                              </Link>
+                              {item.path !== '#' && (
+                                <Link
+                                  href={item.path}
+                                  onClick={handleLinkClick}
+                                  className={`flex items-center py-2 text-[14px] transition-colors duration-200 ${
+                                    item.hasDropdown ? 'pl-3' : 'px-3'
+                                  } ${
+                                    item.isActive
+                                      ? 'text-blue-600'
+                                      : 'text-gray-600 hover:text-gray-500'
+                                  }`}
+                                >
+                                  {item.label}
+                                </Link>
+                              )}
                               {item.hasDropdown && (
                                 // Disclosure button so keyboard and touch users can
                                 // open the submenu (Modern Web Guidance:
@@ -232,19 +243,26 @@ const Header: React.FC = () => {
                                   }}
                                   aria-expanded={isOpen}
                                   aria-controls={submenuId}
-                                  aria-label={`${item.label} submenu`}
+                                  // "Other" has no page of its own, so its button
+                                  // carries the visible label instead of a link.
+                                  aria-label={
+                                    item.path === '#' ? undefined : `${item.label} submenu`
+                                  }
                                   onClick={() =>
                                     setActiveDropdown(activeDropdown === index ? null : index)
                                   }
-                                  className={`flex items-center pl-1 pr-3 py-2 transition-colors duration-200 ${
+                                  className={`flex items-center ${
+                                    item.path === '#' ? 'pl-3' : 'pl-1'
+                                  } pr-3 py-2 text-[14px] transition-colors duration-200 ${
                                     item.isActive
                                       ? 'text-blue-600'
                                       : 'text-gray-600 hover:text-gray-500'
                                   }`}
                                 >
+                                  {item.path === '#' && item.label}
                                   <FiChevronDown
                                     aria-hidden="true"
-                                    className={`mt-[3px] h-4 w-4 transition-transform duration-200 ${
+                                    className={`${item.path === '#' ? 'ml-1 ' : ''}mt-[3px] h-4 w-4 transition-transform duration-200 ${
                                       isOpen ? 'rotate-180' : ''
                                     }`}
                                   />
@@ -351,17 +369,25 @@ const Header: React.FC = () => {
                 {memoizedMenuItems.map((item, index) => {
                   return (
                     <li key={index}>
-                      <Link
-                        href={item.path}
-                        onClick={handleLinkClick}
-                        className={`block px-4 py-2 rounded-lg text-sm font-[600] ${
-                          item.isActive
-                            ? 'bg-blue-50 text-blue-600'
-                            : 'text-gray-700 hover:bg-gray-100'
-                        }`}
-                      >
-                        {item.label}
-                      </Link>
+                      {item.path === '#' ? (
+                        // "Other" has no page of its own: a plain heading for
+                        // its links, not a link that goes nowhere.
+                        <span className="block px-4 py-2 text-sm font-[600] text-gray-700">
+                          {item.label}
+                        </span>
+                      ) : (
+                        <Link
+                          href={item.path}
+                          onClick={handleLinkClick}
+                          className={`block px-4 py-2 rounded-lg text-sm font-[600] ${
+                            item.isActive
+                              ? 'bg-blue-50 text-blue-600'
+                              : 'text-gray-700 hover:bg-gray-100'
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      )}
                       {item.hasDropdown && (
                         <ul className="ml-4 mt-1">
                           {item.dropdownItems?.map((dropItem, dropIndex) => {

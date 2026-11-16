@@ -514,7 +514,7 @@ describe('Navigation', () => {
   it('desktop Help for Charities dropdown: the two application pages are the doors', () => {
     const { container } = render(<Header />)
     const desktop = container.querySelector('nav')!
-    fireEvent.mouseEnter(within(desktop).getByText('Help for Charities').closest('li')!)
+    fireEvent.click(within(desktop).getByRole('button', { name: 'Help for Charities submenu' }))
     expectDoors(desktop)
   })
 

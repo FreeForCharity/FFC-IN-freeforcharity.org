@@ -169,7 +169,9 @@ test.describe('Desktop Dropdown Menus from the keyboard', () => {
     await expect(dropdown).toBeHidden()
   })
 
-  test('clicking the submenu button opens the dropdown and keeps it open', async ({ page }) => {
+  test('a mouse click on the submenu button does not close the hover-opened dropdown', async ({
+    page,
+  }) => {
     const toggle = page.getByRole('button', { name: 'Donate submenu' })
     const menuItem = page
       .locator('header nav li')
@@ -177,14 +179,51 @@ test.describe('Desktop Dropdown Menus from the keyboard', () => {
       .first()
     const dropdown = menuItem.locator('div.absolute')
 
-    // The mouse opens it on the way to the button; the click must not hide it.
+    // The pointer opens it on the way to the button; the click must not hide it.
     await toggle.click()
     await expect(dropdown).toBeVisible()
     await expect(toggle).toHaveAttribute('aria-expanded', 'true')
 
-    // A second press of the button from the keyboard closes it.
-    await toggle.press('Enter')
+    // Moving the mouse away still closes it, as before.
     await page.locator('header a[href="/"]').first().hover()
     await expect(dropdown).toBeHidden()
+  })
+
+  test('only one dropdown is open at a time', async ({ page }) => {
+    await page.getByRole('button', { name: 'Help for Charities submenu' }).focus()
+    await page.keyboard.press('Enter')
+    await page
+      .locator('header nav li')
+      .filter({ hasText: /^Donate/ })
+      .first()
+      .hover()
+    await expect(page.locator('header nav div.absolute')).toHaveCount(1)
+    await expect(page.getByRole('button', { name: 'Help for Charities submenu' })).toHaveAttribute(
+      'aria-expanded',
+      'false'
+    )
+  })
+
+  test('"Other" is a button that opens its links, not a link to "#"', async ({ page }) => {
+    const nav = page.getByRole('navigation', { name: 'Primary navigation' })
+    await expect(nav.locator('a[href="#"]')).toHaveCount(0)
+    const other = nav.getByRole('button', { name: 'Other', exact: true })
+    await other.focus()
+    await page.keyboard.press('Enter')
+    await expect(other).toHaveAttribute('aria-expanded', 'true')
+    await expect(nav.getByRole('link', { name: 'Free For Charity Domains' })).toBeVisible()
+  })
+})
+
+test.describe('Desktop Dropdown Menus on a touch screen', () => {
+  test.use({ hasTouch: true, viewport: { width: 1024, height: 768 } })
+
+  test('tapping the submenu button opens and closes the dropdown', async ({ page }) => {
+    await page.goto('/')
+    const toggle = page.getByRole('button', { name: 'Donate submenu' })
+    await toggle.tap()
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    await toggle.tap()
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false')
   })
 })
