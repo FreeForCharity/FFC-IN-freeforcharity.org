@@ -46,7 +46,6 @@ For a complete list, see the [Site Map](#site-map) section below.
   - Framer Motion 12.40 (animations)
   - Lucide React 0.575 (icons)
   - React Icons 5.6 (additional icons)
-  - Swiper 12.2 (carousels)
 - **Testing**: Playwright 1.60 (E2E) + Jest 30 with React Testing Library & jest-axe (unit/component/a11y)
 - **Linting**: ESLint 9 with Next.js config
 - **Build**: Static export (`output: export`) deployed to cPanel; also previewable on GitHub Pages staging
