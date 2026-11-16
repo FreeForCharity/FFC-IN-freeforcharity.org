@@ -69,14 +69,19 @@ for (const viewport of [
 
 /**
  * Advance the fake clock, then keep it moving in small steps so a smooth
- * scroll the rotation started can finish: with the clock faked, Chromium's
- * scroll animation only progresses as the clock does.
+ * scroll the rotation started can finish.
+ *
+ * The scroll itself runs on real time, while the carousel's 1.5 s "the
+ * scroll never arrived" timer runs on the fake clock. So the steps let more
+ * real time pass than fake time: if the fake clock outran the scroll, that
+ * timer would fire mid-scroll on a slow CI runner, read the slide the scroll
+ * had not yet left, and put the carousel back on it.
  */
 async function tick(page: Page, ms: number) {
   await page.clock.runFor(ms)
-  for (let i = 0; i < 30; i++) {
-    await page.clock.runFor(50)
-    await page.waitForTimeout(20)
+  for (let i = 0; i < 40; i++) {
+    await page.clock.runFor(25)
+    await page.waitForTimeout(50)
   }
 }
 
