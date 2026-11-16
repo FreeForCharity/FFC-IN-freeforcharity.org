@@ -133,6 +133,24 @@ body {
   animation: fadeRight 1s cubic-bezier(0.77, 0, 0.175, 1) 1;
 }
 
+/* Mobile menu entrance (replaces framer-motion). Skipped for visitors who
+   ask for reduced motion. */
+@keyframes menuExpand {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .animate-menuExpand {
+    animation: menuExpand 0.25s ease-out;
+  }
+}
+
 /* Utilities aligned to Figma */
 .ffc-container {
   max-width: var(--container);
