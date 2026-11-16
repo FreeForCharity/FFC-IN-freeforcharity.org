@@ -2,17 +2,8 @@
 
 import React from 'react'
 import EducationalSitesCard from '@/components/ui/EducationalSitesCard'
-import { motion, Variants } from 'framer-motion'
+import Reveal from '@/components/ui/Reveal'
 import { assetPath } from '@/lib/assetPath'
-
-const cardVariants: Variants = {
-  offscreen: { opacity: 0, scale: 0.8 },
-  onscreen: {
-    opacity: 1,
-    scale: 1,
-    transition: { type: 'spring', bounce: 0.3, duration: 0.6 },
-  },
-}
 
 const index = () => {
   const firstGrid = [
@@ -63,30 +54,18 @@ const index = () => {
       {/* First Grid */}
       <div className="py-[27px] w-[90%] lg:w-[80%] mx-auto max-w-[1080px] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[20px] lg:gap-[60px] items-start">
         {firstGrid.map((card, idx) => (
-          <motion.div
-            key={idx}
-            initial="offscreen"
-            whileInView="onscreen"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={cardVariants}
-          >
+          <Reveal key={idx}>
             <EducationalSitesCard {...card} />
-          </motion.div>
+          </Reveal>
         ))}
       </div>
 
       {/* Second Grid */}
       <div className="py-[27px] w-[90%] md:w-[70%] lg:w-[50%] mx-auto max-w-[1080px] grid grid-cols-1 sm:grid-cols-2 gap-[20px] lg:gap-[60px] items-start">
         {secondGrid.map((card, idx) => (
-          <motion.div
-            key={idx}
-            initial="offscreen"
-            whileInView="onscreen"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={cardVariants}
-          >
+          <Reveal key={idx}>
             <EducationalSitesCard {...card} />
-          </motion.div>
+          </Reveal>
         ))}
       </div>
     </div>

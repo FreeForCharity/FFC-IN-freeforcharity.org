@@ -71,6 +71,16 @@ test.describe('Results Animated Numbers', () => {
     await expect(firstCardNumber).toContainText('376')
   })
 
+  test('without JavaScript the real numbers show, never 0', async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false })
+    const page = await context.newPage()
+    await page.goto('/')
+    await expect(getResultCard(page, 'Charity domains under management').locator('h1')).toHaveText(
+      '376'
+    )
+    await context.close()
+  })
+
   test('should display correct descriptions for each statistic', async ({ page }) => {
     // Navigate to the homepage
     await page.goto('/')
