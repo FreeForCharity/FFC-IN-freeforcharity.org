@@ -125,3 +125,66 @@ test.describe('Desktop Dropdown Menus', () => {
     await expect(dropdown).toBeHidden()
   })
 })
+
+test.describe('Desktop Dropdown Menus from the keyboard', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/')
+  })
+
+  test('the submenu button opens the dropdown, Escape closes it and returns focus', async ({
+    page,
+  }) => {
+    const menuItem = page.locator('header nav li').filter({ hasText: 'Help for Charities' })
+    const toggle = page.getByRole('button', { name: 'Help for Charities submenu' })
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+
+    await toggle.focus()
+    await page.keyboard.press('Enter')
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    const dropdown = menuItem.locator('div.absolute')
+    await expect(dropdown).toBeVisible()
+    await expect(toggle).toHaveAttribute('aria-controls', (await dropdown.getAttribute('id'))!)
+
+    // Tab moves into the submenu links.
+    await page.keyboard.press('Tab')
+    await expect(dropdown.locator('a').first()).toBeFocused()
+
+    await page.keyboard.press('Escape')
+    await expect(dropdown).toBeHidden()
+    await expect(toggle).toBeFocused()
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  test('tabbing past the last submenu link closes the dropdown', async ({ page }) => {
+    const menuItem = page.locator('header nav li').filter({ hasText: 'About Us' })
+    const toggle = page.getByRole('button', { name: 'About Us submenu' })
+    await toggle.focus()
+    await page.keyboard.press('Enter')
+    const dropdown = menuItem.locator('div.absolute')
+    await expect(dropdown).toBeVisible()
+
+    await page.keyboard.press('Tab') // Contact Us, the only item
+    await expect(dropdown.getByRole('link', { name: 'Contact Us' })).toBeFocused()
+    await page.keyboard.press('Tab') // leaves the About Us item
+    await expect(dropdown).toBeHidden()
+  })
+
+  test('clicking the submenu button opens the dropdown and keeps it open', async ({ page }) => {
+    const toggle = page.getByRole('button', { name: 'Donate submenu' })
+    const menuItem = page
+      .locator('header nav li')
+      .filter({ hasText: /^Donate/ })
+      .first()
+    const dropdown = menuItem.locator('div.absolute')
+
+    // The mouse opens it on the way to the button; the click must not hide it.
+    await toggle.click()
+    await expect(dropdown).toBeVisible()
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+
+    // A second press of the button from the keyboard closes it.
+    await toggle.press('Enter')
+    await page.locator('header a[href="/"]').first().hover()
+    await expect(dropdown).toBeHidden()
+  })
+})

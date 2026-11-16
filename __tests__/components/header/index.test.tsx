@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Header from '@/components/header'
 
@@ -73,19 +73,45 @@ describe('Header Component', () => {
     expect(screen.queryByPlaceholderText('Search...')).not.toBeInTheDocument()
   })
 
-  it('adds scrolled class when window is scrolled past 50px', () => {
-    render(<Header />)
+  it('shrinks the header once the top-of-page sentinel leaves the viewport', () => {
+    // The header uses an IntersectionObserver on a sentinel, not a scroll
+    // listener. Capture the callback of the observer that watches the sentinel
+    // (next/link creates observers of its own for prefetching).
+    let sentinelCallback: IntersectionObserverCallback | undefined
+    const original = global.IntersectionObserver
+    global.IntersectionObserver = class {
+      constructor(private callback: IntersectionObserverCallback) {}
+      observe(target: Element) {
+        if (target.nextElementSibling?.id === 'header') sentinelCallback = this.callback
+      }
+      unobserve() {}
+      disconnect() {}
+      takeRecords() {
+        return []
+      }
+    } as unknown as typeof IntersectionObserver
 
-    const headerElement = screen.getByRole('banner')
-    // Initially height is 80px (h-[80px])
-    expect(headerElement).toHaveClass('h-[80px]')
+    try {
+      render(<Header />)
+      const headerElement = screen.getByRole('banner')
+      expect(headerElement).toHaveClass('h-[80px]')
+      expect(sentinelCallback).toBeDefined()
+      const report = (isIntersecting: boolean) =>
+        act(() =>
+          sentinelCallback!(
+            [{ isIntersecting } as IntersectionObserverEntry],
+            {} as IntersectionObserver
+          )
+        )
 
-    // Simulate scroll
-    Object.defineProperty(window, 'scrollY', { value: 100, configurable: true })
-    fireEvent.scroll(window)
+      report(false)
+      expect(headerElement).toHaveClass('h-[55px]')
+      expect(headerElement).not.toHaveClass('h-[80px]')
 
-    // After scroll, height should be 55px (h-[55px])
-    expect(headerElement).toHaveClass('h-[55px]')
-    expect(headerElement).not.toHaveClass('h-[80px]')
+      report(true)
+      expect(headerElement).toHaveClass('h-[80px]')
+    } finally {
+      global.IntersectionObserver = original
+    }
   })
 })

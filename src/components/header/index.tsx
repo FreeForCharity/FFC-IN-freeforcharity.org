@@ -1,14 +1,14 @@
 'use client'
 
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useMemo, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FiMenu, FiChevronDown } from 'react-icons/fi'
 import { LiaSearchSolid } from 'react-icons/lia'
 import { RxCross2 } from 'react-icons/rx'
-import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
 import { assetPath } from '@/lib/assetPath'
+import { useScrolledPast } from '@/hooks/useScrolledPast'
 
 interface DropdownItem {
   label: string
@@ -102,18 +102,20 @@ const menuItems: MenuItem[] = [
   },
 ]
 
+// The header shrinks once the page has scrolled this far.
+const SHRINK_AFTER = 50
+
 const Header: React.FC = () => {
-  const [isScrolled, setIsScrolled] = useState(false)
+  const { sentinelRef, scrolledPast: isScrolled } = useScrolledPast(SHRINK_AFTER)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [activeDropdown, setActiveDropdown] = useState<number | null>(null) // 🔹 dropdown control
+  // A dropdown shows while the mouse is over its item (hoveredDropdown) or
+  // after its submenu button was pressed (activeDropdown). Keeping the two
+  // apart means a click on the button never hides a menu the mouse just opened.
+  const [activeDropdown, setActiveDropdown] = useState<number | null>(null)
+  const [hoveredDropdown, setHoveredDropdown] = useState<number | null>(null)
   const pathname = usePathname()
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  const submenuButtons = useRef<(HTMLButtonElement | null)[]>([])
 
   const memoizedMenuItems = useMemo(() => {
     return menuItems.map((item) => ({
@@ -125,152 +127,220 @@ const Header: React.FC = () => {
   const handleSearchToggle = () => setIsSearchOpen(!isSearchOpen)
   const handleLinkClick = () => {
     setIsMobileMenuOpen(false)
-    setActiveDropdown(null) // 🔹 also close dropdowns on any click
+    setActiveDropdown(null) // also close dropdowns on any click
+    setHoveredDropdown(null)
+  }
+
+  // Close a dropdown when keyboard focus leaves it (Tab past the last link, or
+  // a click anywhere else on the page moves focus away).
+  const closeOnFocusOut = (index: number) => (event: React.FocusEvent<HTMLLIElement>) => {
+    if (event.currentTarget.contains(event.relatedTarget as Node | null)) return
+    setActiveDropdown((open) => (open === index ? null : open))
+  }
+
+  // Escape closes the open dropdown and returns focus to its toggle button.
+  const closeOnEscape = (index: number) => (event: React.KeyboardEvent<HTMLLIElement>) => {
+    if (event.key !== 'Escape') return
+    if (activeDropdown !== index && hoveredDropdown !== index) return
+    setActiveDropdown(null)
+    setHoveredDropdown(null)
+    submenuButtons.current[index]?.focus()
   }
 
   return (
-    <header
-      id="header"
-      className={`w-full bg-white shadow-sm fixed top-0 left-0 right-0 z-50 flex items-center transition-all duration-300 ${
-        isScrolled ? 'h-[55px]' : 'h-[80px]'
-      }`}
-    >
-      <div className="w-full">
-        <div className="mx-auto max-w-[1080px]">
-          <div className="flex items-center px-2 transition-all duration-300">
-            {/* Logo */}
-            <div
-              className={`transition-all duration-300 ${isScrolled ? 'w-[110px]' : 'w-[150px]'}`}
-            >
-              <Link href="/" onClick={handleLinkClick} className="block">
-                <Image
-                  src={assetPath('/Images/ffc-logo-banner.webp')}
-                  alt="Free For Charity"
-                  width={686}
-                  height={234}
-                  className={`w-auto object-contain transition-all duration-300 ${isScrolled ? 'h-7' : 'h-11'}`}
-                />
-              </Link>
-            </div>
+    <>
+      {/* Scroll sentinel for the header shrink: it sits at the top of the
+          page, outside the fixed header, and leaves the viewport once the page
+          has scrolled SHRINK_AFTER pixels. */}
+      <div
+        ref={sentinelRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute top-0 left-0 w-px"
+        style={{ height: SHRINK_AFTER }}
+      />
+      <header
+        id="header"
+        className={`w-full bg-white shadow-sm fixed top-0 left-0 right-0 z-50 flex items-center transition-all duration-300 ${
+          isScrolled ? 'h-[55px]' : 'h-[80px]'
+        }`}
+      >
+        <div className="w-full">
+          <div className="mx-auto max-w-[1080px]">
+            <div className="flex items-center px-2 transition-all duration-300">
+              {/* Logo */}
+              <div
+                className={`transition-all duration-300 ${isScrolled ? 'w-[110px]' : 'w-[150px]'}`}
+              >
+                <Link href="/" onClick={handleLinkClick} className="block">
+                  <Image
+                    src={assetPath('/Images/ffc-logo-banner.webp')}
+                    alt="Free For Charity"
+                    width={686}
+                    height={234}
+                    className={`w-auto object-contain transition-all duration-300 ${isScrolled ? 'h-7' : 'h-11'}`}
+                  />
+                </Link>
+              </div>
 
-            {/* Menu or Search */}
-            {!isSearchOpen ? (
-              <div className="flex items-center justify-end sm:pl-[50px] md:pl-[70px] w-full">
-                {/* Desktop Menu */}
-                <nav className="hidden lg:block transition-all duration-300">
-                  <ul className="flex items-center space-x-[1px] font-navbar font-[600]">
-                    {memoizedMenuItems.map((item, index) => {
-                      const isOpen = activeDropdown === index
-
-                      return (
-                        <li
-                          key={index}
-                          className="relative py-6"
-                          onMouseEnter={() => setActiveDropdown(index)}
-                          onMouseLeave={() => setActiveDropdown(null)}
-                        >
-                          <Link
-                            href={item.path}
-                            onClick={handleLinkClick}
-                            className={`flex items-center px-3 py-2 text-[14px] transition-colors duration-200 ${
-                              item.isActive ? 'text-blue-600' : 'text-gray-600 hover:text-gray-500'
-                            }`}
-                          >
-                            {item.label}
-                            {item.hasDropdown && (
-                              <FiChevronDown className="ml-1 mt-[3px] h-4 w-4" />
-                            )}
-                          </Link>
-
-                          {item.hasDropdown && isOpen && (
-                            <div
-                              className={`absolute left-0 ${
-                                isScrolled ? 'top-[82%]' : 'top-[97%]'
-                              } border-t-3 border-[#0567B1] px-3 shadow-[0_2px_5px_rgba(0,0,0,0.1)] bg-white min-w-[240px] z-50`}
-                            >
-                              <div className="px-1 py-[20px]">
-                                {item.dropdownItems?.map((dropItem, dropIndex) => {
-                                  const isDropActive = pathname === dropItem.path
-                                  return (
-                                    <Link
-                                      key={dropIndex}
-                                      href={dropItem.path}
-                                      onClick={handleLinkClick}
-                                      className={`block px-6 py-2 text-[14px] transition-colors duration-200 leading-[28px] ${
-                                        isDropActive
-                                          ? 'text-blue-600 bg-[#F0F7FF]'
-                                          : 'text-gray-700 hover:bg-[#F9F9F9] hover:text-gray-500'
-                                      }`}
-                                    >
-                                      {dropItem.label}
-                                    </Link>
-                                  )
-                                })}
-                              </div>
-                            </div>
-                          )}
-                        </li>
-                      )
-                    })}
-                  </ul>
-                </nav>
-
-                {/* Search Icon */}
-                <div className="hidden lg:flex items-center">
-                  <button
-                    onClick={handleSearchToggle}
-                    className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
-                    aria-label="Search"
+              {/* Menu or Search */}
+              {!isSearchOpen ? (
+                <div className="flex items-center justify-end sm:pl-[50px] md:pl-[70px] w-full">
+                  {/* Desktop Menu */}
+                  <nav
+                    aria-label="Primary navigation"
+                    className="hidden lg:block transition-all duration-300"
                   >
-                    <LiaSearchSolid className="h-5 w-5 cursor-pointer" />
+                    <ul className="flex items-center space-x-[1px] font-navbar font-[600]">
+                      {memoizedMenuItems.map((item, index) => {
+                        const isOpen = activeDropdown === index || hoveredDropdown === index
+                        const submenuId = `submenu-${index}`
+
+                        return (
+                          <li
+                            key={index}
+                            className="relative py-6"
+                            onMouseEnter={() => setHoveredDropdown(index)}
+                            onMouseLeave={() => {
+                              setHoveredDropdown(null)
+                              setActiveDropdown((open) => (open === index ? null : open))
+                            }}
+                            onBlur={item.hasDropdown ? closeOnFocusOut(index) : undefined}
+                            onKeyDown={item.hasDropdown ? closeOnEscape(index) : undefined}
+                          >
+                            <div className="flex items-center">
+                              <Link
+                                href={item.path}
+                                onClick={handleLinkClick}
+                                className={`flex items-center py-2 text-[14px] transition-colors duration-200 ${
+                                  item.hasDropdown ? 'pl-3' : 'px-3'
+                                } ${
+                                  item.isActive
+                                    ? 'text-blue-600'
+                                    : 'text-gray-600 hover:text-gray-500'
+                                }`}
+                              >
+                                {item.label}
+                              </Link>
+                              {item.hasDropdown && (
+                                // Disclosure button so keyboard and touch users can
+                                // open the submenu (Modern Web Guidance:
+                                // ui-components/navbar). Hover still opens it too.
+                                <button
+                                  type="button"
+                                  ref={(el) => {
+                                    submenuButtons.current[index] = el
+                                  }}
+                                  aria-expanded={isOpen}
+                                  aria-controls={submenuId}
+                                  aria-label={`${item.label} submenu`}
+                                  onClick={() =>
+                                    setActiveDropdown(activeDropdown === index ? null : index)
+                                  }
+                                  className={`flex items-center pl-1 pr-3 py-2 transition-colors duration-200 ${
+                                    item.isActive
+                                      ? 'text-blue-600'
+                                      : 'text-gray-600 hover:text-gray-500'
+                                  }`}
+                                >
+                                  <FiChevronDown
+                                    aria-hidden="true"
+                                    className={`mt-[3px] h-4 w-4 transition-transform duration-200 ${
+                                      isOpen ? 'rotate-180' : ''
+                                    }`}
+                                  />
+                                </button>
+                              )}
+                            </div>
+
+                            {item.hasDropdown && isOpen && (
+                              <div
+                                id={submenuId}
+                                className={`absolute left-0 ${
+                                  isScrolled ? 'top-[82%]' : 'top-[97%]'
+                                } border-t-3 border-[#0567B1] px-3 shadow-[0_2px_5px_rgba(0,0,0,0.1)] bg-white min-w-[240px] z-50`}
+                              >
+                                <div className="px-1 py-[20px]">
+                                  {item.dropdownItems?.map((dropItem, dropIndex) => {
+                                    const isDropActive = pathname === dropItem.path
+                                    return (
+                                      <Link
+                                        key={dropIndex}
+                                        href={dropItem.path}
+                                        onClick={handleLinkClick}
+                                        className={`block px-6 py-2 text-[14px] transition-colors duration-200 leading-[28px] ${
+                                          isDropActive
+                                            ? 'text-blue-600 bg-[#F0F7FF]'
+                                            : 'text-gray-700 hover:bg-[#F9F9F9] hover:text-gray-500'
+                                        }`}
+                                      >
+                                        {dropItem.label}
+                                      </Link>
+                                    )
+                                  })}
+                                </div>
+                              </div>
+                            )}
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  </nav>
+
+                  {/* Search Icon */}
+                  <div className="hidden lg:flex items-center">
+                    <button
+                      onClick={handleSearchToggle}
+                      className="p-2 text-gray-600 hover:text-blue-600 transition-colors"
+                      aria-label="Search"
+                    >
+                      <LiaSearchSolid className="h-5 w-5 cursor-pointer" />
+                    </button>
+                  </div>
+
+                  {/* Mobile Menu Button */}
+                  <button
+                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    className="lg:hidden p-2 text-gray-600 hover:text-blue-600"
+                    aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+                    aria-expanded={isMobileMenuOpen}
+                    aria-controls="mobile-menu"
+                  >
+                    {isMobileMenuOpen ? (
+                      <RxCross2 className="h-6 w-6" />
+                    ) : (
+                      <FiMenu className="h-6 w-6" />
+                    )}
                   </button>
                 </div>
-
-                {/* Mobile Menu Button */}
-                <button
-                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="lg:hidden p-2 text-gray-600 hover:text-blue-600"
-                  aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
-                  aria-expanded={isMobileMenuOpen ? 'true' : 'false'}
-                >
-                  {isMobileMenuOpen ? (
-                    <RxCross2 className="h-6 w-6" />
-                  ) : (
-                    <FiMenu className="h-6 w-6" />
-                  )}
-                </button>
-              </div>
-            ) : (
-              // Search Input
-              <div className="w-full max-w-[750px] ml-auto flex items-center justify-between transition-all duration-300">
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="w-full px-4 py-2 focus:outline-none"
-                  autoFocus
-                />
-                <button
-                  onClick={handleSearchToggle}
-                  className="ml-2 p-2 text-gray-600"
-                  aria-label="Close search"
-                >
-                  <RxCross2 className="cursor-pointer h-5 w-5" />
-                </button>
-              </div>
-            )}
+              ) : (
+                // Search Input
+                <div className="w-full max-w-[750px] ml-auto flex items-center justify-between transition-all duration-300">
+                  <input
+                    type="text"
+                    placeholder="Search..."
+                    className="w-full px-4 py-2 focus:outline-none"
+                    autoFocus
+                    aria-label="Search input"
+                  />
+                  <button
+                    onClick={handleSearchToggle}
+                    className="ml-2 p-2 text-gray-600"
+                    aria-label="Close search"
+                  >
+                    <RxCross2 className="cursor-pointer h-5 w-5" />
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
+        {/* Mobile Menu: mounted only while open (so its links are not
+          focusable when collapsed) and animated in with CSS, not framer-motion. */}
         {isMobileMenuOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className={`lg:hidden absolute left-0 w-full overflow-hidden z-40 ${
+          <div
+            id="mobile-menu"
+            className={`lg:hidden absolute left-0 w-full overflow-hidden z-40 animate-menuExpand ${
               isScrolled ? 'top-[53px]' : 'top-[77px]'
             }`}
           >
@@ -319,10 +389,10 @@ const Header: React.FC = () => {
                 })}
               </ul>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
-    </header>
+      </header>
+    </>
   )
 }
 

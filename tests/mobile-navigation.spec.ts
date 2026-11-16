@@ -28,7 +28,7 @@ test.describe('Mobile Navigation', () => {
   })
 
   test('hamburger button should have correct aria attributes', async ({ page }) => {
-    const hamburger = page.locator('header button[aria-expanded]')
+    const hamburger = page.locator('header button[aria-controls="mobile-menu"]')
     await expect(hamburger).toHaveAttribute('aria-expanded', 'false')
     await expect(hamburger).toHaveAttribute('aria-label', 'Open menu')
   })
