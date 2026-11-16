@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo, useRef } from 'react'
+import React, { useEffect, useState, useMemo, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FiMenu, FiChevronDown } from 'react-icons/fi'
@@ -118,6 +118,21 @@ const Header: React.FC = () => {
   const [hoveredDropdown, setHoveredDropdown] = useState<number | null>(null)
   const pathname = usePathname()
   const submenuButtons = useRef<(HTMLButtonElement | null)[]>([])
+  const menuItemRefs = useRef<(HTMLLIElement | null)[]>([])
+
+  // A dropdown opened from its button closes when the visitor presses or taps
+  // anywhere outside it. Focus-out alone is not enough: Safari on iPhone and
+  // iPad does not focus a tapped button, so no blur ever fires there.
+  useEffect(() => {
+    if (activeDropdown === null) return
+    const closeOnOutsidePress = (event: PointerEvent) => {
+      const item = menuItemRefs.current[activeDropdown]
+      if (item && event.target instanceof Node && item.contains(event.target)) return
+      setActiveDropdown(null)
+    }
+    document.addEventListener('pointerdown', closeOnOutsidePress)
+    return () => document.removeEventListener('pointerdown', closeOnOutsidePress)
+  }, [activeDropdown])
 
   const memoizedMenuItems = useMemo(() => {
     return menuItems.map((item) => ({
@@ -200,6 +215,9 @@ const Header: React.FC = () => {
                         return (
                           <li
                             key={index}
+                            ref={(el) => {
+                              menuItemRefs.current[index] = el
+                            }}
                             className="relative py-6"
                             onPointerEnter={(event) => {
                               if (event.pointerType !== 'mouse') return
@@ -209,9 +227,11 @@ const Header: React.FC = () => {
                               setActiveDropdown((open) => (open === index ? open : null))
                             }}
                             onPointerLeave={(event) => {
+                              // Leaving only ends the hover. A dropdown opened from
+                              // its button (or the keyboard) stays open until a
+                              // second press, Escape, focus-out or a press outside.
                               if (event.pointerType !== 'mouse') return
                               setHoveredDropdown(null)
-                              setActiveDropdown((open) => (open === index ? null : open))
                             }}
                             onBlur={item.hasDropdown ? closeOnFocusOut(index) : undefined}
                             onKeyDown={item.hasDropdown ? closeOnEscape(index) : undefined}
@@ -248,10 +268,17 @@ const Header: React.FC = () => {
                                   aria-label={
                                     item.path === '#' ? undefined : `${item.label} submenu`
                                   }
-                                  onClick={() =>
-                                    setActiveDropdown(activeDropdown === index ? null : index)
-                                  }
-                                  className={`flex items-center ${
+                                  // The first press keeps the dropdown open, the second
+                                  // closes it, even while the mouse is still over it.
+                                  onClick={() => {
+                                    if (activeDropdown === index) {
+                                      setActiveDropdown(null)
+                                      setHoveredDropdown(null)
+                                    } else {
+                                      setActiveDropdown(index)
+                                    }
+                                  }}
+                                  className={`flex items-center rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0567B1] ${
                                     item.path === '#' ? 'pl-3' : 'pl-1'
                                   } pr-3 py-2 text-[14px] transition-colors duration-200 ${
                                     item.isActive

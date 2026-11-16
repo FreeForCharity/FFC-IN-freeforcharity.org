@@ -169,7 +169,7 @@ test.describe('Desktop Dropdown Menus from the keyboard', () => {
     await expect(dropdown).toBeHidden()
   })
 
-  test('a mouse click on the submenu button does not close the hover-opened dropdown', async ({
+  test('a mouse click keeps the dropdown open until a second click or a click elsewhere', async ({
     page,
   }) => {
     const toggle = page.getByRole('button', { name: 'Donate submenu' })
@@ -184,9 +184,33 @@ test.describe('Desktop Dropdown Menus from the keyboard', () => {
     await expect(dropdown).toBeVisible()
     await expect(toggle).toHaveAttribute('aria-expanded', 'true')
 
-    // Moving the mouse away still closes it, as before.
+    // Once clicked open, moving the mouse away keeps it open...
     await page.locator('header a[href="/"]').first().hover()
+    await expect(dropdown).toBeVisible()
+    // ...and a second click on the button closes it, with the mouse still over it.
+    await toggle.click()
     await expect(dropdown).toBeHidden()
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+
+    // A click elsewhere on the page also closes it.
+    await toggle.click()
+    await expect(dropdown).toBeVisible()
+    await page.mouse.click(5, 400)
+    await expect(dropdown).toBeHidden()
+  })
+
+  test('a mouse passing over a keyboard-opened dropdown does not close it', async ({ page }) => {
+    const toggle = page.getByRole('button', { name: 'Donate submenu' })
+    await toggle.focus()
+    await page.keyboard.press('Enter')
+    const menuItem = page
+      .locator('header nav li')
+      .filter({ hasText: /^Donate/ })
+      .first()
+    await menuItem.hover()
+    await page.mouse.move(5, 400)
+    await expect(menuItem.locator('div.absolute')).toBeVisible()
+    await expect(toggle).toBeFocused()
   })
 
   test('only one dropdown is open at a time', async ({ page }) => {
@@ -224,6 +248,22 @@ test.describe('Desktop Dropdown Menus on a touch screen', () => {
     await toggle.tap()
     await expect(toggle).toHaveAttribute('aria-expanded', 'true')
     await toggle.tap()
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  test('tapping outside closes a tapped-open dropdown', async ({ page }) => {
+    await page.goto('/')
+    // Behave like Safari on iPhone and iPad, which does not focus a tapped
+    // button: with no focus there is no blur, so the press outside has to
+    // close the dropdown on its own.
+    await page.evaluate(() =>
+      document.addEventListener('mousedown', (event) => event.preventDefault(), true)
+    )
+    const toggle = page.getByRole('button', { name: 'Donate submenu' })
+    await toggle.tap()
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    await expect(toggle).not.toBeFocused()
+    await page.touchscreen.tap(20, 500)
     await expect(toggle).toHaveAttribute('aria-expanded', 'false')
   })
 })
