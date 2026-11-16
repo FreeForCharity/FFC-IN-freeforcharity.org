@@ -1,5 +1,6 @@
 import { pageMetadata } from '@/lib/page-metadata'
 import Link from 'next/link'
+import ScrollableTable from '@/components/ui/ScrollableTable'
 
 export const metadata = pageMetadata({
   title: 'Cookie Policy',
@@ -84,13 +85,19 @@ export default function CookiePolicy() {
             features like storing your cookie consent preferences. These cookies do not store any
             personally identifiable information and cannot be disabled.
           </p>
-          <div className="bg-gray-50 p-4 rounded-lg mb-4 overflow-x-auto">
+          <ScrollableTable label="Essential cookies" className="bg-gray-50 p-4 rounded-lg mb-4">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-2 pr-4 text-[#333]">Cookie Name</th>
-                  <th className="text-left py-2 pr-4 text-[#333]">Purpose</th>
-                  <th className="text-left py-2 text-[#333]">Duration</th>
+                  <th scope="col" className="text-left py-2 pr-4 text-[#333]">
+                    Cookie Name
+                  </th>
+                  <th scope="col" className="text-left py-2 pr-4 text-[#333]">
+                    Purpose
+                  </th>
+                  <th scope="col" className="text-left py-2 text-[#333]">
+                    Duration
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -101,7 +108,7 @@ export default function CookiePolicy() {
                 </tr>
               </tbody>
             </table>
-          </div>
+          </ScrollableTable>
 
           {/* 3.2 Analytics Cookies */}
           <p className="text-[14px] text-[#666] pb-[10px] leading-[24px] font-[500] mt-[1em]">
@@ -148,13 +155,19 @@ export default function CookiePolicy() {
               website traffic. We use Google Analytics to understand how users interact with our
               website.
             </p>
-            <div className="overflow-x-auto">
+            <ScrollableTable label="Google Analytics cookies">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left py-2 pr-4 text-[#333]">Cookie Name</th>
-                    <th className="text-left py-2 pr-4 text-[#333]">Purpose</th>
-                    <th className="text-left py-2 text-[#333]">Duration</th>
+                    <th scope="col" className="text-left py-2 pr-4 text-[#333]">
+                      Cookie Name
+                    </th>
+                    <th scope="col" className="text-left py-2 pr-4 text-[#333]">
+                      Purpose
+                    </th>
+                    <th scope="col" className="text-left py-2 text-[#333]">
+                      Duration
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -175,7 +188,7 @@ export default function CookiePolicy() {
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </ScrollableTable>
             <p className="text-xs mt-2 text-gray-600">
               Privacy Policy:{' '}
               <a
@@ -196,13 +209,19 @@ export default function CookiePolicy() {
               Microsoft Clarity is a user behavior analytics tool that helps us understand how users
               interact with our website through session recordings and heatmaps.
             </p>
-            <div className="overflow-x-auto">
+            <ScrollableTable label="Microsoft Clarity cookies">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left py-2 pr-4 text-[#333]">Cookie Name</th>
-                    <th className="text-left py-2 pr-4 text-[#333]">Purpose</th>
-                    <th className="text-left py-2 text-[#333]">Duration</th>
+                    <th scope="col" className="text-left py-2 pr-4 text-[#333]">
+                      Cookie Name
+                    </th>
+                    <th scope="col" className="text-left py-2 pr-4 text-[#333]">
+                      Purpose
+                    </th>
+                    <th scope="col" className="text-left py-2 text-[#333]">
+                      Duration
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -218,7 +237,7 @@ export default function CookiePolicy() {
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </ScrollableTable>
             <p className="text-xs mt-2 text-gray-600">
               Privacy Policy:{' '}
               <a
@@ -249,13 +268,19 @@ export default function CookiePolicy() {
               The Meta Pixel is an analytics tool that helps us measure the effectiveness of
               advertising by understanding the actions people take on our website.
             </p>
-            <div className="overflow-x-auto">
+            <ScrollableTable label="Meta Pixel cookies">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left py-2 pr-4 text-[#333]">Cookie Name</th>
-                    <th className="text-left py-2 pr-4 text-[#333]">Purpose</th>
-                    <th className="text-left py-2 text-[#333]">Duration</th>
+                    <th scope="col" className="text-left py-2 pr-4 text-[#333]">
+                      Cookie Name
+                    </th>
+                    <th scope="col" className="text-left py-2 pr-4 text-[#333]">
+                      Purpose
+                    </th>
+                    <th scope="col" className="text-left py-2 text-[#333]">
+                      Duration
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -271,7 +296,7 @@ export default function CookiePolicy() {
                   </tr>
                 </tbody>
               </table>
-            </div>
+            </ScrollableTable>
             <p className="text-xs mt-2 text-gray-600">
               Privacy Policy:{' '}
               <a
