@@ -14,10 +14,10 @@ test('header shrinks after scrolling and grows back at the top', async ({ page }
 
   // Retry the scroll: until the page hydrates, Next.js may reset it to the top.
   await expect(async () => {
-    await page.evaluate(() => window.scrollTo(0, 400))
+    await page.evaluate(() => window.scrollTo({ top: 400, behavior: 'instant' }))
     await expect(header).toHaveClass(/h-\[55px\]/, { timeout: 1000 })
   }).toPass({ timeout: 15_000 })
 
-  await page.evaluate(() => window.scrollTo(0, 0))
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }))
   await expect(header).toHaveClass(/h-\[80px\]/)
 })

@@ -44,8 +44,11 @@ test.describe('Results Animated Numbers', () => {
     await page.goto('/')
 
     // Verify the numbers start at 0 before scrolling into view
-    const firstCardNumber = getResultCard(page, 'Charity domains under management').locator('h1')
-    await expect(firstCardNumber).toContainText('0')
+    // The visible digits (the screen-reader copy keeps the real value).
+    const firstCardNumber = getResultCard(page, 'Charity domains under management').locator(
+      'h1 [aria-hidden="true"]'
+    )
+    await expect(firstCardNumber).toHaveText('0')
 
     const resultsSection = page.locator('h2:has-text("Results - ")')
     await expect(resultsSection).toBeAttached()
@@ -75,10 +78,19 @@ test.describe('Results Animated Numbers', () => {
     const context = await browser.newContext({ javaScriptEnabled: false })
     const page = await context.newPage()
     await page.goto('/')
-    await expect(getResultCard(page, 'Charity domains under management').locator('h1')).toHaveText(
-      '376'
-    )
+    const card = getResultCard(page, 'Charity domains under management')
+    await expect(card.locator('h1 [aria-hidden="true"]')).toHaveText('376')
+    await expect(card.getByRole('heading', { name: '376', exact: true })).toBeVisible()
     await context.close()
+  })
+
+  test('screen readers get the real number, never the counting digits', async ({ page }) => {
+    await page.goto('/')
+    // Before it scrolls into view the visible digits show 0 ...
+    const card = getResultCard(page, 'Charity domains under management')
+    await expect(card.locator('h1 [aria-hidden="true"]')).toHaveText('0')
+    // ... while the heading's accessible name is still the real value.
+    await expect(card.getByRole('heading', { name: '376', exact: true })).toBeAttached()
   })
 
   test('should display correct descriptions for each statistic', async ({ page }) => {

@@ -27,10 +27,9 @@ test('a card below the fold is hidden, then revealed when scrolled to', async ({
 test('with reduced motion nothing is hidden', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto(PATH)
-  await expect(lastCard(page)).toBeAttached()
-  // Give the page time to hydrate, then confirm no content was marked.
-  await page.waitForLoadState('load')
-  await page.waitForTimeout(500)
+  // The cookie banner only appears once the page has hydrated, in the same
+  // commit as Reveal's effect, so by then any marking would have happened.
+  await expect(page.getByRole('region', { name: 'Cookie consent notice' })).toBeVisible()
   await expect(page.locator('[data-reveal]')).toHaveCount(0)
 })
 
