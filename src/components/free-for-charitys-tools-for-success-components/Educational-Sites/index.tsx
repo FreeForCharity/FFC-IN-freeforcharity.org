@@ -3,17 +3,8 @@
 import React from 'react'
 import Image from 'next/image'
 import { IoIosArrowForward } from 'react-icons/io'
-import { motion, Variants } from 'framer-motion'
+import Reveal from '@/components/ui/Reveal'
 import { assetPath } from '@/lib/assetPath'
-
-const cardVariants: Variants = {
-  offscreen: { opacity: 0, scale: 0.8 },
-  onscreen: {
-    opacity: 1,
-    scale: 1,
-    transition: { type: 'spring', bounce: 0.3, duration: 1 }, // slower duration
-  },
-}
 
 const EducationalSitesSection = () => {
   const cards = [
@@ -51,14 +42,7 @@ const EducationalSitesSection = () => {
         {/* Cards Container */}
         <div className="flex flex-col md:flex-row gap-12 w-full justify-center">
           {cards.map((card, idx) => (
-            <motion.div
-              key={idx}
-              className="w-full md:w-[46%] flex flex-col items-center text-center"
-              initial="offscreen"
-              whileInView="onscreen"
-              viewport={{ once: true, amount: 0.3 }}
-              variants={cardVariants}
-            >
+            <Reveal key={idx} className="w-full md:w-[46%] flex flex-col items-center text-center">
               {/* Icon */}
               <div className="relative w-full h-[180px] mb-6">
                 <Image src={card.image} alt="Automation" fill className="object-contain" />
@@ -102,7 +86,7 @@ const EducationalSitesSection = () => {
                   />
                 </a>
               </div>
-            </motion.div>
+            </Reveal>
           ))}
         </div>
       </div>

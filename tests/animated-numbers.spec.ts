@@ -44,8 +44,11 @@ test.describe('Results Animated Numbers', () => {
     await page.goto('/')
 
     // Verify the numbers start at 0 before scrolling into view
-    const firstCardNumber = getResultCard(page, 'Charity domains under management').locator('h1')
-    await expect(firstCardNumber).toContainText('0')
+    // The visible digits (the screen-reader copy keeps the real value).
+    const firstCardNumber = getResultCard(page, 'Charity domains under management').locator(
+      'h1 [aria-hidden="true"]'
+    )
+    await expect(firstCardNumber).toHaveText('0')
 
     const resultsSection = page.locator('h2:has-text("Results - ")')
     await expect(resultsSection).toBeAttached()
@@ -67,8 +70,41 @@ test.describe('Results Animated Numbers', () => {
     await page.locator('h1:has-text("Welcome to")').scrollIntoViewIfNeeded()
     await resultsHeading.scrollIntoViewIfNeeded()
 
-    // Value should still be the final animated value (not reset to 0)
-    await expect(firstCardNumber).toContainText('376')
+    // Value should still be the final animated value (not reset to 0), and
+    // once settled it is a single plain number.
+    await expect(firstCardNumber).toHaveText('376')
+  })
+
+  test('without JavaScript the real numbers show, never 0', async ({ browser }) => {
+    const context = await browser.newContext({ javaScriptEnabled: false })
+    const page = await context.newPage()
+    await page.goto('/')
+    // One plain number: copying or searching the page finds it once.
+    const card = getResultCard(page, 'Charity domains under management')
+    await expect(card.locator('h1')).toHaveText('376')
+    await context.close()
+  })
+
+  test('screen readers get the real number, never the counting digits', async ({ page }) => {
+    await page.goto('/')
+    // Before it scrolls into view the visible digits show 0 ...
+    const card = getResultCard(page, 'Charity domains under management')
+    await expect(card.locator('h1 [aria-hidden="true"]')).toHaveText('0')
+    // ... while the heading's accessible name is still the real value.
+    await expect(card.getByRole('heading', { name: '376', exact: true })).toBeAttached()
+  })
+
+  test('printing before the number scrolls into view prints the real value', async ({ page }) => {
+    await page.goto('/')
+    const card = getResultCard(page, 'Charity domains under management')
+    await expect(card.locator('h1 [aria-hidden="true"]')).toHaveText('0')
+    // The browser lays out the printout as soon as beforeprint returns, so
+    // the value has to be in the page by then, not on a later render.
+    const textAtPrint = await card.locator('h1').evaluate((heading) => {
+      window.dispatchEvent(new Event('beforeprint'))
+      return heading.textContent
+    })
+    expect(textAtPrint).toBe('376')
   })
 
   test('should display correct descriptions for each statistic', async ({ page }) => {

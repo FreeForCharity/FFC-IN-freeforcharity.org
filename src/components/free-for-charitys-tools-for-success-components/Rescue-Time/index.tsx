@@ -3,30 +3,15 @@
 import React from 'react'
 import Image from 'next/image'
 import { IoIosArrowForward } from 'react-icons/io'
-import { motion, Variants } from 'framer-motion'
+import Reveal from '@/components/ui/Reveal'
 import { assetPath } from '@/lib/assetPath'
-
-const sectionVariants: Variants = {
-  offscreen: { opacity: 0, scale: 0.8 },
-  onscreen: {
-    opacity: 1,
-    scale: 1,
-    transition: { type: 'spring', bounce: 0.3, duration: 0.6 },
-  },
-}
 
 const Index = () => {
   return (
     <div className="py-[91px] bg-[#0c5575]">
       <div className="w-[90%] md:w-[80%] mx-auto max-w-[1080px] flex flex-col lg:flex-row items-start gap-[40px] lg:gap-[0px]">
         {/* Left Section */}
-        <motion.div
-          className="w-full lg:w-[46%] mr-[86px] flex flex-col items-start"
-          initial="offscreen"
-          whileInView="onscreen"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={sectionVariants}
-        >
+        <Reveal className="w-full lg:w-[46%] mr-[86px] flex flex-col items-start">
           {/* Image */}
           <div className="relative w-full aspect-[16/9] mb-[30px]">
             <Image
@@ -86,16 +71,10 @@ const Index = () => {
               />
             </a>
           </div>
-        </motion.div>
+        </Reveal>
 
         {/* Right Section */}
-        <motion.div
-          className="w-full lg:w-[46%] flex flex-col items-start"
-          initial="offscreen"
-          whileInView="onscreen"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={sectionVariants}
-        >
+        <Reveal className="w-full lg:w-[46%] flex flex-col items-start">
           {/* Image */}
           <div className="relative w-full aspect-[16/9] mb-[30px]">
             <Image
@@ -153,7 +132,7 @@ const Index = () => {
               />
             </a>
           </div>
-        </motion.div>
+        </Reveal>
       </div>
     </div>
   )
