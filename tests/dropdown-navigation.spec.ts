@@ -228,6 +228,27 @@ test.describe('Desktop Dropdown Menus from the keyboard', () => {
     )
   })
 
+  test('opening a dropdown from the keyboard hides the one a resting mouse opened', async ({
+    page,
+  }) => {
+    await page
+      .locator('header nav li')
+      .filter({ hasText: /^Volunteer/ })
+      .first()
+      .hover()
+    await expect(page.getByRole('button', { name: 'Volunteer submenu' })).toHaveAttribute(
+      'aria-expanded',
+      'true'
+    )
+    await page.getByRole('button', { name: 'Donate submenu' }).focus()
+    await page.keyboard.press('Enter')
+    await expect(page.locator('header nav div.absolute')).toHaveCount(1)
+    await expect(page.getByRole('button', { name: 'Volunteer submenu' })).toHaveAttribute(
+      'aria-expanded',
+      'false'
+    )
+  })
+
   test('"Other" is a button that opens its links, not a link to "#"', async ({ page }) => {
     const nav = page.getByRole('navigation', { name: 'Primary navigation' })
     await expect(nav.locator('a[href="#"]')).toHaveCount(0)

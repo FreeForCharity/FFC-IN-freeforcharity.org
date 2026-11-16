@@ -141,7 +141,11 @@ const Header: React.FC = () => {
     }))
   }, [pathname])
 
-  const handleSearchToggle = () => setIsSearchOpen(!isSearchOpen)
+  const handleSearchToggle = () => {
+    setIsSearchOpen(!isSearchOpen)
+    // The menu unmounts while search is open, so no pointerleave will clear it.
+    setHoveredDropdown(null)
+  }
   const handleLinkClick = () => {
     setIsMobileMenuOpen(false)
     setActiveDropdown(null) // also close dropdowns on any click
@@ -276,6 +280,9 @@ const Header: React.FC = () => {
                                       setHoveredDropdown(null)
                                     } else {
                                       setActiveDropdown(index)
+                                      // A resting mouse may hold another item's hover
+                                      // dropdown open; only one shows at a time.
+                                      setHoveredDropdown((h) => (h === index ? h : null))
                                     }
                                   }}
                                   className={`flex items-center rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0567B1] ${
