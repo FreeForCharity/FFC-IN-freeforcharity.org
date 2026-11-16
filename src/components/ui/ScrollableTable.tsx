@@ -13,9 +13,10 @@ interface ScrollableTableProps {
  * A table that scrolls sideways on narrow screens instead of widening the
  * page (Modern Web Guidance: ui-components/responsive-table).
  *
- * The wrapper is a labelled region. Only while the table is wider than its
- * box does it join the tab order, so a keyboard user can reach it and scroll
- * it with the arrow keys; a table that fits adds no extra tab stop.
+ * Only while the table is wider than its box does the wrapper become a
+ * labelled region in the tab order, so a keyboard user can reach it and
+ * scroll it with the arrow keys. A table that fits adds no tab stop and no
+ * landmark.
  */
 export default function ScrollableTable({ label, className = '', children }: ScrollableTableProps) {
   const ref = useRef<HTMLDivElement>(null)
@@ -37,8 +38,8 @@ export default function ScrollableTable({ label, className = '', children }: Scr
   return (
     <div
       ref={ref}
-      role="region"
-      aria-label={label}
+      role={overflowing ? 'region' : undefined}
+      aria-label={overflowing ? label : undefined}
       tabIndex={overflowing ? 0 : undefined}
       data-overflowing={overflowing ? 'true' : undefined}
       className={`overflow-x-auto focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0567B1] ${className}`}

@@ -1,18 +1,41 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { act, render, screen } from '@testing-library/react'
 
 import ScrollableTable from '@/components/ui/ScrollableTable'
 
-function setWidths(scrollWidth: number, clientWidth: number) {
+let widths = { scroll: 300, client: 300 }
+let resize: (() => void) | undefined
+
+beforeAll(() => {
   Object.defineProperty(HTMLElement.prototype, 'scrollWidth', {
     configurable: true,
-    get: () => scrollWidth,
+    get: () => widths.scroll,
   })
   Object.defineProperty(HTMLElement.prototype, 'clientWidth', {
     configurable: true,
-    get: () => clientWidth,
+    get: () => widths.client,
   })
-}
+})
+
+afterAll(() => {
+  // @ts-expect-error -- removing the test override
+  delete HTMLElement.prototype.scrollWidth
+  // @ts-expect-error -- removing the test override
+  delete HTMLElement.prototype.clientWidth
+})
+
+beforeEach(() => {
+  resize = undefined
+  // Capture the callback so a test can report a resize.
+  global.ResizeObserver = class {
+    constructor(callback: () => void) {
+      resize = callback
+    }
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof ResizeObserver
+})
 
 const table = (
   <table>
@@ -25,29 +48,25 @@ const table = (
 )
 
 describe('ScrollableTable', () => {
-  afterEach(() => {
-    // Back to jsdom's own (zero) widths.
-    // @ts-expect-error -- removing the per-test override
-    delete HTMLElement.prototype.scrollWidth
-    // @ts-expect-error -- removing the per-test override
-    delete HTMLElement.prototype.clientWidth
-  })
-
-  it('is a labelled region', () => {
-    setWidths(300, 300)
-    render(<ScrollableTable label="Analytics cookies">{table}</ScrollableTable>)
-    expect(screen.getByRole('region', { name: 'Analytics cookies' })).toBeInTheDocument()
-  })
-
-  it('adds no tab stop when the table fits', () => {
-    setWidths(300, 300)
+  it('adds no landmark and no tab stop when the table fits', () => {
+    widths = { scroll: 300, client: 300 }
     render(<ScrollableTable label="Fits">{table}</ScrollableTable>)
-    expect(screen.getByRole('region', { name: 'Fits' })).not.toHaveAttribute('tabindex')
+    expect(screen.queryByRole('region')).toBeNull()
+    expect(screen.getByRole('table').parentElement).not.toHaveAttribute('tabindex')
   })
 
-  it('joins the tab order when the table is wider than its box', () => {
-    setWidths(600, 300)
+  it('is a labelled region in the tab order when the table is too wide', () => {
+    widths = { scroll: 600, client: 300 }
     render(<ScrollableTable label="Too wide">{table}</ScrollableTable>)
     expect(screen.getByRole('region', { name: 'Too wide' })).toHaveAttribute('tabindex', '0')
+  })
+
+  it('follows a resize after it has rendered', () => {
+    widths = { scroll: 300, client: 300 }
+    render(<ScrollableTable label="Narrowed">{table}</ScrollableTable>)
+    expect(screen.queryByRole('region')).toBeNull()
+    widths = { scroll: 600, client: 300 }
+    act(() => resize?.())
+    expect(screen.getByRole('region', { name: 'Narrowed' })).toHaveAttribute('tabindex', '0')
   })
 })
