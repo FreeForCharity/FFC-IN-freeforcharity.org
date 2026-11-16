@@ -7,6 +7,7 @@ import {
   type FieldRequirement,
   type Track,
 } from '@/data/application-fields'
+import ScrollableTable from '@/components/ui/ScrollableTable'
 
 const BADGE_CLASSES: Record<FieldRequirement, string> = {
   R: 'bg-[#fff1e6] text-[#9a3412] border border-[#f4b183] font-[700]',
@@ -32,7 +33,7 @@ interface FieldTableProps {
 
 /** The fields one form asks in a section, with that form's requirement. */
 const FieldTable: React.FC<FieldTableProps> = ({ track, fields, caption }) => (
-  <div className="overflow-x-auto">
+  <ScrollableTable label={caption}>
     <table className="w-full border border-[#e5e7eb] text-[15px]">
       <caption className="sr-only">{caption}</caption>
       <thead className="bg-[#f9fafb]">
@@ -64,7 +65,7 @@ const FieldTable: React.FC<FieldTableProps> = ({ track, fields, caption }) => (
         ))}
       </tbody>
     </table>
-  </div>
+  </ScrollableTable>
 )
 
 export default FieldTable

@@ -128,16 +128,23 @@ export default function BarChart({ title, unit, data, color = '#0567B1', source 
           View data table
         </summary>
         <table className="mt-2 border-collapse font-[var(--font-lato)] text-[15px]">
+          <caption className="sr-only">{title}</caption>
           <thead>
             <tr>
-              <th className="border border-gray-300 px-3 py-1 text-left">Year</th>
-              <th className="border border-gray-300 px-3 py-1 text-left">{unit}</th>
+              <th scope="col" className="border border-gray-300 px-3 py-1 text-left">
+                Year
+              </th>
+              <th scope="col" className="border border-gray-300 px-3 py-1 text-left">
+                {unit}
+              </th>
             </tr>
           </thead>
           <tbody>
             {data.map((d) => (
               <tr key={d.label}>
-                <td className="border border-gray-300 px-3 py-1">{d.label}</td>
+                <th scope="row" className="border border-gray-300 px-3 py-1 text-left font-normal">
+                  {d.label}
+                </th>
                 <td className="border border-gray-300 px-3 py-1 text-right">{d.value}</td>
               </tr>
             ))}
