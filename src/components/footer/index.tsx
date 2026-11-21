@@ -72,6 +72,16 @@ const Footer: React.FC = () => {
             <p>
               <span className="font-[500] text-[22px]">Free For Charity EIN: 46-2471893</span>
             </p>
+
+            <p>
+              <Link
+                href="/charity-profiles/"
+                className="text-[#5BA3D9] underline text-[18px]"
+                data-font="lato-font"
+              >
+                Our charity profiles on other sites
+              </Link>
+            </p>
           </div>
         </div>
 
