@@ -89,6 +89,7 @@ export const siteRoutes = [
   { route: '/impact', name: 'Impact' },
   { route: '/how-we-count', name: 'How We Count' },
   { route: '/cost-transparency', name: 'Cost Transparency' },
+  { route: '/charity-profiles', name: 'Charity Profiles' },
   { route: '/charity-faq', name: 'Charity Support FAQ' },
   { route: '/volunteer-roles', name: 'Volunteer Roles' },
   { route: '/volunteer-onboarding-guide', name: 'Volunteer Onboarding Guide' },
