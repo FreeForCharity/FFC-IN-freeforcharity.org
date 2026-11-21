@@ -107,6 +107,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/impact', priority: 0.8, changeFrequency: 'monthly' as const },
     { path: '/how-we-count', priority: 0.6, changeFrequency: 'monthly' as const },
     { path: '/cost-transparency', priority: 0.6, changeFrequency: 'monthly' as const },
+    { path: '/charity-profiles', priority: 0.6, changeFrequency: 'monthly' as const },
     { path: '/charity-faq', priority: 0.8, changeFrequency: 'monthly' as const },
     { path: '/volunteer-roles', priority: 0.7, changeFrequency: 'monthly' as const },
     { path: '/volunteer-onboarding-guide', priority: 0.6, changeFrequency: 'monthly' as const },
