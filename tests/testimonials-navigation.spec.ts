@@ -68,29 +68,76 @@ for (const viewport of [
 }
 
 /**
- * Advance the fake clock, then keep it moving in small steps so a smooth
- * scroll the rotation started can finish: with the clock faked, Chromium's
- * scroll animation only progresses as the clock does.
+ * Wait, in real time, until the row of slides has stopped on the slide the
+ * carousel has marked active.
+ *
+ * The smooth scroll runs on real time, while the carousel's timers run on the
+ * fake clock. While this waits, the fake clock only moves at real speed, as it
+ * would for a visitor, instead of leaping ahead of the scroll, so the
+ * carousel's 1.5 s "the scroll never arrived" timer does not fire mid-scroll
+ * just because the test jumped the clock. Comparing against the active slide, not just
+ * any resting position, keeps this from passing in the moment before a
+ * scroll the carousel has just asked for gets going.
+ */
+async function waitForScrollToLand(page: Page) {
+  const row = carousel(page).region.getByRole('group', { name: 'Testimonial slides' })
+  let previous = Number.NaN
+  await expect
+    .poll(
+      async () => {
+        const { left, onActive } = await row.evaluate((el) => {
+          const active = el.querySelector<HTMLElement>('[data-active="true"]')
+          return {
+            left: el.scrollLeft,
+            onActive: !active || Math.abs(el.scrollLeft - active.offsetLeft) < 2,
+          }
+        })
+        const landed = left === previous && onActive
+        previous = left
+        return landed
+      },
+      { timeout: 10_000, intervals: [50] }
+    )
+    .toBe(true)
+}
+
+/**
+ * Advance the fake clock by `ms`, at most half a second at a time, letting any
+ * smooth scroll land before jumping the clock again. Half a second is well
+ * inside the 1.5 s settle timer, so no jump can carry the clock past it
+ * mid-scroll.
+ *
+ * The fake clock also runs at real speed between jumps, so the target is a
+ * fixed fake time read from the page, not a sum of jumps: otherwise the time
+ * spent waiting for scrolls would add up across ticks, and on a slow runner a
+ * tick would let the carousel rotate twice.
  */
 async function tick(page: Page, ms: number) {
-  await page.clock.runFor(ms)
-  for (let i = 0; i < 30; i++) {
-    await page.clock.runFor(50)
-    await page.waitForTimeout(20)
+  const end = (await page.evaluate(() => Date.now())) + ms
+  for (;;) {
+    const left = end - (await page.evaluate(() => Date.now()))
+    if (left <= 0) return
+    await page.clock.runFor(Math.min(500, left))
+    await waitForScrollToLand(page)
   }
 }
 
 /**
  * Advance the fake clock until the carousel rotates to slide 2. The first
  * rotation is also the sign the page has hydrated: before that, the timer
- * does not exist yet.
+ * does not exist yet. The clock moves half a second at a time and stops as
+ * soon as slide 2 is current, so a slow hydration can never carry it on past
+ * slide 2 to slide 3.
  */
 async function waitForFirstRotation(page: Page) {
   const dot2 = carousel(page).region.getByRole('button', { name: 'Go to testimonial 2' })
-  await expect(async () => {
-    await tick(page, 5500)
-    await expect(dot2).toHaveAttribute('aria-current', 'true', { timeout: 500 })
-  }).toPass({ timeout: 15_000 })
+  // Hydration takes real time, not fake time, so a slow runner needs more
+  // steps here; the test's own timeout is the real-time limit.
+  for (let step = 0; (await dot2.getAttribute('aria-current')) !== 'true'; step++) {
+    if (step > 120) throw new Error('The carousel never rotated to slide 2')
+    await tick(page, 500)
+  }
+  await expectShown(page, 1)
 }
 
 test.describe('testimonial rotation', () => {
