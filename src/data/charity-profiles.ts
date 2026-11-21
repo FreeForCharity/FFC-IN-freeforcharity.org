@@ -24,7 +24,13 @@ export interface CharityProfile {
   badge?: { src: string; alt: string; width: number; height: number }
 }
 
-/** Date every URL below was last loaded signed out and checked. */
+/**
+ * Date every URL below was last loaded signed out and checked. On 2026-11-21 the
+ * specific claims in each `shows` line were read off the live pages: ProPublica
+ * ("Tax exemption issued: June 2014", 990-N filings to fiscal year ending Dec. 2025),
+ * Endaoment ("Give cash, stock, crypto, or DAF assets"), GreatNonprofits (5 reviews and
+ * a Donate Now form). Re-check them when this date changes.
+ */
 export const PROFILES_LAST_CHECKED = '2026-11-21'
 
 export const FFC_EIN = '46-2471893'

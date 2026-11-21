@@ -44,7 +44,7 @@ export default function CharityProfiles() {
                   {heading}
                 </h2>
                 <p className="mb-6 text-gray-700">{intro}</p>
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <ul role="list" className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {items.map((p) => (
                     <li
                       key={p.provider}
@@ -82,7 +82,7 @@ export default function CharityProfiles() {
 
           <h2 className={h2}>Prefer to give directly?</h2>
           <p>
-            Every platform above routes money to us in its own way, and some take a fee. Our{' '}
+            The giving platforms above route money to us in their own way, and some take a fee. Our{' '}
             <Link href="/donate/" className="text-[#0567B1] underline">
               donate page
             </Link>{' '}
@@ -90,7 +90,14 @@ export default function CharityProfiles() {
           </p>
 
           <p className="mt-10 text-[14px] leading-[20px] text-gray-600">
-            Each link was last checked on {PROFILES_LAST_CHECKED}. If one stops working, please{' '}
+            Each link was last checked on{' '}
+            {new Date(`${PROFILES_LAST_CHECKED}T12:00:00Z`).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              timeZone: 'UTC',
+            })}
+            . If one stops working, please{' '}
             <Link href="/contact-us/" className="underline">
               let us know
             </Link>
