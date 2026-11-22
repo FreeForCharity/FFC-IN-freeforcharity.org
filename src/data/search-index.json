@@ -74,6 +74,12 @@
       "type": "page"
     },
     {
+      "title": "Charity Profiles",
+      "description": "Free For Charity's profile pages at independent charity-profile and giving platforms: verify our 501(c)(3) status, give through your workplace or donor-advised fund, or volunteer.",
+      "href": "/charity-profiles/",
+      "type": "page"
+    },
+    {
       "title": "Security Basics for Small Charities",
       "description": "MFA, password managers, donation fraud, and domain safety — the security floor every small nonprofit should stand on, in plain language.",
       "href": "/charity-security-guide/",
